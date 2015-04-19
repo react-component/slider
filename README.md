@@ -130,17 +130,17 @@ npm start
 
 ## Example
 
-http://localhost:8088/examples/
+http://localhost:8000/examples/
 
 online example: http://react-component.github.io/slider/build/examples/
 
 ## Test Case
 
-http://localhost:8088/tests/runner.html?coverage
+http://localhost:8000/tests/runner.html?coverage
 
 ## Coverage
 
-http://localhost:8088/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage
+http://localhost:8000/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage
 
 ## License
 
