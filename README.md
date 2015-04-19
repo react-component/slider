@@ -1,0 +1,2 @@
+# slider
+react slider component
