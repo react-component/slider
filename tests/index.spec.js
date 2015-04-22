@@ -38,7 +38,7 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider').length).to.be(1);
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
-    expect(node.find('.dot').length).to.be(6);
+    expect(node.find('.rc-slider-dot').length).to.be(6);
     expect(slider.getValue()).to.be(0);
   });
 
@@ -51,7 +51,7 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider').length).to.be(1);
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
-    expect(node.find('.dot').length).to.be(slider.props.marks.length);
+    expect(node.find('.rc-slider-dot').length).to.be(slider.props.marks.length);
     expect(node.find('.rc-slider-mark').length).to.be(1);
     expect(node.find('.rc-slider-mark-text').length).to.be(slider.props.marks.length);
     expect(slider.getIndex()).to.be(3);
