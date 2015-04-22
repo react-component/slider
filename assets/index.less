@@ -1,24 +1,21 @@
 @prefixClass: rc-slider;
 
 // color
-@sliderColor: #999;
-@trackColor: #b2e9fd;
-@normalHandleColor: #d9d9d9;
-@activeHandleColor: #2db7f5;
-@disabledColor: #e9e9e9;
+@disabledColor: #e7eaec;
 
 .@{prefixClass} {
   position: relative;
   height: 4px;
   width: 100%;
   border-radius: 2px;
-  background-color: @sliderColor;
+  background-color: #e9e9e9;
 
   &-track {
     position: absolute;
+    left: 0;
     height: 4px;
     border-radius: 2px;
-    background-color: @trackColor;
+    background-color: #b2e9fd;
     z-index: 1;
   }
 
@@ -30,15 +27,23 @@
     height: 10px;
     cursor: default;
     border-radius: 50%;
-    border: solid 2px @normalHandleColor;
+    border: solid 2px #d9d9d9;
     background-color: #fff;
     z-index: 2;
-    &:hover, &:active, &.active {
-      border-color: @activeHandleColor;
+
+    &:hover {
+      border-color: #999;
     }
-    &:active {
-      background-color: @activeHandleColor;
-      box-shadow: 0 0 3px 0 rgb(45, 183, 245, .75);
+    &-active {
+      border-color: #8cddfc;
+      &:active {
+        border-color: #2db7f5;
+        background-color: #2db7f5;
+        box-shadow: 0 0 0 5px rgba(45, 183, 245, .3);
+      }
+      &:hover {
+        border-color: #23c0fa;
+      }
     }
   }
 
@@ -60,9 +65,13 @@
     vertical-align: middle;
     text-align: center;
     cursor: pointer;
+    color: #ccc;
     &:first-child {
       text-align: left;
-    } 
+    }
+    &-active {
+      color: #999;
+    }
   }
 
   &-step {
@@ -71,27 +80,31 @@
     height: 4px;
     background: transparent;
     z-index: 1;
-    .dot {
-      position: absolute;
-      top: -2px;
-      margin-left: -4px;
-      width: 4px;
-      height: 4px;
-      border: 2px solid #fff;
-      cursor: pointer;
-      border-radius: 50%;
-      vertical-align: middle;
-      &:first-child {
-        margin-left: -2px;
-      }
-      &:last-child {
-        margin-left: -6px;
-      }
+  }
+
+  &-dot {
+    position: absolute;
+    top: -2px;
+    margin-left: -4px;
+    width: 4px;
+    height: 4px;
+    border: 2px solid #fff;
+    background-color: #bcbcbc;
+    cursor: pointer;
+    border-radius: 50%;
+    vertical-align: middle;
+    &:first-child {
+      margin-left: -2px;
+    }
+    &:last-child {
+      margin-left: -6px;
+    }
+    &-active {
+      background-color: #8cddfc;
     }
   }
 
   &-disabled {
-    color: @disabledColor;
     background-color: @disabledColor;
 
     .@{prefixClass}-track {
@@ -100,14 +113,8 @@
 
     .@{prefixClass}-handle {
       border-color: @disabledColor;
-      background-color: @disabledColor;
+      background-color: #fff;
       cursor: not-allowed;
-
-      &:hover, &:active {
-        border-color: @disabledColor;
-        background-color: @disabledColor;
-        box-shadow: none;
-      }
     }
 
     .@{prefixClass}-mark-text, .dot {
