@@ -23,7 +23,7 @@
       "react": "*"
     }
   },
-  "config":{
+  "config": {
     "port": 8000
   },
   "scripts": {
@@ -45,12 +45,15 @@
     "rc-server": "2.x",
     "rc-tools": "2.x",
     "react": "0.13.x",
-    "node-dev":"2.x",
+    "node-dev": "2.x",
     "jquery": "^1.11.2",
     "css-loader": "^0.9.1"
   },
   "precommit": [
     "lint",
     "less"
-  ]
+  ],
+  "dependencies": {
+    "rc-util": "^2.0.2"
+  }
 }
