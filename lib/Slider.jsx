@@ -1,11 +1,11 @@
 /** @jsx React.DOM */
 var React = require('react');
-var EventListener = require('./EventListener');
+var DomUtils = require('rc-util').Dom;
 
 function pauseEvent(e) {
   if (e.stopPropagation) {
     e.stopPropagation();
-  } 
+  }
   if (e.preventDefault) {
     e.preventDefault();
   }
@@ -72,7 +72,7 @@ var Slider = React.createClass({
   },
 
   componentDidMount: function() {
-    this._onHandleResizeListener = EventListener.listen(window, 'resize', this.handleResize);
+    this._onHandleResizeListener = DomUtils.addEventListener(window, 'resize', this.handleResize);
     this.handleResize();
   },
 
@@ -88,7 +88,7 @@ var Slider = React.createClass({
 
   getIndex: function() {
     var props = this.props;
-    if (props.marks.length === 0) { 
+    if (props.marks.length === 0) {
       return;
     }
     var value = this.state.value;
@@ -150,8 +150,8 @@ var Slider = React.createClass({
   },
 
   _addEventHandles: function() {
-    this._onMouseMoveListener = EventListener.listen(document, 'mousemove', this._onMouseMove);
-    this._onMouseUpListener = EventListener.listen(document, 'mouseup', this._onMouseUp);
+    this._onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this._onMouseMove);
+    this._onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this._onMouseUp);
   },
 
   _removeEventHandles: function () {
@@ -213,7 +213,7 @@ var Slider = React.createClass({
 
     var sliderMin = rect.left;
     var sliderMax = rect.right;
-    
+
     this.setState({
       upperBound: slider.clientWidth,
       sliderLength: Math.abs(sliderMax - sliderMin),
@@ -238,7 +238,7 @@ var Slider = React.createClass({
       return;
     }
     var position = this._getMousePosition(e);
-    this._calValueByPos(position, 
+    this._calValueByPos(position,
       () => {
         this._triggerEvents('onChange');
         this._start(position);
@@ -320,7 +320,7 @@ var Slider = React.createClass({
     var className = prefixClsFn(prefixCls, 'mark');
 
     return (
-      <div className={className} onMouseDown={this.handleSliderMouseDown}>
+      <div className={className}>
         {elements}
       </div>
     );

@@ -23,7 +23,7 @@
       "react": "*"
     }
   },
-  "config":{
+  "config": {
     "port": 8000
   },
   "scripts": {
@@ -34,10 +34,9 @@
     "start": "node-dev --harmony node_modules/.bin/rc-server",
     "publish": "spm publish && rc-tools run tag",
     "lint": "rc-tools run lint",
-    "test": "",
-    "saucelabs": "rc-tools run saucelabs",
-    "browser-test": "rc-tools run browser-test",
-    "browser-test-cover": "rc-tools run browser-test-cover"
+    "saucelabs": "node --harmony node_modules/.bin/rc-tools run saucelabs",
+    "browser-test": "node --harmony node_modules/.bin/rc-tools run browser-test",
+    "browser-test-cover": "node --harmony node_modules/.bin/rc-tools run browser-test-cover"
   },
   "devDependencies": {
     "expect.js": "0.3.x",
@@ -45,12 +44,15 @@
     "rc-server": "2.x",
     "rc-tools": "2.x",
     "react": "0.13.x",
-    "node-dev":"2.x",
+    "node-dev": "2.x",
     "jquery": "^1.11.2",
     "css-loader": "^0.9.1"
   },
   "precommit": [
     "lint",
     "less"
-  ]
+  ],
+  "dependencies": {
+    "rc-util": "^2.0.2"
+  }
 }
