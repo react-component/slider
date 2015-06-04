@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 var expect = require('expect.js');
 var Slider = require('../index.js');
 var React = require('react');

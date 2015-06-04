@@ -1,4 +1,5 @@
-/** @jsx React.DOM */
+'use strict';
+
 var React = require('react');
 var DomUtils = require('rc-util').Dom;
 
@@ -89,7 +90,7 @@ var Slider = React.createClass({
   getIndex: function() {
     var props = this.props;
     if (props.marks.length === 0) {
-      return;
+      return 0;
     }
     var value = this.state.value;
     var unit = (props.max - props.min) / (props.marks.length - 1);
@@ -203,7 +204,7 @@ var Slider = React.createClass({
     value = newValue;
 
     if (newValue !== oldValue) {
-      this.setState({value: value, active: 'active'} ,this._triggerEvents.bind(this, 'onChange'));
+      this.setState({value: value, active: 'active'}, this._triggerEvents.bind(this, 'onChange'));
     }
   },
 
@@ -268,7 +269,7 @@ var Slider = React.createClass({
         className = prefixClsFn(prefixCls, 'dot', 'dot-active');
       }
       elements[i] = (
-        <span className={className} style={style} ref={'step'+i}></span>
+        <span className={className} style={style} ref={'step' + i}></span>
       );
     }
 
