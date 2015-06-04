@@ -1,4 +1,3 @@
-/** @jsx React.DOM */
 // use jsx to render html, do not modify simple.html
 require('rc-slider/assets/index.css');
 var Slider = require('rc-slider');
