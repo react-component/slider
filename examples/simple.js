@@ -1,4 +1,5 @@
-// use jsx to render html, do not modify simple.html
+'use strict';
+
 require('rc-slider/assets/index.css');
 var Slider = require('rc-slider');
 var React = require('react');

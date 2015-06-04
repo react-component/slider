@@ -1,1 +1,3 @@
-module.exports = require('./src/Slider');
+'use strict';
+
+module.exports = require('./src/');

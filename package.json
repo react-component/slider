@@ -18,11 +18,7 @@
     "url": "http://github.com/react-component/slider/issues"
   },
   "licenses": "MIT",
-  "spm": {
-    "dependencies": {
-      "react": "*"
-    }
-  },
+  "main":"./lib/index.js",
   "config": {
     "port": 8000
   },
@@ -46,8 +42,7 @@
     "rc-tools": "3.x",
     "react": "^0.13.x",
     "node-dev": "2.x",
-    "jquery": "^1.11.2",
-    "css-loader": "^0.9.1"
+    "jquery": "^1.11.2"
   },
   "precommit": [
     "precommit"
