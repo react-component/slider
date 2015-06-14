@@ -22,6 +22,20 @@ function prefixClsFn(prefixCls) {
   }).join(' ');
 }
 
+function getSimulatedMouseEvent(mouseEventType, touchEvent) {
+  // initMouseEvent(type, canBubble, cancelable, view, clickCount,
+  //                screenX, screenY, clientX, clientY, ctrlKey,
+  //                altKey, shiftKey, metaKey, button, relatedTarget);
+
+  var simulatedEvent = document.createEvent('MouseEvent');
+  simulatedEvent.initMouseEvent(mouseEventType, true, true, window, 1,
+                                touchEvent.screenX, touchEvent.screenY,
+                                touchEvent.clientX, touchEvent.clientY, false,
+                                false, false, false, 0/*left*/, null);
+  return simulatedEvent;
+}
+
+
 var Slider = React.createClass({
   propTypes: {
     min: React.PropTypes.number,
@@ -74,6 +88,9 @@ var Slider = React.createClass({
 
   componentDidMount: function() {
     this._onHandleResizeListener = DomUtils.addEventListener(window, 'resize', this.handleResize);
+    DomUtils.addEventListener(this.refs.handle.getDOMNode(), 'touchstart', this.handleTouchEvents);
+    DomUtils.addEventListener(this.refs.handle.getDOMNode(), 'touchmove', this.handleTouchEvents);
+    DomUtils.addEventListener(this.refs.handle.getDOMNode(), 'touchend', this.handleTouchEvents);
     this.handleResize();
   },
 
@@ -205,6 +222,30 @@ var Slider = React.createClass({
 
     if (newValue !== oldValue) {
       this.setState({value: value, active: 'active'}, this._triggerEvents.bind(this, 'onChange'));
+    }
+  },
+
+  handleTouchEvents: function (event) {
+    event.preventDefault();
+    var touches = event.changedTouches,
+        first = touches[0],
+        type = '';
+
+    switch (event.type) {
+      case 'touchstart':
+        type = 'mousedown';
+        this.handleMouseDown(getSimulatedMouseEvent(type, first));
+        break;
+      case 'touchmove':
+        type = 'mousemove';
+        this._onMouseMove(getSimulatedMouseEvent(type, first));
+        break;
+      case 'touchend':
+        type = 'mouseup';
+        this._onMouseUp(getSimulatedMouseEvent(type, first));
+        break;
+      default:
+        return;
     }
   },
 
@@ -341,9 +382,9 @@ var Slider = React.createClass({
 
     return (
       <a className={className}
-        ref = "handle"
+        ref = 'handle'
         style = {handleStyle}
-        href = "#"
+        href = '#'
         onMouseDown={this.handleMouseDown}></a>
     );
   },
@@ -357,7 +398,7 @@ var Slider = React.createClass({
     var trackClassName = prefixClsFn(prefixCls, 'track');
 
     return (
-      <div className={trackClassName} ref="track" style={style}></div>
+      <div className={trackClassName} ref='track' style={style}></div>
     );
   },
 
@@ -377,7 +418,7 @@ var Slider = React.createClass({
     var sliderClassName = props.disabled ? prefixClsFn(prefixCls, 'disabled') : prefixCls;
 
     return (
-      <div className={sliderClassName} ref="slider" onMouseDown={this.handleSliderMouseDown}>
+      <div className={sliderClassName} ref='slider' onMouseDown={this.handleSliderMouseDown}>
         {track}
         {handles}
         {steps}
