@@ -142,6 +142,11 @@ var Slider = React.createClass({
     return e.pageX || (e.clientX + document.documentElement.scrollLeft);
   },
 
+  _getTouchPosition: function (e) {
+    var touch = e.touches[0];
+    return touch.pageX;
+  },
+
   _triggerEvents: function(event) {
     var props = this.props;
     var hasMarks = props.marks && props.marks.length > 0;
@@ -150,17 +155,27 @@ var Slider = React.createClass({
     }
   },
 
-  _addEventHandles: function() {
-    this._onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this._onMouseMove);
-    this._onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this._onMouseUp);
-  },
-
-  _removeEventHandles: function () {
-    if (this._onMouseMoveListener) {
-      this._onMouseMoveListener.remove();
+  _addEventHandles: function(type) {
+    if (type === 'touch') {
+      // just work for chrome iOS Safari and Android Browser
+      this._onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this._onTouchMove);
+      this._onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this._onTouchUp);
     }
 
-    if (this._onMouseUpListener) {
+    if (type === 'mouse') {
+      this._onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this._onMouseMove);
+      this._onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this._onMouseUp);
+    }
+  },
+
+  _removeEventHandles: function (type) {
+    if (type === 'touch') {
+      this._onTouchMoveListener.remove();
+      this._onTouchUpListener.remove();
+    }
+
+    if (type === 'mouse') {
+      this._onMouseMoveListener.remove();
       this._onMouseUpListener.remove();
     }
   },
@@ -178,18 +193,37 @@ var Slider = React.createClass({
     });
   },
 
-  _end: function() {
-    this._removeEventHandles();
+  _end: function(type) {
+    this._removeEventHandles(type);
     this.setState(this._triggerEvents.bind(this, 'onAfterChange'));
   },
 
   _onMouseUp: function() {
-    this._end();
+    this._end('mouse');
+  },
+
+  _onTouchUp: function() {
+    this._end('touch');
   },
 
   _onMouseMove: function(e) {
-    pauseEvent(e);
     var position = this._getMousePosition(e);
+    this._handleMove(e, position);
+  },
+
+  _onTouchMove: function(e) {
+    if (e.touches.length > 1 || (e.type === 'touchend' && e.touches.length > 0)) {
+      return;
+    }
+
+    var position = this._getTouchPosition(e);
+
+    this._handleMove(e, position);
+  },
+
+  _handleMove: function(e, position) {
+    pauseEvent(e);
+    // var position = this._getMousePosition(e);
     var props = this.props;
     var state = this.state;
 
@@ -222,6 +256,18 @@ var Slider = React.createClass({
     });
   },
 
+  handleTouchStart: function(e) {
+    if (this.props.disabled || e.touches.length > 1 || (e.type === 'touchend' && e.touches.length > 0)) {
+      return;
+    }
+
+    var position = this._getTouchPosition(e);
+    this.startPosition = position;
+    this._start(position);
+    this._addEventHandles('touch');
+    pauseEvent(e);
+  },
+
   handleMouseDown: function() {
     return (e) => {
       if (this.props.disabled) {
@@ -229,7 +275,7 @@ var Slider = React.createClass({
       }
       var position = this._getMousePosition(e);
       this._start(position);
-      this._addEventHandles();
+      this._addEventHandles('mouse');
       pauseEvent(e);
     };
   },
@@ -243,7 +289,7 @@ var Slider = React.createClass({
       () => {
         this._triggerEvents('onChange');
         this._start(position);
-        this._addEventHandles();
+        this._addEventHandles('mouse');
       }
     );
     pauseEvent(e);
@@ -344,7 +390,8 @@ var Slider = React.createClass({
         ref = "handle"
         style = {handleStyle}
         href = "#"
-        onMouseDown={this.handleMouseDown}></a>
+        onMouseDown = {this.handleMouseDown}
+        onTouchStart = {this.handleTouchStart}></a>
     );
   },
 
