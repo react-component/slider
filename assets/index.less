@@ -3,9 +3,13 @@
 // color
 @disabledColor: #e7eaec;
 
+* {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); //remove tap highlight color for mobile safari
+}
+
 .@{prefixClass} {
   position: relative;
-  margin: 6px;
+  margin: 6px auto;
   height: 4px;
   width: 100%;
   border-radius: 2px;
@@ -26,7 +30,7 @@
     margin-top: -5px;
     width: 10px;
     height: 10px;
-    cursor: default;
+    cursor: pointer;
     border-radius: 50%;
     border: solid 2px #d9d9d9;
     background-color: #fff;
