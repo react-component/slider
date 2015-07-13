@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react');
+var Tooltip = require('rc-tooltip');
 var DomUtils = require('rc-util').Dom;
 
 function pauseEvent(e) {
@@ -10,9 +11,6 @@ function pauseEvent(e) {
   if (e.preventDefault) {
     e.preventDefault();
   }
-  e.cancelBubble = true;
-  e.returnValue = false;
-  return false;
 }
 
 function prefixClsFn(prefixCls) {
@@ -93,7 +91,7 @@ var Slider = React.createClass({
       return 0;
     }
     var value = this.state.value;
-    var unit = (props.max - props.min) / (props.marks.length - 1);
+    var unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
     return Math.floor(value / unit);
   },
 
@@ -292,6 +290,7 @@ var Slider = React.createClass({
         this._addEventHandles('mouse');
       }
     );
+
     pauseEvent(e);
   },
 
@@ -314,6 +313,7 @@ var Slider = React.createClass({
       if (i <= this.getIndex() || (this._calcValue(offset) <= this.getValue())) {
         className = prefixClsFn(prefixCls, 'dot', 'dot-active');
       }
+
       elements[i] = (
         <span className={className} style={style} ref={'step' + i}></span>
       );
@@ -336,11 +336,10 @@ var Slider = React.createClass({
       width: (unit / 2).toFixed(5)
     };
 
-    if (i === (marksLen - 1)) {
-      style.right = '0';
-      style.width = 'auto';
-    }else {
-      style.left = (i > 0 ? (offset - (unit / 4)).toFixed(5) : offset);
+    if (i === marksLen - 1) {
+      style.right = -(style.width / 2).toFixed(5);
+    } else {
+      style.left = i > 0 ? (offset - unit / 4).toFixed(5) : -(style.width / 2).toFixed(5);
     }
 
     var prefixCls = this.props.className;
@@ -385,14 +384,22 @@ var Slider = React.createClass({
       className =  prefixClsFn(prefixCls, 'handle', 'handle-active');
     }
 
-    return (
-      <a className={className}
+    var handle =  <a className={className}
         ref = "handle"
         style = {handleStyle}
         href = "#"
         onMouseDown = {this.handleMouseDown}
-        onTouchStart = {this.handleTouchStart}></a>
-    );
+        onTouchStart = {this.handleTouchStart}></a>;
+
+    if (this.props.marks.length > 0) {
+      return handle;
+    } else {
+      return (
+        <Tooltip placement="top" overlay={<span>{this.state.value}</span>} delay={0} >
+          {handle}
+        </Tooltip>
+      );
+    }
   },
 
   renderTrack: function(offset) {
@@ -429,6 +436,7 @@ var Slider = React.createClass({
         {handles}
         {steps}
         {sliderMarks}
+        {this.props.children}
       </div>
     );
   }
