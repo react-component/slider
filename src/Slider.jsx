@@ -28,6 +28,7 @@ var Slider = React.createClass({
     value: React.PropTypes.number,
     index: React.PropTypes.number,
     marks: React.PropTypes.array,
+    isIncluded: React.PropTypes.bool,
     className: React.PropTypes.string,
     disabled: React.PropTypes.bool,
     onBeforeChange: React.PropTypes.func,
@@ -42,6 +43,7 @@ var Slider = React.createClass({
       step: 1,
       value: 0,
       marks: [],
+      isIncluded: true,
       className: 'rc-slider',
       disabled: false,
       index: 0
@@ -310,8 +312,12 @@ var Slider = React.createClass({
         left: offset.toFixed(5)
       };
       var className = prefixClsFn(prefixCls, 'dot');
-      if (i <= this.getIndex() || (this._calcValue(offset) <= this.getValue())) {
-        className = prefixClsFn(prefixCls, 'dot', 'dot-active');
+      if (props.isIncluded) {
+        if (i <= this.getIndex() || (this._calcValue(offset) <= this.getValue())) {
+          className = prefixClsFn(prefixCls, 'dot', 'dot-active');
+        }
+      } else {
+        className = (i === this.getIndex()) ? prefixClsFn(prefixCls, 'dot', 'dot-active') : className;
       }
 
       elements[i] = (
@@ -345,8 +351,12 @@ var Slider = React.createClass({
     var prefixCls = this.props.className;
     var className = prefixClsFn(prefixCls, 'mark-text');
 
-    if (i <= this.getIndex()) {
-      className = prefixClsFn(prefixCls, 'mark-text', 'mark-text-active');
+    if (this.props.isIncluded) {
+      if (i <= this.getIndex()) {
+        className = prefixClsFn(prefixCls, 'mark-text', 'mark-text-active');
+      }
+    } else {
+      className = (i === this.getIndex()) ? prefixClsFn(prefixCls, 'mark-text', 'mark-text-active') : className;
     }
 
     return (
@@ -422,7 +432,7 @@ var Slider = React.createClass({
     var value = state.value;
     var offset = this._calcOffset(value);
 
-    var track = this.renderTrack(offset);
+    var track = this.props.isIncluded ? this.renderTrack(offset) : null;
     var handles = this.renderHandle(offset);
     var steps = (props.step > 1 || props.marks.length > 0) ? this.renderSteps() : null;
     var sliderMarks = (props.marks.length > 0) ? this.renderMarks() : null;

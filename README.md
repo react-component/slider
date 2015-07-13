@@ -107,6 +107,12 @@ React.render(<Rcslider />, container);
           <td>mark every step for the slider, it will ignore the `step` parameter if it has been defined</td>
         </tr>
         <tr>
+          <td>isIncluded</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>if the value is true, it means a continuous value interval, otherwise, it is a independent value.</td>
+        </tr>
+        <tr>
           <td>index</td>
           <td>number</td>
           <td>0</td>
