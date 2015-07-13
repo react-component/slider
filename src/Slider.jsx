@@ -130,7 +130,7 @@ var Slider = React.createClass({
   },
 
   _calValueByPos: function (position, callback) {
-    var pixelOffset = position - this.state.sliderStart;
+    var pixelOffset = position - this.getSliderStart();
     // pixelOffset -= (this.state.handleSize / 2);
 
     var nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
@@ -251,9 +251,15 @@ var Slider = React.createClass({
 
     this.setState({
       upperBound: slider.clientWidth,
-      sliderLength: Math.abs(sliderMax - sliderMin),
-      sliderStart: sliderMin
+      sliderLength: Math.abs(sliderMax - sliderMin)
     });
+  },
+
+  getSliderStart: function() {
+    var slider = this.refs.slider.getDOMNode();
+    var rect = slider.getBoundingClientRect();
+
+    return rect.left;
   },
 
   handleTouchStart: function(e) {
