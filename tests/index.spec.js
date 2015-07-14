@@ -58,19 +58,19 @@ describe('rc-slider', function () {
     expect(slider.getIndex()).to.be(3);
   });
 
-  it('should mouseDown works!', function (done) {
-    var slider = React.render(
-      <Slider marks={["一","二","三","四","五"]} />,
-      div
-    );
-    var selectedStep = slider.refs.step3.getDOMNode();
+  // it('should mouseDown works!', function (done) {
+  //   var slider = React.render(
+  //     <Slider marks={["一","二","三","四","五"]} />,
+  //     div
+  //   );
+  //   var selectedStep = slider.refs.step3.getDOMNode();
     
-    Simulate.mouseDown(selectedStep);
+  //   Simulate.mouseDown(selectedStep);
 
-    setTimeout( function() {
-      expect(slider.state.active).to.be('active');
-      done();
-    }, 200);
-  });
+  //   setTimeout( function() {
+  //     expect(slider.state.active).to.be('active');
+  //     done();
+  //   }, 200);
+  // });
 
 });

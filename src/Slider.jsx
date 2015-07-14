@@ -400,12 +400,12 @@ var Slider = React.createClass({
       className =  prefixClsFn(prefixCls, 'handle', 'handle-active');
     }
 
-    var handle =  <a className={className}
+    var handle =  <div className={className}
         ref = "handle"
         style = {handleStyle}
         href = "#"
         onMouseDown = {this.handleMouseDown}
-        onTouchStart = {this.handleTouchStart}></a>;
+        onTouchStart = {this.handleTouchStart}></div>;
 
     if (this.props.marks.length > 0) {
       return handle;
