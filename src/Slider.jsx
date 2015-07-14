@@ -411,7 +411,11 @@ var Slider = React.createClass({
       return handle;
     } else {
       return (
-        <Tooltip placement="top" overlay={<span>{this.state.value}</span>} delay={0} >
+        <Tooltip
+          placement="top"
+          overlay={<span>{this.state.value}</span>}
+          delay={0}
+          prefixCls={prefixClsFn(prefixCls, 'tooltip')}>
           {handle}
         </Tooltip>
       );
@@ -444,7 +448,7 @@ var Slider = React.createClass({
     var sliderMarks = (props.marks.length > 0) ? this.renderMarks() : null;
 
     var prefixCls = props.className;
-    var sliderClassName = props.disabled ? prefixClsFn(prefixCls, 'disabled') : prefixCls;
+    var sliderClassName = props.disabled ? prefixCls + ' ' + prefixClsFn(prefixCls, 'disabled') : prefixCls;
 
     return (
       <div className={sliderClassName} ref="slider" onMouseDown={this.handleSliderMouseDown}>
