@@ -33,8 +33,8 @@ webpackJsonp([0,1],[
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/slider/assets/index.css", function() {
-			var newContent = require("!!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/slider/assets/index.css");
+		module.hot.accept("!!/Users/weixingzhang/workspace/projects/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/weixingzhang/workspace/projects/react-components/slider/assets/index.css", function() {
+			var newContent = require("!!/Users/weixingzhang/workspace/projects/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/weixingzhang/workspace/projects/react-components/slider/assets/index.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -672,7 +672,7 @@ webpackJsonp([0,1],[
 	      className = prefixClsFn(prefixCls, 'handle', 'handle-active');
 	    }
 	
-	    var handle = React.createElement('a', { className: className,
+	    var handle = React.createElement('div', { className: className,
 	      ref: 'handle',
 	      style: handleStyle,
 	      href: '#',
