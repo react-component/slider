@@ -60,8 +60,6 @@ var Slider = React.createClass({
     }
 
     return {
-      upperBound: 0,
-      sliderLength: 0,
       value: value,
       active: props.disabled ? '' : ((value > props.min || props.index > 0) ? 'active' : '')
     };
@@ -70,11 +68,6 @@ var Slider = React.createClass({
   componentWillReceiveProps: function(newProps) {
     var value = newProps.value;
     this.state.value = this._trimAlignValue(value, newProps);
-  },
-
-  componentDidMount: function() {
-    this._onHandleResizeListener = DomUtils.addEventListener(window, 'resize', this.handleResize);
-    this.handleResize();
   },
 
   componentWillUnmount: function() {
@@ -121,11 +114,11 @@ var Slider = React.createClass({
 
   _calcOffset: function(value) {
     var ratio = (value - this.props.min) / (this.props.max - this.props.min);
-    return ratio * this.state.upperBound;
+    return ratio * 100 + '%';
   },
 
   _calcValue: function(offset) {
-    var ratio = offset / this.state.upperBound;
+    var ratio = offset / this.getSliderLength();
     return ratio * (this.props.max - this.props.min) + this.props.min;
   },
 
@@ -232,7 +225,7 @@ var Slider = React.createClass({
 
     var diffPosition = position - state.startPosition;
 
-    var diffValue = diffPosition / (state.sliderLength) * (props.max - props.min);
+    var diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
     var newValue = this._trimAlignValue(state.startValue + diffValue);
 
     value = newValue;
@@ -242,17 +235,13 @@ var Slider = React.createClass({
     }
   },
 
-  handleResize: function() {
-    var slider = this.refs.slider.getDOMNode();
-    var rect = slider.getBoundingClientRect();
+  getSliderLength: function() {
+    var slider = this.refs.slider;
+    if (!slider) {
+      return 0;
+    }
 
-    var sliderMin = rect.left;
-    var sliderMax = rect.right;
-
-    this.setState({
-      upperBound: slider.clientWidth,
-      sliderLength: Math.abs(sliderMax - sliderMin)
-    });
+    return slider.getDOMNode().clientWidth;
   },
 
   getSliderStart: function() {
@@ -306,16 +295,16 @@ var Slider = React.createClass({
     var props = this.props;
     var marksLen = props.marks.length;
     var stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
-    var unit = this.state.sliderLength / (stepNum - 1);
+    var unit = 100 / (stepNum - 1);
 
     var prefixCls = props.className;
     var stepClassName = prefixClsFn(prefixCls, 'step');
 
     var elements = [];
     for (var i = 0; i < stepNum; i++) {
-      var offset = unit * i;
+      var offset = unit * i + '%';
       var style = {
-        left: offset.toFixed(5)
+        left: offset
       };
       var className = prefixClsFn(prefixCls, 'dot');
       if (props.isIncluded) {
@@ -341,17 +330,17 @@ var Slider = React.createClass({
   renderMark: function(i) {
     var marks = this.props.marks;
     var marksLen = marks.length;
-    var unit = this.state.sliderLength / (marksLen - 1);
+    var unit = 100 / (marksLen - 1);
     var offset = unit * i;
 
     var style = {
-      width: (unit / 2).toFixed(5)
+      width: unit / 2 + '%'
     };
 
     if (i === marksLen - 1) {
-      style.right = -(style.width / 2).toFixed(5);
+      style.right = -unit / 4 + '%';
     } else {
-      style.left = i > 0 ? (offset - unit / 4).toFixed(5) : -(style.width / 2).toFixed(5);
+      style.left = i > 0 ? offset - unit / 4 + '%' : -unit / 4 + '%';
     }
 
     var prefixCls = this.props.className;
