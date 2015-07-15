@@ -342,8 +342,6 @@ webpackJsonp([0,1],[
 	    }
 	
 	    return {
-	      upperBound: 0,
-	      sliderLength: 0,
 	      value: value,
 	      active: props.disabled ? '' : value > props.min || props.index > 0 ? 'active' : ''
 	    };
@@ -354,29 +352,20 @@ webpackJsonp([0,1],[
 	    this.state.value = this._trimAlignValue(value, newProps);
 	  },
 	
-	  componentDidMount: function componentDidMount() {
-	    this._onHandleResizeListener = DomUtils.addEventListener(window, 'resize', this.handleResize);
-	    setTimeout(this.handleResize, 0);
-	  },
-	
-	  componentWillUnmount: function componentWillUnmount() {
-	    if (this._onHandleResizeListener) {
-	      this._onHandleResizeListener.remove();
-	    }
-	  },
-	
 	  getValue: function getValue() {
 	    return this.state.value;
 	  },
 	
 	  getIndex: function getIndex() {
 	    var props = this.props;
-	    if (props.marks.length === 0) {
-	      return 0;
-	    }
 	    var value = this.state.value;
-	    var unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
-	    return Math.floor(value / unit);
+	
+	    if (props.marks.length === 0) {
+	      return Math.floor((value - props.min) / props.step);
+	    } else {
+	      var unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
+	      return Math.ceil(value / unit);
+	    }
 	  },
 	
 	  _trimAlignValue: function _trimAlignValue(val, props) {
@@ -403,18 +392,17 @@ webpackJsonp([0,1],[
 	
 	  _calcOffset: function _calcOffset(value) {
 	    var ratio = (value - this.props.min) / (this.props.max - this.props.min);
-	    return ratio * this.state.upperBound;
+	    return ratio * 100 + '%';
 	  },
 	
 	  _calcValue: function _calcValue(offset) {
-	    var ratio = offset / this.state.upperBound;
+	    var ratio = offset / this.getSliderLength();
 	    return ratio * (this.props.max - this.props.min) + this.props.min;
 	  },
 	
 	  _calValueByPos: function _calValueByPos(position, callback) {
 	    var pixelOffset = position - this.getSliderStart();
 	    // pixelOffset -= (this.state.handleSize / 2);
-	
 	    var nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
 	
 	    this.setState({ value: nextValue, active: 'active' }, callback);
@@ -514,7 +502,7 @@ webpackJsonp([0,1],[
 	
 	    var diffPosition = position - state.startPosition;
 	
-	    var diffValue = diffPosition / state.sliderLength * (props.max - props.min);
+	    var diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 	    var newValue = this._trimAlignValue(state.startValue + diffValue);
 	
 	    value = newValue;
@@ -524,17 +512,13 @@ webpackJsonp([0,1],[
 	    }
 	  },
 	
-	  handleResize: function handleResize() {
-	    var slider = this.refs.slider.getDOMNode();
-	    var rect = slider.getBoundingClientRect();
+	  getSliderLength: function getSliderLength() {
+	    var slider = this.refs.slider;
+	    if (!slider) {
+	      return 0;
+	    }
 	
-	    var sliderMin = rect.left;
-	    var sliderMax = rect.right;
-	
-	    this.setState({
-	      upperBound: slider.clientWidth,
-	      sliderLength: Math.abs(sliderMax - sliderMin)
-	    });
+	    return slider.getDOMNode().clientWidth;
 	  },
 	
 	  getSliderStart: function getSliderStart() {
@@ -590,20 +574,20 @@ webpackJsonp([0,1],[
 	    var props = this.props;
 	    var marksLen = props.marks.length;
 	    var stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
-	    var unit = this.state.sliderLength / (stepNum - 1);
+	    var unit = 100 / (stepNum - 1);
 	
 	    var prefixCls = props.className;
 	    var stepClassName = prefixClsFn(prefixCls, 'step');
 	
 	    var elements = [];
 	    for (var i = 0; i < stepNum; i++) {
-	      var offset = unit * i;
+	      var offset = unit * i + '%';
 	      var style = {
-	        left: offset.toFixed(5)
+	        left: offset
 	      };
 	      var className = prefixClsFn(prefixCls, 'dot');
 	      if (props.isIncluded) {
-	        if (i <= this.getIndex() || this._calcValue(offset) <= this.getValue()) {
+	        if (i <= this.getIndex()) {
 	          className = prefixClsFn(prefixCls, 'dot', 'dot-active');
 	        }
 	      } else {
@@ -619,17 +603,17 @@ webpackJsonp([0,1],[
 	  renderMark: function renderMark(i) {
 	    var marks = this.props.marks;
 	    var marksLen = marks.length;
-	    var unit = this.state.sliderLength / (marksLen - 1);
+	    var unit = 100 / (marksLen - 1);
 	    var offset = unit * i;
 	
 	    var style = {
-	      width: (unit / 2).toFixed(5)
+	      width: unit / 2 + '%'
 	    };
 	
 	    if (i === marksLen - 1) {
-	      style.right = -(style.width / 2).toFixed(5);
+	      style.right = -unit / 4 + '%';
 	    } else {
-	      style.left = i > 0 ? (offset - unit / 4).toFixed(5) : -(style.width / 2).toFixed(5);
+	      style.left = i > 0 ? offset - unit / 4 + '%' : -unit / 4 + '%';
 	    }
 	
 	    var prefixCls = this.props.className;
