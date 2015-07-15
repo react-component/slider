@@ -82,7 +82,7 @@ var Slider = React.createClass({
       return Math.floor((value - props.min) / props.step);
     } else {
       var unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
-      return Math.ceil(value / unit);
+      return Math.round(value / unit);
     }
   },
 
