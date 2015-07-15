@@ -74,7 +74,7 @@ var Slider = React.createClass({
 
   componentDidMount: function() {
     this._onHandleResizeListener = DomUtils.addEventListener(window, 'resize', this.handleResize);
-    setTimeout(this.handleResize, 0);
+    this.handleResize();
   },
 
   componentWillUnmount: function() {
