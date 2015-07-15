@@ -70,24 +70,20 @@ var Slider = React.createClass({
     this.state.value = this._trimAlignValue(value, newProps);
   },
 
-  componentWillUnmount: function() {
-    if (this._onHandleResizeListener) {
-      this._onHandleResizeListener.remove();
-    }
-  },
-
   getValue: function() {
     return this.state.value;
   },
 
   getIndex: function() {
     var props = this.props;
-    if (props.marks.length === 0) {
-      return 0;
-    }
     var value = this.state.value;
-    var unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
-    return Math.floor(value / unit);
+
+    if (props.marks.length === 0) {
+      return Math.floor((value - props.min) / props.step);
+    } else {
+      var unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
+      return Math.ceil(value / unit);
+    }
   },
 
   _trimAlignValue: function(val, props) {
@@ -125,7 +121,6 @@ var Slider = React.createClass({
   _calValueByPos: function (position, callback) {
     var pixelOffset = position - this.getSliderStart();
     // pixelOffset -= (this.state.handleSize / 2);
-
     var nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
 
     this.setState({value: nextValue, active: 'active'}, callback);
@@ -308,7 +303,7 @@ var Slider = React.createClass({
       };
       var className = prefixClsFn(prefixCls, 'dot');
       if (props.isIncluded) {
-        if (i <= this.getIndex() || (this._calcValue(offset) <= this.getValue())) {
+        if (i <= this.getIndex()) {
           className = prefixClsFn(prefixCls, 'dot', 'dot-active');
         }
       } else {
