@@ -14,10 +14,19 @@ webpackJsonp([0,1],[
 	__webpack_require__(2);
 	
 	var Slider = __webpack_require__(6);
-	var React = __webpack_require__(8);
+	var React = __webpack_require__(9);
+	
+	function onChange(v) {
+	  console.log(v);
+	}
+	
 	// React.render(<Slider marks={["一","二","三","四","五"]} index={3}/>, document.getElementById('__react-content'));
 	// React.render(<Slider className='rc-slider' step={20}/>, document.getElementById('__react-content'));
-	React.render(React.createElement(Slider, null), document.getElementById('__react-content'));
+	React.render(React.createElement(
+	  'div',
+	  { style: { width: 400, margin: 100 } },
+	  React.createElement(Slider, { onChange: onChange })
+	), document.getElementById('__react-content'));
 
 /***/ },
 /* 2 */
@@ -33,8 +42,8 @@ webpackJsonp([0,1],[
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/Users/weixingzhang/workspace/projects/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/weixingzhang/workspace/projects/react-components/slider/assets/index.css", function() {
-			var newContent = require("!!/Users/weixingzhang/workspace/projects/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/weixingzhang/workspace/projects/react-components/slider/assets/index.css");
+		module.hot.accept("!!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/slider/assets/index.css", function() {
+			var newContent = require("!!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js!/Users/yiminghe/code/react-components/slider/assets/index.css");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -280,11 +289,26 @@ webpackJsonp([0,1],[
 
 	'use strict';
 	
-	var React = __webpack_require__(8);
-	var Tooltip = __webpack_require__(9);
-	var DomUtils = __webpack_require__(11).Dom;
+	module.exports = __webpack_require__(8);
+
+/***/ },
+/* 8 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var React = __webpack_require__(9);
+	var Tooltip = __webpack_require__(10);
+	var rcUtil = __webpack_require__(12);
+	var DomUtils = rcUtil.Dom;
+	
+	function noop() {}
 	
 	function pauseEvent(e) {
+	  e.cancelBubble = true;
+	  e.returnValue = false;
 	  if (e.stopPropagation) {
 	    e.stopPropagation();
 	  }
@@ -307,8 +331,8 @@ webpackJsonp([0,1],[
 	    min: React.PropTypes.number,
 	    max: React.PropTypes.number,
 	    step: React.PropTypes.number,
-	    value: React.PropTypes.number,
-	    index: React.PropTypes.number,
+	    defaultValue: React.PropTypes.number,
+	    defaultIndex: React.PropTypes.number,
 	    marks: React.PropTypes.array,
 	    isIncluded: React.PropTypes.bool,
 	    className: React.PropTypes.string,
@@ -323,37 +347,29 @@ webpackJsonp([0,1],[
 	      min: 0,
 	      max: 100,
 	      step: 1,
-	      value: 0,
+	      defaultValue: 0,
 	      marks: [],
 	      isIncluded: true,
-	      className: 'rc-slider',
+	      className: '',
+	      prefixCls: 'rc-slider',
 	      disabled: false,
-	      index: 0
+	      defaultIndex: 0
 	    };
 	  },
 	
 	  getInitialState: function getInitialState() {
 	    var props = this.props;
-	    var value = this._trimAlignValue(props.value);
+	    var value = props.defaultValue;
+	    value = this._trimAlignValue(value);
 	    var marksLen = props.marks.length;
 	    if (marksLen > 0) {
-	      value = (props.max - props.min) / (marksLen - 1) * props.index;
+	      value = (props.max - props.min) / (marksLen - 1) * props.defaultIndex;
 	      value = value.toFixed(5);
 	    }
 	
 	    return {
-	      value: value,
-	      active: props.disabled ? '' : value > props.min || props.index > 0 ? 'active' : ''
+	      value: value
 	    };
-	  },
-	
-	  componentWillReceiveProps: function componentWillReceiveProps(newProps) {
-	    var value = newProps.value;
-	    this.state.value = this._trimAlignValue(value, newProps);
-	  },
-	
-	  getValue: function getValue() {
-	    return this.state.value;
 	  },
 	
 	  getIndex: function getIndex() {
@@ -400,16 +416,16 @@ webpackJsonp([0,1],[
 	    return ratio * (this.props.max - this.props.min) + this.props.min;
 	  },
 	
-	  _calValueByPos: function _calValueByPos(position, callback) {
+	  _calValueByPos: function _calValueByPos(position) {
 	    var pixelOffset = position - this.getSliderStart();
 	    // pixelOffset -= (this.state.handleSize / 2);
 	    var nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
-	
-	    this.setState({ value: nextValue, active: 'active' }, callback);
-	  },
-	
-	  _getMousePosition: function _getMousePosition(e) {
-	    return e.pageX || e.clientX + document.documentElement.scrollLeft;
+	    // do not use setState
+	    this.state.value = nextValue;
+	    this.setState({
+	      value: nextValue
+	    });
+	    return nextValue;
 	  },
 	
 	  _getTouchPosition: function _getTouchPosition(e) {
@@ -430,9 +446,7 @@ webpackJsonp([0,1],[
 	      // just work for chrome iOS Safari and Android Browser
 	      this._onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this._onTouchMove);
 	      this._onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this._onTouchUp);
-	    }
-	
-	    if (type === 'mouse') {
+	    } else if (type === 'mouse') {
 	      this._onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this._onMouseMove);
 	      this._onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this._onMouseUp);
 	    }
@@ -442,30 +456,21 @@ webpackJsonp([0,1],[
 	    if (type === 'touch') {
 	      this._onTouchMoveListener.remove();
 	      this._onTouchUpListener.remove();
-	    }
-	
-	    if (type === 'mouse') {
+	    } else if (type === 'mouse') {
 	      this._onMouseMoveListener.remove();
 	      this._onMouseUpListener.remove();
 	    }
 	  },
 	
 	  _start: function _start(position) {
-	    if (document.activeElement) {
-	      document.activeElement.blur();
-	    }
-	
 	    this._triggerEvents('onBeforeChange');
-	
-	    this.setState({
-	      startValue: this.state.value,
-	      startPosition: position
-	    });
+	    this.startValue = this.state.value;
+	    this.startPosition = position;
 	  },
 	
 	  _end: function _end(type) {
 	    this._removeEventHandles(type);
-	    this.setState(this._triggerEvents.bind(this, 'onAfterChange'));
+	    this._triggerEvents('onAfterChange');
 	  },
 	
 	  _onMouseUp: function _onMouseUp() {
@@ -477,12 +482,13 @@ webpackJsonp([0,1],[
 	  },
 	
 	  _onMouseMove: function _onMouseMove(e) {
-	    var position = this._getMousePosition(e);
+	    var position = e.pageX;
 	    this._handleMove(e, position);
 	  },
 	
 	  _onTouchMove: function _onTouchMove(e) {
 	    if (e.touches.length > 1 || e.type === 'touchend' && e.touches.length > 0) {
+	      this._end('touch');
 	      return;
 	    }
 	
@@ -493,22 +499,22 @@ webpackJsonp([0,1],[
 	
 	  _handleMove: function _handleMove(e, position) {
 	    pauseEvent(e);
-	    // var position = this._getMousePosition(e);
 	    var props = this.props;
 	    var state = this.state;
 	
 	    var value = state.value;
 	    var oldValue = value;
 	
-	    var diffPosition = position - state.startPosition;
+	    var diffPosition = position - this.startPosition;
 	
 	    var diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
-	    var newValue = this._trimAlignValue(state.startValue + diffValue);
+	    var newValue = this._trimAlignValue(this.startValue + diffValue);
 	
 	    value = newValue;
 	
 	    if (newValue !== oldValue) {
-	      this.setState({ value: value, active: 'active' }, this._triggerEvents.bind(this, 'onChange'));
+	      this.setState({ value: value });
+	      this._triggerEvents('onChange');
 	    }
 	  },
 	
@@ -529,44 +535,24 @@ webpackJsonp([0,1],[
 	  },
 	
 	  handleTouchStart: function handleTouchStart(e) {
-	    if (this.props.disabled || e.touches.length > 1 || e.type === 'touchend' && e.touches.length > 0) {
+	    if (e.touches.length > 1 || e.type.toLowerCase() === 'touchend' && e.touches.length > 0) {
 	      return;
 	    }
 	
 	    var position = this._getTouchPosition(e);
-	    this.startPosition = position;
+	    this._calValueByPos(position);
+	    this._triggerEvents('onChange');
 	    this._start(position);
 	    this._addEventHandles('touch');
 	    pauseEvent(e);
 	  },
 	
-	  handleMouseDown: function handleMouseDown() {
-	    var _this = this;
-	
-	    return function (e) {
-	      if (_this.props.disabled) {
-	        return;
-	      }
-	      var position = _this._getMousePosition(e);
-	      _this._start(position);
-	      _this._addEventHandles('mouse');
-	      pauseEvent(e);
-	    };
-	  },
-	
 	  handleSliderMouseDown: function handleSliderMouseDown(e) {
-	    var _this2 = this;
-	
-	    if (this.props.disabled) {
-	      return;
-	    }
-	    var position = this._getMousePosition(e);
-	    this._calValueByPos(position, function () {
-	      _this2._triggerEvents('onChange');
-	      _this2._start(position);
-	      _this2._addEventHandles('mouse');
-	    });
-	
+	    var position = e.pageX;
+	    this._calValueByPos(position);
+	    this._triggerEvents('onChange');
+	    this._start(position);
+	    this._addEventHandles('mouse');
 	    pauseEvent(e);
 	  },
 	
@@ -576,7 +562,7 @@ webpackJsonp([0,1],[
 	    var stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
 	    var unit = 100 / (stepNum - 1);
 	
-	    var prefixCls = props.className;
+	    var prefixCls = props.prefixCls;
 	    var stepClassName = prefixClsFn(prefixCls, 'step');
 	
 	    var elements = [];
@@ -597,7 +583,11 @@ webpackJsonp([0,1],[
 	      elements[i] = React.createElement('span', { className: className, style: style, ref: 'step' + i });
 	    }
 	
-	    return React.createElement('div', { className: stepClassName }, elements);
+	    return React.createElement(
+	      'div',
+	      { className: stepClassName },
+	      elements
+	    );
 	  },
 	
 	  renderMark: function renderMark(i) {
@@ -616,7 +606,7 @@ webpackJsonp([0,1],[
 	      style.left = i > 0 ? offset - unit / 4 + '%' : -unit / 4 + '%';
 	    }
 	
-	    var prefixCls = this.props.className;
+	    var prefixCls = this.props.prefixCls;
 	    var className = prefixClsFn(prefixCls, 'mark-text');
 	
 	    if (this.props.isIncluded) {
@@ -627,7 +617,11 @@ webpackJsonp([0,1],[
 	      className = i === this.getIndex() ? prefixClsFn(prefixCls, 'mark-text', 'mark-text-active') : className;
 	    }
 	
-	    return React.createElement('span', { className: className, style: style }, this.props.marks[i]);
+	    return React.createElement(
+	      'span',
+	      { className: className, style: style },
+	      this.props.marks[i]
+	    );
 	  },
 	
 	  renderMarks: function renderMarks() {
@@ -638,10 +632,14 @@ webpackJsonp([0,1],[
 	      elements[i] = this.renderMark(i);
 	    }
 	
-	    var prefixCls = this.props.className;
+	    var prefixCls = this.props.prefixCls;
 	    var className = prefixClsFn(prefixCls, 'mark');
 	
-	    return React.createElement('div', { className: className }, elements);
+	    return React.createElement(
+	      'div',
+	      { className: className },
+	      elements
+	    );
 	  },
 	
 	  renderHandle: function renderHandle(offset) {
@@ -649,28 +647,29 @@ webpackJsonp([0,1],[
 	      left: offset
 	    };
 	
-	    var prefixCls = this.props.className;
+	    var prefixCls = this.props.prefixCls;
 	    var className = prefixClsFn(prefixCls, 'handle');
-	
-	    if (this.state.active) {
-	      className = prefixClsFn(prefixCls, 'handle', 'handle-active');
-	    }
 	
 	    var handle = React.createElement('div', { className: className,
 	      ref: 'handle',
-	      style: handleStyle,
-	      href: '#',
-	      onMouseDown: this.handleMouseDown,
-	      onTouchStart: this.handleTouchStart });
+	      style: handleStyle });
 	
 	    if (this.props.marks.length > 0) {
 	      return handle;
 	    } else {
-	      return React.createElement(Tooltip, {
-	        placement: 'top',
-	        overlay: React.createElement('span', null, this.state.value),
-	        delay: 0,
-	        prefixCls: prefixClsFn(prefixCls, 'tooltip') }, handle);
+	      return React.createElement(
+	        Tooltip,
+	        {
+	          placement: 'top',
+	          overlay: React.createElement(
+	            'span',
+	            null,
+	            this.state.value
+	          ),
+	          delay: 0,
+	          prefixCls: prefixClsFn(prefixCls, 'tooltip') },
+	        handle
+	      );
 	    }
 	  },
 	
@@ -679,13 +678,15 @@ webpackJsonp([0,1],[
 	      width: offset
 	    };
 	
-	    var prefixCls = this.props.className;
+	    var prefixCls = this.props.prefixCls;
 	    var trackClassName = prefixClsFn(prefixCls, 'track');
 	
 	    return React.createElement('div', { className: trackClassName, ref: 'track', style: style });
 	  },
 	
 	  render: function render() {
+	    var _sliderClassName;
+	
 	    var state = this.state;
 	    var props = this.props;
 	
@@ -697,31 +698,42 @@ webpackJsonp([0,1],[
 	    var steps = props.step > 1 || props.marks.length > 0 ? this.renderSteps() : null;
 	    var sliderMarks = props.marks.length > 0 ? this.renderMarks() : null;
 	
-	    var prefixCls = props.className;
-	    var sliderClassName = props.disabled ? prefixCls + ' ' + prefixClsFn(prefixCls, 'disabled') : prefixCls;
+	    var prefixCls = props.prefixCls;
+	    var disabled = props.disabled;
+	    var sliderClassName = (_sliderClassName = {}, _defineProperty(_sliderClassName, prefixCls, 1), _defineProperty(_sliderClassName, props.className, !!props.className), _defineProperty(_sliderClassName, prefixCls + '-disabled', disabled), _sliderClassName);
 	
-	    return React.createElement('div', { className: sliderClassName, ref: 'slider', onMouseDown: this.handleSliderMouseDown }, track, handles, steps, sliderMarks, this.props.children);
+	    return React.createElement(
+	      'div',
+	      { className: rcUtil.classSet(sliderClassName), ref: 'slider',
+	        onTouchStart: disabled ? noop : this.handleTouchStart,
+	        onMouseDown: disabled ? noop : this.handleSliderMouseDown },
+	      track,
+	      handles,
+	      steps,
+	      sliderMarks,
+	      this.props.children
+	    );
 	  }
 	});
 	
 	module.exports = Slider;
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 	module.exports = React;
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(10);
+	module.exports = __webpack_require__(11);
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -739,10 +751,10 @@ webpackJsonp([0,1],[
 	/**
 	 * @author yiminghe@gmail.com
 	 */
-	var React = __webpack_require__(8);
-	var rcUtil = __webpack_require__(11);
+	var React = __webpack_require__(9);
+	var rcUtil = __webpack_require__(12);
 	var createChainedFunction = rcUtil.createChainedFunction;
-	var Popup = __webpack_require__(23);
+	var Popup = __webpack_require__(24);
 	
 	var Tooltip = (function (_React$Component) {
 	  function Tooltip(props) {
@@ -1036,30 +1048,30 @@ webpackJsonp([0,1],[
 	module.exports = Tooltip;
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  guid: __webpack_require__(12),
-	  classSet: __webpack_require__(13),
-	  joinClasses: __webpack_require__(14),
-	  KeyCode: __webpack_require__(15),
-	  PureRenderMixin: __webpack_require__(16),
-	  shallowEqual: __webpack_require__(17),
-	  createChainedFunction: __webpack_require__(18),
+	  guid: __webpack_require__(13),
+	  classSet: __webpack_require__(14),
+	  joinClasses: __webpack_require__(15),
+	  KeyCode: __webpack_require__(16),
+	  PureRenderMixin: __webpack_require__(17),
+	  shallowEqual: __webpack_require__(18),
+	  createChainedFunction: __webpack_require__(19),
 	  Dom: {
-	    addEventListener: __webpack_require__(19),
-	    contains: __webpack_require__(20)
+	    addEventListener: __webpack_require__(20),
+	    contains: __webpack_require__(21)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(21),
-	    mapSelf: __webpack_require__(22)
+	    toArray: __webpack_require__(22),
+	    mapSelf: __webpack_require__(23)
 	  }
 	};
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports) {
 
 	var seed = 0;
@@ -1069,7 +1081,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports) {
 
 	/**
@@ -1114,7 +1126,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	/**
@@ -1161,7 +1173,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	/**
@@ -1688,7 +1700,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -1704,7 +1716,7 @@ webpackJsonp([0,1],[
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(17);
+	var shallowEqual = __webpack_require__(18);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -1741,7 +1753,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	/**
@@ -1789,7 +1801,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports) {
 
 	/**
@@ -1816,7 +1828,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	module.exports = function (target, eventType, callback) {
@@ -1839,7 +1851,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports) {
 
 	module.exports = function (root, node) {
@@ -1855,10 +1867,10 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(8);
+	var React = __webpack_require__(9);
 	
 	module.exports = function (children) {
 	  var ret = [];
@@ -1870,10 +1882,10 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var React = __webpack_require__(8);
+	var React = __webpack_require__(9);
 	
 	function mirror(o) {
 	  return o;
@@ -1886,7 +1898,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1903,10 +1915,10 @@ webpackJsonp([0,1],[
 	 * @author yiminghe@gmail.com
 	 */
 	
-	var React = __webpack_require__(8);
-	var anim = __webpack_require__(24);
-	var utils = __webpack_require__(27);
-	var domAlign = __webpack_require__(28);
+	var React = __webpack_require__(9);
+	var anim = __webpack_require__(25);
+	var utils = __webpack_require__(28);
+	var domAlign = __webpack_require__(29);
 	
 	var Popup = (function (_React$Component) {
 	  function Popup() {
@@ -1918,6 +1930,13 @@ webpackJsonp([0,1],[
 	  _inherits(Popup, _React$Component);
 	
 	  _createClass(Popup, [{
+	    key: 'shouldComponentUpdate',
+	
+	    // optimize for speed
+	    value: function shouldComponentUpdate(nextProps) {
+	      return this.props.visible || nextProps.visible;
+	    }
+	  }, {
 	    key: 'getPopupDomNode',
 	    value: function getPopupDomNode() {
 	      return React.findDOMNode(this.refs.popup);
@@ -2017,13 +2036,13 @@ webpackJsonp([0,1],[
 	module.exports = Popup;
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(25);
-	var Css = __webpack_require__(26);
+	var Event = __webpack_require__(26);
+	var Css = __webpack_require__(27);
 	
 	var cssAnimation = function cssAnimation(node, transitionName, callback) {
 	  var className = transitionName;
@@ -2116,7 +2135,7 @@ webpackJsonp([0,1],[
 	module.exports = cssAnimation;
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
 	
@@ -2203,7 +2222,7 @@ webpackJsonp([0,1],[
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2234,7 +2253,7 @@ webpackJsonp([0,1],[
 	};
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2256,7 +2275,7 @@ webpackJsonp([0,1],[
 	};
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -2266,7 +2285,7 @@ webpackJsonp([0,1],[
 	
 	'use strict';
 	
-	var utils = __webpack_require__(29);
+	var utils = __webpack_require__(30);
 	
 	// http://yiminghe.iteye.com/blog/1124720
 	
@@ -2621,7 +2640,7 @@ webpackJsonp([0,1],[
 	// document.documentElement, so check for that too.
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2629,9 +2648,6 @@ webpackJsonp([0,1],[
 	var RE_NUM = /[\-+]?(?:\d*\.|)\d+(?:[eE][\-+]?\d+|)/.source;
 	
 	var getComputedStyleX;
-	if (typeof window !== 'undefined') {
-	  getComputedStyleX = window.getComputedStyle ? _getComputedStyle : _getComputedStyleIE;
-	}
 	
 	function css(el, name, value) {
 	  if (typeof name === 'object') {
@@ -2778,21 +2794,28 @@ webpackJsonp([0,1],[
 	  return ret === '' ? 'auto' : ret;
 	}
 	
+	if (typeof window !== 'undefined') {
+	  getComputedStyleX = window.getComputedStyle ? _getComputedStyle : _getComputedStyleIE;
+	}
+	
 	// 设置 elem 相对 elem.ownerDocument 的坐标
 	function setOffset(elem, offset) {
 	  // set position first, in-case top/left are set even on static elem
 	  if (css(elem, 'position') === 'static') {
 	    elem.style.position = 'relative';
 	  }
-	
-	  var old = getOffset(elem),
-	      ret = {},
-	      current,
-	      key;
-	
+	  var preset = -9999;
+	  if ('left' in offset) {
+	    elem.style.left = preset + 'px';
+	  }
+	  if ('top' in offset) {
+	    elem.style.top = preset + 'px';
+	  }
+	  var old = getOffset(elem);
+	  var ret = {};
+	  var key;
 	  for (key in offset) {
-	    current = parseFloat(css(elem, key)) || 0;
-	    ret[key] = current + offset[key] - old[key];
+	    ret[key] = preset + offset[key] - old[key];
 	  }
 	  css(elem, ret);
 	}
