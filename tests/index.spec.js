@@ -18,14 +18,14 @@ describe('rc-slider', function () {
 
   it('should render a simple slider with value correctly!', function () {
     var slider = React.render(
-      <Slider className='rc-slider' value={40}/>,
+      <Slider className='rc-slider' defaultValue={40}/>,
       div
     );
     var node = $(div);
     expect(node.find('.rc-slider').length).to.be(1);
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
-    expect(slider.getValue()).to.be(40);
+    expect(slider.state.value).to.be(40);
     var trackWidth = node.find('.rc-slider-track')[0].style.width;
     expect(trackWidth).to.eql(node.find('.rc-slider-handle')[0].style.left);
   });
@@ -40,12 +40,12 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
     expect(node.find('.rc-slider-dot').length).to.be(6);
-    expect(slider.getValue()).to.be(0);
+    expect(slider.state.value).to.be(0);
   });
 
   it('should render a slider with marks correctly!', function () {
     var slider = React.render(
-      <Slider marks={["一","二","三","四","五"]} index={3} />,
+      <Slider marks={["一","二","三","四","五"]} defaultIndex={3} />,
       div
     );
     var node = $(div);

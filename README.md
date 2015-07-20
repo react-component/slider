@@ -95,7 +95,7 @@ React.render(<Rcslider />, container);
           <td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. max - min should be evenly divisible by the step value.</td>
         </tr>
          <tr>
-          <td>value</td>
+          <td>defaultValue</td>
           <td>number</td>
           <td>0</td>
           <td>Determines the initial positions of the handles.</td>
@@ -113,7 +113,7 @@ React.render(<Rcslider />, container);
           <td>if the value is true, it means a continuous value interval, otherwise, it is a independent value.</td>
         </tr>
         <tr>
-          <td>index</td>
+          <td>defaultIndex</td>
           <td>number</td>
           <td>0</td>
           <td>For step or marks slider, determine the initial positions of the handles.</td>
