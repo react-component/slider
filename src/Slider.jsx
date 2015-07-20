@@ -26,6 +26,22 @@ function prefixClsFn(prefixCls) {
   }).join(' ');
 }
 
+function getValueFromIndex(props) {
+  var value;
+  var marksLen = props.marks.length;
+  var index;
+  if ('index' in props) {
+    index = props.index;
+  } else {
+    index = props.defaultIndex;
+  }
+  if (marksLen > 0) {
+    value = ((props.max - props.min) / (marksLen - 1)) * (index);
+    value = value.toFixed(5);
+  }
+  return value;
+}
+
 var Slider = React.createClass({
   propTypes: {
     min: React.PropTypes.number,
@@ -33,6 +49,8 @@ var Slider = React.createClass({
     step: React.PropTypes.number,
     defaultValue: React.PropTypes.number,
     defaultIndex: React.PropTypes.number,
+    value: React.PropTypes.number,
+    index: React.PropTypes.number,
     marks: React.PropTypes.array,
     isIncluded: React.PropTypes.bool,
     className: React.PropTypes.string,
@@ -42,7 +60,7 @@ var Slider = React.createClass({
     onAfterChange: React.PropTypes.func
   },
 
-  getDefaultProps: function () {
+  getDefaultProps() {
     return {
       min: 0,
       max: 100,
@@ -57,22 +75,35 @@ var Slider = React.createClass({
     };
   },
 
-  getInitialState: function () {
+  getInitialState() {
     var props = this.props;
     var value = props.defaultValue;
+    if ('value' in props) {
+      value = props.value;
+    }
     value = this._trimAlignValue(value);
     var marksLen = props.marks.length;
     if (marksLen > 0) {
-      value = ((props.max - props.min) / (marksLen - 1)) * (props.defaultIndex);
-      value = value.toFixed(5);
+      value = getValueFromIndex(props);
     }
-
     return {
       value: value
     };
   },
 
-  getIndex: function () {
+  componentWillReceiveProps(nextProps) {
+    if ('value' in nextProps) {
+      this.setState({
+        value: nextProps.value
+      });
+    } else if ('index' in nextProps) {
+      this.setState({
+        value: getValueFromIndex(nextProps)
+      });
+    }
+  },
+
+  getIndex() {
     var props = this.props;
     var value = this.state.value;
 
@@ -84,7 +115,7 @@ var Slider = React.createClass({
     }
   },
 
-  _trimAlignValue: function (val, props) {
+  _trimAlignValue(val, props) {
     props = props || this.props;
 
     var step = props.marks.length > 0 ? (props.max - props.min) / (props.marks.length - 1) : props.step;
@@ -106,17 +137,17 @@ var Slider = React.createClass({
     return parseFloat(alignValue.toFixed(5));
   },
 
-  _calcOffset: function (value) {
+  _calcOffset(value) {
     var ratio = (value - this.props.min) / (this.props.max - this.props.min);
     return ratio * 100 + '%';
   },
 
-  _calcValue: function (offset) {
+  _calcValue(offset) {
     var ratio = offset / this.getSliderLength();
     return ratio * (this.props.max - this.props.min) + this.props.min;
   },
 
-  _calValueByPos: function (position) {
+  _calValueByPos(position) {
     var pixelOffset = position - this.getSliderStart();
     // pixelOffset -= (this.state.handleSize / 2);
     var nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
@@ -128,12 +159,12 @@ var Slider = React.createClass({
     return nextValue;
   },
 
-  _getTouchPosition: function (e) {
+  _getTouchPosition(e) {
     var touch = e.touches[0];
     return touch.pageX;
   },
 
-  _triggerEvents: function (event) {
+  _triggerEvents(event) {
     var props = this.props;
     var hasMarks = props.marks && props.marks.length > 0;
     if (props[event]) {
@@ -141,7 +172,7 @@ var Slider = React.createClass({
     }
   },
 
-  _addEventHandles: function (type) {
+  _addEventHandles(type) {
     if (type === 'touch') {
       // just work for chrome iOS Safari and Android Browser
       this._onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this._onTouchMove);
@@ -152,7 +183,7 @@ var Slider = React.createClass({
     }
   },
 
-  _removeEventHandles: function (type) {
+  _removeEventHandles(type) {
     if (type === 'touch') {
       this._onTouchMoveListener.remove();
       this._onTouchUpListener.remove();
@@ -162,31 +193,31 @@ var Slider = React.createClass({
     }
   },
 
-  _start: function (position) {
+  _start(position) {
     this._triggerEvents('onBeforeChange');
     this.startValue = this.state.value;
     this.startPosition = position;
   },
 
-  _end: function (type) {
+  _end(type) {
     this._removeEventHandles(type);
     this._triggerEvents('onAfterChange');
   },
 
-  _onMouseUp: function () {
+  _onMouseUp() {
     this._end('mouse');
   },
 
-  _onTouchUp: function () {
+  _onTouchUp() {
     this._end('touch');
   },
 
-  _onMouseMove: function (e) {
+  _onMouseMove(e) {
     var position = e.pageX;
     this._handleMove(e, position);
   },
 
-  _onTouchMove: function (e) {
+  _onTouchMove(e) {
     if (e.touches.length > 1 || (e.type === 'touchend' && e.touches.length > 0)) {
       this._end('touch');
       return;
@@ -197,7 +228,7 @@ var Slider = React.createClass({
     this._handleMove(e, position);
   },
 
-  _handleMove: function (e, position) {
+  _handleMove(e, position) {
     pauseEvent(e);
     var props = this.props;
     var state = this.state;
@@ -218,7 +249,7 @@ var Slider = React.createClass({
     }
   },
 
-  getSliderLength: function () {
+  getSliderLength() {
     var slider = this.refs.slider;
     if (!slider) {
       return 0;
@@ -227,14 +258,14 @@ var Slider = React.createClass({
     return slider.getDOMNode().clientWidth;
   },
 
-  getSliderStart: function () {
+  getSliderStart() {
     var slider = this.refs.slider.getDOMNode();
     var rect = slider.getBoundingClientRect();
 
     return rect.left;
   },
 
-  handleTouchStart: function (e) {
+  handleTouchStart(e) {
     if (e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0)) {
       return;
     }
@@ -247,7 +278,7 @@ var Slider = React.createClass({
     pauseEvent(e);
   },
 
-  handleSliderMouseDown: function (e) {
+  handleSliderMouseDown(e) {
     var position = e.pageX;
     this._calValueByPos(position);
     this._triggerEvents('onChange');
@@ -256,7 +287,7 @@ var Slider = React.createClass({
     pauseEvent(e);
   },
 
-  renderSteps: function () {
+  renderSteps() {
     var props = this.props;
     var marksLen = props.marks.length;
     var stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
@@ -292,7 +323,7 @@ var Slider = React.createClass({
     );
   },
 
-  renderMark: function (i) {
+  renderMark(i) {
     var marks = this.props.marks;
     var marksLen = marks.length;
     var unit = 100 / (marksLen - 1);
@@ -324,7 +355,7 @@ var Slider = React.createClass({
     );
   },
 
-  renderMarks: function () {
+  renderMarks() {
     var marks = this.props.marks;
     var marksLen = marks.length;
     var elements = [];
@@ -342,7 +373,7 @@ var Slider = React.createClass({
     );
   },
 
-  renderHandle: function (offset) {
+  renderHandle(offset) {
     var handleStyle = {
       left: offset
     };
@@ -369,7 +400,7 @@ var Slider = React.createClass({
     }
   },
 
-  renderTrack: function (offset) {
+  renderTrack(offset) {
     var style = {
       width: offset
     };
@@ -382,7 +413,7 @@ var Slider = React.createClass({
     );
   },
 
-  render: function () {
+  render() {
     var state = this.state;
     var props = this.props;
 
