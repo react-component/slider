@@ -324,6 +324,22 @@ webpackJsonp([0,1],[
 	  }).join(' ');
 	}
 	
+	function getValueFromIndex(props) {
+	  var value;
+	  var marksLen = props.marks.length;
+	  var index;
+	  if ('index' in props) {
+	    index = props.index;
+	  } else {
+	    index = props.defaultIndex;
+	  }
+	  if (marksLen > 0) {
+	    value = (props.max - props.min) / (marksLen - 1) * index;
+	    value = value.toFixed(5);
+	  }
+	  return value;
+	}
+	
 	var Slider = React.createClass({
 	  displayName: 'Slider',
 	
@@ -333,6 +349,8 @@ webpackJsonp([0,1],[
 	    step: React.PropTypes.number,
 	    defaultValue: React.PropTypes.number,
 	    defaultIndex: React.PropTypes.number,
+	    value: React.PropTypes.number,
+	    index: React.PropTypes.number,
 	    marks: React.PropTypes.array,
 	    isIncluded: React.PropTypes.bool,
 	    className: React.PropTypes.string,
@@ -360,16 +378,29 @@ webpackJsonp([0,1],[
 	  getInitialState: function getInitialState() {
 	    var props = this.props;
 	    var value = props.defaultValue;
+	    if ('value' in props) {
+	      value = props.value;
+	    }
 	    value = this._trimAlignValue(value);
 	    var marksLen = props.marks.length;
 	    if (marksLen > 0) {
-	      value = (props.max - props.min) / (marksLen - 1) * props.defaultIndex;
-	      value = value.toFixed(5);
+	      value = getValueFromIndex(props);
 	    }
-	
 	    return {
 	      value: value
 	    };
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    if ('value' in nextProps) {
+	      this.setState({
+	        value: nextProps.value
+	      });
+	    } else if ('index' in nextProps) {
+	      this.setState({
+	        value: getValueFromIndex(nextProps)
+	      });
+	    }
 	  },
 	
 	  getIndex: function getIndex() {
@@ -651,7 +682,7 @@ webpackJsonp([0,1],[
 	    var className = prefixClsFn(prefixCls, 'handle');
 	
 	    var handle = React.createElement('div', { className: className,
-	      ref: 'handle',
+	      ref: "handle",
 	      style: handleStyle });
 	
 	    if (this.props.marks.length > 0) {
@@ -660,7 +691,7 @@ webpackJsonp([0,1],[
 	      return React.createElement(
 	        Tooltip,
 	        {
-	          placement: 'top',
+	          placement: "top",
 	          overlay: React.createElement(
 	            'span',
 	            null,
@@ -681,7 +712,7 @@ webpackJsonp([0,1],[
 	    var prefixCls = this.props.prefixCls;
 	    var trackClassName = prefixClsFn(prefixCls, 'track');
 	
-	    return React.createElement('div', { className: trackClassName, ref: 'track', style: style });
+	    return React.createElement('div', { className: trackClassName, ref: "track", style: style });
 	  },
 	
 	  render: function render() {
@@ -704,7 +735,7 @@ webpackJsonp([0,1],[
 	
 	    return React.createElement(
 	      'div',
-	      { className: rcUtil.classSet(sliderClassName), ref: 'slider',
+	      { className: rcUtil.classSet(sliderClassName), ref: "slider",
 	        onTouchStart: disabled ? noop : this.handleTouchStart,
 	        onMouseDown: disabled ? noop : this.handleSliderMouseDown },
 	      track,
