@@ -100,6 +100,12 @@ React.render(<Rcslider />, container);
           <td>0</td>
           <td>Determines the initial positions of the handles.</td>
         </tr>
+         <tr>
+          <td>value</td>
+          <td>number</td>
+          <td></td>
+          <td>Determines the current positions of the handles.</td>
+        </tr>
         <tr>
           <td>marks</td>
           <td>array</td>
@@ -117,6 +123,12 @@ React.render(<Rcslider />, container);
           <td>number</td>
           <td>0</td>
           <td>For step or marks slider, determine the initial positions of the handles.</td>
+        </tr>
+        <tr>
+          <td>index</td>
+          <td>number</td>
+          <td></td>
+          <td>For step or marks slider, determine current positions of the handles.</td>
         </tr>
         <tr>
           <td>disabled</td>
@@ -138,7 +150,7 @@ npm start
 
 http://localhost:8000/examples/
 
-online example: http://react-component.github.io/slider/examples/
+online example: http://react-component.github.io/slider/
 
 ## Test Case
 
