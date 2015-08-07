@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@1.3.1 - slider ui component for react</title>
+  <title>rc-slider@1.4.0 - slider ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@1.3.1</h1>
+  <h1>rc-slider@1.4.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -814,6 +814,12 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
           <td>0</td>
           <td>Determines the initial positions of the handles.</td>
         </tr>
+         <tr>
+          <td>value</td>
+          <td>number</td>
+          <td></td>
+          <td>Determines the current positions of the handles.</td>
+        </tr>
         <tr>
           <td>marks</td>
           <td>array</td>
@@ -833,6 +839,12 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
           <td>For step or marks slider, determine the initial positions of the handles.</td>
         </tr>
         <tr>
+          <td>index</td>
+          <td>number</td>
+          <td></td>
+          <td>For step or marks slider, determine current positions of the handles.</td>
+        </tr>
+        <tr>
           <td>disabled</td>
           <td>boolean</td>
           <td>false</td>
@@ -843,7 +855,7 @@ React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-titl
 
 <h2>Development<a id="user-content-development" name="development" class="anchor" aria-hidden="true" href="#development"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre class="hljs"><code class="undefined"><span class="hljs-built_in">npm</span> install
 <span class="hljs-built_in">npm</span> start</code></pre></div><h2>Example<a id="user-content-example" name="example" class="anchor" aria-hidden="true" href="#example"><span class="octicon octicon-link"></span></a></h2><p><a href="http://localhost:8000/examples/" title="null">http://localhost:8000/examples/</a></p>
-<p>online example: <a href="http://react-component.github.io/slider/examples/" title="null">http://react-component.github.io/slider/examples/</a></p>
+<p>online example: <a href="http://react-component.github.io/slider/" title="null">http://react-component.github.io/slider/</a></p>
 <h2>Test Case<a id="user-content-test-case" name="test-case" class="anchor" aria-hidden="true" href="#test-case"><span class="octicon octicon-link"></span></a></h2><p><a href="http://localhost:8000/tests/runner.html?coverage" title="null">http://localhost:8000/tests/runner.html?coverage</a></p>
 <h2>Coverage<a id="user-content-coverage" name="coverage" class="anchor" aria-hidden="true" href="#coverage"><span class="octicon octicon-link"></span></a></h2><p><a href="http://localhost:8000/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage" title="null">http://localhost:8000/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage</a></p>
 <h2>License<a id="user-content-license" name="license" class="anchor" aria-hidden="true" href="#license"><span class="octicon octicon-link"></span></a></h2><p>rc-slider is released under the MIT license.</p>
