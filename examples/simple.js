@@ -1,6 +1,6 @@
 'use strict';
 
-require('rc-slider/assets/index.css');
+require('rc-slider/assets/index.less');
 
 var Slider = require('rc-slider');
 var React = require('react');
