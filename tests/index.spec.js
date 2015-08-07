@@ -1,4 +1,3 @@
-'use strict';
 
 var expect = require('expect.js');
 var Slider = require('../index.js');
@@ -6,6 +5,7 @@ var React = require('react');
 var TestUtils = React.addons.TestUtils;
 var Simulate = TestUtils.Simulate;
 var $ = require('jquery');
+require('../assets/index.less');
 
 describe('rc-slider', function () {
   this.timeout(5000);

@@ -1,9 +1,6 @@
-'use strict';
-
-var React = require('react');
-var Tooltip = require('rc-tooltip');
-var rcUtil = require('rc-util');
-var DomUtils = rcUtil.Dom;
+import React from 'react';
+import Tooltip from 'rc-tooltip';
+import rcUtil, {Dom as DomUtils} from 'rc-util';
 
 function noop() {
 }
@@ -19,17 +16,16 @@ function pauseEvent(e) {
   }
 }
 
-function prefixClsFn(prefixCls) {
-  var args = Array.prototype.slice.call(arguments, 1);
+function prefixClsFn(prefixCls, ...args) {
   return args.map((s)=> {
     return prefixCls + '-' + s;
   }).join(' ');
 }
 
 function getValueFromIndex(props) {
-  var value;
-  var marksLen = props.marks.length;
-  var index;
+  let value;
+  const marksLen = props.marks.length;
+  let index;
   if ('index' in props) {
     index = props.index;
   } else {
@@ -42,7 +38,7 @@ function getValueFromIndex(props) {
   return value;
 }
 
-var Slider = React.createClass({
+const Slider = React.createClass({
   propTypes: {
     min: React.PropTypes.number,
     max: React.PropTypes.number,
@@ -54,10 +50,12 @@ var Slider = React.createClass({
     marks: React.PropTypes.array,
     isIncluded: React.PropTypes.bool,
     className: React.PropTypes.string,
+    prefixCls: React.PropTypes.string,
     disabled: React.PropTypes.bool,
+    children: React.PropTypes.any,
     onBeforeChange: React.PropTypes.func,
     onChange: React.PropTypes.func,
-    onAfterChange: React.PropTypes.func
+    onAfterChange: React.PropTypes.func,
   },
 
   getDefaultProps() {
@@ -71,186 +69,120 @@ var Slider = React.createClass({
       className: '',
       prefixCls: 'rc-slider',
       disabled: false,
-      defaultIndex: 0
+      defaultIndex: 0,
     };
   },
 
   getInitialState() {
-    var props = this.props;
-    var value = props.defaultValue;
+    const props = this.props;
+    let value = props.defaultValue;
     if ('value' in props) {
       value = props.value;
     }
     value = this._trimAlignValue(value);
-    var marksLen = props.marks.length;
+    const marksLen = props.marks.length;
     if (marksLen > 0) {
       value = getValueFromIndex(props);
     }
     return {
-      value: value
+      dragging: false,
+      showTooltip: false,
+      value: value,
     };
   },
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
       this.setState({
-        value: nextProps.value
+        value: nextProps.value,
       });
     } else if ('index' in nextProps) {
       this.setState({
-        value: getValueFromIndex(nextProps)
+        value: getValueFromIndex(nextProps),
       });
     }
   },
 
-  getIndex() {
-    var props = this.props;
-    var value = this.state.value;
-
-    if (props.marks.length === 0) {
-      return Math.floor((value - props.min) / props.step);
-    } else {
-      var unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
-      return Math.round(value / unit);
-    }
-  },
-
-  _trimAlignValue(val, props) {
-    props = props || this.props;
-
-    var step = props.marks.length > 0 ? (props.max - props.min) / (props.marks.length - 1) : props.step;
-
-    if (val <= props.min) {
-      val = props.min;
-    }
-    if (val >= props.max) {
-      val = props.max;
-    }
-
-    var valModStep = (val - props.min) % step;
-    var alignValue = val - valModStep;
-
-    if (Math.abs(valModStep) * 2 >= step) {
-      alignValue += (valModStep > 0) ? step : (-step);
-    }
-
-    return parseFloat(alignValue.toFixed(5));
-  },
-
-  _calcOffset(value) {
-    var ratio = (value - this.props.min) / (this.props.max - this.props.min);
-    return ratio * 100 + '%';
-  },
-
-  _calcValue(offset) {
-    var ratio = offset / this.getSliderLength();
-    return ratio * (this.props.max - this.props.min) + this.props.min;
-  },
-
-  _calValueByPos(position) {
-    var pixelOffset = position - this.getSliderStart();
-    // pixelOffset -= (this.state.handleSize / 2);
-    var nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
-    // do not use setState
-    this.state.value = nextValue;
-    this.setState({
-      value: nextValue
-    });
-    return nextValue;
-  },
-
-  _getTouchPosition(e) {
-    var touch = e.touches[0];
-    return touch.pageX;
-  },
-
-  _triggerEvents(event) {
-    var props = this.props;
-    var hasMarks = props.marks && props.marks.length > 0;
-    if (props[event]) {
-      props[event](hasMarks ? this.getIndex() : this.state.value);
-    }
-  },
-
-  _addEventHandles(type) {
-    if (type === 'touch') {
-      // just work for chrome iOS Safari and Android Browser
-      this._onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this._onTouchMove);
-      this._onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this._onTouchUp);
-    } else if (type === 'mouse') {
-      this._onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this._onMouseMove);
-      this._onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this._onMouseUp);
-    }
-  },
-
-  _removeEventHandles(type) {
-    if (type === 'touch') {
-      this._onTouchMoveListener.remove();
-      this._onTouchUpListener.remove();
-    } else if (type === 'mouse') {
-      this._onMouseMoveListener.remove();
-      this._onMouseUpListener.remove();
-    }
-  },
-
-  _start(position) {
-    this._triggerEvents('onBeforeChange');
-    this.startValue = this.state.value;
-    this.startPosition = position;
-  },
-
-  _end(type) {
-    this._removeEventHandles(type);
-    this._triggerEvents('onAfterChange');
-  },
-
-  _onMouseUp() {
+  onMouseUp() {
     this._end('mouse');
   },
 
-  _onTouchUp() {
+  onTouchUp() {
     this._end('touch');
   },
 
-  _onMouseMove(e) {
-    var position = e.pageX;
-    this._handleMove(e, position);
+  onMouseMove(e) {
+    const position = e.pageX;
+    this.onMove(e, position);
   },
 
-  _onTouchMove(e) {
+  onTouchMove(e) {
     if (e.touches.length > 1 || (e.type === 'touchend' && e.touches.length > 0)) {
       this._end('touch');
       return;
     }
 
-    var position = this._getTouchPosition(e);
+    const position = this._getTouchPosition(e);
 
-    this._handleMove(e, position);
+    this.onMove(e, position);
   },
 
-  _handleMove(e, position) {
+  onMove(e, position) {
     pauseEvent(e);
-    var props = this.props;
-    var state = this.state;
+    const props = this.props;
+    const state = this.state;
 
-    var value = state.value;
-    var oldValue = value;
+    let value = state.value;
+    const oldValue = value;
 
-    var diffPosition = position - this.startPosition;
+    const diffPosition = position - this.startPosition;
 
-    var diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
-    var newValue = this._trimAlignValue(this.startValue + diffValue);
+    const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
+    value = this._trimAlignValue(this.startValue + diffValue);
 
-    value = newValue;
-
-    if (newValue !== oldValue) {
+    if (value !== oldValue && !('value' in props) && !('index' in props)) {
       this.setState({value: value});
-      this._triggerEvents('onChange');
+    }
+    if (value !== oldValue) {
+      this._triggerEvents('onChange', value);
     }
   },
 
+  onTouchStart(e) {
+    if (e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0)) {
+      return;
+    }
+
+    const position = this._getTouchPosition(e);
+    const value = this._calValueByPos(position);
+    this._triggerEvents('onChange', value);
+    this._start(position);
+    this._addDocumentEvents('touch');
+    pauseEvent(e);
+  },
+
+  onSliderMouseDown(e) {
+    const position = e.pageX;
+    const value = this._calValueByPos(position);
+    this._triggerEvents('onChange', value);
+    this._start(position);
+    this._addDocumentEvents('mouse');
+    pauseEvent(e);
+  },
+
+  getIndex(v) {
+    const props = this.props;
+    const value = v === undefined ? this.state.value : v;
+
+    if (props.marks.length === 0) {
+      return Math.floor((value - props.min) / props.step);
+    }
+    const unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
+    return Math.round(value / unit);
+  },
+
   getSliderLength() {
-    var slider = this.refs.slider;
+    const slider = this.refs.slider;
     if (!slider) {
       return 0;
     }
@@ -259,50 +191,28 @@ var Slider = React.createClass({
   },
 
   getSliderStart() {
-    var slider = this.refs.slider.getDOMNode();
-    var rect = slider.getBoundingClientRect();
+    const slider = this.refs.slider.getDOMNode();
+    const rect = slider.getBoundingClientRect();
 
     return rect.left;
   },
 
-  handleTouchStart(e) {
-    if (e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0)) {
-      return;
-    }
-
-    var position = this._getTouchPosition(e);
-    this._calValueByPos(position);
-    this._triggerEvents('onChange');
-    this._start(position);
-    this._addEventHandles('touch');
-    pauseEvent(e);
-  },
-
-  handleSliderMouseDown(e) {
-    var position = e.pageX;
-    this._calValueByPos(position);
-    this._triggerEvents('onChange');
-    this._start(position);
-    this._addEventHandles('mouse');
-    pauseEvent(e);
-  },
-
   renderSteps() {
-    var props = this.props;
-    var marksLen = props.marks.length;
-    var stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
-    var unit = 100 / (stepNum - 1);
+    const props = this.props;
+    const marksLen = props.marks.length;
+    const stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
+    const unit = 100 / (stepNum - 1);
 
-    var prefixCls = props.prefixCls;
-    var stepClassName = prefixClsFn(prefixCls, 'step');
+    const prefixCls = props.prefixCls;
+    const stepClassName = prefixClsFn(prefixCls, 'step');
 
-    var elements = [];
-    for (var i = 0; i < stepNum; i++) {
-      var offset = unit * i + '%';
-      var style = {
-        left: offset
+    const elements = [];
+    for (let i = 0; i < stepNum; i++) {
+      const offset = unit * i + '%';
+      const style = {
+        left: offset,
       };
-      var className = prefixClsFn(prefixCls, 'dot');
+      let className = prefixClsFn(prefixCls, 'dot');
       if (props.isIncluded) {
         if (i <= this.getIndex()) {
           className = prefixClsFn(prefixCls, 'dot', 'dot-active');
@@ -312,7 +222,7 @@ var Slider = React.createClass({
       }
 
       elements[i] = (
-        <span className={className} style={style} ref={'step' + i}></span>
+        <span className={className} style={style} ref={'step' + i} key={'step' + i}></span>
       );
     }
 
@@ -324,13 +234,13 @@ var Slider = React.createClass({
   },
 
   renderMark(i) {
-    var marks = this.props.marks;
-    var marksLen = marks.length;
-    var unit = 100 / (marksLen - 1);
-    var offset = unit * i;
+    const marks = this.props.marks;
+    const marksLen = marks.length;
+    const unit = 100 / (marksLen - 1);
+    const offset = unit * i;
 
-    var style = {
-      width: unit / 2 + '%'
+    const style = {
+      width: unit / 2 + '%',
     };
 
     if (i === marksLen - 1) {
@@ -339,8 +249,8 @@ var Slider = React.createClass({
       style.left = i > 0 ? offset - unit / 4 + '%' : -unit / 4 + '%';
     }
 
-    var prefixCls = this.props.prefixCls;
-    var className = prefixClsFn(prefixCls, 'mark-text');
+    const prefixCls = this.props.prefixCls;
+    let className = prefixClsFn(prefixCls, 'mark-text');
 
     if (this.props.isIncluded) {
       if (i <= this.getIndex()) {
@@ -351,20 +261,20 @@ var Slider = React.createClass({
     }
 
     return (
-      <span className={className} style={style}>{this.props.marks[i]}</span>
+      <span className={className} style={style} key={i}>{this.props.marks[i]}</span>
     );
   },
 
   renderMarks() {
-    var marks = this.props.marks;
-    var marksLen = marks.length;
-    var elements = [];
-    for (var i = 0; i < marksLen; i++) {
+    const marks = this.props.marks;
+    const marksLen = marks.length;
+    const elements = [];
+    for (let i = 0; i < marksLen; i++) {
       elements[i] = this.renderMark(i);
     }
 
-    var prefixCls = this.props.prefixCls;
-    var className = prefixClsFn(prefixCls, 'mark');
+    const prefixCls = this.props.prefixCls;
+    const className = prefixClsFn(prefixCls, 'mark');
 
     return (
       <div className={className}>
@@ -373,40 +283,55 @@ var Slider = React.createClass({
     );
   },
 
-  renderHandle(offset) {
-    var handleStyle = {
-      left: offset
+  renderHandler(offset) {
+    const onStyle = {
+      left: offset,
     };
 
-    var prefixCls = this.props.prefixCls;
-    var className = prefixClsFn(prefixCls, 'handle');
+    const prefixCls = this.props.prefixCls;
+    const className = prefixClsFn(prefixCls, 'handle');
 
-    var handle = <div className={className}
-      ref = "handle"
-      style = {handleStyle}></div>;
+    let events = {};
+
+    let tooltipVisible;
+
+    if (this.state.dragging) {
+      tooltipVisible = true;
+    } else {
+      events = {
+        onMouseEnter: this.showTooltip.bind(this, true),
+        onMouseLeave: this.showTooltip.bind(this, false),
+      };
+      tooltipVisible = this.state.showTooltip;
+    }
+
+    const handle = (<div className={className}
+      {...events}
+                          ref="handle"
+                          style={onStyle}></div>);
 
     if (this.props.marks.length > 0) {
       return handle;
-    } else {
-      return (
-        <Tooltip
-          placement="top"
-          overlay={<span>{this.state.value}</span>}
-          delay={0}
-          prefixCls={prefixClsFn(prefixCls, 'tooltip')}>
-          {handle}
-        </Tooltip>
-      );
     }
+    return (
+      <Tooltip
+        placement={{points: ['bc', 'tc']}}
+        visible={tooltipVisible}
+        overlay={<span>{this.state.value}</span>}
+        delay={0}
+        prefixCls={prefixClsFn(prefixCls, 'tooltip')}>
+        {handle}
+      </Tooltip>
+    );
   },
 
   renderTrack(offset) {
-    var style = {
-      width: offset
+    const style = {
+      width: offset,
     };
 
-    var prefixCls = this.props.prefixCls;
-    var trackClassName = prefixClsFn(prefixCls, 'track');
+    const prefixCls = this.props.prefixCls;
+    const trackClassName = prefixClsFn(prefixCls, 'track');
 
     return (
       <div className={trackClassName} ref="track" style={style}></div>
@@ -414,37 +339,142 @@ var Slider = React.createClass({
   },
 
   render() {
-    var state = this.state;
-    var props = this.props;
-
-    var value = state.value;
-    var offset = this._calcOffset(value);
-
-    var track = this.props.isIncluded ? this.renderTrack(offset) : null;
-    var handles = this.renderHandle(offset);
-    var steps = (props.step > 1 || props.marks.length > 0) ? this.renderSteps() : null;
-    var sliderMarks = (props.marks.length > 0) ? this.renderMarks() : null;
-
-    var prefixCls = props.prefixCls;
-    var disabled = props.disabled;
-    var sliderClassName = {
+    const state = this.state;
+    const props = this.props;
+    const value = state.value;
+    const offset = this._calcOffset(value);
+    const track = this.props.isIncluded ? this.renderTrack(offset) : null;
+    const ons = this.renderHandler(offset);
+    const steps = (props.step > 1 || props.marks.length > 0) ? this.renderSteps() : null;
+    const sliderMarks = (props.marks.length > 0) ? this.renderMarks() : null;
+    const prefixCls = props.prefixCls;
+    const disabled = props.disabled;
+    const sliderClassName = {
       [prefixCls]: 1,
       [props.className]: !!props.className,
-      [`${prefixCls}-disabled`]: disabled
+      [`${prefixCls}-disabled`]: disabled,
     };
 
     return (
       <div className={rcUtil.classSet(sliderClassName)} ref="slider"
-        onTouchStart={disabled ? noop : this.handleTouchStart}
-        onMouseDown={disabled ? noop : this.handleSliderMouseDown}>
+           onTouchStart={disabled ? noop : this.onTouchStart}
+           onMouseDown={disabled ? noop : this.onSliderMouseDown}>
         {track}
-        {handles}
+        {ons}
         {steps}
         {sliderMarks}
         {this.props.children}
       </div>
     );
-  }
+  },
+
+  showTooltip(show) {
+    this.setState({
+      showTooltip: show,
+    });
+  },
+
+  _trimAlignValue(v, propsArg) {
+    let val = v;
+    const props = propsArg || this.props;
+    const step = props.marks.length > 0 ? (props.max - props.min) / (props.marks.length - 1) : props.step;
+
+    if (val <= props.min) {
+      val = props.min;
+    }
+    if (val >= props.max) {
+      val = props.max;
+    }
+
+    const valModStep = (val - props.min) % step;
+    let alignValue = val - valModStep;
+
+    if (Math.abs(valModStep) * 2 >= step) {
+      alignValue += (valModStep > 0) ? step : (-step);
+    }
+
+    return parseFloat(alignValue.toFixed(5));
+  },
+
+  _calcOffset(value) {
+    const ratio = (value - this.props.min) / (this.props.max - this.props.min);
+    return ratio * 100 + '%';
+  },
+
+  _calcValue(offset) {
+    const ratio = offset / this.getSliderLength();
+    return ratio * (this.props.max - this.props.min) + this.props.min;
+  },
+
+  _calValueByPos(position) {
+    const pixelOffset = position - this.getSliderStart();
+    // pixelOffset -= (this.state.onSize / 2);
+    const nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
+    this.setState({
+      value: nextValue,
+    });
+    return nextValue;
+  },
+
+  _getTouchPosition(e) {
+    const touch = e.touches[0];
+    return touch.pageX;
+  },
+
+  _triggerEvents(event, v) {
+    const props = this.props;
+    const hasMarks = props.marks && props.marks.length > 0;
+    if (props[event]) {
+      let data;
+      if (hasMarks) {
+        data = this.getIndex(v);
+      } else if (v === undefined) {
+        data = this.state.value;
+      } else {
+        data = v;
+      }
+      props[event](data);
+    }
+  },
+
+  _addDocumentEvents(type) {
+    if (type === 'touch') {
+      // just work for chrome iOS Safari and Android Browser
+      this.onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this.onTouchMove);
+      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this.onTouchUp);
+    } else if (type === 'mouse') {
+      this.onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this.onMouseMove);
+      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this.onMouseUp);
+    }
+  },
+
+  _removeEventons(type) {
+    if (type === 'touch') {
+      this.onTouchMoveListener.remove();
+      this.onTouchUpListener.remove();
+    } else if (type === 'mouse') {
+      this.onMouseMoveListener.remove();
+      this.onMouseUpListener.remove();
+    }
+  },
+
+  _start(position) {
+    this._triggerEvents('onBeforeChange');
+    this.startValue = this.state.value;
+    this.startPosition = position;
+    this.setState({
+      dragging: true,
+    });
+  },
+
+  _end(type) {
+    this._removeEventons(type);
+    this._triggerEvents('onAfterChange');
+    this.setState({
+      dragging: false,
+      showTooltip: false,
+    });
+  },
 });
 
-module.exports = Slider;
+export default Slider;
