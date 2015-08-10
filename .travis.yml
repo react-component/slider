@@ -1,5 +1,7 @@
 language: node_js
 
+sudo: false
+
 notifications:
   email:
   - yiminghe@gmail.com
