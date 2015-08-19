@@ -112,7 +112,7 @@ const Slider = React.createClass({
   },
 
   onMouseMove(e) {
-    const position = e.pageX;
+    const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
     this.onMove(e, position);
   },
 
@@ -162,7 +162,7 @@ const Slider = React.createClass({
   },
 
   onSliderMouseDown(e) {
-    const position = e.pageX;
+    const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
     const value = this._calValueByPos(position);
     this._triggerEvents('onChange', value);
     this._start(position);
