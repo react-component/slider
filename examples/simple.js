@@ -20,8 +20,8 @@ webpackJsonp([0,1],[
 	  console.log(v);
 	}
 	
-	// React.render(<Slider marks={["一","二","三","四","五"]} index={3}/>, document.getElementById('__react-content'));
-	// React.render(<Slider className='rc-slider' step={20}/>, document.getElementById('__react-content'));
+	// React.render(<div style={{width:400,margin:100}}><Slider marks={["一","二","三","四","五"]} defaultIndex={2} /></div>, document.getElementById('__react-content'));
+	// React.render(<div style={{width:400,margin:100}}><Slider className='rc-slider' step={20}/></div>, document.getElementById('__react-content'));
 	React.render(React.createElement(
 	  'div',
 	  { style: { width: 400, margin: 100 } },
@@ -42,8 +42,8 @@ webpackJsonp([0,1],[
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
-		module.hot.accept("!!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js?sourceMap!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/less-loader/index.js?sourceMap!/Users/yiminghe/code/react-components/slider/assets/index.less", function() {
-			var newContent = require("!!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/css-loader/index.js?sourceMap!/Users/yiminghe/code/react-components/slider/node_modules/rc-tools/node_modules/less-loader/index.js?sourceMap!/Users/yiminghe/code/react-components/slider/assets/index.less");
+		module.hot.accept("!!/Users/weixingzhang/temp/slider/node_modules/rc-tools/node_modules/css-loader/index.js?sourceMap!/Users/weixingzhang/temp/slider/node_modules/rc-tools/node_modules/less-loader/index.js?sourceMap!/Users/weixingzhang/temp/slider/assets/index.less", function() {
+			var newContent = require("!!/Users/weixingzhang/temp/slider/node_modules/rc-tools/node_modules/css-loader/index.js?sourceMap!/Users/weixingzhang/temp/slider/node_modules/rc-tools/node_modules/less-loader/index.js?sourceMap!/Users/weixingzhang/temp/slider/assets/index.less");
 			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 			update(newContent);
 		});
@@ -353,7 +353,7 @@ webpackJsonp([0,1],[
 	  }
 	  if (marksLen > 0) {
 	    value = (props.max - props.min) / (marksLen - 1) * index;
-	    value = value.toFixed(5);
+	    value = value.toFixed(5) / 1;
 	  }
 	  return value;
 	}
@@ -434,7 +434,7 @@ webpackJsonp([0,1],[
 	  },
 	
 	  onMouseMove: function onMouseMove(e) {
-	    var position = e.pageX;
+	    var position = e.pageX || e.clientX + document.documentElement.scrollLeft; // to compat ie8
 	    this.onMove(e, position);
 	  },
 	
@@ -484,7 +484,7 @@ webpackJsonp([0,1],[
 	  },
 	
 	  onSliderMouseDown: function onSliderMouseDown(e) {
-	    var position = e.pageX;
+	    var position = e.pageX || e.clientX + document.documentElement.scrollLeft; // to compat ie8
 	    var value = this._calValueByPos(position);
 	    this._triggerEvents('onChange', value);
 	    this._start(position);
@@ -621,6 +621,7 @@ webpackJsonp([0,1],[
 	      tooltipVisible = true;
 	    } else {
 	      events = {
+	        onClick: this.showTooltip.bind(this, true),
 	        onMouseEnter: this.showTooltip.bind(this, true),
 	        onMouseLeave: this.showTooltip.bind(this, false)
 	      };
@@ -2180,7 +2181,7 @@ webpackJsonp([0,1],[
 	
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 	
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 	
 	var _react = __webpack_require__(9);
 	
@@ -2223,24 +2224,15 @@ webpackJsonp([0,1],[
 	  _createClass(Align, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      var _this = this;
-	
 	      var props = this.props;
-	      // parent ref not attached ....
+	      // if parent ref not attached .... use document.getElementById
 	      if (!props.disabled) {
-	        this.hackRefTimer = setTimeout(function () {
-	          var source = _react2['default'].findDOMNode(_this);
-	          props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
-	        }, 0);
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, props.target(), props.align));
 	        if (props.monitorWindowResize) {
 	          this.startMonitorWindowResize();
 	        }
 	      }
-	    }
-	  }, {
-	    key: 'componentWillReceiveProps',
-	    value: function componentWillReceiveProps() {
-	      this.clearHackRefTimer();
 	    }
 	  }, {
 	    key: 'startMonitorWindowResize',
@@ -2258,14 +2250,6 @@ webpackJsonp([0,1],[
 	      }
 	    }
 	  }, {
-	    key: 'clearHackRefTimer',
-	    value: function clearHackRefTimer() {
-	      if (this.hackRefTimer) {
-	        clearTimeout(this.hackRefTimer);
-	        this.hackRefTimer = null;
-	      }
-	    }
-	  }, {
 	    key: 'handleWindowResize',
 	    value: function handleWindowResize() {
 	      var props = this.props;
@@ -2278,38 +2262,33 @@ webpackJsonp([0,1],[
 	    key: 'componentWillUnmount',
 	    value: function componentWillUnmount() {
 	      this.stopMonitorWindowResize();
-	      this.clearHackRefTimer();
 	    }
 	  }, {
 	    key: 'componentDidUpdate',
 	    value: function componentDidUpdate(prevProps) {
-	      var _this2 = this;
-	
 	      var reAlign = false;
 	      var props = this.props;
 	      var currentTarget;
 	
-	      this.hackRefTimer = setTimeout(function () {
-	        if (!props.disabled) {
-	          if (prevProps.disabled || prevProps.align !== props.align) {
+	      if (!props.disabled) {
+	        if (prevProps.disabled || prevProps.align !== props.align) {
+	          reAlign = true;
+	          currentTarget = props.target();
+	        } else {
+	          var lastTarget = prevProps.target();
+	          currentTarget = props.target();
+	          if (isWindow(lastTarget) && isWindow(currentTarget)) {
+	            reAlign = false;
+	          } else if (lastTarget !== currentTarget) {
 	            reAlign = true;
-	            currentTarget = props.target();
-	          } else {
-	            var lastTarget = prevProps.target();
-	            currentTarget = props.target();
-	            if (isWindow(lastTarget) && isWindow(currentTarget)) {
-	              reAlign = false;
-	            } else if (lastTarget !== currentTarget) {
-	              reAlign = true;
-	            }
 	          }
 	        }
+	      }
 	
-	        if (reAlign) {
-	          var source = _react2['default'].findDOMNode(_this2);
-	          props.onAlign(source, (0, _domAlign2['default'])(source, currentTarget, props.align));
-	        }
-	      }, 0);
+	      if (reAlign) {
+	        var source = _react2['default'].findDOMNode(this);
+	        props.onAlign(source, (0, _domAlign2['default'])(source, currentTarget, props.align));
+	      }
 	
 	      if (props.monitorWindowResize && !props.disabled) {
 	        this.startMonitorWindowResize();
@@ -3618,6 +3597,42 @@ webpackJsonp([0,1],[
 	
 	var Event = __webpack_require__(35);
 	var Css = __webpack_require__(36);
+	var isCssAnimationSupported = Event.endEvents.length !== 0;
+	
+	function getDuration(node, name) {
+	  var style = window.getComputedStyle(node);
+	  var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
+	  var ret = '';
+	  for (var i = 0; i < prefixes.length; i++) {
+	    ret = style.getPropertyValue(prefixes[i] + name);
+	    if (ret) {
+	      break;
+	    }
+	  }
+	  return ret;
+	}
+	
+	function fixBrowserByTimeout(node) {
+	  if (isCssAnimationSupported) {
+	    var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
+	    var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
+	    var time = Math.max(transitionDuration, animationDuration);
+	    // sometimes, browser bug
+	    node.rcEndAnimTimeout = setTimeout(function () {
+	      node.rcEndAnimTimeout = null;
+	      if (node.rcEndListener) {
+	        node.rcEndListener();
+	      }
+	    }, time * 1000 + 200);
+	  }
+	}
+	
+	function clearBrowserBugTimeout(node) {
+	  if (node.rcEndAnimTimeout) {
+	    clearTimeout(node.rcEndAnimTimeout);
+	    node.rcEndAnimTimeout = null;
+	  }
+	}
 	
 	var cssAnimation = function cssAnimation(node, transitionName, callback) {
 	  var className = transitionName;
@@ -3637,6 +3652,8 @@ webpackJsonp([0,1],[
 	      node.rcAnimTimeout = null;
 	    }
 	
+	    clearBrowserBugTimeout(node);
+	
 	    Css.removeClass(node, className);
 	    Css.removeClass(node, activeClassName);
 	
@@ -3655,8 +3672,9 @@ webpackJsonp([0,1],[
 	  Css.addClass(node, className);
 	
 	  node.rcAnimTimeout = setTimeout(function () {
-	    Css.addClass(node, activeClassName);
 	    node.rcAnimTimeout = null;
+	    Css.addClass(node, activeClassName);
+	    fixBrowserByTimeout(node);
 	  }, 0);
 	
 	  return {
@@ -3683,6 +3701,8 @@ webpackJsonp([0,1],[
 	      node.rcAnimTimeout = null;
 	    }
 	
+	    clearBrowserBugTimeout(node);
+	
 	    Event.removeEndEventListener(node, node.rcEndListener);
 	    node.rcEndListener = null;
 	
@@ -3697,13 +3717,22 @@ webpackJsonp([0,1],[
 	
 	  node.rcAnimTimeout = setTimeout(function () {
 	    for (var s in style) {
-	      node.style[s] = style[s];
+	      if (style.hasOwnProperty(s)) {
+	        node.style[s] = style[s];
+	      }
 	    }
 	    node.rcAnimTimeout = null;
+	    fixBrowserByTimeout(node);
 	  }, 0);
 	};
 	
-	cssAnimation.setTransition = function (node, property, v) {
+	cssAnimation.setTransition = function (node, p, value) {
+	  var property = p;
+	  var v = value;
+	  if (value === undefined) {
+	    v = property;
+	    property = '';
+	  }
 	  property = property || '';
 	  ['Webkit', 'Moz', 'O',
 	  // ms is special .... !
@@ -3714,7 +3743,7 @@ webpackJsonp([0,1],[
 	
 	cssAnimation.addClass = Css.addClass;
 	cssAnimation.removeClass = Css.removeClass;
-	cssAnimation.isCssAnimationSupported = Event.endEvents.length !== 0;
+	cssAnimation.isCssAnimationSupported = isCssAnimationSupported;
 	
 	module.exports = cssAnimation;
 
@@ -3722,7 +3751,6 @@ webpackJsonp([0,1],[
 /* 35 */
 /***/ function(module, exports) {
 
-	
 	'use strict';
 	
 	var EVENT_NAME_MAP = {
@@ -3758,11 +3786,13 @@ webpackJsonp([0,1],[
 	  }
 	
 	  for (var baseEventName in EVENT_NAME_MAP) {
-	    var baseEvents = EVENT_NAME_MAP[baseEventName];
-	    for (var styleName in baseEvents) {
-	      if (styleName in style) {
-	        endEvents.push(baseEvents[styleName]);
-	        break;
+	    if (EVENT_NAME_MAP.hasOwnProperty(baseEventName)) {
+	      var baseEvents = EVENT_NAME_MAP[baseEventName];
+	      for (var styleName in baseEvents) {
+	        if (styleName in style) {
+	          endEvents.push(baseEvents[styleName]);
+	          break;
+	        }
 	      }
 	    }
 	  }
@@ -3814,19 +3844,19 @@ webpackJsonp([0,1],[
 	var SPACE = ' ';
 	var RE_CLASS = /[\n\t\r]/g;
 	
-	var norm = function norm(elemClass) {
+	function norm(elemClass) {
 	  return (SPACE + elemClass + SPACE).replace(RE_CLASS, SPACE);
-	};
+	}
 	
 	module.exports = {
 	  addClass: function addClass(elem, className) {
 	    elem.className += ' ' + className;
 	  },
 	
-	  removeClass: function removeClass(elem, needle) {
+	  removeClass: function removeClass(elem, n) {
 	    var elemClass = elem.className.trim();
 	    var className = norm(elemClass);
-	    needle = needle.trim();
+	    var needle = n.trim();
 	    needle = SPACE + needle + SPACE;
 	    // 一个 cls 有可能多次出现：'link link2 link link3 link'
 	    while (className.indexOf(needle) >= 0) {
