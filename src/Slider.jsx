@@ -33,7 +33,7 @@ function getValueFromIndex(props) {
   }
   if (marksLen > 0) {
     value = ((props.max - props.min) / (marksLen - 1)) * (index);
-    value = value.toFixed(5);
+    value = value.toFixed(5) / 1;
   }
   return value;
 }
@@ -299,6 +299,7 @@ const Slider = React.createClass({
       tooltipVisible = true;
     } else {
       events = {
+        onClick: this.showTooltip.bind(this, true),
         onMouseEnter: this.showTooltip.bind(this, true),
         onMouseLeave: this.showTooltip.bind(this, false),
       };
