@@ -11,4 +11,4 @@ function onChange(v){
 
 // React.render(<div style={{width:400,margin:100}}><Slider marks={["一","二","三","四","五"]} defaultIndex={2} /></div>, document.getElementById('__react-content'));
 // React.render(<div style={{width:400,margin:100}}><Slider className='rc-slider' step={20}/></div>, document.getElementById('__react-content'));
-React.render(<div style={{width:400,margin:100}}><Slider onChange={onChange}/></div>, document.getElementById('__react-content'));
+React.render(<div style={{width:400,margin:100}}><Slider onChange={onChange}  tipTransitionName='zoom-down'/></div>, document.getElementById('__react-content'));

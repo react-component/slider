@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "slider ui component for react",
   "keywords": [
     "react",
@@ -24,7 +24,7 @@
   "licenses": "MIT",
   "main": "./lib/index.js",
   "config": {
-    "port": 8000
+    "port": 8005
   },
   "scripts": {
     "build": "rc-tools run build",
