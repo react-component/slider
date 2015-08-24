@@ -229,33 +229,33 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.2/html5shiv.js"></script>
 <![endif]-->
     <script src="//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.js"></script>
-  
+  <link rel="stylesheet" href="simple.css" />
 </head>
 
 <body>
     <div class="container">
         <div class="header">
-            <h1>rc-slider@1.4.3</h1>
+            <h1>rc-slider@1.4.4</h1>
             <p>slider ui component for react</p>
         </div>
         <div class="example" id="__react-content"></div>
         <script src="common.js?nowrap"></script>
         <script src="simple.js?nowrap"></script>
-        <div class="highlight"><pre><code><span class="hljs-pi">'use strict'</span>;
+        <div class="highlight"><pre><code><span class="hljs-string">'use strict'</span>;
 
 <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider/assets/index.css'</span>);
 
-<span class="hljs-keyword">var</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
-<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-reserved">var</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
+<span class="hljs-reserved">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">onChange</span>(<span class="hljs-params">v</span>)</span>{
+<span class="hljs-reserved">function</span> onChange(v){
   <span class="hljs-built_in">console</span>.log(v);
 }
 
-<span class="hljs-comment">// React.render(&lt;div style={{width:400,margin:100}}&gt;&lt;Slider marks={["一","二","三","四","五"]} defaultIndex={2} /&gt;&lt;/div&gt;, document.getElementById('__react-content'));</span>
-<span class="hljs-comment">// React.render(&lt;div style={{width:400,margin:100}}&gt;&lt;Slider className='rc-slider' step={20}/&gt;&lt;/div&gt;, document.getElementById('__react-content'));</span>
-React.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{{width:400,margin:100}}</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{onChange}</span>/&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>, document.getElementById('__react-content'));
-</span></code></pre></div>
+<span class="hljs-regexp">//</span> React.render(&lt;div style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">400</span>,<span class="hljs-attribute">margin</span>:<span class="hljs-number">100</span>}}&gt;&lt;Slider marks={[<span class="hljs-string">"一"</span>,<span class="hljs-string">"二"</span>,<span class="hljs-string">"三"</span>,<span class="hljs-string">"四"</span>,<span class="hljs-string">"五"</span>]} defaultIndex={<span class="hljs-number">2</span>} /&gt;&lt;/div&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
+<span class="hljs-regexp">//</span> React.render(&lt;div style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">400</span>,<span class="hljs-attribute">margin</span>:<span class="hljs-number">100</span>}}&gt;&lt;Slider className=<span class="hljs-string">'rc-slider'</span> step={<span class="hljs-number">20</span>}/&gt;&lt;/div&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
+React.render(&lt;div style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">400</span>,<span class="hljs-attribute">margin</span>:<span class="hljs-number">100</span>}}&gt;&lt;Slider onChange={onChange}  tipTransitionName=<span class="hljs-string">'zoom-down'</span>/&gt;&lt;/div&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
+</code></pre></div>
     </div>
     <a href="http://github.com/react-component/slider"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
 </body>
