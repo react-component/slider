@@ -56,6 +56,7 @@ const Slider = React.createClass({
     onBeforeChange: React.PropTypes.func,
     onChange: React.PropTypes.func,
     onAfterChange: React.PropTypes.func,
+    transitionName: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -70,6 +71,7 @@ const Slider = React.createClass({
       prefixCls: 'rc-slider',
       disabled: false,
       defaultIndex: 0,
+      transitionName: 'zoom-down',
     };
   },
 
@@ -103,8 +105,14 @@ const Slider = React.createClass({
     }
   },
 
-  onMouseUp() {
-    this._end('mouse');
+  onMouseUp(e) {
+    const m = e.target;
+    const handleDom = React.findDOMNode(this.refs.handle);
+    let showToolTip = false;
+    if (m === handleDom) {
+      showToolTip = true;
+    }
+    this._end('mouse', showToolTip);
   },
 
   onTouchUp() {
@@ -308,8 +316,8 @@ const Slider = React.createClass({
 
     const handle = (<div className={className}
       {...events}
-                          ref="handle"
-                          style={onStyle}></div>);
+      ref="handle"
+      style={onStyle}></div>);
 
     if (this.props.marks.length > 0) {
       return handle;
@@ -320,6 +328,7 @@ const Slider = React.createClass({
         visible={tooltipVisible}
         overlay={<span>{this.state.value}</span>}
         delay={0}
+        transitionName={this.props.transitionName}
         prefixCls={prefixClsFn(prefixCls, 'tooltip')}>
         {handle}
       </Tooltip>
@@ -358,8 +367,8 @@ const Slider = React.createClass({
 
     return (
       <div className={rcUtil.classSet(sliderClassName)} ref="slider"
-           onTouchStart={disabled ? noop : this.onTouchStart}
-           onMouseDown={disabled ? noop : this.onSliderMouseDown}>
+        onTouchStart={disabled ? noop : this.onTouchStart}
+        onMouseDown={disabled ? noop : this.onSliderMouseDown}>
         {track}
         {ons}
         {steps}
@@ -468,12 +477,12 @@ const Slider = React.createClass({
     });
   },
 
-  _end(type) {
+  _end(type, showToolTip) {
     this._removeEventons(type);
     this._triggerEvents('onAfterChange');
     this.setState({
       dragging: false,
-      showTooltip: false,
+      showTooltip: !!showToolTip,
     });
   },
 });
