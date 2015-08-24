@@ -71,7 +71,7 @@ const Slider = React.createClass({
       prefixCls: 'rc-slider',
       disabled: false,
       defaultIndex: 0,
-      tipTransitionName: 'zoom-down',
+      tipTransitionName: '',
     };
   },
 
