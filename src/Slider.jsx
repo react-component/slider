@@ -56,7 +56,7 @@ const Slider = React.createClass({
     onBeforeChange: React.PropTypes.func,
     onChange: React.PropTypes.func,
     onAfterChange: React.PropTypes.func,
-    transitionName: React.PropTypes.string,
+    tipTransitionName: React.PropTypes.string,
   },
 
   getDefaultProps() {
@@ -71,7 +71,7 @@ const Slider = React.createClass({
       prefixCls: 'rc-slider',
       disabled: false,
       defaultIndex: 0,
-      transitionName: 'zoom-down',
+      tipTransitionName: 'zoom-down',
     };
   },
 
@@ -328,7 +328,7 @@ const Slider = React.createClass({
         visible={tooltipVisible}
         overlay={<span>{this.state.value}</span>}
         delay={0}
-        transitionName={this.props.transitionName}
+        transitionName={this.props.tipTransitionName}
         prefixCls={prefixClsFn(prefixCls, 'tooltip')}>
         {handle}
       </Tooltip>
