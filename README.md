@@ -136,6 +136,12 @@ React.render(<Rcslider />, container);
           <td>false</td>
           <td>If true the handles can't be moved.</td>
         </tr>
+        <tr>
+          <td>tipTransitionName</td>
+          <td>string</td>
+          <td>''</td>
+          <td>Set the animation for tooltip if it shows.</td>
+        </tr>
     </tbody>
 </table>
 
@@ -148,17 +154,17 @@ npm start
 
 ## Example
 
-http://localhost:8000/examples/
+http://localhost:8005/examples/
 
 online example: http://react-component.github.io/slider/
 
 ## Test Case
 
-http://localhost:8000/tests/runner.html?coverage
+http://localhost:8005/tests/runner.html?coverage
 
 ## Coverage
 
-http://localhost:8000/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage
+http://localhost:8005/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage
 
 ## License
 
