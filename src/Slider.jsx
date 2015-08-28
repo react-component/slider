@@ -164,7 +164,7 @@ const Slider = React.createClass({
     const position = this._getTouchPosition(e);
     const value = this._calValueByPos(position);
     this._triggerEvents('onChange', value);
-    this._start(position);
+    this._start(position, value);
     this._addDocumentEvents('touch');
     pauseEvent(e);
   },
@@ -173,7 +173,7 @@ const Slider = React.createClass({
     const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
     const value = this._calValueByPos(position);
     this._triggerEvents('onChange', value);
-    this._start(position);
+    this._start(position, value);
     this._addDocumentEvents('mouse');
     pauseEvent(e);
   },
@@ -468,9 +468,9 @@ const Slider = React.createClass({
     }
   },
 
-  _start(position) {
+  _start(position, value) {
     this._triggerEvents('onBeforeChange');
-    this.startValue = this.state.value;
+    this.startValue = value;
     this.startPosition = position;
     this.setState({
       dragging: true,
