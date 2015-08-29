@@ -245,7 +245,7 @@ webpackJsonp([0,1],[
 	    var position = this._getTouchPosition(e);
 	    var value = this._calValueByPos(position);
 	    this._triggerEvents('onChange', value);
-	    this._start(position);
+	    this._start(position, value);
 	    this._addDocumentEvents('touch');
 	    pauseEvent(e);
 	  },
@@ -254,7 +254,7 @@ webpackJsonp([0,1],[
 	    var position = e.pageX || e.clientX + document.documentElement.scrollLeft; // to compat ie8
 	    var value = this._calValueByPos(position);
 	    this._triggerEvents('onChange', value);
-	    this._start(position);
+	    this._start(position, value);
 	    this._addDocumentEvents('mouse');
 	    pauseEvent(e);
 	  },
@@ -549,9 +549,9 @@ webpackJsonp([0,1],[
 	    }
 	  },
 	
-	  _start: function _start(position) {
+	  _start: function _start(position, value) {
 	    this._triggerEvents('onBeforeChange');
-	    this.startValue = this.state.value;
+	    this.startValue = value;
 	    this.startPosition = position;
 	    this.setState({
 	      dragging: true
@@ -824,15 +824,14 @@ webpackJsonp([0,1],[
 	    var childProps = child.props || {};
 	    var newChildProps = {};
 	    var trigger = props.trigger;
-	    var mouseProps = {};
 	    if (trigger.indexOf('click') !== -1) {
 	      newChildProps.onClick = (0, _rcUtil.createChainedFunction)(this.onClick, childProps.onClick);
 	      newChildProps.onMouseDown = (0, _rcUtil.createChainedFunction)(this.onMouseDown, childProps.onMouseDown);
 	      newChildProps.onTouchStart = (0, _rcUtil.createChainedFunction)(this.onTouchStart, childProps.onTouchStart);
 	    }
 	    if (trigger.indexOf('hover') !== -1) {
-	      mouseProps.onMouseEnter = (0, _rcUtil.createChainedFunction)(this.onMouseEnter, childProps.onMouseEnter);
-	      mouseProps.onMouseLeave = (0, _rcUtil.createChainedFunction)(this.onMouseLeave, childProps.onMouseLeave);
+	      newChildProps.onMouseEnter = (0, _rcUtil.createChainedFunction)(this.onMouseEnter, childProps.onMouseEnter);
+	      newChildProps.onMouseLeave = (0, _rcUtil.createChainedFunction)(this.onMouseLeave, childProps.onMouseLeave);
 	    }
 	    if (trigger.indexOf('focus') !== -1) {
 	      newChildProps.onFocus = (0, _rcUtil.createChainedFunction)(this.onFocus, childProps.onFocus);
@@ -847,7 +846,7 @@ webpackJsonp([0,1],[
 	
 	    return _react2['default'].createElement(
 	      'span',
-	      _extends({ className: className }, mouseProps, { style: props.wrapStyle }),
+	      { className: className, style: props.wrapStyle },
 	      _react2['default'].cloneElement(child, newChildProps)
 	    );
 	  },
@@ -2950,12 +2949,6 @@ webpackJsonp([0,1],[
 	    };
 	  },
 	
-	  componentDidMount: function componentDidMount() {
-	    this.state.children.map(function (c) {
-	      return c.key;
-	    }).forEach(this.performAppear);
-	  },
-	
 	  getInitialState: function getInitialState() {
 	    this.currentlyAnimatingKeys = {};
 	    this.keysToEnter = [];
@@ -2965,8 +2958,23 @@ webpackJsonp([0,1],[
 	    };
 	  },
 	
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	  componentDidMount: function componentDidMount() {
 	    var _this = this;
+	
+	    var showProp = this.props.showProp;
+	    var children = this.state.children;
+	    if (showProp) {
+	      children = children.filter(function (c) {
+	        return !!c.props[showProp];
+	      });
+	    }
+	    children.forEach(function (c) {
+	      _this.performAppear(c.key);
+	    });
+	  },
+	
+	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+	    var _this2 = this;
 	
 	    var nextChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(nextProps));
 	    var props = this.props;
@@ -2976,46 +2984,48 @@ webpackJsonp([0,1],[
 	    // last props children if exclusive
 	    // exclusive needs immediate response
 	    var currentChildren = this.state.children;
-	    var newChildren = _ChildrenUtils2['default'].mergeChildren(currentChildren, nextChildren);
-	
-	    if (showProp && !exclusive) {
-	      newChildren = newChildren.map(function (c) {
-	        var ret = c;
-	        if (!c.props[showProp] && (0, _ChildrenUtils.isShownInChildren)(currentChildren, c, showProp)) {
-	          ret = _react2['default'].cloneElement(c, _defineProperty({}, showProp, true));
+	    var newChildren = undefined;
+	    if (showProp) {
+	      newChildren = currentChildren.map(function (currentChild) {
+	        var nextChild = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, currentChild.key);
+	        if (!nextChild.props[showProp] && currentChild.props[showProp]) {
+	          return _react2['default'].cloneElement(nextChild, _defineProperty({}, showProp, true));
 	        }
-	        return ret;
+	        return nextChild;
 	      });
+	    } else {
+	      newChildren = _ChildrenUtils2['default'].mergeChildren(currentChildren, nextChildren);
 	    }
-	
-	    this.setState({
-	      children: newChildren
-	    });
 	
 	    // exclusive needs immediate response
 	    if (exclusive) {
 	      Object.keys(currentlyAnimatingKeys).forEach(function (key) {
-	        _this.stop(key);
+	        _this2.stop(key);
 	      });
 	      currentChildren = (0, _ChildrenUtils.toArrayChildren)(getChildrenFromProps(props));
 	    }
+	
+	    // need render to avoid update
+	    this.setState({
+	      children: newChildren
+	    });
 	
 	    nextChildren.forEach(function (c) {
 	      var key = c.key;
 	      if (currentlyAnimatingKeys[key]) {
 	        return;
 	      }
-	      var hasPrev = (0, _ChildrenUtils.inChildren)(currentChildren, c);
+	      var hasPrev = (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
 	      if (showProp) {
 	        if (hasPrev) {
-	          var showInNow = (0, _ChildrenUtils.isShownInChildren)(currentChildren, c, showProp);
+	          var showInNow = (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
 	          var showInNext = c.props[showProp];
 	          if (!showInNow && showInNext) {
-	            _this.keysToEnter.push(key);
+	            _this2.keysToEnter.push(key);
 	          }
 	        }
 	      } else if (!hasPrev) {
-	        _this.keysToEnter.push(key);
+	        _this2.keysToEnter.push(key);
 	      }
 	    });
 	
@@ -3024,17 +3034,17 @@ webpackJsonp([0,1],[
 	      if (currentlyAnimatingKeys[key]) {
 	        return;
 	      }
-	      var hasNext = (0, _ChildrenUtils.inChildren)(nextChildren, c);
+	      var hasNext = (0, _ChildrenUtils.findChildInChildrenByKey)(nextChildren, key);
 	      if (showProp) {
 	        if (hasNext) {
-	          var showInNext = (0, _ChildrenUtils.isShownInChildren)(nextChildren, c, showProp);
+	          var showInNext = (0, _ChildrenUtils.findShownChildInChildrenByKey)(nextChildren, key, showProp);
 	          var showInNow = c.props[showProp];
 	          if (!showInNext && showInNow) {
-	            _this.keysToLeave.push(key);
+	            _this2.keysToLeave.push(key);
 	          }
 	        }
 	      } else if (!hasNext) {
-	        _this.keysToLeave.push(key);
+	        _this2.keysToLeave.push(key);
 	      }
 	    });
 	  },
@@ -3102,20 +3112,15 @@ webpackJsonp([0,1],[
 	      this.performLeave(key);
 	    } else {
 	      if (type === 'appear') {
-	        if (_util2['default'].isAppearSupported(props)) {
+	        if (_util2['default'].allowAppearCallback(props)) {
 	          props.onAppear(key);
 	          props.onEnd(key, true);
 	        }
 	      } else {
-	        if (_util2['default'].isEnterSupported(props)) {
+	        if (_util2['default'].allowEnterCallback(props)) {
 	          props.onEnter(key);
 	          props.onEnd(key, true);
 	        }
-	      }
-	      if (this.isMounted() && !(0, _ChildrenUtils.isSameChildren)(this.state.children, currentChildren)) {
-	        this.setState({
-	          children: currentChildren
-	        });
 	      }
 	    }
 	  },
@@ -3136,11 +3141,11 @@ webpackJsonp([0,1],[
 	    if (this.isValidChildByKey(currentChildren, key)) {
 	      this.performEnter(key);
 	    } else {
-	      if (_util2['default'].isLeaveSupported(props)) {
+	      if (_util2['default'].allowLeaveCallback(props)) {
 	        props.onLeave(key);
 	        props.onEnd(key, false);
 	      }
-	      if (this.isMounted() && !(0, _ChildrenUtils.isSameChildren)(this.state.children, currentChildren)) {
+	      if (this.isMounted() && !(0, _ChildrenUtils.isSameChildren)(this.state.children, currentChildren, props.showProp)) {
 	        this.setState({
 	          children: currentChildren
 	        });
@@ -3151,9 +3156,9 @@ webpackJsonp([0,1],[
 	  isValidChildByKey: function isValidChildByKey(currentChildren, key) {
 	    var showProp = this.props.showProp;
 	    if (showProp) {
-	      return (0, _ChildrenUtils.isShownInChildrenByKey)(currentChildren, key, showProp);
+	      return (0, _ChildrenUtils.findShownChildInChildrenByKey)(currentChildren, key, showProp);
 	    }
-	    return (0, _ChildrenUtils.inChildrenByKey)(currentChildren, key);
+	    return (0, _ChildrenUtils.findChildInChildrenByKey)(currentChildren, key);
 	  },
 	
 	  stop: function stop(key) {
@@ -3184,20 +3189,7 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	function inChildren(children, child) {
-	  var found = 0;
-	  children.forEach(function (c) {
-	    if (found) {
-	      return;
-	    }
-	    found = c.key === child.key;
-	  });
-	  return found;
-	}
-	
-	exports['default'] = {
-	  inChildren: inChildren,
-	
+	var utils = {
 	  toArrayChildren: function toArrayChildren(children) {
 	    var ret = [];
 	    _react2['default'].Children.forEach(children, function (c) {
@@ -3206,48 +3198,57 @@ webpackJsonp([0,1],[
 	    return ret;
 	  },
 	
-	  isShownInChildren: function isShownInChildren(children, child, showProp) {
-	    var found = 0;
-	    children.forEach(function (c) {
-	      if (found) {
-	        return;
-	      }
-	      found = c.key === child.key && c.props[showProp];
-	    });
-	    return found;
+	  findChildInChildrenByKey: function findChildInChildrenByKey(children, key) {
+	    var ret = 0;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (ret) {
+	          return;
+	        }
+	        if (c.key === key) {
+	          ret = c;
+	        }
+	      });
+	    }
+	    return ret;
 	  },
 	
-	  inChildrenByKey: function inChildrenByKey(children, key) {
+	  findShownChildInChildrenByKey: function findShownChildInChildrenByKey(children, key, showProp) {
+	    var ret = null;
+	    if (children) {
+	      children.forEach(function (c) {
+	        if (c.key === key && c.props[showProp]) {
+	          if (ret) {
+	            throw new Error('two child with same key for <rc-animate> children');
+	          }
+	          ret = c;
+	        }
+	      });
+	    }
+	    return ret;
+	  },
+	
+	  findHiddenChildInChildrenByKey: function findHiddenChildInChildrenByKey(children, key, showProp) {
 	    var found = 0;
 	    if (children) {
 	      children.forEach(function (c) {
 	        if (found) {
 	          return;
 	        }
-	        found = c.key === key;
+	        found = c.key === key && !c.props[showProp];
 	      });
 	    }
 	    return found;
 	  },
 	
-	  isShownInChildrenByKey: function isShownInChildrenByKey(children, key, showProp) {
-	    var found = 0;
-	    if (children) {
-	      children.forEach(function (c) {
-	        if (found) {
-	          return;
-	        }
-	        found = c.key === key && c.props[showProp];
-	      });
-	    }
-	    return found;
-	  },
-	
-	  isSameChildren: function isSameChildren(c1, c2) {
+	  isSameChildren: function isSameChildren(c1, c2, showProp) {
 	    var same = c1.length === c2.length;
 	    if (same) {
-	      c1.forEach(function (c, i) {
-	        if (c !== c2[i]) {
+	      c1.forEach(function (child, i) {
+	        var child2 = c2[i];
+	        if (child.key !== child2.key) {
+	          same = false;
+	        } else if (showProp && child.props[showProp] !== child2.props[showProp]) {
 	          same = false;
 	        }
 	      });
@@ -3263,7 +3264,7 @@ webpackJsonp([0,1],[
 	    var nextChildrenPending = {};
 	    var pendingChildren = [];
 	    prev.forEach(function (c) {
-	      if (inChildren(next, c)) {
+	      if (utils.findChildInChildrenByKey(next, c.key)) {
 	        if (pendingChildren.length) {
 	          nextChildrenPending[c.key] = pendingChildren;
 	          pendingChildren = [];
@@ -3285,6 +3286,8 @@ webpackJsonp([0,1],[
 	    return ret;
 	  }
 	};
+	
+	exports['default'] = utils;
 	module.exports = exports['default'];
 
 /***/ },
@@ -3680,6 +3683,16 @@ webpackJsonp([0,1],[
 	  },
 	  isLeaveSupported: function isLeaveSupported(props) {
 	    return props.transitionName && props.transitionLeave || props.animation.leave;
+	  },
+	
+	  allowAppearCallback: function allowAppearCallback(props) {
+	    return props.transitionAppear || props.animation.appear;
+	  },
+	  allowEnterCallback: function allowEnterCallback(props) {
+	    return props.transitionEnter || props.animation.enter;
+	  },
+	  allowLeaveCallback: function allowLeaveCallback(props) {
+	    return props.transitionLeave || props.animation.leave;
 	  }
 	};
 	exports["default"] = util;
