@@ -1,17 +1,15 @@
-* {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-*:before,
-*:after {
-  box-sizing: border-box;
-}
 .rc-slider {
   position: relative;
   height: 4px;
   width: 100%;
   border-radius: 6px;
   background-color: #e9e9e9;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-slider * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .rc-slider-track {
   position: absolute;
@@ -91,10 +89,10 @@
   background-color: #e9e9e9;
 }
 .rc-slider-disabled .rc-slider-track {
-  background-color: #cccccc;
+  background-color: #ccc;
 }
 .rc-slider-disabled .rc-slider-handle {
-  border-color: #cccccc;
+  border-color: #ccc;
   background-color: #fff;
   cursor: not-allowed;
 }
@@ -108,6 +106,12 @@
   top: -9999px;
   z-index: 4;
   visibility: visible;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-slider-tooltip * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
 .rc-slider-tooltip-hidden {
   display: none;
@@ -121,7 +125,7 @@
   height: 24px;
   font-size: 12px;
   line-height: 1;
-  color: #ffffff;
+  color: #fff;
   text-align: center;
   text-decoration: none;
   background-color: #6c6c6c;
@@ -142,8 +146,8 @@
   border-width: 4px 4px 0;
   border-top-color: #6c6c6c;
 }
-.zoom-down-enter,
-.zoom-down-appear {
+.rc-slider-tooltip-zoom-down-enter,
+.rc-slider-tooltip-zoom-down-appear {
   -webkit-animation-duration: .3s;
           animation-duration: .3s;
   -webkit-animation-fill-mode: both;
@@ -152,7 +156,7 @@
   -webkit-animation-play-state: paused;
           animation-play-state: paused;
 }
-.zoom-down-leave {
+.rc-slider-tooltip-zoom-down-leave {
   -webkit-animation-duration: .3s;
           animation-duration: .3s;
   -webkit-animation-fill-mode: both;
@@ -161,32 +165,32 @@
   -webkit-animation-play-state: paused;
           animation-play-state: paused;
 }
-.zoom-down-enter.zoom-down-enter-active,
-.zoom-down-appear.zoom-down-appear-active {
-  -webkit-animation-name: zoomDownIn;
-          animation-name: zoomDownIn;
+.rc-slider-tooltip-zoom-down-enter.rc-slider-tooltip-zoom-down-enter-active,
+.rc-slider-tooltip-zoom-down-appear.rc-slider-tooltip-zoom-down-appear-active {
+  -webkit-animation-name: rcSliderTooltipZoomDownOutIn;
+          animation-name: rcSliderTooltipZoomDownOutIn;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
-.zoom-down-leave.zoom-down-leave-active {
-  -webkit-animation-name: zoomDownOut;
-          animation-name: zoomDownOut;
+.rc-slider-tooltip-zoom-down-leave.rc-slider-tooltip-zoom-down-leave-active {
+  -webkit-animation-name: rcSliderTooltipZoomDownOutOut;
+          animation-name: rcSliderTooltipZoomDownOutOut;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
-.zoom-down-enter,
-.zoom-down-appear {
+.rc-slider-tooltip-zoom-down-enter,
+.rc-slider-tooltip-zoom-down-appear {
   -webkit-transform: scale(0, 0);
       -ms-transform: scale(0, 0);
           transform: scale(0, 0);
   -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
           animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
 }
-.zoom-down-leave {
+.rc-slider-tooltip-zoom-down-leave {
   -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
           animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
 }
-@-webkit-keyframes zoomDownIn {
+@-webkit-keyframes rcSliderTooltipZoomDownOutIn {
   0% {
     opacity: 0;
     -webkit-transform-origin: 50% 100%;
@@ -201,7 +205,7 @@
             transform: scale(1, 1);
   }
 }
-@keyframes zoomDownIn {
+@keyframes rcSliderTooltipZoomDownOutIn {
   0% {
     opacity: 0;
     -webkit-transform-origin: 50% 100%;
@@ -216,7 +220,7 @@
             transform: scale(1, 1);
   }
 }
-@-webkit-keyframes zoomDownOut {
+@-webkit-keyframes rcSliderTooltipZoomDownOutOut {
   0% {
     -webkit-transform-origin: 50% 100%;
             transform-origin: 50% 100%;
@@ -231,7 +235,7 @@
             transform: scale(0, 0);
   }
 }
-@keyframes zoomDownOut {
+@keyframes rcSliderTooltipZoomDownOutOut {
   0% {
     -webkit-transform-origin: 50% 100%;
             transform-origin: 50% 100%;
