@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "description": "slider ui component for react",
   "keywords": [
     "react",
@@ -29,13 +29,13 @@
   "scripts": {
     "build": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
-    "start": "node --harmony node_modules/.bin/rc-server",
+    "start": "rc-server",
     "pub": "rc-tools run pub",
     "lint": "rc-tools run lint",
     "karma": "rc-tools run karma",
-    "saucelabs": "node --harmony node_modules/.bin/rc-tools run saucelabs",
-    "browser-test": "node --harmony node_modules/.bin/rc-tools run browser-test",
-    "browser-test-cover": "node --harmony node_modules/.bin/rc-tools run browser-test-cover"
+    "saucelabs": "rc-tools run saucelabs",
+    "browser-test": "rc-tools run browser-test",
+    "browser-test-cover": "rc-tools run browser-test-cover"
   },
   "devDependencies": {
     "expect.js": "0.3.x",
@@ -43,7 +43,6 @@
     "rc-server": "3.x",
     "rc-tools": "4.x",
     "react": "^0.13.x",
-    "node-dev": "2.x",
     "jquery": "^1.11.2"
   },
   "precommit": [

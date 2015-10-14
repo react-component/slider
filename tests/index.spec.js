@@ -1,7 +1,7 @@
 
 var expect = require('expect.js');
 var Slider = require('../index.js');
-var React = require('react');
+var React = require('react/addons');
 var TestUtils = React.addons.TestUtils;
 var Simulate = TestUtils.Simulate;
 var $ = require('jquery');
