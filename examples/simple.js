@@ -20,13 +20,29 @@ webpackJsonp([0,1],[
 	  console.log(v);
 	}
 	
-	// React.render(<div style={{width:400,margin:100}}><Slider marks={["一","二","三","四","五"]} defaultIndex={2} /></div>, document.getElementById('__react-content'));
-	// React.render(<div style={{width:400,margin:100}}><Slider withDots className='rc-slider' step={20}/></div>, document.getElementById('__react-content'));
-	// React.render(<div style={{width:400,margin:100}}><Slider className='rc-slider' step={20}/></div>, document.getElementById('__react-content'));
 	React.render(React.createElement(
 	  'div',
-	  { style: { width: 400, margin: 100 } },
-	  React.createElement(Slider, { onChange: onChange, tipTransitionName: 'rc-slider-tooltip-zoom-down' })
+	  null,
+	  React.createElement(
+	    'div',
+	    { style: { width: 400, margin: 100 } },
+	    React.createElement(Slider, { onChange: onChange, tipTransitionName: 'rc-slider-tooltip-zoom-down' })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: { width: 400, margin: 100 } },
+	    React.createElement(Slider, { marks: ["一", "二", "三", "四", "五"], defaultIndex: 2 })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: { width: 400, margin: 100 } },
+	    React.createElement(Slider, { withDots: true, step: 20 })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: { width: 400, margin: 100 } },
+	    React.createElement(Slider, { step: 20 })
+	  )
 	), document.getElementById('__react-content'));
 
 /***/ },
