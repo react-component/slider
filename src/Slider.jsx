@@ -20,76 +20,36 @@ function pauseEvent(e) {
 }
 
 function getValueFromIndex(props) {
-  let value;
   const marksLen = props.marks.length;
-  let index;
-  if ('index' in props) {
-    index = props.index;
-  } else {
-    index = props.defaultIndex;
-  }
+  const index = ('index' in props ? props.index : props.defaultIndex);
+
+  let value;
   if (marksLen > 0) {
     value = ((props.max - props.min) / (marksLen - 1)) * (index);
-    value = value.toFixed(5) / 1;
+    value = value.toFixed(5);
   }
   return value;
 }
 
-const Slider = React.createClass({
-  propTypes: {
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    step: React.PropTypes.number,
-    defaultValue: React.PropTypes.number,
-    defaultIndex: React.PropTypes.number,
-    value: React.PropTypes.number,
-    index: React.PropTypes.number,
-    marks: React.PropTypes.array,
-    isIncluded: React.PropTypes.bool,
-    className: React.PropTypes.string,
-    prefixCls: React.PropTypes.string,
-    disabled: React.PropTypes.bool,
-    children: React.PropTypes.any,
-    onBeforeChange: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onAfterChange: React.PropTypes.func,
-    tipTransitionName: React.PropTypes.string,
-    withDots: React.PropTypes.bool,
-  },
+class Slider extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getDefaultProps() {
-    return {
-      min: 0,
-      max: 100,
-      step: 1,
-      defaultValue: 0,
-      marks: [],
-      isIncluded: true,
-      className: '',
-      prefixCls: 'rc-slider',
-      disabled: false,
-      defaultIndex: 0,
-      tipTransitionName: '',
-      withDots: false,
-    };
-  },
-
-  getInitialState() {
-    const props = this.props;
-    let value = props.defaultValue;
-    if ('value' in props) {
-      value = props.value;
-    }
+    // Note: Maybe `value` is `0`, `false` and so on.
+    //       So, check the existence of `value` with `in`.
+    let value = ('value' in props ? props.value : props.defaultValue);
     value = this._trimAlignValue(value);
+
     const marksLen = props.marks.length;
     if (marksLen > 0) {
       value = getValueFromIndex(props);
     }
-    return {
+
+    this.state = {
       dragging: false,
       value: value,
     };
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if ('value' in nextProps) {
@@ -101,20 +61,12 @@ const Slider = React.createClass({
         value: getValueFromIndex(nextProps),
       });
     }
-  },
-
-  onMouseUp() {
-    this._end('mouse');
-  },
-
-  onTouchUp() {
-    this._end('touch');
-  },
+  }
 
   onMouseMove(e) {
     const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
     this.onMove(e, position);
-  },
+  }
 
   onTouchMove(e) {
     if (e.touches.length > 1 || (e.type === 'touchend' && e.touches.length > 0)) {
@@ -125,7 +77,7 @@ const Slider = React.createClass({
     const position = this._getTouchPosition(e);
 
     this.onMove(e, position);
-  },
+  }
 
   onMove(e, position) {
     pauseEvent(e);
@@ -146,7 +98,7 @@ const Slider = React.createClass({
     if (value !== oldValue) {
       this._triggerEvents('onChange', value);
     }
-  },
+  }
 
   onTouchStart(e) {
     if (e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0)) {
@@ -159,7 +111,7 @@ const Slider = React.createClass({
     this._start(position, value);
     this._addDocumentEvents('touch');
     pauseEvent(e);
-  },
+  }
 
   onSliderMouseDown(e) {
     const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
@@ -168,7 +120,7 @@ const Slider = React.createClass({
     this._start(position, value);
     this._addDocumentEvents('mouse');
     pauseEvent(e);
-  },
+  }
 
   getIndex(v) {
     const props = this.props;
@@ -179,7 +131,7 @@ const Slider = React.createClass({
     }
     const unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
     return Math.round(value / unit);
-  },
+  }
 
   getSliderLength() {
     const slider = this.refs.slider;
@@ -188,14 +140,14 @@ const Slider = React.createClass({
     }
 
     return slider.clientWidth;
-  },
+  }
 
   getSliderStart() {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
 
     return rect.left;
-  },
+  }
 
   render() {
     const state = this.state;
@@ -238,8 +190,8 @@ const Slider = React.createClass({
 
     return (
       <div ref="slider" className={sliderClassName}
-        onTouchStart={disabled ? noop : this.onTouchStart}
-        onMouseDown={disabled ? noop : this.onSliderMouseDown}>
+        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
+        onMouseDown={disabled ? noop : this.onSliderMouseDown.bind(this)}>
         {track}
         <Handle className={handleClassName} prefixCls={prefixCls}
           offset={offset} tipTransitionName={tipTransitionName} value={value}
@@ -249,21 +201,22 @@ const Slider = React.createClass({
         {children}
       </div>
     );
-  },
+  }
 
   _trimAlignValue(v, propsArg) {
     let val = v;
     const props = propsArg || this.props;
-    const step = props.marks.length > 0 ? (props.max - props.min) / (props.marks.length - 1) : props.step;
+    const {marks, min, max} = props;
+    const step = marks.length > 0 ? (max - min) / (marks.length - 1) : props.step;
 
-    if (val <= props.min) {
-      val = props.min;
+    if (val <= min) {
+      val = min;
     }
-    if (val >= props.max) {
-      val = props.max;
+    if (val >= max) {
+      val = max;
     }
 
-    const valModStep = (val - props.min) % step;
+    const valModStep = (val - min) % step;
     let alignValue = val - valModStep;
 
     if (Math.abs(valModStep) * 2 >= step) {
@@ -271,36 +224,37 @@ const Slider = React.createClass({
     }
 
     return parseFloat(alignValue.toFixed(5));
-  },
+  }
 
   _calcOffset(value) {
-    const ratio = (value - this.props.min) / (this.props.max - this.props.min);
+    const {min, max} = this.props;
+    const ratio = (value - min) / (max - min);
     return ratio * 100;
-  },
+  }
 
   _calcValue(offset) {
+    const {min, max} = this.props;
     const ratio = offset / this.getSliderLength();
-    return ratio * (this.props.max - this.props.min) + this.props.min;
-  },
+    return ratio * (max - min) + min;
+  }
 
   _calValueByPos(position) {
     const pixelOffset = position - this.getSliderStart();
-    // pixelOffset -= (this.state.onSize / 2);
     const nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
     this.setState({
       value: nextValue,
     });
     return nextValue;
-  },
+  }
 
   _getTouchPosition(e) {
     const touch = e.touches[0];
     return touch.pageX;
-  },
+  }
 
   _triggerEvents(event, v) {
     const props = this.props;
-    const hasMarks = props.marks && props.marks.length > 0;
+    const hasMarks = (props.marks.length > 0);
     if (props[event]) {
       let data;
       if (hasMarks) {
@@ -312,18 +266,18 @@ const Slider = React.createClass({
       }
       props[event](data);
     }
-  },
+  }
 
   _addDocumentEvents(type) {
     if (type === 'touch') {
       // just work for chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this.onTouchMove);
-      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this.onTouchUp);
+      this.onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
+      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this._end.bind(this, 'touch'));
     } else if (type === 'mouse') {
-      this.onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this.onMouseMove);
-      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this.onMouseUp);
+      this.onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
+      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this._end.bind(this, 'mouse'));
     }
-  },
+  }
 
   _removeEventons(type) {
     if (type === 'touch') {
@@ -333,7 +287,7 @@ const Slider = React.createClass({
       this.onMouseMoveListener.remove();
       this.onMouseUpListener.remove();
     }
-  },
+  }
 
   _start(position, value) {
     this._triggerEvents('onBeforeChange');
@@ -342,7 +296,7 @@ const Slider = React.createClass({
     this.setState({
       dragging: true,
     });
-  },
+  }
 
   _end(type) {
     this._removeEventons(type);
@@ -350,7 +304,43 @@ const Slider = React.createClass({
     this.setState({
       dragging: false,
     });
-  },
-});
+  }
+}
+
+Slider.propTypes = {
+  min: React.PropTypes.number,
+  max: React.PropTypes.number,
+  step: React.PropTypes.number,
+  defaultValue: React.PropTypes.number,
+  defaultIndex: React.PropTypes.number,
+  value: React.PropTypes.number,
+  index: React.PropTypes.number,
+  marks: React.PropTypes.array,
+  isIncluded: React.PropTypes.bool,
+  className: React.PropTypes.string,
+  prefixCls: React.PropTypes.string,
+  disabled: React.PropTypes.bool,
+  children: React.PropTypes.any,
+  onBeforeChange: React.PropTypes.func,
+  onChange: React.PropTypes.func,
+  onAfterChange: React.PropTypes.func,
+  tipTransitionName: React.PropTypes.string,
+  withDots: React.PropTypes.bool,
+};
+
+Slider.defaultProps = {
+  min: 0,
+  max: 100,
+  step: 1,
+  defaultValue: 0,
+  defaultIndex: 0,
+  marks: [],
+  isIncluded: true,
+  className: '',
+  prefixCls: 'rc-slider',
+  disabled: false,
+  tipTransitionName: '',
+  withDots: false,
+};
 
 export default Slider;
