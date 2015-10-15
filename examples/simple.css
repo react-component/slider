@@ -91,13 +91,14 @@
 .rc-slider-disabled .rc-slider-track {
   background-color: #ccc;
 }
-.rc-slider-disabled .rc-slider-handle {
+.rc-slider-disabled .rc-slider-handle,
+.rc-slider-disabled .rc-slider-dot {
   border-color: #ccc;
   background-color: #fff;
   cursor: not-allowed;
 }
 .rc-slider-disabled .rc-slider-mark-text,
-.rc-slider-disabled .dot {
+.rc-slider-disabled .rc-slider-dot {
   cursor: not-allowed !important;
 }
 .rc-slider-tooltip {
@@ -167,14 +168,14 @@
 }
 .rc-slider-tooltip-zoom-down-enter.rc-slider-tooltip-zoom-down-enter-active,
 .rc-slider-tooltip-zoom-down-appear.rc-slider-tooltip-zoom-down-appear-active {
-  -webkit-animation-name: rcSliderTooltipZoomDownOutIn;
-          animation-name: rcSliderTooltipZoomDownOutIn;
+  -webkit-animation-name: rcSliderTooltipZoomDownIn;
+          animation-name: rcSliderTooltipZoomDownIn;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
 .rc-slider-tooltip-zoom-down-leave.rc-slider-tooltip-zoom-down-leave-active {
-  -webkit-animation-name: rcSliderTooltipZoomDownOutOut;
-          animation-name: rcSliderTooltipZoomDownOutOut;
+  -webkit-animation-name: rcSliderTooltipZoomDownOut;
+          animation-name: rcSliderTooltipZoomDownOut;
   -webkit-animation-play-state: running;
           animation-play-state: running;
 }
@@ -190,7 +191,7 @@
   -webkit-animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
           animation-timing-function: cubic-bezier(0.755, 0.05, 0.855, 0.06);
 }
-@-webkit-keyframes rcSliderTooltipZoomDownOutIn {
+@-webkit-keyframes rcSliderTooltipZoomDownIn {
   0% {
     opacity: 0;
     -webkit-transform-origin: 50% 100%;
@@ -205,7 +206,7 @@
             transform: scale(1, 1);
   }
 }
-@keyframes rcSliderTooltipZoomDownOutIn {
+@keyframes rcSliderTooltipZoomDownIn {
   0% {
     opacity: 0;
     -webkit-transform-origin: 50% 100%;
@@ -220,7 +221,7 @@
             transform: scale(1, 1);
   }
 }
-@-webkit-keyframes rcSliderTooltipZoomDownOutOut {
+@-webkit-keyframes rcSliderTooltipZoomDownOut {
   0% {
     -webkit-transform-origin: 50% 100%;
             transform-origin: 50% 100%;
@@ -235,7 +236,7 @@
             transform: scale(0, 0);
   }
 }
-@keyframes rcSliderTooltipZoomDownOutOut {
+@keyframes rcSliderTooltipZoomDownOut {
   0% {
     -webkit-transform-origin: 50% 100%;
             transform-origin: 50% 100%;

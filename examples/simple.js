@@ -21,6 +21,7 @@ webpackJsonp([0,1],[
 	}
 	
 	// React.render(<div style={{width:400,margin:100}}><Slider marks={["一","二","三","四","五"]} defaultIndex={2} /></div>, document.getElementById('__react-content'));
+	// React.render(<div style={{width:400,margin:100}}><Slider withDots className='rc-slider' step={20}/></div>, document.getElementById('__react-content'));
 	// React.render(<div style={{width:400,margin:100}}><Slider className='rc-slider' step={20}/></div>, document.getElementById('__react-content'));
 	React.render(React.createElement(
 	  'div',
@@ -137,7 +138,8 @@ webpackJsonp([0,1],[
 	    onBeforeChange: _react2['default'].PropTypes.func,
 	    onChange: _react2['default'].PropTypes.func,
 	    onAfterChange: _react2['default'].PropTypes.func,
-	    tipTransitionName: _react2['default'].PropTypes.string
+	    tipTransitionName: _react2['default'].PropTypes.string,
+	    withDots: _react2['default'].PropTypes.bool
 	  },
 	
 	  getDefaultProps: function getDefaultProps() {
@@ -152,7 +154,8 @@ webpackJsonp([0,1],[
 	      prefixCls: 'rc-slider',
 	      disabled: false,
 	      defaultIndex: 0,
-	      tipTransitionName: ''
+	      tipTransitionName: '',
+	      withDots: false
 	    };
 	  },
 	
@@ -289,35 +292,41 @@ webpackJsonp([0,1],[
 	  renderSteps: function renderSteps() {
 	    var props = this.props;
 	    var marksLen = props.marks.length;
-	    var stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
-	    var unit = 100 / (stepNum - 1);
+	    var withDots = props.withDots;
 	
-	    var prefixCls = props.prefixCls;
-	    var stepClassName = prefixClsFn(prefixCls, 'step');
+	    if (marksLen || withDots) {
+	      var stepNum = marksLen ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
+	      var unit = 100 / (stepNum - 1);
 	
-	    var elements = [];
-	    for (var i = 0; i < stepNum; i++) {
-	      var offset = unit * i + '%';
-	      var style = {
-	        left: offset
-	      };
-	      var className = prefixClsFn(prefixCls, 'dot');
-	      if (props.isIncluded) {
-	        if (i <= this.getIndex()) {
-	          className = prefixClsFn(prefixCls, 'dot', 'dot-active');
+	      var prefixCls = props.prefixCls;
+	      var stepClassName = prefixClsFn(prefixCls, 'step');
+	
+	      var elements = [];
+	      for (var i = 0; i < stepNum; i++) {
+	        var offset = unit * i + '%';
+	        var style = {
+	          left: offset
+	        };
+	        var className = prefixClsFn(prefixCls, 'dot');
+	        if (props.isIncluded) {
+	          if (i <= this.getIndex()) {
+	            className = prefixClsFn(prefixCls, 'dot', 'dot-active');
+	          }
+	        } else {
+	          className = i === this.getIndex() ? prefixClsFn(prefixCls, 'dot', 'dot-active') : className;
 	        }
-	      } else {
-	        className = i === this.getIndex() ? prefixClsFn(prefixCls, 'dot', 'dot-active') : className;
+	
+	        elements[i] = _react2['default'].createElement('span', { className: className, style: style, ref: 'step' + i, key: 'step' + i });
 	      }
 	
-	      elements[i] = _react2['default'].createElement('span', { className: className, style: style, ref: 'step' + i, key: 'step' + i });
+	      return _react2['default'].createElement(
+	        'div',
+	        { className: stepClassName },
+	        elements
+	      );
 	    }
 	
-	    return _react2['default'].createElement(
-	      'div',
-	      { className: stepClassName },
-	      elements
-	    );
+	    return null;
 	  },
 	
 	  renderMark: function renderMark(i) {

@@ -239,7 +239,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@1.5.0</h1>
+    <h1>rc-slider@1.5.1</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -247,21 +247,22 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <script src="common.js?nowrap"></script>
   <script src="simple.js?nowrap"></script>
   <div class="highlight">
-    <pre><code><span class="hljs-string">'use strict'</span>;
+    <pre><code><span class="xml">'use strict';
 
-<span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider/assets/index.css'</span>);
+require('rc-slider/assets/index.css');
 
-<span class="hljs-reserved">var</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
-<span class="hljs-reserved">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+var Slider = require('rc-slider');
+var React = require('react');
 
-<span class="hljs-reserved">function</span> onChange(v){
-  <span class="hljs-built_in">console</span>.log(v);
+function onChange(v){
+  console.log(v);
 }
 
-<span class="hljs-regexp">//</span> React.render(&lt;div style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">400</span>,<span class="hljs-attribute">margin</span>:<span class="hljs-number">100</span>}}&gt;&lt;Slider marks={[<span class="hljs-string">"一"</span>,<span class="hljs-string">"二"</span>,<span class="hljs-string">"三"</span>,<span class="hljs-string">"四"</span>,<span class="hljs-string">"五"</span>]} defaultIndex={<span class="hljs-number">2</span>} /&gt;&lt;/div&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
-<span class="hljs-regexp">//</span> React.render(&lt;div style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">400</span>,<span class="hljs-attribute">margin</span>:<span class="hljs-number">100</span>}}&gt;&lt;Slider className=<span class="hljs-string">'rc-slider'</span> step={<span class="hljs-number">20</span>}/&gt;&lt;/div&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
-React.render(&lt;div style={{<span class="hljs-attribute">width</span>:<span class="hljs-number">400</span>,<span class="hljs-attribute">margin</span>:<span class="hljs-number">100</span>}}&gt;&lt;Slider onChange={onChange}  tipTransitionName=<span class="hljs-string">'rc-slider-tooltip-zoom-down'</span>/&gt;&lt;/div&gt;, <span class="hljs-built_in">document</span>.getElementById(<span class="hljs-string">'__react-content'</span>));
-</code></pre>
+// React.render(<span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=</span></span><span class="hljs-expression">{{<span class="hljs-variable">width</span>:400,<span class="hljs-variable">margin</span>:100}}</span><span class="xml"><span class="hljs-tag">&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{["一","二","三","四","五"]}</span> <span class="hljs-attribute">defaultIndex</span>=<span class="hljs-value">{2}</span> /&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>, document.getElementById('__react-content'));
+// React.render(<span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=</span></span><span class="hljs-expression">{{<span class="hljs-variable">width</span>:400,<span class="hljs-variable">margin</span>:100}}</span><span class="xml"><span class="hljs-tag">&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">withDots</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">'rc-slider'</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span>/&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>, document.getElementById('__react-content'));
+// React.render(<span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=</span></span><span class="hljs-expression">{{<span class="hljs-variable">width</span>:400,<span class="hljs-variable">margin</span>:100}}</span><span class="xml"><span class="hljs-tag">&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">className</span>=<span class="hljs-value">'rc-slider'</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span>/&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>, document.getElementById('__react-content'));
+React.render(<span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=</span></span><span class="hljs-expression">{{<span class="hljs-variable">width</span>:400,<span class="hljs-variable">margin</span>:100}}</span><span class="xml"><span class="hljs-tag">&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{onChange}</span>  <span class="hljs-attribute">tipTransitionName</span>=<span class="hljs-value">'rc-slider-tooltip-zoom-down'</span>/&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>, document.getElementById('__react-content'));
+</span></code></pre>
   </div>
 </div>
 <a href="http://github.com/react-component/slider"><img style="position: absolute; top: 0; right: 0; border: 0;"
