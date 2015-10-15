@@ -57,6 +57,7 @@ const Slider = React.createClass({
     onChange: React.PropTypes.func,
     onAfterChange: React.PropTypes.func,
     tipTransitionName: React.PropTypes.string,
+    withDots: React.PropTypes.bool,
   },
 
   getDefaultProps() {
@@ -72,6 +73,7 @@ const Slider = React.createClass({
       disabled: false,
       defaultIndex: 0,
       tipTransitionName: '',
+      withDots: false,
     };
   },
 
@@ -208,37 +210,43 @@ const Slider = React.createClass({
   renderSteps() {
     const props = this.props;
     const marksLen = props.marks.length;
-    const stepNum = marksLen > 0 ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
-    const unit = 100 / (stepNum - 1);
+    const withDots = props.withDots;
 
-    const prefixCls = props.prefixCls;
-    const stepClassName = prefixClsFn(prefixCls, 'step');
+    if (marksLen || withDots) {
+      const stepNum = marksLen ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
+      const unit = 100 / (stepNum - 1);
 
-    const elements = [];
-    for (let i = 0; i < stepNum; i++) {
-      const offset = unit * i + '%';
-      const style = {
-        left: offset,
-      };
-      let className = prefixClsFn(prefixCls, 'dot');
-      if (props.isIncluded) {
-        if (i <= this.getIndex()) {
-          className = prefixClsFn(prefixCls, 'dot', 'dot-active');
+      const prefixCls = props.prefixCls;
+      const stepClassName = prefixClsFn(prefixCls, 'step');
+
+      const elements = [];
+      for (let i = 0; i < stepNum; i++) {
+        const offset = unit * i + '%';
+        const style = {
+          left: offset,
+        };
+        let className = prefixClsFn(prefixCls, 'dot');
+        if (props.isIncluded) {
+          if (i <= this.getIndex()) {
+            className = prefixClsFn(prefixCls, 'dot', 'dot-active');
+          }
+        } else {
+          className = (i === this.getIndex()) ? prefixClsFn(prefixCls, 'dot', 'dot-active') : className;
         }
-      } else {
-        className = (i === this.getIndex()) ? prefixClsFn(prefixCls, 'dot', 'dot-active') : className;
+
+        elements[i] = (
+          <span className={className} style={style} ref={'step' + i} key={'step' + i}></span>
+        );
       }
 
-      elements[i] = (
-        <span className={className} style={style} ref={'step' + i} key={'step' + i}></span>
+      return (
+        <div className={stepClassName}>
+          {elements}
+        </div>
       );
     }
 
-    return (
-      <div className={stepClassName}>
-        {elements}
-      </div>
-    );
+    return null;
   },
 
   renderMark(i) {
