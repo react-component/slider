@@ -142,6 +142,12 @@ React.render(<Rcslider />, container);
           <td>''</td>
           <td>Set the animation for tooltip if it shows.</td>
         </tr>
+        <tr>
+          <td>withDots</td>
+          <td>bool</td>
+          <td>false</td>
+          <td>For linear slider, when the `step` value is greater than 1, you can set the `withDots` to  `true` if you want to render the slider bar with dots.</td>
+        </tr>
     </tbody>
 </table>
 

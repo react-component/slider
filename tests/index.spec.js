@@ -39,8 +39,14 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider').length).to.be(1);
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
-    expect(node.find('.rc-slider-dot').length).to.be(6);
     expect(slider.state.value).to.be(0);
+
+    var sliderWithDots = React.render(
+      <Slider className='rc-slider' step={20} withDots/>,
+      div
+    );
+    var node1 = $(div);
+    expect(node1.find('.rc-slider-dot').length).to.be(6);
   });
 
   it('should render a slider with marks correctly!', function () {
@@ -64,7 +70,7 @@ describe('rc-slider', function () {
   //     div
   //   );
   //   var selectedStep = slider.refs.step3.getDOMNode();
-    
+
   //   Simulate.mouseDown(selectedStep);
 
   //   setTimeout( function() {
