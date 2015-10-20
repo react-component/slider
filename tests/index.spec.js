@@ -1,8 +1,9 @@
 
 var expect = require('expect.js');
 var Slider = require('../index.js');
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
+var React = require('react');
+var ReactDOM = require('react-dom');
+var TestUtils = require('react-addons-test-utils');
 var Simulate = TestUtils.Simulate;
 var $ = require('jquery');
 require('../assets/index.less');
@@ -17,7 +18,7 @@ describe('rc-slider', function () {
   });
 
   it('should render a simple slider with value correctly!', function () {
-    var slider = React.render(
+    var slider = ReactDOM.render(
       <Slider className='rc-slider' defaultValue={40}/>,
       div
     );
@@ -31,7 +32,7 @@ describe('rc-slider', function () {
   });
 
   it('should render a slider with correct numbers of step!', function () {
-    var slider = React.render(
+    var slider = ReactDOM.render(
       <Slider className='rc-slider' step={20}/>,
       div
     );
@@ -50,7 +51,7 @@ describe('rc-slider', function () {
   });
 
   it('should render a slider with marks correctly!', function () {
-    var slider = React.render(
+    var slider = ReactDOM.render(
       <Slider marks={["一","二","三","四","五"]} defaultIndex={3} />,
       div
     );
@@ -65,7 +66,7 @@ describe('rc-slider', function () {
   });
 
   // it('should mouseDown works!', function (done) {
-  //   var slider = React.render(
+  //   var slider = ReactDOM.render(
   //     <Slider marks={["一","二","三","四","五"]} />,
   //     div
   //   );

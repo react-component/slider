@@ -1,6 +1,9 @@
 import React from 'react';
-import Tooltip from 'rc-tooltip';
 import rcUtil, {Dom as DomUtils} from 'rc-util';
+import Track from './Track';
+import Handle from './Handle';
+import Steps from './Steps';
+import Marks from './Marks';
 
 function noop() {
 }
@@ -14,12 +17,6 @@ function pauseEvent(e) {
   if (e.preventDefault) {
     e.preventDefault();
   }
-}
-
-function prefixClsFn(prefixCls, ...args) {
-  return args.map((s)=> {
-    return prefixCls + '-' + s;
-  }).join(' ');
 }
 
 function getValueFromIndex(props) {
@@ -90,7 +87,6 @@ const Slider = React.createClass({
     }
     return {
       dragging: false,
-      showTooltip: false,
       value: value,
     };
   },
@@ -107,14 +103,8 @@ const Slider = React.createClass({
     }
   },
 
-  onMouseUp(e) {
-    const m = e.target;
-    const handleDom = React.findDOMNode(this.refs.handle);
-    let showToolTip = false;
-    if (m === handleDom) {
-      showToolTip = true;
-    }
-    this._end('mouse', showToolTip);
+  onMouseUp() {
+    this._end('mouse');
   },
 
   onTouchUp() {
@@ -197,199 +187,68 @@ const Slider = React.createClass({
       return 0;
     }
 
-    return slider.getDOMNode().clientWidth;
+    return slider.clientWidth;
   },
 
   getSliderStart() {
-    const slider = this.refs.slider.getDOMNode();
+    const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
 
     return rect.left;
   },
 
-  renderSteps() {
-    const props = this.props;
-    const marksLen = props.marks.length;
-    const withDots = props.withDots;
-
-    if (marksLen || withDots) {
-      const stepNum = marksLen ? marksLen : Math.floor((props.max - props.min) / props.step) + 1;
-      const unit = 100 / (stepNum - 1);
-
-      const prefixCls = props.prefixCls;
-      const stepClassName = prefixClsFn(prefixCls, 'step');
-
-      const elements = [];
-      for (let i = 0; i < stepNum; i++) {
-        const offset = unit * i + '%';
-        const style = {
-          left: offset,
-        };
-        let className = prefixClsFn(prefixCls, 'dot');
-        if (props.isIncluded) {
-          if (i <= this.getIndex()) {
-            className = prefixClsFn(prefixCls, 'dot', 'dot-active');
-          }
-        } else {
-          className = (i === this.getIndex()) ? prefixClsFn(prefixCls, 'dot', 'dot-active') : className;
-        }
-
-        elements[i] = (
-          <span className={className} style={style} ref={'step' + i} key={'step' + i}></span>
-        );
-      }
-
-      return (
-        <div className={stepClassName}>
-          {elements}
-        </div>
-      );
-    }
-
-    return null;
-  },
-
-  renderMark(i) {
-    const marks = this.props.marks;
-    const marksLen = marks.length;
-    const unit = 100 / (marksLen - 1);
-    const offset = unit * i;
-
-    const style = {
-      width: unit / 2 + '%',
-    };
-
-    if (i === marksLen - 1) {
-      style.right = -unit / 4 + '%';
-    } else {
-      style.left = i > 0 ? offset - unit / 4 + '%' : -unit / 4 + '%';
-    }
-
-    const prefixCls = this.props.prefixCls;
-    let className = prefixClsFn(prefixCls, 'mark-text');
-
-    if (this.props.isIncluded) {
-      if (i <= this.getIndex()) {
-        className = prefixClsFn(prefixCls, 'mark-text', 'mark-text-active');
-      }
-    } else {
-      className = (i === this.getIndex()) ? prefixClsFn(prefixCls, 'mark-text', 'mark-text-active') : className;
-    }
-
-    return (
-      <span className={className} style={style} key={i}>{this.props.marks[i]}</span>
-    );
-  },
-
-  renderMarks() {
-    const marks = this.props.marks;
-    const marksLen = marks.length;
-    const elements = [];
-    for (let i = 0; i < marksLen; i++) {
-      elements[i] = this.renderMark(i);
-    }
-
-    const prefixCls = this.props.prefixCls;
-    const className = prefixClsFn(prefixCls, 'mark');
-
-    return (
-      <div className={className}>
-        {elements}
-      </div>
-    );
-  },
-
-  renderHandler(offset) {
-    const onStyle = {
-      left: offset,
-    };
-
-    const prefixCls = this.props.prefixCls;
-    const className = prefixClsFn(prefixCls, 'handle');
-
-    let events = {};
-
-    let tooltipVisible;
-
-    if (this.state.dragging) {
-      tooltipVisible = true;
-    } else {
-      events = {
-        onClick: this.showTooltip.bind(this, true),
-        onMouseEnter: this.showTooltip.bind(this, true),
-        onMouseLeave: this.showTooltip.bind(this, false),
-      };
-      tooltipVisible = this.state.showTooltip;
-    }
-
-    const handle = (<div className={className}
-      {...events}
-      ref="handle"
-      style={onStyle}></div>);
-
-    if (this.props.marks.length > 0) {
-      return handle;
-    }
-    return (
-      <Tooltip
-        placement={{points: ['bc', 'tc']}}
-        visible={tooltipVisible}
-        overlay={<span>{this.state.value}</span>}
-        delay={0}
-        transitionName={this.props.tipTransitionName}
-        prefixCls={prefixClsFn(prefixCls, 'tooltip')}>
-        {handle}
-      </Tooltip>
-    );
-  },
-
-  renderTrack(offset) {
-    const style = {
-      width: offset,
-    };
-
-    const prefixCls = this.props.prefixCls;
-    const trackClassName = prefixClsFn(prefixCls, 'track');
-
-    return (
-      <div className={trackClassName} ref="track" style={style}></div>
-    );
-  },
-
   render() {
     const state = this.state;
+    const {value, dragging} = state;
     const props = this.props;
-    const value = state.value;
+    const {className, prefixCls, disabled, isIncluded, withDots} = props;
+    const {marks, step, max, min, tipTransitionName, children} = props;
+    const marksLen = marks.length;
+
+    const sliderClassName = rcUtil.classSet({
+      [prefixCls]: true,
+      [prefixCls + '-disabled']: disabled,
+      [className]: !!className,
+    });
+
     const offset = this._calcOffset(value);
-    const track = this.props.isIncluded ? this.renderTrack(offset) : null;
-    const ons = this.renderHandler(offset);
-    const steps = (props.step > 1 || props.marks.length > 0) ? this.renderSteps() : null;
-    const sliderMarks = (props.marks.length > 0) ? this.renderMarks() : null;
-    const prefixCls = props.prefixCls;
-    const disabled = props.disabled;
-    const sliderClassName = {
-      [prefixCls]: 1,
-      [props.className]: !!props.className,
-      [`${prefixCls}-disabled`]: disabled,
-    };
+
+    let track = null;
+    if (isIncluded) {
+      const trackClassName = prefixCls + '-track';
+      track = <Track className={trackClassName} offset={0} length={offset - 0} />;
+    }
+
+    const handleClassName = prefixCls + '-handle';
+
+    let steps = null;
+    if (marksLen > 0 || (step > 1 && withDots)) {
+      const stepsClassName = prefixCls + '-step';
+      const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
+      steps = (<Steps className={stepsClassName} stepNum={stepNum}
+                 index={this.getIndex()} isIncluded={isIncluded} />);
+    }
+
+    let mark = null;
+    if (marksLen > 0) {
+      const markClassName = prefixCls + '-mark';
+      mark = (<Marks className={markClassName} marks={marks}
+                 index={this.getIndex()} isIncluded={isIncluded} />);
+    }
 
     return (
-      <div className={rcUtil.classSet(sliderClassName)} ref="slider"
+      <div ref="slider" className={sliderClassName}
         onTouchStart={disabled ? noop : this.onTouchStart}
         onMouseDown={disabled ? noop : this.onSliderMouseDown}>
         {track}
-        {ons}
+        <Handle className={handleClassName} prefixCls={prefixCls}
+          offset={offset} tipTransitionName={tipTransitionName} value={value}
+          dragging={dragging} noTip={marksLen > 0} />
         {steps}
-        {sliderMarks}
-        {this.props.children}
+        {mark}
+        {children}
       </div>
     );
-  },
-
-  showTooltip(show) {
-    this.setState({
-      showTooltip: show,
-    });
   },
 
   _trimAlignValue(v, propsArg) {
@@ -416,7 +275,7 @@ const Slider = React.createClass({
 
   _calcOffset(value) {
     const ratio = (value - this.props.min) / (this.props.max - this.props.min);
-    return ratio * 100 + '%';
+    return ratio * 100;
   },
 
   _calcValue(offset) {
@@ -485,12 +344,11 @@ const Slider = React.createClass({
     });
   },
 
-  _end(type, showToolTip) {
+  _end(type) {
     this._removeEventons(type);
     this._triggerEvents('onAfterChange');
     this.setState({
       dragging: false,
-      showTooltip: !!showToolTip,
     });
   },
 });
