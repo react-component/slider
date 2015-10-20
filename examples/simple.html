@@ -239,7 +239,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@1.5.1</h1>
+    <h1>rc-slider@1.5.2</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -251,8 +251,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
 require('rc-slider/assets/index.css');
 
-var Slider = require('rc-slider');
 var React = require('react');
+var Slider = require('rc-slider');
 
 function onChange(v) {
   console.log(v);
@@ -271,6 +271,14 @@ React.render(
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=</span></span><span class="hljs-expression">{{<span class="hljs-variable">width</span>:400,<span class="hljs-variable">margin</span>:100}}</span><span class="xml"><span class="hljs-tag">&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=</span></span><span class="hljs-expression">{{<span class="hljs-variable">width</span>:400,<span class="hljs-variable">margin</span>:100}}</span><span class="xml"><span class="hljs-tag">&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>包含关系<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{["状态1","状态2","状态3","状态4"]}</span> <span class="hljs-attribute">defaultIndex</span>=<span class="hljs-value">{1}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=</span></span><span class="hljs-expression">{{<span class="hljs-variable">width</span>:400,<span class="hljs-variable">margin</span>:100}}</span><span class="xml"><span class="hljs-tag">&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>并列关系<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{["状态1","状态2","状态3","状态4"]}</span> <span class="hljs-attribute">isIncluded</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultIndex</span>=<span class="hljs-value">{1}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   , document.getElementById('__react-content'));
