@@ -5,7 +5,18 @@ import Handle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
 
-function noop() {
+function noop() {}
+
+function isNotTouchEvent(e) {
+  return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
+}
+
+function getTouchPosition(e) {
+  return e.touches[0].pageX;
+}
+
+function getMousePosition(e) {
+  return e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
 }
 
 function pauseEvent(e) {
@@ -64,18 +75,17 @@ class Slider extends React.Component {
   }
 
   onMouseMove(e) {
-    const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
+    const position = getMousePosition(e);
     this.onMove(e, position);
   }
 
   onTouchMove(e) {
-    if (e.touches.length > 1 || (e.type === 'touchend' && e.touches.length > 0)) {
-      this._end('touch');
+    if (isNotTouchEvent(e)) {
+      this.end('touch');
       return;
     }
 
-    const position = this._getTouchPosition(e);
-
+    const position = getTouchPosition(e);
     this.onMove(e, position);
   }
 
@@ -101,11 +111,9 @@ class Slider extends React.Component {
   }
 
   onTouchStart(e) {
-    if (e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0)) {
-      return;
-    }
+    if (isNotTouchEvent(e)) return;
 
-    const position = this._getTouchPosition(e);
+    const position = getTouchPosition(e);
     const value = this._calValueByPos(position);
     this._triggerEvents('onChange', value);
     this._start(position, value);
@@ -114,7 +122,7 @@ class Slider extends React.Component {
   }
 
   onSliderMouseDown(e) {
-    const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
+    const position = getMousePosition(e);
     const value = this._calValueByPos(position);
     this._triggerEvents('onChange', value);
     this._start(position, value);
@@ -246,11 +254,6 @@ class Slider extends React.Component {
     return nextValue;
   }
 
-  _getTouchPosition(e) {
-    const touch = e.touches[0];
-    return touch.pageX;
-  }
-
   _triggerEvents(event, v) {
     const props = this.props;
     const hasMarks = (props.marks.length > 0);
@@ -271,10 +274,10 @@ class Slider extends React.Component {
     if (type === 'touch') {
       // just work for chrome iOS Safari and Android Browser
       this.onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
-      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this._end.bind(this, 'touch'));
+      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
     } else if (type === 'mouse') {
       this.onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
-      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this._end.bind(this, 'mouse'));
+      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
     }
   }
 
@@ -297,7 +300,7 @@ class Slider extends React.Component {
     });
   }
 
-  _end(type) {
+  end(type) {
     this._removeEventons(type);
     this._triggerEvents('onAfterChange');
     this.setState({
