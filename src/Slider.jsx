@@ -193,9 +193,8 @@ class Slider extends React.Component {
         onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
         onMouseDown={disabled ? noop : this.onSliderMouseDown.bind(this)}>
         {track}
-        <Handle className={handleClassName} prefixCls={prefixCls}
-          offset={offset} tipTransitionName={tipTransitionName} value={value}
-          dragging={dragging} noTip={marksLen > 0} />
+        <Handle className={handleClassName} tipTransitionName={tipTransitionName}
+          offset={offset} value={value} dragging={dragging} noTip={marksLen > 0} />
         {steps}
         {mark}
         {children}
