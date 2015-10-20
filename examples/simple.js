@@ -2,8 +2,8 @@
 
 require('rc-slider/assets/index.less');
 
-var Slider = require('rc-slider');
 var React = require('react');
+var Slider = require('rc-slider');
 
 function onChange(v) {
   console.log(v);

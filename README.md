@@ -50,9 +50,10 @@ slider ui component for react
 ## Usage
 
 ```js
-var Rcslider = require('rc-slider');
 var React = require('react');
-React.render(<Rcslider />, container);
+var ReactDOM = require('react-dom');
+var Rcslider = require('rc-slider');
+ReactDOM.render(<Rcslider />, container);
 ```
 
 ## API
