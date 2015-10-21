@@ -10,6 +10,18 @@ export default class Handle extends React.Component {
     };
   }
 
+  showTooltip() {
+    this.setState({
+      isTooltipVisible: true,
+    });
+  }
+
+  hideTooltip() {
+    this.setState({
+      isTooltipVisible: false,
+    });
+  }
+
   render() {
     const props = this.props;
     const {className, tipTransitionName, offset, value} = props;
@@ -35,17 +47,6 @@ export default class Handle extends React.Component {
               transitionName={tipTransitionName}>
               {handle}
             </Tooltip>);
-  }
-
-  showTooltip() {
-    this.setState({
-      isTooltipVisible: true,
-    });
-  }
-  hideTooltip() {
-    this.setState({
-      isTooltipVisible: false,
-    });
   }
 }
 
