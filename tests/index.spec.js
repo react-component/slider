@@ -26,7 +26,7 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider').length).to.be(1);
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
-    expect(slider.state.value).to.be(40);
+    expect(slider.state.upperBound).to.be(40);
     var trackWidth = node.find('.rc-slider-track')[0].style.width;
     expect(trackWidth).to.eql(node.find('.rc-slider-handle')[0].style.left);
   });
@@ -40,7 +40,7 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider').length).to.be(1);
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
-    expect(slider.state.value).to.be(0);
+    expect(slider.state.upperBound).to.be(0);
 
     var sliderWithDots = React.render(
       <Slider className='rc-slider' step={20} withDots/>,
@@ -62,7 +62,7 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider-dot').length).to.be(slider.props.marks.length);
     expect(node.find('.rc-slider-mark').length).to.be(1);
     expect(node.find('.rc-slider-mark-text').length).to.be(slider.props.marks.length);
-    expect(slider.getIndex()).to.be(3);
+    expect(slider.getIndex(slider.state.upperBound)).to.be(3);
   });
 
   // it('should mouseDown works!', function (done) {

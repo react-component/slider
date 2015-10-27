@@ -5,7 +5,18 @@ import Handle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
 
-function noop() {
+function noop() {}
+
+function isNotTouchEvent(e) {
+  return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
+}
+
+function getTouchPosition(e) {
+  return e.touches[0].pageX;
+}
+
+function getMousePosition(e) {
+  return e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
 }
 
 function pauseEvent(e) {
@@ -19,167 +30,159 @@ function pauseEvent(e) {
   }
 }
 
-function getValueFromIndex(props) {
-  let value;
-  const marksLen = props.marks.length;
-  let index;
-  if ('index' in props) {
-    index = props.index;
-  } else {
-    index = props.defaultIndex;
-  }
-  if (marksLen > 0) {
-    value = ((props.max - props.min) / (marksLen - 1)) * (index);
-    value = value.toFixed(5) / 1;
-  }
-  return value;
-}
+class Slider extends React.Component {
+  constructor(props) {
+    super(props);
 
-const Slider = React.createClass({
-  propTypes: {
-    min: React.PropTypes.number,
-    max: React.PropTypes.number,
-    step: React.PropTypes.number,
-    defaultValue: React.PropTypes.number,
-    defaultIndex: React.PropTypes.number,
-    value: React.PropTypes.number,
-    index: React.PropTypes.number,
-    marks: React.PropTypes.array,
-    isIncluded: React.PropTypes.bool,
-    className: React.PropTypes.string,
-    prefixCls: React.PropTypes.string,
-    disabled: React.PropTypes.bool,
-    children: React.PropTypes.any,
-    onBeforeChange: React.PropTypes.func,
-    onChange: React.PropTypes.func,
-    onAfterChange: React.PropTypes.func,
-    tipTransitionName: React.PropTypes.string,
-    withDots: React.PropTypes.bool,
-  },
-
-  getDefaultProps() {
-    return {
-      min: 0,
-      max: 100,
-      step: 1,
-      defaultValue: 0,
-      marks: [],
-      isIncluded: true,
-      className: '',
-      prefixCls: 'rc-slider',
-      disabled: false,
-      defaultIndex: 0,
-      tipTransitionName: '',
-      withDots: false,
-    };
-  },
-
-  getInitialState() {
-    const props = this.props;
-    let value = props.defaultValue;
-    if ('value' in props) {
-      value = props.value;
+    let upperBound;
+    let lowerBound;
+    if (props.range) {
+      const values = (props.values || props.defaultValues);
+      upperBound = this.trimAlignValue(values[1]);
+      lowerBound = this.trimAlignValue(values[0]);
+    } else if (props.marks.length > 0) {
+      upperBound = this.calcValueFromProps(props);
+    } else {
+      // Note: Maybe `value` is `0`.
+      //       So, check the existence of `value` with `in`.
+      const value = ('value' in props ? props.value : props.defaultValue);
+      upperBound = this.trimAlignValue(value);
     }
-    value = this._trimAlignValue(value);
-    const marksLen = props.marks.length;
-    if (marksLen > 0) {
-      value = getValueFromIndex(props);
+
+    let recent;
+    if (props.range && upperBound === lowerBound) {
+      if (lowerBound === props.max) {
+        recent = 'lowerBound';
+      }
+      if (upperBound === props.min) {
+        recent = 'upperBound';
+      }
+    } else {
+      recent = 'upperBound';
     }
-    return {
-      dragging: false,
-      value: value,
+
+    this.state = {
+      handle: null,
+      recent: recent,
+      upperBound: upperBound,
+      // If Slider is not range, set `lowerBound` equal to `min`.
+      lowerBound: (lowerBound || props.min),
     };
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
-    if ('value' in nextProps) {
+    if (nextProps.range) {
+      const values = nextProps.values;
+      if (values) {
+        this.setState({
+          upperBound: values[1],
+          lowerBound: values[0],
+        });
+      }
+    } else if ('value' in nextProps) {
       this.setState({
-        value: nextProps.value,
+        upperBound: nextProps.value,
       });
     } else if ('index' in nextProps) {
       this.setState({
-        value: getValueFromIndex(nextProps),
+        upperBound: this.calcValueFromProps(nextProps),
       });
     }
-  },
-
-  onMouseUp() {
-    this._end('mouse');
-  },
-
-  onTouchUp() {
-    this._end('touch');
-  },
+  }
 
   onMouseMove(e) {
-    const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
+    const position = getMousePosition(e);
     this.onMove(e, position);
-  },
+  }
 
   onTouchMove(e) {
-    if (e.touches.length > 1 || (e.type === 'touchend' && e.touches.length > 0)) {
-      this._end('touch');
+    if (isNotTouchEvent(e)) {
+      this.end('touch');
       return;
     }
 
-    const position = this._getTouchPosition(e);
-
+    const position = getTouchPosition(e);
     this.onMove(e, position);
-  },
+  }
 
   onMove(e, position) {
     pauseEvent(e);
     const props = this.props;
     const state = this.state;
 
-    let value = state.value;
-    const oldValue = value;
-
     const diffPosition = position - this.startPosition;
-
     const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
-    value = this._trimAlignValue(this.startValue + diffValue);
 
-    if (value !== oldValue && !('value' in props) && !('index' in props)) {
-      this.setState({value: value});
+    const value = this.trimAlignValue(this.startValue + diffValue);
+    const oldValue = state[state.handle];
+    if (value === oldValue) return;
+
+    if (!('value' in props) && !('index' in props)) {
+      this.setState({[state.handle]: value});
     }
-    if (value !== oldValue) {
-      this._triggerEvents('onChange', value);
+
+    if (props.range) {
+      // `this.state` will not be updated immediately after `this.setState`.
+      // So, create a similar object.
+      const data = Object.assign({}, state, {[state.handle]: value});
+      this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
+    } else {
+      this.triggerEvents('onChange', value);
     }
-  },
+  }
 
   onTouchStart(e) {
-    if (e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0)) {
-      return;
-    }
+    if (isNotTouchEvent(e)) return;
 
-    const position = this._getTouchPosition(e);
-    const value = this._calValueByPos(position);
-    this._triggerEvents('onChange', value);
-    this._start(position, value);
-    this._addDocumentEvents('touch');
+    const position = getTouchPosition(e);
+    this.onStart(position);
+    this.addDocumentEvents('touch');
     pauseEvent(e);
-  },
+  }
 
   onSliderMouseDown(e) {
-    const position = e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
-    const value = this._calValueByPos(position);
-    this._triggerEvents('onChange', value);
-    this._start(position, value);
-    this._addDocumentEvents('mouse');
+    const position = getMousePosition(e);
+    this.onStart(position);
+    this.addDocumentEvents('mouse');
     pauseEvent(e);
-  },
+  }
 
-  getIndex(v) {
-    const props = this.props;
-    const value = v === undefined ? this.state.value : v;
+  onStart(position) {
+    this.triggerEvents('onBeforeChange');
 
-    if (props.marks.length === 0) {
-      return Math.floor((value - props.min) / props.step);
+    const value = this.calcValueByPos(position);
+    this.startValue = value;
+    this.startPosition = position;
+
+    const {upperBound, lowerBound} = this.state;
+    const isUpperBoundCloser = Math.abs(upperBound - value) < Math.abs(lowerBound - value);
+    let valueNeedChanging = (!this.props.range || isUpperBoundCloser) ? 'upperBound' : 'lowerBound';
+    const isAtTheSamePoint = (upperBound === lowerBound);
+    valueNeedChanging = isAtTheSamePoint ? this.state.recent : valueNeedChanging;
+
+    this.setState({
+      handle: valueNeedChanging,
+      recent: valueNeedChanging,
+      [valueNeedChanging]: value,
+    });
+
+    if (this.props.range) {
+      const data = Object.assign({}, this.state, {[valueNeedChanging]: value});
+      this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
+    } else {
+      this.triggerEvents('onChange', value);
     }
-    const unit = ((props.max - props.min) / (props.marks.length - 1)).toFixed(5);
+  }
+
+  getIndex(value) {
+    const {marks, min, max, step} = this.props;
+
+    if (marks.length === 0) {
+      return Math.floor((value - min) / step);
+    }
+    const unit = ((max - min) / (marks.length - 1)).toFixed(5);
     return Math.round(value / unit);
-  },
+  }
 
   getSliderLength() {
     const slider = this.refs.slider;
@@ -188,82 +191,36 @@ const Slider = React.createClass({
     }
 
     return slider.clientWidth;
-  },
+  }
 
   getSliderStart() {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
 
     return rect.left;
-  },
+  }
 
-  render() {
-    const state = this.state;
-    const {value, dragging} = state;
+  trimAlignValue(v) {
+    const state = this.state || {};
     const props = this.props;
-    const {className, prefixCls, disabled, isIncluded, withDots} = props;
-    const {marks, step, max, min, tipTransitionName, children} = props;
-    const marksLen = marks.length;
+    const {marks, min, max} = props;
+    const step = marks.length > 0 ? (max - min) / (marks.length - 1) : props.step;
 
-    const sliderClassName = rcUtil.classSet({
-      [prefixCls]: true,
-      [prefixCls + '-disabled']: disabled,
-      [className]: !!className,
-    });
-
-    const offset = this._calcOffset(value);
-
-    let track = null;
-    if (isIncluded) {
-      const trackClassName = prefixCls + '-track';
-      track = <Track className={trackClassName} offset={0} length={offset - 0} />;
-    }
-
-    const handleClassName = prefixCls + '-handle';
-
-    let steps = null;
-    if (marksLen > 0 || (step > 1 && withDots)) {
-      const stepsClassName = prefixCls + '-step';
-      const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
-      steps = (<Steps className={stepsClassName} stepNum={stepNum}
-                 index={this.getIndex()} isIncluded={isIncluded} />);
-    }
-
-    let mark = null;
-    if (marksLen > 0) {
-      const markClassName = prefixCls + '-mark';
-      mark = (<Marks className={markClassName} marks={marks}
-                 index={this.getIndex()} isIncluded={isIncluded} />);
-    }
-
-    return (
-      <div ref="slider" className={sliderClassName}
-        onTouchStart={disabled ? noop : this.onTouchStart}
-        onMouseDown={disabled ? noop : this.onSliderMouseDown}>
-        {track}
-        <Handle className={handleClassName} prefixCls={prefixCls}
-          offset={offset} tipTransitionName={tipTransitionName} value={value}
-          dragging={dragging} noTip={marksLen > 0} />
-        {steps}
-        {mark}
-        {children}
-      </div>
-    );
-  },
-
-  _trimAlignValue(v, propsArg) {
     let val = v;
-    const props = propsArg || this.props;
-    const step = props.marks.length > 0 ? (props.max - props.min) / (props.marks.length - 1) : props.step;
-
-    if (val <= props.min) {
-      val = props.min;
+    if (val <= min) {
+      val = min;
     }
-    if (val >= props.max) {
-      val = props.max;
+    if (val >= max) {
+      val = max;
+    }
+    if (state.handle === 'upperBound' && val <= state.lowerBound) {
+      val = state.lowerBound;
+    }
+    if (state.handle === 'lowerBound' && val >= state.upperBound) {
+      val = state.upperBound;
     }
 
-    const valModStep = (val - props.min) % step;
+    const valModStep = (val - min) % step;
     let alignValue = val - valModStep;
 
     if (Math.abs(valModStep) * 2 >= step) {
@@ -271,36 +228,40 @@ const Slider = React.createClass({
     }
 
     return parseFloat(alignValue.toFixed(5));
-  },
+  }
 
-  _calcOffset(value) {
-    const ratio = (value - this.props.min) / (this.props.max - this.props.min);
+  calcOffset(value) {
+    const {min, max} = this.props;
+    const ratio = (value - min) / (max - min);
     return ratio * 100;
-  },
+  }
 
-  _calcValue(offset) {
+  calcValue(offset) {
+    const {min, max} = this.props;
     const ratio = offset / this.getSliderLength();
-    return ratio * (this.props.max - this.props.min) + this.props.min;
-  },
+    return ratio * (max - min) + min;
+  }
 
-  _calValueByPos(position) {
+  calcValueByPos(position) {
     const pixelOffset = position - this.getSliderStart();
-    // pixelOffset -= (this.state.onSize / 2);
-    const nextValue = this._trimAlignValue(this._calcValue(pixelOffset));
-    this.setState({
-      value: nextValue,
-    });
+    const nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
     return nextValue;
-  },
+  }
 
-  _getTouchPosition(e) {
-    const touch = e.touches[0];
-    return touch.pageX;
-  },
+  calcValueFromProps(props) {
+    const marksLen = props.marks.length;
+    if (marksLen > 0) {
+      const index = ('index' in props ? props.index : props.defaultIndex);
+      const value = ((props.max - props.min) / (marksLen - 1)) * (index);
+      // `'1' / 1 => 1`, to make sure that the returned value is a `Number`.
+      return value.toFixed(5) / 1;
+    }
+    return ('value' in props ? props.value : props.defaultValue);
+  }
 
-  _triggerEvents(event, v) {
+  triggerEvents(event, v) {
     const props = this.props;
-    const hasMarks = props.marks && props.marks.length > 0;
+    const hasMarks = (props.marks.length > 0);
     if (props[event]) {
       let data;
       if (hasMarks) {
@@ -312,20 +273,20 @@ const Slider = React.createClass({
       }
       props[event](data);
     }
-  },
+  }
 
-  _addDocumentEvents(type) {
+  addDocumentEvents(type) {
     if (type === 'touch') {
       // just work for chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this.onTouchMove);
-      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this.onTouchUp);
+      this.onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
+      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
     } else if (type === 'mouse') {
-      this.onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this.onMouseMove);
-      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this.onMouseUp);
+      this.onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
+      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
     }
-  },
+  }
 
-  _removeEventons(type) {
+  removeEventons(type) {
     if (type === 'touch') {
       this.onTouchMoveListener.remove();
       this.onTouchUpListener.remove();
@@ -333,24 +294,119 @@ const Slider = React.createClass({
       this.onMouseMoveListener.remove();
       this.onMouseUpListener.remove();
     }
-  },
+  }
 
-  _start(position, value) {
-    this._triggerEvents('onBeforeChange');
-    this.startValue = value;
-    this.startPosition = position;
-    this.setState({
-      dragging: true,
-    });
-  },
+  end(type) {
+    this.removeEventons(type);
+    this.triggerEvents('onAfterChange');
+    this.setState({ handle: null });
+  }
 
-  _end(type) {
-    this._removeEventons(type);
-    this._triggerEvents('onAfterChange');
-    this.setState({
-      dragging: false,
+  render() {
+    const {handle, upperBound, lowerBound} = this.state;
+    const props = this.props;
+    const {className, prefixCls, disabled, isIncluded, withDots, range} = props;
+    const {marks, step, max, min, tipTransitionName, children} = props;
+    const marksLen = marks.length;
+
+    const sliderClassName = rcUtil.classSet({
+      [prefixCls]: true,
+      [prefixCls + '-disabled']: disabled,
+      [className]: !!className,
     });
-  },
-});
+
+    const upperOffset = this.calcOffset(upperBound);
+    const lowerOffset = this.calcOffset(lowerBound);
+
+    let track = null;
+    if (isIncluded || range) {
+      const trackClassName = prefixCls + '-track';
+      track = <Track className={trackClassName} offset={lowerOffset} length={upperOffset - lowerOffset} />;
+    }
+
+    const handleClassName = prefixCls + '-handle';
+    const isNoTip = marksLen > 0;
+    const upper = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
+                     offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
+
+    let lower = null;
+    if (range) {
+      lower = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
+                 offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
+    }
+
+    const upperIndex = this.getIndex(upperBound);
+
+    let steps = null;
+    if (marksLen > 0 || (step > 1 && withDots)) {
+      const stepsClassName = prefixCls + '-step';
+      const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
+      steps = (<Steps className={stepsClassName} stepNum={stepNum}
+                 lowerIndex={this.getIndex(lowerBound)} upperIndex={upperIndex}
+                 isIncluded={isIncluded || range} />);
+    }
+
+    let mark = null;
+    if (marksLen > 0) {
+      const markClassName = prefixCls + '-mark';
+      mark = (<Marks className={markClassName} marks={marks}
+                 index={upperIndex} isIncluded={isIncluded} />);
+    }
+
+    return (
+      <div ref="slider" className={sliderClassName}
+        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
+        onMouseDown={disabled ? noop : this.onSliderMouseDown.bind(this)}>
+        {track}
+        {upper}
+        {lower}
+        {steps}
+        {mark}
+        {children}
+      </div>
+    );
+  }
+}
+
+Slider.propTypes = {
+  min: React.PropTypes.number,
+  max: React.PropTypes.number,
+  step: React.PropTypes.number,
+  defaultValue: React.PropTypes.number,
+  defaultValues: React.PropTypes.arrayOf(React.PropTypes.number),
+  defaultIndex: React.PropTypes.number,
+  value: React.PropTypes.number,
+  values: React.PropTypes.arrayOf(React.PropTypes.number),
+  index: React.PropTypes.number,
+  marks: React.PropTypes.array,
+  isIncluded: React.PropTypes.bool,
+  className: React.PropTypes.string,
+  prefixCls: React.PropTypes.string,
+  disabled: React.PropTypes.bool,
+  children: React.PropTypes.any,
+  onBeforeChange: React.PropTypes.func,
+  onChange: React.PropTypes.func,
+  onAfterChange: React.PropTypes.func,
+  tipTransitionName: React.PropTypes.string,
+  withDots: React.PropTypes.bool,
+  range: React.PropTypes.bool,
+};
+
+Slider.defaultProps = {
+  min: 0,
+  max: 100,
+  step: 1,
+  defaultValue: 0,
+  defaultValues: [0, 0],
+  defaultIndex: 0,
+  marks: [],
+  isIncluded: true,
+  className: '',
+  prefixCls: 'rc-slider',
+  disabled: false,
+  tipTransitionName: '',
+  withDots: false,
+  range: false,
+};
 
 export default Slider;

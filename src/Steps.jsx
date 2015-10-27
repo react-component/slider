@@ -1,7 +1,7 @@
 import React from 'react';
 import rcUtil from 'rc-util';
 
-const Steps = ({className, stepNum, isIncluded, index}) => {
+const Steps = ({className, stepNum, isIncluded, lowerIndex, upperIndex}) => {
   const dotClassName = className.replace('step', 'dot');
   const unit = 100 / (stepNum - 1);
 
@@ -10,7 +10,8 @@ const Steps = ({className, stepNum, isIncluded, index}) => {
     const offset = unit * i + '%';
     const style = { left: offset };
 
-    const isActived = (isIncluded && i <= index) || (!isIncluded && i === index);
+    const isActived = (isIncluded && i <= upperIndex && i >= lowerIndex ) ||
+            (!isIncluded && i === upperIndex);
     const stepClassName = rcUtil.classSet({
       [dotClassName]: true,
       [dotClassName + '-active']: isActived,
