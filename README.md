@@ -74,7 +74,7 @@ ReactDOM.render(<Rcslider />, container);
           <td>className</td>
           <td>String</td>
           <td>rc-slider</td>
-          <td>additional css class of root dom node</td>
+          <td>Additional css class for the root dom node</td>
         </tr>
         <tr>
           <td>min</td>
@@ -94,41 +94,59 @@ ReactDOM.render(<Rcslider />, container);
           <td>1</td>
           <td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. max - min should be evenly divisible by the step value.</td>
         </tr>
-         <tr>
+        <tr>
+          <td>range</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range.</td>
+        </tr>
+        <tr>
           <td>defaultValue</td>
           <td>number</td>
           <td>0</td>
-          <td>Determines the initial positions of the handles.</td>
+          <td>If range is `false`, this prop will set the initial position of the handle.</td>
         </tr>
-         <tr>
+        <tr>
+          <td>defaultValues</td>
+          <td>[number, number]</td>
+          <td>[0, 0]</td>
+          <td>If range is `true`, this prop will set initial positions of handles respectively.</td>
+        </tr>
+        <tr>
           <td>value</td>
           <td>number</td>
           <td></td>
-          <td>Determines the current positions of the handles.</td>
+          <td>If range is `false`, this prop will set the current position of the handle.</td>
+        </tr>
+        <tr>
+          <td>values</td>
+          <td>[number, number]</td>
+          <td></td>
+          <td>If range is `true`, this prop will set current positions of handles respectively.</td>
         </tr>
         <tr>
           <td>marks</td>
           <td>array</td>
           <td>[]</td>
-          <td>mark every step for the slider, it will ignore the `step` parameter if it has been defined</td>
+          <td>Mark every step for the slider, it will ignore the `step` parameter if it has been defined. Does not work with `range`</td>
         </tr>
         <tr>
           <td>isIncluded</td>
           <td>boolean</td>
           <td>true</td>
-          <td>if the value is true, it means a continuous value interval, otherwise, it is a independent value.</td>
+          <td>If the value is `true`, it means a continuous value interval, otherwise, it is a independent value.</td>
         </tr>
         <tr>
           <td>defaultIndex</td>
           <td>number</td>
           <td>0</td>
-          <td>For step or marks slider, determine the initial positions of the handles.</td>
+          <td>For step or marks slider, determines the initial position of the handle. Does not work with `range`</td>
         </tr>
         <tr>
           <td>index</td>
           <td>number</td>
           <td></td>
-          <td>For step or marks slider, determine current positions of the handles.</td>
+          <td>For step or marks slider, determines current position of the handle. Does not work with `range`</td>
         </tr>
         <tr>
           <td>disabled</td>
