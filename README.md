@@ -102,27 +102,15 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>defaultValue</td>
-          <td>number</td>
-          <td>0</td>
-          <td>If range is `false`, this prop will set the initial position of the handle.</td>
-        </tr>
-        <tr>
-          <td>defaultValues</td>
-          <td>[number, number]</td>
-          <td>[0, 0]</td>
-          <td>If range is `true`, this prop will set initial positions of handles respectively.</td>
+          <td>number or [number, number]</td>
+          <td>0 or [0, 0]</td>
+          <td>Set initial positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
         </tr>
         <tr>
           <td>value</td>
-          <td>number</td>
+          <td>number or [number, number]</td>
           <td></td>
-          <td>If range is `false`, this prop will set the current position of the handle.</td>
-        </tr>
-        <tr>
-          <td>values</td>
-          <td>[number, number]</td>
-          <td></td>
-          <td>If range is `true`, this prop will set current positions of handles respectively.</td>
+          <td>Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
         </tr>
         <tr>
           <td>marks</td>
