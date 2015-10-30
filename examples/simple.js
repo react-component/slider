@@ -22,7 +22,7 @@ React.render(
     </div>
     <div style={style}>
       <p>基础滑块，step=20 带原点</p>
-      <Slider withDots step={20} />
+      <Slider dots step={20} />
     </div>
     <div style={style}>
       <p>双滑块</p>
@@ -30,7 +30,7 @@ React.render(
     </div>
     <div style={style}>
       <p>双滑块，step=20 </p>
-      <Slider range={true} withDots step={20} values={[0, 30]} onChange={onChange} isIncluded={false} />
+      <Slider range={true} dots step={20} values={[0, 30]} onChange={onChange} included={false} />
     </div>
     <div style={style}>
       <p>分段式滑块（包含关系）</p>
@@ -38,7 +38,7 @@ React.render(
     </div>
     <div style={style}>
       <p>分段式滑块（并列关系）</p>
-      <Slider marks={["状态1","状态2","状态3","状态4"]} isIncluded={false} defaultIndex={1} />
+      <Slider marks={["状态1","状态2","状态3","状态4"]} included={false} defaultIndex={1} />
     </div>
   </div>
   , document.getElementById('__react-content'));

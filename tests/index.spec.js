@@ -43,7 +43,7 @@ describe('rc-slider', function () {
     expect(slider.state.upperBound).to.be(0);
 
     var sliderWithDots = React.render(
-      <Slider className='rc-slider' step={20} withDots/>,
+      <Slider className='rc-slider' step={20} dots/>,
       div
     );
     var node1 = $(div);

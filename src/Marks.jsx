@@ -1,14 +1,14 @@
 import React from 'react';
 import rcUtil from 'rc-util';
 
-const Marks = ({className, marks, index, isIncluded}) => {
+const Marks = ({className, marks, index, included}) => {
   const marksLen = marks.length;
   const unit = 100 / (marksLen - 1);
   const markWidth = unit / 2 + '%';
 
   const elements = [];
   for (let i = 0; i < marksLen; i++) {
-    const isActived = (isIncluded && i <= index) || (!isIncluded && i === index);
+    const isActived = (included && i <= index) || (!included && i === index);
     const markClassName = rcUtil.classSet({
       [className + '-text']: true,
       [className + '-text-active']: isActived,
