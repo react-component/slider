@@ -156,10 +156,23 @@ class Slider extends React.Component {
     this.startPosition = position;
 
     const {upperBound, lowerBound} = this.state;
-    const isUpperBoundCloser = Math.abs(upperBound - value) < Math.abs(lowerBound - value);
-    let valueNeedChanging = (!this.props.range || isUpperBoundCloser) ? 'upperBound' : 'lowerBound';
-    const isAtTheSamePoint = (upperBound === lowerBound);
-    valueNeedChanging = isAtTheSamePoint ? this.state.recent : valueNeedChanging;
+
+    let valueNeedChanging = 'upperBound';
+    if (this.props.range) {
+      const isLowerBoundCloser = Math.abs(upperBound - value) > Math.abs(lowerBound - value);
+      if (isLowerBoundCloser) {
+        valueNeedChanging = 'lowerBound';
+      }
+
+      const isAtTheSamePoint = (upperBound === lowerBound);
+      if (isAtTheSamePoint) {
+        valueNeedChanging = this.state.recent;
+      }
+
+      if (isAtTheSamePoint && (value !== upperBound)) {
+        valueNeedChanging = value < upperBound ? 'lowerBound' : 'upperBound';
+      }
+    }
 
     this.setState({
       handle: valueNeedChanging,
