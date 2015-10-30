@@ -37,15 +37,16 @@ class Slider extends React.Component {
     let upperBound;
     let lowerBound;
     if (props.range) {
-      const values = (props.values || props.defaultValues);
-      upperBound = this.trimAlignValue(values[1]);
-      lowerBound = this.trimAlignValue(values[0]);
+      const value = (props.value || props.defaultValue || [0, 0]);
+      upperBound = this.trimAlignValue(value[1]);
+      lowerBound = this.trimAlignValue(value[0]);
     } else if (props.marks.length > 0) {
       upperBound = this.calcValueFromProps(props);
     } else {
       // Note: Maybe `value` is `0`.
       //       So, check the existence of `value` with `in`.
-      const value = ('value' in props ? props.value : props.defaultValue);
+      const defaultValue = ('defauleValue' in props ? props.defaultValue : 0);
+      const value = ('value' in props ? props.value : defaultValue);
       upperBound = this.trimAlignValue(value);
     }
 
@@ -72,11 +73,11 @@ class Slider extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.range) {
-      const values = nextProps.values;
-      if (values) {
+      const value = nextProps.value;
+      if (value) {
         this.setState({
-          upperBound: values[1],
-          lowerBound: values[0],
+          upperBound: value[1],
+          lowerBound: value[0],
         });
       }
     } else if ('value' in nextProps) {
@@ -372,11 +373,15 @@ Slider.propTypes = {
   min: React.PropTypes.number,
   max: React.PropTypes.number,
   step: React.PropTypes.number,
-  defaultValue: React.PropTypes.number,
-  defaultValues: React.PropTypes.arrayOf(React.PropTypes.number),
+  defaultValue: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.arrayOf(React.PropTypes.number),
+  ]),
   defaultIndex: React.PropTypes.number,
-  value: React.PropTypes.number,
-  values: React.PropTypes.arrayOf(React.PropTypes.number),
+  value: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.arrayOf(React.PropTypes.number),
+  ]),
   index: React.PropTypes.number,
   marks: React.PropTypes.array,
   included: React.PropTypes.bool,
@@ -396,8 +401,6 @@ Slider.defaultProps = {
   min: 0,
   max: 100,
   step: 1,
-  defaultValue: 0,
-  defaultValues: [0, 0],
   defaultIndex: 0,
   marks: [],
   included: true,
