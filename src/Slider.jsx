@@ -45,7 +45,7 @@ class Slider extends React.Component {
     } else {
       // Note: Maybe `value` is `0`.
       //       So, check the existence of `value` with `in`.
-      const defaultValue = ('defauleValue' in props ? props.defaultValue : 0);
+      const defaultValue = ('defaultValue' in props ? props.defaultValue : 0);
       const value = ('value' in props ? props.value : defaultValue);
       upperBound = this.trimAlignValue(value);
     }
