@@ -26,11 +26,11 @@ React.render(
     </div>
     <div style={style}>
       <p>双滑块</p>
-      <Slider range={true} min={10} max={90} defaultValue={[0, 30]} onChange={onChange} />
+      <Slider range min={10} max={90} defaultValue={[0, 30]} onChange={onChange} />
     </div>
     <div style={style}>
       <p>双滑块，step=20 </p>
-      <Slider range={true} dots step={20} defaultValue={[0, 30]} onChange={onChange} included={false} />
+      <Slider range dots step={20} defaultValue={[0, 30]} onChange={onChange} included={false} />
     </div>
     <div style={style}>
       <p>分段式滑块（包含关系）</p>
