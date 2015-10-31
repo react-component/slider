@@ -330,7 +330,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const props = this.props;
-    const {className, prefixCls, disabled, included, dots, range} = props;
+    const {className, prefixCls, disabled, included, isIncluded, dots, withDots, range} = props;
     const {marks, step, max, min, tipTransitionName, children} = props;
     const marksLen = marks.length;
 
@@ -344,7 +344,7 @@ class Slider extends React.Component {
     const lowerOffset = this.calcOffset(lowerBound);
 
     let track = null;
-    if (included || range) {
+    if ((included && isIncluded) || range) {
       const trackClassName = prefixCls + '-track';
       track = <Track className={trackClassName} offset={lowerOffset} length={upperOffset - lowerOffset} />;
     }
@@ -363,19 +363,19 @@ class Slider extends React.Component {
     const upperIndex = this.getIndex(upperBound);
 
     let steps = null;
-    if (marksLen > 0 || (step > 1 && dots)) {
+    if (marksLen > 0 || (step > 1 && (dots || withDots))) {
       const stepsClassName = prefixCls + '-step';
       const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
       steps = (<Steps className={stepsClassName} stepNum={stepNum}
                  lowerIndex={this.getIndex(lowerBound)} upperIndex={upperIndex}
-                 included={included || range} />);
+                 included={(included && isIncluded) || range} />);
     }
 
     let mark = null;
     if (marksLen > 0) {
       const markClassName = prefixCls + '-mark';
       mark = (<Marks className={markClassName} marks={marks}
-                 index={upperIndex} included={included} />);
+                index={upperIndex} included={(included && isIncluded)} />);
     }
 
     return (
@@ -408,6 +408,7 @@ Slider.propTypes = {
   ]),
   index: React.PropTypes.number,
   marks: React.PropTypes.array,
+  isIncluded: React.PropTypes.bool, // @Deprecated
   included: React.PropTypes.bool,
   className: React.PropTypes.string,
   prefixCls: React.PropTypes.string,
@@ -417,6 +418,7 @@ Slider.propTypes = {
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
   tipTransitionName: React.PropTypes.string,
+  withDots: React.PropTypes.bool, // @Deprecated
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
 };
@@ -427,11 +429,13 @@ Slider.defaultProps = {
   step: 1,
   defaultIndex: 0,
   marks: [],
+  isIncluded: true, // @Deprecated
   included: true,
   className: '',
   prefixCls: 'rc-slider',
   disabled: false,
   tipTransitionName: '',
+  withDots: false, // @Deprecated
   dots: false,
   range: false,
 };
