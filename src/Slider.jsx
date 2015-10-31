@@ -125,7 +125,12 @@ class Slider extends React.Component {
     if (props.range) {
       // `this.state` will not be updated immediately after `this.setState`.
       // So, create a similar object.
-      const data = Object.assign({}, state, {[state.handle]: value});
+      // const data = Object.assign({}, state, {[state.handle]: value});
+      const data = {
+        upperBound: state.upperBound,
+        lowerBound: state.lowerBound,
+      };
+      data[state.handle] = value;
       this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
     } else {
       this.triggerEvents('onChange', value);
@@ -155,7 +160,8 @@ class Slider extends React.Component {
     this.startValue = value;
     this.startPosition = position;
 
-    const {upperBound, lowerBound} = this.state;
+    const state = this.state;
+    const {upperBound, lowerBound} = state;
 
     let valueNeedChanging = 'upperBound';
     if (this.props.range) {
@@ -166,7 +172,7 @@ class Slider extends React.Component {
 
       const isAtTheSamePoint = (upperBound === lowerBound);
       if (isAtTheSamePoint) {
-        valueNeedChanging = this.state.recent;
+        valueNeedChanging = state.recent;
       }
 
       if (isAtTheSamePoint && (value !== upperBound)) {
@@ -181,7 +187,12 @@ class Slider extends React.Component {
     });
 
     if (this.props.range) {
-      const data = Object.assign({}, this.state, {[valueNeedChanging]: value});
+      // const data = Object.assign({}, state, {[valueNeedChanging]: value});
+      const data = {
+        upperBound: state.upperBound,
+        lowerBound: state.lowerBound,
+      };
+      data[valueNeedChanging] = value;
       this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
     } else {
       this.triggerEvents('onChange', value);
