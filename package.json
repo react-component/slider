@@ -51,7 +51,7 @@
     "lint"
   ],
   "dependencies": {
-    "rc-tooltip": "2.x",
+    "rc-tooltip": "~3.0.4",
     "rc-util": "2.x"
   }
 }

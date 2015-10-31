@@ -3,6 +3,7 @@
 require('rc-slider/assets/index.less');
 
 var React = require('react');
+var ReactDOM = require('react-dom');
 var Slider = require('rc-slider');
 var style = {width:400,margin:50};
 
@@ -10,7 +11,7 @@ function onChange(v) {
   console.log(v);
 }
 
-React.render(
+ReactDOM.render(
   <div>
     <div style={style}>
       <p>基础滑块</p>
