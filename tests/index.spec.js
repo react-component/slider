@@ -42,8 +42,8 @@ describe('rc-slider', function () {
     expect(node.find('.rc-slider-track').length).to.be(1);
     expect(slider.state.upperBound).to.be(0);
 
-    var sliderWithDots = React.render(
-      <Slider className='rc-slider' step={20} withDots/>,
+    var sliderWithDots = ReactDOM.render(
+      <Slider className='rc-slider' step={20} dots/>,
       div
     );
     var node1 = $(div);

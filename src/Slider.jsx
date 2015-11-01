@@ -37,15 +37,16 @@ class Slider extends React.Component {
     let upperBound;
     let lowerBound;
     if (props.range) {
-      const values = (props.values || props.defaultValues);
-      upperBound = this.trimAlignValue(values[1]);
-      lowerBound = this.trimAlignValue(values[0]);
+      const value = (props.value || props.defaultValue || [0, 0]);
+      upperBound = this.trimAlignValue(value[1]);
+      lowerBound = this.trimAlignValue(value[0]);
     } else if (props.marks.length > 0) {
       upperBound = this.calcValueFromProps(props);
     } else {
       // Note: Maybe `value` is `0`.
       //       So, check the existence of `value` with `in`.
-      const value = ('value' in props ? props.value : props.defaultValue);
+      const defaultValue = ('defaultValue' in props ? props.defaultValue : 0);
+      const value = ('value' in props ? props.value : defaultValue);
       upperBound = this.trimAlignValue(value);
     }
 
@@ -72,11 +73,11 @@ class Slider extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.range) {
-      const values = nextProps.values;
-      if (values) {
+      const value = nextProps.value;
+      if (value) {
         this.setState({
-          upperBound: values[1],
-          lowerBound: values[0],
+          upperBound: value[1],
+          lowerBound: value[0],
         });
       }
     } else if ('value' in nextProps) {
@@ -124,7 +125,12 @@ class Slider extends React.Component {
     if (props.range) {
       // `this.state` will not be updated immediately after `this.setState`.
       // So, create a similar object.
-      const data = Object.assign({}, state, {[state.handle]: value});
+      // const data = Object.assign({}, state, {[state.handle]: value});
+      const data = {
+        upperBound: state.upperBound,
+        lowerBound: state.lowerBound,
+      };
+      data[state.handle] = value;
       this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
     } else {
       this.triggerEvents('onChange', value);
@@ -154,11 +160,25 @@ class Slider extends React.Component {
     this.startValue = value;
     this.startPosition = position;
 
-    const {upperBound, lowerBound} = this.state;
-    const isUpperBoundCloser = Math.abs(upperBound - value) < Math.abs(lowerBound - value);
-    let valueNeedChanging = (!this.props.range || isUpperBoundCloser) ? 'upperBound' : 'lowerBound';
-    const isAtTheSamePoint = (upperBound === lowerBound);
-    valueNeedChanging = isAtTheSamePoint ? this.state.recent : valueNeedChanging;
+    const state = this.state;
+    const {upperBound, lowerBound} = state;
+
+    let valueNeedChanging = 'upperBound';
+    if (this.props.range) {
+      const isLowerBoundCloser = Math.abs(upperBound - value) > Math.abs(lowerBound - value);
+      if (isLowerBoundCloser) {
+        valueNeedChanging = 'lowerBound';
+      }
+
+      const isAtTheSamePoint = (upperBound === lowerBound);
+      if (isAtTheSamePoint) {
+        valueNeedChanging = state.recent;
+      }
+
+      if (isAtTheSamePoint && (value !== upperBound)) {
+        valueNeedChanging = value < upperBound ? 'lowerBound' : 'upperBound';
+      }
+    }
 
     this.setState({
       handle: valueNeedChanging,
@@ -167,7 +187,12 @@ class Slider extends React.Component {
     });
 
     if (this.props.range) {
-      const data = Object.assign({}, this.state, {[valueNeedChanging]: value});
+      // const data = Object.assign({}, state, {[valueNeedChanging]: value});
+      const data = {
+        upperBound: state.upperBound,
+        lowerBound: state.lowerBound,
+      };
+      data[valueNeedChanging] = value;
       this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
     } else {
       this.triggerEvents('onChange', value);
@@ -305,7 +330,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const props = this.props;
-    const {className, prefixCls, disabled, isIncluded, withDots, range} = props;
+    const {className, prefixCls, disabled, included, isIncluded, dots, withDots, range} = props;
     const {marks, step, max, min, tipTransitionName, children} = props;
     const marksLen = marks.length;
 
@@ -319,7 +344,7 @@ class Slider extends React.Component {
     const lowerOffset = this.calcOffset(lowerBound);
 
     let track = null;
-    if (isIncluded || range) {
+    if ((included && isIncluded) || range) {
       const trackClassName = prefixCls + '-track';
       track = <Track className={trackClassName} offset={lowerOffset} length={upperOffset - lowerOffset} />;
     }
@@ -338,19 +363,19 @@ class Slider extends React.Component {
     const upperIndex = this.getIndex(upperBound);
 
     let steps = null;
-    if (marksLen > 0 || (step > 1 && withDots)) {
+    if (marksLen > 0 || (step > 1 && (dots || withDots))) {
       const stepsClassName = prefixCls + '-step';
       const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
       steps = (<Steps className={stepsClassName} stepNum={stepNum}
                  lowerIndex={this.getIndex(lowerBound)} upperIndex={upperIndex}
-                 isIncluded={isIncluded || range} />);
+                 included={(included && isIncluded) || range} />);
     }
 
     let mark = null;
     if (marksLen > 0) {
       const markClassName = prefixCls + '-mark';
       mark = (<Marks className={markClassName} marks={marks}
-                 index={upperIndex} isIncluded={isIncluded} />);
+                index={upperIndex} included={(included && isIncluded)} />);
     }
 
     return (
@@ -372,14 +397,19 @@ Slider.propTypes = {
   min: React.PropTypes.number,
   max: React.PropTypes.number,
   step: React.PropTypes.number,
-  defaultValue: React.PropTypes.number,
-  defaultValues: React.PropTypes.arrayOf(React.PropTypes.number),
+  defaultValue: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.arrayOf(React.PropTypes.number),
+  ]),
   defaultIndex: React.PropTypes.number,
-  value: React.PropTypes.number,
-  values: React.PropTypes.arrayOf(React.PropTypes.number),
+  value: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.arrayOf(React.PropTypes.number),
+  ]),
   index: React.PropTypes.number,
   marks: React.PropTypes.array,
-  isIncluded: React.PropTypes.bool,
+  isIncluded: React.PropTypes.bool, // @Deprecated
+  included: React.PropTypes.bool,
   className: React.PropTypes.string,
   prefixCls: React.PropTypes.string,
   disabled: React.PropTypes.bool,
@@ -388,7 +418,8 @@ Slider.propTypes = {
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
   tipTransitionName: React.PropTypes.string,
-  withDots: React.PropTypes.bool,
+  withDots: React.PropTypes.bool, // @Deprecated
+  dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
 };
 
@@ -396,16 +427,16 @@ Slider.defaultProps = {
   min: 0,
   max: 100,
   step: 1,
-  defaultValue: 0,
-  defaultValues: [0, 0],
   defaultIndex: 0,
   marks: [],
-  isIncluded: true,
+  isIncluded: true, // @Deprecated
+  included: true,
   className: '',
   prefixCls: 'rc-slider',
   disabled: false,
   tipTransitionName: '',
-  withDots: false,
+  withDots: false, // @Deprecated
+  dots: false,
   range: false,
 };
 
