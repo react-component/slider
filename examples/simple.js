@@ -14,14 +14,15 @@ webpackJsonp([0,1],[
 	__webpack_require__(2);
 	
 	var React = __webpack_require__(3);
-	var Slider = __webpack_require__(160);
+	var ReactDOM = __webpack_require__(160);
+	var Slider = __webpack_require__(161);
 	var style = { width: 400, margin: 50 };
 	
 	function onChange(v) {
 	  console.log(v);
 	}
 	
-	React.render(React.createElement(
+	ReactDOM.render(React.createElement(
 	  'div',
 	  null,
 	  React.createElement(
@@ -52,7 +53,7 @@ webpackJsonp([0,1],[
 	      null,
 	      '基础滑块，step=20 带原点'
 	    ),
-	    React.createElement(Slider, { withDots: true, step: 20 })
+	    React.createElement(Slider, { dots: true, step: 20 })
 	  ),
 	  React.createElement(
 	    'div',
@@ -62,7 +63,7 @@ webpackJsonp([0,1],[
 	      null,
 	      '双滑块'
 	    ),
-	    React.createElement(Slider, { range: true, min: 10, max: 90, values: [0, 30], onChange: onChange })
+	    React.createElement(Slider, { range: true, min: 10, max: 90, defaultValue: [0, 30], onChange: onChange })
 	  ),
 	  React.createElement(
 	    'div',
@@ -72,7 +73,7 @@ webpackJsonp([0,1],[
 	      null,
 	      '双滑块，step=20 '
 	    ),
-	    React.createElement(Slider, { range: true, withDots: true, step: 20, values: [0, 30], onChange: onChange, isIncluded: false })
+	    React.createElement(Slider, { range: true, dots: true, step: 20, defaultValue: [0, 30], onChange: onChange, included: false })
 	  ),
 	  React.createElement(
 	    'div',
@@ -92,7 +93,7 @@ webpackJsonp([0,1],[
 	      null,
 	      '分段式滑块（并列关系）'
 	    ),
-	    React.createElement(Slider, { marks: ["状态1", "状态2", "状态3", "状态4"], isIncluded: false, defaultIndex: 1 })
+	    React.createElement(Slider, { marks: ["状态1", "状态2", "状态3", "状态4"], included: false, defaultIndex: 1 })
 	  )
 	), document.getElementById('__react-content'));
 
@@ -19675,7 +19676,8 @@ webpackJsonp([0,1],[
 
 	'use strict';
 	
-	module.exports = __webpack_require__(161);
+	module.exports = __webpack_require__(5);
+
 
 /***/ },
 /* 161 */
@@ -19687,6 +19689,14 @@ webpackJsonp([0,1],[
 
 /***/ },
 /* 162 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	module.exports = __webpack_require__(163);
+
+/***/ },
+/* 163 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19711,23 +19721,23 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(163);
+	var _rcUtil = __webpack_require__(164);
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
-	var _Track = __webpack_require__(175);
+	var _Track = __webpack_require__(176);
 	
 	var _Track2 = _interopRequireDefault(_Track);
 	
-	var _Handle = __webpack_require__(176);
+	var _Handle = __webpack_require__(177);
 	
 	var _Handle2 = _interopRequireDefault(_Handle);
 	
-	var _Steps = __webpack_require__(199);
+	var _Steps = __webpack_require__(200);
 	
 	var _Steps2 = _interopRequireDefault(_Steps);
 	
-	var _Marks = __webpack_require__(200);
+	var _Marks = __webpack_require__(201);
 	
 	var _Marks2 = _interopRequireDefault(_Marks);
 	
@@ -19767,15 +19777,16 @@ webpackJsonp([0,1],[
 	    var upperBound = undefined;
 	    var lowerBound = undefined;
 	    if (props.range) {
-	      var values = props.values || props.defaultValues;
-	      upperBound = this.trimAlignValue(values[1]);
-	      lowerBound = this.trimAlignValue(values[0]);
+	      var value = props.value || props.defaultValue || [0, 0];
+	      upperBound = this.trimAlignValue(value[1]);
+	      lowerBound = this.trimAlignValue(value[0]);
 	    } else if (props.marks.length > 0) {
 	      upperBound = this.calcValueFromProps(props);
 	    } else {
 	      // Note: Maybe `value` is `0`.
 	      //       So, check the existence of `value` with `in`.
-	      var value = 'value' in props ? props.value : props.defaultValue;
+	      var defaultValue = 'defaultValue' in props ? props.defaultValue : 0;
+	      var value = 'value' in props ? props.value : defaultValue;
 	      upperBound = this.trimAlignValue(value);
 	    }
 	
@@ -19804,11 +19815,11 @@ webpackJsonp([0,1],[
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
 	      if (nextProps.range) {
-	        var values = nextProps.values;
-	        if (values) {
+	        var value = nextProps.value;
+	        if (value) {
 	          this.setState({
-	            upperBound: values[1],
-	            lowerBound: values[0]
+	            upperBound: value[1],
+	            lowerBound: value[0]
 	          });
 	        }
 	      } else if ('value' in nextProps) {
@@ -19859,7 +19870,12 @@ webpackJsonp([0,1],[
 	      if (props.range) {
 	        // `this.state` will not be updated immediately after `this.setState`.
 	        // So, create a similar object.
-	        var data = Object.assign({}, state, _defineProperty({}, state.handle, value));
+	        // const data = Object.assign({}, state, {[state.handle]: value});
+	        var data = {
+	          upperBound: state.upperBound,
+	          lowerBound: state.lowerBound
+	        };
+	        data[state.handle] = value;
 	        this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
 	      } else {
 	        this.triggerEvents('onChange', value);
@@ -19892,14 +19908,26 @@ webpackJsonp([0,1],[
 	      this.startValue = value;
 	      this.startPosition = position;
 	
-	      var _state = this.state;
-	      var upperBound = _state.upperBound;
-	      var lowerBound = _state.lowerBound;
+	      var state = this.state;
+	      var upperBound = state.upperBound;
+	      var lowerBound = state.lowerBound;
 	
-	      var isUpperBoundCloser = Math.abs(upperBound - value) < Math.abs(lowerBound - value);
-	      var valueNeedChanging = !this.props.range || isUpperBoundCloser ? 'upperBound' : 'lowerBound';
-	      var isAtTheSamePoint = upperBound === lowerBound;
-	      valueNeedChanging = isAtTheSamePoint ? this.state.recent : valueNeedChanging;
+	      var valueNeedChanging = 'upperBound';
+	      if (this.props.range) {
+	        var isLowerBoundCloser = Math.abs(upperBound - value) > Math.abs(lowerBound - value);
+	        if (isLowerBoundCloser) {
+	          valueNeedChanging = 'lowerBound';
+	        }
+	
+	        var isAtTheSamePoint = upperBound === lowerBound;
+	        if (isAtTheSamePoint) {
+	          valueNeedChanging = state.recent;
+	        }
+	
+	        if (isAtTheSamePoint && value !== upperBound) {
+	          valueNeedChanging = value < upperBound ? 'lowerBound' : 'upperBound';
+	        }
+	      }
 	
 	      this.setState(_defineProperty({
 	        handle: valueNeedChanging,
@@ -19907,7 +19935,12 @@ webpackJsonp([0,1],[
 	      }, valueNeedChanging, value));
 	
 	      if (this.props.range) {
-	        var data = Object.assign({}, this.state, _defineProperty({}, valueNeedChanging, value));
+	        // const data = Object.assign({}, state, {[valueNeedChanging]: value});
+	        var data = {
+	          upperBound: state.upperBound,
+	          lowerBound: state.lowerBound
+	        };
+	        data[valueNeedChanging] = value;
 	        this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
 	      } else {
 	        this.triggerEvents('onChange', value);
@@ -20071,16 +20104,18 @@ webpackJsonp([0,1],[
 	    value: function render() {
 	      var _rcUtil$classSet;
 	
-	      var _state2 = this.state;
-	      var handle = _state2.handle;
-	      var upperBound = _state2.upperBound;
-	      var lowerBound = _state2.lowerBound;
+	      var _state = this.state;
+	      var handle = _state.handle;
+	      var upperBound = _state.upperBound;
+	      var lowerBound = _state.lowerBound;
 	
 	      var props = this.props;
 	      var className = props.className;
 	      var prefixCls = props.prefixCls;
 	      var disabled = props.disabled;
+	      var included = props.included;
 	      var isIncluded = props.isIncluded;
+	      var dots = props.dots;
 	      var withDots = props.withDots;
 	      var range = props.range;
 	      var marks = props.marks;
@@ -20098,7 +20133,7 @@ webpackJsonp([0,1],[
 	      var lowerOffset = this.calcOffset(lowerBound);
 	
 	      var track = null;
-	      if (isIncluded || range) {
+	      if (included && isIncluded || range) {
 	        var trackClassName = prefixCls + '-track';
 	        track = _react2['default'].createElement(_Track2['default'], { className: trackClassName, offset: lowerOffset, length: upperOffset - lowerOffset });
 	      }
@@ -20117,19 +20152,19 @@ webpackJsonp([0,1],[
 	      var upperIndex = this.getIndex(upperBound);
 	
 	      var steps = null;
-	      if (marksLen > 0 || step > 1 && withDots) {
+	      if (marksLen > 0 || step > 1 && (dots || withDots)) {
 	        var stepsClassName = prefixCls + '-step';
 	        var stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
 	        steps = _react2['default'].createElement(_Steps2['default'], { className: stepsClassName, stepNum: stepNum,
 	          lowerIndex: this.getIndex(lowerBound), upperIndex: upperIndex,
-	          isIncluded: isIncluded || range });
+	          included: included && isIncluded || range });
 	      }
 	
 	      var mark = null;
 	      if (marksLen > 0) {
 	        var markClassName = prefixCls + '-mark';
 	        mark = _react2['default'].createElement(_Marks2['default'], { className: markClassName, marks: marks,
-	          index: upperIndex, isIncluded: isIncluded });
+	          index: upperIndex, included: included && isIncluded });
 	      }
 	
 	      return _react2['default'].createElement(
@@ -20154,14 +20189,13 @@ webpackJsonp([0,1],[
 	  min: _react2['default'].PropTypes.number,
 	  max: _react2['default'].PropTypes.number,
 	  step: _react2['default'].PropTypes.number,
-	  defaultValue: _react2['default'].PropTypes.number,
-	  defaultValues: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number),
+	  defaultValue: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number)]),
 	  defaultIndex: _react2['default'].PropTypes.number,
-	  value: _react2['default'].PropTypes.number,
-	  values: _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number),
+	  value: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number)]),
 	  index: _react2['default'].PropTypes.number,
 	  marks: _react2['default'].PropTypes.array,
-	  isIncluded: _react2['default'].PropTypes.bool,
+	  isIncluded: _react2['default'].PropTypes.bool, // @Deprecated
+	  included: _react2['default'].PropTypes.bool,
 	  className: _react2['default'].PropTypes.string,
 	  prefixCls: _react2['default'].PropTypes.string,
 	  disabled: _react2['default'].PropTypes.bool,
@@ -20170,7 +20204,8 @@ webpackJsonp([0,1],[
 	  onChange: _react2['default'].PropTypes.func,
 	  onAfterChange: _react2['default'].PropTypes.func,
 	  tipTransitionName: _react2['default'].PropTypes.string,
-	  withDots: _react2['default'].PropTypes.bool,
+	  withDots: _react2['default'].PropTypes.bool, // @Deprecated
+	  dots: _react2['default'].PropTypes.bool,
 	  range: _react2['default'].PropTypes.bool
 	};
 	
@@ -20178,16 +20213,16 @@ webpackJsonp([0,1],[
 	  min: 0,
 	  max: 100,
 	  step: 1,
-	  defaultValue: 0,
-	  defaultValues: [0, 0],
 	  defaultIndex: 0,
 	  marks: [],
-	  isIncluded: true,
+	  isIncluded: true, // @Deprecated
+	  included: true,
 	  className: '',
 	  prefixCls: 'rc-slider',
 	  disabled: false,
 	  tipTransitionName: '',
-	  withDots: false,
+	  withDots: false, // @Deprecated
+	  dots: false,
 	  range: false
 	};
 	
@@ -20195,30 +20230,30 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 163 */
+/* 164 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  guid: __webpack_require__(164),
-	  classSet: __webpack_require__(165),
-	  joinClasses: __webpack_require__(166),
-	  KeyCode: __webpack_require__(167),
-	  PureRenderMixin: __webpack_require__(168),
-	  shallowEqual: __webpack_require__(169),
-	  createChainedFunction: __webpack_require__(170),
+	  guid: __webpack_require__(165),
+	  classSet: __webpack_require__(166),
+	  joinClasses: __webpack_require__(167),
+	  KeyCode: __webpack_require__(168),
+	  PureRenderMixin: __webpack_require__(169),
+	  shallowEqual: __webpack_require__(170),
+	  createChainedFunction: __webpack_require__(171),
 	  Dom: {
-	    addEventListener: __webpack_require__(171),
-	    contains: __webpack_require__(172)
+	    addEventListener: __webpack_require__(172),
+	    contains: __webpack_require__(173)
 	  },
 	  Children: {
-	    toArray: __webpack_require__(173),
-	    mapSelf: __webpack_require__(174)
+	    toArray: __webpack_require__(174),
+	    mapSelf: __webpack_require__(175)
 	  }
 	};
 
 
 /***/ },
-/* 164 */
+/* 165 */
 /***/ function(module, exports) {
 
 	var seed = 0;
@@ -20228,7 +20263,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 165 */
+/* 166 */
 /***/ function(module, exports) {
 
 	/**
@@ -20273,7 +20308,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 166 */
+/* 167 */
 /***/ function(module, exports) {
 
 	/**
@@ -20320,7 +20355,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 167 */
+/* 168 */
 /***/ function(module, exports) {
 
 	/**
@@ -20847,7 +20882,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 168 */
+/* 169 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -20863,7 +20898,7 @@ webpackJsonp([0,1],[
 	
 	"use strict";
 	
-	var shallowEqual = __webpack_require__(169);
+	var shallowEqual = __webpack_require__(170);
 	
 	/**
 	 * If your React component's render function is "pure", e.g. it will render the
@@ -20900,7 +20935,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 169 */
+/* 170 */
 /***/ function(module, exports) {
 
 	/**
@@ -20948,7 +20983,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 170 */
+/* 171 */
 /***/ function(module, exports) {
 
 	/**
@@ -20975,7 +21010,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 171 */
+/* 172 */
 /***/ function(module, exports) {
 
 	module.exports = function (target, eventType, callback) {
@@ -20998,7 +21033,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 172 */
+/* 173 */
 /***/ function(module, exports) {
 
 	module.exports = function (root, node) {
@@ -21014,7 +21049,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 173 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(3);
@@ -21029,7 +21064,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 174 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(3);
@@ -21045,7 +21080,7 @@ webpackJsonp([0,1],[
 
 
 /***/ },
-/* 175 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21076,7 +21111,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 176 */
+/* 177 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21099,7 +21134,7 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcTooltip = __webpack_require__(177);
+	var _rcTooltip = __webpack_require__(178);
 	
 	var _rcTooltip2 = _interopRequireDefault(_rcTooltip);
 	
@@ -21186,15 +21221,15 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 177 */
+/* 178 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(178);
+	module.exports = __webpack_require__(179);
 
 /***/ },
-/* 178 */
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21211,9 +21246,9 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(163);
+	var _rcUtil = __webpack_require__(164);
 	
-	var _Popup = __webpack_require__(179);
+	var _Popup = __webpack_require__(180);
 	
 	var _Popup2 = _interopRequireDefault(_Popup);
 	
@@ -21508,7 +21543,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21523,13 +21558,13 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _utils = __webpack_require__(180);
+	var _utils = __webpack_require__(181);
 	
-	var _rcAlign = __webpack_require__(181);
+	var _rcAlign = __webpack_require__(182);
 	
 	var _rcAlign2 = _interopRequireDefault(_rcAlign);
 	
-	var _rcAnimate = __webpack_require__(191);
+	var _rcAnimate = __webpack_require__(192);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
@@ -21657,7 +21692,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -21752,7 +21787,7 @@ webpackJsonp([0,1],[
 	}
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21764,7 +21799,7 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _Align = __webpack_require__(182);
+	var _Align = __webpack_require__(183);
 	
 	var _Align2 = _interopRequireDefault(_Align);
 	
@@ -21772,7 +21807,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21795,11 +21830,11 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _domAlign = __webpack_require__(183);
+	var _domAlign = __webpack_require__(184);
 	
 	var _domAlign2 = _interopRequireDefault(_domAlign);
 	
-	var _rcUtil = __webpack_require__(163);
+	var _rcUtil = __webpack_require__(164);
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
@@ -21937,7 +21972,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -21953,27 +21988,27 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(184);
+	var _utils = __webpack_require__(185);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
-	var _getOffsetParent = __webpack_require__(185);
+	var _getOffsetParent = __webpack_require__(186);
 	
 	var _getOffsetParent2 = _interopRequireDefault(_getOffsetParent);
 	
-	var _getVisibleRectForElement = __webpack_require__(186);
+	var _getVisibleRectForElement = __webpack_require__(187);
 	
 	var _getVisibleRectForElement2 = _interopRequireDefault(_getVisibleRectForElement);
 	
-	var _adjustForViewport = __webpack_require__(187);
+	var _adjustForViewport = __webpack_require__(188);
 	
 	var _adjustForViewport2 = _interopRequireDefault(_adjustForViewport);
 	
-	var _getRegion = __webpack_require__(188);
+	var _getRegion = __webpack_require__(189);
 	
 	var _getRegion2 = _interopRequireDefault(_getRegion);
 	
-	var _getElFuturePos = __webpack_require__(189);
+	var _getElFuturePos = __webpack_require__(190);
 	
 	var _getElFuturePos2 = _interopRequireDefault(_getElFuturePos);
 	
@@ -22147,7 +22182,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22603,7 +22638,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22614,7 +22649,7 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(184);
+	var _utils = __webpack_require__(185);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -22661,7 +22696,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 186 */
+/* 187 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22672,11 +22707,11 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(184);
+	var _utils = __webpack_require__(185);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
-	var _getOffsetParent = __webpack_require__(185);
+	var _getOffsetParent = __webpack_require__(186);
 	
 	var _getOffsetParent2 = _interopRequireDefault(_getOffsetParent);
 	
@@ -22742,7 +22777,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 187 */
+/* 188 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22753,7 +22788,7 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(184);
+	var _utils = __webpack_require__(185);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -22802,7 +22837,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 188 */
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22813,7 +22848,7 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(184);
+	var _utils = __webpack_require__(185);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -22843,7 +22878,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22854,7 +22889,7 @@ webpackJsonp([0,1],[
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _getAlignOffset = __webpack_require__(190);
+	var _getAlignOffset = __webpack_require__(191);
 	
 	var _getAlignOffset2 = _interopRequireDefault(_getAlignOffset);
 	
@@ -22884,7 +22919,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports) {
 
 	/**
@@ -22929,16 +22964,16 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(192);
+	module.exports = __webpack_require__(193);
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22955,15 +22990,15 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(193);
+	var _ChildrenUtils = __webpack_require__(194);
 	
 	var _ChildrenUtils2 = _interopRequireDefault(_ChildrenUtils);
 	
-	var _AnimateChild = __webpack_require__(194);
+	var _AnimateChild = __webpack_require__(195);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(198);
+	var _util = __webpack_require__(199);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -23258,7 +23293,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23375,7 +23410,7 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23390,11 +23425,11 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _cssAnimation = __webpack_require__(195);
+	var _cssAnimation = __webpack_require__(196);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(198);
+	var _util = __webpack_require__(199);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -23473,13 +23508,13 @@ webpackJsonp([0,1],[
 	module.exports = exports['default'];
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(196);
-	var Css = __webpack_require__(197);
+	var Event = __webpack_require__(197);
+	var Css = __webpack_require__(198);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -23631,7 +23666,7 @@ webpackJsonp([0,1],[
 	module.exports = cssAnimation;
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23719,7 +23754,7 @@ webpackJsonp([0,1],[
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -23750,7 +23785,7 @@ webpackJsonp([0,1],[
 	};
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -23783,61 +23818,6 @@ webpackJsonp([0,1],[
 	module.exports = exports["default"];
 
 /***/ },
-/* 199 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-	
-	Object.defineProperty(exports, '__esModule', {
-	  value: true
-	});
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
-	
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-	
-	var _react = __webpack_require__(3);
-	
-	var _react2 = _interopRequireDefault(_react);
-	
-	var _rcUtil = __webpack_require__(163);
-	
-	var _rcUtil2 = _interopRequireDefault(_rcUtil);
-	
-	var Steps = function Steps(_ref) {
-	  var className = _ref.className;
-	  var stepNum = _ref.stepNum;
-	  var isIncluded = _ref.isIncluded;
-	  var lowerIndex = _ref.lowerIndex;
-	  var upperIndex = _ref.upperIndex;
-	
-	  var dotClassName = className.replace('step', 'dot');
-	  var unit = 100 / (stepNum - 1);
-	
-	  var elements = [];
-	  for (var i = 0; i < stepNum; i++) {
-	    var _rcUtil$classSet;
-	
-	    var offset = unit * i + '%';
-	    var style = { left: offset };
-	
-	    var isActived = isIncluded && i <= upperIndex && i >= lowerIndex || !isIncluded && i === upperIndex;
-	    var stepClassName = _rcUtil2['default'].classSet((_rcUtil$classSet = {}, _defineProperty(_rcUtil$classSet, dotClassName, true), _defineProperty(_rcUtil$classSet, dotClassName + '-active', isActived), _rcUtil$classSet));
-	
-	    elements.push(_react2['default'].createElement('span', { className: stepClassName, style: style, key: i }));
-	  }
-	
-	  return _react2['default'].createElement(
-	    'div',
-	    { className: className },
-	    elements
-	  );
-	};
-	
-	exports['default'] = Steps;
-	module.exports = exports['default'];
-
-/***/ },
 /* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -23855,7 +23835,62 @@ webpackJsonp([0,1],[
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcUtil = __webpack_require__(163);
+	var _rcUtil = __webpack_require__(164);
+	
+	var _rcUtil2 = _interopRequireDefault(_rcUtil);
+	
+	var Steps = function Steps(_ref) {
+	  var className = _ref.className;
+	  var stepNum = _ref.stepNum;
+	  var included = _ref.included;
+	  var lowerIndex = _ref.lowerIndex;
+	  var upperIndex = _ref.upperIndex;
+	
+	  var dotClassName = className.replace('step', 'dot');
+	  var unit = 100 / (stepNum - 1);
+	
+	  var elements = [];
+	  for (var i = 0; i < stepNum; i++) {
+	    var _rcUtil$classSet;
+	
+	    var offset = unit * i + '%';
+	    var style = { left: offset };
+	
+	    var isActived = included && i <= upperIndex && i >= lowerIndex || !included && i === upperIndex;
+	    var stepClassName = _rcUtil2['default'].classSet((_rcUtil$classSet = {}, _defineProperty(_rcUtil$classSet, dotClassName, true), _defineProperty(_rcUtil$classSet, dotClassName + '-active', isActived), _rcUtil$classSet));
+	
+	    elements.push(_react2['default'].createElement('span', { className: stepClassName, style: style, key: i }));
+	  }
+	
+	  return _react2['default'].createElement(
+	    'div',
+	    { className: className },
+	    elements
+	  );
+	};
+	
+	exports['default'] = Steps;
+	module.exports = exports['default'];
+
+/***/ },
+/* 201 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, '__esModule', {
+	  value: true
+	});
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	var _rcUtil = __webpack_require__(164);
 	
 	var _rcUtil2 = _interopRequireDefault(_rcUtil);
 	
@@ -23863,7 +23898,7 @@ webpackJsonp([0,1],[
 	  var className = _ref.className;
 	  var marks = _ref.marks;
 	  var index = _ref.index;
-	  var isIncluded = _ref.isIncluded;
+	  var included = _ref.included;
 	
 	  var marksLen = marks.length;
 	  var unit = 100 / (marksLen - 1);
@@ -23873,7 +23908,7 @@ webpackJsonp([0,1],[
 	  for (var i = 0; i < marksLen; i++) {
 	    var _rcUtil$classSet;
 	
-	    var isActived = isIncluded && i <= index || !isIncluded && i === index;
+	    var isActived = included && i <= index || !included && i === index;
 	    var markClassName = _rcUtil2['default'].classSet((_rcUtil$classSet = {}, _defineProperty(_rcUtil$classSet, className + '-text', true), _defineProperty(_rcUtil$classSet, className + '-text-active', isActived), _rcUtil$classSet));
 	
 	    var style = { width: markWidth };

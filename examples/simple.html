@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>simple.js - example - rc-slider@1.6.0</title>
+  <title>simple.js - example - rc-slider@2.0.1</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,7 +257,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@1.6.0</h1>
+    <h1>rc-slider@2.0.1</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -269,6 +269,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider/assets/index.css'</span>);
 
 <span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
+<span class="hljs-keyword">var</span> ReactDOM = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-dom'</span>);
 <span class="hljs-keyword">var</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
 <span class="hljs-keyword">var</span> style = {width:<span class="hljs-number">400</span>,margin:<span class="hljs-number">50</span>};
 
@@ -276,7 +277,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <span class="hljs-built_in">console</span>.log(v);
 }
 
-React.render(
+ReactDOM.render(
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>基础滑块<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
@@ -288,15 +289,15 @@ React.render(
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>基础滑块，step=20 带原点<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">withDots</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">dots</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>双滑块<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">range</span>=<span class="hljs-value">{true}</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{90}</span> <span class="hljs-attribute">values</span>=<span class="hljs-value">{[0,</span> <span class="hljs-attribute">30</span>]} <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{onChange}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{90}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[0,</span> <span class="hljs-attribute">30</span>]} <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{onChange}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>双滑块，step=20 <span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">range</span>=<span class="hljs-value">{true}</span> <span class="hljs-attribute">withDots</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">values</span>=<span class="hljs-value">{[0,</span> <span class="hljs-attribute">30</span>]} <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{onChange}</span> <span class="hljs-attribute">isIncluded</span>=<span class="hljs-value">{false}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">dots</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[0,</span> <span class="hljs-attribute">30</span>]} <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{onChange}</span> <span class="hljs-attribute">included</span>=<span class="hljs-value">{false}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>分段式滑块（包含关系）<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
@@ -304,7 +305,7 @@ React.render(
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>分段式滑块（并列关系）<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{["状态1","状态2","状态3","状态4"]}</span> <span class="hljs-attribute">isIncluded</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultIndex</span>=<span class="hljs-value">{1}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{["状态1","状态2","状态3","状态4"]}</span> <span class="hljs-attribute">included</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultIndex</span>=<span class="hljs-value">{1}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   , document.getElementById('__react-content'));
