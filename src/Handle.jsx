@@ -24,7 +24,7 @@ export default class Handle extends React.Component {
 
   render() {
     const props = this.props;
-    const {className, tipTransitionName, offset, value} = props;
+    const {className, tipTransitionName, tipFormatter, offset, value} = props;
     const {dragging, noTip} = props;
 
     const style = { left: offset + '%' };
@@ -42,7 +42,7 @@ export default class Handle extends React.Component {
               prefixCls={className.replace('handle', 'tooltip')}
               placement={{points: ['bc', 'tc']}}
               visible={isTooltipVisible}
-              overlay={<span>{value}</span>}
+              overlay={<span>{tipFormatter ? tipFormatter(value) : value}</span>}
               delay={0}
               transitionName={tipTransitionName}>
               {handle}
@@ -54,6 +54,7 @@ Handle.propTypes = {
   className: React.PropTypes.string,
   offset: React.PropTypes.number,
   tipTransitionName: React.PropTypes.string,
+  tipFormatter: React.PropTypes.func,
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,

@@ -11,6 +11,10 @@ function onChange(v) {
   console.log(v);
 }
 
+function percentFormatter(v) {
+  return v + " %";
+}
+
 ReactDOM.render(
   <div>
     <div style={style}>
@@ -40,6 +44,10 @@ ReactDOM.render(
     <div style={style}>
       <p>分段式滑块（并列关系）</p>
       <Slider marks={["状态1","状态2","状态3","状态4"]} included={false} defaultIndex={1} />
+    </div>
+    <div style={style}>
+      <p>基础滑块</p>
+      <Slider onChange={onChange} tipFormatter={percentFormatter} tipTransitionName='rc-slider-tooltip-zoom-down' />
     </div>
   </div>
   , document.getElementById('__react-content'));

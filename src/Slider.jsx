@@ -331,7 +331,7 @@ class Slider extends React.Component {
     const {handle, upperBound, lowerBound} = this.state;
     const props = this.props;
     const {className, prefixCls, disabled, included, isIncluded, dots, withDots, range} = props;
-    const {marks, step, max, min, tipTransitionName, children} = props;
+    const {marks, step, max, min, tipTransitionName, tipFormatter, children} = props;
     const marksLen = marks.length;
 
     const sliderClassName = rcUtil.classSet({
@@ -350,13 +350,13 @@ class Slider extends React.Component {
     }
 
     const handleClassName = prefixCls + '-handle';
-    const isNoTip = marksLen > 0;
-    const upper = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
+    const isNoTip = (marksLen > 0) && !tipFormatter;
+    const upper = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip} tipFormatter={tipFormatter}
                      offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
 
     let lower = null;
     if (range) {
-      lower = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
+      lower = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip} tipFormatter={tipFormatter}
                  offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
     }
 
@@ -418,6 +418,7 @@ Slider.propTypes = {
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
   tipTransitionName: React.PropTypes.string,
+  tipFormatter: React.PropTypes.func,
   withDots: React.PropTypes.bool, // @Deprecated
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
