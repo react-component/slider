@@ -330,7 +330,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const props = this.props;
-    const {className, prefixCls, disabled, included, isIncluded, dots, withDots, range} = props;
+    const {className, prefixCls, disabled, included, isIncluded, dots, withDots, range, unit} = props;
     const {marks, step, max, min, tipTransitionName, children} = props;
     const marksLen = marks.length;
 
@@ -352,12 +352,12 @@ class Slider extends React.Component {
     const handleClassName = prefixCls + '-handle';
     const isNoTip = marksLen > 0;
     const upper = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
-                     offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
+                     offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} unit={unit} />);
 
     let lower = null;
     if (range) {
       lower = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
-                 offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
+                 offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} unit={unit} />);
     }
 
     const upperIndex = this.getIndex(upperBound);
@@ -421,6 +421,7 @@ Slider.propTypes = {
   withDots: React.PropTypes.bool, // @Deprecated
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
+  unit: React.PropTypes.string,
 };
 
 Slider.defaultProps = {
@@ -438,6 +439,7 @@ Slider.defaultProps = {
   withDots: false, // @Deprecated
   dots: false,
   range: false,
+  unit: '',
 };
 
 export default Slider;
