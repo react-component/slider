@@ -421,7 +421,7 @@ Slider.propTypes = {
   withDots: React.PropTypes.bool, // @Deprecated
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
-  unit: React.PropTypes.string
+  unit: React.PropTypes.string,
 };
 
 Slider.defaultProps = {
@@ -439,7 +439,7 @@ Slider.defaultProps = {
   withDots: false, // @Deprecated
   dots: false,
   range: false,
-  unit: ''
+  unit: '',
 };
 
 export default Slider;

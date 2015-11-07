@@ -57,5 +57,5 @@ Handle.propTypes = {
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,
-  unit: React.PropTypes.string
+  unit: React.PropTypes.string,
 };
