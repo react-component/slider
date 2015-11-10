@@ -117,7 +117,7 @@
 .rc-slider-tooltip-hidden {
   display: none;
 }
-.rc-slider-tooltip-placement-points-bc-tc {
+.rc-slider-tooltip-placement-top {
   padding: 4px 0 8px 0;
 }
 .rc-slider-tooltip-inner {
@@ -140,7 +140,7 @@
   border-color: transparent;
   border-style: solid;
 }
-.rc-slider-tooltip-placement-points-bc-tc .rc-slider-tooltip-arrow {
+.rc-slider-tooltip-placement-top .rc-slider-tooltip-arrow {
   bottom: 4px;
   left: 50%;
   margin-left: -4px;
