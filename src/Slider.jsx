@@ -1,11 +1,12 @@
 import React from 'react';
-import rcUtil, {Dom as DomUtils} from 'rc-util';
+import {Dom as DomUtils, classSet} from 'rc-util';
 import Track from './Track';
 import Handle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
 
-function noop() {}
+function noop() {
+}
 
 function isNotTouchEvent(e) {
   return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
@@ -16,18 +17,12 @@ function getTouchPosition(e) {
 }
 
 function getMousePosition(e) {
-  return e.pageX || (e.clientX + document.documentElement.scrollLeft); // to compat ie8
+  return e.pageX;
 }
 
 function pauseEvent(e) {
-  e.cancelBubble = true;
-  e.returnValue = false;
-  if (e.stopPropagation) {
-    e.stopPropagation();
-  }
-  if (e.preventDefault) {
-    e.preventDefault();
-  }
+  e.stopPropagation();
+  e.preventDefault();
 }
 
 class Slider extends React.Component {
@@ -324,7 +319,7 @@ class Slider extends React.Component {
   end(type) {
     this.removeEventons(type);
     this.triggerEvents('onAfterChange');
-    this.setState({ handle: null });
+    this.setState({handle: null});
   }
 
   render() {
@@ -334,7 +329,7 @@ class Slider extends React.Component {
     const {marks, step, max, min, tipTransitionName, children} = props;
     const marksLen = marks.length;
 
-    const sliderClassName = rcUtil.classSet({
+    const sliderClassName = classSet({
       [prefixCls]: true,
       [prefixCls + '-disabled']: disabled,
       [className]: !!className,
@@ -346,18 +341,18 @@ class Slider extends React.Component {
     let track = null;
     if ((included && isIncluded) || range) {
       const trackClassName = prefixCls + '-track';
-      track = <Track className={trackClassName} offset={lowerOffset} length={upperOffset - lowerOffset} />;
+      track = <Track className={trackClassName} offset={lowerOffset} length={upperOffset - lowerOffset}/>;
     }
 
     const handleClassName = prefixCls + '-handle';
     const isNoTip = marksLen > 0;
     const upper = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
-                     offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
+                           offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'}/>);
 
     let lower = null;
     if (range) {
       lower = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip}
-                 offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
+                       offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'}/>);
     }
 
     const upperIndex = this.getIndex(upperBound);
@@ -367,21 +362,21 @@ class Slider extends React.Component {
       const stepsClassName = prefixCls + '-step';
       const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
       steps = (<Steps className={stepsClassName} stepNum={stepNum}
-                 lowerIndex={this.getIndex(lowerBound)} upperIndex={upperIndex}
-                 included={(included && isIncluded) || range} />);
+                      lowerIndex={this.getIndex(lowerBound)} upperIndex={upperIndex}
+                      included={(included && isIncluded) || range}/>);
     }
 
     let mark = null;
     if (marksLen > 0) {
       const markClassName = prefixCls + '-mark';
       mark = (<Marks className={markClassName} marks={marks}
-                index={upperIndex} included={(included && isIncluded)} />);
+                     index={upperIndex} included={(included && isIncluded)}/>);
     }
 
     return (
       <div ref="slider" className={sliderClassName}
-        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
-        onMouseDown={disabled ? noop : this.onSliderMouseDown.bind(this)}>
+           onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
+           onMouseDown={disabled ? noop : this.onSliderMouseDown.bind(this)}>
         {track}
         {upper}
         {lower}

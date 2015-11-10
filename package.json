@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "slider ui component for react",
   "keywords": [
     "react",
@@ -40,18 +40,18 @@
   "devDependencies": {
     "expect.js": "0.3.x",
     "jquery": "^1.11.2",
-    "precommit-hook": "^1.0.7",
+    "pre-commit": "1.x",
     "rc-server": "3.x",
     "rc-tools": "4.x",
     "react": "~0.14.0",
     "react-addons-test-utils": "^0.14.0",
     "react-dom": "~0.14.0"
   },
-  "precommit": [
+  "pre-commit": [
     "lint"
   ],
   "dependencies": {
-    "rc-tooltip": "~3.0.4",
-    "rc-util": "2.x"
+    "rc-tooltip": "3.x",
+    "rc-util": "3.x"
   }
 }

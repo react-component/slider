@@ -40,7 +40,7 @@ export default class Handle extends React.Component {
     const isTooltipVisible = dragging || this.state.isTooltipVisible;
     return (<Tooltip
               prefixCls={className.replace('handle', 'tooltip')}
-              placement={{points: ['bc', 'tc']}}
+              placement="top"
               visible={isTooltipVisible}
               overlay={<span>{value}</span>}
               delay={0}
