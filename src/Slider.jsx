@@ -117,19 +117,7 @@ class Slider extends React.Component {
       this.setState({[state.handle]: value});
     }
 
-    if (props.range) {
-      // `this.state` will not be updated immediately after `this.setState`.
-      // So, create a similar object.
-      // const data = Object.assign({}, state, {[state.handle]: value});
-      const data = {
-        upperBound: state.upperBound,
-        lowerBound: state.lowerBound,
-      };
-      data[state.handle] = value;
-      this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
-    } else {
-      this.triggerEvents('onChange', value);
-    }
+    this.triggerEvents('onChange', this.getValue());
   }
 
   onTouchStart(e) {
@@ -181,17 +169,12 @@ class Slider extends React.Component {
       [valueNeedChanging]: value,
     });
 
-    if (this.props.range) {
-      // const data = Object.assign({}, state, {[valueNeedChanging]: value});
-      const data = {
-        upperBound: state.upperBound,
-        lowerBound: state.lowerBound,
-      };
-      data[valueNeedChanging] = value;
-      this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
-    } else {
-      this.triggerEvents('onChange', value);
-    }
+    this.triggerEvents('onChange', this.getValue());
+  }
+
+  getValue() {
+    const {handle, upperBound, lowerBound} = this.state;
+    return this.props.range ? [lowerBound, upperBound] : this.state[handle];
   }
 
   getIndex(value) {
@@ -318,7 +301,7 @@ class Slider extends React.Component {
 
   end(type) {
     this.removeEventons(type);
-    this.triggerEvents('onAfterChange');
+    this.triggerEvents('onAfterChange', this.getValue());
     this.setState({handle: null});
   }
 
