@@ -114,10 +114,10 @@ class Slider extends React.Component {
     if (value === oldValue) return;
 
     if (!('value' in props) && !('index' in props)) {
-      this.setState({[state.handle]: value});
+      this.setState({[state.handle]: value}, () => {
+        this.triggerEvents('onChange', this.getValue());
+      });
     }
-
-    this.triggerEvents('onChange', this.getValue());
   }
 
   onTouchStart(e) {
@@ -167,14 +167,14 @@ class Slider extends React.Component {
       handle: valueNeedChanging,
       recent: valueNeedChanging,
       [valueNeedChanging]: value,
+    }, () => {
+      this.triggerEvents('onChange', this.getValue());
     });
-
-    this.triggerEvents('onChange', this.getValue());
   }
 
   getValue() {
-    const {handle, upperBound, lowerBound} = this.state;
-    return this.props.range ? [lowerBound, upperBound] : this.state[handle];
+    const {lowerBound, upperBound} = this.state;
+    return this.props.range ? [lowerBound, upperBound] : upperBound;
   }
 
   getIndex(value) {
