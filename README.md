@@ -149,6 +149,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>Set the animation for tooltip if it shows.</td>
         </tr>
         <tr>
+          <td>tipFormatter</td>
+          <td>func</td>
+          <td></td>
+          <td>Format the value of the tooltip if it shows.</td>
+        </tr>
+        <tr>
           <td>dots</td>
           <td>bool</td>
           <td>false</td>
