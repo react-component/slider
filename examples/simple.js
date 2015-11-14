@@ -7,31 +7,29 @@ var ReactDOM = require('react-dom');
 var Slider = require('rc-slider');
 var style = {width:400,margin:50};
 
-function onChange(v) {
-  console.log(v);
-}
+var log = console.log.bind(console);
 
 ReactDOM.render(
   <div>
     <div style={style}>
       <p>基础滑块</p>
-      <Slider onChange={onChange} tipTransitionName='rc-slider-tooltip-zoom-down' />
+      <Slider onChange={log} tipTransitionName='rc-slider-tooltip-zoom-down' />
     </div>
     <div style={style}>
       <p>基础滑块，step=20</p>
       <Slider step={20} />
     </div>
     <div style={style}>
-      <p>基础滑块，step=20 带原点</p>
+      <p>基础滑块，step=20 带圆点</p>
       <Slider dots step={20} />
     </div>
     <div style={style}>
       <p>双滑块</p>
-      <Slider range min={10} max={90} defaultValue={[0, 30]} onChange={onChange} />
+      <Slider range min={10} max={90} defaultValue={[0, 30]} onChange={log} />
     </div>
     <div style={style}>
       <p>双滑块，step=20 </p>
-      <Slider range dots step={20} defaultValue={[0, 30]} onChange={onChange} included={false} />
+      <Slider range dots step={20} defaultValue={[0, 30]} onAfterChange={log} included={false} />
     </div>
     <div style={style}>
       <p>分段式滑块（包含关系）</p>
