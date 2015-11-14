@@ -308,7 +308,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const props = this.props;
-    const {className, prefixCls, disabled, included, isIncluded, dots, withDots, range} = props;
+    const {className, prefixCls, disabled, included, isIncluded, dots, range} = props;
     const {marks, step, max, min, tipTransitionName, children} = props;
     const marksLen = marks.length;
 
@@ -341,7 +341,7 @@ class Slider extends React.Component {
     const upperIndex = this.getIndex(upperBound);
 
     let steps = null;
-    if (marksLen > 0 || (step > 1 && (dots || withDots))) {
+    if (marksLen > 0 || (step > 1 && dots)) {
       const stepsClassName = prefixCls + '-step';
       const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
       steps = (<Steps className={stepsClassName} stepNum={stepNum}
@@ -396,7 +396,6 @@ Slider.propTypes = {
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
   tipTransitionName: React.PropTypes.string,
-  withDots: React.PropTypes.bool, // @Deprecated
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
 };
@@ -413,7 +412,6 @@ Slider.defaultProps = {
   prefixCls: 'rc-slider',
   disabled: false,
   tipTransitionName: '',
-  withDots: false, // @Deprecated
   dots: false,
   range: false,
 };
