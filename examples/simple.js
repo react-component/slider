@@ -45,7 +45,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>基础滑块</p>
-      <Slider onChange={onChange} tipFormatter={percentFormatter} tipTransitionName='rc-slider-tooltip-zoom-down' />
+      <Slider onChange={log} tipFormatter={percentFormatter} tipTransitionName='rc-slider-tooltip-zoom-down' />
     </div>
   </div>
   , document.getElementById('__react-content'));
