@@ -18,8 +18,12 @@ webpackJsonp([0,1],[
 	var Slider = __webpack_require__(161);
 	var style = { width: 400, margin: 50 };
 	
-	function onChange(v) {
-	  console.log(v);
+	var log = console.log.bind(console);
+	
+	var marks = ["状态1", "状态2", "状态3", "状态4"];
+	
+	function percentFormatter(v) {
+	  return v + " %";
 	}
 	
 	ReactDOM.render(React.createElement(
@@ -33,7 +37,7 @@ webpackJsonp([0,1],[
 	      null,
 	      '基础滑块'
 	    ),
-	    React.createElement(Slider, { onChange: onChange, tipTransitionName: 'rc-slider-tooltip-zoom-down' })
+	    React.createElement(Slider, { onChange: log, tipTransitionName: 'rc-slider-tooltip-zoom-down' })
 	  ),
 	  React.createElement(
 	    'div',
@@ -51,7 +55,7 @@ webpackJsonp([0,1],[
 	    React.createElement(
 	      'p',
 	      null,
-	      '基础滑块，step=20 带原点'
+	      '基础滑块，step=20 带圆点'
 	    ),
 	    React.createElement(Slider, { dots: true, step: 20 })
 	  ),
@@ -63,7 +67,7 @@ webpackJsonp([0,1],[
 	      null,
 	      '双滑块'
 	    ),
-	    React.createElement(Slider, { range: true, min: 10, max: 90, defaultValue: [0, 30], onChange: onChange })
+	    React.createElement(Slider, { range: true, min: 10, max: 90, defaultValue: [0, 30], onChange: log })
 	  ),
 	  React.createElement(
 	    'div',
@@ -73,7 +77,7 @@ webpackJsonp([0,1],[
 	      null,
 	      '双滑块，step=20 '
 	    ),
-	    React.createElement(Slider, { range: true, dots: true, step: 20, defaultValue: [0, 30], onChange: onChange, included: false })
+	    React.createElement(Slider, { range: true, dots: true, step: 20, defaultValue: [0, 30], onAfterChange: log, included: false })
 	  ),
 	  React.createElement(
 	    'div',
@@ -83,7 +87,17 @@ webpackJsonp([0,1],[
 	      null,
 	      '分段式滑块（包含关系）'
 	    ),
-	    React.createElement(Slider, { marks: ["状态1", "状态2", "状态3", "状态4"], defaultIndex: 1 })
+	    React.createElement(Slider, { marks: marks, defaultIndex: 1 })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
+	      '分段式滑块 (双)'
+	    ),
+	    React.createElement(Slider, { range: true, marks: marks, onChange: log, defaultIndex: [1, 2] })
 	  ),
 	  React.createElement(
 	    'div',
@@ -93,7 +107,17 @@ webpackJsonp([0,1],[
 	      null,
 	      '分段式滑块（并列关系）'
 	    ),
-	    React.createElement(Slider, { marks: ["状态1", "状态2", "状态3", "状态4"], included: false, defaultIndex: 1 })
+	    React.createElement(Slider, { marks: marks, included: false, defaultIndex: 1 })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
+	      '基础滑块'
+	    ),
+	    React.createElement(Slider, { onChange: log, tipFormatter: percentFormatter, tipTransitionName: 'rc-slider-tooltip-zoom-down' })
 	  )
 	), document.getElementById('__react-content'));
 
@@ -19766,6 +19790,14 @@ webpackJsonp([0,1],[
 	  e.preventDefault();
 	}
 	
+	// This is an utility method, tries to get property, then defaultPropery with
+	// special check using 'in', because propery can be '0'
+	function propOrDefault(props, name, fallback) {
+	  var defaultName = 'default' + name.charAt(0).toUpperCase() + name.substring(1);
+	  var defaultValue = defaultName in props ? props[defaultName] : fallback;
+	  return name in props ? props[name] : defaultValue;
+	}
+	
 	var Slider = (function (_React$Component) {
 	  _inherits(Slider, _React$Component);
 	
@@ -19776,18 +19808,22 @@ webpackJsonp([0,1],[
 	
 	    var upperBound = undefined;
 	    var lowerBound = undefined;
-	    if (props.range) {
-	      var value = props.value || props.defaultValue || [0, 0];
-	      upperBound = this.trimAlignValue(value[1]);
-	      lowerBound = this.trimAlignValue(value[0]);
-	    } else if (props.marks.length > 0) {
-	      upperBound = this.calcValueFromProps(props);
+	    var initialValue = props.range ? [0, 0] : 0;
+	    if (props.marks.length > 0) {
+	      var index = propOrDefault(props, 'index', initialValue);
+	
+	      var _getBoundsFromIndex = this.getBoundsFromIndex(index, props);
+	
+	      lowerBound = _getBoundsFromIndex.lowerBound;
+	      upperBound = _getBoundsFromIndex.upperBound;
 	    } else {
-	      // Note: Maybe `value` is `0`.
-	      //       So, check the existence of `value` with `in`.
-	      var defaultValue = 'defaultValue' in props ? props.defaultValue : 0;
-	      var value = 'value' in props ? props.value : defaultValue;
-	      upperBound = this.trimAlignValue(value);
+	      var value = propOrDefault(props, 'value', initialValue);
+	      if (props.range) {
+	        lowerBound = this.trimAlignValue(value[0]);
+	        upperBound = this.trimAlignValue(value[1]);
+	      } else {
+	        upperBound = this.trimAlignValue(value);
+	      }
 	    }
 	
 	    var recent = undefined;
@@ -19827,9 +19863,8 @@ webpackJsonp([0,1],[
 	          upperBound: nextProps.value
 	        });
 	      } else if ('index' in nextProps) {
-	        this.setState({
-	          upperBound: this.calcValueFromProps(nextProps)
-	        });
+	        var index = 'index' in nextProps ? nextProps.index : nextProps.defaultIndex;
+	        this.setState(this.getBoundsFromIndex(index, nextProps));
 	      }
 	    }
 	  }, {
@@ -19852,6 +19887,8 @@ webpackJsonp([0,1],[
 	  }, {
 	    key: 'onMove',
 	    value: function onMove(e, position) {
+	      var _this = this;
+	
 	      pauseEvent(e);
 	      var props = this.props;
 	      var state = this.state;
@@ -19864,21 +19901,9 @@ webpackJsonp([0,1],[
 	      if (value === oldValue) return;
 	
 	      if (!('value' in props) && !('index' in props)) {
-	        this.setState(_defineProperty({}, state.handle, value));
-	      }
-	
-	      if (props.range) {
-	        // `this.state` will not be updated immediately after `this.setState`.
-	        // So, create a similar object.
-	        // const data = Object.assign({}, state, {[state.handle]: value});
-	        var data = {
-	          upperBound: state.upperBound,
-	          lowerBound: state.lowerBound
-	        };
-	        data[state.handle] = value;
-	        this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
-	      } else {
-	        this.triggerEvents('onChange', value);
+	        this.setState(_defineProperty({}, state.handle, value), function () {
+	          _this.triggerEvents('onChange', _this.getValue());
+	        });
 	      }
 	    }
 	  }, {
@@ -19902,6 +19927,8 @@ webpackJsonp([0,1],[
 	  }, {
 	    key: 'onStart',
 	    value: function onStart(position) {
+	      var _this2 = this;
+	
 	      this.triggerEvents('onBeforeChange');
 	
 	      var value = this.calcValueByPos(position);
@@ -19932,19 +19959,18 @@ webpackJsonp([0,1],[
 	      this.setState(_defineProperty({
 	        handle: valueNeedChanging,
 	        recent: valueNeedChanging
-	      }, valueNeedChanging, value));
+	      }, valueNeedChanging, value), function () {
+	        _this2.triggerEvents('onChange', _this2.getValue());
+	      });
+	    }
+	  }, {
+	    key: 'getValue',
+	    value: function getValue() {
+	      var _state = this.state;
+	      var lowerBound = _state.lowerBound;
+	      var upperBound = _state.upperBound;
 	
-	      if (this.props.range) {
-	        // const data = Object.assign({}, state, {[valueNeedChanging]: value});
-	        var data = {
-	          upperBound: state.upperBound,
-	          lowerBound: state.lowerBound
-	        };
-	        data[valueNeedChanging] = value;
-	        this.triggerEvents('onChange', [data.lowerBound, data.upperBound]);
-	      } else {
-	        this.triggerEvents('onChange', value);
-	      }
+	      return this.props.range ? [lowerBound, upperBound] : upperBound;
 	    }
 	  }, {
 	    key: 'getIndex',
@@ -19960,6 +19986,19 @@ webpackJsonp([0,1],[
 	      }
 	      var unit = ((max - min) / (marks.length - 1)).toFixed(5);
 	      return Math.round(value / unit);
+	    }
+	  }, {
+	    key: 'getBoundsFromIndex',
+	    value: function getBoundsFromIndex(value, props) {
+	      if (props.range) {
+	        return {
+	          lowerBound: this.calcValueFromIndex(value[0], props),
+	          upperBound: this.calcValueFromIndex(value[1], props)
+	        };
+	      }
+	      return {
+	        upperBound: this.calcValueFromIndex(value, props)
+	      };
 	    }
 	  }, {
 	    key: 'getSliderLength',
@@ -20041,11 +20080,10 @@ webpackJsonp([0,1],[
 	      return nextValue;
 	    }
 	  }, {
-	    key: 'calcValueFromProps',
-	    value: function calcValueFromProps(props) {
+	    key: 'calcValueFromIndex',
+	    value: function calcValueFromIndex(index, props) {
 	      var marksLen = props.marks.length;
 	      if (marksLen > 0) {
-	        var index = 'index' in props ? props.index : props.defaultIndex;
 	        var value = (props.max - props.min) / (marksLen - 1) * index;
 	        // `'1' / 1 => 1`, to make sure that the returned value is a `Number`.
 	        return value.toFixed(5) / 1;
@@ -20055,12 +20093,20 @@ webpackJsonp([0,1],[
 	  }, {
 	    key: 'triggerEvents',
 	    value: function triggerEvents(event, v) {
+	      var _this3 = this;
+	
 	      var props = this.props;
 	      var hasMarks = props.marks.length > 0;
 	      if (props[event]) {
 	        var data = undefined;
 	        if (hasMarks) {
-	          data = this.getIndex(v);
+	          if (props.range) {
+	            data = v.map(function (bound) {
+	              return _this3.getIndex(bound);
+	            });
+	          } else {
+	            data = this.getIndex(v);
+	          }
 	        } else if (v === undefined) {
 	          data = this.state.value;
 	        } else {
@@ -20096,7 +20142,7 @@ webpackJsonp([0,1],[
 	    key: 'end',
 	    value: function end(type) {
 	      this.removeEventons(type);
-	      this.triggerEvents('onAfterChange');
+	      this.triggerEvents('onAfterChange', this.getValue());
 	      this.setState({ handle: null });
 	    }
 	  }, {
@@ -20104,10 +20150,10 @@ webpackJsonp([0,1],[
 	    value: function render() {
 	      var _classSet;
 	
-	      var _state = this.state;
-	      var handle = _state.handle;
-	      var upperBound = _state.upperBound;
-	      var lowerBound = _state.lowerBound;
+	      var _state2 = this.state;
+	      var handle = _state2.handle;
+	      var upperBound = _state2.upperBound;
+	      var lowerBound = _state2.lowerBound;
 	
 	      var props = this.props;
 	      var className = props.className;
@@ -20116,13 +20162,13 @@ webpackJsonp([0,1],[
 	      var included = props.included;
 	      var isIncluded = props.isIncluded;
 	      var dots = props.dots;
-	      var withDots = props.withDots;
 	      var range = props.range;
 	      var marks = props.marks;
 	      var step = props.step;
 	      var max = props.max;
 	      var min = props.min;
 	      var tipTransitionName = props.tipTransitionName;
+	      var tipFormatter = props.tipFormatter;
 	      var children = props.children;
 	
 	      var marksLen = marks.length;
@@ -20139,20 +20185,20 @@ webpackJsonp([0,1],[
 	      }
 	
 	      var handleClassName = prefixCls + '-handle';
-	      var isNoTip = marksLen > 0;
-	      var upper = _react2['default'].createElement(_Handle2['default'], { className: handleClassName, tipTransitionName: tipTransitionName, noTip: isNoTip,
+	      var isNoTip = marksLen > 0 && !tipFormatter;
+	      var upper = _react2['default'].createElement(_Handle2['default'], { className: handleClassName, tipTransitionName: tipTransitionName, noTip: isNoTip, tipFormatter: tipFormatter,
 	        offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
 	
 	      var lower = null;
 	      if (range) {
-	        lower = _react2['default'].createElement(_Handle2['default'], { className: handleClassName, tipTransitionName: tipTransitionName, noTip: isNoTip,
+	        lower = _react2['default'].createElement(_Handle2['default'], { className: handleClassName, tipTransitionName: tipTransitionName, noTip: isNoTip, tipFormatter: tipFormatter,
 	          offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
 	      }
 	
 	      var upperIndex = this.getIndex(upperBound);
 	
 	      var steps = null;
-	      if (marksLen > 0 || step > 1 && (dots || withDots)) {
+	      if (marksLen > 0 || step > 1 && dots) {
 	        var stepsClassName = prefixCls + '-step';
 	        var stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
 	        steps = _react2['default'].createElement(_Steps2['default'], { className: stepsClassName, stepNum: stepNum,
@@ -20190,9 +20236,9 @@ webpackJsonp([0,1],[
 	  max: _react2['default'].PropTypes.number,
 	  step: _react2['default'].PropTypes.number,
 	  defaultValue: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number)]),
-	  defaultIndex: _react2['default'].PropTypes.number,
+	  defaultIndex: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number)]),
 	  value: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number)]),
-	  index: _react2['default'].PropTypes.number,
+	  index: _react2['default'].PropTypes.oneOfType([_react2['default'].PropTypes.number, _react2['default'].PropTypes.arrayOf(_react2['default'].PropTypes.number)]),
 	  marks: _react2['default'].PropTypes.array,
 	  isIncluded: _react2['default'].PropTypes.bool, // @Deprecated
 	  included: _react2['default'].PropTypes.bool,
@@ -20204,7 +20250,7 @@ webpackJsonp([0,1],[
 	  onChange: _react2['default'].PropTypes.func,
 	  onAfterChange: _react2['default'].PropTypes.func,
 	  tipTransitionName: _react2['default'].PropTypes.string,
-	  withDots: _react2['default'].PropTypes.bool, // @Deprecated
+	  tipFormatter: _react2['default'].PropTypes.func,
 	  dots: _react2['default'].PropTypes.bool,
 	  range: _react2['default'].PropTypes.bool
 	};
@@ -20221,7 +20267,6 @@ webpackJsonp([0,1],[
 	  prefixCls: 'rc-slider',
 	  disabled: false,
 	  tipTransitionName: '',
-	  withDots: false, // @Deprecated
 	  dots: false,
 	  range: false
 	};
@@ -21592,6 +21637,7 @@ webpackJsonp([0,1],[
 	      var props = this.props;
 	      var className = props.className;
 	      var tipTransitionName = props.tipTransitionName;
+	      var tipFormatter = props.tipFormatter;
 	      var offset = props.offset;
 	      var value = props.value;
 	      var dragging = props.dragging;
@@ -21617,7 +21663,7 @@ webpackJsonp([0,1],[
 	          overlay: _react2['default'].createElement(
 	            'span',
 	            null,
-	            value
+	            tipFormatter ? tipFormatter(value) : value
 	          ),
 	          delay: 0,
 	          transitionName: tipTransitionName },
@@ -21635,6 +21681,7 @@ webpackJsonp([0,1],[
 	  className: _react2['default'].PropTypes.string,
 	  offset: _react2['default'].PropTypes.number,
 	  tipTransitionName: _react2['default'].PropTypes.string,
+	  tipFormatter: _react2['default'].PropTypes.func,
 	  value: _react2['default'].PropTypes.number,
 	  dragging: _react2['default'].PropTypes.bool,
 	  noTip: _react2['default'].PropTypes.bool
