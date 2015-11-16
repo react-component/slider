@@ -352,7 +352,7 @@ class Slider extends React.Component {
 
   render() {
     const {handle, upperBound, lowerBound} = this.state;
-    const {className, prefixCls, disabled, included, isIncluded, dots, range,
+    const {className, prefixCls, disabled, included, dots, range,
            marks, step, max, min, tipTransitionName, tipFormatter, children} = this.props;
     const marksLen = marks.length;
 
@@ -366,7 +366,7 @@ class Slider extends React.Component {
     const lowerOffset = this.calcOffset(lowerBound);
 
     let track = null;
-    if ((included && isIncluded) || range) {
+    if (included || range) {
       const trackClassName = prefixCls + '-track';
       track = <Track className={trackClassName} offset={lowerOffset} length={upperOffset - lowerOffset}/>;
     }
@@ -390,14 +390,14 @@ class Slider extends React.Component {
       const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
       steps = (<Steps className={stepsClassName} stepNum={stepNum}
                       lowerIndex={this.getIndex(lowerBound)} upperIndex={upperIndex}
-                      included={(included && isIncluded) || range}/>);
+                      included={included || range}/>);
     }
 
     let mark = null;
     if (marksLen > 0) {
       const markClassName = prefixCls + '-mark';
       mark = (<Marks className={markClassName} marks={marks}
-                     index={upperIndex} included={(included && isIncluded)}/>);
+                     index={upperIndex} included={included}/>);
     }
 
     return (
@@ -436,7 +436,6 @@ Slider.propTypes = {
     React.PropTypes.arrayOf(React.PropTypes.number),
   ]),
   marks: React.PropTypes.array,
-  isIncluded: React.PropTypes.bool, // @Deprecated
   included: React.PropTypes.bool,
   className: React.PropTypes.string,
   prefixCls: React.PropTypes.string,
@@ -457,7 +456,6 @@ Slider.defaultProps = {
   step: 1,
   defaultIndex: 0,
   marks: [],
-  isIncluded: true, // @Deprecated
   included: true,
   className: '',
   prefixCls: 'rc-slider',
