@@ -5,54 +5,44 @@ require('rc-slider/assets/index.less');
 var React = require('react');
 var ReactDOM = require('react-dom');
 var Slider = require('rc-slider');
-var style = {width:400,margin:50};
 
+var style = {width: 400, margin: 50};
 var log = console.log.bind(console);
 
 
-var marks = ["状态1","状态2","状态3","状态4"];
-
 function percentFormatter(v) {
-  return v + " %";
+  return v + ' %';
 }
 
 ReactDOM.render(
   <div>
     <div style={style}>
-      <p>基础滑块</p>
-      <Slider onChange={log} tipTransitionName='rc-slider-tooltip-zoom-down' />
+      <p>Basic Slider</p>
+      <Slider tipTransitionName='rc-slider-tooltip-zoom-down' onChange={log} />
     </div>
     <div style={style}>
-      <p>基础滑块，step=20</p>
+      <p>Basic Slider，`step=20`</p>
       <Slider step={20} />
     </div>
     <div style={style}>
-      <p>基础滑块，step=20 带圆点</p>
+      <p>Basic Slider，`step=20, dots`</p>
       <Slider dots step={20} />
     </div>
     <div style={style}>
-      <p>双滑块</p>
-      <Slider range min={10} max={90} defaultValue={[0, 30]} onChange={log} />
+      <p>Basic Slider with `tipFormatter`</p>
+      <Slider tipFormatter={percentFormatter} tipTransitionName='rc-slider-tooltip-zoom-down' onChange={log} />
     </div>
     <div style={style}>
-      <p>双滑块，step=20 </p>
-      <Slider range dots step={20} defaultValue={[0, 30]} onAfterChange={log} included={false} />
+      <p>Basic Range</p>
+      <Slider range defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
-      <p>分段式滑块（包含关系）</p>
-      <Slider marks={marks} defaultIndex={1} />
+      <p>Basic Range，`step=20` </p>
+      <Slider range step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
     <div style={style}>
-      <p>分段式滑块 (双)</p>
-      <Slider range marks={marks} onChange={log} defaultIndex={[1,2]} />
-    </div>
-    <div style={style}>
-      <p>分段式滑块（并列关系）</p>
-      <Slider marks={marks} included={false} defaultIndex={1} />
-    </div>
-    <div style={style}>
-      <p>基础滑块</p>
-      <Slider onChange={log} tipFormatter={percentFormatter} tipTransitionName='rc-slider-tooltip-zoom-down' />
+      <p>Basic Range，`step=20, dots` </p>
+      <Slider range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
   </div>
   , document.getElementById('__react-content'));
