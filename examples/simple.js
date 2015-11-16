@@ -9,6 +9,9 @@ var style = {width:400,margin:50};
 
 var log = console.log.bind(console);
 
+
+var marks = ["状态1","状态2","状态3","状态4"];
+
 function percentFormatter(v) {
   return v + " %";
 }
@@ -37,11 +40,15 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>分段式滑块（包含关系）</p>
-      <Slider marks={["状态1","状态2","状态3","状态4"]} defaultIndex={1} />
+      <Slider marks={marks} defaultIndex={1} />
+    </div>
+    <div style={style}>
+      <p>分段式滑块 (双)</p>
+      <Slider range marks={marks} onChange={log} defaultIndex={[1,2]} />
     </div>
     <div style={style}>
       <p>分段式滑块（并列关系）</p>
-      <Slider marks={["状态1","状态2","状态3","状态4"]} included={false} defaultIndex={1} />
+      <Slider marks={marks} included={false} defaultIndex={1} />
     </div>
     <div style={style}>
       <p>基础滑块</p>

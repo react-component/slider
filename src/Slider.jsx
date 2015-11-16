@@ -25,24 +25,32 @@ function pauseEvent(e) {
   e.preventDefault();
 }
 
+// This is an utility method, tries to get property, then defaultPropery with
+// special check using 'in', because propery can be '0'
+function propOrDefault(props, name, fallback) {
+  const defaultName = 'default' + name.charAt(0).toUpperCase() + name.substring(1);
+  const defaultValue = (defaultName in props ? props[defaultName] : fallback);
+  return (name in props ? props[name] : defaultValue);
+}
+
 class Slider extends React.Component {
   constructor(props) {
     super(props);
 
     let upperBound;
     let lowerBound;
-    if (props.range) {
-      const value = (props.value || props.defaultValue || [0, 0]);
-      upperBound = this.trimAlignValue(value[1]);
-      lowerBound = this.trimAlignValue(value[0]);
-    } else if (props.marks.length > 0) {
-      upperBound = this.calcValueFromProps(props);
+    const initialValue = props.range ? [0, 0] : 0;
+    if (props.marks.length > 0) {
+      const index = propOrDefault(props, 'index', initialValue);
+      ({lowerBound, upperBound} = this.getBoundsFromIndex(index, props));
     } else {
-      // Note: Maybe `value` is `0`.
-      //       So, check the existence of `value` with `in`.
-      const defaultValue = ('defaultValue' in props ? props.defaultValue : 0);
-      const value = ('value' in props ? props.value : defaultValue);
-      upperBound = this.trimAlignValue(value);
+      const value = propOrDefault(props, 'value', initialValue);
+      if (props.range) {
+        lowerBound = this.trimAlignValue(value[0]);
+        upperBound = this.trimAlignValue(value[1]);
+      } else {
+        upperBound = this.trimAlignValue(value);
+      }
     }
 
     let recent;
@@ -80,9 +88,8 @@ class Slider extends React.Component {
         upperBound: nextProps.value,
       });
     } else if ('index' in nextProps) {
-      this.setState({
-        upperBound: this.calcValueFromProps(nextProps),
-      });
+      const index = ('index' in nextProps ? nextProps.index : nextProps.defaultIndex);
+      this.setState(this.getBoundsFromIndex(index, nextProps));
     }
   }
 
@@ -187,6 +194,18 @@ class Slider extends React.Component {
     return Math.round(value / unit);
   }
 
+  getBoundsFromIndex(value, props) {
+    if (props.range) {
+      return {
+        lowerBound: this.calcValueFromIndex(value[0], props),
+        upperBound: this.calcValueFromIndex(value[1], props),
+      };
+    }
+    return {
+      upperBound: this.calcValueFromIndex(value, props),
+    };
+  }
+
   getSliderLength() {
     const slider = this.refs.slider;
     if (!slider) {
@@ -251,10 +270,9 @@ class Slider extends React.Component {
     return nextValue;
   }
 
-  calcValueFromProps(props) {
+  calcValueFromIndex(index, props) {
     const marksLen = props.marks.length;
     if (marksLen > 0) {
-      const index = ('index' in props ? props.index : props.defaultIndex);
       const value = ((props.max - props.min) / (marksLen - 1)) * (index);
       // `'1' / 1 => 1`, to make sure that the returned value is a `Number`.
       return value.toFixed(5) / 1;
@@ -268,7 +286,11 @@ class Slider extends React.Component {
     if (props[event]) {
       let data;
       if (hasMarks) {
-        data = this.getIndex(v);
+        if (props.range) {
+          data = v.map(bound => this.getIndex(bound));
+        } else {
+          data = this.getIndex(v);
+        }
       } else if (v === undefined) {
         data = this.state.value;
       } else {
@@ -379,12 +401,18 @@ Slider.propTypes = {
     React.PropTypes.number,
     React.PropTypes.arrayOf(React.PropTypes.number),
   ]),
-  defaultIndex: React.PropTypes.number,
+  defaultIndex: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.arrayOf(React.PropTypes.number),
+  ]),
   value: React.PropTypes.oneOfType([
     React.PropTypes.number,
     React.PropTypes.arrayOf(React.PropTypes.number),
   ]),
-  index: React.PropTypes.number,
+  index: React.PropTypes.oneOfType([
+    React.PropTypes.number,
+    React.PropTypes.arrayOf(React.PropTypes.number),
+  ]),
   marks: React.PropTypes.array,
   isIncluded: React.PropTypes.bool, // @Deprecated
   included: React.PropTypes.bool,
