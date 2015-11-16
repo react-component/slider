@@ -7,7 +7,15 @@ var ReactDOM = require('react-dom');
 var Slider = require('rc-slider');
 
 var style = {width: 400, margin: 50};
-var marks = ['A','B','C','D', 'E', 'F'];
+var marks = {
+  0: 'A',
+  20: 'B',
+  40: 'C',
+  60: 'D',
+  80: 'E',
+  100: 'F'
+};
+
 var log = function(value) {
   console.log(value);
 };

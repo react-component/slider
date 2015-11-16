@@ -25,6 +25,10 @@ function pauseEvent(e) {
   e.preventDefault();
 }
 
+function isEmpty(collection) {
+  return Object.keys(collection).length === 0;
+}
+
 // This is an utility method, tries to get property, then defaultPropery with
 // special check using 'in', because propery can be '0'
 function propOrDefault(props, name, fallback) {
@@ -40,7 +44,7 @@ class Slider extends React.Component {
     let upperBound;
     let lowerBound;
     const initialValue = props.range ? [0, 0] : 0;
-    if (props.marks.length > 0) {
+    if (!isEmpty(props.marks)) {
       const index = propOrDefault(props, 'index', initialValue);
       ({lowerBound, upperBound} = this.getBoundsFromIndex(index, props));
     } else {
@@ -139,7 +143,7 @@ class Slider extends React.Component {
     pauseEvent(e);
   }
 
-  onSliderMouseDown(e) {
+  onMouseDown(e) {
     const position = getMousePosition(e);
     this.onStart(position);
     this.addDocumentEvents('mouse');
@@ -209,10 +213,10 @@ class Slider extends React.Component {
   getIndex(value) {
     const {marks, min, max, step} = this.props;
 
-    if (marks.length === 0) {
+    if (isEmpty(marks)) {
       return Math.floor((value - min) / step);
     }
-    const unit = ((max - min) / (marks.length - 1)).toFixed(5);
+    const unit = ((max - min) / (Object.keys(marks).length - 1)).toFixed(5);
     return Math.round(value / unit);
   }
 
@@ -226,6 +230,17 @@ class Slider extends React.Component {
     return {
       upperBound: this.calcValueFromIndex(indexes, props),
     };
+  }
+
+  getPoints() {
+    const {marks, step, dots, min, max} = this.props;
+    const points = new Set(Object.keys(marks));
+    if (step > 1 && dots) {
+      for (let i = min; i <= max; i = i + step) {
+        points.add(i);
+      }
+    }
+    return Array.from(points);
   }
 
   getSliderLength() {
@@ -249,7 +264,7 @@ class Slider extends React.Component {
     const {handle, lowerBound, upperBound} = state;
     const props = this.props;
     const {marks, min, max} = props;
-    const marksLen = marks.length;
+    const marksLen = Object.keys(marks).length;
     const step = (marksLen > 0) ? (max - min) / (marksLen - 1) : props.step;
 
     let val = v;
@@ -295,7 +310,7 @@ class Slider extends React.Component {
   }
 
   calcValueFromIndex(index, props) {
-    const marksLen = props.marks.length;
+    const marksLen = Object.keys(props.marks).length;
     if (marksLen > 0) {
       const value = ((props.max - props.min) / (marksLen - 1)) * (index);
       return parseFloat(value.toFixed(5));
@@ -305,7 +320,7 @@ class Slider extends React.Component {
 
   triggerEvents(event, v) {
     const props = this.props;
-    const hasMarks = (props.marks.length > 0);
+    const hasMarks = !isEmpty(props.marks);
     if (props[event]) {
       let data;
       if (hasMarks) {
@@ -352,9 +367,9 @@ class Slider extends React.Component {
 
   render() {
     const {handle, upperBound, lowerBound} = this.state;
-    const {className, prefixCls, disabled, included, dots, range,
-           marks, step, max, min, tipTransitionName, tipFormatter, children} = this.props;
-    const marksLen = marks.length;
+    const {className, prefixCls, disabled, included, range,
+           marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+    const marksLen = Object.keys(marks).length;
 
     const sliderClassName = classSet({
       [prefixCls]: true,
@@ -382,33 +397,20 @@ class Slider extends React.Component {
                  offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
     }
 
-    const upperIndex = this.getIndex(upperBound);
-
-    let steps = null;
-    if (marksLen > 0 || (step > 1 && dots)) {
-      const stepsClassName = prefixCls + '-step';
-      const stepNum = marksLen > 0 ? marksLen : Math.floor((max - min) / step) + 1;
-      steps = (<Steps className={stepsClassName} stepNum={stepNum}
-                      lowerIndex={this.getIndex(lowerBound)} upperIndex={upperIndex}
-                      included={included || range}/>);
-    }
-
-    let mark = null;
-    if (marksLen > 0) {
-      const markClassName = prefixCls + '-mark';
-      mark = (<Marks className={markClassName} marks={marks}
-                     index={upperIndex} included={included}/>);
-    }
-
+    const isIncluded = included || range;
     return (
       <div ref="slider" className={sliderClassName}
            onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
-           onMouseDown={disabled ? noop : this.onSliderMouseDown.bind(this)}>
+           onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}>
         {track}
         {upper}
         {lower}
-        {steps}
-        {mark}
+        <Steps prefixCls={prefixCls} points={this.getPoints()}
+               included={isIncluded} lowerBound={lowerBound}
+               upperBound={upperBound} max={max} min={min} />
+        <Marks className={prefixCls + '-mark'} marks={marks}
+               included={isIncluded} lowerBound={lowerBound}
+               upperBound={upperBound} max={max} min={min} />
         {children}
       </div>
     );
@@ -435,7 +437,7 @@ Slider.propTypes = {
     React.PropTypes.number,
     React.PropTypes.arrayOf(React.PropTypes.number),
   ]),
-  marks: React.PropTypes.array,
+  marks: React.PropTypes.object,
   included: React.PropTypes.bool,
   className: React.PropTypes.string,
   prefixCls: React.PropTypes.string,
@@ -455,7 +457,7 @@ Slider.defaultProps = {
   max: 100,
   step: 1,
   defaultIndex: 0,
-  marks: [],
+  marks: {},
   included: true,
   className: '',
   prefixCls: 'rc-slider',
