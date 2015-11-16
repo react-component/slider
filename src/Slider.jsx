@@ -194,15 +194,15 @@ class Slider extends React.Component {
     return Math.round(value / unit);
   }
 
-  getBoundsFromIndex(value, props) {
+  getBoundsFromIndex(indexes, props) {
     if (props.range) {
       return {
-        lowerBound: this.calcValueFromIndex(value[0], props),
-        upperBound: this.calcValueFromIndex(value[1], props),
+        lowerBound: this.calcValueFromIndex(indexes[0], props),
+        upperBound: this.calcValueFromIndex(indexes[1], props),
       };
     }
     return {
-      upperBound: this.calcValueFromIndex(value, props),
+      upperBound: this.calcValueFromIndex(indexes, props),
     };
   }
 
@@ -224,9 +224,11 @@ class Slider extends React.Component {
 
   trimAlignValue(v) {
     const state = this.state || {};
+    const {handle, lowerBound, upperBound} = state;
     const props = this.props;
     const {marks, min, max} = props;
-    const step = marks.length > 0 ? (max - min) / (marks.length - 1) : props.step;
+    const marksLen = marks.length;
+    const step = (marksLen > 0) ? (max - min) / (marksLen - 1) : props.step;
 
     let val = v;
     if (val <= min) {
@@ -235,16 +237,16 @@ class Slider extends React.Component {
     if (val >= max) {
       val = max;
     }
-    if (state.handle === 'upperBound' && val <= state.lowerBound) {
-      val = state.lowerBound;
+    if (handle === 'upperBound' && val <= lowerBound) {
+      val = lowerBound;
     }
-    if (state.handle === 'lowerBound' && val >= state.upperBound) {
-      val = state.upperBound;
+    if (handle === 'lowerBound' && val >= upperBound) {
+      val = upperBound;
     }
 
     const valModStep = (val - min) % step;
-    let alignValue = val - valModStep;
 
+    let alignValue = val - valModStep;
     if (Math.abs(valModStep) * 2 >= step) {
       alignValue += (valModStep > 0) ? step : (-step);
     }
@@ -274,8 +276,7 @@ class Slider extends React.Component {
     const marksLen = props.marks.length;
     if (marksLen > 0) {
       const value = ((props.max - props.min) / (marksLen - 1)) * (index);
-      // `'1' / 1 => 1`, to make sure that the returned value is a `Number`.
-      return value.toFixed(5) / 1;
+      return parseFloat(value.toFixed(5));
     }
     return ('value' in props ? props.value : props.defaultValue);
   }
@@ -329,9 +330,8 @@ class Slider extends React.Component {
 
   render() {
     const {handle, upperBound, lowerBound} = this.state;
-    const props = this.props;
-    const {className, prefixCls, disabled, included, isIncluded, dots, range} = props;
-    const {marks, step, max, min, tipTransitionName, tipFormatter, children} = props;
+    const {className, prefixCls, disabled, included, isIncluded, dots, range,
+           marks, step, max, min, tipTransitionName, tipFormatter, children} = this.props;
     const marksLen = marks.length;
 
     const sliderClassName = classSet({
