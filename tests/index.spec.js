@@ -8,13 +8,17 @@ var Simulate = TestUtils.Simulate;
 var $ = require('jquery');
 require('../assets/index.less');
 
+if (typeof initMochaPhantomJS === 'function') {
+  initMochaPhantomJS()
+}
+
 describe('rc-slider', function () {
   this.timeout(5000);
   var div = document.createElement('div');
   document.body.appendChild(div);
 
   afterEach(function () {
-    React.unmountComponentAtNode(div);
+    ReactDOM.unmountComponentAtNode(div);
   });
 
   it('should render a simple slider with value correctly!', function () {
