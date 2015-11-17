@@ -8,7 +8,9 @@ var Slider = require('rc-slider');
 
 var style = {width: 400, margin: 50};
 var marks = ['A','B','C','D', 'E', 'F'];
-var log = console.log.bind(console);
+var log = function(value) {
+  console.log(value);
+};
 
 ReactDOM.render(
   <div>

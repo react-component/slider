@@ -7,7 +7,9 @@ var ReactDOM = require('react-dom');
 var Slider = require('rc-slider');
 
 var style = {width: 400, margin: 50};
-var log = console.log.bind(console);
+var log = function(value) {
+  console.log(value);
+};
 
 
 function percentFormatter(v) {
