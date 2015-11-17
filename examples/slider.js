@@ -14,6 +14,23 @@ function percentFormatter(v) {
   return v + ' %';
 }
 
+var CustomizedSlider = React.createClass({
+  getInitialState: function() {
+    return {
+      value: 50
+    }
+  },
+  onChange: function(value) {
+    log(value);
+    this.setState({
+      value: value
+    });
+  },
+  render: function() {
+    return <Slider value={this.state.value} onChange={this.onChange} />;
+  }
+});
+
 ReactDOM.render(
   <div>
     <div style={style}>
@@ -35,6 +52,10 @@ ReactDOM.render(
     <div style={style}>
       <p>Controlled Slider</p>
       <Slider value={50} />
+    </div>
+    <div style={style}>
+      <p>Customized Slider</p>
+      <CustomizedSlider />
     </div>
   </div>
   , document.getElementById('__react-content'));

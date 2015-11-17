@@ -9,6 +9,23 @@ var Slider = require('rc-slider');
 var style = {width: 400, margin: 50};
 var log = console.log.bind(console);
 
+var CustomizedRange = React.createClass({
+  getInitialState: function() {
+    return {
+      value: [20, 40]
+    }
+  },
+  onChange: function(value) {
+    log(value);
+    this.setState({
+      value: value
+    });
+  },
+  render: function() {
+    return <Slider range value={this.state.value} onChange={this.onChange} />;
+  }
+});
+
 ReactDOM.render(
   <div>
     <div style={style}>
@@ -24,8 +41,12 @@ ReactDOM.render(
       <Slider range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
     <div style={style}>
-      <p>Controlled Range，`step=20, dots` </p>
+      <p>Controlled Range</p>
       <Slider range value={[20, 40]} />
+    </div>
+    <div style={style}>
+      <p>Customized Range</p>
+      <CustomizedRange />
     </div>
   </div>
   , document.getElementById('__react-content'));
