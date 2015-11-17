@@ -144,7 +144,7 @@ class Slider extends React.Component {
   }
 
   onStart(position) {
-    this.triggerEvents('onBeforeChange');
+    this.triggerEvents('onBeforeChange', this.getValue());
 
     const value = this.calcValueByPos(position);
     this.startValue = value;
