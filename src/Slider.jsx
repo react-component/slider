@@ -235,7 +235,7 @@ class Slider extends React.Component {
   getPoints() {
     const {marks, step, min, max} = this.props;
     const points = new Set(Object.keys(marks));
-    if (step > 1) {
+    if (isEmpty(marks) || step > 1) {
       for (let i = min; i <= max; i = i + step) {
         points.add(i);
       }
