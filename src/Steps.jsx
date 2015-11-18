@@ -1,28 +1,24 @@
 import React from 'react';
-import rcUtil from 'rc-util';
+import { classSet } from 'rc-util';
 
-const Steps = ({className, stepNum, included, lowerIndex, upperIndex}) => {
-  const dotClassName = className.replace('step', 'dot');
-  const unit = 100 / (stepNum - 1);
+const Steps = ({prefixCls, points, dots, included, lowerBound, upperBound, max, min}) => {
+  const range = max - min;
+  const elements = points.filter((point) => typeof point === 'string' || dots).map(parseFloat)
+          .map((point) => {
+            const offset = (point - min) / range * 100 + '%';
+            const style = { left: offset };
 
-  const elements = [];
-  for (let i = 0; i < stepNum; i++) {
-    const offset = unit * i + '%';
-    const style = { left: offset };
+            const isActived = (!included && point === upperBound) ||
+                    (included && point <= upperBound && point >= lowerBound);
+            const pointClassName = classSet({
+              [prefixCls + '-dot']: true,
+              [prefixCls + '-dot-active']: isActived,
+            });
 
-    const isActived = (included && i <= upperIndex && i >= lowerIndex ) ||
-            (!included && i === upperIndex);
-    const stepClassName = rcUtil.classSet({
-      [dotClassName]: true,
-      [dotClassName + '-active']: isActived,
-    });
+            return <span className={pointClassName} style={style} key={point} />;
+          });
 
-    elements.push(<span className={stepClassName} style={style} key={i} />);
-  }
-
-  return (<div className={className}>
-            {elements}
-          </div>);
+  return <div className={prefixCls + '-step'}>{elements}</div>;
 };
 
 export default Steps;

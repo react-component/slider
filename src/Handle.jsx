@@ -39,7 +39,7 @@ export default class Handle extends React.Component {
 
     const isTooltipVisible = dragging || this.state.isTooltipVisible;
     return (<Tooltip
-              prefixCls={className.replace('handle', 'tooltip')}
+              prefixCls={className.replace('slider-handle', 'tooltip')}
               placement="top"
               visible={isTooltipVisible}
               overlay={<span>{tipFormatter ? tipFormatter(value) : value}</span>}
