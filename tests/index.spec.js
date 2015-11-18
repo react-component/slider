@@ -52,17 +52,17 @@ describe('rc-slider', function () {
 
   it('should render a slider with marks correctly!', function () {
     var slider = ReactDOM.render(
-      <Slider marks={["一","二","三","四","五"]} defaultIndex={3} />,
+      <Slider marks={{0: "一", 20: "二", 40: "三", 60: "四", 100: "五"}} defaultValue={40} />,
       div
     );
     var node = $(div);
     expect(node.find('.rc-slider').length).to.be(1);
     expect(node.find('.rc-slider-handle').length).to.be(1);
     expect(node.find('.rc-slider-track').length).to.be(1);
-    expect(node.find('.rc-slider-dot').length).to.be(slider.props.marks.length);
+    expect(node.find('.rc-slider-dot').length).to.be(Object.keys(slider.props.marks).length);
     expect(node.find('.rc-slider-mark').length).to.be(1);
-    expect(node.find('.rc-slider-mark-text').length).to.be(slider.props.marks.length);
-    expect(slider.getIndex(slider.state.upperBound)).to.be(3);
+    expect(node.find('.rc-slider-mark-text').length).to.be(Object.keys(slider.props.marks).length);
+    expect(slider.state.upperBound).to.be(40);
   });
 
   // it('should mouseDown works!', function (done) {
