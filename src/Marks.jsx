@@ -17,13 +17,7 @@ const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) =
     });
 
     const style = { width: markWidth };
-    if (point === marksCount - 1) {
-      style.right = -unit / 4 + '%';
-    } else if (point === 0) {
-      style.left = -unit / 4 + '%';
-    } else {
-      style.left = (point - min) / range * 100 - unit / 4 + '%';
-    }
+    style.left = (point - min) / range * 100 - unit / 4 + '%';
 
     return (<span className={markClassName} style={style} key={point}>
              {marks[point]}
