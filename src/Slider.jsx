@@ -182,6 +182,9 @@ class Slider extends React.Component {
       recent: valueNeedChanging,
     });
 
+    const oldValue = state[valueNeedChanging];
+    if (value === oldValue) return;
+
     const props = this.props;
     // If it is not controlled component
     if (!('value' in props) && !('index' in props)) {
