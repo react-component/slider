@@ -8,12 +8,10 @@ var Slider = require('rc-slider');
 
 var style = {width: 400, margin: 50};
 var marks = {
-  0: 'A',
-  20: 'B',
-  40: 'C',
-  60: 'D',
-  80: 'E',
-  100: 'F'
+  0: '0°C',
+  26: '26°C',
+  37: '37°C',
+  100: '100°C'
 };
 
 var log = function(value) {
@@ -24,29 +22,29 @@ ReactDOM.render(
   <div>
     <div style={style}>
       <p>Slider with marks, `included=true`</p>
-      <Slider marks={marks} onChange={log} defaultIndex={1} />
+      <Slider marks={marks} onChange={log} defaultValue={20} />
     </div>
     <div style={style}>
       <p>Slider with marks and steps, `included=true`</p>
-      <Slider marks={marks} step={10} onChange={log} defaultIndex={1} />
+      <Slider marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
 
     <div style={style}>
       <p>Slider with marks, `included=false`</p>
-      <Slider marks={marks} included={false} defaultIndex={1} />
+      <Slider marks={marks} included={false} defaultValue={20} />
     </div>
     <div style={style}>
       <p>Slider with marks and steps, `included=false`</p>
-      <Slider marks={marks} step={10} included={false} defaultIndex={1} />
+      <Slider marks={marks} step={10} included={false} defaultValue={20} />
     </div>
 
     <div style={style}>
       <p>Range with marks</p>
-      <Slider range marks={marks} onChange={log} defaultIndex={[1,2]} />
+    <Slider range marks={marks} onChange={log} defaultValue={[20, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider range marks={marks} step={10} onChange={log} defaultIndex={[1,2]} />
+      <Slider range marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
     </div>
   </div>
   , document.getElementById('__react-content'));
