@@ -88,19 +88,17 @@ class Slider extends React.Component {
     const props = this.props;
     const isNotControlled = !('value' in props);
     if (isNotControlled) {
-      this.setState({[handle]: value}, () => {
-        props.onChange(this.getValue());
-      });
-    } else {
-      const state = this.state;
-      const data = {
-        upperBound: state.upperBound,
-        lowerBound: state.lowerBound,
-      };
-      data[handle] = value;
-      const changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
-      props.onChange(changedValue);
+      this.setState({[handle]: value});
     }
+
+    const state = this.state;
+    const data = {
+      upperBound: state.upperBound,
+      lowerBound: state.lowerBound,
+    };
+    data[handle] = value;
+    const changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
+    props.onChange(changedValue);
   }
 
   onMouseMove(e) {
