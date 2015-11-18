@@ -28,7 +28,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Slider with marks and steps, `included=true`</p>
-      <Slider marks={marks} step={10} defaultIndex={1} />
+      <Slider marks={marks} step={10} onChange={log} defaultIndex={1} />
     </div>
 
     <div style={style}>
@@ -46,7 +46,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider range marks={marks} step={10} defaultIndex={[1,2]} />
+      <Slider range marks={marks} step={10} onChange={log} defaultIndex={[1,2]} />
     </div>
   </div>
   , document.getElementById('__react-content'));

@@ -127,10 +127,10 @@ class Slider extends React.Component {
     // If it is not controlled component
     if (!('value' in props) && !('index' in props)) {
       this.setState({[state.handle]: value}, () => {
-        this.triggerEvents('onChange', this.getValue());
+        props.onChange(this.getValue());
       });
     } else {
-      this.triggerEvents('onChange', this.getChangedValue(state.handle, value));
+      props.onChange(this.getChangedValue(state.handle, value));
     }
   }
 
@@ -151,7 +151,8 @@ class Slider extends React.Component {
   }
 
   onStart(position) {
-    this.triggerEvents('onBeforeChange', this.getValue());
+    const props = this.props;
+    props.onBeforeChange(this.getValue());
 
     const value = this.calcValueByPos(position);
     this.startValue = value;
@@ -185,16 +186,15 @@ class Slider extends React.Component {
     const oldValue = state[valueNeedChanging];
     if (value === oldValue) return;
 
-    const props = this.props;
     // If it is not controlled component
     if (!('value' in props) && !('index' in props)) {
       this.setState({
         [valueNeedChanging]: value,
       }, () => {
-        this.triggerEvents('onChange', this.getValue());
+        props.onChange(this.getValue());
       });
     } else {
-      this.triggerEvents('onChange', this.getChangedValue(valueNeedChanging, value));
+      props.onChange(this.getChangedValue(valueNeedChanging, value));
     }
   }
 
@@ -315,26 +315,6 @@ class Slider extends React.Component {
     return ('value' in props ? props.value : props.defaultValue);
   }
 
-  triggerEvents(event, v) {
-    const props = this.props;
-    const hasMarks = !isEmpty(props.marks);
-    if (props[event]) {
-      let data;
-      if (hasMarks) {
-        if (props.range) {
-          data = v.map(bound => this.getIndex(bound));
-        } else {
-          data = this.getIndex(v);
-        }
-      } else if (v === undefined) {
-        data = this.state.value;
-      } else {
-        data = v;
-      }
-      props[event](data);
-    }
-  }
-
   addDocumentEvents(type) {
     if (type === 'touch') {
       // just work for chrome iOS Safari and Android Browser
@@ -358,7 +338,7 @@ class Slider extends React.Component {
 
   end(type) {
     this.removeEventons(type);
-    this.triggerEvents('onAfterChange', this.getValue());
+    this.props.onAfterChange(this.getValue());
     this.setState({handle: null});
   }
 
@@ -450,16 +430,19 @@ Slider.propTypes = {
 };
 
 Slider.defaultProps = {
+  prefixCls: 'rc-slider',
+  className: '',
+  tipTransitionName: '',
   min: 0,
   max: 100,
   step: 1,
-  defaultIndex: 0,
+  defaultIndex: 0, // TODO
   marks: {},
+  onBeforeChange: noop,
+  onChange: noop,
+  onAfterChange: noop,
   included: true,
-  className: '',
-  prefixCls: 'rc-slider',
   disabled: false,
-  tipTransitionName: '',
   dots: false,
   range: false,
 };
