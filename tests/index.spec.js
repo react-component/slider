@@ -8,10 +8,6 @@ var Simulate = TestUtils.Simulate;
 var $ = require('jquery');
 require('../assets/index.less');
 
-if (typeof initMochaPhantomJS === 'function') {
-  initMochaPhantomJS()
-}
-
 describe('rc-slider', function () {
   this.timeout(5000);
   var div = document.createElement('div');

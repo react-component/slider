@@ -120,10 +120,13 @@ class Slider extends React.Component {
     const oldValue = state[state.handle];
     if (value === oldValue) return;
 
+    // If it is not controlled component
     if (!('value' in props) && !('index' in props)) {
       this.setState({[state.handle]: value}, () => {
         this.triggerEvents('onChange', this.getValue());
       });
+    } else {
+      this.triggerEvents('onChange', this.getChangedValue(state.handle, value));
     }
   }
 
@@ -144,7 +147,7 @@ class Slider extends React.Component {
   }
 
   onStart(position) {
-    this.triggerEvents('onBeforeChange');
+    this.triggerEvents('onBeforeChange', this.getValue());
 
     const value = this.calcValueByPos(position);
     this.startValue = value;
@@ -173,15 +176,34 @@ class Slider extends React.Component {
     this.setState({
       handle: valueNeedChanging,
       recent: valueNeedChanging,
-      [valueNeedChanging]: value,
-    }, () => {
-      this.triggerEvents('onChange', this.getValue());
     });
+
+    const props = this.props;
+    // If it is not controlled component
+    if (!('value' in props) && !('index' in props)) {
+      this.setState({
+        [valueNeedChanging]: value,
+      }, () => {
+        this.triggerEvents('onChange', this.getValue());
+      });
+    } else {
+      this.triggerEvents('onChange', this.getChangedValue(valueNeedChanging, value));
+    }
   }
 
   getValue() {
     const {lowerBound, upperBound} = this.state;
     return this.props.range ? [lowerBound, upperBound] : upperBound;
+  }
+
+  getChangedValue(valueNeedChanging, value) {
+    const state = this.state;
+    const data = {
+      upperBound: state.upperBound,
+      lowerBound: state.lowerBound,
+    };
+    data[valueNeedChanging] = value;
+    return this.props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
   }
 
   getIndex(value) {
