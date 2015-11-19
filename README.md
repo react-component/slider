@@ -89,10 +89,16 @@ ReactDOM.render(<Rcslider />, container);
           <td>The maximum value of the slider</td>
         </tr>
         <tr>
+          <td>marks</td>
+          <td>object {number: string}</td>
+          <td>{}</td>
+          <td>Mark on the slider. The key determines the position, and the value determines what will show.</td>
+        </tr>
+        <tr>
           <td>step</td>
-          <td>number</td>
+          <td>number or `null`</td>
           <td>1</td>
-          <td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. max - min should be evenly divisible by the step value.</td>
+          <td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. max - min should be evenly divisible by the step value. When `marks` is not an empty object, `step` can be set to `null`, to make marks as steps.</td>
         </tr>
         <tr>
           <td>range</td>
@@ -113,34 +119,16 @@ ReactDOM.render(<Rcslider />, container);
           <td>Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
         </tr>
         <tr>
-          <td>marks</td>
-          <td>array</td>
-          <td>[]</td>
-          <td>Mark every step for the slider, it will ignore the `step` parameter if it has been defined. Does not work with `range`</td>
-        </tr>
-        <tr>
           <td>included</td>
           <td>boolean</td>
           <td>true</td>
           <td>If the value is `true`, it means a continuous value interval, otherwise, it is a independent value.</td>
         </tr>
         <tr>
-          <td>defaultIndex</td>
-          <td>number</td>
-          <td>0</td>
-          <td>For step or marks slider, determines the initial position of the handle. Does not work with `range`</td>
-        </tr>
-        <tr>
-          <td>index</td>
-          <td>number</td>
-          <td></td>
-          <td>For step or marks slider, determines current position of the handle. Does not work with `range`</td>
-        </tr>
-        <tr>
           <td>disabled</td>
           <td>boolean</td>
           <td>false</td>
-          <td>If true the handles can't be moved.</td>
+          <td>If `true`, handles can't be moved.</td>
         </tr>
         <tr>
           <td>tipTransitionName</td>
@@ -150,7 +138,7 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>tipFormatter</td>
-          <td>func</td>
+          <td>function</td>
           <td></td>
           <td>Format the value of the tooltip if it shows.</td>
         </tr>
@@ -158,7 +146,7 @@ ReactDOM.render(<Rcslider />, container);
           <td>dots</td>
           <td>bool</td>
           <td>false</td>
-          <td>For linear slider, when the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider bar with dots.</td>
+          <td>When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots.</td>
         </tr>
     </tbody>
 </table>
