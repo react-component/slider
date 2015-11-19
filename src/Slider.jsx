@@ -25,10 +25,6 @@ function pauseEvent(e) {
   e.preventDefault();
 }
 
-function isEmpty(collection) {
-  return Object.keys(collection).length === 0;
-}
-
 class Slider extends React.Component {
   constructor(props) {
     super(props);
@@ -194,7 +190,7 @@ class Slider extends React.Component {
   getPoints() {
     const {marks, step, min, max} = this.props;
     const points = Object.keys(marks);
-    if (isEmpty(marks) || step > 1) {
+    if (step !== null) {
       for (let i = min; i <= max; i = i + step) {
         points.push(i);
       }
@@ -291,9 +287,8 @@ class Slider extends React.Component {
 
   render() {
     const {handle, upperBound, lowerBound} = this.state;
-    const {className, prefixCls, disabled, dots, included, range,
+    const {className, prefixCls, disabled, dots, included, range, step,
            marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
-    const marksCount = Object.keys(marks).length;
 
     const sliderClassName = classSet({
       [prefixCls]: true,
@@ -311,7 +306,7 @@ class Slider extends React.Component {
     }
 
     const handleClassName = prefixCls + '-handle';
-    const isNoTip = (marksCount > 0) && !tipFormatter;
+    const isNoTip = (step === null) && !tipFormatter;
     const upper = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip} tipFormatter={tipFormatter}
                      offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
 
