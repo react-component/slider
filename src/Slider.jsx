@@ -2,7 +2,7 @@ import React from 'react';
 import {Dom as DomUtils, classSet} from 'rc-util';
 import Track from './Track';
 import Handle from './Handle';
-import Steps from './Steps';
+import Dots from './Dots';
 import Marks from './Marks';
 
 function noop() {
@@ -187,17 +187,6 @@ class Slider extends React.Component {
     return this.props.range ? [lowerBound, upperBound] : upperBound;
   }
 
-  getPoints() {
-    const {marks, step, min, max} = this.props;
-    const points = Object.keys(marks);
-    if (step !== null) {
-      for (let i = min; i <= max; i = i + step) {
-        points.push(i);
-      }
-    }
-    return points;
-  }
-
   getSliderLength() {
     const slider = this.refs.slider;
     if (!slider) {
@@ -217,7 +206,7 @@ class Slider extends React.Component {
   trimAlignValue(v) {
     const state = this.state || {};
     const {handle, lowerBound, upperBound} = state;
-    const {min, max} = this.props;
+    const {marks, step, min, max} = this.props;
 
     let val = v;
     if (val <= min) {
@@ -233,7 +222,12 @@ class Slider extends React.Component {
       val = upperBound;
     }
 
-    const points = this.getPoints().map(parseFloat);
+    const points = Object.keys(marks).map(parseFloat);
+    if (step !== null) {
+      const closestStep = Math.round(val / step) * step;
+      points.push(closestStep);
+    }
+
     const diffs = points.map((point) => Math.abs(val - point));
     const closestPoint = points[diffs.indexOf(Math.min.apply(Math, diffs))];
 
@@ -269,7 +263,7 @@ class Slider extends React.Component {
     }
   }
 
-  removeEventons(type) {
+  removeEvents(type) {
     if (type === 'touch') {
       this.onTouchMoveListener.remove();
       this.onTouchUpListener.remove();
@@ -280,7 +274,7 @@ class Slider extends React.Component {
   }
 
   end(type) {
-    this.removeEventons(type);
+    this.removeEvents(type);
     this.props.onAfterChange(this.getValue());
     this.setState({handle: null});
   }
@@ -290,43 +284,40 @@ class Slider extends React.Component {
     const {className, prefixCls, disabled, dots, included, range, step,
            marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
 
+    const upperOffset = this.calcOffset(upperBound);
+    const lowerOffset = this.calcOffset(lowerBound);
+
+    const handleClassName = prefixCls + '-handle';
+    const isNoTip = (step === null) && !tipFormatter;
+
+    const upper = (<Handle className={handleClassName}
+                           noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
+                           offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
+
+    let lower = null;
+    if (range) {
+      lower = (<Handle className={handleClassName}
+                       noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
+                       offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
+    }
+
     const sliderClassName = classSet({
       [prefixCls]: true,
       [prefixCls + '-disabled']: disabled,
       [className]: !!className,
     });
-
-    const upperOffset = this.calcOffset(upperBound);
-    const lowerOffset = this.calcOffset(lowerBound);
-
-    let track = null;
-    if (included || range) {
-      const trackClassName = prefixCls + '-track';
-      track = <Track className={trackClassName} offset={lowerOffset} length={upperOffset - lowerOffset}/>;
-    }
-
-    const handleClassName = prefixCls + '-handle';
-    const isNoTip = (step === null) && !tipFormatter;
-    const upper = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip} tipFormatter={tipFormatter}
-                     offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
-
-    let lower = null;
-    if (range) {
-      lower = (<Handle className={handleClassName} tipTransitionName={tipTransitionName} noTip={isNoTip} tipFormatter={tipFormatter}
-                 offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
-    }
-
     const isIncluded = included || range;
     return (
       <div ref="slider" className={sliderClassName}
            onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
            onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}>
-        {track}
         {upper}
         {lower}
-        <Steps prefixCls={prefixCls} points={this.getPoints()} dots={dots}
-               included={isIncluded} lowerBound={lowerBound}
-               upperBound={upperBound} max={max} min={min} />
+        <Track className={prefixCls + '-track'} included={isIncluded}
+               offset={lowerOffset} length={upperOffset - lowerOffset}/>
+        <Dots prefixCls={prefixCls} marks={marks} dots={dots} step={step}
+              included={isIncluded} lowerBound={lowerBound}
+              upperBound={upperBound} max={max} min={min} />
         <Marks className={prefixCls + '-mark'} marks={marks}
                included={isIncluded} lowerBound={lowerBound}
                upperBound={upperBound} max={max} min={min} />
