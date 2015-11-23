@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@2.3.2 - slider ui component for react</title>
+  <title>rc-slider@3.1.2 - slider ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,14 +737,18 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@2.3.2</h1>
+  <h1>rc-slider@3.1.2</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
   <div class="examples-body">
     <ul>
       
-      <li><a href="examples/simple.html">simple</a></li>
+      <li><a href="examples/marks.html">marks</a></li>
+      
+      <li><a href="examples/range.html">range</a></li>
+      
+      <li><a href="examples/slider.html">slider</a></li>
       
     </ul>
   </div>
@@ -801,10 +805,16 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
           <td>The maximum value of the slider</td>
         </tr>
         <tr>
+          <td>marks</td>
+          <td>object {number: string}</td>
+          <td>{}</td>
+          <td>Mark on the slider. The key determines the position, and the value determines what will show.</td>
+        </tr>
+        <tr>
           <td>step</td>
-          <td>number</td>
+          <td>number or <code>null</code></td>
           <td>1</td>
-          <td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. max - min should be evenly divisible by the step value.</td>
+          <td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. max - min should be evenly divisible by the step value. When <code>marks</code> is not an empty object, <code>step</code> can be set to <code>null</code>, to make marks as steps.</td>
         </tr>
         <tr>
           <td>range</td>
@@ -825,34 +835,16 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
           <td>Set current positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number]</code></td>
         </tr>
         <tr>
-          <td>marks</td>
-          <td>array</td>
-          <td>[]</td>
-          <td>Mark every step for the slider, it will ignore the <code>step</code> parameter if it has been defined. Does not work with <code>range</code></td>
-        </tr>
-        <tr>
           <td>included</td>
           <td>boolean</td>
           <td>true</td>
           <td>If the value is <code>true</code>, it means a continuous value interval, otherwise, it is a independent value.</td>
         </tr>
         <tr>
-          <td>defaultIndex</td>
-          <td>number</td>
-          <td>0</td>
-          <td>For step or marks slider, determines the initial position of the handle. Does not work with <code>range</code></td>
-        </tr>
-        <tr>
-          <td>index</td>
-          <td>number</td>
-          <td></td>
-          <td>For step or marks slider, determines current position of the handle. Does not work with <code>range</code></td>
-        </tr>
-        <tr>
           <td>disabled</td>
           <td>boolean</td>
           <td>false</td>
-          <td>If true the handles can&#39;t be moved.</td>
+          <td>If <code>true</code>, handles can&#39;t be moved.</td>
         </tr>
         <tr>
           <td>tipTransitionName</td>
@@ -862,7 +854,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
         </tr>
         <tr>
           <td>tipFormatter</td>
-          <td>func</td>
+          <td>function</td>
           <td></td>
           <td>Format the value of the tooltip if it shows.</td>
         </tr>
@@ -870,7 +862,7 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
           <td>dots</td>
           <td>bool</td>
           <td>false</td>
-          <td>For linear slider, when the <code>step</code> value is greater than 1, you can set the <code>dots</code> to  <code>true</code> if you want to render the slider bar with dots.</td>
+          <td>When the <code>step</code> value is greater than 1, you can set the <code>dots</code> to  <code>true</code> if you want to render the slider with dots.</td>
         </tr>
     </tbody>
 </table>

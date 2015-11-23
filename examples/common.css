@@ -101,52 +101,6 @@
 .rc-slider-disabled .rc-slider-dot {
   cursor: not-allowed !important;
 }
-.rc-slider-tooltip {
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-  z-index: 4;
-  visibility: visible;
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-.rc-slider-tooltip * {
-  box-sizing: border-box;
-  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
-}
-.rc-slider-tooltip-hidden {
-  display: none;
-}
-.rc-slider-tooltip-placement-top {
-  padding: 4px 0 8px 0;
-}
-.rc-slider-tooltip-inner {
-  padding: 6px 2px;
-  min-width: 24px;
-  height: 24px;
-  font-size: 12px;
-  line-height: 1;
-  color: #fff;
-  text-align: center;
-  text-decoration: none;
-  background-color: #6c6c6c;
-  border-radius: 6px;
-  box-shadow: 0 0 4px #d9d9d9;
-}
-.rc-slider-tooltip-arrow {
-  position: absolute;
-  width: 0;
-  height: 0;
-  border-color: transparent;
-  border-style: solid;
-}
-.rc-slider-tooltip-placement-top .rc-slider-tooltip-arrow {
-  bottom: 4px;
-  left: 50%;
-  margin-left: -4px;
-  border-width: 4px 4px 0;
-  border-top-color: #6c6c6c;
-}
 .rc-slider-tooltip-zoom-down-enter,
 .rc-slider-tooltip-zoom-down-appear {
   -webkit-animation-duration: .3s;
@@ -251,5 +205,51 @@
             transform: scale(0, 0);
   }
 }
+.rc-tooltip {
+  position: absolute;
+  left: -9999px;
+  top: -9999px;
+  z-index: 4;
+  visibility: visible;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-tooltip * {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+.rc-tooltip-hidden {
+  display: none;
+}
+.rc-tooltip-placement-top {
+  padding: 4px 0 8px 0;
+}
+.rc-tooltip-inner {
+  padding: 6px 2px;
+  min-width: 24px;
+  height: 24px;
+  font-size: 12px;
+  line-height: 1;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+  background-color: #6c6c6c;
+  border-radius: 6px;
+  box-shadow: 0 0 4px #d9d9d9;
+}
+.rc-tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+}
+.rc-tooltip-placement-top .rc-tooltip-arrow {
+  bottom: 4px;
+  left: 50%;
+  margin-left: -4px;
+  border-width: 4px 4px 0;
+  border-top-color: #6c6c6c;
+}
 
-/*# sourceMappingURL=simple.css.map*/
+/*# sourceMappingURL=common.css.map*/
