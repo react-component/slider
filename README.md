@@ -148,6 +148,18 @@ ReactDOM.render(<Rcslider />, container);
           <td>false</td>
           <td>When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots.</td>
         </tr>
+        <tr>
+          <td>onChange</td>
+          <td>function</td>
+          <td>NOOP</td>
+          <td>`onChange` will be triggered while the value of Slider changing.</td>
+        </tr>
+        <tr>
+          <td>onAfterChange</td>
+          <td>function</td>
+          <td>NOOP</td>
+          <td>`onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered.</td>
+        </tr>
     </tbody>
 </table>
 
