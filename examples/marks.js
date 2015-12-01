@@ -1,23 +1,21 @@
-'use strict';
-
 require('rc-slider/assets/index.less');
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Slider = require('rc-slider');
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Slider = require('rc-slider');
 
-var style = {width: 400, margin: 50};
-var marks = {
+const style = {width: 400, margin: 50};
+const marks = {
   '-10': '-10°C',
   0: '0°C',
   26: '26°C',
   37: '37°C',
-  100: '100°C'
+  100: '100°C',
 };
 
-var log = function(value) {
+function log(value) {
   console.log(value);
-};
+}
 
 ReactDOM.render(
   <div>
