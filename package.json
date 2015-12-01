@@ -39,7 +39,6 @@
   },
   "devDependencies": {
     "expect.js": "0.3.x",
-    "jquery": "^1.11.2",
     "pre-commit": "1.x",
     "rc-server": "3.x",
     "rc-tools": "4.x",
