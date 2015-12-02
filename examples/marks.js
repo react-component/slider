@@ -26,9 +26,9 @@ webpackJsonp([0],[
 	  100: '100°C'
 	};
 	
-	var log = function log(value) {
+	function log(value) {
 	  console.log(value);
-	};
+	}
 	
 	ReactDOM.render(React.createElement(
 	  'div',

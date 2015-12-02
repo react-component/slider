@@ -3,12 +3,12 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(213);
+	module.exports = __webpack_require__(220);
 
 
 /***/ },
 
-/***/ 213:
+/***/ 220:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20,9 +20,10 @@ webpackJsonp([1],{
 	var Slider = __webpack_require__(161);
 	
 	var style = { width: 400, margin: 50 };
-	var log = function log(value) {
+	
+	function log(value) {
 	  console.log(value);
-	};
+	}
 	
 	var CustomizedRange = React.createClass({
 	  displayName: 'CustomizedRange',
