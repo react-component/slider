@@ -1,5 +1,6 @@
 import React from 'react';
-import {Dom as DomUtils, classSet} from 'rc-util';
+import {Dom as DomUtils} from 'rc-util';
+import classNames from 'classnames';
 import Track from './Track';
 import Handle from './Handle';
 import Dots from './Dots';
@@ -311,7 +312,7 @@ class Slider extends React.Component {
                        offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
     }
 
-    const sliderClassName = classSet({
+    const sliderClassName = classNames({
       [prefixCls]: true,
       [prefixCls + '-disabled']: disabled,
       [className]: !!className,

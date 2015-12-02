@@ -1,5 +1,5 @@
 import React from 'react';
-import { classSet } from 'rc-util';
+import classNames from 'classnames';
 
 function calcPoints(marks, dots, step, min, max) {
   const points = Object.keys(marks).map(parseFloat);
@@ -19,7 +19,7 @@ const Dots = ({prefixCls, marks, dots, step, included, lowerBound, upperBound, m
 
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
-    const pointClassName = classSet({
+    const pointClassName = classNames({
       [prefixCls + '-dot']: true,
       [prefixCls + '-dot-active']: isActived,
     });

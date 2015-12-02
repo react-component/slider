@@ -1,5 +1,5 @@
 import React from 'react';
-import rcUtil from 'rc-util';
+import classNames from 'classnames';
 
 const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) => {
   const marksKeys = Object.keys(marks);
@@ -11,7 +11,7 @@ const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) =
   const elements = marksKeys.map(parseFloat).map((point) => {
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
-    const markClassName = rcUtil.classSet({
+    const markClassName = classNames({
       [className + '-text']: true,
       [className + '-text-active']: isActived,
     });
