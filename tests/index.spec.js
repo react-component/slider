@@ -106,7 +106,7 @@ describe('rc-slider', function() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-mark-text')[1].innerHTML).to.be('30');
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-mark-text')[2].innerHTML).to.be('100');
 
-    const range = ReactDOM.render(<Slider range value={30} marks={marks} />, div);
+    const range = ReactDOM.render(<Slider range value={[0, 30]} marks={marks} />, div);
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-mark-text').length).to.be(3);
   });
 

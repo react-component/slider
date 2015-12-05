@@ -1,6 +1,7 @@
 import React from 'react';
 import {Dom as DomUtils} from 'rc-util';
 import classNames from 'classnames';
+import objectAssign from 'object-assign';
 import Track from './Track';
 import Handle from './Handle';
 import Dots from './Dots';
@@ -66,18 +67,34 @@ class Slider extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
+
+    const {lowerBound, upperBound} = this.state;
     if (nextProps.range) {
       const value = nextProps.value;
-      if (value) {
-        this.setState({
-          upperBound: value[1],
-          lowerBound: value[0],
-        });
-      }
-    } else if ('value' in nextProps) {
+      const nextUpperBound = this.trimAlignValue(value[1], nextProps);
+      const nextLowerBound = this.trimAlignValue(value[0], nextProps);
+      if (nextLowerBound === lowerBound && nextUpperBound === upperBound) return;
+
       this.setState({
-        upperBound: nextProps.value,
+        upperBound: nextUpperBound,
+        lowerBound: nextLowerBound,
       });
+      if (this.isValueOutOfBounds(upperBound, nextProps) ||
+          this.isValueOutOfBounds(lowerBound, nextProps)) {
+        this.props.onChange([nextLowerBound, nextUpperBound]);
+      }
+    } else {
+      const nextValue = this.trimAlignValue(nextProps.value, nextProps);
+      if (nextValue === upperBound && lowerBound === nextProps.min) return;
+
+      this.setState({
+        upperBound: nextValue,
+        lowerBound: nextProps.min,
+      });
+      if (this.isValueOutOfBounds(upperBound, nextProps)) {
+        this.props.onChange(nextValue);
+      }
     }
   }
 
@@ -214,10 +231,14 @@ class Slider extends React.Component {
     return precision;
   }
 
-  trimAlignValue(v) {
+  isValueOutOfBounds(value, props) {
+    return value < props.min || value > props.max;
+  }
+
+  trimAlignValue(v, nextProps) {
     const state = this.state || {};
     const {handle, lowerBound, upperBound} = state;
-    const {marks, step, min, max} = this.props;
+    const {marks, step, min, max} = objectAssign({}, this.props, nextProps || {});
 
     let val = v;
     if (val <= min) {

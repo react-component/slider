@@ -19,16 +19,38 @@ const CustomizedSlider = React.createClass({
   getInitialState: function() {
     return {
       value: 50,
+      min: 0,
+      max: 100,
     };
   },
-  onChange: function(value) {
+  onSliderChange: function(value) {
     log(value);
     this.setState({
       value: value,
     });
   },
+  onMinChange: function(e) {
+    this.setState({
+      min: +e.target.value || 0,
+    });
+  },
+  onMaxChange: function(e) {
+    this.setState({
+      max: +e.target.value || 100,
+    });
+  },
   render: function() {
-    return <Slider value={this.state.value} onChange={this.onChange} />;
+    return (
+      <div>
+        <label>Min: </label>
+        <input type="number" value={this.state.min} onChange={this.onMinChange} />
+        <br />
+        <label>Max: </label>
+        <input type="number" value={this.state.max} onChange={this.onMaxChange} />
+        <br /><br />
+        <Slider value={this.state.value} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+      </div>
+    );
   },
 });
 
