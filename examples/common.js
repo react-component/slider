@@ -19734,19 +19734,23 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _Track = __webpack_require__(188);
+	var _objectAssign2 = __webpack_require__(188);
+	
+	var _objectAssign3 = _interopRequireDefault(_objectAssign2);
+	
+	var _Track = __webpack_require__(189);
 	
 	var _Track2 = _interopRequireDefault(_Track);
 	
-	var _Handle = __webpack_require__(189);
+	var _Handle = __webpack_require__(190);
 	
 	var _Handle2 = _interopRequireDefault(_Handle);
 	
-	var _Dots = __webpack_require__(218);
+	var _Dots = __webpack_require__(219);
 	
 	var _Dots2 = _interopRequireDefault(_Dots);
 	
-	var _Marks = __webpack_require__(219);
+	var _Marks = __webpack_require__(220);
 	
 	var _Marks2 = _interopRequireDefault(_Marks);
 	
@@ -19818,18 +19822,36 @@
 	  _createClass(Slider, [{
 	    key: 'componentWillReceiveProps',
 	    value: function componentWillReceiveProps(nextProps) {
+	      if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
+	
+	      var _state = this.state;
+	      var lowerBound = _state.lowerBound;
+	      var upperBound = _state.upperBound;
+	
 	      if (nextProps.range) {
 	        var value = nextProps.value;
-	        if (value) {
-	          this.setState({
-	            upperBound: value[1],
-	            lowerBound: value[0]
-	          });
-	        }
-	      } else if ('value' in nextProps) {
+	        var nextUpperBound = this.trimAlignValue(value[1], nextProps);
+	        var nextLowerBound = this.trimAlignValue(value[0], nextProps);
+	        if (nextLowerBound === lowerBound && nextUpperBound === upperBound) return;
+	
 	        this.setState({
-	          upperBound: nextProps.value
+	          upperBound: nextUpperBound,
+	          lowerBound: nextLowerBound
 	        });
+	        if (this.isValueOutOfBounds(upperBound, nextProps) || this.isValueOutOfBounds(lowerBound, nextProps)) {
+	          this.props.onChange([nextLowerBound, nextUpperBound]);
+	        }
+	      } else {
+	        var nextValue = this.trimAlignValue(nextProps.value, nextProps);
+	        if (nextValue === upperBound && lowerBound === nextProps.min) return;
+	
+	        this.setState({
+	          upperBound: nextValue,
+	          lowerBound: nextProps.min
+	        });
+	        if (this.isValueOutOfBounds(upperBound, nextProps)) {
+	          this.props.onChange(nextValue);
+	        }
 	      }
 	    }
 	  }, {
@@ -19945,9 +19967,9 @@
 	  }, {
 	    key: 'getValue',
 	    value: function getValue() {
-	      var _state = this.state;
-	      var lowerBound = _state.lowerBound;
-	      var upperBound = _state.upperBound;
+	      var _state2 = this.state;
+	      var lowerBound = _state2.lowerBound;
+	      var upperBound = _state2.upperBound;
 	
 	      return this.props.range ? [lowerBound, upperBound] : upperBound;
 	    }
@@ -19981,17 +20003,24 @@
 	      return precision;
 	    }
 	  }, {
+	    key: 'isValueOutOfBounds',
+	    value: function isValueOutOfBounds(value, props) {
+	      return value < props.min || value > props.max;
+	    }
+	  }, {
 	    key: 'trimAlignValue',
-	    value: function trimAlignValue(v) {
+	    value: function trimAlignValue(v, nextProps) {
 	      var state = this.state || {};
 	      var handle = state.handle;
 	      var lowerBound = state.lowerBound;
 	      var upperBound = state.upperBound;
-	      var _props = this.props;
-	      var marks = _props.marks;
-	      var step = _props.step;
-	      var min = _props.min;
-	      var max = _props.max;
+	
+	      var _objectAssign = (0, _objectAssign3['default'])({}, this.props, nextProps || {});
+	
+	      var marks = _objectAssign.marks;
+	      var step = _objectAssign.step;
+	      var min = _objectAssign.min;
+	      var max = _objectAssign.max;
 	
 	      var val = v;
 	      if (val <= min) {
@@ -20023,9 +20052,9 @@
 	  }, {
 	    key: 'calcOffset',
 	    value: function calcOffset(value) {
-	      var _props2 = this.props;
-	      var min = _props2.min;
-	      var max = _props2.max;
+	      var _props = this.props;
+	      var min = _props.min;
+	      var max = _props.max;
 	
 	      var ratio = (value - min) / (max - min);
 	      return ratio * 100;
@@ -20033,9 +20062,9 @@
 	  }, {
 	    key: 'calcValue',
 	    value: function calcValue(offset) {
-	      var _props3 = this.props;
-	      var min = _props3.min;
-	      var max = _props3.max;
+	      var _props2 = this.props;
+	      var min = _props2.min;
+	      var max = _props2.max;
 	
 	      var ratio = offset / this.getSliderLength();
 	      return ratio * (max - min) + min;
@@ -20082,24 +20111,24 @@
 	    value: function render() {
 	      var _classNames;
 	
-	      var _state2 = this.state;
-	      var handle = _state2.handle;
-	      var upperBound = _state2.upperBound;
-	      var lowerBound = _state2.lowerBound;
-	      var _props4 = this.props;
-	      var className = _props4.className;
-	      var prefixCls = _props4.prefixCls;
-	      var disabled = _props4.disabled;
-	      var dots = _props4.dots;
-	      var included = _props4.included;
-	      var range = _props4.range;
-	      var step = _props4.step;
-	      var marks = _props4.marks;
-	      var max = _props4.max;
-	      var min = _props4.min;
-	      var tipTransitionName = _props4.tipTransitionName;
-	      var tipFormatter = _props4.tipFormatter;
-	      var children = _props4.children;
+	      var _state3 = this.state;
+	      var handle = _state3.handle;
+	      var upperBound = _state3.upperBound;
+	      var lowerBound = _state3.lowerBound;
+	      var _props3 = this.props;
+	      var className = _props3.className;
+	      var prefixCls = _props3.prefixCls;
+	      var disabled = _props3.disabled;
+	      var dots = _props3.dots;
+	      var included = _props3.included;
+	      var range = _props3.range;
+	      var step = _props3.step;
+	      var marks = _props3.marks;
+	      var max = _props3.max;
+	      var min = _props3.min;
+	      var tipTransitionName = _props3.tipTransitionName;
+	      var tipFormatter = _props3.tipFormatter;
+	      var children = _props3.children;
 	
 	      var upperOffset = this.calcOffset(upperBound);
 	      var lowerOffset = this.calcOffset(lowerBound);
@@ -22283,6 +22312,51 @@
 
 /***/ },
 /* 188 */
+/***/ function(module, exports) {
+
+	/* eslint-disable no-unused-vars */
+	'use strict';
+	var hasOwnProperty = Object.prototype.hasOwnProperty;
+	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
+	
+	function toObject(val) {
+		if (val === null || val === undefined) {
+			throw new TypeError('Object.assign cannot be called with null or undefined');
+		}
+	
+		return Object(val);
+	}
+	
+	module.exports = Object.assign || function (target, source) {
+		var from;
+		var to = toObject(target);
+		var symbols;
+	
+		for (var s = 1; s < arguments.length; s++) {
+			from = Object(arguments[s]);
+	
+			for (var key in from) {
+				if (hasOwnProperty.call(from, key)) {
+					to[key] = from[key];
+				}
+			}
+	
+			if (Object.getOwnPropertySymbols) {
+				symbols = Object.getOwnPropertySymbols(from);
+				for (var i = 0; i < symbols.length; i++) {
+					if (propIsEnumerable.call(from, symbols[i])) {
+						to[symbols[i]] = from[symbols[i]];
+					}
+				}
+			}
+		}
+	
+		return to;
+	};
+
+
+/***/ },
+/* 189 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22315,7 +22389,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 189 */
+/* 190 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22338,7 +22412,7 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _rcTooltip = __webpack_require__(190);
+	var _rcTooltip = __webpack_require__(191);
 	
 	var _rcTooltip2 = _interopRequireDefault(_rcTooltip);
 	
@@ -22427,15 +22501,15 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 190 */
+/* 191 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(191);
+	module.exports = __webpack_require__(192);
 
 /***/ },
-/* 191 */
+/* 192 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22452,9 +22526,9 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _placements = __webpack_require__(192);
+	var _placements = __webpack_require__(193);
 	
-	var _rcTrigger = __webpack_require__(193);
+	var _rcTrigger = __webpack_require__(194);
 	
 	var _rcTrigger2 = _interopRequireDefault(_rcTrigger);
 	
@@ -22564,7 +22638,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 192 */
+/* 193 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -22658,15 +22732,15 @@
 	exports['default'] = placements;
 
 /***/ },
-/* 193 */
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	module.exports = __webpack_require__(194);
+	module.exports = __webpack_require__(195);
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22689,11 +22763,11 @@
 	
 	var _rcUtil = __webpack_require__(164);
 	
-	var _Popup = __webpack_require__(195);
+	var _Popup = __webpack_require__(196);
 	
 	var _Popup2 = _interopRequireDefault(_Popup);
 	
-	var _utils = __webpack_require__(216);
+	var _utils = __webpack_require__(217);
 	
 	function noop() {}
 	
@@ -23018,7 +23092,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23037,15 +23111,15 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _rcAlign = __webpack_require__(196);
+	var _rcAlign = __webpack_require__(197);
 	
 	var _rcAlign2 = _interopRequireDefault(_rcAlign);
 	
-	var _rcAnimate = __webpack_require__(207);
+	var _rcAnimate = __webpack_require__(208);
 	
 	var _rcAnimate2 = _interopRequireDefault(_rcAnimate);
 	
-	var _PopupInner = __webpack_require__(215);
+	var _PopupInner = __webpack_require__(216);
 	
 	var _PopupInner2 = _interopRequireDefault(_PopupInner);
 	
@@ -23178,7 +23252,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
@@ -23190,7 +23264,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _Align = __webpack_require__(197);
+	var _Align = __webpack_require__(198);
 	
 	var _Align2 = _interopRequireDefault(_Align);
 	
@@ -23198,7 +23272,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23217,13 +23291,13 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _domAlign = __webpack_require__(198);
+	var _domAlign = __webpack_require__(199);
 	
 	var _domAlign2 = _interopRequireDefault(_domAlign);
 	
 	var _rcUtil = __webpack_require__(164);
 	
-	var _isWindow = __webpack_require__(206);
+	var _isWindow = __webpack_require__(207);
 	
 	var _isWindow2 = _interopRequireDefault(_isWindow);
 	
@@ -23355,7 +23429,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
@@ -23371,27 +23445,27 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(199);
+	var _utils = __webpack_require__(200);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
-	var _getOffsetParent = __webpack_require__(200);
+	var _getOffsetParent = __webpack_require__(201);
 	
 	var _getOffsetParent2 = _interopRequireDefault(_getOffsetParent);
 	
-	var _getVisibleRectForElement = __webpack_require__(201);
+	var _getVisibleRectForElement = __webpack_require__(202);
 	
 	var _getVisibleRectForElement2 = _interopRequireDefault(_getVisibleRectForElement);
 	
-	var _adjustForViewport = __webpack_require__(202);
+	var _adjustForViewport = __webpack_require__(203);
 	
 	var _adjustForViewport2 = _interopRequireDefault(_adjustForViewport);
 	
-	var _getRegion = __webpack_require__(203);
+	var _getRegion = __webpack_require__(204);
 	
 	var _getRegion2 = _interopRequireDefault(_getRegion);
 	
-	var _getElFuturePos = __webpack_require__(204);
+	var _getElFuturePos = __webpack_require__(205);
 	
 	var _getElFuturePos2 = _interopRequireDefault(_getElFuturePos);
 	
@@ -23558,7 +23632,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -24056,7 +24130,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24067,7 +24141,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(199);
+	var _utils = __webpack_require__(200);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -24114,7 +24188,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24125,11 +24199,11 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(199);
+	var _utils = __webpack_require__(200);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
-	var _getOffsetParent = __webpack_require__(200);
+	var _getOffsetParent = __webpack_require__(201);
 	
 	var _getOffsetParent2 = _interopRequireDefault(_getOffsetParent);
 	
@@ -24195,7 +24269,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24206,7 +24280,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(199);
+	var _utils = __webpack_require__(200);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -24255,7 +24329,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24266,7 +24340,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _utils = __webpack_require__(199);
+	var _utils = __webpack_require__(200);
 	
 	var _utils2 = _interopRequireDefault(_utils);
 	
@@ -24296,7 +24370,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 204 */
+/* 205 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24307,7 +24381,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _getAlignOffset = __webpack_require__(205);
+	var _getAlignOffset = __webpack_require__(206);
 	
 	var _getAlignOffset2 = _interopRequireDefault(_getAlignOffset);
 	
@@ -24337,7 +24411,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 205 */
+/* 206 */
 /***/ function(module, exports) {
 
 	/**
@@ -24382,7 +24456,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 206 */
+/* 207 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -24401,16 +24475,16 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 207 */
+/* 208 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// export this package's api
 	'use strict';
 	
-	module.exports = __webpack_require__(208);
+	module.exports = __webpack_require__(209);
 
 /***/ },
-/* 208 */
+/* 209 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24427,13 +24501,13 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var _ChildrenUtils = __webpack_require__(209);
+	var _ChildrenUtils = __webpack_require__(210);
 	
-	var _AnimateChild = __webpack_require__(210);
+	var _AnimateChild = __webpack_require__(211);
 	
 	var _AnimateChild2 = _interopRequireDefault(_AnimateChild);
 	
-	var _util = __webpack_require__(214);
+	var _util = __webpack_require__(215);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -24730,7 +24804,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 209 */
+/* 210 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24848,7 +24922,7 @@
 	}
 
 /***/ },
-/* 210 */
+/* 211 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24867,11 +24941,11 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
-	var _cssAnimation = __webpack_require__(211);
+	var _cssAnimation = __webpack_require__(212);
 	
 	var _cssAnimation2 = _interopRequireDefault(_cssAnimation);
 	
-	var _util = __webpack_require__(214);
+	var _util = __webpack_require__(215);
 	
 	var _util2 = _interopRequireDefault(_util);
 	
@@ -24951,13 +25025,13 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 211 */
+/* 212 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Event = __webpack_require__(212);
-	var Css = __webpack_require__(213);
+	var Event = __webpack_require__(213);
+	var Css = __webpack_require__(214);
 	var isCssAnimationSupported = Event.endEvents.length !== 0;
 	
 	function getDuration(node, name) {
@@ -25109,7 +25183,7 @@
 	module.exports = cssAnimation;
 
 /***/ },
-/* 212 */
+/* 213 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25197,7 +25271,7 @@
 	module.exports = TransitionEvents;
 
 /***/ },
-/* 213 */
+/* 214 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -25228,7 +25302,7 @@
 	};
 
 /***/ },
-/* 214 */
+/* 215 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -25261,7 +25335,7 @@
 	module.exports = exports["default"];
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25307,7 +25381,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25320,7 +25394,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
-	var _objectAssign = __webpack_require__(217);
+	var _objectAssign = __webpack_require__(218);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
 	
@@ -25346,7 +25420,7 @@
 	}
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports) {
 
 	/* eslint-disable no-unused-vars */
@@ -25391,7 +25465,7 @@
 
 
 /***/ },
-/* 218 */
+/* 219 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25457,7 +25531,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 219 */
+/* 220 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

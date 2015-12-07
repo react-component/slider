@@ -3,12 +3,12 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(220);
+	module.exports = __webpack_require__(221);
 
 
 /***/ },
 
-/***/ 220:
+/***/ 221:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -33,14 +33,43 @@ webpackJsonp([1],{
 	      value: [20, 40]
 	    };
 	  },
-	  onChange: function onChange(value) {
+	  onSliderChange: function onSliderChange(value) {
 	    log(value);
 	    this.setState({
 	      value: value
 	    });
 	  },
+	  onMinChange: function onMinChange(e) {
+	    this.setState({
+	      min: +e.target.value || 0
+	    });
+	  },
+	  onMaxChange: function onMaxChange(e) {
+	    this.setState({
+	      max: +e.target.value || 100
+	    });
+	  },
 	  render: function render() {
-	    return React.createElement(Slider, { range: true, value: this.state.value, onChange: this.onChange });
+	    return React.createElement(
+	      'div',
+	      null,
+	      React.createElement(
+	        'label',
+	        null,
+	        'Min: '
+	      ),
+	      React.createElement('input', { type: 'number', value: this.state.min, onChange: this.onMinChange }),
+	      React.createElement('br', null),
+	      React.createElement(
+	        'label',
+	        null,
+	        'Max: '
+	      ),
+	      React.createElement('input', { type: 'number', value: this.state.max, onChange: this.onMaxChange }),
+	      React.createElement('br', null),
+	      React.createElement('br', null),
+	      React.createElement(Slider, { range: true, value: this.state.value, min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
+	    );
 	  }
 	});
 	

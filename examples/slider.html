@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>slider.js - example - rc-slider@3.1.3</title>
+  <title>slider.js - example - rc-slider@3.1.4</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,7 +257,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@3.1.3</h1>
+    <h1>rc-slider@3.1.4</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -285,16 +285,38 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">return</span> {
       value: <span class="hljs-number">50</span>,
+      min: <span class="hljs-number">0</span>,
+      max: <span class="hljs-number">100</span>,
     };
   },
-  onChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{
+  onSliderChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{
     log(value);
     <span class="hljs-keyword">this</span>.setState({
       value: value,
     });
   },
+  onMinChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+    <span class="hljs-keyword">this</span>.setState({
+      min: +e.target.value || <span class="hljs-number">0</span>,
+    });
+  },
+  onMaxChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+    <span class="hljs-keyword">this</span>.setState({
+      max: +e.target.value || <span class="hljs-number">100</span>,
+    });
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onChange}</span> /&gt;</span>;</span>
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Min: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMinChange}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Max: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMaxChange}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    )</span>;
   },
 });
 
