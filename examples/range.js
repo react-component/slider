@@ -16,14 +16,34 @@ const CustomizedRange = React.createClass({
       value: [20, 40],
     };
   },
-  onChange: function(value) {
+  onSliderChange: function(value) {
     log(value);
     this.setState({
       value: value,
     });
   },
+  onMinChange: function(e) {
+    this.setState({
+      min: +e.target.value || 0,
+    });
+  },
+  onMaxChange: function(e) {
+    this.setState({
+      max: +e.target.value || 100,
+    });
+  },
   render: function() {
-    return <Slider range value={this.state.value} onChange={this.onChange} />;
+    return (
+      <div>
+        <label>Min: </label>
+        <input type="number" value={this.state.min} onChange={this.onMinChange} />
+        <br />
+        <label>Max: </label>
+        <input type="number" value={this.state.max} onChange={this.onMaxChange} />
+        <br /><br />
+        <Slider range value={this.state.value} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+      </div>
+    );
   },
 });
 
