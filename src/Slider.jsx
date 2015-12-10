@@ -98,19 +98,16 @@ class Slider extends React.Component {
     }
   }
 
-  onChange(handle, value) {
+  onChange(state) {
     const props = this.props;
     const isNotControlled = !('value' in props);
     if (isNotControlled) {
-      this.setState({[handle]: value});
+      this.setState(state);
+    } else if (state.handle) {
+      this.setState({handle: state.handle});
     }
 
-    const state = this.state;
-    const data = {
-      upperBound: state.upperBound,
-      lowerBound: state.lowerBound,
-    };
-    data[handle] = value;
+    const data = objectAssign({}, this.state, state);
     const changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
     props.onChange(changedValue);
   }
@@ -142,7 +139,26 @@ class Slider extends React.Component {
     const oldValue = state[state.handle];
     if (value === oldValue) return;
 
-    this.onChange(state.handle, value);
+    if (value < state.lowerBound && state.handle === 'upperBound') {
+      this.onChange({
+        handle: 'lowerBound',
+        lowerBound: value,
+        upperBound: this.state.lowerBound,
+      });
+      return;
+    }
+    if (value > state.upperBound && state.handle === 'lowerBound') {
+      this.onChange({
+        handle: 'upperBound',
+        upperBound: value,
+        lowerBound: this.state.upperBound,
+      });
+      return;
+    }
+
+    this.onChange({
+      [state.handle]: value,
+    });
   }
 
   onTouchStart(e) {
@@ -197,7 +213,9 @@ class Slider extends React.Component {
     const oldValue = state[valueNeedChanging];
     if (value === oldValue) return;
 
-    this.onChange(valueNeedChanging, value);
+    this.onChange({
+      [valueNeedChanging]: value,
+    });
   }
 
   getValue() {
@@ -236,8 +254,6 @@ class Slider extends React.Component {
   }
 
   trimAlignValue(v, nextProps) {
-    const state = this.state || {};
-    const {handle, lowerBound, upperBound} = state;
     const {marks, step, min, max} = objectAssign({}, this.props, nextProps || {});
 
     let val = v;
@@ -246,12 +262,6 @@ class Slider extends React.Component {
     }
     if (val >= max) {
       val = max;
-    }
-    if (handle === 'upperBound' && val <= lowerBound) {
-      val = lowerBound;
-    }
-    if (handle === 'lowerBound' && val >= upperBound) {
-      val = upperBound;
     }
 
     const points = Object.keys(marks).map(parseFloat);
