@@ -50,8 +50,8 @@ const CustomizedRange = React.createClass({
 ReactDOM.render(
   <div>
     <div style={style}>
-      <p>Basic Range</p>
-      <Slider range defaultValue={[0, 20]} onChange={log} />
+      <p>Basic Range，`allowCross`</p>
+      <Slider range allowCross defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>
