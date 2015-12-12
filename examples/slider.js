@@ -1,3 +1,4 @@
+/* eslint react/no-multi-comp: 0 */
 require('rc-slider/assets/index.less');
 
 const React = require('react');
@@ -19,8 +20,6 @@ const CustomizedSlider = React.createClass({
   getInitialState: function() {
     return {
       value: 50,
-      min: 0,
-      max: 100,
     };
   },
   onSliderChange: function(value) {
@@ -28,6 +27,21 @@ const CustomizedSlider = React.createClass({
     this.setState({
       value: value,
     });
+  },
+  render: function() {
+    return <Slider value={this.state.value} onChange={this.onSliderChange} />;
+  },
+});
+
+const DynamicBounds = React.createClass({
+  getInitialState: function() {
+    return {
+      min: 0,
+      max: 100,
+    };
+  },
+  onSliderChange: function(value) {
+    log(value);
   },
   onMinChange: function(e) {
     this.setState({
@@ -48,7 +62,7 @@ const CustomizedSlider = React.createClass({
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
         <br /><br />
-        <Slider value={this.state.value} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+        <Slider defaultValue={50} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
       </div>
     );
   },
@@ -79,6 +93,10 @@ ReactDOM.render(
     <div style={style}>
       <p>Customized Slider</p>
       <CustomizedSlider />
+    </div>
+    <div style={style}>
+      <p>Slider with dynamic `min` `max`</p>
+      <DynamicBounds />
     </div>
   </div>
   , document.getElementById('__react-content'));
