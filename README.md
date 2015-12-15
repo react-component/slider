@@ -107,6 +107,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range.</td>
         </tr>
         <tr>
+          <td>allowCross</td>
+          <td>boolean</td>
+          <td>true</td>
+          <td>When `range` is `true`, `allowCross` could be set as `true` to allow those two handles cross.</td>
+        </tr>
+        <tr>
           <td>defaultValue</td>
           <td>number or [number, number]</td>
           <td>0 or [0, 0]</td>
