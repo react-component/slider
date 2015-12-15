@@ -71,7 +71,7 @@ class Slider extends React.Component {
 
     const {lowerBound, upperBound} = this.state;
     if (nextProps.range) {
-      const value = nextProps.value;
+      const value = nextProps.value || [lowerBound, upperBound];
       const nextUpperBound = this.trimAlignValue(value[1], nextProps);
       const nextLowerBound = this.trimAlignValue(value[0], nextProps);
       if (nextLowerBound === lowerBound && nextUpperBound === upperBound) return;
@@ -85,7 +85,8 @@ class Slider extends React.Component {
         this.props.onChange([nextLowerBound, nextUpperBound]);
       }
     } else {
-      const nextValue = this.trimAlignValue(nextProps.value, nextProps);
+      const value = 'value' in nextProps ? nextProps.value : upperBound;
+      const nextValue = this.trimAlignValue(value, nextProps);
       if (nextValue === upperBound && lowerBound === nextProps.min) return;
 
       this.setState({

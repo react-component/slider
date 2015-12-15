@@ -1,3 +1,4 @@
+/* eslint react/no-multi-comp: 0 */
 require('rc-slider/assets/index.less');
 
 const React = require('react');
@@ -22,6 +23,21 @@ const CustomizedRange = React.createClass({
       value: value,
     });
   },
+  render: function() {
+    return <Slider range value={this.state.value} onChange={this.onSliderChange} />;
+  },
+});
+
+const DynamicBounds = React.createClass({
+  getInitialState() {
+    return {
+      min: 0,
+      max: 100,
+    };
+  },
+  onSliderChange: function(value) {
+    log(value);
+  },
   onMinChange: function(e) {
     this.setState({
       min: +e.target.value || 0,
@@ -41,7 +57,7 @@ const CustomizedRange = React.createClass({
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
         <br /><br />
-        <Slider range value={this.state.value} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+        <Slider range defaultValue={[20, 50]} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
       </div>
     );
   },
@@ -50,8 +66,8 @@ const CustomizedRange = React.createClass({
 ReactDOM.render(
   <div>
     <div style={style}>
-      <p>Basic Range，`allowCross`</p>
-      <Slider range allowCross defaultValue={[0, 20]} onChange={log} />
+      <p>Basic Range，`allowCross=false`</p>
+      <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>
@@ -68,6 +84,10 @@ ReactDOM.render(
     <div style={style}>
       <p>Customized Range</p>
       <CustomizedRange />
+    </div>
+    <div style={style}>
+      <p>Range with dynamic `max` `min`</p>
+      <DynamicBounds />
     </div>
   </div>
   , document.getElementById('__react-content'));
