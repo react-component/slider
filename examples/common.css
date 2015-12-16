@@ -136,7 +136,6 @@
 .rc-slider-tooltip-zoom-down-enter,
 .rc-slider-tooltip-zoom-down-appear {
   -webkit-transform: scale(0, 0);
-      -ms-transform: scale(0, 0);
           transform: scale(0, 0);
   -webkit-animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);
           animation-timing-function: cubic-bezier(0.23, 1, 0.32, 1);

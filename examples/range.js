@@ -3,14 +3,15 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(221);
+	module.exports = __webpack_require__(218);
 
 
 /***/ },
 
-/***/ 221:
+/***/ 218:
 /***/ function(module, exports, __webpack_require__) {
 
+	/* eslint react/no-multi-comp: 0 */
 	'use strict';
 	
 	__webpack_require__(2);
@@ -38,6 +39,23 @@ webpackJsonp([1],{
 	    this.setState({
 	      value: value
 	    });
+	  },
+	  render: function render() {
+	    return React.createElement(Slider, { range: true, value: this.state.value, onChange: this.onSliderChange });
+	  }
+	});
+	
+	var DynamicBounds = React.createClass({
+	  displayName: 'DynamicBounds',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      min: 0,
+	      max: 100
+	    };
+	  },
+	  onSliderChange: function onSliderChange(value) {
+	    log(value);
 	  },
 	  onMinChange: function onMinChange(e) {
 	    this.setState({
@@ -68,7 +86,7 @@ webpackJsonp([1],{
 	      React.createElement('input', { type: 'number', value: this.state.max, onChange: this.onMaxChange }),
 	      React.createElement('br', null),
 	      React.createElement('br', null),
-	      React.createElement(Slider, { range: true, value: this.state.value, min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
+	      React.createElement(Slider, { range: true, defaultValue: [20, 50], min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
 	    );
 	  }
 	});
@@ -82,9 +100,9 @@ webpackJsonp([1],{
 	    React.createElement(
 	      'p',
 	      null,
-	      'Basic Range'
+	      'Basic Range，`allowCross=false`'
 	    ),
-	    React.createElement(Slider, { range: true, defaultValue: [0, 20], onChange: log })
+	    React.createElement(Slider, { range: true, allowCross: false, defaultValue: [0, 20], onChange: log })
 	  ),
 	  React.createElement(
 	    'div',
@@ -125,6 +143,16 @@ webpackJsonp([1],{
 	      'Customized Range'
 	    ),
 	    React.createElement(CustomizedRange, null)
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
+	      'Range with dynamic `max` `min`'
+	    ),
+	    React.createElement(DynamicBounds, null)
 	  )
 	), document.getElementById('__react-content'));
 

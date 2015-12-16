@@ -3,14 +3,15 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(222);
+	module.exports = __webpack_require__(219);
 
 
 /***/ },
 
-/***/ 222:
+/***/ 219:
 /***/ function(module, exports, __webpack_require__) {
 
+	/* eslint react/no-multi-comp: 0 */
 	'use strict';
 	
 	__webpack_require__(2);
@@ -34,9 +35,7 @@ webpackJsonp([2],{
 	
 	  getInitialState: function getInitialState() {
 	    return {
-	      value: 50,
-	      min: 0,
-	      max: 100
+	      value: 50
 	    };
 	  },
 	  onSliderChange: function onSliderChange(value) {
@@ -44,6 +43,23 @@ webpackJsonp([2],{
 	    this.setState({
 	      value: value
 	    });
+	  },
+	  render: function render() {
+	    return React.createElement(Slider, { value: this.state.value, onChange: this.onSliderChange });
+	  }
+	});
+	
+	var DynamicBounds = React.createClass({
+	  displayName: 'DynamicBounds',
+	
+	  getInitialState: function getInitialState() {
+	    return {
+	      min: 0,
+	      max: 100
+	    };
+	  },
+	  onSliderChange: function onSliderChange(value) {
+	    log(value);
 	  },
 	  onMinChange: function onMinChange(e) {
 	    this.setState({
@@ -74,7 +90,7 @@ webpackJsonp([2],{
 	      React.createElement('input', { type: 'number', value: this.state.max, onChange: this.onMaxChange }),
 	      React.createElement('br', null),
 	      React.createElement('br', null),
-	      React.createElement(Slider, { value: this.state.value, min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
+	      React.createElement(Slider, { defaultValue: 50, min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
 	    );
 	  }
 	});
@@ -141,6 +157,16 @@ webpackJsonp([2],{
 	      'Customized Slider'
 	    ),
 	    React.createElement(CustomizedSlider, null)
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
+	      'Slider with dynamic `min` `max`'
+	    ),
+	    React.createElement(DynamicBounds, null)
 	  )
 	), document.getElementById('__react-content'));
 
