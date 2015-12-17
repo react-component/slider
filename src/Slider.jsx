@@ -339,7 +339,7 @@ class Slider extends React.Component {
     const lowerOffset = this.calcOffset(lowerBound);
 
     const handleClassName = prefixCls + '-handle';
-    const isNoTip = tipFormatter === null || (step === null && !tipFormatter);
+    const isNoTip = (step === null) || (tipFormatter === null);
 
     const upper = (<Handle className={handleClassName}
                            noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
