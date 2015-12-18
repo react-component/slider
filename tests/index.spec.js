@@ -22,28 +22,36 @@ describe('rc-slider', function() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track').length).to.be(1);
   });
 
-  it('should render a Slider with correct value and CSS style', () => {
+  it('should render a Slider with default value correctly', () => {
     const sliderWithDefaultValue = ReactDOM.render(<Slider defaultValue={50} />, div);
     expect(sliderWithDefaultValue.state.upperBound).to.be(50);
     expect(ReactTestUtils
            .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[0]
            .style.cssText)
-      .to.be('left: 50%; ');
-    expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-track')[0]
-           .style.cssText)
-      .to.be('left: 0%; width: 50%; visibility: visible; ');
+      .to.match(/left: 50%;/);
 
+    const trackStyle = ReactTestUtils
+            .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-track')[0]
+            .style.cssText;
+    expect(trackStyle).to.match(/left: 0%;/);
+    expect(trackStyle).to.match(/width: 50%;/);
+    expect(trackStyle).to.match(/visibility: visible;/);
+  });
+
+  it('should render a Slider with value corrently', () => {
     const sliderWithValue = ReactDOM.render(<Slider value={50} />, div);
     expect(sliderWithValue.state.upperBound).to.be(50);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[0]
+           .scryRenderedDOMComponentsWithClass(sliderWithValue, 'rc-slider-handle')[0]
            .style.cssText)
-      .to.be('left: 50%; ');
-    expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-track')[0]
-           .style.cssText)
-      .to.be('left: 0%; width: 50%; visibility: visible; ');
+      .to.match(/left: 50%;/);
+
+    const trackStyle = ReactTestUtils
+            .scryRenderedDOMComponentsWithClass(sliderWithValue, 'rc-slider-track')[0]
+            .style.cssText;
+    expect(trackStyle).to.match(/left: 0%;/);
+    expect(trackStyle).to.match(/width: 50%;/);
+    expect(trackStyle).to.match(/visibility: visible;/);
   });
 
   it('should render a Range with correct DOM structure', () => {
@@ -53,38 +61,46 @@ describe('rc-slider', function() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-track').length).to.be(1);
   });
 
-  it('should render a Range with correct value and CSS style', () => {
-    const sliderWithDefaultValue = ReactDOM.render(<Slider range defaultValue={[0, 50]} />, div);
-    expect(sliderWithDefaultValue.state.lowerBound).to.be(0);
-    expect(sliderWithDefaultValue.state.upperBound).to.be(50);
+  it('should render a Range with default value correctly', () => {
+    const rangeWithDefaultValue = ReactDOM.render(<Slider range defaultValue={[0, 50]} />, div);
+    expect(rangeWithDefaultValue.state.lowerBound).to.be(0);
+    expect(rangeWithDefaultValue.state.upperBound).to.be(50);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[0]
+           .scryRenderedDOMComponentsWithClass(rangeWithDefaultValue, 'rc-slider-handle')[0]
            .style.cssText)
-      .to.be('left: 50%; ');
+      .to.match(/left: 50%;/);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[1]
+           .scryRenderedDOMComponentsWithClass(rangeWithDefaultValue, 'rc-slider-handle')[1]
            .style.cssText)
-      .to.be('left: 0%; ');
-    expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-track')[0]
-           .style.cssText)
-      .to.be('left: 0%; width: 50%; visibility: visible; ');
+      .to.match(/left: 0%;/);
 
-    const sliderWithValue = ReactDOM.render(<Slider range value={[50, 100]} />, div);
-    expect(sliderWithValue.state.lowerBound).to.be(50);
-    expect(sliderWithValue.state.upperBound).to.be(100);
+    const trackStyle = ReactTestUtils
+            .scryRenderedDOMComponentsWithClass(rangeWithDefaultValue, 'rc-slider-track')[0]
+            .style.cssText;
+    expect(trackStyle).to.match(/left: 0%;/);
+    expect(trackStyle).to.match(/width: 50%;/);
+    expect(trackStyle).to.match(/visibility: visible;/);
+  });
+
+  it('should render a Range with value correctly', () => {
+    const rangeWithValue = ReactDOM.render(<Slider range value={[50, 100]} />, div);
+    expect(rangeWithValue.state.lowerBound).to.be(50);
+    expect(rangeWithValue.state.upperBound).to.be(100);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[0]
+           .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[0]
            .style.cssText)
-      .to.be('left: 100%; ');
+      .to.match(/left: 100%;/);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[1]
+           .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[1]
            .style.cssText)
-      .to.be('left: 50%; ');
-    expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-track')[0]
-           .style.cssText)
-      .to.be('width: 50%; visibility: visible; left: 50%; ');
+      .to.match(/left: 50%;/);
+
+    const trackStyle = ReactTestUtils
+            .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-track')[0]
+            .style.cssText;
+    expect(trackStyle).to.match(/left: 50%;/);
+    expect(trackStyle).to.match(/width: 50%;/);
+    expect(trackStyle).to.match(/visibility: visible;/);
   });
 
   it('should render dots correctly when `dots=true`', () => {
