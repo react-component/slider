@@ -417,6 +417,7 @@ Slider.defaultProps = {
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,
+  tipFormatter: value => value,
   included: true,
   disabled: false,
   dots: false,

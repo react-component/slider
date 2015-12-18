@@ -42,7 +42,7 @@ export default class Handle extends React.Component {
               prefixCls={className.replace('slider-handle', 'tooltip')}
               placement="top"
               visible={isTooltipVisible}
-              overlay={<span>{tipFormatter ? tipFormatter(value) : value}</span>}
+              overlay={<span>{tipFormatter(value)}</span>}
               delay={0}
               transitionName={tipTransitionName}>
               {handle}
