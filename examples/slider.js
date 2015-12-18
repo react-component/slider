@@ -144,6 +144,16 @@ webpackJsonp([2],{
 	    React.createElement(
 	      'p',
 	      null,
+	      'Basic Slider without tooltip'
+	    ),
+	    React.createElement(Slider, { tipFormatter: null, onChange: log })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
 	      'Controlled Slider'
 	    ),
 	    React.createElement(Slider, { value: 50 })

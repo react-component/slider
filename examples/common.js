@@ -20150,7 +20150,7 @@
 	      var lowerOffset = this.calcOffset(lowerBound);
 	
 	      var handleClassName = prefixCls + '-handle';
-	      var isNoTip = step === null && !tipFormatter;
+	      var isNoTip = step === null || tipFormatter === null;
 	
 	      var upper = _react2['default'].createElement(_Handle2['default'], { className: handleClassName,
 	        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
@@ -20221,6 +20221,9 @@
 	  onBeforeChange: noop,
 	  onChange: noop,
 	  onAfterChange: noop,
+	  tipFormatter: function tipFormatter(value) {
+	    return value;
+	  },
 	  included: true,
 	  disabled: false,
 	  dots: false,
@@ -22394,7 +22397,7 @@
 	          overlay: _react2['default'].createElement(
 	            'span',
 	            null,
-	            tipFormatter ? tipFormatter(value) : value
+	            tipFormatter(value)
 	          ),
 	          delay: 0,
 	          transitionName: tipTransitionName },
