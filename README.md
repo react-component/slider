@@ -144,9 +144,9 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>tipFormatter</td>
-          <td>function</td>
+          <td>function or `null`</td>
           <td></td>
-          <td>Format the value of the tooltip if it shows.</td>
+          <td>Format the value of the tooltip if it shows. If `null` the tooltip will always be hidden.</td>
         </tr>
         <tr>
           <td>dots</td>
