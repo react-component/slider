@@ -3,7 +3,7 @@ import {Dom as DomUtils} from 'rc-util';
 import classNames from 'classnames';
 import objectAssign from 'object-assign';
 import Track from './Track';
-import Handle from './Handle';
+import DefaultHandle from './Handle';
 import Dots from './Dots';
 import Marks from './Marks';
 
@@ -333,7 +333,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const {className, prefixCls, disabled, dots, included, range, step,
-           marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+           marks, max, min, Handle, tipTransitionName, tipFormatter, children} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
@@ -399,6 +399,7 @@ Slider.propTypes = {
   onBeforeChange: React.PropTypes.func,
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
+  Handle: React.PropTypes.func,
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
@@ -417,6 +418,7 @@ Slider.defaultProps = {
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,
+  Handle: DefaultHandle,
   tipFormatter: value => value,
   included: true,
   disabled: false,
