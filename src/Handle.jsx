@@ -25,23 +25,30 @@ export default class Handle extends React.Component {
   render() {
     const props = this.props;
     const {className, tipTransitionName, tipFormatter, offset, value} = props;
-    const {dragging, noTip} = props;
+    const {dragging, noTip, alwaysShowTip} = props;
 
     const style = { left: offset + '%' };
-    const handle = (<div className={className} style={style}
-                      onMouseUp={this.showTooltip.bind(this)}
-                      onMouseEnter={this.showTooltip.bind(this)}
-                      onMouseLeave={this.hideTooltip.bind(this)}/>);
+
+    let handle;
+    if (alwaysShowTip) {
+      handle = <div className={className} style={style} />;
+    } else {
+      handle = (<div className={className} style={style}
+                        onMouseUp={this.showTooltip.bind(this)}
+                        onMouseEnter={this.showTooltip.bind(this)}
+                        onMouseLeave={this.hideTooltip.bind(this)}/>);
+    }
 
     if (noTip) {
       return handle;
     }
 
-    const isTooltipVisible = dragging || this.state.isTooltipVisible;
+    const isTooltipVisible = alwaysShowTip || dragging || this.state.isTooltipVisible;
     return (<Tooltip
               prefixCls={className.replace('slider-handle', 'tooltip')}
               placement="top"
               visible={isTooltipVisible}
+              defaultVisible={alwaysShowTip}
               overlay={<span>{tipFormatter(value)}</span>}
               delay={0}
               transitionName={tipTransitionName}>
@@ -58,4 +65,5 @@ Handle.propTypes = {
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,
+  alwaysShowTip: React.PropTypes.bool,
 };
