@@ -339,7 +339,7 @@ class Slider extends React.Component {
     const lowerOffset = this.calcOffset(lowerBound);
 
     const handleClassName = prefixCls + '-handle';
-    const isNoTip = (step === null) && !tipFormatter;
+    const isNoTip = (step === null) || (tipFormatter === null);
 
     const upper = (<Handle className={handleClassName}
                            noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
@@ -420,6 +420,7 @@ Slider.defaultProps = {
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,
+  tipFormatter: value => value,
   included: true,
   disabled: false,
   dots: false,

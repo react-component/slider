@@ -49,7 +49,7 @@ export default class Handle extends React.Component {
               placement="top"
               visible={isTooltipVisible}
               defaultVisible={alwaysShowTip}
-              overlay={<span>{tipFormatter ? tipFormatter(value) : value}</span>}
+              overlay={<span>{tipFormatter(value)}</span>}
               delay={0}
               transitionName={tipTransitionName}>
               {handle}

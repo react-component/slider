@@ -87,6 +87,10 @@ ReactDOM.render(
       <Slider tipFormatter={percentFormatter} tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
     </div>
     <div style={style}>
+      <p>Basic Slider without tooltip</p>
+      <Slider tipFormatter={null} onChange={log} />
+    </div>
+    <div style={style}>
       <p>Controlled Slider</p>
       <Slider value={50} />
     </div>
