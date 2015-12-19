@@ -6,6 +6,7 @@ import Track from './Track';
 import Handle from './Handle';
 import Dots from './Dots';
 import Marks from './Marks';
+import Label from './Label';
 
 function noop() {
 }
@@ -333,13 +334,22 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const {className, prefixCls, disabled, dots, included, range, step,
-           marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+            marks, max, min, tipTransitionName, tipFormatter, children,
+            labelFormater} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
 
     const handleClassName = prefixCls + '-handle';
     const isNoTip = (step === null) || (tipFormatter === null);
+
+
+    let upperLabel = null;
+    if (labelFormater) {
+      upperLabel = (<Label className={prefixCls + '-label'}
+                           labelFormater={labelFormater} offset={upperOffset}
+                           value={upperBound} max={max} min={min} />);
+    }
 
     const upper = (<Handle className={handleClassName}
                            noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
@@ -350,6 +360,13 @@ class Slider extends React.Component {
       lower = (<Handle className={handleClassName}
                        noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
                        offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
+    }
+
+    let lowerLabel = null;
+    if (range && labelFormater) {
+      lowerLabel = (<Label className={prefixCls + '-label'}
+                           labelFormater={labelFormater} offset={lowerOffset}
+                           value={lowerBound} max={max} min={min} />);
     }
 
     const sliderClassName = classNames({
@@ -372,6 +389,8 @@ class Slider extends React.Component {
         <Marks className={prefixCls + '-mark'} marks={marks}
                included={isIncluded} lowerBound={lowerBound}
                upperBound={upperBound} max={max} min={min} />
+        {upperLabel}
+        {lowerLabel}
         {children}
       </div>
     );
@@ -404,6 +423,7 @@ Slider.propTypes = {
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
+  labelFormater: React.PropTypes.func,
 };
 
 Slider.defaultProps = {
@@ -423,6 +443,7 @@ Slider.defaultProps = {
   dots: false,
   range: false,
   allowCross: true,
+  labelFormater: undefined,
 };
 
 export default Slider;
