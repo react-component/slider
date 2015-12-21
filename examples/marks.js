@@ -23,6 +23,7 @@ webpackJsonp([0],[
 	  0: '0°C',
 	  26: '26°C',
 	  37: '37°C',
+	  50: '50°C',
 	  100: '100°C'
 	};
 	
@@ -51,7 +52,7 @@ webpackJsonp([0],[
 	      null,
 	      'Slider with marks and steps'
 	    ),
-	    React.createElement(Slider, { min: -10, marks: marks, step: 10, onChange: log, defaultValue: 20 })
+	    React.createElement(Slider, { dots: true, min: -10, marks: marks, step: 10, onChange: log, defaultValue: 20 })
 	  ),
 	  React.createElement(
 	    'div',
