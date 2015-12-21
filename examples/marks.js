@@ -10,6 +10,7 @@ const marks = {
   0: '0°C',
   26: '26°C',
   37: '37°C',
+  50: '50°C',
   100: '100°C',
 };
 
@@ -25,7 +26,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Slider with marks and steps</p>
-      <Slider min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
+      <Slider dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
 
     <div style={style}>
