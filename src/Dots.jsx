@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 function calcPoints(marks, dots, step, min, max) {
   const points = Object.keys(marks).map(parseFloat);
-  if (dots) {
+  if (dots && step) {
     for (let i = min; i <= max; i = i + step) {
       if (points.indexOf(i) >= 0) continue;
       points.push(i);
@@ -13,6 +13,7 @@ function calcPoints(marks, dots, step, min, max) {
 }
 
 const Dots = ({prefixCls, marks, dots, step, included, lowerBound, upperBound, max, min}) => {
+  if (!dots) return <div></div>;
   const range = max - min;
   const elements = calcPoints(marks, dots, step, min, max).map((point) => {
     const offset = (point - min) / range * 100 + '%';

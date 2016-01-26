@@ -36,11 +36,15 @@ class Slider extends React.Component {
     const defaultValue = ('defaultValue' in props ? props.defaultValue : initialValue);
     const value = ('value' in props ? props.value : defaultValue);
 
+    this.validateProps(this.props);
+
     let upperBound;
     let lowerBound;
     if (props.range) {
       lowerBound = this.trimAlignValue(value[0]);
       upperBound = this.trimAlignValue(value[1]);
+    } else if (props.reverseSlide) {
+      lowerBound = this.trimAlignValue(value);
     } else {
       upperBound = this.trimAlignValue(value);
     }
@@ -53,6 +57,8 @@ class Slider extends React.Component {
       if (upperBound === min) {
         recent = 'upperBound';
       }
+    } else if (props.reverseSlide) {
+      recent = 'lowerBound';
     } else {
       recent = 'upperBound';
     }
@@ -60,13 +66,15 @@ class Slider extends React.Component {
     this.state = {
       handle: null,
       recent: recent,
-      upperBound: upperBound,
       // If Slider is not range, set `lowerBound` equal to `min`.
       lowerBound: (lowerBound || min),
+      // If Slider is not reverseSlide, set `upperBound` equal to `max`.
+      upperBound: (upperBound || max),
     };
   }
 
   componentWillReceiveProps(nextProps) {
+    this.validateProps(nextProps);
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
 
     const {lowerBound, upperBound} = this.state;
@@ -83,6 +91,18 @@ class Slider extends React.Component {
       if (this.isValueOutOfBounds(upperBound, nextProps) ||
           this.isValueOutOfBounds(lowerBound, nextProps)) {
         this.props.onChange([nextLowerBound, nextUpperBound]);
+      }
+    } else if (nextProps.reverseSlide) {
+      const value = 'value' in nextProps ? nextProps.value : lowerBound;
+      const nextValue = this.trimAlignValue(value, nextProps);
+      if (nextValue === lowerBound && upperBound === nextProps.max) return;
+
+      this.setState({
+        lowerBound: nextValue,
+        upperBound: nextProps.max,
+      });
+      if (this.isValueOutOfBounds(lowerBound, nextProps)) {
+        this.props.onChange(nextValue);
       }
     } else {
       const value = 'value' in nextProps ? nextProps.value : upperBound;
@@ -109,7 +129,15 @@ class Slider extends React.Component {
     }
 
     const data = objectAssign({}, this.state, state);
-    const changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
+
+    let changedValue;
+    if (props.range) {
+      changedValue = [data.lowerBound, data.upperBound];
+    } else if (props.reverseSlide) {
+      changedValue = data.lowerBound;
+    } else {
+      changedValue = data.upperBound;
+    }
     props.onChange(changedValue);
   }
 
@@ -205,6 +233,9 @@ class Slider extends React.Component {
         valueNeedChanging = value < upperBound ? 'lowerBound' : 'upperBound';
       }
     }
+    if (this.props.reverseSlide) {
+      valueNeedChanging = 'lowerBound';
+    }
 
     this.setState({
       handle: valueNeedChanging,
@@ -221,7 +252,12 @@ class Slider extends React.Component {
 
   getValue() {
     const {lowerBound, upperBound} = this.state;
-    return this.props.range ? [lowerBound, upperBound] : upperBound;
+    if (this.props.range) {
+      return [lowerBound, upperBound];
+    } else if (this.props.reverseSlide) {
+      return lowerBound;
+    }
+    return upperBound;
   }
 
   getSliderLength() {
@@ -248,6 +284,14 @@ class Slider extends React.Component {
       precision = stepString.length - stepString.indexOf('.') - 1;
     }
     return precision;
+  }
+
+  validateProps(props) {
+    // Throw warning if the user enables both range and reverseSlide
+    if (process.env.NODE_ENV === 'production') { return; }
+    if (props.range === true && props.reverseSlide === true) {
+      console.warn('Both range and reverseSlide cannot be enabled simultaneously. Disable one.');
+    }
   }
 
   isValueOutOfBounds(value, props) {
@@ -332,7 +376,7 @@ class Slider extends React.Component {
 
   render() {
     const {handle, upperBound, lowerBound} = this.state;
-    const {className, prefixCls, disabled, dots, included, range, step,
+    const {className, prefixCls, disabled, dots, included, range, reverseSlide, step,
            marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
@@ -341,12 +385,15 @@ class Slider extends React.Component {
     const handleClassName = prefixCls + '-handle';
     const isNoTip = (step === null) || (tipFormatter === null);
 
-    const upper = (<Handle className={handleClassName}
-                           noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
-                           offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
+    let upper;
+    if (!reverseSlide) {
+      upper = (<Handle className={handleClassName}
+                             noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
+                             offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
+    }
 
     let lower = null;
-    if (range) {
+    if (range || reverseSlide) {
       lower = (<Handle className={handleClassName}
                        noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
                        offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
@@ -357,7 +404,7 @@ class Slider extends React.Component {
       [prefixCls + '-disabled']: disabled,
       [className]: !!className,
     });
-    const isIncluded = included || range;
+    const isIncluded = included || range || reverseSlide;
     return (
       <div ref="slider" className={sliderClassName}
            onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
@@ -366,8 +413,8 @@ class Slider extends React.Component {
         {lower}
         <Track className={prefixCls + '-track'} included={isIncluded}
                offset={lowerOffset} length={upperOffset - lowerOffset}/>
-        <Dots prefixCls={prefixCls} marks={marks} dots={dots} step={step}
-              included={isIncluded} lowerBound={lowerBound}
+        <Dots prefixCls={prefixCls} reverseSlide={reverseSlide} marks={marks}
+              dots={dots} step={step} included={isIncluded} lowerBound={lowerBound}
               upperBound={upperBound} max={max} min={min} />
         <Marks className={prefixCls + '-mark'} marks={marks}
                included={isIncluded} lowerBound={lowerBound}
@@ -403,6 +450,7 @@ Slider.propTypes = {
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
+  reverseSlide: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
 };
 
@@ -422,6 +470,7 @@ Slider.defaultProps = {
   disabled: false,
   dots: false,
   range: false,
+  reverseSlide: false,
   allowCross: true,
 };
 
