@@ -34,7 +34,7 @@ class Slider extends React.Component {
     const {range, min, max} = props;
     const initialValue = range ? [min, min] : min;
     const defaultValue = ('defaultValue' in props ? props.defaultValue : initialValue);
-    const value = ('value' in props ? props.value : defaultValue);
+    const value = (props.value !== undefined ? props.value : defaultValue);
 
     let upperBound;
     let lowerBound;
@@ -81,11 +81,11 @@ class Slider extends React.Component {
         lowerBound: nextLowerBound,
       });
       if (this.isValueOutOfBounds(upperBound, nextProps) ||
-          this.isValueOutOfBounds(lowerBound, nextProps)) {
+        this.isValueOutOfBounds(lowerBound, nextProps)) {
         this.props.onChange([nextLowerBound, nextUpperBound]);
       }
     } else {
-      const value = 'value' in nextProps ? nextProps.value : upperBound;
+      const value = nextProps.value !== undefined ? nextProps.value : upperBound;
       const nextValue = this.trimAlignValue(value, nextProps);
       if (nextValue === upperBound && lowerBound === nextProps.min) return;
 
@@ -333,7 +333,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const {className, prefixCls, disabled, dots, included, range, step,
-           marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+      marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
@@ -343,13 +343,13 @@ class Slider extends React.Component {
 
     const upper = (<Handle className={handleClassName}
                            noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
-                           offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'} />);
+                           offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'}/>);
 
     let lower = null;
     if (range) {
       lower = (<Handle className={handleClassName}
                        noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
-                       offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'} />);
+                       offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'}/>);
     }
 
     const sliderClassName = classNames({
@@ -368,10 +368,10 @@ class Slider extends React.Component {
                offset={lowerOffset} length={upperOffset - lowerOffset}/>
         <Dots prefixCls={prefixCls} marks={marks} dots={dots} step={step}
               included={isIncluded} lowerBound={lowerBound}
-              upperBound={upperBound} max={max} min={min} />
+              upperBound={upperBound} max={max} min={min}/>
         <Marks className={prefixCls + '-mark'} marks={marks}
                included={isIncluded} lowerBound={lowerBound}
-               upperBound={upperBound} max={max} min={min} />
+               upperBound={upperBound} max={max} min={min}/>
         {children}
       </div>
     );
