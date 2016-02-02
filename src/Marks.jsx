@@ -8,7 +8,7 @@ const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) =
   const markWidth = unit * 0.9;
 
   const range = max - min;
-  const elements = marksKeys.map(parseFloat).map((point) => {
+  const elements = marksKeys.map(parseFloat).sort((a, b) => a - b).map((point) => {
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
     const markClassName = classNames({
