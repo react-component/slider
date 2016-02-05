@@ -24,7 +24,7 @@ export default class Handle extends React.Component {
 
   render() {
     const props = this.props;
-    const {className, tipTransitionName, tipFormatter, offset, value} = props;
+    const {className, tipTransitionName, tipFormatter, offset, value, tooltipAlwaysVisible} = props;
     const {dragging, noTip} = props;
 
     const style = { left: offset + '%' };
@@ -41,7 +41,7 @@ export default class Handle extends React.Component {
     return (<Tooltip
               prefixCls={className.replace('slider-handle', 'tooltip')}
               placement="top"
-              visible={isTooltipVisible}
+              visible={isTooltipVisible || tooltipAlwaysVisible}
               overlay={<span>{tipFormatter(value)}</span>}
               delay={0}
               transitionName={tipTransitionName}>
@@ -58,4 +58,5 @@ Handle.propTypes = {
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,
+  tooltipAlwaysVisible: React.PropTypes.bool,
 };

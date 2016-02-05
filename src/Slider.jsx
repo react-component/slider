@@ -333,21 +333,20 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const {className, prefixCls, disabled, dots, included, range, step,
-      marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+      marks, max, min, tipTransitionName, tipFormatter, children, tooltipAlwaysVisible} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
 
     const handleClassName = prefixCls + '-handle';
     const isNoTip = (step === null) || (tipFormatter === null);
-
-    const upper = (<Handle className={handleClassName}
+    const upper = (<Handle className={handleClassName} tooltipAlwaysVisible={tooltipAlwaysVisible}
                            noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
                            offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'}/>);
 
     let lower = null;
     if (range) {
-      lower = (<Handle className={handleClassName}
+      lower = (<Handle className={handleClassName} tooltipAlwaysVisible={tooltipAlwaysVisible}
                        noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
                        offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'}/>);
     }
@@ -404,6 +403,7 @@ Slider.propTypes = {
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
+  tooltipAlwaysVisible: React.PropTypes.bool,
 };
 
 Slider.defaultProps = {

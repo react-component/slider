@@ -126,6 +126,11 @@ describe('rc-slider', function() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-mark-text').length).to.be(3);
   });
 
+  it('should render with tooltip visible', () => {
+    ReactDOM.render(<Slider value={50} step={10} tooltipAlwaysVisible/>, div);
+    expect(document.getElementsByClassName('rc-tooltip').length).to.be(1);
+  });
+
   it('should not set value greater than `max` or smaller `min`', () => {
     const sliderWithMin = ReactDOM.render(<Slider value={0} min={10} />, div);
     expect(sliderWithMin.state.upperBound).to.be(10);
