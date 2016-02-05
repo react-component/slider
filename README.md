@@ -137,6 +137,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>If `true`, handles can't be moved.</td>
         </tr>
         <tr>
+          <td>tooltipAlwaysVisible</td>
+          <td>bool</td>
+          <td>false</td>
+          <td>Makes tooltip always visible.</td>
+        </tr>
+        <tr>
           <td>tipTransitionName</td>
           <td>string</td>
           <td>''</td>
