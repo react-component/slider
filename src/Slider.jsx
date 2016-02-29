@@ -333,7 +333,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const {className, prefixCls, disabled, dots, included, range, step,
-      marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+      marks, max, min, tipTransitionName, tipFormatter, children, markStyler} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
@@ -371,7 +371,7 @@ class Slider extends React.Component {
               upperBound={upperBound} max={max} min={min}/>
         <Marks className={prefixCls + '-mark'} marks={marks}
                included={isIncluded} lowerBound={lowerBound}
-               upperBound={upperBound} max={max} min={min}/>
+               upperBound={upperBound} max={max} min={min} markStyler={markStyler}/>
         {children}
       </div>
     );
@@ -404,6 +404,7 @@ Slider.propTypes = {
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
+  markStyler: React.PropTypes.func,
 };
 
 Slider.defaultProps = {
