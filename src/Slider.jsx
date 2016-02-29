@@ -10,12 +10,18 @@ import Marks from './Marks';
 function noop() {
 }
 
-function isNotTouchEvent(e) {
-  return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
-}
+var _touchIdentifiers = {};
 
 function getTouchPosition(e) {
-  return e.touches[0].pageX;
+  var touches = e.changedTouches;
+  for (let i = 0; i < touches.length; i++) {
+    var touch = touches[i];
+    if (_touchIdentifiers[touch.identifier]) {
+      return touch.pageX;
+    }
+  }
+  //if touch identifier doesn't match
+  return e.changedTouches[0].pageX;
 }
 
 function getMousePosition(e) {
@@ -119,10 +125,6 @@ class Slider extends React.Component {
   }
 
   onTouchMove(e) {
-    if (isNotTouchEvent(e)) {
-      this.end('touch');
-      return;
-    }
 
     const position = getTouchPosition(e);
     this.onMove(e, position);
@@ -163,7 +165,7 @@ class Slider extends React.Component {
   }
 
   onTouchStart(e) {
-    if (isNotTouchEvent(e)) return;
+    _touchIdentifiers[e.changedTouches[0].identifier] = true;
 
     const position = getTouchPosition(e);
     this.onStart(position);
@@ -324,7 +326,14 @@ class Slider extends React.Component {
     }
   }
 
-  end(type) {
+  end(type, e) {
+    var touches = e.changedTouches;
+    for (let i = 0; i < touches.length; i++) {
+      var touch = touches[i];
+      if (_touchIdentifiers[touch.identifier]) {
+        delete _touchIdentifiers[touch.identifier];
+      }
+    }
     this.removeEvents(type);
     this.props.onAfterChange(this.getValue());
     this.setState({handle: null});
