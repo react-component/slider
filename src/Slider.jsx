@@ -7,20 +7,20 @@ import Handle from './Handle';
 import Dots from './Dots';
 import Marks from './Marks';
 
+const _touchIdentifiers = {};
+
 function noop() {
 }
 
-var _touchIdentifiers = {};
-
 function getTouchPosition(e) {
-  var touches = e.changedTouches;
+  const touches = e.changedTouches;
   for (let i = 0; i < touches.length; i++) {
-    var touch = touches[i];
+    const touch = touches[i];
     if (_touchIdentifiers[touch.identifier]) {
       return touch.pageX;
     }
   }
-  //if touch identifier doesn't match
+  // if touch identifier doesn't match
   return e.changedTouches[0].pageX;
 }
 
@@ -125,7 +125,6 @@ class Slider extends React.Component {
   }
 
   onTouchMove(e) {
-
     const position = getTouchPosition(e);
     this.onMove(e, position);
   }
@@ -327,9 +326,9 @@ class Slider extends React.Component {
   }
 
   end(type, e) {
-    var touches = e.changedTouches;
+    const touches = e.changedTouches;
     for (let i = 0; i < touches.length; i++) {
-      var touch = touches[i];
+      const touch = touches[i];
       if (_touchIdentifiers[touch.identifier]) {
         delete _touchIdentifiers[touch.identifier];
       }
