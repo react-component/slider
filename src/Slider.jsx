@@ -13,7 +13,7 @@ function noop() {
 }
 
 function getTouchPosition(e) {
-  const touches = e.changedTouches;
+  const touches = e.touches;
   for (let i = 0; i < touches.length; i++) {
     const touch = touches[i];
     if (_touchIdentifiers[touch.identifier]) {
