@@ -7,8 +7,6 @@ import Handle from './Handle';
 import Dots from './Dots';
 import Marks from './Marks';
 
-const _touchIdentifiers = {};
-
 function noop() {
 }
 
@@ -16,7 +14,7 @@ function getTouchPosition(e) {
   const touches = e.touches;
   for (let i = 0; i < touches.length; i++) {
     const touch = touches[i];
-    if (_touchIdentifiers[touch.identifier]) {
+    if (this.touchIdentifiers[touch.identifier]) {
       return touch.pageX;
     }
   }
@@ -34,6 +32,7 @@ function pauseEvent(e) {
 }
 
 class Slider extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -164,7 +163,7 @@ class Slider extends React.Component {
   }
 
   onTouchStart(e) {
-    _touchIdentifiers[e.changedTouches[0].identifier] = true;
+    this.touchIdentifiers[e.changedTouches[0].identifier] = true;
 
     const position = getTouchPosition(e);
     this.onStart(position);
@@ -251,6 +250,8 @@ class Slider extends React.Component {
     return precision;
   }
 
+  touchIdentifiers = {};
+
   isValueOutOfBounds(value, props) {
     return value < props.min || value > props.max;
   }
@@ -326,11 +327,13 @@ class Slider extends React.Component {
   }
 
   end(type, e) {
-    const touches = e.changedTouches;
-    for (let i = 0; i < touches.length; i++) {
-      const touch = touches[i];
-      if (_touchIdentifiers[touch.identifier]) {
-        delete _touchIdentifiers[touch.identifier];
+    if (type === 'touch') {
+      const touches = e.changedTouches;
+      for (let i = 0; i < touches.length; i++) {
+        const touch = touches[i];
+        if (this.touchIdentifiers[touch.identifier]) {
+          delete this.touchIdentifiers[touch.identifier];
+        }
       }
     }
     this.removeEvents(type);
