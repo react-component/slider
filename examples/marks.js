@@ -11,7 +11,12 @@ const marks = {
   26: '26°C',
   37: '37°C',
   50: '50°C',
-  100: '100°C',
+  100: {
+    style: {
+      color: 'red',
+    },
+    label: '100°C',
+  },
 };
 
 function log(value) {
