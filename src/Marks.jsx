@@ -19,8 +19,13 @@ const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) =
     const style = { width: markWidth + '%' };
     style.left = (point - min) / range * 100 - markWidth / 2 + '%';
 
-    return (<span className={markClassName} style={style} key={point}>
-             {marks[point]}
+    const markPoint = marks[point];
+    const markPointIsObject = typeof markPoint === 'object';
+    const markLabel = markPointIsObject ? markPoint.label : markPoint;
+    const markStyle = markPointIsObject ?
+            { ...style, ...markPoint.style } : style;
+    return (<span className={markClassName} style={markStyle} key={point}>
+             {markLabel}
             </span>);
   });
 
