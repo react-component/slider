@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>marks.js - example - rc-slider@3.3.2</title>
+  <title>marks.js - example - rc-slider@3.4.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,7 +257,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@3.3.2</h1>
+    <h1>rc-slider@3.4.0</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -277,10 +277,15 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <span class="hljs-number">26</span>: <span class="hljs-string">'26°C'</span>,
   <span class="hljs-number">37</span>: <span class="hljs-string">'37°C'</span>,
   <span class="hljs-number">50</span>: <span class="hljs-string">'50°C'</span>,
-  <span class="hljs-number">100</span>: <span class="hljs-string">'100°C'</span>,
+  <span class="hljs-number">100</span>: {
+    style: {
+      color: <span class="hljs-string">'red'</span>,
+    },
+    label: <span class="hljs-string">'100°C'</span>,
+  },
 };
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">value</span>) </span>{
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span><span class="hljs-params">(value)</span> </span>{
   <span class="hljs-built_in">console</span>.log(value);
 }
 
