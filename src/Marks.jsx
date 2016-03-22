@@ -16,8 +16,11 @@ const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) =
       [className + '-text-active']: isActived,
     });
 
-    const style = { width: markWidth + '%' };
-    style.left = (point - min) / range * 100 - markWidth / 2 + '%';
+    const style = {
+      width: markWidth + '%',
+      marginLeft: -markWidth / 2 + '%',
+    };
+    style.left = (point - min) / range * 100 + '%';
 
     const markPoint = marks[point];
     const markPointIsObject = typeof markPoint === 'object' &&
