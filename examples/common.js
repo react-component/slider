@@ -25689,7 +25689,7 @@
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
-	        value: true
+	  value: true
 	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -25707,47 +25707,50 @@
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
 	var Marks = function Marks(_ref) {
-	        var className = _ref.className;
-	        var marks = _ref.marks;
-	        var included = _ref.included;
-	        var upperBound = _ref.upperBound;
-	        var lowerBound = _ref.lowerBound;
-	        var max = _ref.max;
-	        var min = _ref.min;
+	  var className = _ref.className;
+	  var marks = _ref.marks;
+	  var included = _ref.included;
+	  var upperBound = _ref.upperBound;
+	  var lowerBound = _ref.lowerBound;
+	  var max = _ref.max;
+	  var min = _ref.min;
 	
-	        var marksKeys = Object.keys(marks);
-	        var marksCount = marksKeys.length;
-	        var unit = 100 / (marksCount - 1);
-	        var markWidth = unit * 0.9;
+	  var marksKeys = Object.keys(marks);
+	  var marksCount = marksKeys.length;
+	  var unit = 100 / (marksCount - 1);
+	  var markWidth = unit * 0.9;
 	
-	        var range = max - min;
-	        var elements = marksKeys.map(parseFloat).sort(function (a, b) {
-	                return a - b;
-	        }).map(function (point) {
-	                var _classNames;
+	  var range = max - min;
+	  var elements = marksKeys.map(parseFloat).sort(function (a, b) {
+	    return a - b;
+	  }).map(function (point) {
+	    var _classNames;
 	
-	                var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
-	                var markClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, className + '-text', true), _defineProperty(_classNames, className + '-text-active', isActived), _classNames));
+	    var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
+	    var markClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, className + '-text', true), _defineProperty(_classNames, className + '-text-active', isActived), _classNames));
 	
-	                var style = { width: markWidth + '%' };
-	                style.left = (point - min) / range * 100 - markWidth / 2 + '%';
+	    var style = {
+	      width: markWidth + '%',
+	      marginLeft: -markWidth / 2 + '%'
+	    };
+	    style.left = (point - min) / range * 100 + '%';
 	
-	                var markPoint = marks[point];
-	                var markPointIsObject = typeof markPoint === 'object' && !_react2['default'].isValidElement(markPoint);
-	                var markLabel = markPointIsObject ? markPoint.label : markPoint;
-	                var markStyle = markPointIsObject ? _extends({}, style, markPoint.style) : style;
-	                return _react2['default'].createElement(
-	                        'span',
-	                        { className: markClassName, style: markStyle, key: point },
-	                        markLabel
-	                );
-	        });
+	    var markPoint = marks[point];
+	    var markPointIsObject = typeof markPoint === 'object' && !_react2['default'].isValidElement(markPoint);
+	    var markLabel = markPointIsObject ? markPoint.label : markPoint;
+	    var markStyle = markPointIsObject ? _extends({}, style, markPoint.style) : style;
+	    return _react2['default'].createElement(
+	      'span',
+	      { className: markClassName, style: markStyle, key: point },
+	      markLabel
+	    );
+	  });
 	
-	        return _react2['default'].createElement(
-	                'div',
-	                { className: className },
-	                elements
-	        );
+	  return _react2['default'].createElement(
+	    'div',
+	    { className: className },
+	    elements
+	  );
 	};
 	
 	exports['default'] = Marks;
