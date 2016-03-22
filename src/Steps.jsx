@@ -12,7 +12,8 @@ function calcPoints(marks, dots, step, min, max) {
   return points;
 }
 
-const Dots = ({prefixCls, marks, dots, step, included, lowerBound, upperBound, max, min}) => {
+const Steps = ({prefixCls, marks, dots, step, included,
+                lowerBound, upperBound, max, min}) => {
   const range = max - min;
   const elements = calcPoints(marks, dots, step, min, max).map((point) => {
     const offset = (point - min) / range * 100 + '%';
@@ -31,4 +32,4 @@ const Dots = ({prefixCls, marks, dots, step, included, lowerBound, upperBound, m
   return <div className={prefixCls + '-step'}>{elements}</div>;
 };
 
-export default Dots;
+export default Steps;

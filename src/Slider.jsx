@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import objectAssign from 'object-assign';
 import Track from './Track';
 import Handle from './Handle';
-import Dots from './Dots';
+import Steps from './Steps';
 import Marks from './Marks';
 
 function noop() {
@@ -366,7 +366,7 @@ class Slider extends React.Component {
         {lower}
         <Track className={prefixCls + '-track'} included={isIncluded}
                offset={lowerOffset} length={upperOffset - lowerOffset}/>
-        <Dots prefixCls={prefixCls} marks={marks} dots={dots} step={step}
+        <Steps prefixCls={prefixCls} marks={marks} dots={dots} step={step}
               included={isIncluded} lowerBound={lowerBound}
               upperBound={upperBound} max={max} min={min}/>
         <Marks className={prefixCls + '-mark'} marks={marks}
