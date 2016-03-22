@@ -20,7 +20,8 @@ const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) =
     style.left = (point - min) / range * 100 - markWidth / 2 + '%';
 
     const markPoint = marks[point];
-    const markPointIsObject = typeof markPoint === 'object';
+    const markPointIsObject = typeof markPoint === 'object' &&
+            !React.isValidElement(markPoint);
     const markLabel = markPointIsObject ? markPoint.label : markPoint;
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
