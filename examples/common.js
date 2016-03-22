@@ -19760,11 +19760,11 @@
 	
 	var _Handle2 = _interopRequireDefault(_Handle);
 	
-	var _Dots = __webpack_require__(215);
+	var _Steps = __webpack_require__(216);
 	
-	var _Dots2 = _interopRequireDefault(_Dots);
+	var _Steps2 = _interopRequireDefault(_Steps);
 	
-	var _Marks = __webpack_require__(216);
+	var _Marks = __webpack_require__(217);
 	
 	var _Marks2 = _interopRequireDefault(_Marks);
 	
@@ -20188,7 +20188,7 @@
 	        lower,
 	        _react2['default'].createElement(_Track2['default'], { className: prefixCls + '-track', included: isIncluded,
 	          offset: lowerOffset, length: upperOffset - lowerOffset }),
-	        _react2['default'].createElement(_Dots2['default'], { prefixCls: prefixCls, marks: marks, dots: dots, step: step,
+	        _react2['default'].createElement(_Steps2['default'], { prefixCls: prefixCls, marks: marks, dots: dots, step: step,
 	          included: isIncluded, lowerBound: lowerBound,
 	          upperBound: upperBound, max: max, min: min }),
 	        _react2['default'].createElement(_Marks2['default'], { className: prefixCls + '-mark', marks: marks,
@@ -21441,7 +21441,7 @@
 /***/ function(module, exports) {
 
 	/**
-	 * lodash 3.0.7 (Custom Build) <https://lodash.com/>
+	 * lodash 3.0.8 (Custom Build) <https://lodash.com/>
 	 * Build: `lodash modularize exports="npm" -o ./`
 	 * Copyright 2012-2016 The Dojo Foundation <http://dojofoundation.org/>
 	 * Based on Underscore.js 1.8.3 <http://underscorejs.org/LICENSE>
@@ -21544,8 +21544,7 @@
 	 * // => false
 	 */
 	function isArrayLike(value) {
-	  return value != null &&
-	    !(typeof value == 'function' && isFunction(value)) && isLength(getLength(value));
+	  return value != null && isLength(getLength(value)) && !isFunction(value);
 	}
 	
 	/**
@@ -21593,8 +21592,8 @@
 	 */
 	function isFunction(value) {
 	  // The use of `Object#toString` avoids issues with the `typeof` operator
-	  // in Safari 8 which returns 'object' for typed array constructors, and
-	  // PhantomJS 1.9 which returns 'function' for `NodeList` instances.
+	  // in Safari 8 which returns 'object' for typed array and weak map constructors,
+	  // and PhantomJS 1.9 which returns 'function' for `NodeList` instances.
 	  var tag = isObject(value) ? objectToString.call(value) : '';
 	  return tag == funcTag || tag == genTag;
 	}
@@ -22732,31 +22731,31 @@
 	  left: {
 	    points: ['cr', 'cl'],
 	    overflow: autoAdjustOverflow,
-	    offset: [-3, 0],
+	    offset: [-4, 0],
 	    targetOffset: targetOffset
 	  },
 	  right: {
 	    points: ['cl', 'cr'],
 	    overflow: autoAdjustOverflow,
-	    offset: [3, 0],
+	    offset: [4, 0],
 	    targetOffset: targetOffset
 	  },
 	  top: {
 	    points: ['bc', 'tc'],
 	    overflow: autoAdjustOverflow,
-	    offset: [0, -3],
+	    offset: [0, -4],
 	    targetOffset: targetOffset
 	  },
 	  bottom: {
 	    points: ['tc', 'bc'],
 	    overflow: autoAdjustOverflow,
-	    offset: [0, 3],
+	    offset: [0, 4],
 	    targetOffset: targetOffset
 	  },
 	  topLeft: {
 	    points: ['bl', 'tl'],
 	    overflow: autoAdjustOverflow,
-	    offset: [0, -3],
+	    offset: [0, -4],
 	    targetOffset: targetOffset
 	  },
 	  leftTop: {
@@ -22768,37 +22767,37 @@
 	  topRight: {
 	    points: ['br', 'tr'],
 	    overflow: autoAdjustOverflow,
-	    offset: [0, -3],
+	    offset: [0, -4],
 	    targetOffset: targetOffset
 	  },
 	  rightTop: {
 	    points: ['tl', 'tr'],
 	    overflow: autoAdjustOverflow,
-	    offset: [3, 0],
+	    offset: [4, 0],
 	    targetOffset: targetOffset
 	  },
 	  bottomRight: {
 	    points: ['tr', 'br'],
 	    overflow: autoAdjustOverflow,
-	    offset: [0, 3],
+	    offset: [0, 4],
 	    targetOffset: targetOffset
 	  },
 	  rightBottom: {
 	    points: ['bl', 'br'],
 	    overflow: autoAdjustOverflow,
-	    offset: [3, 0],
+	    offset: [4, 0],
 	    targetOffset: targetOffset
 	  },
 	  bottomLeft: {
 	    points: ['tl', 'bl'],
 	    overflow: autoAdjustOverflow,
-	    offset: [0, 3],
+	    offset: [0, 4],
 	    targetOffset: targetOffset
 	  },
 	  leftBottom: {
 	    points: ['br', 'bl'],
 	    overflow: autoAdjustOverflow,
-	    offset: [-3, 0],
+	    offset: [-4, 0],
 	    targetOffset: targetOffset
 	  }
 	};
@@ -22820,13 +22819,13 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
 	var _react = __webpack_require__(3);
 	
@@ -22842,7 +22841,9 @@
 	
 	var _Popup2 = _interopRequireDefault(_Popup);
 	
-	var _utils = __webpack_require__(214);
+	var _utils = __webpack_require__(215);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
 	function noop() {}
 	
@@ -22852,16 +22853,19 @@
 	
 	var ALL_HANDLERS = ['onClick', 'onMouseDown', 'onTouchStart', 'onMouseEnter', 'onMouseLeave', 'onFocus', 'onBlur'];
 	
-	var Trigger = _react2['default'].createClass({
+	var Trigger = _react2["default"].createClass({
 	  displayName: 'Trigger',
 	
 	  propTypes: {
 	    action: _react.PropTypes.any,
+	    showAction: _react.PropTypes.any,
+	    hideAction: _react.PropTypes.any,
 	    getPopupClassNameFromAlign: _react.PropTypes.any,
 	    onPopupVisibleChange: _react.PropTypes.func,
 	    afterPopupVisibleChange: _react.PropTypes.func,
 	    popup: _react.PropTypes.node.isRequired,
 	    popupStyle: _react.PropTypes.object,
+	    prefixCls: _react.PropTypes.string,
 	    popupClassName: _react.PropTypes.string,
 	    popupPlacement: _react.PropTypes.string,
 	    builtinPlacements: _react.PropTypes.object,
@@ -22869,6 +22873,8 @@
 	    popupAnimation: _react.PropTypes.any,
 	    mouseEnterDelay: _react.PropTypes.number,
 	    mouseLeaveDelay: _react.PropTypes.number,
+	    focusDelay: _react.PropTypes.number,
+	    blurDelay: _react.PropTypes.number,
 	    getPopupContainer: _react.PropTypes.func,
 	    destroyPopupOnHide: _react.PropTypes.bool,
 	    popupAlign: _react.PropTypes.object,
@@ -22884,31 +22890,34 @@
 	      popupClassName: '',
 	      mouseEnterDelay: 0,
 	      mouseLeaveDelay: 0.1,
+	      focusDelay: 0,
+	      blurDelay: 0.15,
 	      popupStyle: {},
 	      destroyPopupOnHide: false,
 	      popupAlign: {},
 	      defaultPopupVisible: false,
-	      action: []
+	      action: [],
+	      showAction: [],
+	      hideAction: []
 	    };
 	  },
-	
 	  getInitialState: function getInitialState() {
 	    var props = this.props;
-	    var popupVisible = undefined;
+	    var popupVisible = void 0;
 	    if ('popupVisible' in props) {
 	      popupVisible = !!props.popupVisible;
 	    } else {
 	      popupVisible = !!props.defaultPopupVisible;
 	    }
-	    return { popupVisible: popupVisible };
+	    return {
+	      popupVisible: popupVisible
+	    };
 	  },
-	
 	  componentDidMount: function componentDidMount() {
 	    this.componentDidUpdate({}, {
 	      popupVisible: this.state.popupVisible
 	    });
 	  },
-	
 	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
 	    if ('popupVisible' in nextProps) {
 	      this.setState({
@@ -22916,16 +22925,16 @@
 	      });
 	    }
 	  },
-	
 	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
 	    var _this = this;
 	
 	    var props = this.props;
 	    var state = this.state;
 	    if (this.popupRendered) {
-	      var _ret = (function () {
+	      var _ret = function () {
 	        var self = _this;
-	        _reactDom2['default'].unstable_renderSubtreeIntoContainer(_this, _this.getPopupElement(), _this.getPopupContainer(), function renderPopup() {
+	        _reactDom2["default"].unstable_renderSubtreeIntoContainer(_this, _this.getPopupElement(), _this.getPopupContainer(), function renderPopup() {
+	          /* eslint react/no-is-mounted:0 */
 	          if (this.isMounted()) {
 	            self.popupDomNode = (0, _reactDom.findDOMNode)(this);
 	          } else {
@@ -22942,7 +22951,7 @@
 	              _this.touchOutsideHandler = _rcUtil.Dom.addEventListener(document, 'touchstart', _this.onDocumentClick);
 	            }
 	            return {
-	              v: undefined
+	              v: void 0
 	            };
 	          }
 	        }
@@ -22952,16 +22961,15 @@
 	          _this.clickOutsideHandler = null;
 	          _this.touchOutsideHandler = null;
 	        }
-	      })();
+	      }();
 	
-	      if (typeof _ret === 'object') return _ret.v;
+	      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	    }
 	  },
-	
 	  componentWillUnmount: function componentWillUnmount() {
 	    var popupContainer = this.popupContainer;
 	    if (popupContainer) {
-	      _reactDom2['default'].unmountComponentAtNode(popupContainer);
+	      _reactDom2["default"].unmountComponentAtNode(popupContainer);
 	      if (this.props.getPopupContainer) {
 	        var mountNode = this.props.getPopupContainer((0, _reactDom.findDOMNode)(this));
 	        mountNode.removeChild(popupContainer);
@@ -22970,10 +22978,7 @@
 	      }
 	      this.popupContainer = null;
 	    }
-	    if (this.delayTimer) {
-	      clearTimeout(this.delayTimer);
-	      this.delayTimer = null;
-	    }
+	    this.clearDelayTimer();
 	    if (this.clickOutsideHandler) {
 	      this.clickOutsideHandler.remove();
 	      this.touchOutsideHandler.remove();
@@ -22981,36 +22986,29 @@
 	      this.touchOutsideHandler = null;
 	    }
 	  },
-	
 	  onMouseEnter: function onMouseEnter() {
 	    this.delaySetPopupVisible(true, this.props.mouseEnterDelay);
 	  },
-	
 	  onMouseLeave: function onMouseLeave() {
 	    this.delaySetPopupVisible(false, this.props.mouseLeaveDelay);
 	  },
-	
 	  onFocus: function onFocus() {
 	    this.focusTime = Date.now();
-	    this.setPopupVisible(true);
+	    this.delaySetPopupVisible(true, this.props.focusDelay);
 	  },
-	
 	  onMouseDown: function onMouseDown() {
 	    this.preClickTime = Date.now();
 	  },
-	
 	  onTouchStart: function onTouchStart() {
 	    this.preTouchTime = Date.now();
 	  },
-	
 	  onBlur: function onBlur() {
-	    this.setPopupVisible(false);
+	    this.delaySetPopupVisible(false, this.props.blurDelay);
 	  },
-	
 	  onClick: function onClick(event) {
 	    // focus will trigger click
 	    if (this.focusTime) {
-	      var preTime = undefined;
+	      var preTime = void 0;
 	      if (this.preClickTime && this.preTouchTime) {
 	        preTime = Math.min(this.preClickTime, this.preTouchTime);
 	      } else if (this.preClickTime) {
@@ -23026,9 +23024,11 @@
 	    this.preClickTime = 0;
 	    this.preTouchTime = 0;
 	    event.preventDefault();
-	    this.setPopupVisible(!this.state.popupVisible);
+	    var nextVisible = !this.state.popupVisible;
+	    if (this.isClickToHide() && !nextVisible || nextVisible && this.isClickToShow()) {
+	      this.setPopupVisible(!this.state.popupVisible);
+	    }
 	  },
-	
 	  onDocumentClick: function onDocumentClick(event) {
 	    var target = event.target;
 	    var root = (0, _reactDom.findDOMNode)(this);
@@ -23037,12 +23037,10 @@
 	      this.setPopupVisible(false);
 	    }
 	  },
-	
 	  getPopupDomNode: function getPopupDomNode() {
 	    // for test
 	    return this.popupDomNode;
 	  },
-	
 	  getPopupContainer: function getPopupContainer() {
 	    if (!this.popupContainer) {
 	      this.popupContainer = document.createElement('div');
@@ -23055,7 +23053,6 @@
 	    }
 	    return this.popupContainer;
 	  },
-	
 	  getPopupClassNameFromAlign: function getPopupClassNameFromAlign(align) {
 	    var className = [];
 	    var props = this.props;
@@ -23071,7 +23068,6 @@
 	    }
 	    return className.join(' ');
 	  },
-	
 	  getPopupAlign: function getPopupAlign() {
 	    var props = this.props;
 	    var popupPlacement = props.popupPlacement;
@@ -23083,7 +23079,6 @@
 	    }
 	    return popupAlign;
 	  },
-	
 	  getPopupElement: function getPopupElement() {
 	    var props = this.props;
 	    var state = this.state;
@@ -23092,9 +23087,10 @@
 	      mouseProps.onMouseEnter = this.onMouseEnter;
 	      mouseProps.onMouseLeave = this.onMouseLeave;
 	    }
-	    return _react2['default'].createElement(
-	      _Popup2['default'],
-	      _extends({ prefixCls: props.prefixCls,
+	    return _react2["default"].createElement(
+	      _Popup2["default"],
+	      _extends({
+	        prefixCls: props.prefixCls,
 	        destroyPopupOnHide: props.destroyPopupOnHide,
 	        visible: state.popupVisible,
 	        className: props.popupClassName,
@@ -23105,12 +23101,13 @@
 	      }, mouseProps, {
 	        wrap: this,
 	        style: props.popupStyle,
-	        transitionName: props.popupTransitionName }),
+	        transitionName: props.popupTransitionName
+	      }),
 	      props.popup
 	    );
 	  },
-	
 	  setPopupVisible: function setPopupVisible(popupVisible) {
+	    this.clearDelayTimer();
 	    if (this.state.popupVisible !== popupVisible) {
 	      if (!('popupVisible' in this.props)) {
 	        this.setState({
@@ -23120,49 +23117,96 @@
 	      this.props.onPopupVisibleChange(popupVisible);
 	    }
 	  },
-	
 	  delaySetPopupVisible: function delaySetPopupVisible(visible, delayS) {
 	    var _this2 = this;
 	
 	    var delay = delayS * 1000;
-	    if (this.delayTimer) {
-	      clearTimeout(this.delayTimer);
-	      this.delayTimer = null;
-	    }
+	    this.clearDelayTimer();
 	    if (delay) {
 	      this.delayTimer = setTimeout(function () {
 	        _this2.setPopupVisible(visible);
-	        _this2.delayTimer = null;
+	        _this2.clearDelayTimer();
 	      }, delay);
 	    } else {
 	      this.setPopupVisible(visible);
 	    }
 	  },
+	  clearDelayTimer: function clearDelayTimer() {
+	    if (this.delayTimer) {
+	      clearTimeout(this.delayTimer);
+	      this.delayTimer = null;
+	    }
+	  },
+	  isClickToShow: function isClickToShow() {
+	    var _props = this.props;
+	    var action = _props.action;
+	    var showAction = _props.showAction;
 	
+	    return action.indexOf('click') !== -1 || showAction.indexOf('click') !== -1;
+	  },
+	  isClickToHide: function isClickToHide() {
+	    var _props2 = this.props;
+	    var action = _props2.action;
+	    var hideAction = _props2.hideAction;
+	
+	    return action.indexOf('click') !== -1 || hideAction.indexOf('click') !== -1;
+	  },
+	  isMouseEnterToShow: function isMouseEnterToShow() {
+	    var _props3 = this.props;
+	    var action = _props3.action;
+	    var showAction = _props3.showAction;
+	
+	    return action.indexOf('hover') !== -1 || showAction.indexOf('mouseEnter') !== -1;
+	  },
+	  isMouseLeaveToHide: function isMouseLeaveToHide() {
+	    var _props4 = this.props;
+	    var action = _props4.action;
+	    var hideAction = _props4.hideAction;
+	
+	    return action.indexOf('hover') !== -1 || hideAction.indexOf('mouseLeave') !== -1;
+	  },
+	  isFocusToShow: function isFocusToShow() {
+	    var _props5 = this.props;
+	    var action = _props5.action;
+	    var showAction = _props5.showAction;
+	
+	    return action.indexOf('focus') !== -1 || showAction.indexOf('focus') !== -1;
+	  },
+	  isBlurToHide: function isBlurToHide() {
+	    var _props6 = this.props;
+	    var action = _props6.action;
+	    var hideAction = _props6.hideAction;
+	
+	    return action.indexOf('focus') !== -1 || hideAction.indexOf('blur') !== -1;
+	  },
 	  render: function render() {
 	    this.popupRendered = this.popupRendered || this.state.popupVisible;
 	    var props = this.props;
 	    var children = props.children;
-	    var child = _react2['default'].Children.only(children);
+	    var child = _react2["default"].Children.only(children);
 	    var childProps = child.props || {};
 	    var newChildProps = {};
-	    var trigger = props.action;
-	    if (trigger.indexOf('click') !== -1) {
+	
+	    if (this.isClickToHide() || this.isClickToShow()) {
 	      newChildProps.onClick = (0, _rcUtil.createChainedFunction)(this.onClick, childProps.onClick);
 	      newChildProps.onMouseDown = (0, _rcUtil.createChainedFunction)(this.onMouseDown, childProps.onMouseDown);
 	      newChildProps.onTouchStart = (0, _rcUtil.createChainedFunction)(this.onTouchStart, childProps.onTouchStart);
 	    }
-	    if (trigger.indexOf('hover') !== -1) {
+	    if (this.isMouseEnterToShow()) {
 	      newChildProps.onMouseEnter = (0, _rcUtil.createChainedFunction)(this.onMouseEnter, childProps.onMouseEnter);
+	    }
+	    if (this.isMouseLeaveToHide()) {
 	      newChildProps.onMouseLeave = (0, _rcUtil.createChainedFunction)(this.onMouseLeave, childProps.onMouseLeave);
 	    }
-	    if (trigger.indexOf('focus') !== -1) {
+	    if (this.isFocusToShow()) {
 	      newChildProps.onFocus = (0, _rcUtil.createChainedFunction)(this.onFocus, childProps.onFocus);
+	    }
+	    if (this.isBlurToHide()) {
 	      newChildProps.onBlur = (0, _rcUtil.createChainedFunction)(this.onBlur, childProps.onBlur);
 	    }
 	
 	    ALL_HANDLERS.forEach(function (handler) {
-	      var newFn = undefined;
+	      var newFn = void 0;
 	      if (props[handler] && newChildProps[handler]) {
 	        newFn = (0, _rcUtil.createChainedFunction)(props[handler], newChildProps[handler]);
 	      } else {
@@ -23173,11 +23217,11 @@
 	      }
 	    });
 	
-	    return _react2['default'].cloneElement(child, newChildProps);
+	    return _react2["default"].cloneElement(child, newChildProps);
 	  }
 	});
 	
-	exports['default'] = Trigger;
+	exports["default"] = Trigger;
 	module.exports = exports['default'];
 
 /***/ },
@@ -23186,11 +23230,9 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	var _react = __webpack_require__(3);
 	
@@ -23212,7 +23254,9 @@
 	
 	var _PopupInner2 = _interopRequireDefault(_PopupInner);
 	
-	var Popup = _react2['default'].createClass({
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	var Popup = _react2["default"].createClass({
 	  displayName: 'Popup',
 	
 	  propTypes: {
@@ -23221,14 +23265,16 @@
 	    style: _react.PropTypes.object,
 	    getClassNameFromAlign: _react.PropTypes.func,
 	    onMouseEnter: _react.PropTypes.func,
+	    align: _react.PropTypes.any,
+	    destroyPopupOnHide: _react.PropTypes.bool,
 	    className: _react.PropTypes.string,
+	    prefixCls: _react.PropTypes.string,
 	    onMouseLeave: _react.PropTypes.func
 	  },
 	
 	  componentDidMount: function componentDidMount() {
 	    this.rootNode = this.getPopupDomNode();
 	  },
-	
 	  onAlign: function onAlign(popupDomNode, align) {
 	    var props = this.props;
 	    var alignClassName = props.getClassNameFromAlign(props.align);
@@ -23238,15 +23284,12 @@
 	      popupDomNode.className = this.getClassName(currentAlignClassName);
 	    }
 	  },
-	
 	  getPopupDomNode: function getPopupDomNode() {
-	    return _reactDom2['default'].findDOMNode(this);
+	    return _reactDom2["default"].findDOMNode(this);
 	  },
-	
 	  getTarget: function getTarget() {
-	    return _reactDom2['default'].findDOMNode(this.props.wrap);
+	    return _reactDom2["default"].findDOMNode(this.props.wrap);
 	  },
-	
 	  getTransitionName: function getTransitionName() {
 	    var props = this.props;
 	    var transitionName = props.transitionName;
@@ -23255,16 +23298,9 @@
 	    }
 	    return transitionName;
 	  },
-	
 	  getClassName: function getClassName(currentAlignClassName) {
-	    var props = this.props;
-	    var prefixCls = props.prefixCls;
-	
-	    var className = prefixCls + ' ' + props.className + ' ';
-	    className += currentAlignClassName;
-	    return className;
+	    return this.props.prefixCls + ' ' + this.props.className + ' ' + currentAlignClassName;
 	  },
-	
 	  render: function render() {
 	    var props = this.props;
 	    var align = props.align;
@@ -23279,57 +23315,69 @@
 	      this.currentAlignClassName = null;
 	    }
 	    if (destroyPopupOnHide) {
-	      return _react2['default'].createElement(
-	        _rcAnimate2['default'],
-	        { component: '',
+	      return _react2["default"].createElement(
+	        _rcAnimate2["default"],
+	        {
+	          component: '',
 	          exclusive: true,
 	          transitionAppear: true,
-	          transitionName: this.getTransitionName() },
-	        visible ? _react2['default'].createElement(
-	          _rcAlign2['default'],
-	          { target: this.getTarget,
+	          transitionName: this.getTransitionName()
+	        },
+	        visible ? _react2["default"].createElement(
+	          _rcAlign2["default"],
+	          {
+	            target: this.getTarget,
 	            key: 'popup',
 	            monitorWindowResize: true,
 	            align: align,
-	            onAlign: this.onAlign },
-	          _react2['default'].createElement(
-	            _PopupInner2['default'],
-	            { className: className,
+	            onAlign: this.onAlign
+	          },
+	          _react2["default"].createElement(
+	            _PopupInner2["default"],
+	            {
+	              className: className,
+	              prefixCls: prefixCls,
 	              visible: true,
 	              onMouseEnter: props.onMouseEnter,
 	              onMouseLeave: props.onMouseLeave,
-	              style: style },
+	              style: style
+	            },
 	            props.children
 	          )
 	        ) : null
 	      );
 	    }
-	    return _react2['default'].createElement(
-	      _rcAnimate2['default'],
-	      { component: '',
+	    return _react2["default"].createElement(
+	      _rcAnimate2["default"],
+	      {
+	        component: '',
 	        exclusive: true,
 	        transitionAppear: true,
 	        transitionName: this.getTransitionName(),
-	        showProp: 'xVisible' },
-	      _react2['default'].createElement(
-	        _rcAlign2['default'],
-	        { target: this.getTarget,
+	        showProp: 'xVisible'
+	      },
+	      _react2["default"].createElement(
+	        _rcAlign2["default"],
+	        {
+	          target: this.getTarget,
 	          key: 'popup',
 	          monitorWindowResize: true,
 	          xVisible: visible,
-	          childrenProps: {
-	            visible: 'xVisible'
-	          },
+	          childrenProps: { visible: 'xVisible' },
 	          disabled: !visible,
 	          align: align,
-	          onAlign: this.onAlign },
-	        _react2['default'].createElement(
-	          _PopupInner2['default'],
-	          { className: className,
+	          onAlign: this.onAlign
+	        },
+	        _react2["default"].createElement(
+	          _PopupInner2["default"],
+	          {
+	            className: className,
 	            hiddenClassName: hiddenClassName,
+	            prefixCls: prefixCls,
 	            onMouseEnter: props.onMouseEnter,
 	            onMouseLeave: props.onMouseLeave,
-	            style: style },
+	            style: style
+	          },
 	          props.children
 	        )
 	      )
@@ -23337,7 +23385,7 @@
 	  }
 	});
 	
-	exports['default'] = Popup;
+	exports["default"] = Popup;
 	module.exports = exports['default'];
 
 /***/ },
@@ -25439,22 +25487,27 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 	
 	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
 	
-	var PopupInner = _react2['default'].createClass({
+	var _LazyRenderBox = __webpack_require__(214);
+	
+	var _LazyRenderBox2 = _interopRequireDefault(_LazyRenderBox);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	var PopupInner = _react2["default"].createClass({
 	  displayName: 'PopupInner',
 	
 	  propTypes: {
 	    hiddenClassName: _react.PropTypes.string,
 	    className: _react.PropTypes.string,
+	    prefixCls: _react.PropTypes.string,
 	    onMouseEnter: _react.PropTypes.func,
 	    onMouseLeave: _react.PropTypes.func,
 	    children: _react.PropTypes.any
@@ -25465,27 +25518,75 @@
 	    if (!props.visible) {
 	      className += ' ' + props.hiddenClassName;
 	    }
-	    return _react2['default'].createElement(
+	    return _react2["default"].createElement(
 	      'div',
-	      { className: className,
+	      {
+	        className: className,
 	        onMouseEnter: props.onMouseEnter,
 	        onMouseLeave: props.onMouseLeave,
-	        style: props.style },
-	      props.children
+	        style: props.style
+	      },
+	      _react2["default"].createElement(
+	        _LazyRenderBox2["default"],
+	        { prefixCls: props.prefixCls, visible: props.visible },
+	        props.children
+	      )
 	    );
 	  }
 	});
 	
-	exports['default'] = PopupInner;
+	exports["default"] = PopupInner;
 	module.exports = exports['default'];
 
 /***/ },
 /* 214 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _react = __webpack_require__(3);
+	
+	var _react2 = _interopRequireDefault(_react);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	var LazyRenderBox = _react2["default"].createClass({
+	  displayName: 'LazyRenderBox',
+	
+	  propTypes: {
+	    children: _react.PropTypes.any,
+	    visible: _react.PropTypes.bool,
+	    prefixCls: _react.PropTypes.string
+	  },
+	  shouldComponentUpdate: function shouldComponentUpdate(nextProps) {
+	    return nextProps.visible;
+	  },
+	  render: function render() {
+	    if (_react2["default"].Children.count(this.props.children) > 1) {
+	      return _react2["default"].createElement(
+	        'div',
+	        { className: this.props.prefixCls + '-content' },
+	        this.props.children
+	      );
+	    }
+	    return _react2["default"].Children.only(this.props.children);
+	  }
+	});
+	
+	exports["default"] = LazyRenderBox;
+	module.exports = exports['default'];
+
+/***/ },
+/* 215 */
 /***/ function(module, exports) {
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 	
@@ -25515,7 +25616,7 @@
 	}
 
 /***/ },
-/* 215 */
+/* 216 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25547,7 +25648,7 @@
 	  return points;
 	}
 	
-	var Dots = function Dots(_ref) {
+	var Steps = function Steps(_ref) {
 	  var prefixCls = _ref.prefixCls;
 	  var marks = _ref.marks;
 	  var dots = _ref.dots;
@@ -25578,17 +25679,17 @@
 	  );
 	};
 	
-	exports['default'] = Dots;
+	exports['default'] = Steps;
 	module.exports = exports['default'];
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	Object.defineProperty(exports, '__esModule', {
-	  value: true
+	        value: true
 	});
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -25606,47 +25707,47 @@
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
 	var Marks = function Marks(_ref) {
-	  var className = _ref.className;
-	  var marks = _ref.marks;
-	  var included = _ref.included;
-	  var upperBound = _ref.upperBound;
-	  var lowerBound = _ref.lowerBound;
-	  var max = _ref.max;
-	  var min = _ref.min;
+	        var className = _ref.className;
+	        var marks = _ref.marks;
+	        var included = _ref.included;
+	        var upperBound = _ref.upperBound;
+	        var lowerBound = _ref.lowerBound;
+	        var max = _ref.max;
+	        var min = _ref.min;
 	
-	  var marksKeys = Object.keys(marks);
-	  var marksCount = marksKeys.length;
-	  var unit = 100 / (marksCount - 1);
-	  var markWidth = unit * 0.9;
+	        var marksKeys = Object.keys(marks);
+	        var marksCount = marksKeys.length;
+	        var unit = 100 / (marksCount - 1);
+	        var markWidth = unit * 0.9;
 	
-	  var range = max - min;
-	  var elements = marksKeys.map(parseFloat).sort(function (a, b) {
-	    return a - b;
-	  }).map(function (point) {
-	    var _classNames;
+	        var range = max - min;
+	        var elements = marksKeys.map(parseFloat).sort(function (a, b) {
+	                return a - b;
+	        }).map(function (point) {
+	                var _classNames;
 	
-	    var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
-	    var markClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, className + '-text', true), _defineProperty(_classNames, className + '-text-active', isActived), _classNames));
+	                var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
+	                var markClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, className + '-text', true), _defineProperty(_classNames, className + '-text-active', isActived), _classNames));
 	
-	    var style = { width: markWidth + '%' };
-	    style.left = (point - min) / range * 100 - markWidth / 2 + '%';
+	                var style = { width: markWidth + '%' };
+	                style.left = (point - min) / range * 100 - markWidth / 2 + '%';
 	
-	    var markPoint = marks[point];
-	    var markPointIsObject = typeof markPoint === 'object';
-	    var markLabel = markPointIsObject ? markPoint.label : markPoint;
-	    var markStyle = markPointIsObject ? _extends({}, style, markPoint.style) : style;
-	    return _react2['default'].createElement(
-	      'span',
-	      { className: markClassName, style: markStyle, key: point },
-	      markLabel
-	    );
-	  });
+	                var markPoint = marks[point];
+	                var markPointIsObject = typeof markPoint === 'object' && !_react2['default'].isValidElement(markPoint);
+	                var markLabel = markPointIsObject ? markPoint.label : markPoint;
+	                var markStyle = markPointIsObject ? _extends({}, style, markPoint.style) : style;
+	                return _react2['default'].createElement(
+	                        'span',
+	                        { className: markClassName, style: markStyle, key: point },
+	                        markLabel
+	                );
+	        });
 	
-	  return _react2['default'].createElement(
-	    'div',
-	    { className: className },
-	    elements
-	  );
+	        return _react2['default'].createElement(
+	                'div',
+	                { className: className },
+	                elements
+	        );
 	};
 	
 	exports['default'] = Marks;

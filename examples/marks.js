@@ -20,7 +20,11 @@ webpackJsonp([0],[
 	var style = { width: 400, margin: 50 };
 	var marks = {
 	  '-10': '-10°C',
-	  0: '0°C',
+	  0: React.createElement(
+	    'strong',
+	    null,
+	    '0°C'
+	  ),
 	  26: '26°C',
 	  37: '37°C',
 	  50: '50°C',
@@ -28,7 +32,11 @@ webpackJsonp([0],[
 	    style: {
 	      color: 'red'
 	    },
-	    label: '100°C'
+	    label: React.createElement(
+	      'strong',
+	      null,
+	      '100°C'
+	    )
 	  }
 	};
 	

@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>marks.js - example - rc-slider@3.4.0</title>
+  <title>marks.js - example - rc-slider@3.5.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,7 +257,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@3.4.0</h1>
+    <h1>rc-slider@3.5.0</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -273,24 +273,24 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">const</span> style = {width: <span class="hljs-number">400</span>, margin: <span class="hljs-number">50</span>};
 <span class="hljs-keyword">const</span> marks = {
   <span class="hljs-string">'-10'</span>: <span class="hljs-string">'-10°C'</span>,
-  <span class="hljs-number">0</span>: <span class="hljs-string">'0°C'</span>,
-  <span class="hljs-number">26</span>: <span class="hljs-string">'26°C'</span>,
-  <span class="hljs-number">37</span>: <span class="hljs-string">'37°C'</span>,
-  <span class="hljs-number">50</span>: <span class="hljs-string">'50°C'</span>,
-  <span class="hljs-number">100</span>: {
+  <span class="hljs-number">0</span>: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">strong</span>&gt;</span>0°C<span class="hljs-tag">&lt;/<span class="hljs-title">strong</span>&gt;</span>,
+  26: '26°C',
+  37: '37°C',
+  50: '50°C',
+  100: {
     style: {
-      color: <span class="hljs-string">'red'</span>,
+      color: 'red',
     },
-    label: <span class="hljs-string">'100°C'</span>,
+    label: <span class="hljs-tag">&lt;<span class="hljs-title">strong</span>&gt;</span>100°C<span class="hljs-tag">&lt;/<span class="hljs-title">strong</span>&gt;</span>,
   },
 };
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span><span class="hljs-params">(value)</span> </span>{
-  <span class="hljs-built_in">console</span>.log(value);
+function log(value) {
+  console.log(value);
 }
 
 ReactDOM.render(
-  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with marks, `step=null`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{null}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
