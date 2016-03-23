@@ -14,8 +14,16 @@ function log(value) {
 const CustomizedRange = React.createClass({
   getInitialState: function() {
     return {
+      lowerBound: 20,
+      upperBound: 40,
       value: [20, 40],
     };
+  },
+  onLowerBoundChange: function(e) {
+    this.setState({ lowerBound: +e.target.value });
+  },
+  onUpperBoundChange: function(e) {
+    this.setState({ upperBound: +e.target.value });
   },
   onSliderChange: function(value) {
     log(value);
@@ -23,8 +31,24 @@ const CustomizedRange = React.createClass({
       value: value,
     });
   },
+  handleApply: function() {
+    const { lowerBound, upperBound } = this.state;
+    this.setState({ value: [lowerBound, upperBound]});
+  },
   render: function() {
-    return <Slider range value={this.state.value} onChange={this.onSliderChange} />;
+    return (
+      <div>
+        <label>LowerBound: </label>
+        <input type="number" value={this.state.lowerBound} onChange={this.onLowerBoundChange} />
+        <br />
+        <label>UpperBound: </label>
+        <input type="number" value={this.state.upperBound} onChange={this.onUpperBoundChange} />
+        <br />
+        <button onClick={this.handleApply}>Apply</button>
+        <br /><br />
+        <Slider range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
+      </div>
+    );
   },
 });
 
