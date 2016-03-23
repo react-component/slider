@@ -1,7 +1,6 @@
 import React from 'react';
 import {Dom as DomUtils} from 'rc-util';
 import classNames from 'classnames';
-import objectAssign from 'object-assign';
 import Track from './Track';
 import Handle from './Handle';
 import Steps from './Steps';
@@ -108,7 +107,7 @@ class Slider extends React.Component {
       this.setState({handle: state.handle});
     }
 
-    const data = objectAssign({}, this.state, state);
+    const data = {...this.state, ...state};
     const changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
     props.onChange(changedValue);
   }
@@ -257,7 +256,7 @@ class Slider extends React.Component {
   trimAlignValue(v, nextProps) {
     const state = this.state || {};
     const {handle, lowerBound, upperBound} = state;
-    const {marks, step, min, max, allowCross} = objectAssign({}, this.props, nextProps || {});
+    const {marks, step, min, max, allowCross} = {...this.props, ...(nextProps || {})};
 
     let val = v;
     if (val <= min) {
