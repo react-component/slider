@@ -9,12 +9,16 @@ import Marks from './Marks';
 function noop() {
 }
 
-function isNotTouchEvent(e) {
-  return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
-}
-
 function getTouchPosition(e) {
-  return e.touches[0].pageX;
+  const touches = e.touches;
+  for (let i = 0; i < touches.length; i++) {
+    const touch = touches[i];
+    if (this.touchIdentifiers[touch.identifier]) {
+      return touch.pageX;
+    }
+  }
+  // if touch identifier doesn't match
+  return e.changedTouches[0].pageX;
 }
 
 function getMousePosition(e) {
@@ -27,6 +31,7 @@ function pauseEvent(e) {
 }
 
 class Slider extends React.Component {
+
   constructor(props) {
     super(props);
 
@@ -118,11 +123,6 @@ class Slider extends React.Component {
   }
 
   onTouchMove(e) {
-    if (isNotTouchEvent(e)) {
-      this.end('touch');
-      return;
-    }
-
     const position = getTouchPosition(e);
     this.onMove(e, position);
   }
@@ -162,7 +162,7 @@ class Slider extends React.Component {
   }
 
   onTouchStart(e) {
-    if (isNotTouchEvent(e)) return;
+    this.touchIdentifiers[e.changedTouches[0].identifier] = true;
 
     const position = getTouchPosition(e);
     this.onStart(position);
@@ -249,6 +249,8 @@ class Slider extends React.Component {
     return precision;
   }
 
+  touchIdentifiers = {};
+
   isValueOutOfBounds(value, props) {
     return value < props.min || value > props.max;
   }
@@ -323,7 +325,16 @@ class Slider extends React.Component {
     }
   }
 
-  end(type) {
+  end(type, e) {
+    if (type === 'touch') {
+      const touches = e.changedTouches;
+      for (let i = 0; i < touches.length; i++) {
+        const touch = touches[i];
+        if (this.touchIdentifiers[touch.identifier]) {
+          delete this.touchIdentifiers[touch.identifier];
+        }
+      }
+    }
     this.removeEvents(type);
     this.props.onAfterChange(this.getValue());
     this.setState({handle: null});
