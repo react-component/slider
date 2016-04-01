@@ -113,6 +113,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>When `range` is `true`, `allowCross` could be set as `true` to allow those two handles cross.</td>
         </tr>
         <tr>
+          <td>vertical</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>If vertical is `true`, the slider will be vertical.</td>
+        </tr>
+        <tr>
           <td>defaultValue</td>
           <td>number or [number, number]</td>
           <td>0 or [0, 0]</td>

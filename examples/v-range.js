@@ -1,0 +1,117 @@
+/* eslint react/no-multi-comp: 0 */
+require('rc-slider/assets/index.less');
+
+const React = require('react');
+const ReactDOM = require('react-dom');
+const Slider = require('rc-slider');
+
+const style = {height: 400, marginBottom: 50, marginLeft: 50};
+
+function log(value) {
+  console.log(value);
+}
+
+const CustomizedRange = React.createClass({
+  getInitialState: function() {
+    return {
+      lowerBound: 20,
+      upperBound: 40,
+      value: [20, 40],
+    };
+  },
+  onLowerBoundChange: function(e) {
+    this.setState({ lowerBound: +e.target.value });
+  },
+  onUpperBoundChange: function(e) {
+    this.setState({ upperBound: +e.target.value });
+  },
+  onSliderChange: function(value) {
+    log(value);
+    this.setState({
+      value: value,
+    });
+  },
+  handleApply: function() {
+    const { lowerBound, upperBound } = this.state;
+    this.setState({ value: [lowerBound, upperBound]});
+  },
+  render: function() {
+    return (
+      <div style={style}>
+        <label>LowerBound: </label>
+        <input type="number" value={this.state.lowerBound} onChange={this.onLowerBoundChange} />
+        <br />
+        <label>UpperBound: </label>
+        <input type="number" value={this.state.upperBound} onChange={this.onUpperBoundChange} />
+        <br />
+        <button onClick={this.handleApply}>Apply</button>
+        <br /><br />
+        <Slider range vertical allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
+      </div>
+    );
+  },
+});
+
+const DynamicBounds = React.createClass({
+  getInitialState() {
+    return {
+      min: 0,
+      max: 100,
+    };
+  },
+  onSliderChange: function(value) {
+    log(value);
+  },
+  onMinChange: function(e) {
+    this.setState({
+      min: +e.target.value || 0,
+    });
+  },
+  onMaxChange: function(e) {
+    this.setState({
+      max: +e.target.value || 100,
+    });
+  },
+  render: function() {
+    return (
+      <div style={style}>
+        <label>Min: </label>
+        <input type="number" value={this.state.min} onChange={this.onMinChange} />
+        <br />
+        <label>Max: </label>
+        <input type="number" value={this.state.max} onChange={this.onMaxChange} />
+        <br /><br />
+        <Slider range vertical defaultValue={[20, 50]} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+      </div>
+    );
+  },
+});
+
+ReactDOM.render(
+  <div>
+    <p>Basic Range，`allowCross=false`</p>
+    <div style={style}>
+      <Slider range vertical allowCross={false} defaultValue={[0, 20]} onChange={log} />
+    </div>
+    <p>Basic Range，`step=20` </p>
+    <div style={style}>
+      <Slider range vertical step={20} defaultValue={[20, 40]} onBeforeChange={log} />
+    </div>
+    <p>Basic Range，`step=20, dots` </p>
+    <div style={style}>
+      <Slider range vertical dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+    </div>
+    <p>Controlled Range</p>
+    <div style={style}>
+      <Slider range vertical value={[20, 40]} />
+    </div>
+    <p>Customized Range</p>
+    <div style={style}>
+      <CustomizedRange />
+    </div>
+    <p>Range with dynamic `max` `min`</p>
+    <div style={style}>
+      <DynamicBounds />
+    </div>
+  </div>
+  , document.getElementById('__react-content'));

@@ -13,12 +13,12 @@ function isNotTouchEvent(e) {
   return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
 }
 
-function getTouchPosition(e) {
-  return e.touches[0].pageX;
+function getTouchPosition(vertical, e) {
+  return vertical ? e.touches[0].clientY : e.touches[0].pageX;
 }
 
-function getMousePosition(e) {
-  return e.pageX;
+function getMousePosition(vertical, e) {
+  return vertical ? e.clientY : e.pageX;
 }
 
 function pauseEvent(e) {
@@ -113,7 +113,7 @@ class Slider extends React.Component {
   }
 
   onMouseMove(e) {
-    const position = getMousePosition(e);
+    const position = getMousePosition(this.props.vertical, e);
     this.onMove(e, position);
   }
 
@@ -123,7 +123,7 @@ class Slider extends React.Component {
       return;
     }
 
-    const position = getTouchPosition(e);
+    const position = getTouchPosition(this.props.vertical, e);
     this.onMove(e, position);
   }
 
@@ -132,7 +132,8 @@ class Slider extends React.Component {
     const props = this.props;
     const state = this.state;
 
-    const diffPosition = position - this.startPosition;
+    let diffPosition = position - this.startPosition;
+    diffPosition = this.props.vertical ? -diffPosition : diffPosition;
     const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 
     const value = this.trimAlignValue(this.startValue + diffValue);
@@ -164,14 +165,14 @@ class Slider extends React.Component {
   onTouchStart(e) {
     if (isNotTouchEvent(e)) return;
 
-    const position = getTouchPosition(e);
+    const position = getTouchPosition(this.props.vertical, e);
     this.onStart(position);
     this.addDocumentEvents('touch');
     pauseEvent(e);
   }
 
   onMouseDown(e) {
-    const position = getMousePosition(e);
+    const position = getMousePosition(this.props.vertical, e);
     this.onStart(position);
     this.addDocumentEvents('mouse');
     pauseEvent(e);
@@ -229,14 +230,14 @@ class Slider extends React.Component {
       return 0;
     }
 
-    return slider.clientWidth;
+    return this.props.vertical ? slider.clientHeight : slider.clientWidth;
   }
 
   getSliderStart() {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
 
-    return rect.left;
+    return this.props.vertical ? rect.top : rect.left;
   }
 
   getPrecision() {
@@ -291,9 +292,10 @@ class Slider extends React.Component {
   }
 
   calcValue(offset) {
-    const {min, max} = this.props;
-    const ratio = offset / this.getSliderLength();
-    return ratio * (max - min) + min;
+    const {vertical, min, max} = this.props;
+    const ratio = Math.abs(offset / this.getSliderLength());
+    const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
+    return value;
   }
 
   calcValueByPos(position) {
@@ -331,7 +333,7 @@ class Slider extends React.Component {
 
   render() {
     const {handle, upperBound, lowerBound} = this.state;
-    const {className, prefixCls, disabled, dots, included, range, step,
+    const {className, prefixCls, disabled, vertical, dots, included, range, step,
       marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
@@ -342,19 +344,20 @@ class Slider extends React.Component {
 
     const upper = (<Handle className={handleClassName}
                            noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
-                           offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'}/>);
+                           vertical = {vertical} offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'}/>);
 
     let lower = null;
     if (range) {
       lower = (<Handle className={handleClassName}
                        noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
-                       offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'}/>);
+                       vertical = {vertical} offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'}/>);
     }
 
     const sliderClassName = classNames({
       [prefixCls]: true,
       [prefixCls + '-disabled']: disabled,
       [className]: !!className,
+      ['rc-slider-vertical']: this.props.vertical,
     });
     const isIncluded = included || range;
     return (
@@ -363,12 +366,12 @@ class Slider extends React.Component {
            onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}>
         {upper}
         {lower}
-        <Track className={prefixCls + '-track'} included={isIncluded}
+        <Track className={prefixCls + '-track'} vertical = {vertical} included={isIncluded}
                offset={lowerOffset} length={upperOffset - lowerOffset}/>
-        <Steps prefixCls={prefixCls} marks={marks} dots={dots} step={step}
+        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
               included={isIncluded} lowerBound={lowerBound}
               upperBound={upperBound} max={max} min={min}/>
-        <Marks className={prefixCls + '-mark'} marks={marks}
+        <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
                included={isIncluded} lowerBound={lowerBound}
                upperBound={upperBound} max={max} min={min}/>
         {children}
@@ -402,6 +405,7 @@ Slider.propTypes = {
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
   range: React.PropTypes.bool,
+  vertical: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
 };
 
@@ -421,6 +425,7 @@ Slider.defaultProps = {
   disabled: false,
   dots: false,
   range: false,
+  vertical: false,
   allowCross: true,
 };
 
