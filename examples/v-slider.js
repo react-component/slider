@@ -5,7 +5,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {float: 'left', 'marginBottom': 20, width: 200, height: 400, marginBottom: 160, marginLeft: 50};
+const style = {float: 'left', width: 200, height: 400, marginBottom: 160, marginLeft: 50};
 const parentStyle = {overflow: 'hidden'};
 
 function log(value) {
