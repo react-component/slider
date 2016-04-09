@@ -5,7 +5,8 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {height: 400, marginBottom: 50, marginLeft: 50};
+const style = {float: 'left', 'marginBottom': 20, width: 200, height: 400, marginBottom: 160, marginLeft: 50};
+const parentStyle = {overflow: 'hidden'};
 
 function log(value) {
   console.log(value);
@@ -56,49 +57,48 @@ const DynamicBounds = React.createClass({
   render: function() {
     return (
       <div style={style}>
+        <p>Slider with dynamic `min` `max`</p>
+        <Slider vertical defaultValue={50} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
         <label>Min: </label>
         <input type="number" value={this.state.min} onChange={this.onMinChange} />
         <br />
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
-        <br /><br />
-        <Slider vertical defaultValue={50} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
       </div>
     );
   },
 });
 
 ReactDOM.render(
-  <div>
-    <p>Basic Slider</p>
+  <div style={parentStyle}>
     <div style={style}>
+      <p>Basic Slider</p>
       <Slider vertical tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
     </div>
-    <p>Basic Slider，`step=20`</p>
     <div style={style}>
+      <p>Basic Slider，`step=20`</p>
       <Slider vertical step={20} defaultValue={50} onBeforeChange={log} />
     </div>
-    <p>Basic Slider，`step=20, dots`</p>
     <div style={style}>
+      <p>Basic Slider，`step=20, dots`</p>
       <Slider vertical dots step={20} defaultValue={100} onAfterChange={log} />
     </div>
-    <p>Basic Slider with `tipFormatter`</p>
     <div style={style}>
+      <p>Basic Slider with `tipFormatter`</p>
       <Slider vertical tipFormatter={percentFormatter} tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
     </div>
-    <p>Basic Slider without tooltip</p>
     <div style={style}>
+      <p>Basic Slider without tooltip</p>
       <Slider vertical tipFormatter={null} onChange={log} />
     </div>
-    <p>Controlled Slider</p>
     <div style={style}>
+      <p>Controlled Slider</p>
       <Slider vertical value={50} />
     </div>
-    <p>Customized Slider</p>
     <div style={style}>
+      <p>Customized Slider</p>
       <CustomizedSlider />
     </div>
-    <p>Slider with dynamic `min` `max`</p>
     <div>
       <DynamicBounds />
     </div>

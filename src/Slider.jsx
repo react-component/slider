@@ -357,7 +357,7 @@ class Slider extends React.Component {
       [prefixCls]: true,
       [prefixCls + '-disabled']: disabled,
       [className]: !!className,
-      ['rc-slider-vertical']: this.props.vertical,
+      [prefixCls + '-vertical']: this.props.vertical,
     });
     const isIncluded = included || range;
     return (

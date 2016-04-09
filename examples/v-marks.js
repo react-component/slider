@@ -4,7 +4,9 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {height: 400, marginBottom: 50, marginLeft: 50};
+const style = {float: 'left', 'marginBottom': 20, width: 160, height: 400, marginBottom: 160, marginLeft: 50};
+const parentStyle = {overflow: 'hidden'};
+
 const marks = {
   '-10': '-10°C',
   0: <strong>0°C</strong>,
@@ -24,29 +26,29 @@ function log(value) {
 }
 
 ReactDOM.render(
-  <div>
-    <p>Slider with marks, `step=null`</p>
+  <div style={parentStyle}>
     <div style={style}>
+      <p>Slider with marks, `step=null`</p>
       <Slider vertical min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
     </div>
-    <p>Slider with marks and steps</p>
     <div style={style}>
+       <p>Slider with marks and steps</p>
       <Slider vertical dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
-    <p>Slider with marks, `included=false`</p>
     <div style={style}>
+      <p>Slider with marks, `included=false`</p>
       <Slider vertical min={-10} marks={marks} included={false} defaultValue={20} />
     </div>
-    <p>Slider with marks and steps, `included=false`</p>
     <div style={style}>
+      <p>Slider with marks and steps, `included=false`</p>
       <Slider vertical min={-10} marks={marks} step={10} included={false} defaultValue={20} />
     </div>
-    <p>Range with marks</p>
     <div style={style}>
+      <p>Range with marks</p>
       <Slider vertical min={-10} range marks={marks} onChange={log} defaultValue={[20, 40]} />
     </div>
-    <p>Range with marks and steps</p>
     <div style={style}>
+      <p>Range with marks and steps</p>
       <Slider vertical min={-10} range marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
     </div>
   </div>

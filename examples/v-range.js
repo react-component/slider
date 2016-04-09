@@ -5,7 +5,8 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {height: 400, marginBottom: 50, marginLeft: 50};
+const style = {float: 'left', 'marginBottom': 20, width: 180, height: 400, marginBottom: 160, marginLeft: 50};
+const parentStyle = {overflow: 'hidden'};
 
 function log(value) {
   console.log(value);
@@ -38,6 +39,7 @@ const CustomizedRange = React.createClass({
   render: function() {
     return (
       <div style={style}>
+        <Slider range vertical allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
         <label>LowerBound: </label>
         <input type="number" value={this.state.lowerBound} onChange={this.onLowerBoundChange} />
         <br />
@@ -45,8 +47,6 @@ const CustomizedRange = React.createClass({
         <input type="number" value={this.state.upperBound} onChange={this.onUpperBoundChange} />
         <br />
         <button onClick={this.handleApply}>Apply</button>
-        <br /><br />
-        <Slider range vertical allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
       </div>
     );
   },
@@ -75,42 +75,41 @@ const DynamicBounds = React.createClass({
   render: function() {
     return (
       <div style={style}>
+        <Slider range vertical defaultValue={[20, 50]} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
         <label>Min: </label>
         <input type="number" value={this.state.min} onChange={this.onMinChange} />
         <br />
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
-        <br /><br />
-        <Slider range vertical defaultValue={[20, 50]} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
       </div>
     );
   },
 });
 
 ReactDOM.render(
-  <div>
-    <p>Basic Range，`allowCross=false`</p>
+  <div style={parentStyle}>
     <div style={style}>
+      <p>Basic Range，`allowCross=false`</p>
       <Slider range vertical allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
-    <p>Basic Range，`step=20` </p>
     <div style={style}>
+      <p>Basic Range，`step=20` </p>
       <Slider range vertical step={20} defaultValue={[20, 40]} onBeforeChange={log} />
     </div>
-    <p>Basic Range，`step=20, dots` </p>
     <div style={style}>
+      <p>Basic Range，`step=20, dots` </p>
       <Slider range vertical dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
-    <p>Controlled Range</p>
     <div style={style}>
+      <p>Controlled Range</p>
       <Slider range vertical value={[20, 40]} />
     </div>
-    <p>Customized Range</p>
     <div style={style}>
+      <p>Customized Range</p>
       <CustomizedRange />
     </div>
-    <p>Range with dynamic `max` `min`</p>
     <div style={style}>
+      <p>Range with dynamic `max` `min`</p>
       <DynamicBounds />
     </div>
   </div>
