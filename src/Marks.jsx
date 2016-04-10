@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) => {
+const Marks = ({className, vertical, marks, included, upperBound, lowerBound, max, min}) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
   const unit = 100 / (marksCount - 1);
@@ -16,11 +16,19 @@ const Marks = ({className, marks, included, upperBound, lowerBound, max, min}) =
       [className + '-text-active']: isActived,
     });
 
-    const style = {
+    const bottomStyle = {
+      // height: markWidth + '%',
+      marginBottom: '-200' + '%',
+      bottom: (point - min) / range * 100 + '%',
+    };
+
+    const leftStyle = {
       width: markWidth + '%',
       marginLeft: -markWidth / 2 + '%',
+      left: (point - min) / range * 100 + '%',
     };
-    style.left = (point - min) / range * 100 + '%';
+
+    const style = vertical ? bottomStyle : leftStyle;
 
     const markPoint = marks[point];
     const markPointIsObject = typeof markPoint === 'object' &&

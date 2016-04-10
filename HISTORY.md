@@ -1,6 +1,11 @@
 # History
 ----
 
+## 3.6.0 / 2016-04-01
+
+[#18](https://github.com/react-component/slider/issues/18) add `vertical` props ([@wnlee](https://github.com/WNLee))
+
+...
 
 ## 1.2.5 / 2015-07-13
 

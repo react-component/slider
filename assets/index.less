@@ -94,7 +94,7 @@
 
   &-dot {
     position: absolute;
-    top: -2px;
+    bottom: -2px;
     margin-left: -4px;
     width: 8px;
     height: 8px;
@@ -129,6 +129,45 @@
 
     .@{prefixClass}-mark-text, .@{prefixClass}-dot {
       cursor: not-allowed!important;
+    }
+  }
+}
+
+.@{prefixClass}-vertical {
+  width: 4px;
+  height: 100%;
+  .@{prefixClass} {
+    &-track {
+      bottom: 0;
+      width: 4px;
+    }
+
+    &-handle {
+      position: absolute;
+      margin-left: -5px;
+      margin-bottom: -7px;
+    }
+
+    &-mark {
+      top: 0;
+      left: 10px;
+      height: 100%;
+    }
+
+    &-step {
+      height: 100%;
+      width: 4px;
+    }
+
+    &-dot {
+      left: 2px;
+      margin-bottom: -4px;
+      &:first-child {
+        margin-bottom: -4px;
+      }
+      &:last-child {
+        margin-bottom: -4px;
+      }
     }
   }
 }

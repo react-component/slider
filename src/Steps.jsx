@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-function calcPoints(marks, dots, step, min, max) {
+function calcPoints(vertical, marks, dots, step, min, max) {
   const points = Object.keys(marks).map(parseFloat);
   if (dots) {
     for (let i = min; i <= max; i = i + step) {
@@ -12,12 +12,12 @@ function calcPoints(marks, dots, step, min, max) {
   return points;
 }
 
-const Steps = ({prefixCls, marks, dots, step, included,
+const Steps = ({prefixCls, vertical, marks, dots, step, included,
                 lowerBound, upperBound, max, min}) => {
   const range = max - min;
-  const elements = calcPoints(marks, dots, step, min, max).map((point) => {
-    const offset = (point - min) / range * 100 + '%';
-    const style = { left: offset };
+  const elements = calcPoints(vertical, marks, dots, step, min, max).map((point) => {
+    const offset = Math.abs(point - min) / range * 100 + '%';
+    const style = vertical ? { bottom: offset } : { left: offset };
 
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);

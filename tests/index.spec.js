@@ -6,7 +6,7 @@ const Slider = require('..');
 
 require('../assets/index.less');
 
-describe('rc-slider', function() {
+describe('rc-slider', function test() {
   this.timeout(5000);
   const div = document.createElement('div');
   document.body.appendChild(div);
@@ -139,5 +139,10 @@ describe('rc-slider', function() {
     expect(range.state.lowerBound).to.be(10);
     expect(range.state.upperBound).to.be(90);
     ReactDOM.unmountComponentAtNode(div);
+  });
+
+  it('should render a vertical slider, when `vertical` is true', () => {
+    const slider = ReactDOM.render(<Slider vertical />, div);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-vertical').length).to.be(1);
   });
 });
