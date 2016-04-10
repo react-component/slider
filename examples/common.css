@@ -66,7 +66,7 @@
 }
 .rc-slider-dot {
   position: absolute;
-  top: -2px;
+  bottom: -2px;
   margin-left: -4px;
   width: 8px;
   height: 8px;
@@ -100,6 +100,38 @@
 .rc-slider-disabled .rc-slider-mark-text,
 .rc-slider-disabled .rc-slider-dot {
   cursor: not-allowed !important;
+}
+.rc-slider-vertical {
+  width: 4px;
+  height: 100%;
+}
+.rc-slider-vertical .rc-slider-track {
+  bottom: 0;
+  width: 4px;
+}
+.rc-slider-vertical .rc-slider-handle {
+  position: absolute;
+  margin-left: -5px;
+  margin-bottom: -7px;
+}
+.rc-slider-vertical .rc-slider-mark {
+  top: 0;
+  left: 10px;
+  height: 100%;
+}
+.rc-slider-vertical .rc-slider-step {
+  height: 100%;
+  width: 4px;
+}
+.rc-slider-vertical .rc-slider-dot {
+  left: 2px;
+  margin-bottom: -4px;
+}
+.rc-slider-vertical .rc-slider-dot:first-child {
+  margin-bottom: -4px;
+}
+.rc-slider-vertical .rc-slider-dot:last-child {
+  margin-bottom: -4px;
 }
 .rc-slider-tooltip-zoom-down-enter,
 .rc-slider-tooltip-zoom-down-appear {

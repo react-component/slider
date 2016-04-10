@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>marks.js - example - rc-slider@3.6.0</title>
+  <title>v-marks.js - example - rc-slider@3.6.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,14 +263,16 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   </div>
   <div class="example" id="__react-content"></div>
   <script src="common.js?nowrap"></script>
-  <script src="marks.js?nowrap"></script>
+  <script src="v-marks.js?nowrap"></script>
   <div class="highlight"><pre><code language="js"><span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider/assets/index.css'</span>);
 
 <span class="hljs-keyword">const</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">const</span> ReactDOM = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-dom'</span>);
 <span class="hljs-keyword">const</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
 
-<span class="hljs-keyword">const</span> style = {width: <span class="hljs-number">400</span>, margin: <span class="hljs-number">50</span>};
+<span class="hljs-keyword">const</span> style = {float: <span class="hljs-string">'left'</span>, width: <span class="hljs-number">160</span>, height: <span class="hljs-number">400</span>, marginBottom: <span class="hljs-number">160</span>, marginLeft: <span class="hljs-number">50</span>};
+<span class="hljs-keyword">const</span> parentStyle = {overflow: <span class="hljs-string">'hidden'</span>};
+
 <span class="hljs-keyword">const</span> marks = {
   <span class="hljs-string">'-10'</span>: <span class="hljs-string">'-10°C'</span>,
   <span class="hljs-number">0</span>: <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">strong</span>&gt;</span>0°C<span class="hljs-tag">&lt;/<span class="hljs-title">strong</span>&gt;</span>,
@@ -290,32 +292,30 @@ function log(value) {
 }
 
 ReactDOM.render(
-  <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{parentStyle}</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with marks, `step=null`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{null}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{null}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with marks and steps<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">dots</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
+       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with marks and steps<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">dots</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with marks, `included=false`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">included</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">included</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with marks and steps, `included=false`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">included</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">included</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{20}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Range with marks<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[20,</span> <span class="hljs-attribute">40</span>]} /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[20,</span> <span class="hljs-attribute">40</span>]} /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Range with marks and steps<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[20,</span> <span class="hljs-attribute">40</span>]} /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{-10}</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">marks</span>=<span class="hljs-value">{marks}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{10}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[20,</span> <span class="hljs-attribute">40</span>]} /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   , document.getElementById('__react-content'));

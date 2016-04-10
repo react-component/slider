@@ -30,7 +30,7 @@
 /******/ 	// "0" means "already loaded"
 /******/ 	// Array means "loading", array contains callbacks
 /******/ 	var installedChunks = {
-/******/ 		3:0
+/******/ 		6:0
 /******/ 	};
 /******/
 /******/ 	// The require function
@@ -76,7 +76,7 @@
 /******/ 			script.charset = 'utf-8';
 /******/ 			script.async = true;
 /******/
-/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"marks","1":"range","2":"slider"}[chunkId]||chunkId) + ".js";
+/******/ 			script.src = __webpack_require__.p + "" + chunkId + "." + ({"0":"marks","1":"range","2":"slider","3":"v-marks","4":"v-range","5":"v-slider"}[chunkId]||chunkId) + ".js";
 /******/ 			head.appendChild(script);
 /******/ 		}
 /******/ 	};
@@ -19726,6 +19726,8 @@
 	  value: true
 	});
 	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 	
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; desc = parent = undefined; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -19747,10 +19749,6 @@
 	var _classnames = __webpack_require__(168);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
-	
-	var _objectAssign2 = __webpack_require__(182);
-	
-	var _objectAssign3 = _interopRequireDefault(_objectAssign2);
 	
 	var _Track = __webpack_require__(186);
 	
@@ -19774,12 +19772,12 @@
 	  return e.touches.length > 1 || e.type.toLowerCase() === 'touchend' && e.touches.length > 0;
 	}
 	
-	function getTouchPosition(e) {
-	  return e.touches[0].pageX;
+	function getTouchPosition(vertical, e) {
+	  return vertical ? e.touches[0].clientY : e.touches[0].pageX;
 	}
 	
-	function getMousePosition(e) {
-	  return e.pageX;
+	function getMousePosition(vertical, e) {
+	  return vertical ? e.clientY : e.pageX;
 	}
 	
 	function pauseEvent(e) {
@@ -19880,14 +19878,14 @@
 	        this.setState({ handle: state.handle });
 	      }
 	
-	      var data = (0, _objectAssign3['default'])({}, this.state, state);
+	      var data = _extends({}, this.state, state);
 	      var changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
 	      props.onChange(changedValue);
 	    }
 	  }, {
 	    key: 'onMouseMove',
 	    value: function onMouseMove(e) {
-	      var position = getMousePosition(e);
+	      var position = getMousePosition(this.props.vertical, e);
 	      this.onMove(e, position);
 	    }
 	  }, {
@@ -19898,7 +19896,7 @@
 	        return;
 	      }
 	
-	      var position = getTouchPosition(e);
+	      var position = getTouchPosition(this.props.vertical, e);
 	      this.onMove(e, position);
 	    }
 	  }, {
@@ -19909,6 +19907,7 @@
 	      var state = this.state;
 	
 	      var diffPosition = position - this.startPosition;
+	      diffPosition = this.props.vertical ? -diffPosition : diffPosition;
 	      var diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 	
 	      var value = this.trimAlignValue(this.startValue + diffValue);
@@ -19939,7 +19938,7 @@
 	    value: function onTouchStart(e) {
 	      if (isNotTouchEvent(e)) return;
 	
-	      var position = getTouchPosition(e);
+	      var position = getTouchPosition(this.props.vertical, e);
 	      this.onStart(position);
 	      this.addDocumentEvents('touch');
 	      pauseEvent(e);
@@ -19947,7 +19946,7 @@
 	  }, {
 	    key: 'onMouseDown',
 	    value: function onMouseDown(e) {
-	      var position = getMousePosition(e);
+	      var position = getMousePosition(this.props.vertical, e);
 	      this.onStart(position);
 	      this.addDocumentEvents('mouse');
 	      pauseEvent(e);
@@ -20010,7 +20009,7 @@
 	        return 0;
 	      }
 	
-	      return slider.clientWidth;
+	      return this.props.vertical ? slider.clientHeight : slider.clientWidth;
 	    }
 	  }, {
 	    key: 'getSliderStart',
@@ -20018,7 +20017,7 @@
 	      var slider = this.refs.slider;
 	      var rect = slider.getBoundingClientRect();
 	
-	      return rect.left;
+	      return this.props.vertical ? rect.top : rect.left;
 	    }
 	  }, {
 	    key: 'getPrecision',
@@ -20044,13 +20043,13 @@
 	      var lowerBound = state.lowerBound;
 	      var upperBound = state.upperBound;
 	
-	      var _objectAssign = (0, _objectAssign3['default'])({}, this.props, nextProps || {});
+	      var _extends2 = _extends({}, this.props, nextProps || {});
 	
-	      var marks = _objectAssign.marks;
-	      var step = _objectAssign.step;
-	      var min = _objectAssign.min;
-	      var max = _objectAssign.max;
-	      var allowCross = _objectAssign.allowCross;
+	      var marks = _extends2.marks;
+	      var step = _extends2.step;
+	      var min = _extends2.min;
+	      var max = _extends2.max;
+	      var allowCross = _extends2.allowCross;
 	
 	      var val = v;
 	      if (val <= min) {
@@ -20093,11 +20092,13 @@
 	    key: 'calcValue',
 	    value: function calcValue(offset) {
 	      var _props2 = this.props;
+	      var vertical = _props2.vertical;
 	      var min = _props2.min;
 	      var max = _props2.max;
 	
-	      var ratio = offset / this.getSliderLength();
-	      return ratio * (max - min) + min;
+	      var ratio = Math.abs(offset / this.getSliderLength());
+	      var value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
+	      return value;
 	    }
 	  }, {
 	    key: 'calcValueByPos',
@@ -20149,6 +20150,7 @@
 	      var className = _props3.className;
 	      var prefixCls = _props3.prefixCls;
 	      var disabled = _props3.disabled;
+	      var vertical = _props3.vertical;
 	      var dots = _props3.dots;
 	      var included = _props3.included;
 	      var range = _props3.range;
@@ -20168,16 +20170,16 @@
 	
 	      var upper = _react2['default'].createElement(_Handle2['default'], { className: handleClassName,
 	        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
-	        offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
+	        vertical: vertical, offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
 	
 	      var lower = null;
 	      if (range) {
 	        lower = _react2['default'].createElement(_Handle2['default'], { className: handleClassName,
 	          noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
-	          offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
+	          vertical: vertical, offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
 	      }
 	
-	      var sliderClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _defineProperty(_classNames, className, !!className), _classNames));
+	      var sliderClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls + '-vertical', this.props.vertical), _classNames));
 	      var isIncluded = included || range;
 	      return _react2['default'].createElement(
 	        'div',
@@ -20186,12 +20188,12 @@
 	          onMouseDown: disabled ? noop : this.onMouseDown.bind(this) },
 	        upper,
 	        lower,
-	        _react2['default'].createElement(_Track2['default'], { className: prefixCls + '-track', included: isIncluded,
+	        _react2['default'].createElement(_Track2['default'], { className: prefixCls + '-track', vertical: vertical, included: isIncluded,
 	          offset: lowerOffset, length: upperOffset - lowerOffset }),
-	        _react2['default'].createElement(_Steps2['default'], { prefixCls: prefixCls, marks: marks, dots: dots, step: step,
+	        _react2['default'].createElement(_Steps2['default'], { prefixCls: prefixCls, vertical: vertical, marks: marks, dots: dots, step: step,
 	          included: isIncluded, lowerBound: lowerBound,
 	          upperBound: upperBound, max: max, min: min }),
-	        _react2['default'].createElement(_Marks2['default'], { className: prefixCls + '-mark', marks: marks,
+	        _react2['default'].createElement(_Marks2['default'], { className: prefixCls + '-mark', vertical: vertical, marks: marks,
 	          included: isIncluded, lowerBound: lowerBound,
 	          upperBound: upperBound, max: max, min: min }),
 	        children
@@ -20221,6 +20223,7 @@
 	  tipFormatter: _react2['default'].PropTypes.func,
 	  dots: _react2['default'].PropTypes.bool,
 	  range: _react2['default'].PropTypes.bool,
+	  vertical: _react2['default'].PropTypes.bool,
 	  allowCross: _react2['default'].PropTypes.bool
 	};
 	
@@ -20242,6 +20245,7 @@
 	  disabled: false,
 	  dots: false,
 	  range: false,
+	  vertical: false,
 	  allowCross: true
 	};
 	
@@ -22437,14 +22441,20 @@
 	var Track = function Track(_ref) {
 	  var className = _ref.className;
 	  var included = _ref.included;
+	  var vertical = _ref.vertical;
 	  var offset = _ref.offset;
 	  var length = _ref.length;
 	
 	  var style = {
-	    left: offset + '%',
-	    width: length + '%',
 	    visibility: included ? 'visible' : 'hidden'
 	  };
+	  if (vertical) {
+	    style.bottom = offset + '%';
+	    style.height = length + '%';
+	  } else {
+	    style.left = offset + '%';
+	    style.width = length + '%';
+	  }
 	  return _react2['default'].createElement('div', { className: className, style: style });
 	};
 	
@@ -22513,12 +22523,13 @@
 	      var className = props.className;
 	      var tipTransitionName = props.tipTransitionName;
 	      var tipFormatter = props.tipFormatter;
+	      var vertical = props.vertical;
 	      var offset = props.offset;
 	      var value = props.value;
 	      var dragging = props.dragging;
 	      var noTip = props.noTip;
 	
-	      var style = { left: offset + '%' };
+	      var style = vertical ? { bottom: offset + '%' } : { left: offset + '%' };
 	      var handle = _react2['default'].createElement('div', { className: className, style: style,
 	        onMouseUp: this.showTooltip.bind(this),
 	        onMouseEnter: this.showTooltip.bind(this),
@@ -22554,6 +22565,7 @@
 	
 	Handle.propTypes = {
 	  className: _react2['default'].PropTypes.string,
+	  vertical: _react2['default'].PropTypes.bool,
 	  offset: _react2['default'].PropTypes.number,
 	  tipTransitionName: _react2['default'].PropTypes.string,
 	  tipFormatter: _react2['default'].PropTypes.func,
@@ -25637,7 +25649,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	function calcPoints(marks, dots, step, min, max) {
+	function calcPoints(vertical, marks, dots, step, min, max) {
 	  var points = Object.keys(marks).map(parseFloat);
 	  if (dots) {
 	    for (var i = min; i <= max; i = i + step) {
@@ -25650,6 +25662,7 @@
 	
 	var Steps = function Steps(_ref) {
 	  var prefixCls = _ref.prefixCls;
+	  var vertical = _ref.vertical;
 	  var marks = _ref.marks;
 	  var dots = _ref.dots;
 	  var step = _ref.step;
@@ -25660,11 +25673,11 @@
 	  var min = _ref.min;
 	
 	  var range = max - min;
-	  var elements = calcPoints(marks, dots, step, min, max).map(function (point) {
+	  var elements = calcPoints(vertical, marks, dots, step, min, max).map(function (point) {
 	    var _classNames;
 	
-	    var offset = (point - min) / range * 100 + '%';
-	    var style = { left: offset };
+	    var offset = Math.abs(point - min) / range * 100 + '%';
+	    var style = vertical ? { bottom: offset } : { left: offset };
 	
 	    var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
 	    var pointClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, prefixCls + '-dot', true), _defineProperty(_classNames, prefixCls + '-dot-active', isActived), _classNames));
@@ -25708,6 +25721,7 @@
 	
 	var Marks = function Marks(_ref) {
 	  var className = _ref.className;
+	  var vertical = _ref.vertical;
 	  var marks = _ref.marks;
 	  var included = _ref.included;
 	  var upperBound = _ref.upperBound;
@@ -25729,11 +25743,19 @@
 	    var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
 	    var markClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, className + '-text', true), _defineProperty(_classNames, className + '-text-active', isActived), _classNames));
 	
-	    var style = {
-	      width: markWidth + '%',
-	      marginLeft: -markWidth / 2 + '%'
+	    var bottomStyle = {
+	      // height: markWidth + '%',
+	      marginBottom: '-200' + '%',
+	      bottom: (point - min) / range * 100 + '%'
 	    };
-	    style.left = (point - min) / range * 100 + '%';
+	
+	    var leftStyle = {
+	      width: markWidth + '%',
+	      marginLeft: -markWidth / 2 + '%',
+	      left: (point - min) / range * 100 + '%'
+	    };
+	
+	    var style = vertical ? bottomStyle : leftStyle;
 	
 	    var markPoint = marks[point];
 	    var markPointIsObject = typeof markPoint === 'object' && !_react2['default'].isValidElement(markPoint);

@@ -1,14 +1,14 @@
-webpackJsonp([1],{
+webpackJsonp([4],{
 
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(218);
+	module.exports = __webpack_require__(221);
 
 
 /***/ },
 
-/***/ 218:
+/***/ 221:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* eslint react/no-multi-comp: 0 */
@@ -20,7 +20,8 @@ webpackJsonp([1],{
 	var ReactDOM = __webpack_require__(160);
 	var Slider = __webpack_require__(161);
 	
-	var style = { width: 400, margin: 50 };
+	var style = { float: 'left', width: 180, height: 400, marginBottom: 160, marginLeft: 50 };
+	var parentStyle = { overflow: 'hidden' };
 	
 	function log(value) {
 	  console.log(value);
@@ -58,7 +59,8 @@ webpackJsonp([1],{
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { style: style },
+	      React.createElement(Slider, { range: true, vertical: true, allowCross: false, value: this.state.value, onChange: this.onSliderChange }),
 	      React.createElement(
 	        'label',
 	        null,
@@ -77,10 +79,7 @@ webpackJsonp([1],{
 	        'button',
 	        { onClick: this.handleApply },
 	        'Apply'
-	      ),
-	      React.createElement('br', null),
-	      React.createElement('br', null),
-	      React.createElement(Slider, { range: true, allowCross: false, value: this.state.value, onChange: this.onSliderChange })
+	      )
 	    );
 	  }
 	});
@@ -110,7 +109,8 @@ webpackJsonp([1],{
 	  render: function render() {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { style: style },
+	      React.createElement(Slider, { range: true, vertical: true, defaultValue: [20, 50], min: this.state.min, max: this.state.max, onChange: this.onSliderChange }),
 	      React.createElement(
 	        'label',
 	        null,
@@ -123,17 +123,14 @@ webpackJsonp([1],{
 	        null,
 	        'Max: '
 	      ),
-	      React.createElement('input', { type: 'number', value: this.state.max, onChange: this.onMaxChange }),
-	      React.createElement('br', null),
-	      React.createElement('br', null),
-	      React.createElement(Slider, { range: true, defaultValue: [20, 50], min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
+	      React.createElement('input', { type: 'number', value: this.state.max, onChange: this.onMaxChange })
 	    );
 	  }
 	});
 	
 	ReactDOM.render(React.createElement(
 	  'div',
-	  null,
+	  { style: parentStyle },
 	  React.createElement(
 	    'div',
 	    { style: style },
@@ -142,7 +139,7 @@ webpackJsonp([1],{
 	      null,
 	      'Basic Range，`allowCross=false`'
 	    ),
-	    React.createElement(Slider, { range: true, allowCross: false, defaultValue: [0, 20], onChange: log })
+	    React.createElement(Slider, { range: true, vertical: true, allowCross: false, defaultValue: [0, 20], onChange: log })
 	  ),
 	  React.createElement(
 	    'div',
@@ -152,7 +149,7 @@ webpackJsonp([1],{
 	      null,
 	      'Basic Range，`step=20` '
 	    ),
-	    React.createElement(Slider, { range: true, step: 20, defaultValue: [20, 40], onBeforeChange: log })
+	    React.createElement(Slider, { range: true, vertical: true, step: 20, defaultValue: [20, 40], onBeforeChange: log })
 	  ),
 	  React.createElement(
 	    'div',
@@ -162,7 +159,7 @@ webpackJsonp([1],{
 	      null,
 	      'Basic Range，`step=20, dots` '
 	    ),
-	    React.createElement(Slider, { range: true, dots: true, step: 20, defaultValue: [20, 40], onAfterChange: log })
+	    React.createElement(Slider, { range: true, vertical: true, dots: true, step: 20, defaultValue: [20, 40], onAfterChange: log })
 	  ),
 	  React.createElement(
 	    'div',
@@ -172,7 +169,7 @@ webpackJsonp([1],{
 	      null,
 	      'Controlled Range'
 	    ),
-	    React.createElement(Slider, { range: true, value: [20, 40] })
+	    React.createElement(Slider, { range: true, vertical: true, value: [20, 40] })
 	  ),
 	  React.createElement(
 	    'div',
@@ -199,4 +196,4 @@ webpackJsonp([1],{
 /***/ }
 
 });
-//# sourceMappingURL=range.js.map
+//# sourceMappingURL=v-range.js.map
