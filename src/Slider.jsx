@@ -240,9 +240,8 @@ class Slider extends React.Component {
     return this.props.vertical ? rect.top : rect.left;
   }
 
-  getPrecision() {
-    const props = this.props;
-    const stepString = props.step.toString();
+  getPrecision(step) {
+    const stepString = step.toString();
     let precision = 0;
     if (stepString.indexOf('.') >= 0) {
       precision = stepString.length - stepString.indexOf('.') - 1;
