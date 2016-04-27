@@ -52,6 +52,7 @@
   "dependencies": {
     "classnames": "^2.2.1",
     "rc-tooltip": "3.x",
-    "rc-util": "3.x"
+    "rc-util": "3.x",
+    "warning": "^2.1.0"
   }
 }
