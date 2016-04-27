@@ -241,9 +241,8 @@ class Slider extends React.Component {
     return this.props.vertical ? rect.top : rect.left;
   }
 
-  getPrecision() {
-    const props = this.props;
-    const stepString = props.step.toString();
+  getPrecision(step) {
+    const stepString = step.toString();
     let precision = 0;
     if (stepString.indexOf('.') >= 0) {
       precision = stepString.length - stepString.indexOf('.') - 1;
@@ -283,7 +282,7 @@ class Slider extends React.Component {
     const diffs = points.map((point) => Math.abs(val - point));
     const closestPoint = points[diffs.indexOf(Math.min.apply(Math, diffs))];
 
-    return step !== null ? parseFloat(closestPoint.toFixed(this.getPrecision())) : closestPoint;
+    return step !== null ? parseFloat(closestPoint.toFixed(this.getPrecision(step))) : closestPoint;
   }
 
   calcOffset(value) {
