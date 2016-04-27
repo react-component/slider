@@ -95,7 +95,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>
-      <Slider range step={20} defaultValue={[20, 40]} onBeforeChange={log} />
+      <Slider range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20, dots` </p>
