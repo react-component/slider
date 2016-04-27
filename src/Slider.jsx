@@ -46,13 +46,7 @@ class Slider extends React.Component {
 
     let recent;
     if (props.range && upperBound === lowerBound) {
-      if (lowerBound === max) {
-        recent = 'lowerBound';
-      } else if (upperBound === min) {
-        recent = 'upperBound';
-      } else {
-        recent = 'upperBound';
-      }
+      recent = lowerBound === max ? 'lowerBound' : 'upperBound';
     } else {
       recent = 'upperBound';
     }
