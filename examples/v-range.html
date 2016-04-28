@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>v-range.js - example - rc-slider@3.6.0</title>
+  <title>v-range.js - example - rc-slider@3.6.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,7 +257,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@3.6.0</h1>
+    <h1>rc-slider@3.6.2</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -274,35 +274,35 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">const</span> style = {float: <span class="hljs-string">'left'</span>, width: <span class="hljs-number">180</span>, height: <span class="hljs-number">400</span>, marginBottom: <span class="hljs-number">160</span>, marginLeft: <span class="hljs-number">50</span>};
 <span class="hljs-keyword">const</span> parentStyle = {overflow: <span class="hljs-string">'hidden'</span>};
 
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span><span class="hljs-params">(value)</span> </span>{
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">value</span>) </span>{
   <span class="hljs-built_in">console</span>.log(value);
 }
 
 <span class="hljs-keyword">const</span> CustomizedRange = React.createClass({
-  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  getInitialState: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">return</span> {
       lowerBound: <span class="hljs-number">20</span>,
       upperBound: <span class="hljs-number">40</span>,
       value: [<span class="hljs-number">20</span>, <span class="hljs-number">40</span>],
     };
   },
-  onLowerBoundChange: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+  onLowerBoundChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
     <span class="hljs-keyword">this</span>.setState({ lowerBound: +e.target.value });
   },
-  onUpperBoundChange: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(e)</span> </span>{
+  onUpperBoundChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
     <span class="hljs-keyword">this</span>.setState({ upperBound: +e.target.value });
   },
-  onSliderChange: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span> </span>{
+  onSliderChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{
     log(value);
     <span class="hljs-keyword">this</span>.setState({
       value: value,
     });
   },
-  handleApply: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  handleApply: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">const</span> { lowerBound, upperBound } = <span class="hljs-keyword">this</span>.state;
     <span class="hljs-keyword">this</span>.setState({ value: [lowerBound, upperBound]});
   },
-  render: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">allowCross</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span> /&gt;</span>
@@ -314,33 +314,33 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
         <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">button</span> <span class="hljs-attribute">onClick</span>=<span class="hljs-value">{this.handleApply}</span>&gt;</span>Apply<span class="hljs-tag">&lt;/<span class="hljs-title">button</span>&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    );
+    )</span>;
   },
 });
 
-const DynamicBounds = React.createClass({
+<span class="hljs-keyword">const</span> DynamicBounds = React.createClass({
   getInitialState() {
-    return {
-      min: 0,
-      max: 100,
+    <span class="hljs-keyword">return</span> {
+      min: <span class="hljs-number">0</span>,
+      max: <span class="hljs-number">100</span>,
     };
   },
-  onSliderChange: function(value) {
+  onSliderChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">value</span>) </span>{
     log(value);
   },
-  onMinChange: function(e) {
-    this.setState({
-      min: +e.target.value || 0,
+  onMinChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+    <span class="hljs-keyword">this</span>.setState({
+      min: +e.target.value || <span class="hljs-number">0</span>,
     });
   },
-  onMaxChange: function(e) {
-    this.setState({
-      max: +e.target.value || 100,
+  onMaxChange: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params">e</span>) </span>{
+    <span class="hljs-keyword">this</span>.setState({
+      max: +e.target.value || <span class="hljs-number">100</span>,
     });
   },
-  render: function() {
-    return (
-      <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+  render: <span class="hljs-function"><span class="hljs-keyword">function</span>(<span class="hljs-params"></span>) </span>{
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[20,</span> <span class="hljs-attribute">50</span>]} <span class="hljs-attribute">min</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span> /&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Min: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMinChange}</span> /&gt;</span>
@@ -348,12 +348,12 @@ const DynamicBounds = React.createClass({
         <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Max: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMaxChange}</span> /&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    );
+    )</span>;
   },
 });
 
 ReactDOM.render(
-  <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{parentStyle}</span>&gt;</span>
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{parentStyle}</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Range，`allowCross=false`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">range</span> <span class="hljs-attribute">vertical</span> <span class="hljs-attribute">allowCross</span>=<span class="hljs-value">{false}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[0,</span> <span class="hljs-attribute">20</span>]} <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
