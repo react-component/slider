@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { cloneElement } from 'react';
 import {Dom as DomUtils} from 'rc-util';
 import classNames from 'classnames';
 import Track from './Track';
-import Handle from './Handle';
+import DefaultHandle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
 
@@ -328,7 +328,7 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const {className, prefixCls, disabled, vertical, dots, included, range, step,
-      marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+      marks, max, min, Handle, tipTransitionName, tipFormatter, children} = this.props;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
@@ -336,15 +336,15 @@ class Slider extends React.Component {
     const handleClassName = prefixCls + '-handle';
     const isNoTip = (step === null) || (tipFormatter === null);
 
-    const upper = (<Handle className={handleClassName}
-                           noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
-                           vertical = {vertical} offset={upperOffset} value={upperBound} dragging={handle === 'upperBound'}/>);
+    const upper = cloneElement(Handle, { className: handleClassName,
+        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
+        vertical: vertical, offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
 
     let lower = null;
     if (range) {
-      lower = (<Handle className={handleClassName}
-                       noTip={isNoTip} tipTransitionName={tipTransitionName} tipFormatter={tipFormatter}
-                       vertical = {vertical} offset={lowerOffset} value={lowerBound} dragging={handle === 'lowerBound'}/>);
+      lower = cloneElement(Handle, { className: handleClassName,
+        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
+        vertical: vertical, offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
     }
 
     const sliderClassName = classNames({
@@ -395,6 +395,7 @@ Slider.propTypes = {
   onBeforeChange: React.PropTypes.func,
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
+  Handle: React.PropTypes.element,
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
@@ -411,6 +412,7 @@ Slider.defaultProps = {
   max: 100,
   step: 1,
   marks: {},
+  Handle: <DefaultHandle />,
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,
