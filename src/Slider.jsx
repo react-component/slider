@@ -328,7 +328,9 @@ class Slider extends React.Component {
   render() {
     const {handle, upperBound, lowerBound} = this.state;
     const {className, prefixCls, disabled, vertical, dots, included, range, step,
-      marks, max, min, Handle, tipTransitionName, tipFormatter, children} = this.props;
+      marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+
+    const customHandle = this.props.handle;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
@@ -336,13 +338,13 @@ class Slider extends React.Component {
     const handleClassName = prefixCls + '-handle';
     const isNoTip = (step === null) || (tipFormatter === null);
 
-    const upper = cloneElement(Handle, { className: handleClassName,
+    const upper = cloneElement(customHandle, { className: handleClassName,
         noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
         vertical: vertical, offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
 
     let lower = null;
     if (range) {
-      lower = cloneElement(Handle, { className: handleClassName,
+      lower = cloneElement(customHandle, { className: handleClassName,
         noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
         vertical: vertical, offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
     }
@@ -395,7 +397,7 @@ Slider.propTypes = {
   onBeforeChange: React.PropTypes.func,
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
-  Handle: React.PropTypes.element,
+  handle: React.PropTypes.element,
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
@@ -412,7 +414,7 @@ Slider.defaultProps = {
   max: 100,
   step: 1,
   marks: {},
-  Handle: <DefaultHandle />,
+  handle: <DefaultHandle />,
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,

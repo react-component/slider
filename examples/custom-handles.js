@@ -38,7 +38,7 @@ ReactDOM.render(
     </div>
     <div style={wrapperStyle}>
       <p>Slider with custom handle</p>
-      <Slider min={0} max={20} defaultValue={3} Handle={<CustomHandle />} />
+      <Slider min={0} max={20} defaultValue={3} handle={<CustomHandle />} />
     </div>
   </div>
   , document.getElementById('__react-content'));
