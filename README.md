@@ -131,6 +131,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
         </tr>
         <tr>
+          <td>handle</td>
+          <td>Component</td>
+          <td></td>
+          <td>Provide a custom Handle to use in the slider by passing a component. This component will have a `value` and `offset` props used to define custom styling/content.</td>
+        </tr>
+        <tr>
           <td>included</td>
           <td>boolean</td>
           <td>true</td>
