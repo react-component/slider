@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@3.6.2 - slider ui component for react</title>
+  <title>rc-slider@3.7.0 - slider ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,12 +737,14 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@3.6.2</h1>
+  <h1>rc-slider@3.7.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
   <div class="examples-body">
     <ul>
+      
+      <li><a href="examples/custom-handles.html">custom-handles</a></li>
       
       <li><a href="examples/marks.html">marks</a></li>
       
@@ -851,6 +853,12 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
           <td>number or [number, number]</td>
           <td></td>
           <td>Set current positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number]</code></td>
+        </tr>
+        <tr>
+          <td>handle</td>
+          <td>Component</td>
+          <td></td>
+          <td>Provide a custom Handle to use in the slider by passing a component. This component will have a <code>value</code> and <code>offset</code> props used to define custom styling/content.</td>
         </tr>
         <tr>
           <td>included</td>
