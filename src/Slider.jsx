@@ -167,6 +167,7 @@ class Slider extends React.Component {
   }
 
   onMouseDown(e) {
+    if (e.button !== 0) { return; }
     const position = getMousePosition(this.props.vertical, e);
     this.onStart(position);
     this.addDocumentEvents('mouse');
