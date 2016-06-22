@@ -1,5 +1,5 @@
 import React, { cloneElement } from 'react';
-import {Dom as DomUtils} from 'rc-util';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
 import Track from './Track';
 import DefaultHandle from './Handle';
@@ -302,11 +302,11 @@ class Slider extends React.Component {
   addDocumentEvents(type) {
     if (type === 'touch') {
       // just work for chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = DomUtils.addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
-      this.onTouchUpListener = DomUtils.addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
+      this.onTouchMoveListener = addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
+      this.onTouchUpListener = addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
     } else if (type === 'mouse') {
-      this.onMouseMoveListener = DomUtils.addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
-      this.onMouseUpListener = DomUtils.addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
+      this.onMouseMoveListener = addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
+      this.onMouseUpListener = addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
     }
   }
 
