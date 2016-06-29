@@ -28,8 +28,11 @@ const CustomizedSlider = React.createClass({
       value: value,
     });
   },
+  onAfterChange: function(value) {
+    console.log(value);
+  },
   render: function() {
-    return <Slider value={this.state.value} onChange={this.onSliderChange} />;
+    return <Slider value={this.state.value} onChange={this.onSliderChange} onAfterChange={this.onAfterChange} />;
   },
 });
 
