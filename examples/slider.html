@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>slider.js - example - rc-slider@3.7.2</title>
+  <title>slider.js - example - rc-slider@3.7.3</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,7 +257,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
 <div class="container">
   <div class="header">
-    <h1>rc-slider@3.7.2</h1>
+    <h1>rc-slider@3.7.3</h1>
 
     <p>slider ui component for react</p>
   </div>
@@ -294,8 +294,11 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       value: value,
     });
   },
+  onAfterChange: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">(value)</span> </span>{
+    <span class="hljs-built_in">console</span>.log(value);
+  },
   render: <span class="hljs-function"><span class="hljs-keyword">function</span><span class="hljs-params">()</span> </span>{
-    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span> /&gt;</span>;</span>
+    <span class="hljs-keyword">return</span> <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span> <span class="hljs-attribute">onAfterChange</span>=<span class="hljs-value">{this.onAfterChange}</span> /&gt;</span>;</span>
   },
 });
 

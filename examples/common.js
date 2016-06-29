@@ -23261,7 +23261,7 @@
 	  propTypes: {
 	    component: _react2["default"].PropTypes.any,
 	    animation: _react2["default"].PropTypes.object,
-	    transitionName: _react2["default"].PropTypes.string,
+	    transitionName: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.object]),
 	    transitionEnter: _react2["default"].PropTypes.bool,
 	    transitionAppear: _react2["default"].PropTypes.bool,
 	    exclusive: _react2["default"].PropTypes.bool,
@@ -23657,6 +23657,8 @@
 	  value: true
 	});
 	
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
+	
 	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -23721,13 +23723,15 @@
 	    var node = _reactDom2["default"].findDOMNode(this);
 	    var props = this.props;
 	    var transitionName = props.transitionName;
+	    var nameIsObj = (typeof transitionName === 'undefined' ? 'undefined' : _typeof(transitionName)) === 'object';
 	    this.stop();
 	    var end = function end() {
 	      _this.stopper = null;
 	      finishCallback();
 	    };
 	    if ((_cssAnimation.isCssAnimationSupported || !props.animation[animationType]) && transitionName && props[transitionMap[animationType]]) {
-	      this.stopper = (0, _cssAnimation2["default"])(node, transitionName + '-' + animationType, end);
+	      var name = nameIsObj ? transitionName[animationType] : transitionName + '-' + animationType;
+	      this.stopper = (0, _cssAnimation2["default"])(node, name, end);
 	    } else {
 	      this.stopper = props.animation[animationType](node, end);
 	    }

@@ -44,8 +44,11 @@ webpackJsonp([3],{
 	      value: value
 	    });
 	  },
+	  onAfterChange: function onAfterChange(value) {
+	    console.log(value);
+	  },
 	  render: function render() {
-	    return React.createElement(Slider, { value: this.state.value, onChange: this.onSliderChange });
+	    return React.createElement(Slider, { value: this.state.value, onChange: this.onSliderChange, onAfterChange: this.onAfterChange });
 	  }
 	});
 	
