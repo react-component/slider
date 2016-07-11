@@ -3,12 +3,12 @@ webpackJsonp([5],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(210);
+	module.exports = __webpack_require__(222);
 
 
 /***/ },
 
-/***/ 210:
+/***/ 222:
 /***/ function(module, exports, __webpack_require__) {
 
 	/* eslint react/no-multi-comp: 0 */
@@ -17,8 +17,8 @@ webpackJsonp([5],{
 	__webpack_require__(2);
 	
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(160);
-	var Slider = __webpack_require__(161);
+	var ReactDOM = __webpack_require__(35);
+	var Slider = __webpack_require__(174);
 	
 	var style = { float: 'left', width: 180, height: 400, marginBottom: 160, marginLeft: 50 };
 	var parentStyle = { overflow: 'hidden' };
