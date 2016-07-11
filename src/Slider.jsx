@@ -270,7 +270,7 @@ class Slider extends React.Component {
 
     const points = Object.keys(marks).map(parseFloat);
     if (step !== null) {
-      const closestStep = Math.round(val / step) * step;
+      const closestStep = (Math.round((val - min) / step) * step) + min;
       points.push(closestStep);
     }
 
