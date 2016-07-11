@@ -42,17 +42,17 @@
     "pre-commit": "1.x",
     "rc-server": "3.x",
     "rc-tools": "4.x",
-    "react": "~0.14.0",
-    "react-addons-test-utils": "^0.14.0",
-    "react-dom": "~0.14.0"
+    "react": "^15.2.1",
+    "react-addons-test-utils": "^15.2.1",
+    "react-dom": "^15.2.1"
   },
   "pre-commit": [
     "lint"
   ],
   "dependencies": {
-    "classnames": "^2.2.1",
-    "rc-tooltip": "3.x",
-    "rc-util": "3.x",
-    "warning": "^2.1.0"
+    "classnames": "^2.2.5",
+    "rc-tooltip": "^3.4.2",
+    "rc-util": "^3.2.1",
+    "warning": "^3.0.0"
   }
 }
