@@ -71,6 +71,31 @@ const DynamicBounds = React.createClass({
   },
 });
 
+const CustomizedTrack = ({className, included, vertical, offset, length}) => {
+  const style = {
+    visibility: included ? 'visible' : 'hidden',
+    backgroundColor: 'tomato',
+  };
+  if (vertical) {
+    style.bottom = offset + '%';
+    style.height = length + '%';
+  } else {
+    style.left = offset + '%';
+    style.width = length + '%';
+  }
+  return <div className={className + ' customClass'} style={style} />;
+};
+
+const CustomizedSteps = ({prefixCls, vertical, marks, dots, step, included,
+                lowerBound, upperBound, max, min}) => {
+  const customStyle = {
+    background: `rgba(255,0,0,${upperBound})`,
+  }
+  return <div className={prefixCls + '-step'} style={customStyle} />;
+};
+
+
+
 ReactDOM.render(
   <div>
     <div style={style}>
@@ -104,6 +129,14 @@ ReactDOM.render(
     <div style={style}>
       <p>Slider with dynamic `min` `max`</p>
       <DynamicBounds />
+    </div>
+    <div style={style}>
+      <p>Customized Track component</p>
+      <Slider trackComponent={<CustomizedTrack />} defaultValue={25} />
+    </div>
+    <div style={style}>
+      <p>Customized Steps component</p>
+      <Slider stepsComponent={<CustomizedSteps />} defaultValue={0.25} min={0} max={1} step={0.01} />
     </div>
   </div>
   , document.getElementById('__react-content'));

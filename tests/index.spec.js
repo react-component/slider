@@ -145,4 +145,22 @@ describe('rc-slider', function test() {
     const slider = ReactDOM.render(<Slider vertical />, div);
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-vertical').length).to.be(1);
   });
+
+  it('should render a customized track component when `trackComponent` is provided', () => {
+    const slider = ReactDOM.render(<Slider trackComponent={({className}) => <div className={className} style={{backgroundColor: 'red'}} />} />, div);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track').length).to.be(1);
+    expect(ReactTestUtils
+           .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track')[0]
+           .style.cssText)
+      .to.match(/background-color: red;/);
+  });
+
+  it('should render a customized steps component when `stepsComponent` is provided', () => {
+    const slider = ReactDOM.render(<Slider stepsComponent={({prefixCls}) => <div className={prefixCls + '-step'} style={{backgroundColor: 'red'}} />} />, div);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-step').length).to.be(1);
+    expect(ReactTestUtils
+           .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-step')[0]
+           .style.cssText)
+      .to.match(/background-color: red;/);
+  });
 });

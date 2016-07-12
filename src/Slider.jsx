@@ -1,9 +1,9 @@
 import React, { cloneElement } from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
-import Track from './Track';
+import DefaultTrack from './Track';
 import DefaultHandle from './Handle';
-import Steps from './Steps';
+import DefaultSteps from './Steps';
 import Marks from './Marks';
 
 function noop() {
@@ -331,7 +331,7 @@ class Slider extends React.Component {
     const {className, prefixCls, disabled, vertical, dots, included, range, step,
       marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
 
-    const customHandle = this.props.handle;
+    const customHandle = this.props.handleComponent;
 
     const upperOffset = this.calcOffset(upperBound);
     const lowerOffset = this.calcOffset(lowerBound);
@@ -357,17 +357,36 @@ class Slider extends React.Component {
       [prefixCls + '-vertical']: this.props.vertical,
     });
     const isIncluded = included || range;
+
+    const track = cloneElement(this.props.trackComponent, {
+      className: prefixCls + '-track',
+      vertical,
+      included: isIncluded,
+      offset: lowerOffset,
+      length: upperOffset - lowerOffset,
+    });
+
+    const steps = cloneElement(this.props.stepsComponent, {
+      prefixCls: prefixCls,
+      vertical,
+      marks,
+      dots,
+      step,
+      included: isIncluded,
+      lowerBound,
+      upperBound,
+      max,
+      min,
+    });
+
     return (
       <div ref="slider" className={sliderClassName}
            onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
            onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}>
         {upper}
         {lower}
-        <Track className={prefixCls + '-track'} vertical = {vertical} included={isIncluded}
-               offset={lowerOffset} length={upperOffset - lowerOffset}/>
-        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
-              included={isIncluded} lowerBound={lowerBound}
-              upperBound={upperBound} max={max} min={min}/>
+        {track}
+        {steps}
         <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
                included={isIncluded} lowerBound={lowerBound}
                upperBound={upperBound} max={max} min={min}/>
@@ -398,7 +417,9 @@ Slider.propTypes = {
   onBeforeChange: React.PropTypes.func,
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
-  handle: React.PropTypes.element,
+  handleComponent: React.PropTypes.element,
+  trackComponent: React.PropTypes.element,
+  stepsComponent: React.PropTypes.element,
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
@@ -415,7 +436,9 @@ Slider.defaultProps = {
   max: 100,
   step: 1,
   marks: {},
-  handle: <DefaultHandle />,
+  handleComponent: <DefaultHandle />,
+  trackComponent: <DefaultTrack />,
+  stepsComponent: <DefaultSteps />,
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,
