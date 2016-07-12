@@ -357,15 +357,19 @@ class Slider extends React.Component {
       [prefixCls + '-vertical']: this.props.vertical,
     });
     const isIncluded = included || range;
+
+    const TrackComponent = this.props.trackComponent;
+    const StepsComponent = this.props.stepsComponent;
+
     return (
       <div ref="slider" className={sliderClassName}
            onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
            onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}>
         {upper}
         {lower}
-        <Track className={prefixCls + '-track'} vertical = {vertical} included={isIncluded}
+        <TrackComponent className={prefixCls + '-track'} vertical = {vertical} included={isIncluded}
                offset={lowerOffset} length={upperOffset - lowerOffset}/>
-        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
+        <StepsComponent prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
               included={isIncluded} lowerBound={lowerBound}
               upperBound={upperBound} max={max} min={min}/>
         <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
@@ -399,6 +403,14 @@ Slider.propTypes = {
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
   handle: React.PropTypes.element,
+  trackComponent: React.PropTypes.oneOfType([
+    React.PropTypes.node,
+    React.PropTypes.func,
+  ]),
+  stepsComponent: React.PropTypes.oneOfType([
+    React.PropTypes.node,
+    React.PropTypes.func,
+  ]),
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
@@ -416,6 +428,8 @@ Slider.defaultProps = {
   step: 1,
   marks: {},
   handle: <DefaultHandle />,
+  trackComponent: Track,
+  stepsComponent: Steps,
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,

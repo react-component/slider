@@ -167,6 +167,39 @@ ReactDOM.render(<Rcslider />, container);
           <td>When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots.</td>
         </tr>
         <tr>
+          <td>trackComponent</td>
+          <td>Component</td>
+          <td></td>
+          <td>Provide a custom track component that receives the following props:
+            <ul>
+              <li><code>className</code>: <em>String</em></li>
+              <li><code>included</code>: <em>Boolean</em></li>
+              <li><code>vertical</code>: <em>Boolean</em></li>
+              <li><code>offset</code>: <em>Number</em></li>
+              <li><code>length</code>: <em>Number</em></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
+          <td>stepsComponent</td>
+          <td>Component</td>
+          <td></td>
+          <td>Provide a custom steps component that receives the following props:
+            <ul>
+              <li><code>prefixCls</code>: <em>String</em></li>
+              <li><code>vertical</code>: <em>Boolean</em></li>
+              <li><code>marks</code></li>
+              <li><code>dots</code>: <em>Boolean</em></li>
+              <li><code>step</code>: <em>Boolean</em></li>
+              <li><code>included</code>: <em>Boolean</em></li>
+              <li><code>lowerBound</code>: <em>Number</em></li>
+              <li><code>upperBound</code>: <em>Number</em></li>
+              <li><code>max</code>: <em>Number</em></li>
+              <li><code>min</code>: <em>Number</em></li>
+            </ul>
+          </td>
+        </tr>
+        <tr>
           <td>onChange</td>
           <td>function</td>
           <td>NOOP</td>
