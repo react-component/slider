@@ -132,11 +132,11 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Customized Track component</p>
-      <Slider trackComponent={CustomizedTrack} defaultValue={25} />
+      <Slider trackComponent={<CustomizedTrack />} defaultValue={25} />
     </div>
     <div style={style}>
       <p>Customized Steps component</p>
-      <Slider stepsComponent={CustomizedSteps} defaultValue={0.25} min={0} max={1} step={0.01} />
+      <Slider stepsComponent={<CustomizedSteps />} defaultValue={0.25} min={0} max={1} step={0.01} />
     </div>
   </div>
   , document.getElementById('__react-content'));

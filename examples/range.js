@@ -140,11 +140,11 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Customized Track component</p>
-      <Slider range trackComponent={CustomizedTrack} defaultValue={[10, 50]} />
+      <Slider range trackComponent={<CustomizedTrack />} defaultValue={[10, 50]} />
     </div>
     <div style={style}>
       <p>Customized Steps component</p>
-      <Slider range stepsComponent={CustomizedSteps} defaultValue={[100, 150]} min={0} max={255} />
+      <Slider range stepsComponent={<CustomizedSteps />} defaultValue={[100, 150]} min={0} max={255} />
     </div>
   </div>
   , document.getElementById('__react-content'));
