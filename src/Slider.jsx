@@ -338,8 +338,15 @@ class Slider extends React.Component {
 
     const handleClassName = prefixCls + '-handle';
 
-    const upperClassName = handleClassName + ' ' + handleClassName + '-upper';
-    const lowerClassName = handleClassName + ' ' + handleClassName + '-lower';
+    const upperClassName = classNames({
+      [handleClassName]: true,
+      [handleClassName + '-upper']: true,
+    });
+
+    const lowerClassName = classNames({
+      [handleClassName]: true,
+      [handleClassName + '-lower']: true,
+    });
 
     const isNoTip = (step === null) || (tipFormatter === null);
 
