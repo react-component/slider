@@ -337,15 +337,26 @@ class Slider extends React.Component {
     const lowerOffset = this.calcOffset(lowerBound);
 
     const handleClassName = prefixCls + '-handle';
+
+    const upperClassName = classNames({
+      [handleClassName]: true,
+      [handleClassName + '-upper']: true,
+    });
+
+    const lowerClassName = classNames({
+      [handleClassName]: true,
+      [handleClassName + '-lower']: true,
+    });
+
     const isNoTip = (step === null) || (tipFormatter === null);
 
-    const upper = cloneElement(customHandle, { className: handleClassName,
+    const upper = cloneElement(customHandle, { className: upperClassName,
         noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
         vertical: vertical, offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
 
     let lower = null;
     if (range) {
-      lower = cloneElement(customHandle, { className: handleClassName,
+      lower = cloneElement(customHandle, { className: lowerClassName,
         noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
         vertical: vertical, offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
     }
