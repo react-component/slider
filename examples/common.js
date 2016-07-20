@@ -21191,11 +21191,11 @@
 	
 	var _Handle2 = _interopRequireDefault(_Handle);
 	
-	var _Steps = __webpack_require__(215);
+	var _Steps = __webpack_require__(216);
 	
 	var _Steps2 = _interopRequireDefault(_Steps);
 	
-	var _Marks = __webpack_require__(217);
+	var _Marks = __webpack_require__(218);
 	
 	var _Marks2 = _interopRequireDefault(_Marks);
 	
@@ -21570,7 +21570,7 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var _classNames;
+	      var _classNames, _classNames2, _classNames3;
 	
 	      var _state3 = this.state;
 	      var handle = _state3.handle;
@@ -21598,20 +21598,25 @@
 	      var lowerOffset = this.calcOffset(lowerBound);
 	
 	      var handleClassName = prefixCls + '-handle';
+	
+	      var upperClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, handleClassName, true), _defineProperty(_classNames, handleClassName + '-upper', true), _classNames));
+	
+	      var lowerClassName = (0, _classnames2['default'])((_classNames2 = {}, _defineProperty(_classNames2, handleClassName, true), _defineProperty(_classNames2, handleClassName + '-lower', true), _classNames2));
+	
 	      var isNoTip = step === null || tipFormatter === null;
 	
-	      var upper = (0, _react.cloneElement)(customHandle, { className: handleClassName,
+	      var upper = (0, _react.cloneElement)(customHandle, { className: upperClassName,
 	        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
 	        vertical: vertical, offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
 	
 	      var lower = null;
 	      if (range) {
-	        lower = (0, _react.cloneElement)(customHandle, { className: handleClassName,
+	        lower = (0, _react.cloneElement)(customHandle, { className: lowerClassName,
 	          noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
 	          vertical: vertical, offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
 	      }
 	
-	      var sliderClassName = (0, _classnames2['default'])((_classNames = {}, _defineProperty(_classNames, prefixCls, true), _defineProperty(_classNames, prefixCls + '-disabled', disabled), _defineProperty(_classNames, className, !!className), _defineProperty(_classNames, prefixCls + '-vertical', this.props.vertical), _classNames));
+	      var sliderClassName = (0, _classnames2['default'])((_classNames3 = {}, _defineProperty(_classNames3, prefixCls, true), _defineProperty(_classNames3, prefixCls + '-disabled', disabled), _defineProperty(_classNames3, className, !!className), _defineProperty(_classNames3, prefixCls + '-vertical', this.props.vertical), _classNames3));
 	      var isIncluded = included || range;
 	      return _react2['default'].createElement(
 	        'div',
@@ -21692,12 +21697,10 @@
 
 	'use strict';
 	
-	Object.defineProperty(exports, '__esModule', {
+	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports['default'] = addEventListenerWrap;
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
+	exports["default"] = addEventListenerWrap;
 	
 	var _addDomEventListener = __webpack_require__(178);
 	
@@ -21707,14 +21710,15 @@
 	
 	var _reactDom2 = _interopRequireDefault(_reactDom);
 	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
 	function addEventListenerWrap(target, eventType, cb) {
 	  /* eslint camelcase: 2 */
-	  var callback = _reactDom2['default'].unstable_batchedUpdates ? function run(e) {
-	    _reactDom2['default'].unstable_batchedUpdates(cb, e);
+	  var callback = _reactDom2["default"].unstable_batchedUpdates ? function run(e) {
+	    _reactDom2["default"].unstable_batchedUpdates(cb, e);
 	  } : cb;
-	  return (0, _addDomEventListener2['default'])(target, eventType, callback);
+	  return (0, _addDomEventListener2["default"])(target, eventType, callback);
 	}
-	
 	module.exports = exports['default'];
 
 /***/ },
@@ -22573,8 +22577,6 @@
 	
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
-	
 	var _react = __webpack_require__(3);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -22600,6 +22602,10 @@
 	var _Popup2 = _interopRequireDefault(_Popup);
 	
 	var _utils = __webpack_require__(214);
+	
+	var _getContainerRenderMixin = __webpack_require__(215);
+	
+	var _getContainerRenderMixin2 = _interopRequireDefault(_getContainerRenderMixin);
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 	
@@ -22644,6 +22650,55 @@
 	    maskAnimation: _react.PropTypes.string
 	  },
 	
+	  mixins: [(0, _getContainerRenderMixin2["default"])({
+	    autoMount: false,
+	
+	    isVisible: function isVisible(instance) {
+	      return instance.state.popupVisible;
+	    },
+	    getContainer: function getContainer(instance) {
+	      var popupContainer = document.createElement('div');
+	      var mountNode = instance.props.getPopupContainer ? instance.props.getPopupContainer((0, _reactDom.findDOMNode)(instance)) : document.body;
+	      mountNode.appendChild(popupContainer);
+	      return popupContainer;
+	    },
+	    getComponent: function getComponent(instance) {
+	      var props = instance.props;
+	      var state = instance.state;
+	
+	      var mouseProps = {};
+	      if (instance.isMouseEnterToShow()) {
+	        mouseProps.onMouseEnter = instance.onMouseEnter;
+	      }
+	      if (instance.isMouseLeaveToHide()) {
+	        mouseProps.onMouseLeave = instance.onMouseLeave;
+	      }
+	      return _react2["default"].createElement(
+	        _Popup2["default"],
+	        _extends({
+	          prefixCls: props.prefixCls,
+	          destroyPopupOnHide: props.destroyPopupOnHide,
+	          visible: state.popupVisible,
+	          className: props.popupClassName,
+	          action: props.action,
+	          align: instance.getPopupAlign(),
+	          onAlign: props.onPopupAlign,
+	          animation: props.popupAnimation,
+	          getClassNameFromAlign: instance.getPopupClassNameFromAlign
+	        }, mouseProps, {
+	          getRootDomNode: instance.getRootDomNode,
+	          style: props.popupStyle,
+	          mask: props.mask,
+	          zIndex: props.zIndex,
+	          transitionName: props.popupTransitionName,
+	          maskAnimation: props.maskAnimation,
+	          maskTransitionName: props.maskTransitionName
+	        }),
+	        typeof props.popup === 'function' ? props.popup() : props.popup
+	      );
+	    }
+	  })],
+	
 	  getDefaultProps: function getDefaultProps() {
 	    return {
 	      prefixCls: 'rc-trigger-popup',
@@ -22683,56 +22738,40 @@
 	      popupVisible: this.state.popupVisible
 	    });
 	  },
-	  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-	    if ('popupVisible' in nextProps) {
+	  componentWillReceiveProps: function componentWillReceiveProps(_ref) {
+	    var popupVisible = _ref.popupVisible;
+	
+	    if (popupVisible !== undefined) {
 	      this.setState({
-	        popupVisible: !!nextProps.popupVisible
+	        popupVisible: popupVisible
 	      });
 	    }
 	  },
-	  componentDidUpdate: function componentDidUpdate(prevProps, prevState) {
-	    var _this = this;
-	
+	  componentDidUpdate: function componentDidUpdate(_, prevState) {
 	    var props = this.props;
 	    var state = this.state;
-	    if (this.popupRendered) {
-	      var _ret = function () {
-	        var self = _this;
-	        _reactDom2["default"].unstable_renderSubtreeIntoContainer(_this, _this.getPopupElement(), _this.getPopupContainer(), function mounted() {
-	          self.popupInstance = this;
-	          if (prevState.popupVisible !== state.popupVisible) {
-	            props.afterPopupVisibleChange(state.popupVisible);
-	          }
-	        });
-	        if (_this.isClickToHide()) {
-	          if (state.popupVisible) {
-	            if (!_this.clickOutsideHandler) {
-	              _this.clickOutsideHandler = (0, _addEventListener2["default"])(document, 'mousedown', _this.onDocumentClick);
-	              _this.touchOutsideHandler = (0, _addEventListener2["default"])(document, 'touchstart', _this.onDocumentClick);
-	            }
-	            return {
-	              v: void 0
-	            };
-	          }
+	    this.renderComponent(function () {
+	      if (prevState.popupVisible !== state.popupVisible) {
+	        props.afterPopupVisibleChange(state.popupVisible);
+	      }
+	    });
+	    if (this.isClickToHide()) {
+	      if (state.popupVisible) {
+	        if (!this.clickOutsideHandler) {
+	          this.clickOutsideHandler = (0, _addEventListener2["default"])(document, 'mousedown', this.onDocumentClick);
+	          this.touchOutsideHandler = (0, _addEventListener2["default"])(document, 'touchstart', this.onDocumentClick);
 	        }
-	        if (_this.clickOutsideHandler) {
-	          _this.clickOutsideHandler.remove();
-	          _this.touchOutsideHandler.remove();
-	          _this.clickOutsideHandler = null;
-	          _this.touchOutsideHandler = null;
-	        }
-	      }();
-	
-	      if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
+	        return;
+	      }
+	    }
+	    if (this.clickOutsideHandler) {
+	      this.clickOutsideHandler.remove();
+	      this.touchOutsideHandler.remove();
+	      this.clickOutsideHandler = null;
+	      this.touchOutsideHandler = null;
 	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
-	    var popupContainer = this.popupContainer;
-	    if (popupContainer) {
-	      _reactDom2["default"].unmountComponentAtNode(popupContainer);
-	      popupContainer.parentNode.removeChild(popupContainer);
-	      this.popupContainer = null;
-	    }
 	    this.clearDelayTimer();
 	    if (this.clickOutsideHandler) {
 	      this.clickOutsideHandler.remove();
@@ -22806,21 +22845,13 @@
 	  },
 	  getPopupDomNode: function getPopupDomNode() {
 	    // for test
-	    if (this.popupInstance) {
-	      return this.popupInstance.isMounted() ? this.popupInstance.getPopupDomNode() : null;
+	    if (this._component) {
+	      return this._component.isMounted() ? this._component.getPopupDomNode() : null;
 	    }
 	    return null;
 	  },
 	  getRootDomNode: function getRootDomNode() {
 	    return _reactDom2["default"].findDOMNode(this);
-	  },
-	  getPopupContainer: function getPopupContainer() {
-	    if (!this.popupContainer) {
-	      this.popupContainer = document.createElement('div');
-	      var mountNode = this.props.getPopupContainer ? this.props.getPopupContainer((0, _reactDom.findDOMNode)(this)) : document.body;
-	      mountNode.appendChild(this.popupContainer);
-	    }
-	    return this.popupContainer;
 	  },
 	  getPopupClassNameFromAlign: function getPopupClassNameFromAlign(align) {
 	    var className = [];
@@ -22848,41 +22879,6 @@
 	    }
 	    return popupAlign;
 	  },
-	  getPopupElement: function getPopupElement() {
-	    var props = this.props;
-	    var state = this.state;
-	
-	    var mouseProps = {};
-	    if (this.isMouseEnterToShow()) {
-	      mouseProps.onMouseEnter = this.onMouseEnter;
-	    }
-	    if (this.isMouseLeaveToHide()) {
-	      mouseProps.onMouseLeave = this.onMouseLeave;
-	    }
-	    return _react2["default"].createElement(
-	      _Popup2["default"],
-	      _extends({
-	        prefixCls: props.prefixCls,
-	        destroyPopupOnHide: props.destroyPopupOnHide,
-	        visible: state.popupVisible,
-	        className: props.popupClassName,
-	        action: props.action,
-	        align: this.getPopupAlign(),
-	        onAlign: props.onPopupAlign,
-	        animation: props.popupAnimation,
-	        getClassNameFromAlign: this.getPopupClassNameFromAlign
-	      }, mouseProps, {
-	        getRootDomNode: this.getRootDomNode,
-	        style: props.popupStyle,
-	        mask: props.mask,
-	        zIndex: props.zIndex,
-	        transitionName: props.popupTransitionName,
-	        maskAnimation: props.maskAnimation,
-	        maskTransitionName: props.maskTransitionName
-	      }),
-	      typeof props.popup === 'function' ? props.popup() : props.popup
-	    );
-	  },
 	  setPopupVisible: function setPopupVisible(popupVisible) {
 	    this.clearDelayTimer();
 	    if (this.state.popupVisible !== popupVisible) {
@@ -22895,14 +22891,14 @@
 	    }
 	  },
 	  delaySetPopupVisible: function delaySetPopupVisible(visible, delayS) {
-	    var _this2 = this;
+	    var _this = this;
 	
 	    var delay = delayS * 1000;
 	    this.clearDelayTimer();
 	    if (delay) {
 	      this.delayTimer = setTimeout(function () {
-	        _this2.setPopupVisible(visible);
-	        _this2.clearDelayTimer();
+	        _this.setPopupVisible(visible);
+	        _this.clearDelayTimer();
 	      }, delay);
 	    } else {
 	      this.setPopupVisible(visible);
@@ -22962,7 +22958,6 @@
 	    }
 	  },
 	  render: function render() {
-	    this.popupRendered = this.popupRendered || this.state.popupVisible;
 	    var props = this.props;
 	    var children = props.children;
 	    var child = _react2["default"].Children.only(children);
@@ -23008,6 +23003,8 @@
 /* 189 */
 /***/ function(module, exports) {
 
+	"use strict";
+	
 	/**
 	 * Safe chained function
 	 *
@@ -23016,8 +23013,6 @@
 	 *
 	 * @returns {function|null}
 	 */
-	"use strict";
-	
 	function createChainedFunction() {
 	  var args = arguments;
 	  return function chainedFunction() {
@@ -25104,7 +25099,7 @@
 	'ms'];
 	var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
 	
-	function getDuration(node, name) {
+	function getStyleProperty(node, name) {
 	  var style = window.getComputedStyle(node);
 	
 	  var ret = '';
@@ -25119,9 +25114,11 @@
 	
 	function fixBrowserByTimeout(node) {
 	  if (isCssAnimationSupported) {
-	    var transitionDuration = parseFloat(getDuration(node, 'transition-duration')) || 0;
-	    var animationDuration = parseFloat(getDuration(node, 'animation-duration')) || 0;
-	    var time = Math.max(transitionDuration, animationDuration);
+	    var transitionDelay = parseFloat(getStyleProperty(node, 'transition-delay')) || 0;
+	    var transitionDuration = parseFloat(getStyleProperty(node, 'transition-duration')) || 0;
+	    var animationDelay = parseFloat(getStyleProperty(node, 'animation-delay')) || 0;
+	    var animationDuration = parseFloat(getStyleProperty(node, 'animation-duration')) || 0;
+	    var time = Math.max(transitionDuration + transitionDelay, animationDuration + animationDelay);
 	    // sometimes, browser bug
 	    node.rcEndAnimTimeout = setTimeout(function () {
 	      node.rcEndAnimTimeout = null;
@@ -25749,6 +25746,105 @@
 
 	'use strict';
 	
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	exports["default"] = getContainerRenderMixin;
+	
+	var _reactDom = __webpack_require__(35);
+	
+	var _reactDom2 = _interopRequireDefault(_reactDom);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+	
+	function defaultGetContainer() {
+	  var container = document.createElement('div');
+	  document.body.appendChild(container);
+	  return container;
+	}
+	
+	function getContainerRenderMixin(config) {
+	  var _config$autoMount = config.autoMount;
+	  var autoMount = _config$autoMount === undefined ? true : _config$autoMount;
+	  var _config$autoDestroy = config.autoDestroy;
+	  var autoDestroy = _config$autoDestroy === undefined ? true : _config$autoDestroy;
+	  var isVisible = config.isVisible;
+	  var getComponent = config.getComponent;
+	  var _config$getContainer = config.getContainer;
+	  var getContainer = _config$getContainer === undefined ? defaultGetContainer : _config$getContainer;
+	
+	
+	  var mixin = void 0;
+	
+	  function _renderComponent(instance, componentArg, ready) {
+	    if (!isVisible || instance._component || isVisible(instance)) {
+	      if (!instance._container) {
+	        instance._container = getContainer(instance);
+	      }
+	      _reactDom2["default"].unstable_renderSubtreeIntoContainer(instance, getComponent(instance, componentArg), instance._container, function callback() {
+	        instance._component = this;
+	        if (ready) {
+	          ready.call(this);
+	        }
+	      });
+	    }
+	  }
+	
+	  if (autoMount) {
+	    mixin = _extends({}, mixin, {
+	      componentDidMount: function componentDidMount() {
+	        _renderComponent(this);
+	      },
+	      componentDidUpdate: function componentDidUpdate() {
+	        _renderComponent(this);
+	      }
+	    });
+	  }
+	
+	  if (!autoMount || !autoDestroy) {
+	    mixin = _extends({}, mixin, {
+	      renderComponent: function renderComponent(componentArg, ready) {
+	        _renderComponent(this, componentArg, ready);
+	      }
+	    });
+	  }
+	
+	  function _removeContainer(instance) {
+	    if (instance._container) {
+	      var container = instance._container;
+	      _reactDom2["default"].unmountComponentAtNode(container);
+	      container.parentNode.removeChild(container);
+	      instance._container = null;
+	    }
+	  }
+	
+	  if (autoDestroy) {
+	    mixin = _extends({}, mixin, {
+	      componentWillUnmount: function componentWillUnmount() {
+	        _removeContainer(this);
+	      }
+	    });
+	  } else {
+	    mixin = _extends({}, mixin, {
+	      removeContainer: function removeContainer() {
+	        _removeContainer(this);
+	      }
+	    });
+	  }
+	
+	  return mixin;
+	}
+	module.exports = exports['default'];
+
+/***/ },
+/* 216 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
 	Object.defineProperty(exports, '__esModule', {
 	  value: true
 	});
@@ -25765,7 +25861,7 @@
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
 	
-	var _warning = __webpack_require__(216);
+	var _warning = __webpack_require__(217);
 	
 	var _warning2 = _interopRequireDefault(_warning);
 	
@@ -25817,7 +25913,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 216 */
+/* 217 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(process) {/**
@@ -25884,7 +25980,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(5)))
 
 /***/ },
-/* 217 */
+/* 218 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
