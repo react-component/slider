@@ -57,6 +57,7 @@ Handle.propTypes = {
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   value: React.PropTypes.number,
+  otherValue: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,
 };
