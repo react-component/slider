@@ -23,34 +23,49 @@ export default class Handle extends React.Component {
   }
 
   render() {
-    const props = this.props;
-    const {className, tipTransitionName, tipFormatter, vertical, offset, value} = props;
-    const {dragging, noTip} = props;
+    const {
+      prefixCls,
+      className,
+      tipTransitionName,
+      tipFormatter,
+      vertical,
+      offset,
+      value,
+      dragging,
+      noTip,
+    } = this.props;
 
     const style = vertical ? { bottom: offset + '%' } : { left: offset + '%' };
-    const handle = (<div className={className} style={style}
-                      onMouseUp={this.showTooltip.bind(this)}
-                      onMouseEnter={this.showTooltip.bind(this)}
-                      onMouseLeave={this.hideTooltip.bind(this)}/>);
+    const handle = (
+      <div className={className} style={style}
+        onMouseUp={this.showTooltip.bind(this)}
+        onMouseEnter={this.showTooltip.bind(this)}
+        onMouseLeave={this.hideTooltip.bind(this)}
+      />
+    );
 
     if (noTip) {
       return handle;
     }
 
     const isTooltipVisible = dragging || this.state.isTooltipVisible;
-    return (<Tooltip
-              prefixCls={className.replace('slider-handle', 'tooltip')}
-              placement="top"
-              visible={isTooltipVisible}
-              overlay={<span>{tipFormatter(value)}</span>}
-              delay={0}
-              transitionName={tipTransitionName}>
-              {handle}
-            </Tooltip>);
+    return (
+      <Tooltip
+        prefixCls={prefixCls.replace('slider', 'tooltip')}
+        placement="top"
+        visible={isTooltipVisible}
+        overlay={<span>{tipFormatter(value)}</span>}
+        delay={0}
+        transitionName={tipTransitionName}
+      >
+        {handle}
+      </Tooltip>
+    );
   }
 }
 
 Handle.propTypes = {
+  prefixCls: React.PropTypes.string,
   className: React.PropTypes.string,
   vertical: React.PropTypes.bool,
   offset: React.PropTypes.number,

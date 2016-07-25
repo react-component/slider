@@ -327,9 +327,26 @@ class Slider extends React.Component {
   }
 
   render() {
-    const {handle, upperBound, lowerBound} = this.state;
-    const {className, prefixCls, disabled, vertical, dots, included, range, step,
-      marks, max, min, tipTransitionName, tipFormatter, children} = this.props;
+    const {
+      handle,
+      upperBound,
+      lowerBound,
+    } = this.state;
+    const {
+      className,
+      prefixCls,
+      disabled,
+      vertical,
+      dots,
+      included,
+      range,
+      step,
+      marks,
+      max, min,
+      tipTransitionName,
+      tipFormatter,
+      children,
+    } = this.props;
 
     const customHandle = this.props.handle;
 
@@ -350,15 +367,31 @@ class Slider extends React.Component {
 
     const isNoTip = (step === null) || (tipFormatter === null);
 
-    const upper = cloneElement(customHandle, { className: upperClassName,
-        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
-        vertical: vertical, offset: upperOffset, value: upperBound, dragging: handle === 'upperBound' });
+    const commonHandleProps = {
+      prefixCls,
+      noTip: isNoTip,
+      tipTransitionName,
+      tipFormatter,
+      vertical,
+    };
+
+    const upper = cloneElement(customHandle, {
+      ...commonHandleProps,
+      className: upperClassName,
+      value: upperBound,
+      offset: upperOffset,
+      dragging: handle === 'upperBound',
+    });
 
     let lower = null;
     if (range) {
-      lower = cloneElement(customHandle, { className: lowerClassName,
-        noTip: isNoTip, tipTransitionName: tipTransitionName, tipFormatter: tipFormatter,
-        vertical: vertical, offset: lowerOffset, value: lowerBound, dragging: handle === 'lowerBound' });
+      lower = cloneElement(customHandle, {
+        ...commonHandleProps,
+        className: lowerClassName,
+        value: lowerBound,
+        offset: lowerOffset,
+        dragging: handle === 'lowerBound',
+      });
     }
 
     const sliderClassName = classNames({
@@ -370,18 +403,19 @@ class Slider extends React.Component {
     const isIncluded = included || range;
     return (
       <div ref="slider" className={sliderClassName}
-           onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
-           onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}>
+        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
+        onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
+      >
         {upper}
         {lower}
         <Track className={prefixCls + '-track'} vertical = {vertical} included={isIncluded}
-               offset={lowerOffset} length={upperOffset - lowerOffset}/>
+          offset={lowerOffset} length={upperOffset - lowerOffset} />
         <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
-              included={isIncluded} lowerBound={lowerBound}
-              upperBound={upperBound} max={max} min={min}/>
+          included={isIncluded} lowerBound={lowerBound}
+          upperBound={upperBound} max={max} min={min} />
         <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
-               included={isIncluded} lowerBound={lowerBound}
-               upperBound={upperBound} max={max} min={min}/>
+          included={isIncluded} lowerBound={lowerBound}
+          upperBound={upperBound} max={max} min={min} />
         {children}
       </div>
     );
