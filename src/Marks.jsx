@@ -14,6 +14,7 @@ const Marks = ({className, vertical, marks, included, upperBound, lowerBound, ma
     const markClassName = classNames({
       [className + '-text']: true,
       [className + '-text-active']: isActived,
+      [className + '-text-point-' + point]: true, 
     });
 
     const bottomStyle = {
