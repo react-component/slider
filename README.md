@@ -34,6 +34,8 @@ slider ui component for react
 
 <img src="https://t.alipayobjects.com/images/T1wO8fXd4rXXXXXXXX.png" width="550"/>
 
+<img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/>
+
 
 ## Feature
 
@@ -112,7 +114,13 @@ ReactDOM.render(<Rcslider />, container);
           <td>allowCross</td>
           <td>boolean</td>
           <td>true</td>
-          <td>When `range` is `true`, `allowCross` could be set as `true` to allow those two handles cross.</td>
+          <td>When `range` is `true`, `allowCross` could be set as `true` to allow those handles to cross.</td>
+        </tr>
+        <tr>
+          <td>pushable</td>
+          <td>boolean or number</td>
+          <td>true</td>
+          <td>When `range` is `true`, `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: <img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/></td>
         </tr>
         <tr>
           <td>vertical</td>

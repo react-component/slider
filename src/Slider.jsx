@@ -121,7 +121,10 @@ class Slider extends React.Component {
     const nextBounds = [...state.bounds];
     nextBounds[state.handle] = value;
     let nextHandle = state.handle;
-    if (props.allowCross) {
+    if (props.pushable !== false) {
+      const originalValue = state.bounds[nextHandle];
+      this.pushSurroundingHandles(nextBounds, nextHandle, originalValue);
+    } else if (props.allowCross) {
       nextBounds.sort((a, b) => a - b);
       nextHandle = nextBounds.indexOf(value);
     }
@@ -223,6 +226,27 @@ class Slider extends React.Component {
     return precision;
   }
 
+  /**
+   * Returns an array of possible slider points, taking into account both
+   * `marks` and `step`. The result is cached.
+   */
+  getPoints() {
+    const { marks, step, min, max } = this.props;
+    const cache = this._getPointsCache;
+    if (!cache || cache.marks !== marks || cache.step !== step) {
+      const pointsObject = { ...marks };
+      if (step !== null) {
+        for (let point = min; point <= max; point += step) {
+          pointsObject[point] = point;
+        }
+      }
+      const points = Object.keys(pointsObject).map(parseFloat);
+      points.sort((a, b) => a - b);
+      this._getPointsCache = { marks, step, points };
+    }
+    return this._getPointsCache.points;
+  }
+
   isValueOutOfBounds(value, props) {
     return value < props.min || value > props.max;
   }
@@ -258,6 +282,64 @@ class Slider extends React.Component {
     const closestPoint = points[diffs.indexOf(Math.min.apply(Math, diffs))];
 
     return step !== null ? parseFloat(closestPoint.toFixed(this.getPrecision(step))) : closestPoint;
+  }
+
+  pushHandleOnePoint(bounds, handle, direction) {
+    const points = this.getPoints();
+    const pointIndex = points.indexOf(bounds[handle]);
+    const nextPointIndex = pointIndex + direction;
+    if (nextPointIndex >= points.length || nextPointIndex < 0) {
+      // reached the minimum or maximum available point, can't push anymore
+      return false;
+    }
+    const nextHandle = handle + direction;
+    const nextValue = points[nextPointIndex];
+    const { pushable: threshold } = this.props;
+    const diffToNext = direction * (bounds[nextHandle] - nextValue);
+    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
+      // couldn't push next handle, so we won't push this one either
+      return false;
+    }
+    // push the handle
+    bounds[handle] = nextValue;
+    return true;
+  }
+
+  pushHandle(bounds, handle, direction, amount) {
+    const originalValue = bounds[handle];
+    let currentValue = bounds[handle];
+    while (direction * (currentValue - originalValue) < amount) {
+      if (!this.pushHandleOnePoint(bounds, handle, direction)) {
+        // can't push handle enough to create the needed `amount` gap, so we
+        // revert its position to the original value
+        bounds[handle] = originalValue;
+        return false;
+      }
+      currentValue = bounds[handle];
+    }
+    // the handle was pushed enough to create the needed `amount` gap
+    return true;
+  }
+
+  pushSurroundingHandles(bounds, handle, originalValue) {
+    const { pushable: threshold } = this.props;
+    const value = bounds[handle];
+
+    let direction = 0;
+    if (bounds[handle + 1] - value < threshold) {
+      direction = +1;
+    } else if (value - bounds[handle - 1] < threshold) {
+      direction = -1;
+    }
+
+    if (direction === 0) { return; }
+
+    const nextHandle = handle + direction;
+    const diffToNext = direction * (bounds[nextHandle] - value);
+    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
+      // revert to original value if pushing is impossible
+      bounds[handle] = originalValue;
+    }
   }
 
   calcOffset(value) {
@@ -431,6 +513,10 @@ Slider.propTypes = {
   ]),
   vertical: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
+  pushable: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.number,
+  ]),
 };
 
 Slider.defaultProps = {
@@ -452,6 +538,7 @@ Slider.defaultProps = {
   range: false,
   vertical: false,
   allowCross: true,
+  pushable: false,
 };
 
 export default Slider;
