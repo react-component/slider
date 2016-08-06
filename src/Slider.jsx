@@ -31,63 +31,46 @@ class Slider extends React.Component {
     super(props);
 
     const {range, min, max} = props;
-    const initialValue = range ? [min, min] : min;
+    const initialValue = range ? new Array(range + 1).fill(min) : min;
     const defaultValue = ('defaultValue' in props ? props.defaultValue : initialValue);
     const value = (props.value !== undefined ? props.value : defaultValue);
 
-    let upperBound;
-    let lowerBound;
-    if (props.range) {
-      lowerBound = this.trimAlignValue(value[0]);
-      upperBound = this.trimAlignValue(value[1]);
-    } else {
-      upperBound = this.trimAlignValue(value);
-    }
+    const bounds = range ? value : [min, value].map(v => this.trimAlignValue(v));
 
     let recent;
-    if (props.range && upperBound === lowerBound) {
-      recent = lowerBound === max ? 'lowerBound' : 'upperBound';
+    if (range && bounds[0] === bounds[bounds.length - 1] && bounds[0] === max) {
+      recent = 0;
     } else {
-      recent = 'upperBound';
+      recent = bounds.length - 1;
     }
 
     this.state = {
       handle: null,
       recent: recent,
-      upperBound: upperBound,
-      // If Slider is not range, set `lowerBound` equal to `min`.
-      lowerBound: (lowerBound || min),
+      bounds
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
 
-    const {lowerBound, upperBound} = this.state;
+    const {bounds} = this.state;
     if (nextProps.range) {
-      const value = nextProps.value || [lowerBound, upperBound];
-      const nextUpperBound = this.trimAlignValue(value[1], nextProps);
-      const nextLowerBound = this.trimAlignValue(value[0], nextProps);
-      if (nextLowerBound === lowerBound && nextUpperBound === upperBound) return;
+      const value = nextProps.value || bounds;
+      const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
+      if (nextBounds.every((v, i) => v === bounds[i])) return;
 
-      this.setState({
-        upperBound: nextUpperBound,
-        lowerBound: nextLowerBound,
-      });
-      if (this.isValueOutOfBounds(upperBound, nextProps) ||
-        this.isValueOutOfBounds(lowerBound, nextProps)) {
-        this.props.onChange([nextLowerBound, nextUpperBound]);
+      this.setState({ bounds: nextBounds });
+      if (bounds.some(v => this.isValueOutOfBounds(v, nextProps))) {
+        this.props.onChange(nextBounds);
       }
     } else {
-      const value = nextProps.value !== undefined ? nextProps.value : upperBound;
+      const value = nextProps.value !== undefined ? nextProps.value : bounds[1];
       const nextValue = this.trimAlignValue(value, nextProps);
-      if (nextValue === upperBound && lowerBound === nextProps.min) return;
+      if (nextValue === bounds[1] && bounds[0] === nextProps.min) return;
 
-      this.setState({
-        upperBound: nextValue,
-        lowerBound: nextProps.min,
-      });
-      if (this.isValueOutOfBounds(upperBound, nextProps)) {
+      this.setState({ bounds: [nextProps.min, nextValue] });
+      if (this.isValueOutOfBounds(bounds[1], nextProps)) {
         this.props.onChange(nextValue);
       }
     }
@@ -103,7 +86,7 @@ class Slider extends React.Component {
     }
 
     const data = {...this.state, ...state};
-    const changedValue = props.range ? [data.lowerBound, data.upperBound] : data.upperBound;
+    const changedValue = props.range ? data.bounds : data.bounds[1];
     props.onChange(changedValue);
   }
 
@@ -135,25 +118,16 @@ class Slider extends React.Component {
     const oldValue = state[state.handle];
     if (value === oldValue) return;
 
-    if (props.allowCross && value < state.lowerBound && state.handle === 'upperBound') {
-      this.onChange({
-        handle: 'lowerBound',
-        lowerBound: value,
-        upperBound: this.state.lowerBound,
-      });
-      return;
+    const nextBounds = [...state.bounds];
+    nextBounds[state.handle] = value;
+    let nextHandle = state.handle;
+    if (props.allowCross) {
+      nextBounds.sort((a, b) => a > b);
+      nextHandle = nextBounds.indexOf(value);
     }
-    if (props.allowCross && value > state.upperBound && state.handle === 'lowerBound') {
-      this.onChange({
-        handle: 'upperBound',
-        upperBound: value,
-        lowerBound: this.state.upperBound,
-      });
-      return;
-    }
-
     this.onChange({
-      [state.handle]: value,
+      handle: nextHandle,
+      bounds: nextBounds,
     });
   }
 
@@ -183,22 +157,26 @@ class Slider extends React.Component {
     this.startPosition = position;
 
     const state = this.state;
-    const {upperBound, lowerBound} = state;
+    const {bounds} = state;
 
-    let valueNeedChanging = 'upperBound';
+    let valueNeedChanging = 1;
     if (this.props.range) {
-      const isLowerBoundCloser = Math.abs(upperBound - value) > Math.abs(lowerBound - value);
-      if (isLowerBoundCloser) {
-        valueNeedChanging = 'lowerBound';
+      let closestBound = 0;
+      for (let i = 1; i < bounds.length - 1; ++i) {
+        if (value > bounds[i]) { closestBound = i; }
       }
+      if (Math.abs(bounds[closestBound + 1] - value) < Math.abs(bounds[closestBound] - value)) {
+        closestBound = closestBound + 1;
+      }
+      valueNeedChanging = closestBound;
 
-      const isAtTheSamePoint = (upperBound === lowerBound);
+      const isAtTheSamePoint = (bounds[closestBound + 1] === bounds[closestBound]);
       if (isAtTheSamePoint) {
         valueNeedChanging = state.recent;
       }
 
-      if (isAtTheSamePoint && (value !== upperBound)) {
-        valueNeedChanging = value < upperBound ? 'lowerBound' : 'upperBound';
+      if (isAtTheSamePoint && (value !== bounds[closestBound + 1])) {
+        valueNeedChanging = value < bounds[closestBound + 1] ? closestBound : closestBound + 1;
       }
     }
 
@@ -207,17 +185,17 @@ class Slider extends React.Component {
       recent: valueNeedChanging,
     });
 
-    const oldValue = state[valueNeedChanging];
+    const oldValue = state.bounds[valueNeedChanging];
     if (value === oldValue) return;
 
-    this.onChange({
-      [valueNeedChanging]: value,
-    });
+    const nextBounds = [...state.bounds];
+    nextBounds[valueNeedChanging] = value;
+    this.onChange({ bounds: nextBounds });
   }
 
   getValue() {
-    const {lowerBound, upperBound} = this.state;
-    return this.props.range ? [lowerBound, upperBound] : upperBound;
+    const {bounds} = this.state;
+    return this.props.range ? bounds : bounds[1];
   }
 
   getSliderLength() {
@@ -251,7 +229,7 @@ class Slider extends React.Component {
 
   trimAlignValue(v, nextProps) {
     const state = this.state || {};
-    const {handle, lowerBound, upperBound} = state;
+    const {handle, bounds} = state;
     const {marks, step, min, max, allowCross} = {...this.props, ...(nextProps || {})};
 
     let val = v;
@@ -261,11 +239,11 @@ class Slider extends React.Component {
     if (val >= max) {
       val = max;
     }
-    if (!allowCross && handle === 'upperBound' && val <= lowerBound) {
-      val = lowerBound;
+    if (!allowCross && handle > 0 && val <= bounds[handle - 1]) {
+      val = bounds[handle - 1];
     }
-    if (!allowCross && handle === 'lowerBound' && val >= upperBound) {
-      val = upperBound;
+    if (!allowCross && handle < bounds.length - 1 && val >= bounds[handle + 1]) {
+      val = bounds[handle + 1];
     }
 
     const points = Object.keys(marks).map(parseFloat);
@@ -328,42 +306,37 @@ class Slider extends React.Component {
 
   render() {
     const {
-      handle,
-      upperBound,
-      lowerBound,
+        handle,
+        bounds,
     } = this.state;
     const {
-      className,
-      prefixCls,
-      disabled,
-      vertical,
-      dots,
-      included,
-      range,
-      step,
-      marks,
-      max, min,
-      tipTransitionName,
-      tipFormatter,
-      children,
+        className,
+        prefixCls,
+        disabled,
+        vertical,
+        dots,
+        included,
+        range,
+        step,
+        marks,
+        max, min,
+        tipTransitionName,
+        tipFormatter,
+        children,
     } = this.props;
 
     const customHandle = this.props.handle;
 
-    const upperOffset = this.calcOffset(upperBound);
-    const lowerOffset = this.calcOffset(lowerBound);
+    const offsets = bounds.map(v => this.calcOffset(v));
 
     const handleClassName = prefixCls + '-handle';
 
-    const upperClassName = classNames({
+    const handlesClassNames = bounds.map((v, i) => classNames({
       [handleClassName]: true,
-      [handleClassName + '-upper']: true,
-    });
-
-    const lowerClassName = classNames({
-      [handleClassName]: true,
-      [handleClassName + '-lower']: true,
-    });
+      [`${handleClassName}-${i + 1}`]: true,
+      [`${handleClassName}-lower`]: i === 0,
+      [`${handleClassName}-upper`]: i === bounds.length - 1,
+    }));
 
     const isNoTip = (step === null) || (tipFormatter === null);
 
@@ -375,23 +348,27 @@ class Slider extends React.Component {
       vertical,
     };
 
-    const upper = cloneElement(customHandle, {
+    const handles = bounds.map((v, i) => cloneElement(customHandle, {
       ...commonHandleProps,
-      className: upperClassName,
-      value: upperBound,
-      offset: upperOffset,
-      dragging: handle === 'upperBound',
-    });
+      className: handlesClassNames[i],
+      value: v,
+      offset: offsets[i],
+      dragging: handle === i,
+      key: i,
+    }));
 
-    let lower = null;
-    if (range) {
-      lower = cloneElement(customHandle, {
-        ...commonHandleProps,
-        className: lowerClassName,
-        value: lowerBound,
-        offset: lowerOffset,
-        dragging: handle === 'lowerBound',
+    const isIncluded = included || range;
+
+    const tracks = [];
+    for (let i = 1; i < bounds.length; ++i) {
+      const className = classNames({
+        [`${prefixCls}-track`]: true,
+        [`${prefixCls}-track-${i}`]: true,
       });
+      tracks.push(
+          <Track className={className} vertical={vertical} included={isIncluded}
+                 offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i} />
+      );
     }
 
     const sliderClassName = classNames({
@@ -400,24 +377,22 @@ class Slider extends React.Component {
       [className]: !!className,
       [prefixCls + '-vertical']: this.props.vertical,
     });
-    const isIncluded = included || range;
+
     return (
-      <div ref="slider" className={sliderClassName}
-        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
-        onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
-      >
-        {upper}
-        {lower}
-        <Track className={prefixCls + '-track'} vertical = {vertical} included={isIncluded}
-          offset={lowerOffset} length={upperOffset - lowerOffset} />
-        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
-          included={isIncluded} lowerBound={lowerBound}
-          upperBound={upperBound} max={max} min={min} />
-        <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
-          included={isIncluded} lowerBound={lowerBound}
-          upperBound={upperBound} max={max} min={min} />
-        {children}
-      </div>
+        <div ref="slider" className={sliderClassName}
+             onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
+             onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
+        >
+          {handles}
+          {tracks}
+          <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
+                 included={isIncluded} lowerBound={bounds[0]}
+                 upperBound={bounds[bounds.length - 1]} max={max} min={min} />
+          <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
+                 included={isIncluded} lowerBound={bounds[0]}
+                 upperBound={bounds[bounds.length - 1]} max={max} min={min} />
+          {children}
+        </div>
     );
   }
 }
@@ -447,7 +422,10 @@ Slider.propTypes = {
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
-  range: React.PropTypes.bool,
+  range: React.PropTypes.oneOfType([
+    React.PropTypes.bool,
+    React.PropTypes.number
+  ]),
   vertical: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
 };

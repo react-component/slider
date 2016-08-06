@@ -106,6 +106,10 @@ ReactDOM.render(
       <Slider range value={[20, 40]} />
     </div>
     <div style={style}>
+      <p>Multi Range</p>
+      <Slider range={3} value={[20, 40, 60, 80]} />
+    </div>
+    <div style={style}>
       <p>Customized Range</p>
       <CustomizedRange />
     </div>

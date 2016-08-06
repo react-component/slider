@@ -104,9 +104,9 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>range</td>
-          <td>boolean</td>
+          <td>boolean or number</td>
           <td>false</td>
-          <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range.</td>
+          <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using `range={true}` is equivalent to `range={1}`.</td>
         </tr>
         <tr>
           <td>allowCross</td>
@@ -122,15 +122,15 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>defaultValue</td>
-          <td>number or [number, number]</td>
+          <td>number or [number, number, ...]</td>
           <td>0 or [0, 0]</td>
-          <td>Set initial positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
+          <td>Set initial positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number, ...]`</td>
         </tr>
         <tr>
           <td>value</td>
-          <td>number or [number, number]</td>
+          <td>number or [number, number, ...]</td>
           <td></td>
-          <td>Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
+          <td>Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number, ...]`</td>
         </tr>
         <tr>
           <td>handle</td>
