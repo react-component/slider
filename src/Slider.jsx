@@ -47,7 +47,7 @@ class Slider extends React.Component {
     this.state = {
       handle: null,
       recent: recent,
-      bounds
+      bounds,
     };
   }
 
@@ -361,12 +361,12 @@ class Slider extends React.Component {
 
     const tracks = [];
     for (let i = 1; i < bounds.length; ++i) {
-      const className = classNames({
+      const trackClassName = classNames({
         [`${prefixCls}-track`]: true,
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-          <Track className={className} vertical={vertical} included={isIncluded}
+          <Track className={trackClassName} vertical={vertical} included={isIncluded}
                  offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i} />
       );
     }
@@ -424,7 +424,7 @@ Slider.propTypes = {
   dots: React.PropTypes.bool,
   range: React.PropTypes.oneOfType([
     React.PropTypes.bool,
-    React.PropTypes.number
+    React.PropTypes.number,
   ]),
   vertical: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
