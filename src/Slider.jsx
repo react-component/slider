@@ -356,6 +356,7 @@ class Slider extends React.Component {
       dragging: handle === i,
       key: i,
     }));
+    if (!range) { handles.shift(); }
 
     const isIncluded = included || range;
 
