@@ -31,7 +31,7 @@ class Slider extends React.Component {
     super(props);
 
     const {range, min, max} = props;
-    const initialValue = range ? new Array(range + 1).fill(min) : min;
+    const initialValue = range ? new Array(range + 1).map(() => min) : min;
     const defaultValue = ('defaultValue' in props ? props.defaultValue : initialValue);
     const value = (props.value !== undefined ? props.value : defaultValue);
 
