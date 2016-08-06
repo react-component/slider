@@ -122,7 +122,7 @@ class Slider extends React.Component {
     nextBounds[state.handle] = value;
     let nextHandle = state.handle;
     if (props.allowCross) {
-      nextBounds.sort((a, b) => a > b);
+      nextBounds.sort((a, b) => a - b);
       nextHandle = nextBounds.indexOf(value);
     }
     this.onChange({
