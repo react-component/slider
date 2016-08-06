@@ -35,7 +35,7 @@ class Slider extends React.Component {
     const defaultValue = ('defaultValue' in props ? props.defaultValue : initialValue);
     const value = (props.value !== undefined ? props.value : defaultValue);
 
-    const bounds = range ? value : [min, value].map(v => this.trimAlignValue(v));
+    const bounds = (range ? value : [min, value]).map(v => this.trimAlignValue(v));
 
     let recent;
     if (range && bounds[0] === bounds[bounds.length - 1] && bounds[0] === max) {
