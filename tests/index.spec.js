@@ -84,11 +84,11 @@ describe('rc-slider', function test() {
     expect(ReactTestUtils
       .scryRenderedDOMComponentsWithClass(rangeWithDefaultValue, 'rc-slider-handle')[0]
       .style.cssText)
-      .to.match(/left: 50%;/);
+      .to.match(/left: 0%;/);
     expect(ReactTestUtils
       .scryRenderedDOMComponentsWithClass(rangeWithDefaultValue, 'rc-slider-handle')[1]
       .style.cssText)
-      .to.match(/left: 0%;/);
+      .to.match(/left: 50%;/);
 
     const trackStyle = ReactTestUtils
       .scryRenderedDOMComponentsWithClass(rangeWithDefaultValue, 'rc-slider-track')[0]
@@ -107,19 +107,19 @@ describe('rc-slider', function test() {
     expect(ReactTestUtils
       .scryRenderedDOMComponentsWithClass(multiRangeWithDefaultValue, 'rc-slider-handle')[0]
       .style.cssText)
-      .to.match(/left: 75%;/);
+      .to.match(/left: 0%;/);
     expect(ReactTestUtils
       .scryRenderedDOMComponentsWithClass(multiRangeWithDefaultValue, 'rc-slider-handle')[1]
       .style.cssText)
-      .to.match(/left: 50%;/);
+      .to.match(/left: 25%;/);
     expect(ReactTestUtils
       .scryRenderedDOMComponentsWithClass(multiRangeWithDefaultValue, 'rc-slider-handle')[2]
       .style.cssText)
-      .to.match(/left: 25%;/);
+      .to.match(/left: 50%;/);
     expect(ReactTestUtils
       .scryRenderedDOMComponentsWithClass(multiRangeWithDefaultValue, 'rc-slider-handle')[3]
       .style.cssText)
-      .to.match(/left: 0%;/);
+      .to.match(/left: 75%;/);
 
     const track1Style = ReactTestUtils
       .scryRenderedDOMComponentsWithClass(multiRangeWithDefaultValue, 'rc-slider-track-1')[0]
@@ -150,11 +150,11 @@ describe('rc-slider', function test() {
     expect(ReactTestUtils
            .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[0]
            .style.cssText)
-      .to.match(/left: 100%;/);
+      .to.match(/left: 50%;/);
     expect(ReactTestUtils
            .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[1]
            .style.cssText)
-      .to.match(/left: 50%;/);
+      .to.match(/left: 100%;/);
 
     const trackStyle = ReactTestUtils
             .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-track')[0]
