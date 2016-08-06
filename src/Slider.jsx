@@ -239,12 +239,14 @@ class Slider extends React.Component {
     if (val >= max) {
       val = max;
     }
-    if (!allowCross && handle > 0 && val <= bounds[handle - 1]) {
+    /* eslint-disable eqeqeq */
+    if (!allowCross && handle != null && handle > 0 && val <= bounds[handle - 1]) {
       val = bounds[handle - 1];
     }
-    if (!allowCross && handle < bounds.length - 1 && val >= bounds[handle + 1]) {
+    if (!allowCross && handle != null && handle < bounds.length - 1 && val >= bounds[handle + 1]) {
       val = bounds[handle + 1];
     }
+    /* eslint-enable eqeqeq */
 
     const points = Object.keys(marks).map(parseFloat);
     if (step !== null) {
