@@ -175,7 +175,7 @@ describe('rc-slider', function test() {
   });
 
   it('should render marks correctly when `marks` is not an empty object', () => {
-    const marks = {0: '0', 30: '30', 100: '100'};
+    const marks = { 0: '0', 30: '30', 100: '100' };
 
     const slider = ReactDOM.render(<Slider value={30} marks={marks} />, div);
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-mark-text').length).to.be(3);

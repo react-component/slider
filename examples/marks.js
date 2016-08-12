@@ -4,7 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {width: 400, margin: 50};
+const style = { width: 400, margin: 50 };
 const marks = {
   '-10': '-10°C',
   0: <strong>0°C</strong>,

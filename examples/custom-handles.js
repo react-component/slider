@@ -4,7 +4,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const wrapperStyle = {width: 400, margin: 50};
+const wrapperStyle = { width: 400, margin: 50 };
 
 const handleStyle = {
   position: 'absolute',
@@ -20,7 +20,7 @@ const handleStyle = {
 };
 
 const CustomHandle = props => {
-  const style = Object.assign({left: props.offset + '%'}, handleStyle);
+  const style = Object.assign({ left: props.offset + '%' }, handleStyle);
   return (
     <div style={style}>val: {props.value}</div>
   );

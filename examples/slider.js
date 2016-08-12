@@ -5,7 +5,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {width: 400, margin: 50};
+const style = { width: 400, margin: 50 };
 
 function log(value) {
   console.log(value);
@@ -17,46 +17,46 @@ function percentFormatter(v) {
 }
 
 const CustomizedSlider = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       value: 50,
     };
   },
-  onSliderChange: function(value) {
+  onSliderChange(value) {
     log(value);
     this.setState({
-      value: value,
+      value,
     });
   },
-  onAfterChange: function(value) {
+  onAfterChange(value) {
     console.log(value);
   },
-  render: function() {
+  render() {
     return <Slider value={this.state.value} onChange={this.onSliderChange} onAfterChange={this.onAfterChange} />;
   },
 });
 
 const DynamicBounds = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       min: 0,
       max: 100,
     };
   },
-  onSliderChange: function(value) {
+  onSliderChange(value) {
     log(value);
   },
-  onMinChange: function(e) {
+  onMinChange(e) {
     this.setState({
       min: +e.target.value || 0,
     });
   },
-  onMaxChange: function(e) {
+  onMaxChange(e) {
     this.setState({
       max: +e.target.value || 100,
     });
   },
-  render: function() {
+  render() {
     return (
       <div>
         <label>Min: </label>

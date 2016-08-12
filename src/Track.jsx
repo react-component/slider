@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Track = ({className, included, vertical, offset, length}) => {
+const Track = ({ className, included, vertical, offset, length }) => {
   const style = {
     visibility: included ? 'visible' : 'hidden',
   };

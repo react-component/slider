@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const Marks = ({className, vertical, marks, included, upperBound, lowerBound, max, min}) => {
+const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, max, min }) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
   const unit = 100 / (marksCount - 1);

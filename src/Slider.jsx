@@ -30,7 +30,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    const {range, min, max} = props;
+    const { range, min, max } = props;
     const initialValue = range ? Array.apply(null, Array(range + 1)).map(() => min) : min;
     const defaultValue = ('defaultValue' in props ? props.defaultValue : initialValue);
     const value = (props.value !== undefined ? props.value : defaultValue);
@@ -46,7 +46,7 @@ class Slider extends React.Component {
 
     this.state = {
       handle: null,
-      recent: recent,
+      recent,
       bounds,
     };
   }
@@ -54,7 +54,7 @@ class Slider extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
 
-    const {bounds} = this.state;
+    const { bounds } = this.state;
     if (nextProps.range) {
       const value = nextProps.value || bounds;
       const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
@@ -82,10 +82,10 @@ class Slider extends React.Component {
     if (isNotControlled) {
       this.setState(state);
     } else if (state.handle) {
-      this.setState({handle: state.handle});
+      this.setState({ handle: state.handle });
     }
 
-    const data = {...this.state, ...state};
+    const data = { ...this.state, ...state };
     const changedValue = props.range ? data.bounds : data.bounds[1];
     props.onChange(changedValue);
   }
@@ -160,7 +160,7 @@ class Slider extends React.Component {
     this.startPosition = position;
 
     const state = this.state;
-    const {bounds} = state;
+    const { bounds } = state;
 
     let valueNeedChanging = 1;
     if (this.props.range) {
@@ -197,7 +197,7 @@ class Slider extends React.Component {
   }
 
   getValue() {
-    const {bounds} = this.state;
+    const { bounds } = this.state;
     return this.props.range ? bounds : bounds[1];
   }
 
@@ -253,8 +253,8 @@ class Slider extends React.Component {
 
   trimAlignValue(v, nextProps) {
     const state = this.state || {};
-    const {handle, bounds} = state;
-    const {marks, step, min, max, allowCross} = {...this.props, ...(nextProps || {})};
+    const { handle, bounds } = state;
+    const { marks, step, min, max, allowCross } = { ...this.props, ...(nextProps || {}) };
 
     let val = v;
     if (val <= min) {
@@ -343,13 +343,13 @@ class Slider extends React.Component {
   }
 
   calcOffset(value) {
-    const {min, max} = this.props;
+    const { min, max } = this.props;
     const ratio = (value - min) / (max - min);
     return ratio * 100;
   }
 
   calcValue(offset) {
-    const {vertical, min, max} = this.props;
+    const { vertical, min, max } = this.props;
     const ratio = Math.abs(offset / this.getSliderLength());
     const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
     return value;
@@ -385,7 +385,7 @@ class Slider extends React.Component {
   end(type) {
     this.removeEvents(type);
     this.props.onAfterChange(this.getValue());
-    this.setState({handle: null});
+    this.setState({ handle: null });
   }
 
   render() {
