@@ -1,6 +1,10 @@
 # History
 ----
 
+## 4.0.0 / 2016-08-12
+
+[#133](https://github.com/react-component/slider/pull/133) support multi-range ([@sosz](https://github.com/sosz))
+
 ## 3.6.0 / 2016-04-01
 
 [#18](https://github.com/react-component/slider/issues/18) add `vertical` props ([@wnlee](https://github.com/WNLee))
