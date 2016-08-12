@@ -34,6 +34,8 @@ slider ui component for react
 
 <img src="https://t.alipayobjects.com/images/T1wO8fXd4rXXXXXXXX.png" width="550"/>
 
+<img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/>
+
 
 ## Feature
 
@@ -104,15 +106,21 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>range</td>
-          <td>boolean</td>
+          <td>boolean or number</td>
           <td>false</td>
-          <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range.</td>
+          <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using `range={true}` is equivalent to `range={1}`.</td>
         </tr>
         <tr>
           <td>allowCross</td>
           <td>boolean</td>
           <td>true</td>
-          <td>When `range` is `true`, `allowCross` could be set as `true` to allow those two handles cross.</td>
+          <td>When `range` is `true`, `allowCross` could be set as `true` to allow those handles to cross.</td>
+        </tr>
+        <tr>
+          <td>pushable</td>
+          <td>boolean or number</td>
+          <td>true</td>
+          <td>When `range` is `true`, `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: <img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/></td>
         </tr>
         <tr>
           <td>vertical</td>
@@ -122,15 +130,15 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>defaultValue</td>
-          <td>number or [number, number]</td>
+          <td>number or [number, number, ...]</td>
           <td>0 or [0, 0]</td>
-          <td>Set initial positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
+          <td>Set initial positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number, ...]`</td>
         </tr>
         <tr>
           <td>value</td>
-          <td>number or [number, number]</td>
+          <td>number or [number, number, ...]</td>
           <td></td>
-          <td>Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number]`</td>
+          <td>Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number, ...]`</td>
         </tr>
         <tr>
           <td>handle</td>
