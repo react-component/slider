@@ -3,22 +3,22 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(219);
+	module.exports = __webpack_require__(319);
 
 
 /***/ },
 
-/***/ 219:
+/***/ 319:
 /***/ function(module, exports, __webpack_require__) {
 
-	/* eslint react/no-multi-comp: 0 */
 	'use strict';
 	
+	/* eslint react/no-multi-comp: 0 */
 	__webpack_require__(2);
 	
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(35);
-	var Slider = __webpack_require__(174);
+	var ReactDOM = __webpack_require__(37);
+	var Slider = __webpack_require__(177);
 	
 	var style = { width: 400, margin: 50 };
 	
@@ -28,7 +28,6 @@ webpackJsonp([2],{
 	
 	var CustomizedRange = React.createClass({
 	  displayName: 'CustomizedRange',
-	
 	  getInitialState: function getInitialState() {
 	    return {
 	      lowerBound: 20,
@@ -87,7 +86,6 @@ webpackJsonp([2],{
 	
 	var DynamicBounds = React.createClass({
 	  displayName: 'DynamicBounds',
-	
 	  getInitialState: function getInitialState() {
 	    return {
 	      min: 0,
@@ -173,6 +171,16 @@ webpackJsonp([2],{
 	      'Controlled Range'
 	    ),
 	    React.createElement(Slider, { range: true, value: [20, 40] })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
+	      'Multi Range'
+	    ),
+	    React.createElement(Slider, { range: 3, value: [20, 40, 60, 80] })
 	  ),
 	  React.createElement(
 	    'div',

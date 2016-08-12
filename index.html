@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@3.8.2 - slider ui component for react</title>
+  <title>rc-slider@4.0.0 - slider ui component for react</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@3.8.2</h1>
+  <h1>rc-slider@4.0.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -777,6 +777,7 @@
 <h2>Screenshots<a id="user-content-screenshots" name="screenshots" class="anchor" aria-hidden="true" href="#screenshots"><span class="octicon octicon-link"></span></a></h2><p><img src="https://t.alipayobjects.com/images/T1ki8fXeprXXXXXXXX.png" width="550"/></p>
 <p><img src="https://t.alipayobjects.com/images/T1pPhfXhBqXXXXXXXX.png" width="550"/></p>
 <p><img src="https://t.alipayobjects.com/images/T1wO8fXd4rXXXXXXXX.png" width="550"/></p>
+<p><img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/></p>
 <h2>Feature<a id="user-content-feature" name="feature" class="anchor" aria-hidden="true" href="#feature"><span class="octicon octicon-link"></span></a></h2><ul>
 <li>support ie8,ie8+,chrome,firefox,safari</li>
 </ul>
@@ -828,15 +829,21 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
         </tr>
         <tr>
           <td>range</td>
-          <td>boolean</td>
+          <td>boolean or number</td>
           <td>false</td>
-          <td>Determines the type of slider. If range is <code>true</code>, two handles will be rendered in order to select a range.</td>
+          <td>Determines the type of slider. If range is <code>true</code>, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using <code>range={true}</code> is equivalent to <code>range={1}</code>.</td>
         </tr>
         <tr>
           <td>allowCross</td>
           <td>boolean</td>
           <td>true</td>
-          <td>When <code>range</code> is <code>true</code>, <code>allowCross</code> could be set as <code>true</code> to allow those two handles cross.</td>
+          <td>When <code>range</code> is <code>true</code>, <code>allowCross</code> could be set as <code>true</code> to allow those handles to cross.</td>
+        </tr>
+        <tr>
+          <td>pushable</td>
+          <td>boolean or number</td>
+          <td>true</td>
+          <td>When <code>range</code> is <code>true</code>, <code>pushable</code> could be set as <code>true</code> to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: <img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/></td>
         </tr>
         <tr>
           <td>vertical</td>
@@ -846,15 +853,15 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
         </tr>
         <tr>
           <td>defaultValue</td>
-          <td>number or [number, number]</td>
+          <td>number or [number, number, ...]</td>
           <td>0 or [0, 0]</td>
-          <td>Set initial positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number]</code></td>
+          <td>Set initial positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number, ...]</code></td>
         </tr>
         <tr>
           <td>value</td>
-          <td>number or [number, number]</td>
+          <td>number or [number, number, ...]</td>
           <td></td>
-          <td>Set current positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number]</code></td>
+          <td>Set current positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number, ...]</code></td>
         </tr>
         <tr>
           <td>handle</td>

@@ -3,22 +3,22 @@ webpackJsonp([5],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(222);
+	module.exports = __webpack_require__(322);
 
 
 /***/ },
 
-/***/ 222:
+/***/ 322:
 /***/ function(module, exports, __webpack_require__) {
 
-	/* eslint react/no-multi-comp: 0 */
 	'use strict';
 	
+	/* eslint react/no-multi-comp: 0 */
 	__webpack_require__(2);
 	
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(35);
-	var Slider = __webpack_require__(174);
+	var ReactDOM = __webpack_require__(37);
+	var Slider = __webpack_require__(177);
 	
 	var style = { float: 'left', width: 180, height: 400, marginBottom: 160, marginLeft: 50 };
 	var parentStyle = { overflow: 'hidden' };
@@ -29,7 +29,6 @@ webpackJsonp([5],{
 	
 	var CustomizedRange = React.createClass({
 	  displayName: 'CustomizedRange',
-	
 	  getInitialState: function getInitialState() {
 	    return {
 	      lowerBound: 20,
@@ -86,7 +85,6 @@ webpackJsonp([5],{
 	
 	var DynamicBounds = React.createClass({
 	  displayName: 'DynamicBounds',
-	
 	  getInitialState: function getInitialState() {
 	    return {
 	      min: 0,

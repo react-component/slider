@@ -14,8 +14,8 @@ webpackJsonp([0],[
 	__webpack_require__(2);
 	
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(35);
-	var Slider = __webpack_require__(174);
+	var ReactDOM = __webpack_require__(37);
+	var Slider = __webpack_require__(177);
 	
 	var wrapperStyle = { width: 400, margin: 50 };
 	

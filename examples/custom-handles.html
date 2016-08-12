@@ -2,12 +2,12 @@
 <html>
 
 <head>
-  <title>custom-handles.js - example - rc-slider@3.8.2</title>
+  <title>custom-handles.js - example - rc-slider@4.0.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
+  <link href="https://a.alipayobjects.com/normalize.css/3.0.1/normalize.css" rel="stylesheet"/>
   <style>
     .highlight pre {
       padding: .8em 1em;
@@ -251,26 +251,26 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   <!--[if lt IE 9]>
   <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js,es5-shim/4.0.5/es5-sham.js,html5shiv/3.7.2/src/html5shiv.js"></script>
   <![endif]-->
+  
   <link rel="stylesheet" href="common.css" />
 </head>
 
 <body>
-<div class="container">
-  <div class="header">
-    <h1>rc-slider@3.8.2</h1>
+  <div class="container">
+    <div class="header">
+      <h1>rc-slider@4.0.0</h1>
 
-    <p>slider ui component for react</p>
-  </div>
-  <div class="example" id="__react-content"></div>
-  <script src="common.js?nowrap"></script>
-  <script src="custom-handles.js?nowrap"></script>
-  <div class="highlight"><pre><code language="js"><span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider/assets/index.css'</span>);
+      <p>slider ui component for react</p>
+    </div>
+    <div class="example" id="__react-content"></div>
+
+    <div class="highlight"><pre><code language="js"><span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider/assets/index.css'</span>);
 
 <span class="hljs-keyword">const</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
 <span class="hljs-keyword">const</span> ReactDOM = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-dom'</span>);
 <span class="hljs-keyword">const</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
 
-<span class="hljs-keyword">const</span> wrapperStyle = {width: <span class="hljs-number">400</span>, margin: <span class="hljs-number">50</span>};
+<span class="hljs-keyword">const</span> wrapperStyle = { width: <span class="hljs-number">400</span>, margin: <span class="hljs-number">50</span> };
 
 <span class="hljs-keyword">const</span> handleStyle = {
   position: <span class="hljs-string">'absolute'</span>,
@@ -286,10 +286,10 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 };
 
 <span class="hljs-keyword">const</span> CustomHandle = props =&gt; {
-  <span class="hljs-keyword">const</span> style = <span class="hljs-built_in">Object</span>.assign({left: props.offset + <span class="hljs-string">'%'</span>}, handleStyle);
+  <span class="hljs-keyword">const</span> style = <span class="hljs-built_in">Object</span>.assign({ left: props.offset + <span class="hljs-string">'%'</span> }, handleStyle);
   <span class="hljs-keyword">return</span> (
     <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>val: {props.value}<span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-  );
+  )</span>;
 };
 CustomHandle.propTypes = {
   value: React.PropTypes.any,
@@ -297,7 +297,7 @@ CustomHandle.propTypes = {
 };
 
 ReactDOM.render(
-  <span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{wrapperStyle}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Default slider<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{0}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{3}</span> /&gt;</span>
@@ -309,13 +309,16 @@ ReactDOM.render(
   <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   , document.getElementById('__react-content'));
 </span></code></pre></div>
-</div>
-<a href="http://github.com/react-component/slider">
-  <img style="position: absolute; top: 0; right: 0; border: 0;"
-       src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
-       alt="Fork me on GitHub"
-       data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
-</a>
+  </div>
+  <a href="http://github.com/react-component/slider">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+         src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+         alt="Fork me on GitHub"
+         data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+  </a>
+  
+  <script src="common.js?nowrap"></script>
+  <script src="custom-handles.js?nowrap"></script>
 </body>
 
 </html>
