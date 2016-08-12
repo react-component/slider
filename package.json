@@ -31,7 +31,7 @@
     "build": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-server",
-    "pub": "rc-tools run pub",
+    "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
     "karma": "rc-tools run karma",
     "saucelabs": "rc-tools run saucelabs",
@@ -42,7 +42,7 @@
     "expect.js": "0.3.x",
     "pre-commit": "1.x",
     "rc-server": "3.x",
-    "rc-tools": "4.x",
+    "rc-tools": "^5.6.8",
     "react": "^15.2.1",
     "react-addons-test-utils": "^15.2.1",
     "react-dom": "^15.2.1"
@@ -51,6 +51,7 @@
     "lint"
   ],
   "dependencies": {
+    "babel-runtime": "6.x",
     "classnames": "^2.2.5",
     "rc-tooltip": "^3.4.2",
     "rc-util": "^3.2.1",
