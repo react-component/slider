@@ -210,7 +210,7 @@ describe('rc-slider', function test() {
   it('should set appropriate bounds when the range, max, and min aren\'t an exact multiple of the step', () => {
     const min = 0.5;
     const max = 2.1;
-    const slider = ReactDOM.render(<Slider max={max} min={min} value={[1,3]} range={true}/>, div);
+    const slider = ReactDOM.render(<Slider max={max} min={min} value={[0,3]} range={true}/>, div);
 
     slider.state.bounds.forEach((bound) => {
       expect(bound).to.be.greaterThan(min);
