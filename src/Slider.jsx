@@ -260,8 +260,9 @@ class Slider extends React.Component {
     if (val <= min) {
       val = min;
     }
-    if (val >= max) {
-      val = max;
+    const maxSelectableValue = (Math.floor((max - min) / step) * step) + min;
+    if (val >= maxSelectableValue) {
+      val = maxSelectableValue;
     }
     /* eslint-disable eqeqeq */
     if (!allowCross && handle != null && handle > 0 && val <= bounds[handle - 1]) {
