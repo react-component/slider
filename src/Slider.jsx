@@ -470,7 +470,8 @@ class Slider extends React.Component {
       });
       tracks.unshift(
           <Track className={trackClassName} vertical={vertical} included={isIncluded}
-                 offset={0} length={offsets[0]} key="prefix" />
+            offset={0} length={offsets[0]} key="prefix"
+          />
       );
     }
 
