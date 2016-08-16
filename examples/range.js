@@ -116,6 +116,10 @@ ReactDOM.render(
       <Slider range={3} defaultValue={[20, 40, 60, 80]} pushable={10} />
     </div>
     <div style={style}>
+      <p>Range with `prefixTrack=true`</p>
+      <Slider range defaultValue={[20, 40]} prefixTrack />
+    </div>
+    <div style={style}>
       <p>Customized Range</p>
       <CustomizedRange />
     </div>
