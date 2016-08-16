@@ -39,7 +39,9 @@ const CustomizedRange = React.createClass({
   render() {
     return (
       <div style={style}>
-        <Slider range vertical allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
+        <Slider range vertical allowCross={false} value={this.state.value}
+          onChange={this.onSliderChange}
+        />
         <label>LowerBound: </label>
         <input type="number" value={this.state.lowerBound} onChange={this.onLowerBoundChange} />
         <br />
@@ -75,7 +77,9 @@ const DynamicBounds = React.createClass({
   render() {
     return (
       <div style={style}>
-        <Slider range vertical defaultValue={[20, 50]} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+        <Slider range vertical defaultValue={[20, 50]} min={this.state.min} max={this.state.max}
+          onChange={this.onSliderChange}
+        />
         <label>Min: </label>
         <input type="number" value={this.state.min} onChange={this.onMinChange} />
         <br />

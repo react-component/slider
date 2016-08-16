@@ -49,7 +49,9 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider vertical min={-10} range marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
+      <Slider vertical min={-10} range marks={marks} step={10}
+        onChange={log} defaultValue={[20, 40]}
+      />
     </div>
   </div>
   , document.getElementById('__react-content'));

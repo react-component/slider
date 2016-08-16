@@ -364,11 +364,15 @@ class Slider extends React.Component {
   addDocumentEvents(type) {
     if (type === 'touch') {
       // just work for chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
-      this.onTouchUpListener = addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
+      this.onTouchMoveListener =
+        addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
+      this.onTouchUpListener =
+        addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
     } else if (type === 'mouse') {
-      this.onMouseMoveListener = addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
-      this.onMouseUpListener = addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
+      this.onMouseMoveListener =
+        addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
+      this.onMouseUpListener =
+        addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
     }
   }
 
@@ -413,7 +417,7 @@ class Slider extends React.Component {
 
     const offsets = bounds.map(v => this.calcOffset(v));
 
-    const handleClassName = prefixCls + '-handle';
+    const handleClassName = `${prefixCls}-handle`;
 
     const handlesClassNames = bounds.map((v, i) => classNames({
       [handleClassName]: true,
@@ -451,33 +455,36 @@ class Slider extends React.Component {
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-          <Track className={trackClassName} vertical={vertical} included={isIncluded}
-                 offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i} />
+        <Track className={trackClassName} vertical={vertical} included={isIncluded}
+          offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
+        />
       );
     }
 
     const sliderClassName = classNames({
       [prefixCls]: true,
-      [prefixCls + '-disabled']: disabled,
+      [`${prefixCls}-disabled`]: disabled,
       [className]: !!className,
-      [prefixCls + '-vertical']: this.props.vertical,
+      [`${prefixCls}-vertical`]: this.props.vertical,
     });
 
     return (
-        <div ref="slider" className={sliderClassName}
-             onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
-             onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
-        >
-          {tracks}
-          <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
-                 included={isIncluded} lowerBound={bounds[0]}
-                 upperBound={bounds[bounds.length - 1]} max={max} min={min} />
-          {handles}
-          <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
-                 included={isIncluded} lowerBound={bounds[0]}
-                 upperBound={bounds[bounds.length - 1]} max={max} min={min} />
-          {children}
-        </div>
+      <div ref="slider" className={sliderClassName}
+        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
+        onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
+      >
+        {tracks}
+        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
+          included={isIncluded} lowerBound={bounds[0]}
+          upperBound={bounds[bounds.length - 1]} max={max} min={min}
+        />
+        {handles}
+        <Marks className={`${prefixCls}-mark`} vertical = {vertical} marks={marks}
+          included={isIncluded} lowerBound={bounds[0]}
+          upperBound={bounds[bounds.length - 1]} max={max} min={min}
+        />
+        {children}
+      </div>
     );
   }
 }

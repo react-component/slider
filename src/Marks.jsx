@@ -12,20 +12,20 @@ const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, m
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
     const markClassName = classNames({
-      [className + '-text']: true,
-      [className + '-text-active']: isActived,
+      [`${className}-text`]: true,
+      [`${className}-text-active`]: isActived,
     });
 
     const bottomStyle = {
       // height: markWidth + '%',
-      marginBottom: '-200' + '%',
-      bottom: (point - min) / range * 100 + '%',
+      marginBottom: '-200%',
+      bottom: `${(point - min) / range * 100}%`,
     };
 
     const leftStyle = {
-      width: markWidth + '%',
-      marginLeft: -markWidth / 2 + '%',
-      left: (point - min) / range * 100 + '%',
+      width: `${markWidth}%`,
+      marginLeft: `${-markWidth / 2}%`,
+      left: `${(point - min) / range * 100}%`,
     };
 
     const style = vertical ? bottomStyle : leftStyle;

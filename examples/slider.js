@@ -13,7 +13,7 @@ function log(value) {
 
 
 function percentFormatter(v) {
-  return v + ' %';
+  return `${v} %`;
 }
 
 const CustomizedSlider = React.createClass({
@@ -32,7 +32,11 @@ const CustomizedSlider = React.createClass({
     console.log(value);
   },
   render() {
-    return <Slider value={this.state.value} onChange={this.onSliderChange} onAfterChange={this.onAfterChange} />;
+    return (
+      <Slider value={this.state.value}
+        onChange={this.onSliderChange} onAfterChange={this.onAfterChange}
+      />
+    );
   },
 });
 
@@ -65,7 +69,9 @@ const DynamicBounds = React.createClass({
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
         <br /><br />
-        <Slider defaultValue={50} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+        <Slider defaultValue={50} min={this.state.min} max={this.state.max}
+          onChange={this.onSliderChange}
+        />
       </div>
     );
   },
@@ -87,7 +93,9 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Basic Slider with `tipFormatter`</p>
-      <Slider tipFormatter={percentFormatter} tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
+      <Slider tipFormatter={percentFormatter}
+        tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log}
+      />
     </div>
     <div style={style}>
       <p>Basic Slider without tooltip</p>

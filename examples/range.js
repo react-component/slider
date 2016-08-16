@@ -81,7 +81,9 @@ const DynamicBounds = React.createClass({
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
         <br /><br />
-        <Slider range defaultValue={[20, 50]} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+        <Slider range defaultValue={[20, 50]} min={this.state.min} max={this.state.max}
+          onChange={this.onSliderChange}
+        />
       </div>
     );
   },

@@ -19,7 +19,7 @@ const handleStyle = {
 };
 
 const CustomHandle = props => {
-  const style = Object.assign({ left: props.offset + '%' }, handleStyle);
+  const style = Object.assign({ left: `${props.offset}%` }, handleStyle);
   return (
     <div style={style}>val: {props.value}</div>
   );
@@ -39,5 +39,6 @@ ReactDOM.render(
       <p>Slider with custom handle</p>
       <Slider min={0} max={20} defaultValue={3} handle={<CustomHandle />} />
     </div>
-  </div>
-  , document.getElementById('__react-content'));
+  </div>,
+  document.getElementById('__react-content')
+);
