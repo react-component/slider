@@ -79,7 +79,9 @@ webpackJsonp([6],{
 	        null,
 	        'Slider with dynamic `min` `max`'
 	      ),
-	      React.createElement(Slider, { vertical: true, defaultValue: 50, min: this.state.min, max: this.state.max, onChange: this.onSliderChange }),
+	      React.createElement(Slider, { vertical: true, defaultValue: 50, min: this.state.min, max: this.state.max,
+	        onChange: this.onSliderChange
+	      }),
 	      React.createElement(
 	        'label',
 	        null,
@@ -138,7 +140,9 @@ webpackJsonp([6],{
 	      null,
 	      'Basic Slider with `tipFormatter`'
 	    ),
-	    React.createElement(Slider, { vertical: true, tipFormatter: percentFormatter, tipTransitionName: 'rc-slider-tooltip-zoom-down', onChange: log })
+	    React.createElement(Slider, { vertical: true, tipFormatter: percentFormatter,
+	      tipTransitionName: 'rc-slider-tooltip-zoom-down', onChange: log
+	    })
 	  ),
 	  React.createElement(
 	    'div',

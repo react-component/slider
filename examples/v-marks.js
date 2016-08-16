@@ -109,7 +109,9 @@ webpackJsonp([4],{
 	      null,
 	      'Range with marks and steps'
 	    ),
-	    React.createElement(Slider, { vertical: true, min: -10, range: true, marks: marks, step: 10, onChange: log, defaultValue: [20, 40] })
+	    React.createElement(Slider, { vertical: true, min: -10, range: true, marks: marks, step: 10,
+	      onChange: log, defaultValue: [20, 40]
+	    })
 	  )
 	), document.getElementById('__react-content'));
 

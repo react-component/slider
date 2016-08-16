@@ -59,7 +59,9 @@ webpackJsonp([5],{
 	    return React.createElement(
 	      'div',
 	      { style: style },
-	      React.createElement(Slider, { range: true, vertical: true, allowCross: false, value: this.state.value, onChange: this.onSliderChange }),
+	      React.createElement(Slider, { range: true, vertical: true, allowCross: false, value: this.state.value,
+	        onChange: this.onSliderChange
+	      }),
 	      React.createElement(
 	        'label',
 	        null,
@@ -108,7 +110,9 @@ webpackJsonp([5],{
 	    return React.createElement(
 	      'div',
 	      { style: style },
-	      React.createElement(Slider, { range: true, vertical: true, defaultValue: [20, 50], min: this.state.min, max: this.state.max, onChange: this.onSliderChange }),
+	      React.createElement(Slider, { range: true, vertical: true, defaultValue: [20, 50], min: this.state.min, max: this.state.max,
+	        onChange: this.onSliderChange
+	      }),
 	      React.createElement(
 	        'label',
 	        null,

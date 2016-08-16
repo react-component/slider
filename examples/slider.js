@@ -47,7 +47,9 @@ webpackJsonp([3],{
 	    console.log(value);
 	  },
 	  render: function render() {
-	    return React.createElement(Slider, { value: this.state.value, onChange: this.onSliderChange, onAfterChange: this.onAfterChange });
+	    return React.createElement(Slider, { value: this.state.value,
+	      onChange: this.onSliderChange, onAfterChange: this.onAfterChange
+	    });
 	  }
 	});
 	
@@ -91,7 +93,9 @@ webpackJsonp([3],{
 	      React.createElement('input', { type: 'number', value: this.state.max, onChange: this.onMaxChange }),
 	      React.createElement('br', null),
 	      React.createElement('br', null),
-	      React.createElement(Slider, { defaultValue: 50, min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
+	      React.createElement(Slider, { defaultValue: 50, min: this.state.min, max: this.state.max,
+	        onChange: this.onSliderChange
+	      })
 	    );
 	  }
 	});
@@ -137,7 +141,9 @@ webpackJsonp([3],{
 	      null,
 	      'Basic Slider with `tipFormatter`'
 	    ),
-	    React.createElement(Slider, { tipFormatter: percentFormatter, tipTransitionName: 'rc-slider-tooltip-zoom-down', onChange: log })
+	    React.createElement(Slider, { tipFormatter: percentFormatter,
+	      tipTransitionName: 'rc-slider-tooltip-zoom-down', onChange: log
+	    })
 	  ),
 	  React.createElement(
 	    'div',

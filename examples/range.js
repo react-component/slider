@@ -124,7 +124,9 @@ webpackJsonp([2],{
 	      React.createElement('input', { type: 'number', value: this.state.max, onChange: this.onMaxChange }),
 	      React.createElement('br', null),
 	      React.createElement('br', null),
-	      React.createElement(Slider, { range: true, defaultValue: [20, 50], min: this.state.min, max: this.state.max, onChange: this.onSliderChange })
+	      React.createElement(Slider, { range: true, defaultValue: [20, 50], min: this.state.min, max: this.state.max,
+	        onChange: this.onSliderChange
+	      })
 	    );
 	  }
 	});

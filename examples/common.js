@@ -22095,7 +22095,8 @@
 	
 	      var trackClassName = (0, _classnames2.default)((_classNames2 = {}, (0, _defineProperty3.default)(_classNames2, prefixCls + '-track', true), (0, _defineProperty3.default)(_classNames2, prefixCls + '-track-' + i, true), _classNames2));
 	      tracks.push(_react2.default.createElement(_Track2.default, { className: trackClassName, vertical: vertical, included: isIncluded,
-	        offset: offsets[i - 1], length: offsets[i] - offsets[i - 1], key: i }));
+	        offset: offsets[i - 1], length: offsets[i] - offsets[i - 1], key: i
+	      }));
 	    }
 	
 	    var sliderClassName = (0, _classnames2.default)((_classNames3 = {}, (0, _defineProperty3.default)(_classNames3, prefixCls, true), (0, _defineProperty3.default)(_classNames3, prefixCls + '-disabled', disabled), (0, _defineProperty3.default)(_classNames3, className, !!className), (0, _defineProperty3.default)(_classNames3, prefixCls + '-vertical', this.props.vertical), _classNames3));
@@ -22106,14 +22107,16 @@
 	        onTouchStart: disabled ? noop : this.onTouchStart.bind(this),
 	        onMouseDown: disabled ? noop : this.onMouseDown.bind(this)
 	      },
-	      handles,
 	      tracks,
 	      _react2.default.createElement(_Steps2.default, { prefixCls: prefixCls, vertical: vertical, marks: marks, dots: dots, step: step,
 	        included: isIncluded, lowerBound: bounds[0],
-	        upperBound: bounds[bounds.length - 1], max: max, min: min }),
+	        upperBound: bounds[bounds.length - 1], max: max, min: min
+	      }),
+	      handles,
 	      _react2.default.createElement(_Marks2.default, { className: prefixCls + '-mark', vertical: vertical, marks: marks,
 	        included: isIncluded, lowerBound: bounds[0],
-	        upperBound: bounds[bounds.length - 1], max: max, min: min }),
+	        upperBound: bounds[bounds.length - 1], max: max, min: min
+	      }),
 	      children
 	    );
 	  };
@@ -28323,7 +28326,7 @@
 	
 	    var bottomStyle = {
 	      // height: markWidth + '%',
-	      marginBottom: '-200' + '%',
+	      marginBottom: '-200%',
 	      bottom: (point - min) / range * 100 + '%'
 	    };
 	

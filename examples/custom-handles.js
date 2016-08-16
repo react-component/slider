@@ -28,8 +28,7 @@ webpackJsonp([0],[
 	  borderRadius: '3px',
 	  background: '#fff',
 	  fontSize: '14px',
-	  textAlign: 'center',
-	  zIndex: 3
+	  textAlign: 'center'
 	};
 	
 	var CustomHandle = function CustomHandle(props) {
