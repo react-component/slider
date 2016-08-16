@@ -16,7 +16,6 @@ const handleStyle = {
   background: '#fff',
   fontSize: '14px',
   textAlign: 'center',
-  zIndex: 3,
 };
 
 const CustomHandle = props => {

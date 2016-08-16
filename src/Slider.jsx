@@ -468,11 +468,11 @@ class Slider extends React.Component {
              onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
              onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
         >
-          {handles}
           {tracks}
           <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
                  included={isIncluded} lowerBound={bounds[0]}
                  upperBound={bounds[bounds.length - 1]} max={max} min={min} />
+          {handles}
           <Marks className={prefixCls + '-mark'} vertical = {vertical} marks={marks}
                  included={isIncluded} lowerBound={bounds[0]}
                  upperBound={bounds[bounds.length - 1]} max={max} min={min} />
