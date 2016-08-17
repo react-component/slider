@@ -36,10 +36,10 @@ export default class Handle extends React.Component {
       color,
     } = this.props;
 
-    const style = Object.assign(
-      vertical ?
-        { bottom: `${offset}%` } :
-        { left: `${offset}%` }, color ? { borderColor: `${color}` } : { });
+    const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
+    if (color) {
+      style.borderColor = `${color}`;
+    }
     const handle = (
       <div className={className} style={style}
         onMouseUp={this.showTooltip.bind(this)}
