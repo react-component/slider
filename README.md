@@ -94,9 +94,9 @@ ReactDOM.render(<Rcslider />, container);
         </tr>
         <tr>
           <td>marks</td>
-          <td>object{number: string} or object{number: object{ style, label }}</td>
+          <td>object{number: string} or object{number: object{ style, label, color }}</td>
           <td>{}</td>
-          <td>Mark on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties.</td>
+          <td>Mark on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style`, `label` and `color`(optional) properties.</td>
         </tr>
         <tr>
           <td>step</td>

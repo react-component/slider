@@ -33,9 +33,13 @@ export default class Handle extends React.Component {
       value,
       dragging,
       noTip,
+      color,
     } = this.props;
 
-    const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
+    const style = Object.assign(
+      vertical ?
+        { bottom: `${offset}%` } :
+        { left: `${offset}%` }, color ? { borderColor: `${color}` } : { });
     const handle = (
       <div className={className} style={style}
         onMouseUp={this.showTooltip.bind(this)}
@@ -74,4 +78,5 @@ Handle.propTypes = {
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,
+  color: React.PropTypes.string,
 };
