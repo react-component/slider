@@ -196,6 +196,14 @@ class Slider extends React.Component {
     this.onChange({ bounds: nextBounds });
   }
 
+  getMarkColor(index) {
+    const { marks } = this.props;
+    const markPoint = marks[index];
+    const markPointIsObject = typeof markPoint === 'object' &&
+            !React.isValidElement(markPoint);
+    return markPointIsObject ? markPoint.color : undefined;
+  }
+
   getValue() {
     const { bounds } = this.state;
     return this.props.range ? bounds : bounds[1];
@@ -443,6 +451,7 @@ class Slider extends React.Component {
       offset: offsets[i],
       dragging: handle === i,
       key: i,
+      color: this.getMarkColor(v),
     }));
     if (!range) { handles.shift(); }
 
@@ -454,9 +463,16 @@ class Slider extends React.Component {
         [`${prefixCls}-track`]: true,
         [`${prefixCls}-track-${i}`]: true,
       });
+
+      const gradient = [];
+      const lowerColor = this.getMarkColor(bounds[0]);
+      const upperColor = this.getMarkColor(bounds[1]);
+      if (lowerColor) gradient.push(lowerColor);
+      if (upperColor) gradient.push(upperColor);
+
       tracks.push(
         <Track className={trackClassName} vertical={vertical} included={isIncluded}
-          offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
+          offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i} gradient={gradient}
         />
       );
     }
