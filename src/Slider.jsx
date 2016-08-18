@@ -5,6 +5,7 @@ import Track from './Track';
 import DefaultHandle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
+import warning from 'warning';
 
 function noop() {
 }
@@ -255,6 +256,12 @@ class Slider extends React.Component {
     const state = this.state || {};
     const { handle, bounds } = state;
     const { marks, step, min, max, allowCross } = { ...this.props, ...(nextProps || {}) };
+
+    const numStepsInRange = (max - min) / step;
+    warning(
+      Math.floor(numStepsInRange) === numStepsInRange,
+      'Slider range should be a multiple of the step'
+    );
 
     let val = v;
     if (val <= min) {
