@@ -7,7 +7,7 @@ import Steps from './Steps';
 import Marks from './Marks';
 import warning from 'warning';
 
-var canShowRangeStepWarning = process.env.NODE_ENV !== 'production';
+let canShowRangeStepWarning = process.env.NODE_ENV !== 'production';
 
 function noop() {
 }
