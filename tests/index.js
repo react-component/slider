@@ -212,11 +212,11 @@ describe('rc-slider', function test() {
     const values = [];
     const handler = (e) => {
       values.push(e);
-    }
+    };
 
-    const slider = ReactDOM.render(<Slider onChange={handler}/>, div);
-    const handle = div.querySelector('.rc-slider-handle')
-    
+    ReactDOM.render(<Slider onChange={handler}/>, div);
+    const handle = div.querySelector('.rc-slider-handle');
+
     const down = document.createEvent('MouseEvent');
     down.initEvent('mousedown', true, true);
 
@@ -225,7 +225,7 @@ describe('rc-slider', function test() {
 
     const up = document.createEvent('MouseEvent');
     up.initEvent('mouseup', true, true);
-    
+
     handle.dispatchEvent(down);
     handle.dispatchEvent(move);
     handle.dispatchEvent(up);
