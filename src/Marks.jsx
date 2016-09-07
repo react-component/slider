@@ -13,7 +13,7 @@ const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, m
             (included && point <= upperBound && point >= lowerBound);
     const markClassName = classNames({
       [`${className}-text`]: true,
-      [`${className}-text-active`]: isActived
+      [`${className}-text-active`]: isActived,
     }, (marks[point].className) ? marks[point].className : null);
 
     const bottomStyle = {
