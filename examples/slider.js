@@ -5,7 +5,7 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {width: 400, margin: 50};
+const style = { width: 400, margin: 50 };
 
 function log(value) {
   console.log(value);
@@ -13,50 +13,54 @@ function log(value) {
 
 
 function percentFormatter(v) {
-  return v + ' %';
+  return `${v} %`;
 }
 
 const CustomizedSlider = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       value: 50,
     };
   },
-  onSliderChange: function(value) {
+  onSliderChange(value) {
     log(value);
     this.setState({
-      value: value,
+      value,
     });
   },
-  onAfterChange: function(value) {
+  onAfterChange(value) {
     console.log(value);
   },
-  render: function() {
-    return <Slider value={this.state.value} onChange={this.onSliderChange} onAfterChange={this.onAfterChange} />;
+  render() {
+    return (
+      <Slider value={this.state.value}
+        onChange={this.onSliderChange} onAfterChange={this.onAfterChange}
+      />
+    );
   },
 });
 
 const DynamicBounds = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       min: 0,
       max: 100,
     };
   },
-  onSliderChange: function(value) {
+  onSliderChange(value) {
     log(value);
   },
-  onMinChange: function(e) {
+  onMinChange(e) {
     this.setState({
       min: +e.target.value || 0,
     });
   },
-  onMaxChange: function(e) {
+  onMaxChange(e) {
     this.setState({
       max: +e.target.value || 100,
     });
   },
-  render: function() {
+  render() {
     return (
       <div>
         <label>Min: </label>
@@ -65,7 +69,9 @@ const DynamicBounds = React.createClass({
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
         <br /><br />
-        <Slider defaultValue={50} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+        <Slider defaultValue={50} min={this.state.min} max={this.state.max}
+          onChange={this.onSliderChange}
+        />
       </div>
     );
   },
@@ -87,7 +93,9 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Basic Slider with `tipFormatter`</p>
-      <Slider tipFormatter={percentFormatter} tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
+      <Slider tipFormatter={percentFormatter}
+        tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log}
+      />
     </div>
     <div style={style}>
       <p>Basic Slider without tooltip</p>

@@ -4,8 +4,8 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {float: 'left', width: 160, height: 400, marginBottom: 160, marginLeft: 50};
-const parentStyle = {overflow: 'hidden'};
+const style = { float: 'left', width: 160, height: 400, marginBottom: 160, marginLeft: 50 };
+const parentStyle = { overflow: 'hidden' };
 
 const marks = {
   '-10': '-10°C',
@@ -49,7 +49,9 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider vertical min={-10} range marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
+      <Slider vertical min={-10} range marks={marks} step={10}
+        onChange={log} defaultValue={[20, 40]}
+      />
     </div>
   </div>
   , document.getElementById('__react-content'));

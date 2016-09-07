@@ -1,15 +1,15 @@
 import React from 'react';
 
-const Track = ({className, included, vertical, offset, length}) => {
+const Track = ({ className, included, vertical, offset, length }) => {
   const style = {
     visibility: included ? 'visible' : 'hidden',
   };
   if (vertical) {
-    style.bottom = offset + '%';
-    style.height = length + '%';
+    style.bottom = `${offset}%`;
+    style.height = `${length}%`;
   } else {
-    style.left = offset + '%';
-    style.width = length + '%';
+    style.left = `${offset}%`;
+    style.width = `${length}%`;
   }
   return <div className={className} style={style} />;
 };

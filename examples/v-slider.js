@@ -5,8 +5,8 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
 
-const style = {float: 'left', width: 200, height: 400, marginBottom: 160, marginLeft: 50};
-const parentStyle = {overflow: 'hidden'};
+const style = { float: 'left', width: 200, height: 400, marginBottom: 160, marginLeft: 50 };
+const parentStyle = { overflow: 'hidden' };
 
 function log(value) {
   console.log(value);
@@ -14,51 +14,53 @@ function log(value) {
 
 
 function percentFormatter(v) {
-  return v + ' %';
+  return `${v} %`;
 }
 
 const CustomizedSlider = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       value: 50,
     };
   },
-  onSliderChange: function(value) {
+  onSliderChange(value) {
     log(value);
     this.setState({
-      value: value,
+      value,
     });
   },
-  render: function() {
+  render() {
     return <Slider vertical value={this.state.value} onChange={this.onSliderChange} />;
   },
 });
 
 const DynamicBounds = React.createClass({
-  getInitialState: function() {
+  getInitialState() {
     return {
       min: 0,
       max: 100,
     };
   },
-  onSliderChange: function(value) {
+  onSliderChange(value) {
     log(value);
   },
-  onMinChange: function(e) {
+  onMinChange(e) {
     this.setState({
       min: +e.target.value || 0,
     });
   },
-  onMaxChange: function(e) {
+  onMaxChange(e) {
     this.setState({
       max: +e.target.value || 100,
     });
   },
-  render: function() {
+  render() {
     return (
       <div style={style}>
         <p>Slider with dynamic `min` `max`</p>
-        <Slider vertical defaultValue={50} min={this.state.min} max={this.state.max} onChange={this.onSliderChange} />
+        <Slider vertical defaultValue={50} min={this.state.min} max={this.state.max}
+          onChange={this.onSliderChange}
+        />
         <label>Min: </label>
         <input type="number" value={this.state.min} onChange={this.onMinChange} />
         <br />
@@ -85,7 +87,9 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Basic Slider with `tipFormatter`</p>
-      <Slider vertical tipFormatter={percentFormatter} tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
+      <Slider vertical tipFormatter={percentFormatter}
+        tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log}
+      />
     </div>
     <div style={style}>
       <p>Basic Slider without tooltip</p>

@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const Marks = ({className, vertical, marks, included, upperBound, lowerBound, max, min}) => {
+const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, max, min }) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
   const unit = 100 / (marksCount - 1);
@@ -12,21 +12,20 @@ const Marks = ({className, vertical, marks, included, upperBound, lowerBound, ma
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
     const markClassName = classNames({
-      [className + '-text']: true,
-      [className + '-text-active']: isActived,
-      [className + '-text-class-' + marks[point].className]: (marks[point].className) ? true : false,
-    });
+      [`${className}-text`]: true,
+      [`${className}-text-active`]: isActived
+    }, (marks[point].className) ? marks[point].className : null);
 
     const bottomStyle = {
       // height: markWidth + '%',
-      marginBottom: '-200' + '%',
-      bottom: (point - min) / range * 100 + '%',
+      marginBottom: '-200%',
+      bottom: `${(point - min) / range * 100}%`,
     };
 
     const leftStyle = {
-      width: markWidth + '%',
-      marginLeft: -markWidth / 2 + '%',
-      left: (point - min) / range * 100 + '%',
+      width: `${markWidth}%`,
+      marginLeft: `${-markWidth / 2}%`,
+      left: `${(point - min) / range * 100}%`,
     };
 
     const style = vertical ? bottomStyle : leftStyle;
