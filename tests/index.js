@@ -5,6 +5,18 @@ const ReactDOM = require('react-dom');
 const ReactTestUtils = require('react-addons-test-utils');
 const Slider = require('..');
 
+function createSliderWrapperComponent() {
+  return class SliderWrapper extends React.Component {
+    render() {
+      return (
+        <div style={{ position: `absolute`, width: `100px`, height: `10px` }}>
+          <Slider ref="slider"/>
+        </div>
+      );
+    }
+  };
+}
+
 require('../assets/index.less');
 
 describe('rc-slider', function test() {
@@ -231,5 +243,101 @@ describe('rc-slider', function test() {
     handle.dispatchEvent(up);
 
     expect(values.length).to.be(0);
+  });
+
+  it('should set `dragOffset` to correct value when the left handle is clicked off-center', () => {
+    const slider = ReactDOM.render(<Slider />, div);
+    const leftHandle = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-handle')[0];
+    slider.onMouseDown({
+      type: 'mousedown',
+      target: leftHandle,
+      pageX: 5, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.dragOffset).to.be(5);
+  });
+
+  it('should respect `dragOffset` while dragging the handle via MouseEvents', () => {
+    const SliderWrapper = createSliderWrapperComponent();
+    const slider = ReactDOM.render(<SliderWrapper/>, div).refs.slider;
+    const leftHandle = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-handle')[0];
+    slider.onMouseDown({
+      type: 'mousedown',
+      target: leftHandle,
+      pageX: 5, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.dragOffset).to.be(5);
+    slider.onMouseMove({
+      type: 'mousemove',
+      target: leftHandle,
+      pageX: 14, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.getValue()).to.be(9);
+  });
+
+  it('should set `dragOffset` to 0 when the MouseEvent target isn\'t a handle', () => {
+    const slider = ReactDOM.render(<Slider />, div);
+    const sliderTrack = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track')[0];
+    slider.onMouseDown({
+      type: 'mousedown',
+      target: sliderTrack,
+      pageX: 5, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.dragOffset).to.be(0);
+  });
+
+  it('should set `dragOffset` to correct value when the left handle is touched off-center', () => {
+    const slider = ReactDOM.render(<Slider />, div);
+    const leftHandle = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-handle')[0];
+    slider.onTouchStart({
+      type: 'touchstart',
+      target: leftHandle,
+      touches: [{ pageX: 5 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.dragOffset).to.be(5);
+  });
+
+  it('should respect `dragOffset` while dragging the handle via TouchEvents', () => {
+    const SliderWrapper = createSliderWrapperComponent();
+    const slider = ReactDOM.render(<SliderWrapper/>, div).refs.slider;
+    const leftHandle = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-handle')[0];
+    slider.onTouchStart({
+      type: 'touchstart',
+      target: leftHandle,
+      touches: [{ pageX: 5 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.dragOffset).to.be(5);
+    slider.onTouchMove({
+      type: 'touchmove',
+      target: leftHandle,
+      touches: [{ pageX: 14 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.getValue()).to.be(9);
+  });
+
+  it('should set `dragOffset` to 0 when the TouchEvent target isn\'t a handle', () => {
+    const slider = ReactDOM.render(<Slider />, div);
+    const sliderTrack = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track')[0];
+    slider.onTouchStart({
+      type: 'touchstart',
+      target: sliderTrack,
+      touches: [{ pageX: 5 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(slider.dragOffset).to.be(0);
   });
 });
