@@ -7,8 +7,6 @@ import Steps from './Steps';
 import Marks from './Marks';
 import warning from 'warning';
 
-let canShowRangeStepWarning = process.env.NODE_ENV !== 'production';
-
 function noop() {
 }
 
@@ -33,7 +31,7 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    const { range, min, max } = props;
+    const { range, min, max, step } = props;
     const initialValue = range ? Array.apply(null, Array(range + 1)).map(() => min) : min;
     const defaultValue = ('defaultValue' in props ? props.defaultValue : initialValue);
     const value = (props.value !== undefined ? props.value : defaultValue);
@@ -45,6 +43,15 @@ class Slider extends React.Component {
       recent = 0;
     } else {
       recent = bounds.length - 1;
+    }
+
+    if (process.env.NODE_ENV !== 'production' && (max - min) % step !== 0) {
+      warning(
+        false,
+        'Slider[max] - Slider[min] (%s) should be a multiple of Slider[step] (%s)',
+        max - min,
+        step
+      );
     }
 
     this.state = {
@@ -258,17 +265,6 @@ class Slider extends React.Component {
     const state = this.state || {};
     const { handle, bounds } = state;
     const { marks, step, min, max, allowCross } = { ...this.props, ...(nextProps || {}) };
-
-    const numStepsInRange = (max - min) / step;
-    if (Math.floor(numStepsInRange) !== numStepsInRange && canShowRangeStepWarning) {
-      warning(
-        false,
-        'Slider[max] - Slider[min] (%s) should be a multiple of the step (%s)',
-        max - min,
-        step
-      );
-      canShowRangeStepWarning = false;
-    }
 
     let val = v;
     if (val <= min) {
