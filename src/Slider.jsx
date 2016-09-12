@@ -45,7 +45,9 @@ class Slider extends React.Component {
       recent = bounds.length - 1;
     }
 
-    if (process.env.NODE_ENV !== 'production' && (max - min) % step !== 0) {
+    if (process.env.NODE_ENV !== 'production' &&
+        step && Math.floor(step) === step &&
+        (max - min) % step !== 0) {
       warning(
         false,
         'Slider[max] - Slider[min] (%s) should be a multiple of Slider[step] (%s)',
