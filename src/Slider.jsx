@@ -410,6 +410,7 @@ class Slider extends React.Component {
     const {
         className,
         prefixCls,
+        tooltipPrefixCls,
         disabled,
         vertical,
         dots,
@@ -440,6 +441,7 @@ class Slider extends React.Component {
 
     const commonHandleProps = {
       prefixCls,
+      tooltipPrefixCls,
       noTip: isNoTip,
       tipTransitionName,
       tipFormatter,
@@ -515,6 +517,7 @@ Slider.propTypes = {
   included: React.PropTypes.bool,
   className: React.PropTypes.string,
   prefixCls: React.PropTypes.string,
+  tooltipPrefixCls: React.PropTypes.string,
   disabled: React.PropTypes.bool,
   children: React.PropTypes.any,
   onBeforeChange: React.PropTypes.func,

@@ -25,6 +25,7 @@ export default class Handle extends React.Component {
   render() {
     const {
       prefixCls,
+      tooltipPrefixCls,
       className,
       tipTransitionName,
       tipFormatter,
@@ -51,7 +52,7 @@ export default class Handle extends React.Component {
     const isTooltipVisible = dragging || this.state.isTooltipVisible;
     return (
       <Tooltip
-        prefixCls={`${prefixCls}-tooltip`}
+        prefixCls={tooltipPrefixCls || `${prefixCls}-tooltip`}
         placement="top"
         visible={isTooltipVisible}
         overlay={<span>{tipFormatter(value)}</span>}
@@ -66,6 +67,7 @@ export default class Handle extends React.Component {
 
 Handle.propTypes = {
   prefixCls: React.PropTypes.string,
+  tooltipPrefixCls: React.PropTypes.string,
   className: React.PropTypes.string,
   vertical: React.PropTypes.bool,
   offset: React.PropTypes.number,
