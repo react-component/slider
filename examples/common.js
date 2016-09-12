@@ -22010,6 +22010,7 @@
 	    var _props5 = this.props;
 	    var className = _props5.className;
 	    var prefixCls = _props5.prefixCls;
+	    var tooltipPrefixCls = _props5.tooltipPrefixCls;
 	    var disabled = _props5.disabled;
 	    var vertical = _props5.vertical;
 	    var dots = _props5.dots;
@@ -22042,6 +22043,7 @@
 	
 	    var commonHandleProps = {
 	      prefixCls: prefixCls,
+	      tooltipPrefixCls: tooltipPrefixCls,
 	      noTip: isNoTip,
 	      tipTransitionName: tipTransitionName,
 	      tipFormatter: tipFormatter,
@@ -22108,6 +22110,7 @@
 	  included: _react2.default.PropTypes.bool,
 	  className: _react2.default.PropTypes.string,
 	  prefixCls: _react2.default.PropTypes.string,
+	  tooltipPrefixCls: _react2.default.PropTypes.string,
 	  disabled: _react2.default.PropTypes.bool,
 	  children: _react2.default.PropTypes.any,
 	  onBeforeChange: _react2.default.PropTypes.func,
@@ -24494,6 +24497,7 @@
 	  Handle.prototype.render = function render() {
 	    var _props = this.props;
 	    var prefixCls = _props.prefixCls;
+	    var tooltipPrefixCls = _props.tooltipPrefixCls;
 	    var className = _props.className;
 	    var tipTransitionName = _props.tipTransitionName;
 	    var tipFormatter = _props.tipFormatter;
@@ -24519,7 +24523,7 @@
 	    return _react2.default.createElement(
 	      _rcTooltip2.default,
 	      {
-	        prefixCls: prefixCls + '-tooltip',
+	        prefixCls: tooltipPrefixCls || prefixCls + '-tooltip',
 	        placement: 'top',
 	        visible: isTooltipVisible,
 	        overlay: _react2.default.createElement(
@@ -24542,6 +24546,7 @@
 	
 	Handle.propTypes = {
 	  prefixCls: _react2.default.PropTypes.string,
+	  tooltipPrefixCls: _react2.default.PropTypes.string,
 	  className: _react2.default.PropTypes.string,
 	  vertical: _react2.default.PropTypes.bool,
 	  offset: _react2.default.PropTypes.number,
