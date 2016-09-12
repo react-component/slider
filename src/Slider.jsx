@@ -125,7 +125,7 @@ class Slider extends React.Component {
     const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 
     const value = this.trimAlignValue(this.startValue + diffValue);
-    const oldValue = state[state.handle];
+    const oldValue = state.bounds[state.handle];
     if (value === oldValue) return;
 
     const nextBounds = [...state.bounds];

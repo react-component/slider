@@ -207,4 +207,29 @@ describe('rc-slider', function test() {
     const slider = ReactDOM.render(<Slider vertical />, div);
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-vertical').length).to.be(1);
   });
+
+  it('should not call onChange when value is the same', () => {
+    const values = [];
+    const handler = (e) => {
+      values.push(e);
+    };
+
+    ReactDOM.render(<Slider onChange={handler}/>, div);
+    const handle = div.querySelector('.rc-slider-handle');
+
+    const down = document.createEvent('MouseEvent');
+    down.initEvent('mousedown', true, true);
+
+    const move = document.createEvent('MouseEvent');
+    move.initEvent('mousemove', true, true);
+
+    const up = document.createEvent('MouseEvent');
+    up.initEvent('mouseup', true, true);
+
+    handle.dispatchEvent(down);
+    handle.dispatchEvent(move);
+    handle.dispatchEvent(up);
+
+    expect(values.length).to.be(0);
+  });
 });
