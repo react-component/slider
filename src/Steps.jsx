@@ -18,7 +18,8 @@ function calcPoints(vertical, marks, dots, step, min, max) {
 }
 
 const Steps = ({ prefixCls, vertical, marks, dots, step, included,
-                lowerBound, upperBound, max, min }) => {
+                lowerBound, upperBound, max, min, onMarkMouseOver,
+                onMarkMouseOut }) => {
   const range = max - min;
   const elements = calcPoints(vertical, marks, dots, step, min, max).map((point) => {
     const offset = `${Math.abs(point - min) / range * 100}%`;
@@ -30,8 +31,16 @@ const Steps = ({ prefixCls, vertical, marks, dots, step, included,
       [`${prefixCls}-dot`]: true,
       [`${prefixCls}-dot-active`]: isActived,
     });
-
-    return <span className={pointClassName} style={style} key={point} />;
+    const isMark = marks[point] !== undefined;
+    return (
+      <span
+        className={pointClassName}
+        onMouseOver={() => isMark && onMarkMouseOver(point)}
+        onMouseOut={() => isMark && onMarkMouseOut(point)}
+        style={style}
+        key={point}
+      />
+    );
   });
 
   return <div className={`${prefixCls}-step`}>{elements}</div>;

@@ -340,4 +340,15 @@ describe('rc-slider', function test() {
     });
     expect(slider.dragOffset).to.be(0);
   });
+
+  it('should add rc-slider-mark-text-hover to a mark text when mouse is over the mark', () => {
+    const slider = ReactDOM.render(<Slider marks={{ 30: '30' }} />, div);
+    const dot = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-dot')[0];
+    const text = ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-mark-text')[0];
+    expect(text.className).to.be('rc-slider-mark-text');
+    ReactTestUtils.Simulate.mouseOver(dot);
+    expect(text.className).to.be('rc-slider-mark-text rc-slider-mark-text-hover');
+    ReactTestUtils.Simulate.mouseOut(dot);
+    expect(text.className).to.be('rc-slider-mark-text');
+  });
 });
