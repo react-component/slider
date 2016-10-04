@@ -1,0 +1,310 @@
+@import "compass";
+
+$prefix-class: "rc-slider" !default;
+$disabledColor: #ccc !default;
+$border-radius-base: 6px !default;
+$primary-color: #2db7f5 !default;
+$tooltip-color: #fff !default;
+$tooltip-bg: tint(#666, 4%) !default;
+$tooltip-arrow-width: 4px !default;
+$tooltip-distance: $tooltip-arrow-width + 4px !default;
+$tooltip-arrow-color: $tooltip-bg !default;
+$ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1) !default;
+$ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06) !default;
+
+%borderBox {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); //  remove tap highlight color for mobile safari
+
+    * {
+        box-sizing: border-box;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0); //  remove tap highlight color for mobile safari
+   
+    }
+}
+
+.#{$prefix-class} {
+    position: relative;
+    height: 4px;
+    width: 100%;
+    border-radius: $border-radius-base;
+    background-color: #e9e9e9;
+
+    @extend %borderBox;
+
+    &-track {
+        position: absolute;
+        left: 0;
+        height: 4px;
+        border-radius: $border-radius-base;
+        background-color: tint($primary-color, 60%);
+    }
+
+    &-handle {
+        position: absolute;
+        margin-left: -7px;
+        margin-top: -5px;
+        width: 14px;
+        height: 14px;
+        cursor: pointer;
+        border-radius: 50%;
+        border: solid 2px tint($primary-color, 50%);
+        background-color: #fff;
+
+        &:hover {
+            border-color: tint($primary-color, 20%);
+        }
+
+        &-active {
+            &:active {
+                border-color: tint($primary-color, 20%);
+                box-shadow: 0 0 5px tint($primary-color, 20%);
+            }
+        }
+    }
+
+    &-mark {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        width: 100%;
+        font-size: 12px;
+    }
+
+    &-mark-text {
+        position: absolute;
+        display: inline-block;
+        vertical-align: middle;
+        text-align: center;
+        cursor: pointer;
+        color: #999;
+
+        &-active {
+            color: #666;
+        }
+    }
+
+    &-step {
+        position: absolute;
+        width: 100%;
+        height: 4px;
+        background: transparent;
+    }
+
+    &-dot {
+        position: absolute;
+        bottom: -2px;
+        margin-left: -4px;
+        width: 8px;
+        height: 8px;
+        border: 2px solid #e9e9e9;
+        background-color: #fff;
+        cursor: pointer;
+        border-radius: 50%;
+        vertical-align: middle;
+
+        &:first-child {
+            margin-left: -4px;
+        }
+
+        &:last-child {
+            margin-left: -4px;
+        }
+
+        &-active {
+            border-color: tint($primary-color, 50%);
+        }
+
+        &-disabled {
+            background-color: #e9e9e9;
+
+            .#{$prefix-class}-track {
+                background-color: $disabledColor;
+            }
+
+            .#{$prefix-class}-handle, .#{$prefix-class}-dot {
+                border-color: $disabledColor;
+                background-color: #fff;
+                cursor: not-allowed;
+            }
+
+            .#{$prefix-class}-mark-text, .#{$prefix-class}-dot {
+                cursor: not-allowed !important;
+            }
+        }
+    }
+}
+
+.#{$prefix-class}-vertical {
+    width: 4px;
+    height: 100%;
+
+    .#{$prefix-class} {
+        &-track {
+            bottom: 0;
+            width: 4px;
+        }
+
+        &-handle {
+            position: absolute;
+            margin-left: -5px;
+            margin-bottom: -7px;
+        }
+
+        &-mark {
+            top: 0;
+            left: 10px;
+            height: 100%;
+        }
+
+        &-step {
+            height: 100%;
+            width: 4px;
+        }
+
+        &-dot {
+            left: 2px;
+            margin-bottom: -4px;
+
+            &:first-child {
+                margin-bottom: -4px;
+            }
+
+            &:last-child {
+                margin-bottom: -4px;
+            }
+        }
+    }
+}
+
+%motion-common {
+    @include animation-duration(0.3s);
+
+    @include animation-fill-mode(both);
+
+    display: block !important;
+}
+
+@mixin make-motion($className, $keyframeName) {
+    .#{$className}-enter, .#{$className}-appear {
+        @extend %motion-common;
+
+        @include animation-play-state("paused");
+    }
+
+    .#{$className}-leave {
+        @extend %motion-common;
+
+        @include animation-play-state("paused");
+    }
+
+    .#{$className}-enter.#{$className}-enter-active, .#{$className}-appear.#{$className}-appear-active {
+        @include animation-name($keyframeName + "In");
+
+        @include animation-play-state("running");
+    }
+
+    .#{$className}-leave.#{$className}-leave-active {
+        @include animation-name($keyframeName + "Out");
+
+        @include animation-play-state("running");
+    }
+}
+
+@mixin zoom-motion($className, $keyframeName) {
+    @include make-motion($className, $keyframeName);
+
+    .#{$className}-enter, .#{$className}-appear {
+        @include transform(scale(0, 0));
+
+        // need this by yiminghe
+        @include animation-timing-function($ease-out-quint);
+    }
+
+    .#{$className}-leave {
+        @include animation-timing-function($ease-in-quint);
+    }
+}
+
+@include zoom-motion("rc-slider-tooltip-zoom-down", "rcSliderTooltipZoomDown");
+
+@include keyframes("rcSliderTooltipZoomDownIn") {
+    0% {
+        @include opacity(0);
+
+        @include transform-origin(50% 100%);
+
+        @include transform(scale(0, 0));
+    }
+
+    100% {
+        @include transform-origin(50% 100%);
+
+        @include transform(scale(1, 1));
+    }
+}
+
+
+@include keyframes("rcSliderTooltipZoomDownOut") {
+    0% {
+        @include transform-origin(50% 100%);
+
+        @include transform(scale(1, 1));
+    }
+
+    100% {
+        @include opacity(0);
+
+        @include transform-origin(50% 100%);
+
+        @include transform(scale(0, 0));
+    }
+}
+
+
+.#{$prefix-class}-tooltip {
+    position: absolute;
+    left: -9999px;
+    top: -9999px;
+    visibility: visible;
+
+    @extend %borderBox;
+
+    &-hidden {
+        display: none;
+    }
+
+    &-placement-top {
+        padding: $tooltip-arrow-width 0 $tooltip-distance 0;
+    }
+
+    &-inner {
+        padding: 6px 2px;
+        min-width: 24px;
+        height: 24px;
+        font-size: 12px;
+        line-height: 1;
+        color: $tooltip-color;
+        text-align: center;
+        text-decoration: none;
+        background-color: $tooltip-bg;
+        border-radius: $border-radius-base;
+        box-shadow: 0 0 4px #d9d9d9;
+    }
+
+    &-arrow {
+        position: absolute;
+        width: 0;
+        height: 0;
+        border-color: transparent;
+        border-style: solid;
+    }
+
+    &-placement-top &-arrow {
+        bottom: $tooltip-distance - $tooltip-arrow-width;
+        left: 50%;
+        margin-left: -$tooltip-arrow-width;
+        border-width: $tooltip-arrow-width $tooltip-arrow-width 0;
+        border-top-color: $tooltip-arrow-color;
+    }
+}
