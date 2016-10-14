@@ -1,6 +1,11 @@
 # History
 ----
 
+## 5.0.0 / 2016-09-12
+
+[#147](https://github.com/react-component/slider/issues/147) fix style conflicts with rc-tooltip [@benjycui](https://github.com/benjycui)
+[#145](https://github.com/react-component/slider/pull/145) fix `onChange` will be triggered while mousemove [@Fuzzyma](https://github.com/Fuzzyma)
+
 ## 4.0.0 / 2016-08-12
 
 [#133](https://github.com/react-component/slider/pull/133) support multi-range ([@sosz](https://github.com/sosz))
