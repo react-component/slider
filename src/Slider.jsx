@@ -1,3 +1,4 @@
+import { findDOMNode } from 'react-dom';
 import React, { cloneElement } from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
@@ -20,6 +21,13 @@ function getTouchPosition(vertical, e) {
 
 function getMousePosition(vertical, e) {
   return vertical ? e.clientY : e.pageX;
+}
+
+function getHandleCenterPosition(vertical, handle) {
+  const coords = handle.getBoundingClientRect();
+  return vertical ?
+    coords.top + (coords.height * 0.5) :
+    coords.left + (coords.width * 0.5);
 }
 
 function pauseEvent(e) {
@@ -104,7 +112,7 @@ class Slider extends React.Component {
 
   onMouseMove(e) {
     const position = getMousePosition(this.props.vertical, e);
-    this.onMove(e, position);
+    this.onMove(e, position - this.dragOffset);
   }
 
   onTouchMove(e) {
@@ -114,7 +122,7 @@ class Slider extends React.Component {
     }
 
     const position = getTouchPosition(this.props.vertical, e);
-    this.onMove(e, position);
+    this.onMove(e, position - this.dragOffset);
   }
 
   onMove(e, position) {
@@ -149,7 +157,14 @@ class Slider extends React.Component {
   onTouchStart(e) {
     if (isNotTouchEvent(e)) return;
 
-    const position = getTouchPosition(this.props.vertical, e);
+    let position = getTouchPosition(this.props.vertical, e);
+    if (!this.isEventFromHandle(e)) {
+      this.dragOffset = 0;
+    } else {
+      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+      this.dragOffset = position - handlePosition;
+      position = handlePosition;
+    }
     this.onStart(position);
     this.addDocumentEvents('touch');
     pauseEvent(e);
@@ -157,7 +172,15 @@ class Slider extends React.Component {
 
   onMouseDown(e) {
     if (e.button !== 0) { return; }
-    const position = getMousePosition(this.props.vertical, e);
+
+    let position = getMousePosition(this.props.vertical, e);
+    if (!this.isEventFromHandle(e)) {
+      this.dragOffset = 0;
+    } else {
+      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+      this.dragOffset = position - handlePosition;
+      position = handlePosition;
+    }
     this.onStart(position);
     this.addDocumentEvents('mouse');
     pauseEvent(e);
@@ -257,6 +280,13 @@ class Slider extends React.Component {
       this._getPointsCache = { marks, step, points };
     }
     return this._getPointsCache.points;
+  }
+
+  isEventFromHandle(e) {
+    return this.state.bounds.some((x, i) => (
+        this.refs[`handle-${i}`] &&
+        e.target === findDOMNode(this.refs[`handle-${i}`])
+    ));
   }
 
   isValueOutOfBounds(value, props) {
@@ -457,6 +487,7 @@ class Slider extends React.Component {
       offset: offsets[i],
       dragging: handle === i,
       key: i,
+      ref: `handle-${i}`,
     }));
     if (!range) { handles.shift(); }
 
