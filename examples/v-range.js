@@ -3,12 +3,12 @@ webpackJsonp([5],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(320);
+	module.exports = __webpack_require__(321);
 
 
 /***/ },
 
-/***/ 320:
+/***/ 321:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -139,7 +139,7 @@ webpackJsonp([5],{
 	    React.createElement(
 	      'p',
 	      null,
-	      'Basic Range，`allowCross=false`'
+	      'Basic Range\uFF0C`allowCross=false`'
 	    ),
 	    React.createElement(Slider, { range: true, vertical: true, allowCross: false, defaultValue: [0, 20], onChange: log })
 	  ),
@@ -149,7 +149,7 @@ webpackJsonp([5],{
 	    React.createElement(
 	      'p',
 	      null,
-	      'Basic Range，`step=20` '
+	      'Basic Range\uFF0C`step=20` '
 	    ),
 	    React.createElement(Slider, { range: true, vertical: true, step: 20, defaultValue: [20, 40], onBeforeChange: log })
 	  ),
@@ -159,7 +159,7 @@ webpackJsonp([5],{
 	    React.createElement(
 	      'p',
 	      null,
-	      'Basic Range，`step=20, dots` '
+	      'Basic Range\uFF0C`step=20, dots` '
 	    ),
 	    React.createElement(Slider, { range: true, vertical: true, dots: true, step: 20, defaultValue: [20, 40], onAfterChange: log })
 	  ),

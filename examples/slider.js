@@ -3,12 +3,12 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(318);
+	module.exports = __webpack_require__(319);
 
 
 /***/ },
 
-/***/ 318:
+/***/ 319:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -119,7 +119,7 @@ webpackJsonp([3],{
 	    React.createElement(
 	      'p',
 	      null,
-	      'Basic Slider，`step=20`'
+	      'Basic Slider\uFF0C`step=20`'
 	    ),
 	    React.createElement(Slider, { step: 20, defaultValue: 50, onBeforeChange: log })
 	  ),
@@ -129,7 +129,7 @@ webpackJsonp([3],{
 	    React.createElement(
 	      'p',
 	      null,
-	      'Basic Slider，`step=20, dots`'
+	      'Basic Slider\uFF0C`step=20, dots`'
 	    ),
 	    React.createElement(Slider, { dots: true, step: 20, defaultValue: 100, onAfterChange: log })
 	  ),

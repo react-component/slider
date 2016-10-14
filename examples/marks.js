@@ -3,12 +3,12 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(316);
+	module.exports = __webpack_require__(317);
 
 
 /***/ },
 
-/***/ 316:
+/***/ 317:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -25,7 +25,7 @@ webpackJsonp([1],{
 	  0: React.createElement(
 	    'strong',
 	    null,
-	    '0°C'
+	    '0\xB0C'
 	  ),
 	  26: '26°C',
 	  37: '37°C',
@@ -37,7 +37,7 @@ webpackJsonp([1],{
 	    label: React.createElement(
 	      'strong',
 	      null,
-	      '100°C'
+	      '100\xB0C'
 	    )
 	  }
 	};
