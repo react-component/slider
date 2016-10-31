@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, max, min }) => {
+const Marks = ({ className, vertical, marks, included, upperBound,
+                 lowerBound, max, min, marksHover }) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
   const unit = 100 / (marksCount - 1);
@@ -14,6 +15,7 @@ const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, m
     const markClassName = classNames({
       [`${className}-text`]: true,
       [`${className}-text-active`]: isActived,
+      [`${className}-text-hover`]: marksHover[point],
     });
 
     const bottomStyle = {

@@ -66,6 +66,7 @@ class Slider extends React.Component {
 
     this.state = {
       handle: null,
+      marksHover: {},
       recent,
       bounds,
     };
@@ -282,6 +283,15 @@ class Slider extends React.Component {
     return this._getPointsCache.points;
   }
 
+  setMarkHover(point, value) {
+    this.setState({
+      marksHover: {
+        ...this.state.marksHover,
+        [point]: value,
+      },
+    });
+  }
+
   isEventFromHandle(e) {
     return this.state.bounds.some((x, i) => (
         this.refs[`handle-${i}`] &&
@@ -438,6 +448,7 @@ class Slider extends React.Component {
     const {
         handle,
         bounds,
+        marksHover,
     } = this.state;
     const {
         className,
@@ -523,11 +534,14 @@ class Slider extends React.Component {
         <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
+          onMarkMouseOver={(point) => this.setMarkHover(point, true)}
+          onMarkMouseOut={(point) => this.setMarkHover(point, false)}
         />
         {handles}
         <Marks className={`${prefixCls}-mark`} vertical = {vertical} marks={marks}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
+          marksHover={marksHover}
         />
         {children}
       </div>
