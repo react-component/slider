@@ -49,9 +49,9 @@ webpackJsonp([5],{
 	    });
 	  },
 	  handleApply: function handleApply() {
-	    var _state = this.state;
-	    var lowerBound = _state.lowerBound;
-	    var upperBound = _state.upperBound;
+	    var _state = this.state,
+	        lowerBound = _state.lowerBound,
+	        upperBound = _state.upperBound;
 	
 	    this.setState({ value: [lowerBound, upperBound] });
 	  },

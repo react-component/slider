@@ -21584,10 +21584,10 @@
 	
 	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
 	
-	    var range = props.range;
-	    var min = props.min;
-	    var max = props.max;
-	    var step = props.step;
+	    var range = props.range,
+	        min = props.min,
+	        max = props.max,
+	        step = props.step;
 	
 	    var initialValue = range ? Array.apply(null, Array(range + 1)).map(function () {
 	      return min;
@@ -21832,11 +21832,11 @@
 	
 	
 	  Slider.prototype.getPoints = function getPoints() {
-	    var _props = this.props;
-	    var marks = _props.marks;
-	    var step = _props.step;
-	    var min = _props.min;
-	    var max = _props.max;
+	    var _props = this.props,
+	        marks = _props.marks,
+	        step = _props.step,
+	        min = _props.min,
+	        max = _props.max;
 	
 	    var cache = this._getPointsCache;
 	    if (!cache || cache.marks !== marks || cache.step !== step) {
@@ -21869,17 +21869,15 @@
 	
 	  Slider.prototype.trimAlignValue = function trimAlignValue(v, nextProps) {
 	    var state = this.state || {};
-	    var handle = state.handle;
-	    var bounds = state.bounds;
+	    var handle = state.handle,
+	        bounds = state.bounds;
 	
-	    var _props2 = (0, _extends3.default)({}, this.props, nextProps || {});
-	
-	    var marks = _props2.marks;
-	    var step = _props2.step;
-	    var min = _props2.min;
-	    var max = _props2.max;
-	    var allowCross = _props2.allowCross;
-	
+	    var _props2 = (0, _extends3.default)({}, this.props, nextProps || {}),
+	        marks = _props2.marks,
+	        step = _props2.step,
+	        min = _props2.min,
+	        max = _props2.max,
+	        allowCross = _props2.allowCross;
 	
 	    var val = v;
 	    if (val <= min) {
@@ -21974,19 +21972,19 @@
 	  };
 	
 	  Slider.prototype.calcOffset = function calcOffset(value) {
-	    var _props3 = this.props;
-	    var min = _props3.min;
-	    var max = _props3.max;
+	    var _props3 = this.props,
+	        min = _props3.min,
+	        max = _props3.max;
 	
 	    var ratio = (value - min) / (max - min);
 	    return ratio * 100;
 	  };
 	
 	  Slider.prototype.calcValue = function calcValue(offset) {
-	    var _props4 = this.props;
-	    var vertical = _props4.vertical;
-	    var min = _props4.min;
-	    var max = _props4.max;
+	    var _props4 = this.props,
+	        vertical = _props4.vertical,
+	        min = _props4.min,
+	        max = _props4.max;
 	
 	    var ratio = Math.abs(offset / this.getSliderLength());
 	    var value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
@@ -22030,25 +22028,25 @@
 	    var _this4 = this,
 	        _classNames3;
 	
-	    var _state = this.state;
-	    var handle = _state.handle;
-	    var bounds = _state.bounds;
-	    var _props5 = this.props;
-	    var className = _props5.className;
-	    var prefixCls = _props5.prefixCls;
-	    var tooltipPrefixCls = _props5.tooltipPrefixCls;
-	    var disabled = _props5.disabled;
-	    var vertical = _props5.vertical;
-	    var dots = _props5.dots;
-	    var included = _props5.included;
-	    var range = _props5.range;
-	    var step = _props5.step;
-	    var marks = _props5.marks;
-	    var max = _props5.max;
-	    var min = _props5.min;
-	    var tipTransitionName = _props5.tipTransitionName;
-	    var tipFormatter = _props5.tipFormatter;
-	    var children = _props5.children;
+	    var _state = this.state,
+	        handle = _state.handle,
+	        bounds = _state.bounds;
+	    var _props5 = this.props,
+	        className = _props5.className,
+	        prefixCls = _props5.prefixCls,
+	        tooltipPrefixCls = _props5.tooltipPrefixCls,
+	        disabled = _props5.disabled,
+	        vertical = _props5.vertical,
+	        dots = _props5.dots,
+	        included = _props5.included,
+	        range = _props5.range,
+	        step = _props5.step,
+	        marks = _props5.marks,
+	        max = _props5.max,
+	        min = _props5.min,
+	        tipTransitionName = _props5.tipTransitionName,
+	        tipFormatter = _props5.tipFormatter,
+	        children = _props5.children;
 	
 	
 	    var customHandle = this.props.handle;
@@ -22110,6 +22108,7 @@
 	        onTouchStart: disabled ? noop : this.onTouchStart.bind(this),
 	        onMouseDown: disabled ? noop : this.onMouseDown.bind(this)
 	      },
+	      _react2.default.createElement('div', { className: prefixCls + '-rail' }),
 	      tracks,
 	      _react2.default.createElement(_Steps2.default, { prefixCls: prefixCls, vertical: vertical, marks: marks, dots: dots, step: step,
 	        included: isIncluded, lowerBound: bounds[0],
@@ -23284,14 +23283,14 @@
 	
 	var _symbol2 = _interopRequireDefault(_symbol);
 	
-	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj; };
+	var _typeof = typeof _symbol2.default === "function" && typeof _iterator2.default === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj; };
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	exports.default = typeof _symbol2.default === "function" && _typeof(_iterator2.default) === "symbol" ? function (obj) {
 	  return typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	} : function (obj) {
-	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
+	  return obj && typeof _symbol2.default === "function" && obj.constructor === _symbol2.default && obj !== _symbol2.default.prototype ? "symbol" : typeof obj === "undefined" ? "undefined" : _typeof(obj);
 	};
 
 /***/ },
@@ -24441,11 +24440,11 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Track = function Track(_ref) {
-	  var className = _ref.className;
-	  var included = _ref.included;
-	  var vertical = _ref.vertical;
-	  var offset = _ref.offset;
-	  var length = _ref.length;
+	  var className = _ref.className,
+	      included = _ref.included,
+	      vertical = _ref.vertical,
+	      offset = _ref.offset,
+	      length = _ref.length;
 	
 	  var style = {
 	    visibility: included ? 'visible' : 'hidden'
@@ -24522,17 +24521,17 @@
 	  };
 	
 	  Handle.prototype.render = function render() {
-	    var _props = this.props;
-	    var prefixCls = _props.prefixCls;
-	    var tooltipPrefixCls = _props.tooltipPrefixCls;
-	    var className = _props.className;
-	    var tipTransitionName = _props.tipTransitionName;
-	    var tipFormatter = _props.tipFormatter;
-	    var vertical = _props.vertical;
-	    var offset = _props.offset;
-	    var value = _props.value;
-	    var dragging = _props.dragging;
-	    var noTip = _props.noTip;
+	    var _props = this.props,
+	        prefixCls = _props.prefixCls,
+	        tooltipPrefixCls = _props.tooltipPrefixCls,
+	        className = _props.className,
+	        tipTransitionName = _props.tipTransitionName,
+	        tipFormatter = _props.tipFormatter,
+	        vertical = _props.vertical,
+	        offset = _props.offset,
+	        value = _props.value,
+	        dragging = _props.dragging,
+	        noTip = _props.noTip;
 	
 	
 	    var style = vertical ? { bottom: offset + '%' } : { left: offset + '%' };
@@ -28393,16 +28392,16 @@
 	}
 	
 	var Steps = function Steps(_ref) {
-	  var prefixCls = _ref.prefixCls;
-	  var vertical = _ref.vertical;
-	  var marks = _ref.marks;
-	  var dots = _ref.dots;
-	  var step = _ref.step;
-	  var included = _ref.included;
-	  var lowerBound = _ref.lowerBound;
-	  var upperBound = _ref.upperBound;
-	  var max = _ref.max;
-	  var min = _ref.min;
+	  var prefixCls = _ref.prefixCls,
+	      vertical = _ref.vertical,
+	      marks = _ref.marks,
+	      dots = _ref.dots,
+	      step = _ref.step,
+	      included = _ref.included,
+	      lowerBound = _ref.lowerBound,
+	      upperBound = _ref.upperBound,
+	      max = _ref.max,
+	      min = _ref.min;
 	
 	  var range = max - min;
 	  var elements = calcPoints(vertical, marks, dots, step, min, max).map(function (point) {
@@ -28527,14 +28526,14 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Marks = function Marks(_ref) {
-	  var className = _ref.className;
-	  var vertical = _ref.vertical;
-	  var marks = _ref.marks;
-	  var included = _ref.included;
-	  var upperBound = _ref.upperBound;
-	  var lowerBound = _ref.lowerBound;
-	  var max = _ref.max;
-	  var min = _ref.min;
+	  var className = _ref.className,
+	      vertical = _ref.vertical,
+	      marks = _ref.marks,
+	      included = _ref.included,
+	      upperBound = _ref.upperBound,
+	      lowerBound = _ref.lowerBound,
+	      max = _ref.max,
+	      min = _ref.min;
 	
 	  var marksKeys = Object.keys(marks);
 	  var marksCount = marksKeys.length;
@@ -28552,7 +28551,7 @@
 	
 	    var bottomStyle = {
 	      // height: markWidth + '%',
-	      marginBottom: '-200%',
+	      marginBottom: '-50%',
 	      bottom: (point - min) / range * 100 + '%'
 	    };
 	
