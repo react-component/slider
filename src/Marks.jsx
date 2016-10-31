@@ -18,7 +18,7 @@ const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, m
 
     const bottomStyle = {
       // height: markWidth + '%',
-      marginBottom: '-200%',
+      marginBottom: '-50%',
       bottom: `${(point - min) / range * 100}%`,
     };
 

@@ -518,6 +518,7 @@ class Slider extends React.Component {
         onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
         onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
       >
+        <div className={`${prefixCls}-rail`} />
         {tracks}
         <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
           included={isIncluded} lowerBound={bounds[0]}

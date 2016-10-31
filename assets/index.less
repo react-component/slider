@@ -23,12 +23,18 @@
 
 .@{prefixClass} {
   position: relative;
-  height: 4px;
+  height: 14px;
+  padding: 5px 0;
   width: 100%;
   border-radius: @border-radius-base;
-  background-color: #e9e9e9;
-
   .borderBox();
+
+  &-rail {
+    position: absolute;
+    width: 100%;
+    background-color: #e9e9e9;
+    height: 4px;
+  }
 
   &-track {
     position: absolute;
@@ -62,7 +68,7 @@
 
   &-mark {
     position: absolute;
-    top: 10px;
+    top: 18px;
     left: 0;
     width: 100%;
     font-size: 12px;
@@ -85,7 +91,6 @@
     position: absolute;
     width: 100%;
     height: 4px;
-    margin: 5px 0;
     background: transparent;
   }
 
@@ -131,23 +136,30 @@
 }
 
 .@{prefixClass}-vertical {
-  width: 4px;
+  width: 14px;
   height: 100%;
+  padding: 0 5px;
+
   .@{prefixClass} {
+    &-rail {
+      height: 100%;
+      width: 4px;
+    }
+
     &-track {
+      left: 5px;
       bottom: 0;
       width: 4px;
     }
 
     &-handle {
-      position: absolute;
       margin-left: -5px;
       margin-bottom: -7px;
     }
 
     &-mark {
       top: 0;
-      left: 10px;
+      left: 18px;
       height: 100%;
     }
 
