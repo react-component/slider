@@ -101,7 +101,7 @@ class Slider extends React.Component {
     const isNotControlled = !('value' in props);
     if (isNotControlled) {
       this.setState(state);
-    } else if (state.handle) {
+    } else if (state.handle !== undefined) {
       this.setState({ handle: state.handle });
     }
 
