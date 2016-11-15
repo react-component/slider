@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "5.3.0",
+  "version": "5.3.3",
   "description": "slider ui component for react",
   "keywords": [
     "react",
@@ -25,7 +25,7 @@
   "licenses": "MIT",
   "main": "./lib/index.js",
   "entry": {
-    "rc-slider": ["./src/index.js", "./assets/index.less"]
+    "rc-slider": ["./assets/index.less", "./src/index.js"]
   },
   "style": "./assets/index.css",
   "config": {
