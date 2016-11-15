@@ -249,7 +249,7 @@ class Slider extends React.Component {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
 
-    return this.props.vertical ? rect.top : rect.left;
+    return this.props.vertical ? (window.scrollY + rect.top) : (window.scrollX + rect.left);
   }
 
   getPrecision(step) {
