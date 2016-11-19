@@ -1,6 +1,6 @@
 {
-  "name": "rc-slider",
-  "version": "5.3.4",
+  "name": "rc-slider-custom",
+  "version": "1.0.0",
   "description": "slider ui component for react",
   "keywords": [
     "react",
@@ -8,8 +8,8 @@
     "react-slider",
     "slider"
   ],
-  "homepage": "http://github.com/react-component/slider",
-  "author": "sima.zhang1990@gmail.com",
+  "homepage": "https://github.com/Gunavel/slider.git",
+  "author": "sgb.rated@gmail.com",
   "repository": {
     "type": "git",
     "url": "git@github.com:react-component/slider.git"
