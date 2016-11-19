@@ -1,7 +1,7 @@
-# rc-slider
+# rc-slider-custom
 ---
 
-slider ui component for react
+slider ui component for react with option to show toolTip always
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
@@ -47,7 +47,7 @@ slider ui component for react
 
 ## install
 
-[![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
+[![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider-custom)
 
 ## Usage
 
@@ -56,7 +56,7 @@ require('rc-slider/assets/index.css');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Rcslider = require('rc-slider');
+var Rcslider = require('rc-slider-custom');
 ReactDOM.render(<Rcslider />, container);
 ```
 
@@ -220,4 +220,4 @@ http://localhost:8005/node_modules/rc-server/node_modules/node-jscover/lib/front
 
 ## License
 
-rc-slider is released under the MIT license.
+rc-slider-custom is released under the MIT license.
