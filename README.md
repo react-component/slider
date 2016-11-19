@@ -188,6 +188,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>NOOP</td>
           <td>`onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered.</td>
         </tr>
+        <tr>
+          <td>toolTipVisibleAlways</td>
+          <td>bool</td>
+          <td>false</td>
+          <td>If `toolTipVisibleAlways` is set to true, the tooltip will be visible always.</td>
+        </tr>
     </tbody>
 </table>
 

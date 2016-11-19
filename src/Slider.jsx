@@ -454,6 +454,7 @@ class Slider extends React.Component {
         tipTransitionName,
         tipFormatter,
         children,
+        toolTipVisibleAlways,
     } = this.props;
 
     const customHandle = this.props.handle;
@@ -488,6 +489,7 @@ class Slider extends React.Component {
       dragging: handle === i,
       key: i,
       ref: `handle-${i}`,
+      toolTipVisibleAlways,
     }));
     if (!range) { handles.shift(); }
 
@@ -571,6 +573,7 @@ Slider.propTypes = {
     React.PropTypes.bool,
     React.PropTypes.number,
   ]),
+  toolTipVisibleAlways: React.PropTypes.bool,
 };
 
 Slider.defaultProps = {
@@ -593,6 +596,7 @@ Slider.defaultProps = {
   vertical: false,
   allowCross: true,
   pushable: false,
+  toolTipVisibleAlways: false,
 };
 
 export default Slider;
