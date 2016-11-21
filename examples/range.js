@@ -3,12 +3,12 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(318);
+	module.exports = __webpack_require__(324);
 
 
 /***/ },
 
-/***/ 318:
+/***/ 324:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -17,8 +17,8 @@ webpackJsonp([2],{
 	__webpack_require__(2);
 	
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(36);
-	var Slider = __webpack_require__(174);
+	var ReactDOM = __webpack_require__(34);
+	var Slider = __webpack_require__(180);
 	
 	var style = { width: 400, margin: 50 };
 	

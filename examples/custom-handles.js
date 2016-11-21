@@ -14,8 +14,8 @@ webpackJsonp([0],[
 	__webpack_require__(2);
 	
 	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(36);
-	var Slider = __webpack_require__(174);
+	var ReactDOM = __webpack_require__(34);
+	var Slider = __webpack_require__(180);
 	
 	var wrapperStyle = { width: 400, margin: 50 };
 	
@@ -31,19 +31,24 @@ webpackJsonp([0],[
 	  textAlign: 'center'
 	};
 	
-	var CustomHandle = function CustomHandle(props) {
-	  var style = Object.assign({ left: props.offset + '%' }, handleStyle);
-	  return React.createElement(
-	    'div',
-	    { style: style },
-	    'val: ',
-	    props.value
-	  );
-	};
-	CustomHandle.propTypes = {
-	  value: React.PropTypes.any,
-	  offset: React.PropTypes.number
-	};
+	var CustomHandle = React.createClass({
+	  displayName: 'CustomHandle',
+	
+	  propTypes: {
+	    value: React.PropTypes.any,
+	    offset: React.PropTypes.number
+	  },
+	  render: function render() {
+	    var props = this.props;
+	    var style = Object.assign({ left: props.offset + '%' }, handleStyle);
+	    return React.createElement(
+	      'div',
+	      { style: style },
+	      'val: ',
+	      props.value
+	    );
+	  }
+	});
 	
 	ReactDOM.render(React.createElement(
 	  'div',
