@@ -508,9 +508,10 @@ class Slider extends React.Component {
 
     const sliderClassName = classNames({
       [prefixCls]: true,
+      [`${prefixCls}-with-marks`]: Object.keys(marks).length,
       [`${prefixCls}-disabled`]: disabled,
-      [className]: !!className,
       [`${prefixCls}-vertical`]: this.props.vertical,
+      [className]: !!className,
     });
 
     return (
