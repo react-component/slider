@@ -10,15 +10,15 @@ export default class Handle extends React.Component {
     };
   }
 
-  showTooltip() {
-    this.setState({
-      isTooltipVisible: true,
-    });
-  }
-
   hideTooltip() {
     this.setState({
       isTooltipVisible: false,
+    });
+  }
+
+  showTooltip() {
+    this.setState({
+      isTooltipVisible: true,
     });
   }
 

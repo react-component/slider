@@ -110,18 +110,24 @@ class Slider extends React.Component {
     props.onChange(changedValue);
   }
 
-  onMouseMove(e) {
-    const position = getMousePosition(this.props.vertical, e);
-    this.onMove(e, position - this.dragOffset);
+  onMouseDown(e) {
+    if (e.button !== 0) { return; }
+
+    let position = getMousePosition(this.props.vertical, e);
+    if (!this.isEventFromHandle(e)) {
+      this.dragOffset = 0;
+    } else {
+      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+      this.dragOffset = position - handlePosition;
+      position = handlePosition;
+    }
+    this.onStart(position);
+    this.addDocumentEvents('mouse');
+    pauseEvent(e);
   }
 
-  onTouchMove(e) {
-    if (isNotTouchEvent(e)) {
-      this.end('touch');
-      return;
-    }
-
-    const position = getTouchPosition(this.props.vertical, e);
+  onMouseMove(e) {
+    const position = getMousePosition(this.props.vertical, e);
     this.onMove(e, position - this.dragOffset);
   }
 
@@ -152,38 +158,6 @@ class Slider extends React.Component {
       handle: nextHandle,
       bounds: nextBounds,
     });
-  }
-
-  onTouchStart(e) {
-    if (isNotTouchEvent(e)) return;
-
-    let position = getTouchPosition(this.props.vertical, e);
-    if (!this.isEventFromHandle(e)) {
-      this.dragOffset = 0;
-    } else {
-      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
-      this.dragOffset = position - handlePosition;
-      position = handlePosition;
-    }
-    this.onStart(position);
-    this.addDocumentEvents('touch');
-    pauseEvent(e);
-  }
-
-  onMouseDown(e) {
-    if (e.button !== 0) { return; }
-
-    let position = getMousePosition(this.props.vertical, e);
-    if (!this.isEventFromHandle(e)) {
-      this.dragOffset = 0;
-    } else {
-      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
-      this.dragOffset = position - handlePosition;
-      position = handlePosition;
-    }
-    this.onStart(position);
-    this.addDocumentEvents('mouse');
-    pauseEvent(e);
   }
 
   onStart(position) {
@@ -231,34 +205,30 @@ class Slider extends React.Component {
     this.onChange({ bounds: nextBounds });
   }
 
-  getValue() {
-    const { bounds } = this.state;
-    return this.props.range ? bounds : bounds[1];
-  }
-
-  getSliderLength() {
-    const slider = this.refs.slider;
-    if (!slider) {
-      return 0;
+  onTouchMove(e) {
+    if (isNotTouchEvent(e)) {
+      this.end('touch');
+      return;
     }
 
-    return this.props.vertical ? slider.clientHeight : slider.clientWidth;
+    const position = getTouchPosition(this.props.vertical, e);
+    this.onMove(e, position - this.dragOffset);
   }
 
-  getSliderStart() {
-    const slider = this.refs.slider;
-    const rect = slider.getBoundingClientRect();
+  onTouchStart(e) {
+    if (isNotTouchEvent(e)) return;
 
-    return this.props.vertical ? rect.top : rect.left;
-  }
-
-  getPrecision(step) {
-    const stepString = step.toString();
-    let precision = 0;
-    if (stepString.indexOf('.') >= 0) {
-      precision = stepString.length - stepString.indexOf('.') - 1;
+    let position = getTouchPosition(this.props.vertical, e);
+    if (!this.isEventFromHandle(e)) {
+      this.dragOffset = 0;
+    } else {
+      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+      this.dragOffset = position - handlePosition;
+      position = handlePosition;
     }
-    return precision;
+    this.onStart(position);
+    this.addDocumentEvents('touch');
+    pauseEvent(e);
   }
 
   /**
@@ -282,6 +252,76 @@ class Slider extends React.Component {
     return this._getPointsCache.points;
   }
 
+  getPrecision(step) {
+    const stepString = step.toString();
+    let precision = 0;
+    if (stepString.indexOf('.') >= 0) {
+      precision = stepString.length - stepString.indexOf('.') - 1;
+    }
+    return precision;
+  }
+
+  getSliderLength() {
+    const slider = this.refs.slider;
+    if (!slider) {
+      return 0;
+    }
+
+    return this.props.vertical ? slider.clientHeight : slider.clientWidth;
+  }
+
+  getSliderStart() {
+    const slider = this.refs.slider;
+    const rect = slider.getBoundingClientRect();
+
+    return this.props.vertical ? rect.top : rect.left;
+  }
+
+  getValue() {
+    const { bounds } = this.state;
+    return this.props.range ? bounds : bounds[1];
+  }
+
+  addDocumentEvents(type) {
+    if (type === 'touch') {
+      // just work for chrome iOS Safari and Android Browser
+      this.onTouchMoveListener =
+        addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
+      this.onTouchUpListener =
+        addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
+    } else if (type === 'mouse') {
+      this.onMouseMoveListener =
+        addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
+      this.onMouseUpListener =
+        addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
+    }
+  }
+
+  calcOffset(value) {
+    const { min, max } = this.props;
+    const ratio = (value - min) / (max - min);
+    return ratio * 100;
+  }
+
+  calcValue(offset) {
+    const { vertical, min, max } = this.props;
+    const ratio = Math.abs(offset / this.getSliderLength());
+    const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
+    return value;
+  }
+
+  calcValueByPos(position) {
+    const pixelOffset = position - this.getSliderStart();
+    const nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
+    return nextValue;
+  }
+
+  end(type) {
+    this.removeEvents(type);
+    this.props.onAfterChange(this.getValue());
+    this.setState({ handle: null });
+  }
+
   isEventFromHandle(e) {
     return this.state.bounds.some((x, i) => (
         this.refs[`handle-${i}`] &&
@@ -291,6 +331,74 @@ class Slider extends React.Component {
 
   isValueOutOfBounds(value, props) {
     return value < props.min || value > props.max;
+  }
+
+  pushHandle(bounds, handle, direction, amount) {
+    const originalValue = bounds[handle];
+    let currentValue = bounds[handle];
+    while (direction * (currentValue - originalValue) < amount) {
+      if (!this.pushHandleOnePoint(bounds, handle, direction)) {
+        // can't push handle enough to create the needed `amount` gap, so we
+        // revert its position to the original value
+        bounds[handle] = originalValue;
+        return false;
+      }
+      currentValue = bounds[handle];
+    }
+    // the handle was pushed enough to create the needed `amount` gap
+    return true;
+  }
+
+  pushHandleOnePoint(bounds, handle, direction) {
+    const points = this.getPoints();
+    const pointIndex = points.indexOf(bounds[handle]);
+    const nextPointIndex = pointIndex + direction;
+    if (nextPointIndex >= points.length || nextPointIndex < 0) {
+      // reached the minimum or maximum available point, can't push anymore
+      return false;
+    }
+    const nextHandle = handle + direction;
+    const nextValue = points[nextPointIndex];
+    const { pushable: threshold } = this.props;
+    const diffToNext = direction * (bounds[nextHandle] - nextValue);
+    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
+      // couldn't push next handle, so we won't push this one either
+      return false;
+    }
+    // push the handle
+    bounds[handle] = nextValue;
+    return true;
+  }
+
+  pushSurroundingHandles(bounds, handle, originalValue) {
+    const { pushable: threshold } = this.props;
+    const value = bounds[handle];
+
+    let direction = 0;
+    if (bounds[handle + 1] - value < threshold) {
+      direction = +1;
+    } else if (value - bounds[handle - 1] < threshold) {
+      direction = -1;
+    }
+
+    if (direction === 0) { return; }
+
+    const nextHandle = handle + direction;
+    const diffToNext = direction * (bounds[nextHandle] - value);
+    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
+      // revert to original value if pushing is impossible
+      bounds[handle] = originalValue;
+    }
+  }
+
+  removeEvents(type) {
+    if (type === 'touch') {
+      this.onTouchMoveListener.remove();
+      this.onTouchUpListener.remove();
+    } else if (type === 'mouse') {
+      this.onMouseMoveListener.remove();
+      this.onMouseUpListener.remove();
+    }
   }
 
   trimAlignValue(v, nextProps) {
@@ -324,114 +432,6 @@ class Slider extends React.Component {
     const closestPoint = points[diffs.indexOf(Math.min.apply(Math, diffs))];
 
     return step !== null ? parseFloat(closestPoint.toFixed(this.getPrecision(step))) : closestPoint;
-  }
-
-  pushHandleOnePoint(bounds, handle, direction) {
-    const points = this.getPoints();
-    const pointIndex = points.indexOf(bounds[handle]);
-    const nextPointIndex = pointIndex + direction;
-    if (nextPointIndex >= points.length || nextPointIndex < 0) {
-      // reached the minimum or maximum available point, can't push anymore
-      return false;
-    }
-    const nextHandle = handle + direction;
-    const nextValue = points[nextPointIndex];
-    const { pushable: threshold } = this.props;
-    const diffToNext = direction * (bounds[nextHandle] - nextValue);
-    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
-      // couldn't push next handle, so we won't push this one either
-      return false;
-    }
-    // push the handle
-    bounds[handle] = nextValue;
-    return true;
-  }
-
-  pushHandle(bounds, handle, direction, amount) {
-    const originalValue = bounds[handle];
-    let currentValue = bounds[handle];
-    while (direction * (currentValue - originalValue) < amount) {
-      if (!this.pushHandleOnePoint(bounds, handle, direction)) {
-        // can't push handle enough to create the needed `amount` gap, so we
-        // revert its position to the original value
-        bounds[handle] = originalValue;
-        return false;
-      }
-      currentValue = bounds[handle];
-    }
-    // the handle was pushed enough to create the needed `amount` gap
-    return true;
-  }
-
-  pushSurroundingHandles(bounds, handle, originalValue) {
-    const { pushable: threshold } = this.props;
-    const value = bounds[handle];
-
-    let direction = 0;
-    if (bounds[handle + 1] - value < threshold) {
-      direction = +1;
-    } else if (value - bounds[handle - 1] < threshold) {
-      direction = -1;
-    }
-
-    if (direction === 0) { return; }
-
-    const nextHandle = handle + direction;
-    const diffToNext = direction * (bounds[nextHandle] - value);
-    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
-      // revert to original value if pushing is impossible
-      bounds[handle] = originalValue;
-    }
-  }
-
-  calcOffset(value) {
-    const { min, max } = this.props;
-    const ratio = (value - min) / (max - min);
-    return ratio * 100;
-  }
-
-  calcValue(offset) {
-    const { vertical, min, max } = this.props;
-    const ratio = Math.abs(offset / this.getSliderLength());
-    const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
-    return value;
-  }
-
-  calcValueByPos(position) {
-    const pixelOffset = position - this.getSliderStart();
-    const nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
-    return nextValue;
-  }
-
-  addDocumentEvents(type) {
-    if (type === 'touch') {
-      // just work for chrome iOS Safari and Android Browser
-      this.onTouchMoveListener =
-        addEventListener(document, 'touchmove', this.onTouchMove.bind(this));
-      this.onTouchUpListener =
-        addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
-    } else if (type === 'mouse') {
-      this.onMouseMoveListener =
-        addEventListener(document, 'mousemove', this.onMouseMove.bind(this));
-      this.onMouseUpListener =
-        addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
-    }
-  }
-
-  removeEvents(type) {
-    if (type === 'touch') {
-      this.onTouchMoveListener.remove();
-      this.onTouchUpListener.remove();
-    } else if (type === 'mouse') {
-      this.onMouseMoveListener.remove();
-      this.onMouseUpListener.remove();
-    }
-  }
-
-  end(type) {
-    this.removeEvents(type);
-    this.props.onAfterChange(this.getValue());
-    this.setState({ handle: null });
   }
 
   render() {
