@@ -452,6 +452,7 @@ class Slider extends React.Component {
         marks,
         max, min,
         tipTransitionName,
+        tipAlwaysVisible,
         tipFormatter,
         children,
     } = this.props;
@@ -476,6 +477,7 @@ class Slider extends React.Component {
       tooltipPrefixCls,
       noTip: isNoTip,
       tipTransitionName,
+      tipAlwaysVisible,
       tipFormatter,
       vertical,
     };
@@ -560,6 +562,7 @@ Slider.propTypes = {
   onAfterChange: React.PropTypes.func,
   handle: React.PropTypes.element,
   tipTransitionName: React.PropTypes.string,
+  tipAlwaysVisible: React.PropTypes.bool,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
   range: React.PropTypes.oneOfType([
@@ -578,6 +581,7 @@ Slider.defaultProps = {
   prefixCls: 'rc-slider',
   className: '',
   tipTransitionName: '',
+  tipAlwaysVisible: false,
   min: 0,
   max: 100,
   step: 1,
