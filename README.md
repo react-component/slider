@@ -171,6 +171,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>Format the value of the tooltip if it shows. If `null` the tooltip will always be hidden.</td>
         </tr>
         <tr>
+          <td>tipAlign</td>
+          <td>Object: alignConfig of [dom-align](https://github.com/yiminghe/dom-align)</td>
+          <td></td>
+          <td>Align the tooltip with the slider.</td>
+        </tr>
+        <tr>
           <td>dots</td>
           <td>bool</td>
           <td>false</td>
