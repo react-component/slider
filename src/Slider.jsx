@@ -453,6 +453,7 @@ class Slider extends React.Component {
         max, min,
         tipTransitionName,
         tipAlign,
+        tipContainer,
         tipFormatter,
         children,
     } = this.props;
@@ -478,6 +479,7 @@ class Slider extends React.Component {
       noTip: isNoTip,
       tipTransitionName,
       tipAlign,
+      tipContainer,
       tipFormatter,
       vertical,
     };
@@ -563,6 +565,7 @@ Slider.propTypes = {
   handle: React.PropTypes.element,
   tipTransitionName: React.PropTypes.string,
   tipAlign: React.PropTypes.object,
+  tipContainer: React.PropTypes.func,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
   range: React.PropTypes.oneOfType([

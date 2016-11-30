@@ -177,6 +177,12 @@ ReactDOM.render(<Rcslider />, container);
           <td>Align the tooltip with the slider.</td>
         </tr>
         <tr>
+          <td>tipContainer</td>
+          <td>function</td>
+          <td></td>
+          <td>Function returning html node which will act as tooltip container</td>
+        </tr>
+        <tr>
           <td>dots</td>
           <td>bool</td>
           <td>false</td>
