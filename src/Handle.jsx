@@ -34,6 +34,7 @@ export default class Handle extends React.Component {
       value,
       dragging,
       noTip,
+      toolTipVisibleAlways,
     } = this.props;
 
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
@@ -50,11 +51,14 @@ export default class Handle extends React.Component {
     }
 
     const isTooltipVisible = dragging || this.state.isTooltipVisible;
+
+    const toolTipVisibilityOverride = toolTipVisibleAlways ? true : isTooltipVisible;
+
     return (
       <Tooltip
         prefixCls={tooltipPrefixCls || `${prefixCls}-tooltip`}
         placement="top"
-        visible={isTooltipVisible}
+        visible={toolTipVisibilityOverride}
         overlay={<span>{tipFormatter(value)}</span>}
         delay={0}
         transitionName={tipTransitionName}
@@ -76,4 +80,5 @@ Handle.propTypes = {
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,
+  toolTipVisibleAlways: React.PropTypes.bool,
 };
