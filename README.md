@@ -56,8 +56,8 @@ require('rc-slider/assets/index.css');
 
 var React = require('react');
 var ReactDOM = require('react-dom');
-var Rcslider = require('rc-slider');
-ReactDOM.render(<Rcslider />, container);
+var Slider = require('rc-slider');
+ReactDOM.render(<Slider />, container);
 ```
 
 ## API
