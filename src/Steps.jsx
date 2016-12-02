@@ -22,7 +22,14 @@ const Steps = ({ prefixCls, vertical, verticalReverse, marks, dots, step, includ
   const range = max - min;
   const elements = calcPoints(vertical, marks, dots, step, min, max).map((point) => {
     const offset = `${Math.abs(point - min) / range * 100}%`;
-    const style = vertical ? (verticalReverse ? { top: offset }: { bottom: offset }) : { left: offset };
+    let style = { left: offset };
+    if (vertical) {
+      if (verticalReverse) {
+        style = { top: offset };
+      } else {
+        style = { bottom: offset };
+      }
+    }
 
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);

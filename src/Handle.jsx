@@ -37,7 +37,9 @@ export default class Handle extends React.Component {
       noTip,
     } = this.props;
 
-    const style = vertical ? (verticalReverse ? { top: `${offset}%` } : { bottom: `${offset}%` }) : { left: `${offset}%` };
+    let style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
+    style = ((vertical && verticalReverse) ? { top: `${offset}%` } : style);
+
     const handle = (
       <div className={className} style={style}
         onMouseUp={this.showTooltip.bind(this)}

@@ -137,7 +137,12 @@ class Slider extends React.Component {
     const state = this.state;
 
     let diffPosition = position - this.startPosition;
-    diffPosition = this.props.vertical ? (this.props.verticalReverse ? diffPosition : -diffPosition) : diffPosition;
+    if (this.props.vertical) {
+      if (!this.props.verticalReverse) {
+        diffPosition = -diffPosition;
+      }
+    }
+
     const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 
     const value = this.trimAlignValue(this.startValue + diffValue);
@@ -273,8 +278,15 @@ class Slider extends React.Component {
   getSliderStart() {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
-
-    return this.props.vertical ? (this.props.verticalReverse ? rect.bottom : rect.top) : rect.left;
+    let start = rect.left;
+    if (this.props.vertical) {
+      if (this.props.verticalReverse) {
+        start = rect.bottom;
+      } else {
+        start = rect.top;
+      }
+    }
+    return start;
   }
 
   getValue() {
@@ -502,8 +514,8 @@ class Slider extends React.Component {
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-        <Track className={trackClassName} vertical={vertical} verticalReverse={verticalReverse} included={isIncluded}
-          offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
+        <Track className={trackClassName} vertical={vertical} verticalReverse={verticalReverse}
+          included={isIncluded} offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
         />
       );
     }
@@ -523,7 +535,8 @@ class Slider extends React.Component {
       >
         <div className={`${prefixCls}-rail`} />
         {tracks}
-        <Steps prefixCls={prefixCls} vertical={vertical} verticalReverse={verticalReverse} marks={marks} dots={dots} step={step}
+        <Steps prefixCls={prefixCls} vertical={vertical} verticalReverse={verticalReverse}
+          marks={marks} dots={dots} step={step}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
