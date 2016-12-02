@@ -137,7 +137,7 @@ class Slider extends React.Component {
     const state = this.state;
 
     let diffPosition = position - this.startPosition;
-    diffPosition = this.props.vertical ? -diffPosition : diffPosition;
+    diffPosition = this.props.vertical ? (this.props.verticalReverse ? diffPosition : -diffPosition) : diffPosition;
     const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 
     const value = this.trimAlignValue(this.startValue + diffValue);
@@ -274,7 +274,7 @@ class Slider extends React.Component {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
 
-    return this.props.vertical ? rect.top : rect.left;
+    return this.props.vertical ? (this.props.verticalReverse ? rect.bottom : rect.top) : rect.left;
   }
 
   getValue() {
@@ -445,6 +445,7 @@ class Slider extends React.Component {
         tooltipPrefixCls,
         disabled,
         vertical,
+        verticalReverse,
         dots,
         included,
         range,
@@ -478,6 +479,7 @@ class Slider extends React.Component {
       tipTransitionName,
       tipFormatter,
       vertical,
+      verticalReverse,
     };
 
     const handles = bounds.map((v, i) => cloneElement(customHandle, {
@@ -500,7 +502,7 @@ class Slider extends React.Component {
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-        <Track className={trackClassName} vertical={vertical} included={isIncluded}
+        <Track className={trackClassName} vertical={vertical} verticalReverse={verticalReverse} included={isIncluded}
           offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
         />
       );
@@ -521,7 +523,7 @@ class Slider extends React.Component {
       >
         <div className={`${prefixCls}-rail`} />
         {tracks}
-        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
+        <Steps prefixCls={prefixCls} vertical={vertical} verticalReverse={verticalReverse} marks={marks} dots={dots} step={step}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
@@ -567,6 +569,7 @@ Slider.propTypes = {
     React.PropTypes.number,
   ]),
   vertical: React.PropTypes.bool,
+  verticalReverse: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
   pushable: React.PropTypes.oneOfType([
     React.PropTypes.bool,
@@ -592,6 +595,7 @@ Slider.defaultProps = {
   dots: false,
   range: false,
   vertical: false,
+  verticalReverse: false,
   allowCross: true,
   pushable: false,
 };

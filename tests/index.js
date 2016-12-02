@@ -220,6 +220,19 @@ describe('rc-slider', function test() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-vertical').length).to.be(1);
   });
 
+  it('should render a verticalReverse vertical slider, when `vertical` `verticalReverse` is true', () => {
+    const slider = ReactDOM.render(<Slider vertical verticalReverse />, div);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-vertical').length).to.be(1);
+    expect(ReactTestUtils
+           .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-handle')[0]
+           .style.cssText)
+      .to.match(/top: 0%;/);
+    expect(ReactTestUtils
+           .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track')[0]
+           .style.cssText)
+      .to.match(/top: 0%;/);
+  });
+
   it('should not call onChange when value is the same', () => {
     const values = [];
     const handler = (e) => {
