@@ -35,6 +35,20 @@ describe('rc-slider', function test() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track').length).to.be(1);
   });
 
+  it('should render a Reverse Slider width default value 30', () => {
+    const slider = ReactDOM.render(<Slider reverse defaultValue={30} />, div);
+    const trackStyle = ReactTestUtils
+            .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track')[0]
+            .style.cssText;
+    expect(trackStyle).to.match(/left: 70%;/);
+    expect(trackStyle).to.match(/width: 30%;/);
+
+    expect(ReactTestUtils
+            .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-handle')[0]
+            .style.cssText)
+      .to.match(/right: 30%;/);
+  });
+
   it('should render a Slider with default value correctly', () => {
     const sliderWithDefaultValue = ReactDOM.render(<Slider defaultValue={50} />, div);
     expect(sliderWithDefaultValue.state.bounds[1]).to.be(50);
@@ -220,17 +234,19 @@ describe('rc-slider', function test() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-vertical').length).to.be(1);
   });
 
-  it('should render a verticalReverse vertical slider, when `vertical` `verticalReverse` is true', () => {
-    const slider = ReactDOM.render(<Slider vertical verticalReverse />, div);
+  it('should render a reverse vertical slider with default value 30', () => {
+    const slider = ReactDOM.render(<Slider vertical reverse defaultValue={30} />, div);
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-vertical').length).to.be(1);
-    expect(ReactTestUtils
+    const handleStyle = ReactTestUtils
            .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-handle')[0]
-           .style.cssText)
-      .to.match(/top: 0%;/);
-    expect(ReactTestUtils
+           .style.cssText;
+    expect(handleStyle).to.match(/top: 30%;/);
+
+    const trackStyle = ReactTestUtils
            .scryRenderedDOMComponentsWithClass(slider, 'rc-slider-track')[0]
-           .style.cssText)
-      .to.match(/top: 0%;/);
+           .style.cssText;
+    expect(trackStyle).to.match(/top: 0%;/);
+    expect(trackStyle).to.match(/height: 30%;/);
   });
 
   it('should not call onChange when value is the same', () => {

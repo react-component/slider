@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Track = ({ className, included, vertical, verticalReverse, offset, length }) => {
+const Track = ({ className, included, vertical, reverse, offset, length }) => {
   const style = {
     visibility: included ? 'visible' : 'hidden',
   };
   if (vertical) {
-    if (verticalReverse) {
+    if (reverse) {
       style.top = `${offset}%`;
       style.height = `${length}%`;
     } else {
@@ -13,8 +13,13 @@ const Track = ({ className, included, vertical, verticalReverse, offset, length 
       style.height = `${length}%`;
     }
   } else {
-    style.left = `${offset}%`;
-    style.width = `${length}%`;
+    if (reverse) {
+      style.width = `${length}%`;
+      style.left = `${100 - offset - length}%`;
+    } else {
+      style.left = `${offset}%`;
+      style.width = `${length}%`;
+    }
   }
   return <div className={className} style={style} />;
 };

@@ -17,17 +17,21 @@ function calcPoints(vertical, marks, dots, step, min, max) {
   return points;
 }
 
-const Steps = ({ prefixCls, vertical, verticalReverse, marks, dots, step, included,
+const Steps = ({ prefixCls, vertical, reverse, marks, dots, step, included,
                 lowerBound, upperBound, max, min }) => {
   const range = max - min;
   const elements = calcPoints(vertical, marks, dots, step, min, max).map((point) => {
     const offset = `${Math.abs(point - min) / range * 100}%`;
     let style = { left: offset };
     if (vertical) {
-      if (verticalReverse) {
+      if (reverse) {
         style = { top: offset };
       } else {
         style = { bottom: offset };
+      }
+    } else {
+      if (reverse) {
+        style = { right: offset };
       }
     }
 

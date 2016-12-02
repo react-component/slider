@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, max, min }) => {
+const Marks = ({ className, vertical, reverse,
+  marks, included, upperBound, lowerBound, max, min }) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
   const unit = 100 / (marksCount - 1);
@@ -22,13 +23,34 @@ const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, m
       bottom: `${(point - min) / range * 100}%`,
     };
 
+    const topStyle = {
+      marginTop: '-50%',
+      top: `${(point - min) / range * 100}%`,
+    };
+
     const leftStyle = {
       width: `${markWidth}%`,
       marginLeft: `${-markWidth / 2}%`,
       left: `${(point - min) / range * 100}%`,
     };
 
-    const style = vertical ? bottomStyle : leftStyle;
+    const rightStyle = {
+      width: `${markWidth}%`,
+      marginRight: `${-markWidth / 2}%`,
+      right: `${(point - min) / range * 100}%`,
+    };
+
+    let style = leftStyle;
+    if (vertical) {
+      style = bottomStyle;
+      if (reverse) {
+        style = topStyle;
+      }
+    } else {
+      if (reverse) {
+        style = rightStyle;
+      }
+    }
 
     const markPoint = marks[point];
     const markPointIsObject = typeof markPoint === 'object' &&
