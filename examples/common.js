@@ -21246,18 +21246,26 @@
 	    props.onChange(changedValue);
 	  };
 	
-	  Slider.prototype.onMouseMove = function onMouseMove(e) {
-	    var position = getMousePosition(this.props.vertical, e);
-	    this.onMove(e, position - this.dragOffset);
-	  };
-	
-	  Slider.prototype.onTouchMove = function onTouchMove(e) {
-	    if (isNotTouchEvent(e)) {
-	      this.end('touch');
+	  Slider.prototype.onMouseDown = function onMouseDown(e) {
+	    if (e.button !== 0) {
 	      return;
 	    }
 	
-	    var position = getTouchPosition(this.props.vertical, e);
+	    var position = getMousePosition(this.props.vertical, e);
+	    if (!this.isEventFromHandle(e)) {
+	      this.dragOffset = 0;
+	    } else {
+	      var handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+	      this.dragOffset = position - handlePosition;
+	      position = handlePosition;
+	    }
+	    this.onStart(position);
+	    this.addDocumentEvents('mouse');
+	    pauseEvent(e);
+	  };
+	
+	  Slider.prototype.onMouseMove = function onMouseMove(e) {
+	    var position = getMousePosition(this.props.vertical, e);
 	    this.onMove(e, position - this.dragOffset);
 	  };
 	
@@ -21290,40 +21298,6 @@
 	      handle: nextHandle,
 	      bounds: nextBounds
 	    });
-	  };
-	
-	  Slider.prototype.onTouchStart = function onTouchStart(e) {
-	    if (isNotTouchEvent(e)) return;
-	
-	    var position = getTouchPosition(this.props.vertical, e);
-	    if (!this.isEventFromHandle(e)) {
-	      this.dragOffset = 0;
-	    } else {
-	      var handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
-	      this.dragOffset = position - handlePosition;
-	      position = handlePosition;
-	    }
-	    this.onStart(position);
-	    this.addDocumentEvents('touch');
-	    pauseEvent(e);
-	  };
-	
-	  Slider.prototype.onMouseDown = function onMouseDown(e) {
-	    if (e.button !== 0) {
-	      return;
-	    }
-	
-	    var position = getMousePosition(this.props.vertical, e);
-	    if (!this.isEventFromHandle(e)) {
-	      this.dragOffset = 0;
-	    } else {
-	      var handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
-	      this.dragOffset = position - handlePosition;
-	      position = handlePosition;
-	    }
-	    this.onStart(position);
-	    this.addDocumentEvents('mouse');
-	    pauseEvent(e);
 	  };
 	
 	  Slider.prototype.onStart = function onStart(position) {
@@ -21374,35 +21348,30 @@
 	    this.onChange({ bounds: nextBounds });
 	  };
 	
-	  Slider.prototype.getValue = function getValue() {
-	    var bounds = this.state.bounds;
-	
-	    return this.props.range ? bounds : bounds[1];
-	  };
-	
-	  Slider.prototype.getSliderLength = function getSliderLength() {
-	    var slider = this.refs.slider;
-	    if (!slider) {
-	      return 0;
+	  Slider.prototype.onTouchMove = function onTouchMove(e) {
+	    if (isNotTouchEvent(e)) {
+	      this.end('touch');
+	      return;
 	    }
 	
-	    return this.props.vertical ? slider.clientHeight : slider.clientWidth;
+	    var position = getTouchPosition(this.props.vertical, e);
+	    this.onMove(e, position - this.dragOffset);
 	  };
 	
-	  Slider.prototype.getSliderStart = function getSliderStart() {
-	    var slider = this.refs.slider;
-	    var rect = slider.getBoundingClientRect();
+	  Slider.prototype.onTouchStart = function onTouchStart(e) {
+	    if (isNotTouchEvent(e)) return;
 	
-	    return this.props.vertical ? rect.top : rect.left;
-	  };
-	
-	  Slider.prototype.getPrecision = function getPrecision(step) {
-	    var stepString = step.toString();
-	    var precision = 0;
-	    if (stepString.indexOf('.') >= 0) {
-	      precision = stepString.length - stepString.indexOf('.') - 1;
+	    var position = getTouchPosition(this.props.vertical, e);
+	    if (!this.isEventFromHandle(e)) {
+	      this.dragOffset = 0;
+	    } else {
+	      var handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+	      this.dragOffset = position - handlePosition;
+	      position = handlePosition;
 	    }
-	    return precision;
+	    this.onStart(position);
+	    this.addDocumentEvents('touch');
+	    pauseEvent(e);
 	  };
 	
 	  /**
@@ -21435,6 +21404,80 @@
 	    return this._getPointsCache.points;
 	  };
 	
+	  Slider.prototype.getPrecision = function getPrecision(step) {
+	    var stepString = step.toString();
+	    var precision = 0;
+	    if (stepString.indexOf('.') >= 0) {
+	      precision = stepString.length - stepString.indexOf('.') - 1;
+	    }
+	    return precision;
+	  };
+	
+	  Slider.prototype.getSliderLength = function getSliderLength() {
+	    var slider = this.refs.slider;
+	    if (!slider) {
+	      return 0;
+	    }
+	
+	    return this.props.vertical ? slider.clientHeight : slider.clientWidth;
+	  };
+	
+	  Slider.prototype.getSliderStart = function getSliderStart() {
+	    var slider = this.refs.slider;
+	    var rect = slider.getBoundingClientRect();
+	
+	    return this.props.vertical ? rect.top : rect.left;
+	  };
+	
+	  Slider.prototype.getValue = function getValue() {
+	    var bounds = this.state.bounds;
+	
+	    return this.props.range ? bounds : bounds[1];
+	  };
+	
+	  Slider.prototype.addDocumentEvents = function addDocumentEvents(type) {
+	    if (type === 'touch') {
+	      // just work for chrome iOS Safari and Android Browser
+	      this.onTouchMoveListener = (0, _addEventListener2.default)(document, 'touchmove', this.onTouchMove.bind(this));
+	      this.onTouchUpListener = (0, _addEventListener2.default)(document, 'touchend', this.end.bind(this, 'touch'));
+	    } else if (type === 'mouse') {
+	      this.onMouseMoveListener = (0, _addEventListener2.default)(document, 'mousemove', this.onMouseMove.bind(this));
+	      this.onMouseUpListener = (0, _addEventListener2.default)(document, 'mouseup', this.end.bind(this, 'mouse'));
+	    }
+	  };
+	
+	  Slider.prototype.calcOffset = function calcOffset(value) {
+	    var _props2 = this.props,
+	        min = _props2.min,
+	        max = _props2.max;
+	
+	    var ratio = (value - min) / (max - min);
+	    return ratio * 100;
+	  };
+	
+	  Slider.prototype.calcValue = function calcValue(offset) {
+	    var _props3 = this.props,
+	        vertical = _props3.vertical,
+	        min = _props3.min,
+	        max = _props3.max;
+	
+	    var ratio = Math.abs(offset / this.getSliderLength());
+	    var value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
+	    return value;
+	  };
+	
+	  Slider.prototype.calcValueByPos = function calcValueByPos(position) {
+	    var pixelOffset = position - this.getSliderStart();
+	    var nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
+	    return nextValue;
+	  };
+	
+	  Slider.prototype.end = function end(type) {
+	    this.removeEvents(type);
+	    this.props.onAfterChange(this.getValue());
+	    this.setState({ handle: null });
+	  };
+	
 	  Slider.prototype.isEventFromHandle = function isEventFromHandle(e) {
 	    var _this3 = this;
 	
@@ -21447,17 +21490,89 @@
 	    return value < props.min || value > props.max;
 	  };
 	
+	  Slider.prototype.pushHandle = function pushHandle(bounds, handle, direction, amount) {
+	    var originalValue = bounds[handle];
+	    var currentValue = bounds[handle];
+	    while (direction * (currentValue - originalValue) < amount) {
+	      if (!this.pushHandleOnePoint(bounds, handle, direction)) {
+	        // can't push handle enough to create the needed `amount` gap, so we
+	        // revert its position to the original value
+	        bounds[handle] = originalValue;
+	        return false;
+	      }
+	      currentValue = bounds[handle];
+	    }
+	    // the handle was pushed enough to create the needed `amount` gap
+	    return true;
+	  };
+	
+	  Slider.prototype.pushHandleOnePoint = function pushHandleOnePoint(bounds, handle, direction) {
+	    var points = this.getPoints();
+	    var pointIndex = points.indexOf(bounds[handle]);
+	    var nextPointIndex = pointIndex + direction;
+	    if (nextPointIndex >= points.length || nextPointIndex < 0) {
+	      // reached the minimum or maximum available point, can't push anymore
+	      return false;
+	    }
+	    var nextHandle = handle + direction;
+	    var nextValue = points[nextPointIndex];
+	    var threshold = this.props.pushable;
+	
+	    var diffToNext = direction * (bounds[nextHandle] - nextValue);
+	    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
+	      // couldn't push next handle, so we won't push this one either
+	      return false;
+	    }
+	    // push the handle
+	    bounds[handle] = nextValue;
+	    return true;
+	  };
+	
+	  Slider.prototype.pushSurroundingHandles = function pushSurroundingHandles(bounds, handle, originalValue) {
+	    var threshold = this.props.pushable;
+	
+	    var value = bounds[handle];
+	
+	    var direction = 0;
+	    if (bounds[handle + 1] - value < threshold) {
+	      direction = +1;
+	    } else if (value - bounds[handle - 1] < threshold) {
+	      direction = -1;
+	    }
+	
+	    if (direction === 0) {
+	      return;
+	    }
+	
+	    var nextHandle = handle + direction;
+	    var diffToNext = direction * (bounds[nextHandle] - value);
+	    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
+	      // revert to original value if pushing is impossible
+	      bounds[handle] = originalValue;
+	    }
+	  };
+	
+	  Slider.prototype.removeEvents = function removeEvents(type) {
+	    if (type === 'touch') {
+	      this.onTouchMoveListener.remove();
+	      this.onTouchUpListener.remove();
+	    } else if (type === 'mouse') {
+	      this.onMouseMoveListener.remove();
+	      this.onMouseUpListener.remove();
+	    }
+	  };
+	
 	  Slider.prototype.trimAlignValue = function trimAlignValue(v, nextProps) {
 	    var state = this.state || {};
 	    var handle = state.handle,
 	        bounds = state.bounds;
 	
-	    var _props2 = (0, _extends3.default)({}, this.props, nextProps || {}),
-	        marks = _props2.marks,
-	        step = _props2.step,
-	        min = _props2.min,
-	        max = _props2.max,
-	        allowCross = _props2.allowCross;
+	    var _props4 = (0, _extends3.default)({}, this.props, nextProps || {}),
+	        marks = _props4.marks,
+	        step = _props4.step,
+	        min = _props4.min,
+	        max = _props4.max,
+	        allowCross = _props4.allowCross;
 	
 	    var val = v;
 	    if (val <= min) {
@@ -21487,121 +21602,6 @@
 	    var closestPoint = points[diffs.indexOf(Math.min.apply(Math, diffs))];
 	
 	    return step !== null ? parseFloat(closestPoint.toFixed(this.getPrecision(step))) : closestPoint;
-	  };
-	
-	  Slider.prototype.pushHandleOnePoint = function pushHandleOnePoint(bounds, handle, direction) {
-	    var points = this.getPoints();
-	    var pointIndex = points.indexOf(bounds[handle]);
-	    var nextPointIndex = pointIndex + direction;
-	    if (nextPointIndex >= points.length || nextPointIndex < 0) {
-	      // reached the minimum or maximum available point, can't push anymore
-	      return false;
-	    }
-	    var nextHandle = handle + direction;
-	    var nextValue = points[nextPointIndex];
-	    var threshold = this.props.pushable;
-	
-	    var diffToNext = direction * (bounds[nextHandle] - nextValue);
-	    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
-	      // couldn't push next handle, so we won't push this one either
-	      return false;
-	    }
-	    // push the handle
-	    bounds[handle] = nextValue;
-	    return true;
-	  };
-	
-	  Slider.prototype.pushHandle = function pushHandle(bounds, handle, direction, amount) {
-	    var originalValue = bounds[handle];
-	    var currentValue = bounds[handle];
-	    while (direction * (currentValue - originalValue) < amount) {
-	      if (!this.pushHandleOnePoint(bounds, handle, direction)) {
-	        // can't push handle enough to create the needed `amount` gap, so we
-	        // revert its position to the original value
-	        bounds[handle] = originalValue;
-	        return false;
-	      }
-	      currentValue = bounds[handle];
-	    }
-	    // the handle was pushed enough to create the needed `amount` gap
-	    return true;
-	  };
-	
-	  Slider.prototype.pushSurroundingHandles = function pushSurroundingHandles(bounds, handle, originalValue) {
-	    var threshold = this.props.pushable;
-	
-	    var value = bounds[handle];
-	
-	    var direction = 0;
-	    if (bounds[handle + 1] - value < threshold) {
-	      direction = +1;
-	    } else if (value - bounds[handle - 1] < threshold) {
-	      direction = -1;
-	    }
-	
-	    if (direction === 0) {
-	      return;
-	    }
-	
-	    var nextHandle = handle + direction;
-	    var diffToNext = direction * (bounds[nextHandle] - value);
-	    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
-	      // revert to original value if pushing is impossible
-	      bounds[handle] = originalValue;
-	    }
-	  };
-	
-	  Slider.prototype.calcOffset = function calcOffset(value) {
-	    var _props3 = this.props,
-	        min = _props3.min,
-	        max = _props3.max;
-	
-	    var ratio = (value - min) / (max - min);
-	    return ratio * 100;
-	  };
-	
-	  Slider.prototype.calcValue = function calcValue(offset) {
-	    var _props4 = this.props,
-	        vertical = _props4.vertical,
-	        min = _props4.min,
-	        max = _props4.max;
-	
-	    var ratio = Math.abs(offset / this.getSliderLength());
-	    var value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
-	    return value;
-	  };
-	
-	  Slider.prototype.calcValueByPos = function calcValueByPos(position) {
-	    var pixelOffset = position - this.getSliderStart();
-	    var nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
-	    return nextValue;
-	  };
-	
-	  Slider.prototype.addDocumentEvents = function addDocumentEvents(type) {
-	    if (type === 'touch') {
-	      // just work for chrome iOS Safari and Android Browser
-	      this.onTouchMoveListener = (0, _addEventListener2.default)(document, 'touchmove', this.onTouchMove.bind(this));
-	      this.onTouchUpListener = (0, _addEventListener2.default)(document, 'touchend', this.end.bind(this, 'touch'));
-	    } else if (type === 'mouse') {
-	      this.onMouseMoveListener = (0, _addEventListener2.default)(document, 'mousemove', this.onMouseMove.bind(this));
-	      this.onMouseUpListener = (0, _addEventListener2.default)(document, 'mouseup', this.end.bind(this, 'mouse'));
-	    }
-	  };
-	
-	  Slider.prototype.removeEvents = function removeEvents(type) {
-	    if (type === 'touch') {
-	      this.onTouchMoveListener.remove();
-	      this.onTouchUpListener.remove();
-	    } else if (type === 'mouse') {
-	      this.onMouseMoveListener.remove();
-	      this.onMouseUpListener.remove();
-	    }
-	  };
-	
-	  Slider.prototype.end = function end(type) {
-	    this.removeEvents(type);
-	    this.props.onAfterChange(this.getValue());
-	    this.setState({ handle: null });
 	  };
 	
 	  Slider.prototype.render = function render() {
@@ -21660,6 +21660,7 @@
 	        value: v,
 	        offset: offsets[i],
 	        dragging: handle === i,
+	        index: i,
 	        key: i,
 	        ref: 'handle-' + i
 	      }));
@@ -24088,15 +24089,15 @@
 	    return _this;
 	  }
 	
-	  Handle.prototype.showTooltip = function showTooltip() {
-	    this.setState({
-	      isTooltipVisible: true
-	    });
-	  };
-	
 	  Handle.prototype.hideTooltip = function hideTooltip() {
 	    this.setState({
 	      isTooltipVisible: false
+	    });
+	  };
+	
+	  Handle.prototype.showTooltip = function showTooltip() {
+	    this.setState({
+	      isTooltipVisible: true
 	    });
 	  };
 	
@@ -24111,7 +24112,8 @@
 	        offset = _props.offset,
 	        value = _props.value,
 	        dragging = _props.dragging,
-	        noTip = _props.noTip;
+	        noTip = _props.noTip,
+	        index = _props.index;
 	
 	
 	    var style = vertical ? { bottom: offset + '%' } : { left: offset + '%' };
@@ -24135,7 +24137,7 @@
 	        overlay: _react2.default.createElement(
 	          'span',
 	          null,
-	          tipFormatter(value)
+	          tipFormatter(value, index)
 	        ),
 	        delay: 0,
 	        transitionName: tipTransitionName
@@ -24160,7 +24162,8 @@
 	  tipFormatter: _react2.default.PropTypes.func,
 	  value: _react2.default.PropTypes.number,
 	  dragging: _react2.default.PropTypes.bool,
-	  noTip: _react2.default.PropTypes.bool
+	  noTip: _react2.default.PropTypes.bool,
+	  index: _react2.default.PropTypes.number
 	};
 	module.exports = exports['default'];
 
