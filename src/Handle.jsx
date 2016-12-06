@@ -34,6 +34,7 @@ export default class Handle extends React.Component {
       value,
       dragging,
       noTip,
+      index,
     } = this.props;
 
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
@@ -55,7 +56,7 @@ export default class Handle extends React.Component {
         prefixCls={tooltipPrefixCls || `${prefixCls}-tooltip`}
         placement="top"
         visible={isTooltipVisible}
-        overlay={<span>{tipFormatter(value)}</span>}
+        overlay={<span>{tipFormatter(value, index)}</span>}
         delay={0}
         transitionName={tipTransitionName}
       >
@@ -76,4 +77,5 @@ Handle.propTypes = {
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,
   noTip: React.PropTypes.bool,
+  index: React.PropTypes.number,
 };

@@ -168,7 +168,7 @@ ReactDOM.render(<Slider />, container);
           <td>tipFormatter</td>
           <td>function or `null`</td>
           <td></td>
-          <td>Format the value of the tooltip if it shows. If `null` the tooltip will always be hidden.</td>
+          <td>Format the value of the tooltip if it shows. If `null` the tooltip will always be hidden. When given a function, the first argument will be the value and the second will be the index of the slider handle.</td>
         </tr>
         <tr>
           <td>dots</td>

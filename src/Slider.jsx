@@ -486,6 +486,7 @@ class Slider extends React.Component {
       value: v,
       offset: offsets[i],
       dragging: handle === i,
+      index: i,
       key: i,
       ref: `handle-${i}`,
     }));
