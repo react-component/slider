@@ -127,13 +127,6 @@ class Slider extends React.Component {
     const nextBounds = [...state.bounds];
     nextBounds[state.handle] = value;
     let nextHandle = state.handle;
-    if (props.pushable !== false) {
-      const originalValue = state.bounds[nextHandle];
-      this.pushSurroundingHandles(nextBounds, nextHandle, originalValue);
-    } else if (props.allowCross) {
-      nextBounds.sort((a, b) => a - b);
-      nextHandle = nextBounds.indexOf(value);
-    }
     this.onChange({
       handle: nextHandle,
       bounds: nextBounds,
@@ -294,64 +287,6 @@ class Slider extends React.Component {
     return value < props.min || value > props.max;
   }
 
-  pushHandle(bounds, handle, direction, amount) {
-    const originalValue = bounds[handle];
-    let currentValue = bounds[handle];
-    while (direction * (currentValue - originalValue) < amount) {
-      if (!this.pushHandleOnePoint(bounds, handle, direction)) {
-        // can't push handle enough to create the needed `amount` gap, so we
-        // revert its position to the original value
-        bounds[handle] = originalValue;
-        return false;
-      }
-      currentValue = bounds[handle];
-    }
-    // the handle was pushed enough to create the needed `amount` gap
-    return true;
-  }
-
-  pushHandleOnePoint(bounds, handle, direction) {
-    const points = this.getPoints();
-    const pointIndex = points.indexOf(bounds[handle]);
-    const nextPointIndex = pointIndex + direction;
-    if (nextPointIndex >= points.length || nextPointIndex < 0) {
-      // reached the minimum or maximum available point, can't push anymore
-      return false;
-    }
-    const nextHandle = handle + direction;
-    const nextValue = points[nextPointIndex];
-    const { pushable: threshold } = this.props;
-    const diffToNext = direction * (bounds[nextHandle] - nextValue);
-    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
-      // couldn't push next handle, so we won't push this one either
-      return false;
-    }
-    // push the handle
-    bounds[handle] = nextValue;
-    return true;
-  }
-
-  pushSurroundingHandles(bounds, handle, originalValue) {
-    const { pushable: threshold } = this.props;
-    const value = bounds[handle];
-
-    let direction = 0;
-    if (bounds[handle + 1] - value < threshold) {
-      direction = +1;
-    } else if (value - bounds[handle - 1] < threshold) {
-      direction = -1;
-    }
-
-    if (direction === 0) { return; }
-
-    const nextHandle = handle + direction;
-    const diffToNext = direction * (bounds[nextHandle] - value);
-    if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
-      // revert to original value if pushing is impossible
-      bounds[handle] = originalValue;
-    }
-  }
-
   removeEvents(type) {
     if (type === 'touch') {
       this.onTouchMoveListener.remove();
@@ -365,7 +300,7 @@ class Slider extends React.Component {
   trimAlignValue(v, nextProps) {
     const state = this.state || {};
     const { handle, bounds } = state;
-    const { marks, step, min, max, allowCross } = { ...this.props, ...(nextProps || {}) };
+    const { marks, step, min, max } = { ...this.props, ...(nextProps || {}) };
 
     let val = v;
     if (val <= min) {
@@ -375,10 +310,10 @@ class Slider extends React.Component {
       val = max;
     }
     /* eslint-disable eqeqeq */
-    if (!allowCross && handle != null && handle > 0 && val <= bounds[handle - 1]) {
+    if (handle != null && handle > 0 && val <= bounds[handle - 1]) {
       val = bounds[handle - 1];
     }
-    if (!allowCross && handle != null && handle < bounds.length - 1 && val >= bounds[handle + 1]) {
+    if (handle != null && handle < bounds.length - 1 && val >= bounds[handle + 1]) {
       val = bounds[handle + 1];
     }
     /* eslint-enable eqeqeq */
@@ -520,11 +455,6 @@ Slider.propTypes = {
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
-  allowCross: React.PropTypes.bool,
-  pushable: React.PropTypes.oneOfType([
-    React.PropTypes.bool,
-    React.PropTypes.number,
-  ]),
 };
 
 Slider.defaultProps = {
@@ -543,8 +473,6 @@ Slider.defaultProps = {
   included: true,
   disabled: false,
   dots: false,
-  allowCross: true,
-  pushable: false,
 };
 
 export default Slider;
