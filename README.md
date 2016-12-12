@@ -105,30 +105,6 @@ ReactDOM.render(<Slider />, container);
           <td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. max - min should be evenly divisible by the step value. When `marks` is not an empty object, `step` can be set to `null`, to make marks as steps.</td>
         </tr>
         <tr>
-          <td>range</td>
-          <td>boolean or number</td>
-          <td>false</td>
-          <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using `range={true}` is equivalent to `range={1}`.</td>
-        </tr>
-        <tr>
-          <td>allowCross</td>
-          <td>boolean</td>
-          <td>true</td>
-          <td>When `range` is `true`, `allowCross` could be set as `true` to allow those handles to cross.</td>
-        </tr>
-        <tr>
-          <td>pushable</td>
-          <td>boolean or number</td>
-          <td>true</td>
-          <td>When `range` is `true`, `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: <img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/></td>
-        </tr>
-        <tr>
-          <td>vertical</td>
-          <td>boolean</td>
-          <td>false</td>
-          <td>If vertical is `true`, the slider will be vertical.</td>
-        </tr>
-        <tr>
           <td>defaultValue</td>
           <td>number or [number, number, ...]</td>
           <td>0 or [0, 0]</td>
