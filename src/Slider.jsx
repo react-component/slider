@@ -433,14 +433,8 @@ Slider.propTypes = {
   min: React.PropTypes.number,
   max: React.PropTypes.number,
   step: React.PropTypes.number,
-  defaultValue: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.arrayOf(React.PropTypes.number),
-  ]),
-  value: React.PropTypes.oneOfType([
-    React.PropTypes.number,
-    React.PropTypes.arrayOf(React.PropTypes.number),
-  ]),
+  defaultValue: React.PropTypes.number,
+  value: React.PropTypes.number,
   marks: React.PropTypes.object,
   included: React.PropTypes.bool,
   className: React.PropTypes.string,
