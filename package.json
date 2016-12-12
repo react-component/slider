@@ -1,5 +1,5 @@
 {
-  "name": "rc-slider",
+  "name": "react-flex-slider",
   "version": "5.4.0",
   "description": "slider ui component for react",
   "keywords": [
@@ -8,21 +8,21 @@
     "react-slider",
     "slider"
   ],
-  "homepage": "http://github.com/react-component/slider",
+  "homepage": "http://github.com/kinghenne/react-flex-slider",
   "author": "sima.zhang1990@gmail.com",
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/slider.git"
+    "url": "git@github.com:kinghenne/react-flex-slider.git"
   },
   "bugs": {
-    "url": "http://github.com/react-component/slider/issues"
+    "url": "http://github.com/kinghenne/react-flex-slider/issues"
   },
   "files": [
     "assets/*.css",
     "lib",
     "dist"
   ],
-  "licenses": "MIT",
+  "license": "MIT",
   "main": "./lib/index.js",
   "entry": {
     "rc-slider": ["./assets/index.less", "./src/index.js"]
@@ -41,7 +41,8 @@
     "saucelabs": "rc-tools run saucelabs",
     "test": "rc-tools run test",
     "chrome-test": "rc-tools run chrome-test",
-    "coverage": "rc-tools run coverage"
+    "coverage": "rc-tools run coverage",
+    "watch": "rc-tools run watch"
   },
   "devDependencies": {
     "expect.js": "0.3.x",

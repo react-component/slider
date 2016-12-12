@@ -1,8 +1,8 @@
-require('rc-slider/assets/index.less');
+require('react-flex-slider/assets/index.less');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
-const Slider = require('rc-slider');
+const Slider = require('react-flex-slider');
 
 const style = { float: 'left', width: 160, height: 400, marginBottom: 160, marginLeft: 50 };
 const parentStyle = { overflow: 'hidden' };
