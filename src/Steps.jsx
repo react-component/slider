@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import warning from 'warning';
 
-function calcPoints(vertical, marks, dots, step, min, max) {
+function calcPoints(marks, dots, step, min, max) {
   warning(
     dots ? step > 0 : true,
     '`Slider[step]` should be a positive number in order to make Slider[dots] work.'
@@ -17,12 +17,12 @@ function calcPoints(vertical, marks, dots, step, min, max) {
   return points;
 }
 
-const Steps = ({ prefixCls, vertical, marks, dots, step, included,
+const Steps = ({ prefixCls, marks, dots, step, included,
                 lowerBound, upperBound, max, min }) => {
   const range = max - min;
-  const elements = calcPoints(vertical, marks, dots, step, min, max).map((point) => {
+  const elements = calcPoints(marks, dots, step, min, max).map((point) => {
     const offset = `${Math.abs(point - min) / range * 100}%`;
-    const style = vertical ? { bottom: offset } : { left: offset };
+    const style = { left: offset };
 
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);

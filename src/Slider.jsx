@@ -15,19 +15,17 @@ function isNotTouchEvent(e) {
   return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
 }
 
-function getTouchPosition(vertical, e) {
-  return vertical ? e.touches[0].clientY : e.touches[0].pageX;
+function getTouchPosition(e) {
+  return e.touches[0].pageX;
 }
 
-function getMousePosition(vertical, e) {
-  return vertical ? e.clientY : e.pageX;
+function getMousePosition(e) {
+  return e.pageX;
 }
 
-function getHandleCenterPosition(vertical, handle) {
+function getHandleCenterPosition(handle) {
   const coords = handle.getBoundingClientRect();
-  return vertical ?
-    coords.top + (coords.height * 0.5) :
-    coords.left + (coords.width * 0.5);
+  return coords.left + (coords.width * 0.5);
 }
 
 function pauseEvent(e) {
@@ -113,11 +111,11 @@ class Slider extends React.Component {
   onMouseDown(e) {
     if (e.button !== 0) { return; }
 
-    let position = getMousePosition(this.props.vertical, e);
+    let position = getMousePosition(e);
     if (!this.isEventFromHandle(e)) {
       this.dragOffset = 0;
     } else {
-      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+      const handlePosition = getHandleCenterPosition(e.target);
       this.dragOffset = position - handlePosition;
       position = handlePosition;
     }
@@ -127,7 +125,7 @@ class Slider extends React.Component {
   }
 
   onMouseMove(e) {
-    const position = getMousePosition(this.props.vertical, e);
+    const position = getMousePosition(e);
     this.onMove(e, position - this.dragOffset);
   }
 
@@ -137,7 +135,6 @@ class Slider extends React.Component {
     const state = this.state;
 
     let diffPosition = position - this.startPosition;
-    diffPosition = this.props.vertical ? -diffPosition : diffPosition;
     const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 
     const value = this.trimAlignValue(this.startValue + diffValue);
@@ -211,18 +208,18 @@ class Slider extends React.Component {
       return;
     }
 
-    const position = getTouchPosition(this.props.vertical, e);
+    const position = getTouchPosition(e);
     this.onMove(e, position - this.dragOffset);
   }
 
   onTouchStart(e) {
     if (isNotTouchEvent(e)) return;
 
-    let position = getTouchPosition(this.props.vertical, e);
+    let position = getTouchPosition(e);
     if (!this.isEventFromHandle(e)) {
       this.dragOffset = 0;
     } else {
-      const handlePosition = getHandleCenterPosition(this.props.vertical, e.target);
+      const handlePosition = getHandleCenterPosition(e.target);
       this.dragOffset = position - handlePosition;
       position = handlePosition;
     }
@@ -267,14 +264,14 @@ class Slider extends React.Component {
       return 0;
     }
 
-    return this.props.vertical ? slider.clientHeight : slider.clientWidth;
+    return slider.clientWidth;
   }
 
   getSliderStart() {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
 
-    return this.props.vertical ? rect.top : rect.left;
+    return rect.left;
   }
 
   getValue() {
@@ -304,9 +301,9 @@ class Slider extends React.Component {
   }
 
   calcValue(offset) {
-    const { vertical, min, max } = this.props;
+    const { min, max } = this.props;
     const ratio = Math.abs(offset / this.getSliderLength());
-    const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
+    const value = ratio * (max - min) + min;
     return value;
   }
 
@@ -444,7 +441,6 @@ class Slider extends React.Component {
         prefixCls,
         tooltipPrefixCls,
         disabled,
-        vertical,
         dots,
         included,
         range,
@@ -477,7 +473,6 @@ class Slider extends React.Component {
       noTip: isNoTip,
       tipTransitionName,
       tipFormatter,
-      vertical,
     };
 
     const handles = bounds.map((v, i) => cloneElement(customHandle, {
@@ -501,7 +496,7 @@ class Slider extends React.Component {
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-        <Track className={trackClassName} vertical={vertical} included={isIncluded}
+        <Track className={trackClassName} included={isIncluded}
           offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
         />
       );
@@ -511,7 +506,6 @@ class Slider extends React.Component {
       [prefixCls]: true,
       [`${prefixCls}-with-marks`]: Object.keys(marks).length,
       [`${prefixCls}-disabled`]: disabled,
-      [`${prefixCls}-vertical`]: this.props.vertical,
       [className]: !!className,
     });
 
@@ -522,12 +516,12 @@ class Slider extends React.Component {
       >
         <div className={`${prefixCls}-rail`} />
         {tracks}
-        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
+        <Steps prefixCls={prefixCls} marks={marks} dots={dots} step={step}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
         {handles}
-        <Marks className={`${prefixCls}-mark`} vertical = {vertical} marks={marks}
+        <Marks className={`${prefixCls}-mark`} marks={marks}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
@@ -567,7 +561,6 @@ Slider.propTypes = {
     React.PropTypes.bool,
     React.PropTypes.number,
   ]),
-  vertical: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
   pushable: React.PropTypes.oneOfType([
     React.PropTypes.bool,
@@ -592,7 +585,6 @@ Slider.defaultProps = {
   disabled: false,
   dots: false,
   range: false,
-  vertical: false,
   allowCross: true,
   pushable: false,
 };
