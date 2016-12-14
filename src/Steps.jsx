@@ -31,7 +31,7 @@ const Steps = ({ prefixCls, marks, dots, step, included,
       [`${prefixCls}-dot-active`]: isActived,
     });
 
-    return <span className={pointClassName} style={style} key={point} />;
+    return <span className={`${prefixCls}-dot-wrapper`}><span className={pointClassName} key={point} /></span>;
   });
 
   return <div className={`${prefixCls}-step`}>{elements}</div>;

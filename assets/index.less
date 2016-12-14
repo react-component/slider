@@ -99,27 +99,32 @@
   &-step {
     position: absolute;
     width: 100%;
-    height: 4px;
     background: transparent;
+
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-dot-wrapper {
+    display:inline-block;
+
+    &:first-child {
+      transform: translateX(-50%);
+    }
+    &:last-child {
+      transform: translateX(50%);
+    }
   }
 
   &-dot {
-    position: absolute;
-    bottom: -2px;
-    margin-left: -4px;
+    display:inline-block;
     width: 8px;
     height: 8px;
     border: 2px solid #e9e9e9;
     background-color: #fff;
     cursor: pointer;
     border-radius: 50%;
-    vertical-align: middle;
-    &:first-child {
-      margin-left: -4px;
-    }
-    &:last-child {
-      margin-left: -4px;
-    }
+
     &-active {
       border-color: tint(@primary-color, 50%);
     }
