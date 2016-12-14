@@ -72,11 +72,13 @@
     left: 0;
     width: 100%;
     font-size: 12px;
+
+    display: flex;
+    justify-content: space-between;
   }
 
   &-mark-text {
-    position: absolute;
-    display: inline-block;
+    flex: 1;
     vertical-align: middle;
     text-align: center;
     cursor: pointer;
@@ -84,6 +86,13 @@
 
     &-active {
       color: #666;
+    }
+
+    &:first-child {
+      transform: translateX(-50%);
+    }
+    &:last-child {
+      transform: translateX(50%);
     }
   }
 

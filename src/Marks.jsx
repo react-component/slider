@@ -28,7 +28,7 @@ const Marks = ({ className, marks, included, upperBound, lowerBound, max, min })
     const markLabel = markPointIsObject ? markPoint.label : markPoint;
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
-    return (<span className={markClassName} style={markStyle} key={point}>
+    return (<span className={markClassName} key={point}>
              {markLabel}
             </span>);
   });
