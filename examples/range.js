@@ -96,6 +96,10 @@ ReactDOM.render(
       <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
+      <p>Basic Range with reverse, `allowCross=false`</p>
+      <Slider reverse range allowCross={false} defaultValue={[0, 20]} onChange={log} />
+    </div>
+    <div style={style}>
       <p>Basic Range，`step=20` </p>
       <Slider range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
     </div>

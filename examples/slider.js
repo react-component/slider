@@ -84,6 +84,19 @@ ReactDOM.render(
       <Slider tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
     </div>
     <div style={style}>
+      <p>Basic reverse Slider</p>
+      <Slider reverse tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
+    </div>
+    <div style={style}>
+      <p>Basic reverse Slider with default value 30</p>
+      <Slider
+        reverse
+        tipTransitionName="rc-slider-tooltip-zoom-down"
+        defaultValue={30}
+        onChange={log}
+      />
+    </div>
+    <div style={style}>
       <p>Basic Slider，`step=20`</p>
       <Slider step={20} defaultValue={50} onBeforeChange={log} />
     </div>

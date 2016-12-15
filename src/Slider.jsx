@@ -137,7 +137,16 @@ class Slider extends React.Component {
     const state = this.state;
 
     let diffPosition = position - this.startPosition;
-    diffPosition = this.props.vertical ? -diffPosition : diffPosition;
+    if (this.props.vertical) {
+      if (!this.props.reverse) {
+        diffPosition = -diffPosition;
+      }
+    } else {
+      if (this.props.reverse) {
+        diffPosition = -diffPosition;
+      }
+    }
+
     const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
 
     const value = this.trimAlignValue(this.startValue + diffValue);
@@ -273,8 +282,19 @@ class Slider extends React.Component {
   getSliderStart() {
     const slider = this.refs.slider;
     const rect = slider.getBoundingClientRect();
-
-    return this.props.vertical ? rect.top : rect.left;
+    let start = rect.left;
+    if (this.props.vertical) {
+      if (this.props.reverse) {
+        start = rect.bottom;
+      } else {
+        start = rect.top;
+      }
+    } else {
+      if (this.props.reverse) {
+        start = rect.right;
+      }
+    }
+    return start;
   }
 
   getValue() {
@@ -445,6 +465,7 @@ class Slider extends React.Component {
         tooltipPrefixCls,
         disabled,
         vertical,
+        reverse,
         dots,
         included,
         range,
@@ -478,6 +499,7 @@ class Slider extends React.Component {
       tipTransitionName,
       tipFormatter,
       vertical,
+      reverse,
     };
 
     const handles = bounds.map((v, i) => cloneElement(customHandle, {
@@ -501,8 +523,8 @@ class Slider extends React.Component {
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-        <Track className={trackClassName} vertical={vertical} included={isIncluded}
-          offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
+        <Track className={trackClassName} vertical={vertical} reverse={reverse}
+          included={isIncluded} offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
         />
       );
     }
@@ -522,13 +544,14 @@ class Slider extends React.Component {
       >
         <div className={`${prefixCls}-rail`} />
         {tracks}
-        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
+        <Steps prefixCls={prefixCls} vertical={vertical} reverse={reverse}
+          marks={marks} dots={dots} step={step}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
         {handles}
-        <Marks className={`${prefixCls}-mark`} vertical = {vertical} marks={marks}
-          included={isIncluded} lowerBound={bounds[0]}
+        <Marks className={`${prefixCls}-mark`} vertical={vertical} reverse={reverse}
+          marks={marks} included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
         {children}
@@ -568,6 +591,7 @@ Slider.propTypes = {
     React.PropTypes.number,
   ]),
   vertical: React.PropTypes.bool,
+  reverse: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
   pushable: React.PropTypes.oneOfType([
     React.PropTypes.bool,
@@ -593,6 +617,7 @@ Slider.defaultProps = {
   dots: false,
   range: false,
   vertical: false,
+  reverse: false,
   allowCross: true,
   pushable: false,
 };

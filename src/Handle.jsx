@@ -30,6 +30,7 @@ export default class Handle extends React.Component {
       tipTransitionName,
       tipFormatter,
       vertical,
+      reverse,
       offset,
       value,
       dragging,
@@ -37,7 +38,18 @@ export default class Handle extends React.Component {
       index,
     } = this.props;
 
-    const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
+    let style = { left: `${offset}%` };
+    if (vertical) {
+      style = { bottom: `${offset}%` };
+      if (reverse) {
+        style = { top: `${offset}%` };
+      }
+    } else {
+      if (reverse) {
+        style = { right: `${offset}%` };
+      }
+    }
+
     const handle = (
       <div className={className} style={style}
         onMouseUp={this.showTooltip.bind(this)}
@@ -71,6 +83,7 @@ Handle.propTypes = {
   tooltipPrefixCls: React.PropTypes.string,
   className: React.PropTypes.string,
   vertical: React.PropTypes.bool,
+  reverse: React.PropTypes.bool,
   offset: React.PropTypes.number,
   tipTransitionName: React.PropTypes.string,
   tipFormatter: React.PropTypes.func,
