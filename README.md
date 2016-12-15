@@ -163,6 +163,12 @@ ReactDOM.render(<Slider />, container);
           <td>Set the animation for tooltip if it shows.</td>
         </tr>
         <tr>
+          <td>tipAlwaysVisible</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>If set to `true`, the tooltip will be always visible.</td>
+        </tr>
+        <tr>
           <td>tipFormatter</td>
           <td>function or `null`</td>
           <td></td>
