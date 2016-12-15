@@ -8,11 +8,11 @@ const style = { width: 400, margin: 50 };
 const marks = {
   0: 0,
   50: 50,
-  100: 100 
+  100: 100,
 };
 
 function log(value) {
-  console.log(value);
+  console.log(value); // eslint-disable-line no-console
 }
 
 ReactDOM.render(

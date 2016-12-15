@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+/* eslint-env mocha */
 const expect = require('expect.js');
 const React = require('react');
 const ReactDOM = require('react-dom');

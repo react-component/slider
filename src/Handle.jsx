@@ -7,13 +7,9 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls,
       className,
       vertical,
       offset,
-      value,
-      dragging,
-      index,
     } = this.props;
 
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };

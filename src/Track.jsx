@@ -4,7 +4,7 @@ const Track = ({ className, included, offset, length }) => {
   const style = {
     visibility: included ? 'visible' : 'hidden',
     left: `${offset}%`,
-    width:`${length}%`,
+    width: `${length}%`,
   };
   return <div className={className} style={style} />;
 };

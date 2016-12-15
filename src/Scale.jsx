@@ -19,11 +19,7 @@ function calcPoints(marks, dots, step, min, max) {
 
 const Scale = ({ prefixCls, marks, dots, step, included,
                 tracks, lowerBound, upperBound, max, min }) => {
-  const range = max - min;
   const elements = calcPoints(marks, dots, step, min, max).map((point) => {
-    const offset = `${Math.abs(point - min) / range * 100}%`;
-    const style = { left: offset };
-
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
     const pointClassName = classNames({
@@ -31,7 +27,11 @@ const Scale = ({ prefixCls, marks, dots, step, included,
       [`${prefixCls}-dot-active`]: isActived,
     });
 
-    return <span className={`${prefixCls}-dot-wrapper`} key={point}><span className={pointClassName} /></span>;
+    return (
+      <span className={`${prefixCls}-dot-wrapper`} key={point}>
+        <span className={pointClassName} />
+      </span>
+    );
   });
 
   return (

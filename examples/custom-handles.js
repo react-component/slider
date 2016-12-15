@@ -18,19 +18,20 @@ const handleStyle = {
   textAlign: 'center',
 };
 
-const CustomHandle = React.createClass({
-  propTypes: {
-    value: React.PropTypes.any,
-    offset: React.PropTypes.number,
-  },
+class CustomHandle extends React.Component {
   render() {
     const props = this.props;
     const style = Object.assign({ left: `${props.offset}%` }, handleStyle);
     return (
         <div style={style}>val: {props.value}</div>
     );
-  },
-});
+  }
+}
+
+CustomHandle.propTypes = {
+  value: React.PropTypes.any,
+  offset: React.PropTypes.number,
+};
 
 ReactDOM.render(
   <div>
