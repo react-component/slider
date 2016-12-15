@@ -74,6 +74,17 @@ describe('rc-slider', function test() {
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-track').length).to.be(1);
   });
 
+  it('should render a prefix track when `prefixTrack=true`', () => {
+    const range = ReactDOM.render(<Slider range prefixTrack />, div);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider').length).to.be(1);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-handle').length).to.be(2);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-track').length).to.be(2);
+
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-track-prefix').length).to.be(1);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-track-0').length).to.be(1);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(range, 'rc-slider-track-1').length).to.be(1);
+  });
+
   it('should render a Multi-Range with correct DOM structure', () => {
     const multiRange = ReactDOM.render(<Slider range={3} />, div);
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(multiRange, 'rc-slider').length).to.be(1);

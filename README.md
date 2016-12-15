@@ -109,6 +109,12 @@ ReactDOM.render(<Slider />, container);
           <td>Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using `range={true}` is equivalent to `range={1}`.</td>
         </tr>
         <tr>
+          <td>prefixTrack</td>
+          <td>boolean</td>
+          <td>false</td>
+          <td>When `range` is `true`, `prefixTrack` could be set as `true` to add an additional track from the slider's start to the first handle.</td>
+        </tr>
+        <tr>
           <td>allowCross</td>
           <td>boolean</td>
           <td>true</td>

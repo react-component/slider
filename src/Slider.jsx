@@ -448,6 +448,7 @@ class Slider extends React.Component {
         dots,
         included,
         range,
+        prefixTrack,
         step,
         marks,
         max, min,
@@ -504,6 +505,19 @@ class Slider extends React.Component {
         <Track className={trackClassName} vertical={vertical} included={isIncluded}
           offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
         />
+      );
+    }
+
+    if (range && prefixTrack) {
+      const trackClassName = classNames({
+        [`${prefixCls}-track`]: true,
+        [`${prefixCls}-track-0`]: true,
+        [`${prefixCls}-track-prefix`]: true,
+      });
+      tracks.unshift(
+          <Track className={trackClassName} vertical={vertical} included={isIncluded}
+            offset={0} length={offsets[0]} key="prefix"
+          />
       );
     }
 
@@ -567,6 +581,7 @@ Slider.propTypes = {
     React.PropTypes.bool,
     React.PropTypes.number,
   ]),
+  prefixTrack: React.PropTypes.bool,
   vertical: React.PropTypes.bool,
   allowCross: React.PropTypes.bool,
   pushable: React.PropTypes.oneOfType([
@@ -592,6 +607,7 @@ Slider.defaultProps = {
   disabled: false,
   dots: false,
   range: false,
+  prefixTrack: false,
   vertical: false,
   allowCross: true,
   pushable: false,
