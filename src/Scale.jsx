@@ -17,7 +17,7 @@ function calcPoints(marks, dots, step, min, max) {
   return points;
 }
 
-const Scale = ({ prefixCls, marks, dots, step, included,
+const Scale = ({ prefixCls, marks, dots, step, included, handles,
                 tracks, lowerBound, upperBound, max, min }) => {
   const elements = calcPoints(marks, dots, step, min, max).map((point) => {
     const isActived = (!included && point === upperBound) ||
@@ -39,6 +39,7 @@ const Scale = ({ prefixCls, marks, dots, step, included,
       <div className={`${prefixCls}-rail`} />
       {tracks}
       {elements}
+      {handles}
     </div>);
 };
 

@@ -404,10 +404,9 @@ class Slider extends React.Component {
         onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
       >
         <Scale prefixCls={prefixCls} marks={marks} dots={dots} step={step}
-          included={isIncluded} tracks={tracks} lowerBound={bounds[0]}
+          included={isIncluded} handles={handles} tracks={tracks} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
-        {handles}
         <Marks className={`${prefixCls}-mark`} marks={marks}
           included={isIncluded} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
