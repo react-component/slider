@@ -28,6 +28,8 @@ export default class Handle extends React.Component {
       tooltipPrefixCls,
       className,
       tipTransitionName,
+      tipAlign,
+      tipContainer,
       tipFormatter,
       vertical,
       offset,
@@ -59,6 +61,8 @@ export default class Handle extends React.Component {
         overlay={<span>{tipFormatter(value, index)}</span>}
         delay={0}
         transitionName={tipTransitionName}
+        align={tipAlign}
+        getTooltipContainer={tipContainer}
       >
         {handle}
       </Tooltip>
@@ -73,6 +77,8 @@ Handle.propTypes = {
   vertical: React.PropTypes.bool,
   offset: React.PropTypes.number,
   tipTransitionName: React.PropTypes.string,
+  tipAlign: React.PropTypes.object,
+  tipContainer: React.PropTypes.func,
   tipFormatter: React.PropTypes.func,
   value: React.PropTypes.number,
   dragging: React.PropTypes.bool,

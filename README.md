@@ -169,6 +169,18 @@ ReactDOM.render(<Slider />, container);
           <td>Format the value of the tooltip if it shows. If `null` the tooltip will always be hidden. When given a function, the first argument will be the value and the second will be the index of the slider handle.</td>
         </tr>
         <tr>
+          <td>tipAlign</td>
+          <td>Object: alignConfig of [dom-align](https://github.com/yiminghe/dom-align)</td>
+          <td></td>
+          <td>Align the tooltip with the slider.</td>
+        </tr>
+        <tr>
+          <td>tipContainer</td>
+          <td>function</td>
+          <td></td>
+          <td>Function returning html node which will act as tooltip container</td>
+        </tr>
+        <tr>
           <td>dots</td>
           <td>bool</td>
           <td>false</td>
