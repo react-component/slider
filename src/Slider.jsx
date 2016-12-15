@@ -338,15 +338,12 @@ class Slider extends React.Component {
     const {
         className,
         prefixCls,
-        tooltipPrefixCls,
         disabled,
         dots,
         included,
         step,
         marks,
         max, min,
-        tipTransitionName,
-        tipFormatter,
         children,
     } = this.props;
 
@@ -363,14 +360,8 @@ class Slider extends React.Component {
       [`${handleClassName}-upper`]: i === bounds.length - 1,
     }));
 
-    const isNoTip = (step === null) || (tipFormatter === null);
-
     const commonHandleProps = {
-      prefixCls,
-      tooltipPrefixCls,
-      noTip: isNoTip,
-      tipTransitionName,
-      tipFormatter,
+      prefixCls
     };
 
     const handles = bounds.map((v, i) => cloneElement(customHandle, {
@@ -437,22 +428,18 @@ Slider.propTypes = {
   included: React.PropTypes.bool,
   className: React.PropTypes.string,
   prefixCls: React.PropTypes.string,
-  tooltipPrefixCls: React.PropTypes.string,
   disabled: React.PropTypes.bool,
   children: React.PropTypes.any,
   onBeforeChange: React.PropTypes.func,
   onChange: React.PropTypes.func,
   onAfterChange: React.PropTypes.func,
   handle: React.PropTypes.element,
-  tipTransitionName: React.PropTypes.string,
-  tipFormatter: React.PropTypes.func,
   dots: React.PropTypes.bool,
 };
 
 Slider.defaultProps = {
   prefixCls: 'rc-slider',
   className: '',
-  tipTransitionName: '',
   min: 0,
   max: 100,
   step: 1,
@@ -461,7 +448,6 @@ Slider.defaultProps = {
   onBeforeChange: noop,
   onChange: noop,
   onAfterChange: noop,
-  tipFormatter: value => value,
   included: true,
   disabled: false,
   dots: false,

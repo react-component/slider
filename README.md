@@ -135,18 +135,6 @@ ReactDOM.render(<Slider />, container);
           <td>If `true`, handles can't be moved.</td>
         </tr>
         <tr>
-          <td>tipTransitionName</td>
-          <td>string</td>
-          <td>''</td>
-          <td>Set the animation for tooltip if it shows.</td>
-        </tr>
-        <tr>
-          <td>tipFormatter</td>
-          <td>function or `null`</td>
-          <td></td>
-          <td>Format the value of the tooltip if it shows. If `null` the tooltip will always be hidden. When given a function, the first argument will be the value and the second will be the index of the slider handle.</td>
-        </tr>
-        <tr>
           <td>dots</td>
           <td>bool</td>
           <td>false</td>
