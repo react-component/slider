@@ -39,11 +39,9 @@ slider ui component for react
 
 ## Feature
 
-* support ie8,ie8+,chrome,firefox,safari
+* Supports IE9, IE9+, Chrome, Firefox, Safari
 
 ### Keyboard
-
-
 
 ## install
 
