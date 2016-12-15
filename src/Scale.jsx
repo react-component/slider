@@ -17,8 +17,8 @@ function calcPoints(marks, dots, step, min, max) {
   return points;
 }
 
-const Steps = ({ prefixCls, marks, dots, step, included,
-                lowerBound, upperBound, max, min }) => {
+const Scale = ({ prefixCls, marks, dots, step, included,
+                tracks, lowerBound, upperBound, max, min }) => {
   const range = max - min;
   const elements = calcPoints(marks, dots, step, min, max).map((point) => {
     const offset = `${Math.abs(point - min) / range * 100}%`;
@@ -31,10 +31,15 @@ const Steps = ({ prefixCls, marks, dots, step, included,
       [`${prefixCls}-dot-active`]: isActived,
     });
 
-    return <span className={`${prefixCls}-dot-wrapper`}><span className={pointClassName} key={point} /></span>;
+    return <span className={`${prefixCls}-dot-wrapper`} key={point}><span className={pointClassName} /></span>;
   });
 
-  return <div className={`${prefixCls}-step`}>{elements}</div>;
+  return (
+    <div className={`${prefixCls}-scale`}>
+      <div className={`${prefixCls}-rail`} />
+      {tracks}
+      {elements}
+    </div>);
 };
 
-export default Steps;
+export default Scale;

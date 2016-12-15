@@ -10,6 +10,7 @@
 @tooltip-arrow-color: @tooltip-bg;
 @ease-out-quint      : cubic-bezier(0.23, 1, 0.32, 1);
 @ease-in-quint       : cubic-bezier(0.755, 0.05, 0.855, 0.06);
+@rail-height: 4px;
 
 .borderBox() {
   box-sizing: border-box;
@@ -23,7 +24,6 @@
 
 .@{prefixClass} {
   position: relative;
-  height: 14px;
   padding: 5px 0;
   width: 100%;
   border-radius: @border-radius-base;
@@ -31,15 +31,18 @@
 
   &-rail {
     position: absolute;
+    top: 50%;
+    height: @rail-height;
+    margin-top: -(@rail-height/2);
     width: 100%;
     background-color: #e9e9e9;
-    height: 4px;
   }
 
   &-track {
     position: absolute;
-    left: 0;
-    height: 4px;
+    top: 50%;
+    height: @rail-height;
+    margin-top: -(@rail-height/2);
     border-radius: @border-radius-base;
     background-color: tint(@primary-color, 60%);
   }
@@ -47,7 +50,7 @@
   &-handle {
     position: absolute;
     margin-left: -7px;
-    margin-top: -5px;
+    margin-top: -16px;
     width: 14px;
     height: 14px;
     cursor: pointer;
@@ -67,9 +70,6 @@
   }
 
   &-mark {
-    position: absolute;
-    top: 18px;
-    left: 0;
     width: 100%;
     font-size: 12px;
 
@@ -96,8 +96,8 @@
     }
   }
 
-  &-step {
-    position: absolute;
+  &-scale {
+    position: relative;
     width: 100%;
     background: transparent;
 
@@ -106,20 +106,23 @@
   }
 
   &-dot-wrapper {
-    display:inline-block;
+    z-index: 0;
 
-    &:first-child {
+    &:first-of-type {
       transform: translateX(-50%);
     }
-    &:last-child {
+
+    &:last-of-type {
       transform: translateX(50%);
     }
   }
 
   &-dot {
     display:inline-block;
+    vertical-align: middle;
     width: 8px;
     height: 8px;
+    margin-top: -2px;
     border: 2px solid #e9e9e9;
     background-color: #fff;
     cursor: pointer;

@@ -4,7 +4,7 @@ import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
 import Track from './Track';
 import DefaultHandle from './Handle';
-import Steps from './Steps';
+import Scale from './Scale';
 import Marks from './Marks';
 import warning from 'warning';
 
@@ -412,10 +412,8 @@ class Slider extends React.Component {
         onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
         onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
       >
-        <div className={`${prefixCls}-rail`} />
-        {tracks}
-        <Steps prefixCls={prefixCls} marks={marks} dots={dots} step={step}
-          included={isIncluded} lowerBound={bounds[0]}
+        <Scale prefixCls={prefixCls} marks={marks} dots={dots} step={step}
+          included={isIncluded} tracks={tracks} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
         {handles}
