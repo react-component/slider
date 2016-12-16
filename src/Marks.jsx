@@ -16,12 +16,26 @@ const Marks = ({ className, marks, included, upperBound, lowerBound }) => {
     const markPointIsObject = typeof markPoint === 'object' &&
             !React.isValidElement(markPoint);
     const markLabel = markPointIsObject ? markPoint.label : markPoint;
-    return (<span className={markClassName} key={point}>
-             {markLabel}
-            </span>);
+    return (
+      <span className={markClassName} key={point}>
+        {markLabel}
+      </span>);
   });
 
   return <div className={className}>{elements}</div>;
+};
+
+Marks.propTypes = {
+  className: React.PropTypes.string,
+  marks: React.PropTypes.objectOf(
+    React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.number,
+    ]),
+  ),
+  included: React.PropTypes.bool,
+  lowerBound: React.PropTypes.number,
+  upperBound: React.PropTypes.number,
 };
 
 export default Marks;

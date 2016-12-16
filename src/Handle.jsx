@@ -1,10 +1,6 @@
 import React from 'react';
 
 export default class Handle extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
   render() {
     const {
       className,
@@ -22,11 +18,7 @@ export default class Handle extends React.Component {
 }
 
 Handle.propTypes = {
-  prefixCls: React.PropTypes.string,
   className: React.PropTypes.string,
   vertical: React.PropTypes.bool,
   offset: React.PropTypes.number,
-  value: React.PropTypes.number,
-  dragging: React.PropTypes.bool,
-  index: React.PropTypes.number,
 };
