@@ -63,7 +63,6 @@
     "lint"
   ],
   "dependencies": {
-    "babel-runtime": "6.x",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "classnames": "^2.2.5",
