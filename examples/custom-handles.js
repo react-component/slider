@@ -1,8 +1,8 @@
-require('rc-slider/assets/index.less');
+require('react-flex-slider/assets/index.less');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
-const Slider = require('rc-slider');
+const Slider = require('react-flex-slider');
 
 const wrapperStyle = { width: 400, margin: 50 };
 
@@ -18,19 +18,20 @@ const handleStyle = {
   textAlign: 'center',
 };
 
-const CustomHandle = React.createClass({
-  propTypes: {
-    value: React.PropTypes.any,
-    offset: React.PropTypes.number,
-  },
+class CustomHandle extends React.Component {
   render() {
     const props = this.props;
     const style = Object.assign({ left: `${props.offset}%` }, handleStyle);
     return (
         <div style={style}>val: {props.value}</div>
     );
-  },
-});
+  }
+}
+
+CustomHandle.propTypes = {
+  value: React.PropTypes.any,
+  offset: React.PropTypes.number,
+};
 
 ReactDOM.render(
   <div>

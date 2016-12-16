@@ -1,5 +1,5 @@
 {
-  "name": "rc-slider",
+  "name": "react-flex-slider",
   "version": "5.4.0",
   "description": "slider ui component for react",
   "keywords": [
@@ -8,24 +8,27 @@
     "react-slider",
     "slider"
   ],
-  "homepage": "http://github.com/react-component/slider",
+  "homepage": "http://github.com/kinghenne/react-flex-slider",
   "author": "sima.zhang1990@gmail.com",
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/slider.git"
+    "url": "git@github.com:kinghenne/react-flex-slider.git"
   },
   "bugs": {
-    "url": "http://github.com/react-component/slider/issues"
+    "url": "http://github.com/kinghenne/react-flex-slider/issues"
   },
   "files": [
     "assets/*.css",
     "lib",
     "dist"
   ],
-  "licenses": "MIT",
+  "license": "MIT",
   "main": "./lib/index.js",
   "entry": {
-    "rc-slider": ["./assets/index.less", "./src/index.js"]
+    "rc-slider": [
+      "./assets/index.less",
+      "./src/index.js"
+    ]
   },
   "style": "./assets/index.css",
   "config": {
@@ -36,28 +39,33 @@
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
     "pub": "rc-tools run pub --babel-runtime",
-    "lint": "rc-tools run lint",
+    "lint": "eslint src/**/*.jsx",
     "karma": "rc-tools run karma",
     "saucelabs": "rc-tools run saucelabs",
     "test": "rc-tools run test",
     "chrome-test": "rc-tools run chrome-test",
-    "coverage": "rc-tools run coverage"
+    "coverage": "rc-tools run coverage",
+    "watch": "rc-tools run watch"
   },
   "devDependencies": {
+    "babel-eslint": "^7.1.1",
+    "eslint": "^3.12.2",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "eslint-plugin-jsx-a11y": "^2.2.3",
+    "eslint-plugin-react": "^6.8.0",
     "expect.js": "0.3.x",
     "pre-commit": "1.x",
     "rc-tools": "^5.6.8",
-    "react": "^15.2.1",
-    "react-addons-test-utils": "^15.2.1",
-    "react-dom": "^15.2.1"
+    "react-addons-test-utils": "^15.2.1"
   },
   "pre-commit": [
     "lint"
   ],
   "dependencies": {
-    "babel-runtime": "6.x",
+    "react": "^15.2.1",
+    "react-dom": "^15.2.1",
     "classnames": "^2.2.5",
-    "rc-tooltip": "^3.4.2",
     "rc-util": "^3.2.1",
     "warning": "^3.0.0"
   }

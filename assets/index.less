@@ -3,13 +3,9 @@
 @disabledColor: #ccc;
 @border-radius-base: 6px;
 @primary-color: #2db7f5;
-@tooltip-color: #fff;
-@tooltip-bg: tint(#666, 4%);
-@tooltip-arrow-width: 4px;
-@tooltip-distance: @tooltip-arrow-width+4;
-@tooltip-arrow-color: @tooltip-bg;
 @ease-out-quint      : cubic-bezier(0.23, 1, 0.32, 1);
 @ease-in-quint       : cubic-bezier(0.755, 0.05, 0.855, 0.06);
+@rail-height: 4px;
 
 .borderBox() {
   box-sizing: border-box;
@@ -23,7 +19,6 @@
 
 .@{prefixClass} {
   position: relative;
-  height: 14px;
   padding: 5px 0;
   width: 100%;
   border-radius: @border-radius-base;
@@ -31,23 +26,27 @@
 
   &-rail {
     position: absolute;
+    top: 50%;
+    height: @rail-height;
+    margin-top: -(@rail-height/2);
     width: 100%;
     background-color: #e9e9e9;
-    height: 4px;
   }
 
   &-track {
     position: absolute;
-    left: 0;
-    height: 4px;
+    top: 50%;
+    height: @rail-height;
+    margin-top: -(@rail-height/2);
     border-radius: @border-radius-base;
     background-color: tint(@primary-color, 60%);
   }
 
   &-handle {
     position: absolute;
+    top: 50%;
+    margin-top: -7px; 
     margin-left: -7px;
-    margin-top: -5px;
     width: 14px;
     height: 14px;
     cursor: pointer;
@@ -67,16 +66,15 @@
   }
 
   &-mark {
-    position: absolute;
-    top: 18px;
-    left: 0;
     width: 100%;
     font-size: 12px;
+
+    display: flex;
+    justify-content: space-between;
   }
 
   &-mark-text {
-    position: absolute;
-    display: inline-block;
+    flex: 1;
     vertical-align: middle;
     text-align: center;
     cursor: pointer;
@@ -85,32 +83,47 @@
     &-active {
       color: #666;
     }
+
+    &:first-child {
+      transform: translateX(-50%);
+    }
+    &:last-child {
+      transform: translateX(50%);
+    }
   }
 
-  &-step {
-    position: absolute;
+  &-scale {
+    position: relative;
     width: 100%;
-    height: 4px;
     background: transparent;
+
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &-dot-wrapper {
+    z-index: 0;
+
+    &:first-of-type {
+      transform: translateX(-50%);
+    }
+
+    &:last-of-type {
+      transform: translateX(50%);
+    }
   }
 
   &-dot {
-    position: absolute;
-    bottom: -2px;
-    margin-left: -4px;
+    display:inline-block;
+    vertical-align: middle;
     width: 8px;
     height: 8px;
+    margin-top: -2px;
     border: 2px solid #e9e9e9;
     background-color: #fff;
     cursor: pointer;
     border-radius: 50%;
-    vertical-align: middle;
-    &:first-child {
-      margin-left: -4px;
-    }
-    &:last-child {
-      margin-left: -4px;
-    }
+
     &-active {
       border-color: tint(@primary-color, 50%);
     }
@@ -132,158 +145,5 @@
     .@{prefixClass}-mark-text, .@{prefixClass}-dot {
       cursor: not-allowed!important;
     }
-  }
-}
-
-.@{prefixClass}-vertical {
-  width: 14px;
-  height: 100%;
-  padding: 0 5px;
-
-  .@{prefixClass} {
-    &-rail {
-      height: 100%;
-      width: 4px;
-    }
-
-    &-track {
-      left: 5px;
-      bottom: 0;
-      width: 4px;
-    }
-
-    &-handle {
-      margin-left: -5px;
-      margin-bottom: -7px;
-    }
-
-    &-mark {
-      top: 0;
-      left: 18px;
-      height: 100%;
-    }
-
-    &-step {
-      height: 100%;
-      width: 4px;
-    }
-
-    &-dot {
-      left: 2px;
-      margin-bottom: -4px;
-      &:first-child {
-        margin-bottom: -4px;
-      }
-      &:last-child {
-        margin-bottom: -4px;
-      }
-    }
-  }
-}
-
-.motion-common() {
-  animation-duration: .3s;
-  animation-fill-mode: both;
-  display: block !important;
-}
-
-.make-motion(@className, @keyframeName) {
-  .@{className}-enter, .@{className}-appear {
-    .motion-common();
-    animation-play-state: paused;
-  }
-  .@{className}-leave {
-    .motion-common();
-    animation-play-state: paused;
-  }
-  .@{className}-enter.@{className}-enter-active, .@{className}-appear.@{className}-appear-active {
-    animation-name: ~"@{keyframeName}In";
-    animation-play-state: running;
-  }
-  .@{className}-leave.@{className}-leave-active {
-    animation-name: ~"@{keyframeName}Out";
-    animation-play-state: running;
-  }
-}
-.zoom-motion(@className, @keyframeName) {
-  .make-motion(@className, @keyframeName);
-  .@{className}-enter, .@{className}-appear {
-    transform: scale(0, 0); // need this by yiminghe
-    animation-timing-function: @ease-out-quint;
-  }
-  .@{className}-leave {
-    animation-timing-function: @ease-in-quint;
-  }
-}
-.zoom-motion(rc-slider-tooltip-zoom-down, rcSliderTooltipZoomDown);
-
-@keyframes rcSliderTooltipZoomDownIn {
-  0% {
-    opacity: 0;
-    transform-origin: 50% 100%;
-    transform: scale(0, 0);
-  }
-  100% {
-    transform-origin: 50% 100%;
-    transform: scale(1, 1);
-  }
-}
-
-@keyframes rcSliderTooltipZoomDownOut {
-  0% {
-    transform-origin: 50% 100%;
-    transform: scale(1, 1);
-  }
-  100% {
-    opacity: 0;
-    transform-origin: 50% 100%;
-    transform: scale(0, 0);
-  }
-}
-
-.@{prefixClass}-tooltip {
-  position: absolute;
-  left: -9999px;
-  top: -9999px;
-  visibility: visible;
-
-  .borderBox();
-
-  &-hidden {
-    display: none;
-  }
-
-  &-placement-top {
-    padding: @tooltip-arrow-width 0 @tooltip-distance 0;
-  }
-
-  &-inner {
-    padding: 6px 2px;
-    min-width: 24px;
-    height: 24px;
-    font-size: 12px;
-    line-height: 1;
-    color: @tooltip-color;
-    text-align: center;
-    text-decoration: none;
-    background-color: @tooltip-bg;
-    border-radius: @border-radius-base;
-    box-shadow: 0 0 4px #d9d9d9;
-  }
-
-  &-arrow {
-    position: absolute;
-    width: 0;
-    height: 0;
-    border-color: transparent;
-    border-style: solid;
-  }
-
-  &-placement-top &-arrow {
-    bottom: @tooltip-distance - @tooltip-arrow-width;
-    left: 50%;
-    margin-left: -@tooltip-arrow-width;
-    border-width: @tooltip-arrow-width @tooltip-arrow-width 0;
-    border-top-color: @tooltip-arrow-color;
   }
 }

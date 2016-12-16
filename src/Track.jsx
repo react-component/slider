@@ -1,17 +1,19 @@
 import React from 'react';
 
-const Track = ({ className, included, vertical, offset, length }) => {
+const Track = ({ className, included, offset, length }) => {
   const style = {
     visibility: included ? 'visible' : 'hidden',
+    left: `${offset}%`,
+    width: `${length}%`,
   };
-  if (vertical) {
-    style.bottom = `${offset}%`;
-    style.height = `${length}%`;
-  } else {
-    style.left = `${offset}%`;
-    style.width = `${length}%`;
-  }
   return <div className={className} style={style} />;
+};
+
+Track.propTypes = {
+  className: React.PropTypes.string,
+  included: React.PropTypes.bool,
+  offset: React.PropTypes.number,
+  length: React.PropTypes.number,
 };
 
 export default Track;
