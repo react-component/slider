@@ -8,32 +8,32 @@ import Steps from './Steps';
 import Marks from './Marks';
 import warning from 'warning';
 
-function noop() {
-}
+const noop = () => {
+};
 
-function isNotTouchEvent(e) {
+const isNotTouchEvent = (e) => {
   return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
-}
+};
 
-function getTouchPosition(vertical, e) {
+const getTouchPosition = (vertical, e) => {
   return vertical ? e.touches[0].clientY : e.touches[0].pageX;
-}
+};
 
-function getMousePosition(vertical, e) {
+const getMousePosition = (vertical, e) => {
   return vertical ? e.clientY : e.pageX;
-}
+};
 
-function getHandleCenterPosition(vertical, handle) {
+const getHandleCenterPosition = (vertical, handle) => {
   const coords = handle.getBoundingClientRect();
   return vertical ?
     coords.top + (coords.height * 0.5) :
     coords.left + (coords.width * 0.5);
-}
+};
 
-function pauseEvent(e) {
+const pauseEvent = (e) => {
   e.stopPropagation();
   e.preventDefault();
-}
+};
 
 class Slider extends React.Component {
   constructor(props) {
