@@ -8,6 +8,9 @@ export default class Handle extends React.Component {
     this.state = {
       isTooltipVisible: false,
     };
+
+    this.showTooltip = this.showTooltip.bind(this);
+    this.hideTooltip = this.hideTooltip.bind(this);
   }
 
   hideTooltip() {
@@ -40,9 +43,9 @@ export default class Handle extends React.Component {
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
     const handle = (
       <div className={className} style={style}
-        onMouseUp={this.showTooltip.bind(this)}
-        onMouseEnter={this.showTooltip.bind(this)}
-        onMouseLeave={this.hideTooltip.bind(this)}
+        onMouseUp={this.showTooltip}
+        onMouseEnter={this.showTooltip}
+        onMouseLeave={this.hideTooltip}
       />
     );
 

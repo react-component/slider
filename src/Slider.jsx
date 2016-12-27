@@ -69,6 +69,9 @@ class Slider extends React.Component {
       recent,
       bounds,
     };
+
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -517,8 +520,8 @@ class Slider extends React.Component {
 
     return (
       <div ref="slider" className={sliderClassName}
-        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
-        onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
+        onTouchStart={disabled ? noop : this.onTouchStart}
+        onMouseDown={disabled ? noop : this.onMouseDown}
       >
         <div className={`${prefixCls}-rail`} />
         {tracks}
