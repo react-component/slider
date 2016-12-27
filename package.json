@@ -22,7 +22,7 @@
     "lib",
     "dist"
   ],
-  "licenses": "MIT",
+  "license": "MIT",
   "main": "./lib/index.js",
   "entry": {
     "rc-slider": ["./assets/index.less", "./src/index.js"]
