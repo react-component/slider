@@ -10,7 +10,6 @@ Slider UI component for React
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
 [![Sauce Test Status](https://saucelabs.com/buildstatus/rc-slider)](https://saucelabs.com/u/rc-slider)
-
 [![Sauce Test Status](https://saucelabs.com/browser-matrix/rc-slider.svg)](https://saucelabs.com/u/rc-slider)
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
@@ -44,6 +43,10 @@ Slider UI component for React
 ### Keyboard
 
 ## Install
+
+```bash
+npm install --save rc-slider
+```
 
 [![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
 
@@ -94,18 +97,18 @@ npm start
 
 ## Example
 
-http://localhost:8005/examples/
+`npm start` and then go to `http://localhost:8005/examples/`
 
-online example: http://react-component.github.io/slider/
+Online examples: [http://react-component.github.io/slider/](http://react-component.github.io/slider/)
 
 ## Test Case
 
-http://localhost:8005/tests/runner.html?coverage
+`http://localhost:8005/tests/runner.html?coverage`
 
 ## Coverage
 
-http://localhost:8005/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage
+`http://localhost:8005/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage`
 
 ## License
 
-rc-slider is released under the MIT license.
+`rc-slider` is released under the MIT license.
