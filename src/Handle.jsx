@@ -42,7 +42,9 @@ export default class Handle extends React.Component {
 
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
     const handle = (
-      <div className={className} style={style}
+      <div
+        className={className}
+        style={style}
         onMouseUp={this.showTooltip}
         onMouseEnter={this.showTooltip}
         onMouseLeave={this.hideTooltip}
