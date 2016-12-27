@@ -22,7 +22,7 @@ const marks = {
 };
 
 function log(value) {
-  console.log(value);
+  console.log(value); //eslint-disable-line
 }
 
 ReactDOM.render(
