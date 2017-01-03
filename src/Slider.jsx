@@ -8,32 +8,32 @@ import Steps from './Steps';
 import Marks from './Marks';
 import warning from 'warning';
 
-function noop() {
-}
+const noop = () => {
+};
 
-function isNotTouchEvent(e) {
+const isNotTouchEvent = (e) => {
   return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
-}
+};
 
-function getTouchPosition(vertical, e) {
+const getTouchPosition = (vertical, e) => {
   return vertical ? e.touches[0].clientY : e.touches[0].pageX;
-}
+};
 
-function getMousePosition(vertical, e) {
+const getMousePosition = (vertical, e) => {
   return vertical ? e.clientY : e.pageX;
-}
+};
 
-function getHandleCenterPosition(vertical, handle) {
+const getHandleCenterPosition = (vertical, handle) => {
   const coords = handle.getBoundingClientRect();
   return vertical ?
     coords.top + (coords.height * 0.5) :
     coords.left + (coords.width * 0.5);
-}
+};
 
-function pauseEvent(e) {
+const pauseEvent = (e) => {
   e.stopPropagation();
   e.preventDefault();
-}
+};
 
 class Slider extends React.Component {
   constructor(props) {
@@ -69,6 +69,9 @@ class Slider extends React.Component {
       recent,
       bounds,
     };
+
+    this.onTouchStart = this.onTouchStart.bind(this);
+    this.onMouseDown = this.onMouseDown.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -500,8 +503,13 @@ class Slider extends React.Component {
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-        <Track className={trackClassName} vertical={vertical} included={included}
-          offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
+        <Track
+          className={trackClassName}
+          vertical={vertical}
+          included={included}
+          offset={offsets[i - 1]}
+          length={offsets[i] - offsets[i - 1]}
+          key={i}
         />
       );
     }
@@ -515,22 +523,38 @@ class Slider extends React.Component {
     });
 
     return (
-      <div ref="slider" className={sliderClassName}
-        onTouchStart={disabled ? noop : this.onTouchStart.bind(this)}
-        onMouseDown={disabled ? noop : this.onMouseDown.bind(this)}
+      <div
+        ref="slider"
+        className={sliderClassName}
+        onTouchStart={disabled ? noop : this.onTouchStart}
+        onMouseDown={disabled ? noop : this.onMouseDown}
       >
         <div className={`${prefixCls}-rail`} />
-        {tracks}
-        <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
-          included={included} lowerBound={bounds[0]}
-          upperBound={bounds[bounds.length - 1]} max={max} min={min}
+          {tracks}
+        <Steps
+          prefixCls={prefixCls}
+          vertical = {vertical}
+          marks={marks}
+          dots={dots}
+          step={step}
+          included={included}
+          lowerBound={bounds[0]}
+          upperBound={bounds[bounds.length - 1]}
+          max={max}
+          min={min}
         />
-        {handles}
-        <Marks className={`${prefixCls}-mark`} vertical = {vertical} marks={marks}
-          included={included} lowerBound={bounds[0]}
-          upperBound={bounds[bounds.length - 1]} max={max} min={min}
+          {handles}
+        <Marks
+          className={`${prefixCls}-mark`}
+          vertical={vertical}
+          marks={marks}
+          included={included}
+          lowerBound={bounds[0]}
+          upperBound={bounds[bounds.length - 1]}
+          max={max}
+          min={min}
         />
-        {children}
+          {children}
       </div>
     );
   }

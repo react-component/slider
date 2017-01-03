@@ -5,7 +5,7 @@ const ReactDOM = require('react-dom');
 const ReactTestUtils = require('react-addons-test-utils');
 const Slider = require('..');
 
-function createSliderWrapperComponent() {
+const createSliderWrapperComponent = () => {
   return class SliderWrapper extends React.Component {
     render() {
       return (
@@ -15,7 +15,7 @@ function createSliderWrapperComponent() {
       );
     }
   };
-}
+};
 
 require('../assets/index.less');
 
@@ -39,29 +39,29 @@ describe('rc-slider', function test() {
     const sliderWithDefaultValue = ReactDOM.render(<Slider defaultValue={50} />, div);
     expect(sliderWithDefaultValue.state.bounds[1]).to.be(50);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[0]
-           .style.cssText)
+      .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-handle')[0]
+      .style.cssText)
       .to.match(/left: 50%;/);
 
     const trackStyle = ReactTestUtils
-            .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-track')[0]
-            .style.cssText;
+      .scryRenderedDOMComponentsWithClass(sliderWithDefaultValue, 'rc-slider-track')[0]
+      .style.cssText;
     expect(trackStyle).to.match(/left: 0%;/);
     expect(trackStyle).to.match(/width: 50%;/);
     expect(trackStyle).to.match(/visibility: visible;/);
   });
 
-  it('should render a Slider with value corrently', () => {
+  it('should render a Slider with value correctly', () => {
     const sliderWithValue = ReactDOM.render(<Slider value={50} />, div);
     expect(sliderWithValue.state.bounds[1]).to.be(50);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(sliderWithValue, 'rc-slider-handle')[0]
-           .style.cssText)
+      .scryRenderedDOMComponentsWithClass(sliderWithValue, 'rc-slider-handle')[0]
+      .style.cssText)
       .to.match(/left: 50%;/);
 
     const trackStyle = ReactTestUtils
-            .scryRenderedDOMComponentsWithClass(sliderWithValue, 'rc-slider-track')[0]
-            .style.cssText;
+      .scryRenderedDOMComponentsWithClass(sliderWithValue, 'rc-slider-track')[0]
+      .style.cssText;
     expect(trackStyle).to.match(/left: 0%;/);
     expect(trackStyle).to.match(/width: 50%;/);
     expect(trackStyle).to.match(/visibility: visible;/);
@@ -161,17 +161,17 @@ describe('rc-slider', function test() {
     expect(rangeWithValue.state.bounds[0]).to.be(50);
     expect(rangeWithValue.state.bounds[1]).to.be(100);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[0]
-           .style.cssText)
+      .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[0]
+      .style.cssText)
       .to.match(/left: 50%;/);
     expect(ReactTestUtils
-           .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[1]
-           .style.cssText)
+      .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-handle')[1]
+      .style.cssText)
       .to.match(/left: 100%;/);
 
     const trackStyle = ReactTestUtils
-            .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-track')[0]
-            .style.cssText;
+      .scryRenderedDOMComponentsWithClass(rangeWithValue, 'rc-slider-track')[0]
+      .style.cssText;
     expect(trackStyle).to.match(/left: 50%;/);
     expect(trackStyle).to.match(/width: 50%;/);
     expect(trackStyle).to.match(/visibility: visible;/);

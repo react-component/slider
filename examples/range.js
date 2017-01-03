@@ -8,7 +8,7 @@ const Slider = require('rc-slider');
 const style = { width: 400, margin: 50 };
 
 function log(value) {
-  console.log(value);
+  console.log(value); //eslint-disable-line
 }
 
 const CustomizedRange = React.createClass({

@@ -9,7 +9,7 @@ const style = { float: 'left', width: 200, height: 400, marginBottom: 160, margi
 const parentStyle = { overflow: 'hidden' };
 
 function log(value) {
-  console.log(value);
+  console.log(value); //eslint-disable-line
 }
 
 

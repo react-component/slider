@@ -2,7 +2,7 @@ import React from 'react';
 import classNames from 'classnames';
 import warning from 'warning';
 
-function calcPoints(vertical, marks, dots, step, min, max) {
+const calcPoints = (vertical, marks, dots, step, min, max) => {
   warning(
     dots ? step > 0 : true,
     '`Slider[step]` should be a positive number in order to make Slider[dots] work.'
@@ -15,7 +15,7 @@ function calcPoints(vertical, marks, dots, step, min, max) {
     }
   }
   return points;
-}
+};
 
 const Steps = ({ prefixCls, vertical, marks, dots, step, included,
                 lowerBound, upperBound, max, min }) => {
