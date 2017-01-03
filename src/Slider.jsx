@@ -492,7 +492,6 @@ class Slider extends React.Component {
     }));
     if (!range) { handles.shift(); }
 
-    const isIncluded = included || range;
 
     const tracks = [];
     for (let i = 1; i < bounds.length; ++i) {
@@ -501,7 +500,7 @@ class Slider extends React.Component {
         [`${prefixCls}-track-${i}`]: true,
       });
       tracks.push(
-        <Track className={trackClassName} vertical={vertical} included={isIncluded}
+        <Track className={trackClassName} vertical={vertical} included={included}
           offset={offsets[i - 1]} length={offsets[i] - offsets[i - 1]} key={i}
         />
       );
@@ -523,12 +522,12 @@ class Slider extends React.Component {
         <div className={`${prefixCls}-rail`} />
         {tracks}
         <Steps prefixCls={prefixCls} vertical = {vertical} marks={marks} dots={dots} step={step}
-          included={isIncluded} lowerBound={bounds[0]}
+          included={included} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
         {handles}
         <Marks className={`${prefixCls}-mark`} vertical = {vertical} marks={marks}
-          included={isIncluded} lowerBound={bounds[0]}
+          included={included} lowerBound={bounds[0]}
           upperBound={bounds[bounds.length - 1]} max={max} min={min}
         />
         {children}
