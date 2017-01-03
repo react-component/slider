@@ -457,6 +457,7 @@ class Slider extends React.Component {
         tipTransitionName,
         tipFormatter,
         children,
+        style,
     } = this.props;
 
     const customHandle = this.props.handle;
@@ -528,6 +529,7 @@ class Slider extends React.Component {
         className={sliderClassName}
         onTouchStart={disabled ? noop : this.onTouchStart}
         onMouseDown={disabled ? noop : this.onMouseDown}
+        style={style}
       >
         <div className={`${prefixCls}-rail`} />
           {tracks}
@@ -596,6 +598,7 @@ Slider.propTypes = {
     React.PropTypes.bool,
     React.PropTypes.number,
   ]),
+  style: React.PropTypes.object,
 };
 
 Slider.defaultProps = {
