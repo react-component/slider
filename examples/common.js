@@ -21655,7 +21655,8 @@
 	        min = _props5.min,
 	        tipTransitionName = _props5.tipTransitionName,
 	        tipFormatter = _props5.tipFormatter,
-	        children = _props5.children;
+	        children = _props5.children,
+	        style = _props5.style;
 	
 	
 	    var customHandle = this.props.handle;
@@ -21721,7 +21722,8 @@
 	        ref: 'slider',
 	        className: sliderClassName,
 	        onTouchStart: disabled ? noop : this.onTouchStart,
-	        onMouseDown: disabled ? noop : this.onMouseDown
+	        onMouseDown: disabled ? noop : this.onMouseDown,
+	        style: style
 	      },
 	      _react2.default.createElement('div', { className: prefixCls + '-rail' }),
 	      tracks,
@@ -21778,7 +21780,8 @@
 	  range: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.bool, _react2.default.PropTypes.number]),
 	  vertical: _react2.default.PropTypes.bool,
 	  allowCross: _react2.default.PropTypes.bool,
-	  pushable: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.bool, _react2.default.PropTypes.number])
+	  pushable: _react2.default.PropTypes.oneOfType([_react2.default.PropTypes.bool, _react2.default.PropTypes.number]),
+	  style: _react2.default.PropTypes.object
 	};
 	
 	Slider.defaultProps = {
