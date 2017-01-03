@@ -3,12 +3,12 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(327);
+	module.exports = __webpack_require__(325);
 
 
 /***/ },
 
-/***/ 327:
+/***/ 325:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23,7 +23,7 @@ webpackJsonp([3],{
 	var style = { width: 400, margin: 50 };
 	
 	function log(value) {
-	  console.log(value);
+	  console.log(value); //eslint-disable-line
 	}
 	
 	function percentFormatter(v) {
@@ -44,7 +44,7 @@ webpackJsonp([3],{
 	    });
 	  },
 	  onAfterChange: function onAfterChange(value) {
-	    console.log(value);
+	    console.log(value); //eslint-disable-line
 	  },
 	  render: function render() {
 	    return React.createElement(Slider, { value: this.state.value,

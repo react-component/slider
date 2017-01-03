@@ -3,12 +3,12 @@ webpackJsonp([2],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(326);
+	module.exports = __webpack_require__(324);
 
 
 /***/ },
 
-/***/ 326:
+/***/ 324:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -23,7 +23,7 @@ webpackJsonp([2],{
 	var style = { width: 400, margin: 50 };
 	
 	function log(value) {
-	  console.log(value);
+	  console.log(value); //eslint-disable-line
 	}
 	
 	var CustomizedRange = React.createClass({

@@ -3,12 +3,12 @@ webpackJsonp([6],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(330);
+	module.exports = __webpack_require__(328);
 
 
 /***/ },
 
-/***/ 330:
+/***/ 328:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -24,7 +24,7 @@ webpackJsonp([6],{
 	var parentStyle = { overflow: 'hidden' };
 	
 	function log(value) {
-	  console.log(value);
+	  console.log(value); //eslint-disable-line
 	}
 	
 	function percentFormatter(v) {

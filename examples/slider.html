@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>slider.js - example - rc-slider@5.4.1</title>
+  <title>slider.js - example - rc-slider@5.4.2</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,9 +263,9 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-slider@5.4.1</h1>
+      <h1>rc-slider@5.4.2</h1>
 
-      <p>slider ui component for react</p>
+      <p>Slider UI component for React</p>
     </div>
     <div class="example" id="__react-content"></div>
 
@@ -279,7 +279,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-keyword">const</span> style = { width: <span class="hljs-number">400</span>, margin: <span class="hljs-number">50</span> };
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">value</span>) </span>{
-  <span class="hljs-built_in">console</span>.log(value);
+  <span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">//eslint-disable-line</span>
 }
 
 
@@ -300,7 +300,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     });
   },
   onAfterChange(value) {
-    <span class="hljs-built_in">console</span>.log(value);
+    <span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">//eslint-disable-line</span>
   },
   render() {
     <span class="hljs-keyword">return</span> (
