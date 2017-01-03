@@ -157,6 +157,9 @@ class Slider extends React.Component {
       nextBounds.sort((a, b) => a - b);
       nextHandle = nextBounds.indexOf(value);
     }
+    if (nextBounds[1] < props.minValue || nextBounds[1] > props.maxValue){
+      return;
+    }
     this.onChange({
       handle: nextHandle,
       bounds: nextBounds,
@@ -205,6 +208,11 @@ class Slider extends React.Component {
 
     const nextBounds = [...state.bounds];
     nextBounds[valueNeedChanging] = value;
+    if (nextBounds[1] < props.minValue){
+      nextBounds[1] = props.minValue
+    } else if (nextBounds[1] > props.maxValue ){
+      nextBounds[1] = props.maxValue
+    }
     this.onChange({ bounds: nextBounds });
   }
 
@@ -565,6 +573,8 @@ class Slider extends React.Component {
 Slider.propTypes = {
   min: React.PropTypes.number,
   max: React.PropTypes.number,
+  minValue: React.PropTypes.number,
+  maxValue: React.PropTypes.number,
   step: React.PropTypes.number,
   defaultValue: React.PropTypes.oneOfType([
     React.PropTypes.number,
