@@ -177,6 +177,27 @@ describe('rc-slider', function test() {
     expect(trackStyle).to.match(/visibility: visible;/);
   });
 
+  it('should update Range with value correctly', () => {
+    class TestParent extends React.Component { // eslint-disable-line
+      state = {
+        value: [2, 4, 6],
+      }
+      getSlider() {
+        return this.refs.slider;
+      }
+      render() {
+        return <Slider ref="slider" range value={this.state.value}/>;
+      }
+    }
+    const component = ReactDOM.render(<TestParent/>, div);
+
+    expect(component.getSlider().state.bounds.length).to.be(3);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(component, 'rc-slider-handle').length).to.be(3);
+    component.setState({ value: [2, 4] });
+    expect(component.getSlider().state.bounds.length).to.be(2);
+    expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(component, 'rc-slider-handle').length).to.be(2);
+  });
+
   it('should render dots correctly when `dots=true`', () => {
     const slider = ReactDOM.render(<Slider value={50} step={10} dots />, div);
     expect(ReactTestUtils.scryRenderedDOMComponentsWithClass(slider, 'rc-slider-dot').length).to.be(11);
