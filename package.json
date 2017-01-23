@@ -40,12 +40,21 @@
     "lint": "rc-tools run lint",
     "karma": "rc-tools run karma",
     "saucelabs": "rc-tools run saucelabs",
-    "test": "rc-tools run test",
+    "test": "jest",
     "chrome-test": "rc-tools run chrome-test",
-    "coverage": "rc-tools run coverage"
+    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+  },
+  "jest": {
+    "collectCoverageFrom": [
+      "src/*"
+    ]
   },
   "devDependencies": {
+    "coveralls": "^2.11.15",
+    "enzyme": "^2.7.0",
+    "enzyme-to-json": "^1.4.5",
     "expect.js": "0.3.x",
+    "jest": "^18.1.0",
     "pre-commit": "1.x",
     "rc-tools": "^5.6.8",
     "react": "^15.2.1",

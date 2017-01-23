@@ -1,0 +1,71 @@
+exports[`rc-slider should render Multi-Range with correct DOM structure 1`] = `
+<div
+  class="rc-slider">
+  <div
+    class="rc-slider-rail" />
+  <div
+    class="rc-slider-track rc-slider-track-1"
+    style="visibility:visible;left:0%;width:0%;" />
+  <div
+    class="rc-slider-track rc-slider-track-2"
+    style="visibility:visible;left:0%;width:0%;" />
+  <div
+    class="rc-slider-track rc-slider-track-3"
+    style="visibility:visible;left:0%;width:0%;" />
+  <div
+    class="rc-slider-step" />
+  <div
+    class="rc-slider-handle rc-slider-handle-1 rc-slider-handle-lower"
+    style="left:0%;" />
+  <div
+    class="rc-slider-handle rc-slider-handle-2"
+    style="left:0%;" />
+  <div
+    class="rc-slider-handle rc-slider-handle-3"
+    style="left:0%;" />
+  <div
+    class="rc-slider-handle rc-slider-handle-4 rc-slider-handle-upper"
+    style="left:0%;" />
+  <div
+    class="rc-slider-mark" />
+</div>
+`;
+
+exports[`rc-slider should render Range with correct DOM structure 1`] = `
+<div
+  class="rc-slider">
+  <div
+    class="rc-slider-rail" />
+  <div
+    class="rc-slider-track rc-slider-track-1"
+    style="visibility:visible;left:0%;width:0%;" />
+  <div
+    class="rc-slider-step" />
+  <div
+    class="rc-slider-handle rc-slider-handle-1 rc-slider-handle-lower"
+    style="left:0%;" />
+  <div
+    class="rc-slider-handle rc-slider-handle-2 rc-slider-handle-upper"
+    style="left:0%;" />
+  <div
+    class="rc-slider-mark" />
+</div>
+`;
+
+exports[`rc-slider should render Slider with correct DOM structure 1`] = `
+<div
+  class="rc-slider">
+  <div
+    class="rc-slider-rail" />
+  <div
+    class="rc-slider-track rc-slider-track-1"
+    style="visibility:visible;left:0%;width:0%;" />
+  <div
+    class="rc-slider-step" />
+  <div
+    class="rc-slider-handle rc-slider-handle-2 rc-slider-handle-upper"
+    style="left:0%;" />
+  <div
+    class="rc-slider-mark" />
+</div>
+`;
