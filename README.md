@@ -9,8 +9,6 @@ Slider UI component for React
 [![gemnasium deps][gemnasium-image]][gemnasium-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
-[![Sauce Test Status](https://saucelabs.com/buildstatus/rc-slider)](https://saucelabs.com/u/rc-slider)
-[![Sauce Test Status](https://saucelabs.com/browser-matrix/rc-slider.svg)](https://saucelabs.com/u/rc-slider)
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-slider
