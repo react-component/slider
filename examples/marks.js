@@ -45,11 +45,11 @@ ReactDOM.render(
 
     <div style={style}>
       <p>Range with marks</p>
-      <Slider min={-10} range marks={marks} onChange={log} defaultValue={[20, 40]} />
+      <Slider.Range min={-10} marks={marks} onChange={log} defaultValue={[20, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider min={-10} range marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
+      <Slider.Range min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
     </div>
   </div>
   , document.getElementById('__react-content'));

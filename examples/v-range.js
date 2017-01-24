@@ -4,6 +4,7 @@ require('rc-slider/assets/index.less');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
+const Range = Slider.Range;
 
 const style = { float: 'left', width: 180, height: 400, marginBottom: 160, marginLeft: 50 };
 const parentStyle = { overflow: 'hidden' };
@@ -39,7 +40,7 @@ const CustomizedRange = React.createClass({
   render() {
     return (
       <div style={style}>
-        <Slider range vertical allowCross={false} value={this.state.value}
+        <Range vertical allowCross={false} value={this.state.value}
           onChange={this.onSliderChange}
         />
         <label>LowerBound: </label>
@@ -77,7 +78,7 @@ const DynamicBounds = React.createClass({
   render() {
     return (
       <div style={style}>
-        <Slider range vertical defaultValue={[20, 50]} min={this.state.min} max={this.state.max}
+        <Range vertical defaultValue={[20, 50]} min={this.state.min} max={this.state.max}
           onChange={this.onSliderChange}
         />
         <label>Min: </label>
@@ -94,19 +95,19 @@ ReactDOM.render(
   <div style={parentStyle}>
     <div style={style}>
       <p>Basic Range，`allowCross=false`</p>
-      <Slider range vertical allowCross={false} defaultValue={[0, 20]} onChange={log} />
+      <Range vertical allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>
-      <Slider range vertical step={20} defaultValue={[20, 40]} onBeforeChange={log} />
+      <Range vertical step={20} defaultValue={[20, 40]} onBeforeChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20, dots` </p>
-      <Slider range vertical dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+      <Range vertical dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
     <div style={style}>
       <p>Controlled Range</p>
-      <Slider range vertical value={[20, 40]} />
+      <Range vertical value={[20, 40]} />
     </div>
     <div style={style}>
       <p>Customized Range</p>

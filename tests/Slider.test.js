@@ -12,7 +12,7 @@ describe('Slider', () => {
 
   it('should render Slider with default value correctly', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
-    expect(wrapper.state('bounds')[1]).toBe(50);
+    expect(wrapper.state('value')).toBe(50);
     expect(wrapper.find('.rc-slider-handle').get(0).style.cssText).toMatch(/left: 50%;/);
 
     const trackStyle = wrapper.find('.rc-slider-track').get(0).style.cssText;
@@ -23,7 +23,7 @@ describe('Slider', () => {
 
   it('should render Slider with value correctly', () => {
     const wrapper = mount(<Slider value={50} />);
-    expect(wrapper.state('bounds')[1]).toBe(50);
+    expect(wrapper.state('value')).toBe(50);
     expect(wrapper.find('.rc-slider-handle').get(0).style.cssText).toMatch(/left: 50%;/);
 
     const trackStyle = wrapper.find('.rc-slider-track').get(0).style.cssText;

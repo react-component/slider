@@ -9,7 +9,7 @@ describe('rc-slider', () => {
     expect(sliderWrapper.find('.rc-slider-dot').length).toBe(11);
     expect(sliderWrapper.find('.rc-slider-dot-active').length).toBe(6);
 
-    const rangeWrapper = mount(<Slider range value={[20, 50]} step={10} dots />);
+    const rangeWrapper = mount(<Slider.Range value={[20, 50]} step={10} dots />);
     expect(rangeWrapper.find('.rc-slider-dot').length).toBe(11);
     expect(rangeWrapper.find('.rc-slider-dot-active').length).toBe(4);
   });
@@ -23,18 +23,18 @@ describe('rc-slider', () => {
     expect(sliderWrapper.find('.rc-slider-mark-text').get(1).innerHTML).toBe('30');
     expect(sliderWrapper.find('.rc-slider-mark-text').get(2).innerHTML).toBe('100');
 
-    const rangeWrapper = mount(<Slider range value={[0, 30]} marks={marks} />);
+    const rangeWrapper = mount(<Slider.Range value={[0, 30]} marks={marks} />);
     expect(rangeWrapper.find('.rc-slider-mark-text').length).toBe(3);
   });
 
   it('should not set value greater than `max` or smaller `min`', () => {
     const sliderWithMinWrapper = mount(<Slider value={0} min={10} />);
-    expect(sliderWithMinWrapper.state('bounds')[1]).toBe(10);
+    expect(sliderWithMinWrapper.state('value')).toBe(10);
 
     const sliderWithMaxWrapper = mount(<Slider value={100} max={90} />);
-    expect(sliderWithMaxWrapper.state('bounds')[1]).toBe(90);
+    expect(sliderWithMaxWrapper.state('value')).toBe(90);
 
-    const rangeWrapper = mount(<Slider range value={[0, 100]} min={10} max={90} />);
+    const rangeWrapper = mount(<Slider.Range value={[0, 100]} min={10} max={90} />);
     expect(rangeWrapper.state('bounds')[0]).toBe(10);
     expect(rangeWrapper.state('bounds')[1]).toBe(90);
   });

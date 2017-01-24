@@ -4,6 +4,7 @@ require('rc-slider/assets/index.less');
 const React = require('react');
 const ReactDOM = require('react-dom');
 const Slider = require('rc-slider');
+const Range = Slider.Range;
 
 const style = { width: 400, margin: 50 };
 
@@ -46,7 +47,7 @@ const CustomizedRange = React.createClass({
         <br />
         <button onClick={this.handleApply}>Apply</button>
         <br /><br />
-        <Slider range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
+        <Range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
       </div>
     );
   },
@@ -81,7 +82,7 @@ const DynamicBounds = React.createClass({
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
         <br /><br />
-        <Slider range defaultValue={[20, 50]} min={this.state.min} max={this.state.max}
+        <Range defaultValue={[20, 50]} min={this.state.min} max={this.state.max}
           onChange={this.onSliderChange}
         />
       </div>
@@ -93,23 +94,23 @@ ReactDOM.render(
   <div>
     <div style={style}>
       <p>Basic Range，`allowCross=false`</p>
-      <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} />
+      <Range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>
-      <Slider range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
+      <Range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20, dots` </p>
-      <Slider range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+      <Range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
     <div style={style}>
       <p>Controlled Range</p>
-      <Slider range value={[20, 40]} />
+      <Range value={[20, 40]} />
     </div>
     <div style={style}>
       <p>Multi Range</p>
-      <Slider range={3} value={[20, 40, 60, 80]} />
+      <Range range={3} value={[20, 40, 60, 80]} />
     </div>
     <div style={style}>
       <p>Customized Range</p>
