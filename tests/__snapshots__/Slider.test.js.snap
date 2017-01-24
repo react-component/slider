@@ -1,0 +1,17 @@
+exports[`Slider should render Slider with correct DOM structure 1`] = `
+<div
+  class="rc-slider">
+  <div
+    class="rc-slider-rail" />
+  <div
+    class="rc-slider-track rc-slider-track-1"
+    style="visibility:visible;left:0%;width:0%;" />
+  <div
+    class="rc-slider-step" />
+  <div
+    class="rc-slider-handle rc-slider-handle-2 rc-slider-handle-upper"
+    style="left:0%;" />
+  <div
+    class="rc-slider-mark" />
+</div>
+`;
