@@ -5,6 +5,7 @@ import createSlider from './createSlider';
 import * as utils from './utils';
 
 class Slider extends React.Component {
+  static displayName = 'Slider';
   static propTypes = {
     defaultValue: PropTypes.number,
     value: PropTypes.number,

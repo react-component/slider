@@ -6,6 +6,7 @@ import createSlider from './createSlider';
 import * as utils from './utils';
 
 class Range extends React.Component {
+  static displayName = 'Range';
   static propTypes = {
     defaultValue: PropTypes.arrayOf(PropTypes.number),
     value: PropTypes.arrayOf(PropTypes.number),

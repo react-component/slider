@@ -5,18 +5,19 @@ require('rc-tooltip/assets/bootstrap.css');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+const Tooltip = require('rc-tooltip');
 const Slider = require('rc-slider');
 const Range = Slider.Range;
 const Handle = Slider.Handle;
-const Tooltip = require('rc-tooltip');
 
 const handle = (props) => {
-  const { value, dragging } = props;
+  const { value, dragging, index } = props;
   return (
     <Tooltip
       overlay={value}
       visible={dragging}
       placement="top"
+      key={index}
     >
       <Handle {...props} />
     </Tooltip>

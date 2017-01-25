@@ -74,16 +74,17 @@ The following APIs are shared by Slider and Range.
 
 | Name         | Type    | Default | Description |
 | ------------ | ------- | ------- | ----------- |
-| className | string | `rc-slider` | Additional CSS class for the root DOM node |
+| className | string | `''` | Additional CSS class for the root DOM node |
 | min | number | `0` | The minimum value of the slider |
 | max | number | `100` | The maximum value of the slider |
-| marks | `{number: string}` or`{number: { style, label }}` | `{}` | Mark on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
-| step | number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero. `max` - `min` should be evenly divisible by the step value. When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. |
-| vertical | Boolean | `false` | If vertical is `true`, the slider will be vertical. |
+| marks | `{number: string}` or`{number: { style, label }}` | `{}` | Marks on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
+| step | number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero, and `max` - `min` should be evenly divisible by the step value. <br /> When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. |
+| vertical | boolean | `false` | If vertical is `true`, the slider will be vertical. |
 | handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
-| included | Boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
-| disabled | Boolean | `false` | If `true`, handles can't be moved. |
-| dots | Boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
+| included | boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
+| disabled | boolean | `false` | If `true`, handles can't be moved. |
+| dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
+| onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
 | onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
 
@@ -98,11 +99,11 @@ The following APIs are shared by Slider and Range.
 
 | Name         | Type    | Default | Description |
 | ------------ | ------- | ------- | ----------- |
-| defaultValue | `[number, number, ...]` | `[0, 0]` | Set initial positions of handles. |
-| value | `[number, number, ...]` | | Set current positions of handles. |
+| defaultValue | `number[]` | `[0, 0]` | Set initial positions of handles. |
+| value | `number[]` | | Set current positions of handles. |
 | range | Boolean or Number | `false` | Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using `range={true}` is equivalent to `range={1}`. |
-| allowCross | Boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
-| pushable | Boolean or Number | `true` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
+| allowCross | boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
+| pushable | boolean or number | `true` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
 
 ## Development
 

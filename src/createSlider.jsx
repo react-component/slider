@@ -11,6 +11,7 @@ function noop() {}
 
 export default function createSlider(Component) {
   return class ComponentEnhancer extends Component {
+    static displayName = `ComponentEnhancer(${Component.displayName})`;
     static propTypes = {
       ...Component.propTypes,
       min: PropTypes.number,
