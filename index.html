@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@5.4.3 - Slider UI component for React</title>
+  <title>rc-slider@6.0.0 - Slider UI component for React</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,14 +737,14 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@5.4.3</h1>
+  <h1>rc-slider@6.0.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
   <div class="examples-body">
     <ul>
       
-      <li><a href="examples/custom-handles.html">custom-handles</a></li>
+      <li><a href="examples/handle.html">handle</a></li>
       
       <li><a href="examples/marks.html">marks</a></li>
       
@@ -752,11 +752,7 @@
       
       <li><a href="examples/slider.html">slider</a></li>
       
-      <li><a href="examples/v-marks.html">v-marks</a></li>
-      
-      <li><a href="examples/v-range.html">v-range</a></li>
-      
-      <li><a href="examples/v-slider.html">v-slider</a></li>
+      <li><a href="examples/vertical.html">vertical</a></li>
       
     </ul>
   </div>
@@ -771,9 +767,7 @@
 <a href="https://coveralls.io/r/react-component/slider?branch=master" title="null"><img src="https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square" alt="Test coverage"></a>
 <a href="https://gemnasium.com/react-component/slider" title="null"><img src="http://img.shields.io/gemnasium/react-component/slider.svg?style=flat-square" alt="gemnasium deps"></a>
 <a href="http://nodejs.org/download/" title="null"><img src="https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square" alt="node version"></a>
-<a href="https://npmjs.org/package/rc-slider" title="null"><img src="https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square" alt="npm download"></a>
-<a href="https://saucelabs.com/u/rc-slider" title="null"><img src="https://saucelabs.com/buildstatus/rc-slider" alt="Sauce Test Status"></a>
-<a href="https://saucelabs.com/u/rc-slider" title="null"><img src="https://saucelabs.com/browser-matrix/rc-slider.svg" alt="Sauce Test Status"></a></p>
+<a href="https://npmjs.org/package/rc-slider" title="null"><img src="https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square" alt="npm download"></a></p>
 <h2>Screenshots<a id="user-content-screenshots" name="screenshots" class="anchor" aria-hidden="true" href="#screenshots"><span class="octicon octicon-link"></span></a></h2><p><img src="https://t.alipayobjects.com/images/T1ki8fXeprXXXXXXXX.png" width="550"/></p>
 <p><img src="https://t.alipayobjects.com/images/T1pPhfXhBqXXXXXXXX.png" width="550"/></p>
 <p><img src="https://t.alipayobjects.com/images/T1wO8fXd4rXXXXXXXX.png" width="550"/></p>
@@ -781,13 +775,24 @@
 <h2>Features<a id="user-content-features" name="features" class="anchor" aria-hidden="true" href="#features"><span class="octicon octicon-link"></span></a></h2><ul>
 <li>Supports IE9, IE9+, Chrome, Firefox &amp; Safari</li>
 </ul>
-<h3>Keyboard<a id="user-content-keyboard" name="keyboard" class="anchor" aria-hidden="true" href="#keyboard"><span class="octicon octicon-link"></span></a></h3><h2>Install<a id="user-content-install" name="install" class="anchor" aria-hidden="true" href="#install"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="bash">npm install --save rc-slider</code></pre></div><p><a href="https://npmjs.org/package/rc-slider" title="null"><img src="https://nodei.co/npm/rc-slider.png" alt="rc-slider"></a></p>
-<h2>Usage<a id="user-content-usage" name="usage" class="anchor" aria-hidden="true" href="#usage"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="js"><span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider/assets/index.css'</span>);
+<h2>Install<a id="user-content-install" name="install" class="anchor" aria-hidden="true" href="#install"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="bash">npm install --save rc-slider</code></pre></div><p><a href="https://npmjs.org/package/rc-slider" title="null"><img src="https://nodei.co/npm/rc-slider.png" alt="rc-slider"></a></p>
+<h2>Usage<a id="user-content-usage" name="usage" class="anchor" aria-hidden="true" href="#usage"><span class="octicon octicon-link"></span></a></h2><div class="highlight"><pre><code language="js"><span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
+<span class="hljs-keyword">import</span> Slider, { Range } <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-slider'</span>;
+<span class="hljs-comment">// We can just import Slider or Range to reduce bundle size</span>
+<span class="hljs-comment">// import Slider from 'rc-slider/lib/Slider';</span>
+<span class="hljs-comment">// import Range from 'rc-slider/lib/Range';</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'rc-slider/assets/index.css'</span>;
 
-<span class="hljs-keyword">var</span> React = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react'</span>);
-<span class="hljs-keyword">var</span> ReactDOM = <span class="hljs-built_in">require</span>(<span class="hljs-string">'react-dom'</span>);
-<span class="hljs-keyword">var</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
-ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> /&gt;</span>, container);</span></code></pre></div><h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><h3>props<a id="user-content-props" name="props" class="anchor" aria-hidden="true" href="#props"><span class="octicon octicon-link"></span></a></h3><table>
+ReactDOM.render(
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> /&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">Range</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>,
+  container
+);
+`</span></code></pre></div><h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><h3>Common API<a id="user-content-common-api" name="common-api" class="anchor" aria-hidden="true" href="#common-api"><span class="octicon octicon-link"></span></a></h3><p>The following APIs are shared by Slider and Range.</p>
+<table>
 <thead>
 <tr>
 <th>Name</th>
@@ -799,105 +804,69 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
 <tbody>
 <tr>
 <td>className</td>
-<td>String</td>
-<td><code>rc-slider</code></td>
+<td>string</td>
+<td><code>&#39;&#39;</code></td>
 <td>Additional CSS class for the root DOM node</td>
 </tr>
 <tr>
 <td>min</td>
-<td>Number</td>
+<td>number</td>
 <td><code>0</code></td>
 <td>The minimum value of the slider</td>
 </tr>
 <tr>
 <td>max</td>
-<td>Number</td>
+<td>number</td>
 <td><code>100</code></td>
 <td>The maximum value of the slider</td>
 </tr>
 <tr>
 <td>marks</td>
-<td><code>{ number: string }</code> or<code>{ number: { style, label }}</code></td>
+<td><code>{number: string}</code> or<code>{number: { style, label }}</code></td>
 <td><code>{}</code></td>
-<td>Mark on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains <code>style</code> and <code>label</code> properties.</td>
+<td>Marks on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains <code>style</code> and <code>label</code> properties.</td>
 </tr>
 <tr>
 <td>step</td>
-<td>Number or <code>null</code></td>
+<td>number or <code>null</code></td>
 <td><code>1</code></td>
-<td>Value to be added or subtracted on each step the slider makes. Must be greater than zero. <code>max</code> - <code>min</code> should be evenly divisible by the step value. When <code>marks</code> is not an empty object, <code>step</code> can be set to <code>null</code>, to make <code>marks</code> as steps.</td>
-</tr>
-<tr>
-<td>range</td>
-<td>Boolean or Number</td>
-<td><code>false</code></td>
-<td>Determines the type of slider. If range is <code>true</code>, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using <code>range={true}</code> is equivalent to <code>range={1}</code>.</td>
-</tr>
-<tr>
-<td>allowCross</td>
-<td>Boolean</td>
-<td><code>true</code></td>
-<td>When <code>range</code> is <code>true</code>, <code>allowCross</code> could be set as <code>true</code> to allow those handles to cross.</td>
-</tr>
-<tr>
-<td>pushable</td>
-<td>Boolean or Number</td>
-<td><code>true</code></td>
-<td>When <code>range</code> is <code>true</code>, <code>pushable</code> could be set as <code>true</code> to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: <img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif" alt=""></td>
+<td>Value to be added or subtracted on each step the slider makes. Must be greater than zero, and <code>max</code> - <code>min</code> should be evenly divisible by the step value. <br /> When <code>marks</code> is not an empty object, <code>step</code> can be set to <code>null</code>, to make <code>marks</code> as steps.</td>
 </tr>
 <tr>
 <td>vertical</td>
-<td>Boolean</td>
+<td>boolean</td>
 <td><code>false</code></td>
 <td>If vertical is <code>true</code>, the slider will be vertical.</td>
 </tr>
 <tr>
-<td>defaultValue</td>
-<td>Number or <code>[Number, Number, ...]</code></td>
-<td><code>0</code> or <code>[0, 0]</code></td>
-<td>Set initial positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number, ...]</code></td>
-</tr>
-<tr>
-<td>value</td>
-<td>Number or <code>[Number, Number, ...]</code></td>
-<td></td>
-<td>Set current positions of handles. If range is <code>false</code>, the type of <code>defaultValue</code> should be <code>number</code>. Otherwise, <code>[number, number, ...]</code></td>
-</tr>
-<tr>
 <td>handle</td>
-<td>Component</td>
+<td>(props) =&gt; React.ReactNode</td>
 <td></td>
-<td>Provide a custom Handle to use in the slider by passing a component. This component will have a <code>value</code> and <code>offset</code> props used to define custom styling/content.</td>
+<td>A handle generator which could be used to customized handle.</td>
 </tr>
 <tr>
 <td>included</td>
-<td>Boolean</td>
+<td>boolean</td>
 <td><code>true</code></td>
 <td>If the value is <code>true</code>, it means a continuous value interval, otherwise, it is a independent value.</td>
 </tr>
 <tr>
 <td>disabled</td>
-<td>Boolean</td>
+<td>boolean</td>
 <td><code>false</code></td>
 <td>If <code>true</code>, handles can&#39;t be moved.</td>
 </tr>
 <tr>
-<td>tipTransitionName</td>
-<td>String</td>
-<td><code>&#39;&#39;</code></td>
-<td>Set the animation for tooltip if it shows.</td>
-</tr>
-<tr>
-<td>tipFormatter</td>
-<td>Function or <code>null</code></td>
-<td></td>
-<td>Format the value of the tooltip if it shows. If <code>null</code> the tooltip will always be hidden. When given a function, the first argument will be the value and the second will be the index of the slider handle.</td>
-</tr>
-<tr>
 <td>dots</td>
-<td>Boolean</td>
+<td>boolean</td>
 <td><code>false</code></td>
 <td>When the <code>step</code> value is greater than 1, you can set the <code>dots</code> to  <code>true</code> if you want to render the slider with dots.</td>
+</tr>
+<tr>
+<td>onBeforeChange</td>
+<td>Function</td>
+<td>NOOP</td>
+<td><code>onBeforeChange</code> will be triggered when <code>ontouchstart</code> or <code>onmousedown</code> is triggered.</td>
 </tr>
 <tr>
 <td>onChange</td>
@@ -910,6 +879,72 @@ ReactDOM.render(<span class="xml"><span class="hljs-tag">&lt;<span class="hljs-t
 <td>Function</td>
 <td>NOOP</td>
 <td><code>onAfterChange</code> will be triggered when <code>ontouchend</code> or <code>onmouseup</code> is triggered.</td>
+</tr>
+</tbody>
+</table>
+<h3>Slider<a id="user-content-slider" name="slider" class="anchor" aria-hidden="true" href="#slider"><span class="octicon octicon-link"></span></a></h3><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>defaultValue</td>
+<td>number</td>
+<td><code>0</code></td>
+<td>Set initial value of slider.</td>
+</tr>
+<tr>
+<td>value</td>
+<td>number</td>
+<td>-</td>
+<td>Set current value of slider.</td>
+</tr>
+</tbody>
+</table>
+<h3>Range<a id="user-content-range" name="range" class="anchor" aria-hidden="true" href="#range"><span class="octicon octicon-link"></span></a></h3><table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Type</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>defaultValue</td>
+<td><code>number[]</code></td>
+<td><code>[0, 0]</code></td>
+<td>Set initial positions of handles.</td>
+</tr>
+<tr>
+<td>value</td>
+<td><code>number[]</code></td>
+<td></td>
+<td>Set current positions of handles.</td>
+</tr>
+<tr>
+<td>count</td>
+<td>number</td>
+<td><code>1</code></td>
+<td>Determine how many ranges to render, and multiple handles will be rendered (number + 1).</td>
+</tr>
+<tr>
+<td>allowCross</td>
+<td>boolean</td>
+<td><code>true</code></td>
+<td><code>allowCross</code> could be set as <code>true</code> to allow those handles to cross.</td>
+</tr>
+<tr>
+<td>pushable</td>
+<td>boolean or number</td>
+<td><code>true</code></td>
+<td><code>pushable</code> could be set as <code>true</code> to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: <img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif" alt=""></td>
 </tr>
 </tbody>
 </table>

@@ -3,21 +3,21 @@ webpackJsonp([1],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(323);
+	module.exports = __webpack_require__(327);
 
 
 /***/ },
 
-/***/ 323:
+/***/ 327:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
 	__webpack_require__(2);
 	
-	var React = __webpack_require__(3);
-	var ReactDOM = __webpack_require__(34);
-	var Slider = __webpack_require__(180);
+	var React = __webpack_require__(4);
+	var ReactDOM = __webpack_require__(35);
+	var Slider = __webpack_require__(256);
 	
 	var style = { width: 400, margin: 50 };
 	var marks = {
@@ -97,7 +97,7 @@ webpackJsonp([1],{
 	      null,
 	      'Range with marks'
 	    ),
-	    React.createElement(Slider, { min: -10, range: true, marks: marks, onChange: log, defaultValue: [20, 40] })
+	    React.createElement(Slider.Range, { min: -10, marks: marks, onChange: log, defaultValue: [20, 40] })
 	  ),
 	  React.createElement(
 	    'div',
@@ -107,7 +107,7 @@ webpackJsonp([1],{
 	      null,
 	      'Range with marks and steps'
 	    ),
-	    React.createElement(Slider, { min: -10, range: true, marks: marks, step: 10, onChange: log, defaultValue: [20, 40] })
+	    React.createElement(Slider.Range, { min: -10, marks: marks, step: 10, onChange: log, defaultValue: [20, 40] })
 	  )
 	), document.getElementById('__react-content'));
 
