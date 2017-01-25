@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
 import warning from 'warning';
@@ -10,47 +10,32 @@ import * as utils from './utils';
 function noop() {}
 
 export default function createSlider(Component) {
-  return class ComponentWrapper extends Component {
+  return class ComponentEnhancer extends Component {
     static propTypes = {
-      min: React.PropTypes.number,
-      max: React.PropTypes.number,
-      step: React.PropTypes.number,
-      defaultValue: React.PropTypes.oneOfType([
-        React.PropTypes.number,
-        React.PropTypes.arrayOf(React.PropTypes.number),
-      ]),
-      value: React.PropTypes.oneOfType([
-        React.PropTypes.number,
-        React.PropTypes.arrayOf(React.PropTypes.number),
-      ]),
-      marks: React.PropTypes.object,
-      included: React.PropTypes.bool,
-      className: React.PropTypes.string,
-      prefixCls: React.PropTypes.string,
-      tooltipPrefixCls: React.PropTypes.string,
-      disabled: React.PropTypes.bool,
-      children: React.PropTypes.any,
-      onBeforeChange: React.PropTypes.func,
-      onChange: React.PropTypes.func,
-      onAfterChange: React.PropTypes.func,
-      handle: React.PropTypes.element,
-      tipTransitionName: React.PropTypes.string,
-      tipFormatter: React.PropTypes.func,
-      dots: React.PropTypes.bool,
-      range: React.PropTypes.oneOfType([
-        React.PropTypes.bool,
-        React.PropTypes.number,
-      ]),
-      vertical: React.PropTypes.bool,
-      allowCross: React.PropTypes.bool,
-      pushable: React.PropTypes.oneOfType([
-        React.PropTypes.bool,
-        React.PropTypes.number,
-      ]),
-      style: React.PropTypes.object,
+      ...Component.propTypes,
+      min: PropTypes.number,
+      max: PropTypes.number,
+      step: PropTypes.number,
+      marks: PropTypes.object,
+      included: PropTypes.bool,
+      className: PropTypes.string,
+      prefixCls: PropTypes.string,
+      tooltipPrefixCls: PropTypes.string,
+      disabled: PropTypes.bool,
+      children: PropTypes.any,
+      onBeforeChange: PropTypes.func,
+      onChange: PropTypes.func,
+      onAfterChange: PropTypes.func,
+      handle: PropTypes.element,
+      tipTransitionName: PropTypes.string,
+      tipFormatter: PropTypes.func,
+      dots: PropTypes.bool,
+      vertical: PropTypes.bool,
+      style: PropTypes.object,
     };
 
     static defaultProps = {
+      ...Component.defaultProps,
       prefixCls: 'rc-slider',
       className: '',
       tipTransitionName: '',
@@ -67,8 +52,6 @@ export default function createSlider(Component) {
       disabled: false,
       dots: false,
       vertical: false,
-      allowCross: true,
-      pushable: false,
     };
 
     constructor(props) {
@@ -89,7 +72,7 @@ export default function createSlider(Component) {
 
       const isVertical = this.props.vertical;
       let position = utils.getMousePosition(isVertical, e);
-      if (!utils.isEventFromHandle(e, this.handles)) {
+      if (!utils.isEventFromHandle(e, this.handlesRefs)) {
         this.dragOffset = 0;
       } else {
         const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
@@ -97,38 +80,46 @@ export default function createSlider(Component) {
         position = handlePosition;
       }
       this.onStart(position);
-      this.addDocumentEvents('mouse');
+      this.addDocumentMouseEvents();
       utils.pauseEvent(e);
     }
 
     onTouchStart = (e) => {
       if (utils.isNotTouchEvent(e)) return;
 
-      let position = utils.getTouchPosition(this.props.vertical, e);
-      if (!utils.isEventFromHandle(e, this.handles)) {
+      const isVertical = this.props.vertical;
+      let position = utils.getTouchPosition(isVertical, e);
+      if (!utils.isEventFromHandle(e, this.handlesRefs)) {
         this.dragOffset = 0;
       } else {
-        const handlePosition = utils.getHandleCenterPosition(this.props.vertical, e.target);
+        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
       this.onStart(position);
-      this.addDocumentEvents('touch');
+      this.addDocumentTouchEvents();
       utils.pauseEvent(e);
     }
 
-    addDocumentEvents(type) {
-      if (type === 'touch') {
-        // just work for Chrome iOS Safari and Android Browser
-        this.onTouchMoveListener = addEventListener(document, 'touchmove', this.onTouchMove);
-        this.onTouchUpListener =
-          addEventListener(document, 'touchend', this.end.bind(this, 'touch'));
-      }
-      if (type === 'mouse') {
-        this.onMouseMoveListener = addEventListener(document, 'mousemove', this.onMouseMove);
-        this.onMouseUpListener =
-          addEventListener(document, 'mouseup', this.end.bind(this, 'mouse'));
-      }
+    addDocumentTouchEvents() {
+      // just work for Chrome iOS Safari and Android Browser
+      this.onTouchMoveListener = addEventListener(document, 'touchmove', this.onTouchMove);
+      this.onTouchUpListener = addEventListener(document, 'touchend', this.onEnd);
+    }
+
+    addDocumentMouseEvents() {
+      this.onMouseMoveListener = addEventListener(document, 'mousemove', this.onMouseMove);
+      this.onMouseUpListener = addEventListener(document, 'mouseup', this.onEnd);
+    }
+
+    removeDocumentEvents() {
+      /* eslint-disable no-unused-expressions */
+      this.onTouchMoveListener && this.onTouchMoveListener.remove();
+      this.onTouchUpListener && this.onTouchUpListener.remove();
+
+      this.onMouseMoveListener && this.onMouseMoveListener.remove();
+      this.onMouseUpListener && this.onMouseUpListener.remove();
+      /* eslint-enable no-unused-expressions */
     }
 
     onMouseMove = (e) => {
@@ -138,7 +129,7 @@ export default function createSlider(Component) {
 
     onTouchMove = (e) => {
       if (utils.isNotTouchEvent(e)) {
-        this.end('touch');
+        this.onEnd();
         return;
       }
 
@@ -146,8 +137,15 @@ export default function createSlider(Component) {
       this.onMove(e, position - this.dragOffset);
     }
 
+    getSliderStart() {
+      const slider = this.sliderRef;
+      const rect = slider.getBoundingClientRect();
+
+      return this.props.vertical ? rect.top : rect.left;
+    }
+
     getSliderLength() {
-      const slider = this.refs.slider;
+      const slider = this.sliderRef;
       if (!slider) {
         return 0;
       }
@@ -155,14 +153,6 @@ export default function createSlider(Component) {
       return this.props.vertical ?
         slider.clientHeight : slider.clientWidth;
     }
-
-    getSliderStart() {
-      const slider = this.refs.slider;
-      const rect = slider.getBoundingClientRect();
-
-      return this.props.vertical ? rect.top : rect.left;
-    }
-
 
     calcValue(offset) {
       const { vertical, min, max } = this.props;
@@ -177,37 +167,22 @@ export default function createSlider(Component) {
       return nextValue;
     }
 
-    end(type) {
-      this.dragging = false;
-      this.removeEvents(type);
-      this.props.onAfterChange(this.getValue());
-      this.setState({ handle: null });
-    }
-
-    removeEvents(type) {
-      if (type === 'touch') {
-        this.onTouchMoveListener.remove();
-        this.onTouchUpListener.remove();
-      }
-      if (type === 'mouse') {
-        this.onMouseMoveListener.remove();
-        this.onMouseUpListener.remove();
-      }
-    }
-
     calcOffset(value) {
       const { min, max } = this.props;
       const ratio = (value - min) / (max - min);
       return ratio * 100;
     }
 
-    saveHandle(index, handle) {
-      if (!this.handles) {
-        this.handles = {};
-      }
-      this.handles[index] = handle;
+    saveSlider = (slider) => {
+      this.sliderRef = slider;
     }
 
+    saveHandle(index, handle) {
+      if (!this.handlesRefs) {
+        this.handlesRefs = {};
+      }
+      this.handlesRefs[index] = handle;
+    }
 
     render() {
       const {
@@ -231,11 +206,11 @@ export default function createSlider(Component) {
         [`${prefixCls}-with-marks`]: Object.keys(marks).length,
         [`${prefixCls}-disabled`]: disabled,
         [`${prefixCls}-vertical`]: vertical,
-        [className]: !!className,
+        [className]: className,
       });
       return (
         <div
-          ref="slider"
+          ref={this.saveSlider}
           className={sliderClassName}
           onTouchStart={disabled ? noop : this.onTouchStart}
           onMouseDown={disabled ? noop : this.onMouseDown}

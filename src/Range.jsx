@@ -1,15 +1,32 @@
 /* eslint-disable react/prop-types */
-import React, { cloneElement } from 'react';
+import React, { PropTypes, cloneElement } from 'react';
 import classNames from 'classnames';
 import Track from './Track';
 import createSlider from './createSlider';
 import * as utils from './utils';
 
 class Range extends React.Component {
+  static propTypes = {
+    defaultValue: PropTypes.arrayOf(PropTypes.number),
+    value: PropTypes.arrayOf(PropTypes.number),
+    range: PropTypes.number,
+    pushable: PropTypes.oneOfType([
+      PropTypes.bool,
+      PropTypes.number,
+    ]),
+    allowCross: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    range: 1,
+    allowCross: true,
+    pushable: false,
+  };
+
   constructor(props) {
     super(props);
 
-    const { range = 1, min, max } = props;
+    const { range, min, max } = props;
     const initialValue = Array.apply(null, Array(range + 1))
             .map(() => min);
     const defaultValue = 'defaultValue' in props ?
@@ -88,12 +105,18 @@ class Range extends React.Component {
       recent: valueNeedChanging,
     });
 
-    const oldValue = bounds[valueNeedChanging];
-    if (value === oldValue) return;
+    const prevValue = bounds[valueNeedChanging];
+    if (value === prevValue) return;
 
     const nextBounds = [...state.bounds];
     nextBounds[valueNeedChanging] = value;
     this.onChange({ bounds: nextBounds });
+  }
+
+  onEnd = () => {
+    this.setState({ handle: null });
+    this.removeDocumentEvents();
+    this.props.onAfterChange(this.getValue());
   }
 
   onMove(e, position) {
@@ -218,32 +241,26 @@ class Range extends React.Component {
   }
 
   trimAlignValue(v, nextProps = {}) {
+    const mergedProps = { ...this.props, ...nextProps };
+    const valInRange = utils.ensureValueInRange(v, mergedProps);
+    const valNotConflict = this.ensureValueNotConflict(valInRange, mergedProps);
+    return utils.ensureValuePrecision(valNotConflict, mergedProps);
+  }
+
+  ensureValueNotConflict(val, { allowCross }) {
     const state = this.state || {};
     const { handle, bounds } = state;
-    const mergedProps = { ...this.props, ...nextProps };
-    const { step, min, max, allowCross } = mergedProps;
-    let val = v;
-    if (val <= min) {
-      val = min;
-    }
-    if (val >= max) {
-      val = max;
-    }
     /* eslint-disable eqeqeq */
     if (!allowCross && handle != null) {
-      // value should not smaller than left-most handle's
       if (handle > 0 && val <= bounds[handle - 1]) {
-        val = bounds[handle - 1];
+        return bounds[handle - 1];
       }
-      // value should not greater than right-most handle's
       if (handle < bounds.length - 1 && val >= bounds[handle + 1]) {
-        val = bounds[handle + 1];
+        return bounds[handle + 1];
       }
     }
     /* eslint-enable eqeqeq */
-    const closestPoint = utils.getClosestPoint(val, mergedProps);
-    return step === null ? closestPoint :
-      parseFloat(closestPoint.toFixed(utils.getPrecision(step)));
+    return val;
   }
 
   render() {

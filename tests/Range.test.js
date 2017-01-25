@@ -15,8 +15,8 @@ describe('Range', () => {
     expect(renderToJson(wrapper)).toMatchSnapshot();
   });
 
-  it('should render Range with default value correctly', () => {
-    const wrapper = mount(<Range defaultValue={[0, 50]} />);
+  it('should render Range with value correctly', () => {
+    const wrapper = mount(<Range value={[0, 50]} />);
     expect(wrapper.state('bounds')[0]).toBe(0);
     expect(wrapper.state('bounds')[1]).toBe(50);
     expect(wrapper.find('.rc-slider-handle').get(0).style.cssText).toMatch(/left: 0%;/);
@@ -28,8 +28,8 @@ describe('Range', () => {
     expect(trackStyle).toMatch(/visibility: visible;/);
   });
 
-  it('should render Multi-Range with default value correctly', () => {
-    const wrapper = mount(<Range range={3} defaultValue={[0, 25, 50, 75]} />);
+  it('should render Multi-Range with value correctly', () => {
+    const wrapper = mount(<Range range={3} value={[0, 25, 50, 75]} />);
     expect(wrapper.state('bounds')[0]).toBe(0);
     expect(wrapper.state('bounds')[1]).toBe(25);
     expect(wrapper.state('bounds')[2]).toBe(50);
@@ -53,18 +53,5 @@ describe('Range', () => {
     expect(track3Style).toMatch(/left: 50%;/);
     expect(track3Style).toMatch(/width: 25%;/);
     expect(track3Style).toMatch(/visibility: visible;/);
-  });
-
-  it('should render Range with value correctly', () => {
-    const wrapper = mount(<Range value={[50, 100]} />);
-    expect(wrapper.state('bounds')[0]).toBe(50);
-    expect(wrapper.state('bounds')[1]).toBe(100);
-    expect(wrapper.find('.rc-slider-handle').get(0).style.cssText).toMatch(/left: 50%;/);
-    expect(wrapper.find('.rc-slider-handle').get(1).style.cssText).toMatch(/left: 100%;/);
-
-    const trackStyle = wrapper.find('.rc-slider-track').get(0).style.cssText;
-    expect(trackStyle).toMatch(/left: 50%;/);
-    expect(trackStyle).toMatch(/width: 50%;/);
-    expect(trackStyle).toMatch(/visibility: visible;/);
   });
 });

@@ -1,22 +1,29 @@
 /* eslint-disable react/prop-types */
-import React, { cloneElement } from 'react';
+import React, { PropTypes, cloneElement } from 'react';
 import classNames from 'classnames';
 import Track from './Track';
 import createSlider from './createSlider';
 import * as utils from './utils';
 
 class Slider extends React.Component {
+  static propTypes = {
+    defaultValue: PropTypes.number,
+    value: PropTypes.number,
+  };
+
+  static defaultProps = {};
+
   constructor(props) {
     super(props);
 
-    const { min } = props;
-    const defaultValue = 'defaultValue' in props ?
-            props.defaultValue : min;
+    const defaultValue = props.defaultValue !== undefined ?
+            props.defaultValue : props.min;
     const value = props.value !== undefined ?
             props.value : defaultValue;
 
     this.state = {
       value: this.trimAlignValue(value),
+      dragging: false,
     };
   }
 
@@ -47,7 +54,7 @@ class Slider extends React.Component {
   }
 
   onStart(position) {
-    this.dragging = true;
+    this.setState({ dragging: true });
     const props = this.props;
     const prevValue = this.getValue();
     props.onBeforeChange(prevValue);
@@ -59,6 +66,12 @@ class Slider extends React.Component {
     if (value === prevValue) return;
 
     this.onChange({ value });
+  }
+
+  onEnd = () => {
+    this.setState({ dragging: false });
+    this.removeDocumentEvents();
+    this.props.onAfterChange(this.getValue());
   }
 
   onMove(e, position) {
@@ -91,19 +104,8 @@ class Slider extends React.Component {
 
   trimAlignValue(v, nextProps = {}) {
     const mergedProps = { ...this.props, ...nextProps };
-    const { step, min, max } = mergedProps;
-
-    let val = v;
-    if (val <= min) {
-      val = min;
-    }
-    if (val >= max) {
-      val = max;
-    }
-
-    const closestPoint = utils.getClosestPoint(val, mergedProps);
-    return step === null ? closestPoint :
-      parseFloat(closestPoint.toFixed(utils.getPrecision(step)));
+    const val = utils.ensureValueInRange(v, mergedProps);
+    return utils.ensureValuePrecision(val, mergedProps);
   }
 
   render() {
@@ -117,7 +119,7 @@ class Slider extends React.Component {
       tipFormatter,
     } = this.props;
     const customHandle = this.props.handle;
-    const { value } = this.state;
+    const { value, dragging } = this.state;
     const offset = this.calcOffset(value);
 
     const handleClassName = `${prefixCls}-handle`;
@@ -138,7 +140,7 @@ class Slider extends React.Component {
       className: handleClassName,
       value,
       offset,
-      dragging: this.dragging,
+      dragging,
       ref: h => this.saveHandle(0, h),
     });
 

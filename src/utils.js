@@ -5,8 +5,16 @@ export function isEventFromHandle(e, handles) {
     .some(key => e.target === findDOMNode(handles[key]));
 }
 
-export function getClosestPoint(val, props) {
-  const { marks, step, min } = props;
+export function isValueOutOfRange(value, { min, max }) {
+  return value < min || value > max;
+}
+
+export function isNotTouchEvent(e) {
+  return e.touches.length > 1 ||
+    (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
+}
+
+export function getClosestPoint(val, { marks, step, min }) {
   const points = Object.keys(marks).map(parseFloat);
   if (step !== null) {
     const closestStep =
@@ -26,12 +34,12 @@ export function getPrecision(step) {
   return precision;
 }
 
-export function isValueOutOfRange(value, { min, max }) {
-  return value < min || value > max;
-}
-
 export function getMousePosition(vertical, e) {
   return vertical ? e.clientY : e.pageX;
+}
+
+export function getTouchPosition(vertical, e) {
+  return vertical ? e.touches[0].clientY : e.touches[0].pageX;
 }
 
 export function getHandleCenterPosition(vertical, handle) {
@@ -41,15 +49,24 @@ export function getHandleCenterPosition(vertical, handle) {
     coords.left + (coords.width * 0.5);
 }
 
+export function ensureValueInRange(val, { max, min }) {
+  if (val <= min) {
+    return min;
+  }
+  if (val >= max) {
+    return max;
+  }
+  return val;
+}
+
+export function ensureValuePrecision(val, props) {
+  const { step } = props;
+  const closestPoint = getClosestPoint(val, props);
+  return step === null ? closestPoint :
+    parseFloat(closestPoint.toFixed(getPrecision(step)));
+}
+
 export function pauseEvent(e) {
   e.stopPropagation();
   e.preventDefault();
-}
-
-export function isNotTouchEvent(e) {
-  return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
-}
-
-export function getTouchPosition(vertical, e) {
-  return vertical ? e.touches[0].clientY : e.touches[0].pageX;
 }
