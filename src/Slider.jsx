@@ -1,6 +1,5 @@
 /* eslint-disable react/prop-types */
 import React, { PropTypes, cloneElement } from 'react';
-import classNames from 'classnames';
 import Track from './Track';
 import createSlider from './createSlider';
 import * as utils from './utils';
@@ -76,14 +75,8 @@ class Slider extends React.Component {
 
   onMove(e, position) {
     utils.pauseEvent(e);
-    const props = this.props;
     const state = this.state;
-
-    let diffPosition = position - this.startPosition;
-    diffPosition = this.props.vertical ? -diffPosition : diffPosition;
-    const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
-
-    const value = this.trimAlignValue(this.startValue + diffValue);
+    const value = this.calcValueByPos(position);
     const oldValue = state.value;
     if (value === oldValue) return;
 
@@ -117,39 +110,28 @@ class Slider extends React.Component {
       step,
       tipTransitionName,
       tipFormatter,
+      handle: customHandle,
     } = this.props;
-    const customHandle = this.props.handle;
     const { value, dragging } = this.state;
     const offset = this.calcOffset(value);
-
-    const handleClassName = `${prefixCls}-handle`;
-
     const isNoTip = (step === null) || (tipFormatter === null);
 
-    const commonHandleProps = {
+    const handle = cloneElement(customHandle, {
       prefixCls,
       tooltipPrefixCls,
       noTip: isNoTip,
       tipTransitionName,
       tipFormatter,
       vertical,
-    };
-
-    const handle = cloneElement(customHandle, {
-      ...commonHandleProps,
-      className: handleClassName,
+      className: `${prefixCls}-handle`,
       value,
       offset,
       dragging,
       ref: h => this.saveHandle(0, h),
     });
-
-    const trackClassName = classNames({
-      [`${prefixCls}-track`]: true,
-    });
     const track = (
       <Track
-        className={trackClassName}
+        className={`${prefixCls}-track`}
         vertical={vertical}
         included={included}
         offset={0}

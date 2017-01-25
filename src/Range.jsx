@@ -81,35 +81,19 @@ class Range extends React.Component {
     this.startValue = value;
     this.startPosition = position;
 
-    let valueNeedChanging = 1;
-    let closestBound = 0;
-    for (let i = 1; i < bounds.length - 1; ++i) {
-      if (value > bounds[i]) { closestBound = i; }
-    }
-    if (Math.abs(bounds[closestBound + 1] - value) < Math.abs(bounds[closestBound] - value)) {
-      closestBound = closestBound + 1;
-    }
-    valueNeedChanging = closestBound;
-
-    const isAtTheSamePoint = (bounds[closestBound + 1] === bounds[closestBound]);
-    if (isAtTheSamePoint) {
-      valueNeedChanging = state.recent;
-    }
-
-    if (isAtTheSamePoint && (value !== bounds[closestBound + 1])) {
-      valueNeedChanging = value < bounds[closestBound + 1] ? closestBound : closestBound + 1;
-    }
+    const closestBound = this.getClosestBound(value);
+    const boundNeedMoving = this.getBoundNeedMoving(value, closestBound);
 
     this.setState({
-      handle: valueNeedChanging,
-      recent: valueNeedChanging,
+      handle: boundNeedMoving,
+      recent: boundNeedMoving,
     });
 
-    const prevValue = bounds[valueNeedChanging];
+    const prevValue = bounds[boundNeedMoving];
     if (value === prevValue) return;
 
     const nextBounds = [...state.bounds];
-    nextBounds[valueNeedChanging] = value;
+    nextBounds[boundNeedMoving] = value;
     this.onChange({ bounds: nextBounds });
   }
 
@@ -124,11 +108,7 @@ class Range extends React.Component {
     const props = this.props;
     const state = this.state;
 
-    let diffPosition = position - this.startPosition;
-    diffPosition = this.props.vertical ? -diffPosition : diffPosition;
-    const diffValue = diffPosition / this.getSliderLength() * (props.max - props.min);
-
-    const value = this.trimAlignValue(this.startValue + diffValue);
+    const value = this.calcValueByPos(position);
     const oldValue = state.bounds[state.handle];
     if (value === oldValue) return;
 
@@ -152,6 +132,41 @@ class Range extends React.Component {
     return this.state.bounds;
   }
 
+  getClosestBound(value) {
+    const { bounds } = this.state;
+    let closestBound = 0;
+    for (let i = 1; i < bounds.length - 1; ++i) {
+      if (value > bounds[i]) { closestBound = i; }
+    }
+    if (Math.abs(bounds[closestBound + 1] - value) < Math.abs(bounds[closestBound] - value)) {
+      closestBound = closestBound + 1;
+    }
+    return closestBound;
+  }
+
+  getBoundNeedMoving(value, closestBound) {
+    const { bounds, recent } = this.state;
+    let boundNeedMoving = closestBound;
+    const isAtTheSamePoint = (bounds[closestBound + 1] === bounds[closestBound]);
+    if (isAtTheSamePoint) {
+      boundNeedMoving = recent;
+    }
+
+    if (isAtTheSamePoint && (value !== bounds[closestBound + 1])) {
+      boundNeedMoving = value < bounds[closestBound + 1] ? closestBound : closestBound + 1;
+    }
+    return boundNeedMoving;
+  }
+
+  getLowerBound() {
+    return this.state.bounds[0];
+  }
+
+  getUpperBound() {
+    const { bounds } = this.state;
+    return bounds[bounds.length - 1];
+  }
+
   /**
    * Returns an array of possible slider points, taking into account both
    * `marks` and `step`. The result is cached.
@@ -173,24 +188,16 @@ class Range extends React.Component {
     return this._getPointsCache.points;
   }
 
-  getLowerBound() {
-    return this.state.bounds[0];
-  }
-
-  getUpperBound() {
-    const { bounds } = this.state;
-    return bounds[bounds.length - 1];
-  }
-
   pushSurroundingHandles(bounds, handle, originalValue) {
     const { pushable: threshold } = this.props;
     const value = bounds[handle];
 
     let direction = 0;
     if (bounds[handle + 1] - value < threshold) {
-      direction = +1;
-    } else if (value - bounds[handle - 1] < threshold) {
-      direction = -1;
+      direction = +1; // push to right
+    }
+    if (value - bounds[handle - 1] < threshold) {
+      direction = -1; // push to left
     }
 
     if (direction === 0) { return; }
@@ -276,14 +283,12 @@ class Range extends React.Component {
       step,
       tipTransitionName,
       tipFormatter,
+      handle: customHandle,
     } = this.props;
-
-    const customHandle = this.props.handle;
 
     const offsets = bounds.map(v => this.calcOffset(v));
 
     const handleClassName = `${prefixCls}-handle`;
-
     const handlesClassNames = bounds.map((v, i) => classNames({
       [handleClassName]: true,
       [`${handleClassName}-${i + 1}`]: true,

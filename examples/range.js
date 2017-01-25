@@ -110,7 +110,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Multi Range</p>
-      <Range range={3} value={[20, 40, 60, 80]} />
+      <Range range={3} defaultValue={[20, 40, 60, 80]} pushable />
     </div>
     <div style={style}>
       <p>Customized Range</p>
