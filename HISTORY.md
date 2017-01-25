@@ -1,6 +1,10 @@
 # History
 ----
 
+## 6.0.0 / 2017-01-25
+
+[Breaking Change] Re-design and refactor, almost a new UI component.
+
 ## 5.0.0 / 2016-09-12
 
 [#147](https://github.com/react-component/slider/issues/147) fix style conflicts with rc-tooltip [@benjycui](https://github.com/benjycui)
