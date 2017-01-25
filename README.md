@@ -38,8 +38,6 @@ Slider UI component for React
 
 * Supports IE9, IE9+, Chrome, Firefox & Safari
 
-### Keyboard
-
 ## Install
 
 ```bash
@@ -50,33 +48,38 @@ npm install --save rc-slider
 
 ## Usage
 
-```js
-require('rc-slider/assets/index.css');
+````js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import Slider, { Range } from 'rc-slider';
+// We can just import Slider or Range to reduce bundle size
+// import Slider from 'rc-slider/lib/Slider';
+// import Range from 'rc-slider/lib/Range';
+import 'rc-slider/assets/index.css';
 
-var React = require('react');
-var ReactDOM = require('react-dom');
-var Slider = require('rc-slider');
-ReactDOM.render(<Slider />, container);
-```
+ReactDOM.render(
+  <div>
+    <Slider />
+    <Range />
+  </div>,
+  container
+);
+`````
 
 ## API
 
-### props
+### Common API
 
+The following APIs are shared by Slider and Range.
 
 | Name         | Type    | Default | Description |
 | ------------ | ------- | ------- | ----------- |
-| className | String | `rc-slider` | Additional CSS class for the root DOM node |
-| min | Number | `0` | The minimum value of the slider |
-| max | Number | `100` | The maximum value of the slider |
-| marks | `{ number: string }` or`{ number: { style, label }}` | `{}` | Mark on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
-| step | Number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero. `max` - `min` should be evenly divisible by the step value. When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. | 
-| range | Boolean or Number | `false` | Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using `range={true}` is equivalent to `range={1}`. |
-| allowCross | Boolean | `true` | When `range` is `true`, `allowCross` could be set as `true` to allow those handles to cross. |
-| pushable | Boolean or Number | `true` | When `range` is `true`, `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
+| className | string | `rc-slider` | Additional CSS class for the root DOM node |
+| min | number | `0` | The minimum value of the slider |
+| max | number | `100` | The maximum value of the slider |
+| marks | `{number: string}` or`{number: { style, label }}` | `{}` | Mark on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
+| step | number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero. `max` - `min` should be evenly divisible by the step value. When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. |
 | vertical | Boolean | `false` | If vertical is `true`, the slider will be vertical. |
-| defaultValue | Number or `[Number, Number, ...]` | `0` or `[0, 0]` | Set initial positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number, ...]` |
-| value | Number or `[Number, Number, ...]` | | Set current positions of handles. If range is `false`, the type of `defaultValue` should be `number`. Otherwise, `[number, number, ...]` |
 | handle | Component | | Provide a custom Handle to use in the slider by passing a component. This component will have a `value` and `offset` props used to define custom styling/content. |
 | included | Boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
 | disabled | Boolean | `false` | If `true`, handles can't be moved. |
@@ -85,6 +88,23 @@ ReactDOM.render(<Slider />, container);
 | dots | Boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
 | onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
+
+### Slider
+
+| Name         | Type    | Default | Description |
+| ------------ | ------- | ------- | ----------- |
+| defaultValue | number | `0` | Set initial value of slider. |
+| value | number | - | Set current value of slider. |
+
+### Range
+
+| Name         | Type    | Default | Description |
+| ------------ | ------- | ------- | ----------- |
+| defaultValue | `[number, number, ...]` | `[0, 0]` | Set initial positions of handles. |
+| value | `[number, number, ...]` | | Set current positions of handles. |
+| range | Boolean or Number | `false` | Determines the type of slider. If range is `true`, two handles will be rendered in order to select a range. If range is a number, multiple handles will be rendered (number + 1). Using `range={true}` is equivalent to `range={1}`. |
+| allowCross | Boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
+| pushable | Boolean or Number | `true` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
 
 ## Development
 
