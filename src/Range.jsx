@@ -10,7 +10,7 @@ class Range extends React.Component {
   static propTypes = {
     defaultValue: PropTypes.arrayOf(PropTypes.number),
     value: PropTypes.arrayOf(PropTypes.number),
-    range: PropTypes.number,
+    count: PropTypes.number,
     pushable: PropTypes.oneOfType([
       PropTypes.bool,
       PropTypes.number,
@@ -19,7 +19,7 @@ class Range extends React.Component {
   };
 
   static defaultProps = {
-    range: 1,
+    count: 1,
     allowCross: true,
     pushable: false,
   };
@@ -27,8 +27,8 @@ class Range extends React.Component {
   constructor(props) {
     super(props);
 
-    const { range, min, max } = props;
-    const initialValue = Array.apply(null, Array(range + 1))
+    const { count, min, max } = props;
+    const initialValue = Array.apply(null, Array(count + 1))
             .map(() => min);
     const defaultValue = 'defaultValue' in props ?
             props.defaultValue : initialValue;

@@ -11,7 +11,7 @@ describe('Range', () => {
   });
 
   it('should render Multi-Range with correct DOM structure', () => {
-    const wrapper = render(<Range range={3} />);
+    const wrapper = render(<Range count={3} />);
     expect(renderToJson(wrapper)).toMatchSnapshot();
   });
 
@@ -29,7 +29,7 @@ describe('Range', () => {
   });
 
   it('should render Multi-Range with value correctly', () => {
-    const wrapper = mount(<Range range={3} value={[0, 25, 50, 75]} />);
+    const wrapper = mount(<Range count={3} value={[0, 25, 50, 75]} />);
     expect(wrapper.state('bounds')[0]).toBe(0);
     expect(wrapper.state('bounds')[1]).toBe(25);
     expect(wrapper.state('bounds')[2]).toBe(50);
