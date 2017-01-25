@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
 import warning from 'warning';
-import DefaultHandle from './Handle';
+import Handle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
 import * as utils from './utils';
@@ -20,15 +20,12 @@ export default function createSlider(Component) {
       included: PropTypes.bool,
       className: PropTypes.string,
       prefixCls: PropTypes.string,
-      tooltipPrefixCls: PropTypes.string,
       disabled: PropTypes.bool,
       children: PropTypes.any,
       onBeforeChange: PropTypes.func,
       onChange: PropTypes.func,
       onAfterChange: PropTypes.func,
-      handle: PropTypes.element,
-      tipTransitionName: PropTypes.string,
-      tipFormatter: PropTypes.func,
+      handle: PropTypes.func,
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
       style: PropTypes.object,
@@ -38,16 +35,16 @@ export default function createSlider(Component) {
       ...Component.defaultProps,
       prefixCls: 'rc-slider',
       className: '',
-      tipTransitionName: '',
       min: 0,
       max: 100,
       step: 1,
       marks: {},
-      handle: <DefaultHandle />,
+      handle({ index, ...restProps }) {
+        return <Handle {...restProps} key={index} />;
+      },
       onBeforeChange: noop,
       onChange: noop,
       onAfterChange: noop,
-      tipFormatter: value => value,
       included: true,
       disabled: false,
       dots: false,

@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { PropTypes, cloneElement } from 'react';
+import React, { PropTypes } from 'react';
 import Track from './Track';
 import createSlider from './createSlider';
 import * as utils from './utils';
@@ -104,28 +104,17 @@ class Slider extends React.Component {
   render() {
     const {
       prefixCls,
-      tooltipPrefixCls,
       vertical,
       included,
-      step,
-      tipTransitionName,
-      tipFormatter,
-      handle: customHandle,
+      handle: handleGenerator,
     } = this.props;
     const { value, dragging } = this.state;
     const offset = this.calcOffset(value);
-    const isNoTip = (step === null) || (tipFormatter === null);
-
-    const handle = cloneElement(customHandle, {
-      prefixCls,
-      tooltipPrefixCls,
-      noTip: isNoTip,
-      tipTransitionName,
-      tipFormatter,
-      vertical,
+    const handle = handleGenerator({
       className: `${prefixCls}-handle`,
-      value,
+      vertical,
       offset,
+      value,
       dragging,
       ref: h => this.saveHandle(0, h),
     });

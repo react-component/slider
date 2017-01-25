@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React, { PropTypes, cloneElement } from 'react';
+import React, { PropTypes } from 'react';
 import classNames from 'classnames';
 import Track from './Track';
 import createSlider from './createSlider';
@@ -277,54 +277,34 @@ class Range extends React.Component {
     } = this.state;
     const {
       prefixCls,
-      tooltipPrefixCls,
       vertical,
       included,
-      step,
-      tipTransitionName,
-      tipFormatter,
-      handle: customHandle,
+      handle: handleGenerator,
     } = this.props;
 
     const offsets = bounds.map(v => this.calcOffset(v));
 
     const handleClassName = `${prefixCls}-handle`;
-    const handlesClassNames = bounds.map((v, i) => classNames({
-      [handleClassName]: true,
-      [`${handleClassName}-${i + 1}`]: true,
-      [`${handleClassName}-lower`]: i === 0,
-      [`${handleClassName}-upper`]: i === bounds.length - 1,
-    }));
-
-    const isNoTip = (step === null) || (tipFormatter === null);
-
-    const commonHandleProps = {
-      prefixCls,
-      tooltipPrefixCls,
-      noTip: isNoTip,
-      tipTransitionName,
-      tipFormatter,
+    const handles = bounds.map((v, i) => handleGenerator({
+      className: classNames({
+        [handleClassName]: true,
+        [`${handleClassName}-${i + 1}`]: true,
+      }),
       vertical,
-    };
-
-    const handles = bounds.map((v, i) => cloneElement(customHandle, {
-      ...commonHandleProps,
-      className: handlesClassNames[i],
-      value: v,
       offset: offsets[i],
+      value: v,
       dragging: handle === i,
       index: i,
-      key: i,
       ref: h => this.saveHandle(i, h),
     }));
 
-    const tracks = [];
-    for (let i = 1; i < bounds.length; ++i) {
+    const tracks = bounds.slice(0, -1).map((_, index) => {
+      const i = index + 1;
       const trackClassName = classNames({
         [`${prefixCls}-track`]: true,
         [`${prefixCls}-track-${i}`]: true,
       });
-      tracks.push(
+      return (
         <Track
           className={trackClassName}
           vertical={vertical}
@@ -334,7 +314,7 @@ class Range extends React.Component {
           key={i}
         />
       );
-    }
+    });
 
     return { tracks, handles };
   }

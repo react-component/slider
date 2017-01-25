@@ -80,11 +80,9 @@ The following APIs are shared by Slider and Range.
 | marks | `{number: string}` or`{number: { style, label }}` | `{}` | Mark on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
 | step | number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero. `max` - `min` should be evenly divisible by the step value. When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. |
 | vertical | Boolean | `false` | If vertical is `true`, the slider will be vertical. |
-| handle | Component | | Provide a custom Handle to use in the slider by passing a component. This component will have a `value` and `offset` props used to define custom styling/content. |
+| handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
 | included | Boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
 | disabled | Boolean | `false` | If `true`, handles can't be moved. |
-| tipTransitionName | String | `''` | Set the animation for tooltip if it shows. |
-| tipFormatter | Function or `null` | | Format the value of the tooltip if it shows. If `null` the tooltip will always be hidden. When given a function, the first argument will be the value and the second will be the index of the slider handle. |
 | dots | Boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
 | onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
