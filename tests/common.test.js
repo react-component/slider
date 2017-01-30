@@ -121,6 +121,28 @@ describe('createSlider', () => {
     expect(wrapper.node.getValue()).toBe(9);
   });
 
+  it('should not go to right direction when mouse go to the left', () => {
+    const wrapper = mount(<Slider />);
+    wrapper.node.sliderRef.clientWidth = 100; // jsdom doesn't provide clientWidth
+    const leftHandle = wrapper.find('.rc-slider-handle').get(0);
+    wrapper.simulate('mousedown', {
+      type: 'mousedown',
+      target: leftHandle,
+      pageX: 5, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(wrapper.node.getValue()).toBe(0); // zero on start
+    wrapper.node.onMouseMove({ // to propagation
+      type: 'mousemove',
+      target: leftHandle,
+      pageX: 0, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(wrapper.node.getValue()).toBe(0); // still zero
+  });
+
   it('should set `dragOffset` to 0 when the MouseEvent target isn\'t a handle', () => {
     const wrapper = mount(<Slider />);
     wrapper.node.sliderRef.clientWidth = 100; // jsdom doesn't provide clientWidth
