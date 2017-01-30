@@ -23564,7 +23564,7 @@
 	          min = _props.min,
 	          max = _props.max;
 	
-	      var ratio = Math.abs(offset / this.getSliderLength());
+	      var ratio = Math.abs(Math.max(offset, 0) / this.getSliderLength());
 	      var value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
 	      return value;
 	    };
