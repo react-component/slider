@@ -66,6 +66,11 @@ export default function createSlider(Component) {
       }
     }
 
+    componentWillUnmount() {
+      if (super.componentWillUnmount) super.componentWillUnmount();
+      this.removeDocumentEvents();
+    }
+
     onMouseDown = (e) => {
       if (e.button !== 0) { return; }
 

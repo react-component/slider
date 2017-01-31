@@ -206,4 +206,21 @@ describe('createSlider', () => {
     });
     expect(wrapper.node.dragOffset).toBe(0);
   });
+
+  it('Should remove event listeners if unmounted during drag', () => {
+    const wrapper = mount(<Slider />);
+    wrapper.node.sliderRef.clientWidth = 100; // jsdom doesn't provide clientWidth
+    const sliderTrack = wrapper.find('.rc-slider-track').get(0);
+    wrapper.simulate('touchstart', {
+      type: 'touchstart',
+      target: sliderTrack,
+      touches: [{ pageX: 5 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(wrapper.getNode().onTouchUpListener).toBeTruthy();
+    wrapper.getNode().onTouchUpListener.remove = jest.fn();
+    wrapper.unmount();
+    expect(wrapper.getNode().onTouchUpListener.remove).toHaveBeenCalled();
+  });
 });
