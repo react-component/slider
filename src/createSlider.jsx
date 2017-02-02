@@ -6,6 +6,7 @@ import Handle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
 import * as utils from './utils';
+import * as d3Scale from 'd3-scale';
 
 function noop() {}
 
@@ -65,6 +66,7 @@ export default function createSlider(Component) {
         );
       }
     }
+
     onMouseDown = (e) => {
       if (e.button !== 0) { return; }
 
@@ -154,9 +156,14 @@ export default function createSlider(Component) {
 
     calcValue(offset) {
       const { vertical, min, max } = this.props;
-      const ratio = Math.abs(Math.max(offset, 0) / this.getSliderLength());
-      const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
-      return value;
+      let domain = [0, this.getSliderLength()];
+      if (vertical) {
+        domain = domain.reverse();
+      }
+      const scale = d3Scale.scaleLinear()
+        .range([min, max])
+        .domain(domain);
+      return scale(offset);
     }
 
     calcValueByPos(position) {
