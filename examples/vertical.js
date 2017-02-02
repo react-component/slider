@@ -9,11 +9,11 @@ const parentStyle = { overflow: 'hidden' };
 
 const marks = {
   '-10': '-10°C',
-  0: <strong>0°C</strong>,
-  26: '26°C',
-  37: '37°C',
-  50: '50°C',
-  100: {
+  '0': <strong>0°C</strong>,
+  '26': '26°C',
+  '37': '37°C',
+  '50': '50°C',
+  '100': {
     style: {
       color: 'red',
     },

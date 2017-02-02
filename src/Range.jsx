@@ -259,7 +259,7 @@ class Range extends React.Component {
     const state = this.state || {};
     const { handle, bounds } = state;
     /* eslint-disable eqeqeq */
-    if (!allowCross && handle != null) {
+    if (!allowCross && handle !== null) {
       if (handle > 0 && val <= bounds[handle - 1]) {
         return bounds[handle - 1];
       }
