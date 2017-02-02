@@ -84,6 +84,10 @@ ReactDOM.render(
       <Slider tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
     </div>
     <div style={style}>
+      <p>Basic Slider, pow-scale</p>
+      <Slider scale='pow' min={1} max={100000} tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
+    </div>
+    <div style={style}>
       <p>Basic Slider，`step=20`</p>
       <Slider step={20} defaultValue={50} onBeforeChange={log} />
     </div>

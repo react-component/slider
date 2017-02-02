@@ -15,6 +15,7 @@ export default function createSlider(Component) {
     static displayName = `ComponentEnhancer(${Component.displayName})`;
     static propTypes = {
       ...Component.propTypes,
+      scale: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       min: PropTypes.number,
       max: PropTypes.number,
       step: PropTypes.number,
@@ -154,16 +155,57 @@ export default function createSlider(Component) {
         slider.clientHeight : slider.clientWidth;
     }
 
-    calcValue(offset) {
+    createScale() {
       const { vertical, min, max } = this.props;
-      let domain = [0, this.getSliderLength()];
+      // The slider length isn't defined at the beginning, so we return the given value.
+      // To solve this, we would use componentDidMount at the correct moment
+      // and rewrite the offset-handling
+      let domain = [0, this.getSliderLength() || 100];
+      const range = [min, max];
       if (vertical) {
         domain = domain.reverse();
       }
-      const scale = d3Scale.scaleLinear()
-        .range([min, max])
-        .domain(domain);
-      return scale(offset);
+      const scale = this.props.scale;
+      let _scale = this.createLinearScale; // default
+      if (typeof scale === 'function') {
+        _scale = scale;
+      }
+      if (typeof scale === 'string') {
+        switch (scale) {
+        case 'linear':
+          _scale = this.createLinearScale;
+          break;
+        case 'pow':
+          _scale = this.createPowScale;
+          break;
+        default:
+          _scale = this.createLinearScale;
+        }
+      }
+      return _scale(domain, range);
+    }
+
+    createLinearScale(domain, range) {
+      return d3Scale.scaleLinear()
+        .domain(domain)
+        .range(range)
+        .clamp(true);
+    }
+
+    createPowScale(domain, range) {
+      const scale = d3Scale.scalePow()
+        .exponent(2)
+        .domain(domain)
+        .range(range)
+        .clamp(true);
+      return scale;
+
+    }
+
+    calcValue(offset) {
+      const scale = this.createScale();
+      const value = scale(offset);
+      return value;
     }
 
     calcValueByPos(position) {
@@ -172,7 +214,14 @@ export default function createSlider(Component) {
       return nextValue;
     }
 
-    calcOffset(value) {
+    calcOffsetPercentage(value) {
+      const scale = this.createScale().invert;
+      const ratio = (scale(value) - scale(this.props.min)) / (scale(this.props.max) - scale(this.props.min));
+      let offset = ratio * 100;
+      return offset;
+    }
+
+    calcOffsetPercentage2(value) {
       const { min, max } = this.props;
       const ratio = (value - min) / (max - min);
       return ratio * 100;

@@ -258,8 +258,7 @@ class Range extends React.Component {
   ensureValueNotConflict(val, { allowCross }) {
     const state = this.state || {};
     const { handle, bounds } = state;
-    /* eslint-disable eqeqeq */
-    if (!allowCross && handle !== null) {
+    if (!allowCross && handle !== null && handle !== undefined) {
       if (handle > 0 && val <= bounds[handle - 1]) {
         return bounds[handle - 1];
       }
@@ -267,7 +266,6 @@ class Range extends React.Component {
         return bounds[handle + 1];
       }
     }
-    /* eslint-enable eqeqeq */
     return val;
   }
 
@@ -283,7 +281,7 @@ class Range extends React.Component {
       handle: handleGenerator,
     } = this.props;
 
-    const offsets = bounds.map(v => this.calcOffset(v));
+    const offsets = bounds.map(v => this.calcOffsetPercentage(v));
 
     const handleClassName = `${prefixCls}-handle`;
     const handles = bounds.map((v, i) => handleGenerator({

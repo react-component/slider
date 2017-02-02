@@ -110,7 +110,7 @@ class Slider extends React.Component {
       handle: handleGenerator,
     } = this.props;
     const { value, dragging } = this.state;
-    const offset = this.calcOffset(value);
+    const offset = this.calcOffsetPercentage(value);
     const handle = handleGenerator({
       className: `${prefixCls}-handle`,
       vertical,

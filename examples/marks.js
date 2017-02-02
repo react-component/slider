@@ -19,6 +19,13 @@ const marks = {
   },
 };
 
+const markHandle = {
+  style: {
+    color: 'red'
+  },
+  label: <strong>Test</strong>
+};
+
 function log(value) {
   console.log(value); //eslint-disable-line
 }
