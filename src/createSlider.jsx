@@ -20,6 +20,7 @@ export default function createSlider(Component) {
       max: PropTypes.number,
       step: PropTypes.number,
       marks: PropTypes.object,
+      createHandleMark: PropTypes.func,
       included: PropTypes.bool,
       className: PropTypes.string,
       prefixCls: PropTypes.string,
@@ -159,7 +160,6 @@ export default function createSlider(Component) {
       const { vertical, min, max } = this.props;
       // The slider length isn't defined at the beginning, so we return the given value.
       // To solve this, we would use componentDidMount at the correct moment
-      // and rewrite the offset-handling
       let domain = [0, this.getSliderLength() || 100];
       const range = [min, max];
       if (vertical) {
@@ -221,12 +221,6 @@ export default function createSlider(Component) {
       return offset;
     }
 
-    calcOffsetPercentage2(value) {
-      const { min, max } = this.props;
-      const ratio = (value - min) / (max - min);
-      return ratio * 100;
-    }
-
     saveSlider = (slider) => {
       this.sliderRef = slider;
     }
@@ -262,6 +256,17 @@ export default function createSlider(Component) {
         [`${prefixCls}-vertical`]: vertical,
         [className]: className,
       });
+      // Range uses bounds, Slider uses value
+      const values = this.state.bounds || [].concat(this.state.value);
+      let handleMarks = {};
+      if (this.props.createHandleMark) {
+        handleMarks = Object.assign(...values.map((v, i) => {
+          return {
+            [v]: this.props.createHandleMark(v, i)
+          };
+        }));
+      }
+      const marksWithHandleMarks = {...marks, ... handleMarks};
       return (
         <div
           ref={this.saveSlider}
@@ -275,7 +280,7 @@ export default function createSlider(Component) {
           <Steps
             prefixCls={prefixCls}
             vertical={vertical}
-            marks={marks}
+            marks={marksWithHandleMarks}
             dots={dots}
             step={step}
             included={included}
@@ -288,7 +293,7 @@ export default function createSlider(Component) {
           <Marks
             className={`${prefixCls}-mark`}
             vertical={vertical}
-            marks={marks}
+            marks={marksWithHandleMarks}
             included={included}
             lowerBound={this.getLowerBound()}
             upperBound={this.getUpperBound()}
