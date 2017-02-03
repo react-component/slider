@@ -7,11 +7,11 @@ const Slider = require('rc-slider');
 const style = { width: 400, margin: 50 };
 const marks = {
   '-10': '-10°C',
-  0: <strong>0°C</strong>,
-  26: '26°C',
-  37: '37°C',
-  50: '50°C',
-  100: {
+  '0': <strong>0°C</strong>,
+  '26': '26°C',
+  '37': '37°C',
+  '50': '50°C',
+  '100': {
     style: {
       color: 'red',
     },
@@ -23,15 +23,44 @@ function log(value) {
   console.log(value); //eslint-disable-line
 }
 
+function createHandleMark (value) {
+  return <strong>{value}</strong>;
+}
+
 ReactDOM.render(
   <div>
     <div style={style}>
       <p>Slider with marks, `step=null`</p>
-      <Slider min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
+      <Slider
+        min={-10}
+        marks={marks}
+        step={null}
+        onChange={log}
+        defaultValue={20}
+        markHandle
+      />
     </div>
     <div style={style}>
       <p>Slider with marks and steps</p>
-      <Slider dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
+      <Slider
+        dots min={-10}
+        marks={marks}
+        step={10}
+        onChange={log}
+        defaultValue={20}
+      />
+    </div>
+
+    <div style={style}>
+      <p>Slider with marks and handle mark</p>
+      <Slider
+        createHandleMark={createHandleMark}
+        dots min={-10}
+        marks={marks}
+        step={10}
+        onChange={log}
+        defaultValue={20}
+      />
     </div>
 
     <div style={style}>
@@ -46,6 +75,16 @@ ReactDOM.render(
     <div style={style}>
       <p>Range with marks</p>
       <Slider.Range min={-10} marks={marks} onChange={log} defaultValue={[20, 40]} />
+    </div>
+    <div style={style}>
+      <p>Range with marks and handle mark</p>
+      <Slider.Range
+        min={-10}
+        marks={marks}
+        createHandleMark={createHandleMark}
+        onChange={log}
+        defaultValue={[20, 40]}
+      />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>

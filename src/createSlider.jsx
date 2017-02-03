@@ -6,6 +6,7 @@ import Handle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
 import * as utils from './utils';
+import * as d3Scale from 'd3-scale';
 
 function noop() {}
 
@@ -14,10 +15,12 @@ export default function createSlider(Component) {
     static displayName = `ComponentEnhancer(${Component.displayName})`;
     static propTypes = {
       ...Component.propTypes,
+      scale: PropTypes.oneOfType([PropTypes.string, PropTypes.func]),
       min: PropTypes.number,
       max: PropTypes.number,
       step: PropTypes.number,
       marks: PropTypes.object,
+      createHandleMark: PropTypes.func,
       included: PropTypes.bool,
       className: PropTypes.string,
       prefixCls: PropTypes.string,
@@ -65,6 +68,7 @@ export default function createSlider(Component) {
         );
       }
     }
+
     onMouseDown = (e) => {
       if (e.button !== 0) { return; }
 
@@ -152,10 +156,55 @@ export default function createSlider(Component) {
         slider.clientHeight : slider.clientWidth;
     }
 
-    calcValue(offset) {
+    createScale() {
       const { vertical, min, max } = this.props;
-      const ratio = Math.abs(Math.max(offset, 0) / this.getSliderLength());
-      const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
+      // The slider length isn't defined at the beginning, so we return the given value.
+      // To solve this, we would use componentDidMount at the correct moment
+      let domain = [0, this.getSliderLength() || 100];
+      const range = [min, max];
+      if (vertical) {
+        domain = domain.reverse();
+      }
+      const scale = this.props.scale;
+      let _scale = this.createLinearScale; // default
+      if (typeof scale === 'function') {
+        _scale = scale;
+      }
+      if (typeof scale === 'string') {
+        switch (scale) {
+        case 'linear':
+          _scale = this.createLinearScale;
+          break;
+        case 'pow':
+          _scale = this.createPowScale;
+          break;
+        default:
+          _scale = this.createLinearScale;
+        }
+      }
+      return _scale(domain, range);
+    }
+
+    createLinearScale(domain, range) {
+      return d3Scale.scaleLinear()
+        .domain(domain)
+        .range(range)
+        .clamp(true);
+    }
+
+    createPowScale(domain, range) {
+      const scale = d3Scale.scalePow()
+        .exponent(2)
+        .domain(domain)
+        .range(range)
+        .clamp(true);
+      return scale;
+
+    }
+
+    calcValue(offset) {
+      const scale = this.createScale();
+      const value = scale(offset);
       return value;
     }
 
@@ -165,10 +214,11 @@ export default function createSlider(Component) {
       return nextValue;
     }
 
-    calcOffset(value) {
-      const { min, max } = this.props;
-      const ratio = (value - min) / (max - min);
-      return ratio * 100;
+    calcOffsetPercentage(value) {
+      const scale = this.createScale().invert;
+      const ratio = (scale(value) - scale(this.props.min)) / (scale(this.props.max) - scale(this.props.min));
+      let offset = ratio * 100;
+      return offset;
     }
 
     saveSlider = (slider) => {
@@ -206,6 +256,17 @@ export default function createSlider(Component) {
         [`${prefixCls}-vertical`]: vertical,
         [className]: className,
       });
+      // Range uses bounds, Slider uses value
+      const values = this.state.bounds || [].concat(this.state.value);
+      let handleMarks = {};
+      if (this.props.createHandleMark) {
+        handleMarks = Object.assign(...values.map((v, i) => {
+          return {
+            [v]: this.props.createHandleMark(v, i)
+          };
+        }));
+      }
+      const marksWithHandleMarks = {...marks, ... handleMarks};
       return (
         <div
           ref={this.saveSlider}
@@ -219,7 +280,7 @@ export default function createSlider(Component) {
           <Steps
             prefixCls={prefixCls}
             vertical={vertical}
-            marks={marks}
+            marks={marksWithHandleMarks}
             dots={dots}
             step={step}
             included={included}
@@ -232,7 +293,7 @@ export default function createSlider(Component) {
           <Marks
             className={`${prefixCls}-mark`}
             vertical={vertical}
-            marks={marks}
+            marks={marksWithHandleMarks}
             included={included}
             lowerBound={this.getLowerBound()}
             upperBound={this.getUpperBound()}

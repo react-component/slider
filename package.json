@@ -1,6 +1,5 @@
 {
   "name": "rc-slider",
-
   "version": "6.0.1",
   "description": "Slider UI component for React",
   "keywords": [
@@ -26,7 +25,10 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "entry": {
-    "rc-slider": ["./assets/index.less", "./src/index.js"]
+    "rc-slider": [
+      "./assets/index.less",
+      "./src/index.js"
+    ]
   },
   "style": "./assets/index.css",
   "config": {
@@ -67,6 +69,7 @@
   "dependencies": {
     "babel-runtime": "6.x",
     "classnames": "^2.2.5",
+    "d3-scale": "^1.0.4",
     "rc-util": "^4.0.0",
     "warning": "^3.0.0"
   }
