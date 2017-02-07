@@ -1,14 +1,22 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, max, min }) => {
+const Marks = ({
+  className,
+  vertical,
+  marks,
+  included,
+  upperBound,
+  lowerBound,
+  max, min,
+}) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
   const unit = 100 / (marksCount - 1);
   const markWidth = unit * 0.9;
 
   const range = max - min;
-  const elements = marksKeys.map(parseFloat).sort((a, b) => a - b).map((point) => {
+  const elements = marksKeys.map(parseFloat).sort((a, b) => a - b).map(point => {
     const isActive = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
     const markClassName = classNames({
@@ -17,7 +25,6 @@ const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, m
     });
 
     const bottomStyle = {
-      // height: markWidth + '%',
       marginBottom: '-50%',
       bottom: `${(point - min) / range * 100}%`,
     };
@@ -36,9 +43,15 @@ const Marks = ({ className, vertical, marks, included, upperBound, lowerBound, m
     const markLabel = markPointIsObject ? markPoint.label : markPoint;
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
-    return (<span className={markClassName} style={markStyle} key={point}>
-             {markLabel}
-            </span>);
+    return (
+      <span
+        className={markClassName}
+        style={markStyle}
+        key={point}
+      >
+        {markLabel}
+      </span>
+    );
   });
 
   return <div className={className}>{elements}</div>;

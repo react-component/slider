@@ -64,6 +64,8 @@ export default function createSlider(Component) {
           step
         );
       }
+
+      this.handlesRefs = {};
     }
 
     componentWillUnmount() {
@@ -186,9 +188,6 @@ export default function createSlider(Component) {
     }
 
     saveHandle(index, handle) {
-      if (!this.handlesRefs) {
-        this.handlesRefs = {};
-      }
       this.handlesRefs[index] = handle;
     }
 

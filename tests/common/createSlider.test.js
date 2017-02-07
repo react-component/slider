@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
 import { mount } from 'enzyme';
-import Slider from '..';
+import Slider from '../..';
 const { Range } = Slider;
 
 describe('createSlider', () => {
@@ -21,22 +21,6 @@ describe('createSlider', () => {
     const rangeWrapper = mount(<Range value={[20, 50]} step={10} dots />);
     expect(rangeWrapper.find('.rc-slider-dot').length).toBe(11);
     expect(rangeWrapper.find('.rc-slider-dot-active').length).toBe(4);
-  });
-
-  it('should render marks correctly when `marks` is not an empty object', () => {
-    const marks = { 0: '0', 30: '30', 100: '100' };
-
-    const sliderWrapper = mount(<Slider value={30} marks={marks} />);
-    expect(sliderWrapper.find('.rc-slider-mark-text').length).toBe(3);
-    expect(sliderWrapper.find('.rc-slider-mark-text').get(0).innerHTML).toBe('0');
-    expect(sliderWrapper.find('.rc-slider-mark-text').get(1).innerHTML).toBe('30');
-    expect(sliderWrapper.find('.rc-slider-mark-text').get(2).innerHTML).toBe('100');
-
-    const rangeWrapper = mount(<Range value={[0, 30]} marks={marks} />);
-    expect(rangeWrapper.find('.rc-slider-mark-text').length).toBe(3);
-    expect(rangeWrapper.find('.rc-slider-mark-text').get(0).innerHTML).toBe('0');
-    expect(rangeWrapper.find('.rc-slider-mark-text').get(1).innerHTML).toBe('30');
-    expect(rangeWrapper.find('.rc-slider-mark-text').get(2).innerHTML).toBe('100');
   });
 
   it('should not set value greater than `max` or smaller `min`', () => {
@@ -83,6 +67,22 @@ describe('createSlider', () => {
     expect(handler).not.toHaveBeenCalled();
   });
 
+  it('Should remove event listeners if unmounted during drag', () => {
+    const wrapper = mount(<Slider />);
+    wrapper.node.sliderRef.clientWidth = 100; // jsdom doesn't provide clientWidth
+    const sliderTrack = wrapper.find('.rc-slider-track').get(0);
+    wrapper.simulate('touchstart', {
+      type: 'touchstart',
+      target: sliderTrack,
+      touches: [{ pageX: 5 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(wrapper.getNode().onTouchUpListener).toBeTruthy();
+    wrapper.getNode().onTouchUpListener.remove = jest.fn();
+    wrapper.unmount();
+    expect(wrapper.getNode().onTouchUpListener.remove).toHaveBeenCalled();
+  });
 
   // TODO: should update the following test cases for it should test API instead implementation
   it('should set `dragOffset` to correct value when the left handle is clicked off-center', () => {
@@ -205,22 +205,5 @@ describe('createSlider', () => {
       preventDefault() {},
     });
     expect(wrapper.node.dragOffset).toBe(0);
-  });
-
-  it('Should remove event listeners if unmounted during drag', () => {
-    const wrapper = mount(<Slider />);
-    wrapper.node.sliderRef.clientWidth = 100; // jsdom doesn't provide clientWidth
-    const sliderTrack = wrapper.find('.rc-slider-track').get(0);
-    wrapper.simulate('touchstart', {
-      type: 'touchstart',
-      target: sliderTrack,
-      touches: [{ pageX: 5 }],
-      stopPropagation() {},
-      preventDefault() {},
-    });
-    expect(wrapper.getNode().onTouchUpListener).toBeTruthy();
-    wrapper.getNode().onTouchUpListener.remove = jest.fn();
-    wrapper.unmount();
-    expect(wrapper.getNode().onTouchUpListener.remove).toHaveBeenCalled();
   });
 });
