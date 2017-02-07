@@ -7,11 +7,12 @@ const React = require('react');
 const ReactDOM = require('react-dom');
 const Tooltip = require('rc-tooltip');
 const Slider = require('rc-slider');
-const Range = Slider.Range;
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
 const Handle = Slider.Handle;
 
 const handle = (props) => {
-  const { value, dragging, index } = props;
+  const { value, dragging, index, ...restProps } = props;
   return (
     <Tooltip
       overlay={value}
@@ -19,7 +20,7 @@ const handle = (props) => {
       placement="top"
       key={index}
     >
-      <Handle {...props} />
+      <Handle {...restProps} />
     </Tooltip>
   );
 };
@@ -33,7 +34,7 @@ ReactDOM.render(
     </div>
     <div style={wrapperStyle}>
       <p>Range with custom handle</p>
-      <Range min={0} max={20} defaultValue={[3, 10]} handle={handle} />
+      <Range min={0} max={20} defaultValue={[3, 10]} />
     </div>
   </div>,
   document.getElementById('__react-content')

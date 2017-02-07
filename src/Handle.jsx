@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 
 export default class Handle extends React.Component {
   render() {
-    const { className, vertical, offset } = this.props;
+    const { className, vertical, offset, ...restProps } = this.props;
 
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
-    return <div className={className} style={style} />;
+    return <div {...restProps} className={className} style={style} />;
   }
 }
 
