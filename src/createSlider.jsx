@@ -65,6 +65,12 @@ export default function createSlider(Component) {
         );
       }
     }
+
+    componentWillUnmount() {
+      if (super.componentWillUnmount) super.componentWillUnmount();
+      this.removeDocumentEvents();
+    }
+
     onMouseDown = (e) => {
       if (e.button !== 0) { return; }
 
@@ -121,12 +127,16 @@ export default function createSlider(Component) {
     }
 
     onMouseMove = (e) => {
+      if (!this.sliderRef) {
+        this.onEnd();
+        return;
+      }
       const position = utils.getMousePosition(this.props.vertical, e);
       this.onMove(e, position - this.dragOffset);
     }
 
     onTouchMove = (e) => {
-      if (utils.isNotTouchEvent(e)) {
+      if (utils.isNotTouchEvent(e) || !this.sliderRef) {
         this.onEnd();
         return;
       }
