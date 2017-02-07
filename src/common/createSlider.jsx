@@ -41,6 +41,8 @@ export default function createSlider(Component) {
       step: 1,
       marks: {},
       handle({ index, ...restProps }) {
+        delete restProps.dragging;
+        delete restProps.value;
         return <Handle {...restProps} key={index} />;
       },
       onBeforeChange: noop,
