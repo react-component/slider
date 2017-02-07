@@ -23493,12 +23493,16 @@
 	      };
 	
 	      _this.onMouseMove = function (e) {
+	        if (!_this.sliderRef) {
+	          _this.onEnd();
+	          return;
+	        }
 	        var position = utils.getMousePosition(_this.props.vertical, e);
 	        _this.onMove(e, position - _this.dragOffset);
 	      };
 	
 	      _this.onTouchMove = function (e) {
-	        if (utils.isNotTouchEvent(e)) {
+	        if (utils.isNotTouchEvent(e) || !_this.sliderRef) {
 	          _this.onEnd();
 	          return;
 	        }
@@ -23520,6 +23524,11 @@
 	      }
 	      return _this;
 	    }
+	
+	    ComponentEnhancer.prototype.componentWillUnmount = function componentWillUnmount() {
+	      if (_Component.prototype.componentWillUnmount) _Component.prototype.componentWillUnmount.call(this);
+	      this.removeDocumentEvents();
+	    };
 	
 	    ComponentEnhancer.prototype.addDocumentTouchEvents = function addDocumentTouchEvents() {
 	      // just work for Chrome iOS Safari and Android Browser
