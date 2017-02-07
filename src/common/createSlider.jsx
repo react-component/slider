@@ -2,10 +2,10 @@ import React, { PropTypes } from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
 import warning from 'warning';
-import Handle from './Handle';
 import Steps from './Steps';
 import Marks from './Marks';
-import * as utils from './utils';
+import Handle from '../Handle';
+import * as utils from '../utils';
 
 function noop() {}
 

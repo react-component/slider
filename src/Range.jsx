@@ -1,8 +1,8 @@
 /* eslint-disable react/prop-types */
 import React, { PropTypes } from 'react';
 import classNames from 'classnames';
-import Track from './Track';
-import createSlider from './createSlider';
+import Track from './common/Track';
+import createSlider from './common/createSlider';
 import * as utils from './utils';
 
 class Range extends React.Component {
