@@ -68,6 +68,18 @@ ReactDOM.render(
 
 ## API
 
+### createSliderWithTooltip(Slider | Range) => React.Component
+
+An extension to make Slider or Range support Tooltip on handle.
+
+```jsx
+const Slider = require('rc-slider');
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
+```
+
+[Online demo](http://react-component.github.io/slider/examples/handle.html)
+
 ### Common API
 
 The following APIs are shared by Slider and Range.
