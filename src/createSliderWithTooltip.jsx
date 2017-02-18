@@ -1,14 +1,20 @@
-import React from 'react';
+import React, { PropTypes } from 'react';
 import Tooltip from 'rc-tooltip';
 import Handle from './Handle';
 
-export default function createSliderWithTooltip(Component) {
+export default function createSliderWithTooltip(Component, autoDisable = false) {
   return class ComponentWrapper extends React.Component {
+    static propTypes = {
+      disabled: PropTypes.bool,
+    }
     constructor(props) {
       super(props);
       this.state = { visibles: {} };
     }
     handleTooltipVisibleChange = (index, visible) => {
+      if (this.props.disabled && autoDisable) {
+        return;
+      }
       this.setState({
         visibles: {
           ...this.state.visibles,

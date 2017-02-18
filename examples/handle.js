@@ -9,6 +9,7 @@ const Tooltip = require('rc-tooltip');
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
+const RangeAutoDisable = createSliderWithTooltip(Slider.Range, true);
 const Handle = Slider.Handle;
 
 const handle = (props) => {
@@ -33,8 +34,12 @@ ReactDOM.render(
       <Slider min={0} max={20} defaultValue={3} handle={handle} />
     </div>
     <div style={wrapperStyle}>
-      <p>Range with custom handle</p>
-      <Range min={0} max={20} defaultValue={[3, 10]} />
+      <p>Range wrappered by createSliderWithTooltip </p>
+      <Range min={0} max={20} defaultValue={[3, 10]}/>
+    </div>
+    <div style={wrapperStyle}>
+      <p>Range wrappered by createSliderWithTooltip , which set autoDisabled to be true</p>
+      <RangeAutoDisable min={0} max={20} defaultValue={[3, 10]} disabled/>
     </div>
   </div>,
   document.getElementById('__react-content')

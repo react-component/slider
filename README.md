@@ -68,15 +68,18 @@ ReactDOM.render(
 
 ## API
 
-### createSliderWithTooltip(Slider | Range) => React.Component
+### createSliderWithTooltip(Slider | Range, autoDisable: boolean) => React.Component
 
-An extension to make Slider or Range support Tooltip on handle.
+An extension to make Slider or Range support Tooltip on handle.   
+
+If `autoDisable` set be `true`, Tooltip will be disabled if Slider/Range is `disabled`.
 
 ```jsx
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 ```
+
 
 [Online demo](http://react-component.github.io/slider/examples/handle.html)
 
