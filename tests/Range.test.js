@@ -54,4 +54,25 @@ describe('Range', () => {
     expect(track3Style).toMatch(/width: 25%;/);
     expect(track3Style).toMatch(/visibility: visible;/);
   });
+
+  it('should update Range correctly in controllered model', () => {
+    class TestParent extends React.Component { // eslint-disable-line
+      state = {
+        value: [2, 4, 6],
+      }
+      getSlider() {
+        return this.refs.slider;
+      }
+      render() {
+        return <Range ref="slider" value={this.state.value}/>;
+      }
+    }
+    const wrapper = mount(<TestParent/>);
+
+    expect(wrapper.instance().getSlider().state.bounds.length).toBe(3);
+    expect(wrapper.find('.rc-slider-handle').length).toBe(3);
+    wrapper.setState({ value: [2, 4] });
+    expect(wrapper.instance().getSlider().state.bounds.length).toBe(2);
+    expect(wrapper.find('.rc-slider-handle').length).toBe(2);
+  });
 });

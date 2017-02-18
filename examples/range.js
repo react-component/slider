@@ -90,6 +90,25 @@ const DynamicBounds = React.createClass({
   },
 });
 
+class ControlledRange extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: [20, 40, 60, 80],
+    };
+  }
+  handleChange = (value) => {
+    this.setState({
+      value,
+    });
+  }
+  render() {
+    return (
+      <Range value={this.state.value} onChange={this.handleChange}/>
+    );
+  }
+}
+
 ReactDOM.render(
   <div>
     <div style={style}>
@@ -106,7 +125,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Controlled Range</p>
-      <Range value={[20, 40]} />
+      <ControlledRange />
     </div>
     <div style={style}>
       <p>Multi Range</p>

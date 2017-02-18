@@ -46,11 +46,10 @@ class Range extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
-
     const { bounds } = this.state;
     const value = nextProps.value || bounds;
     const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
-    if (nextBounds.every((v, i) => v === bounds[i])) return;
+    if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
 
     this.setState({ bounds: nextBounds });
     if (bounds.some(v => utils.isValueOutOfRange(v, nextProps))) {
