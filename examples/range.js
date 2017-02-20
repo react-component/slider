@@ -124,6 +124,10 @@ ReactDOM.render(
       <Range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
     <div style={style}>
+      <p>Basic Range，disabled</p>
+      <Range allowCross={false} defaultValue={[0, 20]} onChange={log} disabled />
+    </div>
+    <div style={style}>
       <p>Controlled Range</p>
       <ControlledRange />
     </div>

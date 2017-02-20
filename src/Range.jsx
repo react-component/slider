@@ -16,6 +16,7 @@ class Range extends React.Component {
       PropTypes.number,
     ]),
     allowCross: PropTypes.bool,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -279,6 +280,7 @@ class Range extends React.Component {
       prefixCls,
       vertical,
       included,
+      disabled,
       handle: handleGenerator,
     } = this.props;
 
@@ -295,6 +297,7 @@ class Range extends React.Component {
       value: v,
       dragging: handle === i,
       index: i,
+      disabled,
       ref: h => this.saveHandle(i, h),
     }));
 
