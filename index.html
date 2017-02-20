@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@6.1.0 - Slider UI component for React</title>
+  <title>rc-slider@6.1.1 - Slider UI component for React</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@6.1.0</h1>
+  <h1>rc-slider@6.1.1</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -791,7 +791,11 @@ ReactDOM.render(
   <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>,
   container
 );
-`</span></code></pre></div><h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><h3>Common API<a id="user-content-common-api" name="common-api" class="anchor" aria-hidden="true" href="#common-api"><span class="octicon octicon-link"></span></a></h3><p>The following APIs are shared by Slider and Range.</p>
+`</span></code></pre></div><h2>API<a id="user-content-api" name="api" class="anchor" aria-hidden="true" href="#api"><span class="octicon octicon-link"></span></a></h2><h3>createSliderWithTooltip(Slider | Range) =&gt; React.Component<a id="user-content-createsliderwithtooltip(slider-|-range)-=&gt;-react.component" name="createsliderwithtooltip(slider-|-range)-=&gt;-react.component" class="anchor" aria-hidden="true" href="#createsliderwithtooltip(slider-|-range)-=&gt;-react.component"><span class="octicon octicon-link"></span></a></h3><p>An extension to make Slider or Range support Tooltip on handle.</p>
+<div class="highlight"><pre><code language="js"><span class="hljs-keyword">const</span> Slider = <span class="hljs-built_in">require</span>(<span class="hljs-string">'rc-slider'</span>);
+<span class="hljs-keyword">const</span> createSliderWithTooltip = Slider.createSliderWithTooltip;
+<span class="hljs-keyword">const</span> Range = createSliderWithTooltip(Slider.Range);</code></pre></div><p><a href="http://react-component.github.io/slider/examples/handle.html" title="null">Online demo</a></p>
+<h3>Common API<a id="user-content-common-api" name="common-api" class="anchor" aria-hidden="true" href="#common-api"><span class="octicon octicon-link"></span></a></h3><p>The following APIs are shared by Slider and Range.</p>
 <table>
 <thead>
 <tr>

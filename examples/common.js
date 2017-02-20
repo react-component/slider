@@ -25094,8 +25094,8 @@
 	var prefixes = ['-webkit-', '-moz-', '-o-', 'ms-', ''];
 	
 	function getStyleProperty(node, name) {
-	  var style = window.getComputedStyle(node);
-	
+	  // old ff need null, https://developer.mozilla.org/en-US/docs/Web/API/Window/getComputedStyle
+	  var style = window.getComputedStyle(node, null);
 	  var ret = '';
 	  for (var i = 0; i < prefixes.length; i++) {
 	    ret = style.getPropertyValue(prefixes[i] + name);
@@ -28249,14 +28249,13 @@
 	    var _this2 = this;
 	
 	    if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
-	
 	    var bounds = this.state.bounds;
 	
 	    var value = nextProps.value || bounds;
 	    var nextBounds = value.map(function (v) {
 	      return _this2.trimAlignValue(v, nextProps);
 	    });
-	    if (nextBounds.every(function (v, i) {
+	    if (nextBounds.length === bounds.length && nextBounds.every(function (v, i) {
 	      return v === bounds[i];
 	    })) return;
 	

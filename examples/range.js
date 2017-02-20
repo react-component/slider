@@ -13,6 +13,20 @@ webpackJsonp([2],{
 
 	'use strict';
 	
+	var _classCallCheck2 = __webpack_require__(259);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(260);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(296);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	/* eslint react/no-multi-comp: 0 */
 	__webpack_require__(3);
 	
@@ -132,6 +146,33 @@ webpackJsonp([2],{
 	  }
 	});
 	
+	var ControlledRange = function (_React$Component) {
+	  (0, _inherits3.default)(ControlledRange, _React$Component);
+	
+	  function ControlledRange(props) {
+	    (0, _classCallCheck3.default)(this, ControlledRange);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	
+	    _this.handleChange = function (value) {
+	      _this.setState({
+	        value: value
+	      });
+	    };
+	
+	    _this.state = {
+	      value: [20, 40, 60, 80]
+	    };
+	    return _this;
+	  }
+	
+	  ControlledRange.prototype.render = function render() {
+	    return React.createElement(Range, { value: this.state.value, onChange: this.handleChange });
+	  };
+	
+	  return ControlledRange;
+	}(React.Component);
+	
 	ReactDOM.render(React.createElement(
 	  'div',
 	  null,
@@ -173,7 +214,7 @@ webpackJsonp([2],{
 	      null,
 	      'Controlled Range'
 	    ),
-	    React.createElement(Range, { value: [20, 40] })
+	    React.createElement(ControlledRange, null)
 	  ),
 	  React.createElement(
 	    'div',
