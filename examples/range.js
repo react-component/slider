@@ -212,6 +212,16 @@ webpackJsonp([2],{
 	    React.createElement(
 	      'p',
 	      null,
+	      'Basic Range\uFF0Cdisabled'
+	    ),
+	    React.createElement(Range, { allowCross: false, defaultValue: [0, 20], onChange: log, disabled: true })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
 	      'Controlled Range'
 	    ),
 	    React.createElement(ControlledRange, null)

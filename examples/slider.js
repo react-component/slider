@@ -161,6 +161,16 @@ webpackJsonp([3],{
 	    React.createElement(
 	      'p',
 	      null,
+	      'Basic Slider, disabled'
+	    ),
+	    React.createElement(Slider, { tipTransitionName: 'rc-slider-tooltip-zoom-down', onChange: log, disabled: true })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
 	      'Controlled Slider'
 	    ),
 	    React.createElement(Slider, { value: 50 })

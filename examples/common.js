@@ -26037,6 +26037,7 @@
 	        prefixCls = _props.prefixCls,
 	        vertical = _props.vertical,
 	        included = _props.included,
+	        disabled = _props.disabled,
 	        handleGenerator = _props.handle;
 	    var _state = this.state,
 	        value = _state.value,
@@ -26049,6 +26050,7 @@
 	      offset: offset,
 	      value: value,
 	      dragging: dragging,
+	      disabled: disabled,
 	      ref: function ref(h) {
 	        return _this2.saveHandle(0, h);
 	      }
@@ -26070,7 +26072,8 @@
 	Slider.displayName = 'Slider';
 	Slider.propTypes = {
 	  defaultValue: _react.PropTypes.number,
-	  value: _react.PropTypes.number
+	  value: _react.PropTypes.number,
+	  disabled: _react.PropTypes.bool
 	};
 	Slider.defaultProps = {};
 	exports.default = (0, _createSlider2.default)(Slider);
@@ -28512,6 +28515,7 @@
 	        prefixCls = _props2.prefixCls,
 	        vertical = _props2.vertical,
 	        included = _props2.included,
+	        disabled = _props2.disabled,
 	        handleGenerator = _props2.handle;
 	
 	
@@ -28530,6 +28534,7 @@
 	        value: v,
 	        dragging: handle === i,
 	        index: i,
+	        disabled: disabled,
 	        ref: function ref(h) {
 	          return _this3.saveHandle(i, h);
 	        }
@@ -28564,7 +28569,8 @@
 	  value: _react.PropTypes.arrayOf(_react.PropTypes.number),
 	  count: _react.PropTypes.number,
 	  pushable: _react.PropTypes.oneOfType([_react.PropTypes.bool, _react.PropTypes.number]),
-	  allowCross: _react.PropTypes.bool
+	  allowCross: _react.PropTypes.bool,
+	  disabled: _react.PropTypes.bool
 	};
 	Range.defaultProps = {
 	  count: 1,
@@ -28643,14 +28649,15 @@
 	        var value = _ref.value,
 	            dragging = _ref.dragging,
 	            index = _ref.index,
-	            restProps = (0, _objectWithoutProperties3.default)(_ref, ['value', 'dragging', 'index']);
+	            disabled = _ref.disabled,
+	            restProps = (0, _objectWithoutProperties3.default)(_ref, ['value', 'dragging', 'index', 'disabled']);
 	
 	        return _react2.default.createElement(
 	          _rcTooltip2.default,
 	          {
 	            prefixCls: 'rc-slider-tooltip',
 	            overlay: value,
-	            visible: _this.state.visibles[index] || dragging,
+	            visible: !disabled && (_this.state.visibles[index] || dragging),
 	            onVisibleChange: function onVisibleChange(visible) {
 	              return _this.handleTooltipVisibleChange(index, visible);
 	            },
