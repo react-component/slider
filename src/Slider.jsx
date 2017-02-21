@@ -9,6 +9,7 @@ class Slider extends React.Component {
   static propTypes = {
     defaultValue: PropTypes.number,
     value: PropTypes.number,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps = {};
@@ -107,6 +108,7 @@ class Slider extends React.Component {
       prefixCls,
       vertical,
       included,
+      disabled,
       handle: handleGenerator,
     } = this.props;
     const { value, dragging } = this.state;
@@ -117,6 +119,7 @@ class Slider extends React.Component {
       offset,
       value,
       dragging,
+      disabled,
       ref: h => this.saveHandle(0, h),
     });
     const track = (
