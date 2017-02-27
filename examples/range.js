@@ -136,6 +136,10 @@ ReactDOM.render(
       <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />
     </div>
     <div style={style}>
+      <p>Multi Range, decimal step</p>
+      <Range count={3} defaultValue={[20, 40, 60, 80]} pushable step={0.1} />
+    </div>
+    <div style={style}>
       <p>Customized Range</p>
       <CustomizedRange />
     </div>

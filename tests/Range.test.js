@@ -75,4 +75,9 @@ describe('Range', () => {
     expect(wrapper.instance().getSlider().state.bounds.length).toBe(2);
     expect(wrapper.find('.rc-slider-handle').length).toBe(2);
   });
+
+  it('should calculate with decimal correctly', () => {
+    const wrapper = mount(<Range count={3} defaultValue={[20, 40, 60, 80]} pushable step={0.1} />);
+    expect(wrapper.instance().getPoints()[3]).toBe(0.3);
+  });
 });
