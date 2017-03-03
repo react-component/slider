@@ -16,11 +16,11 @@ export default function createSliderWithTooltip(Component) {
         },
       });
     }
-    handleWithTooltip = ({ value, dragging, index, disabled, ...restProps }) => {
+    handleWithTooltip = ({ value, dragging, index, disabled, tipFormatter, ...restProps }) => {
       return (
         <Tooltip
           prefixCls="rc-slider-tooltip"
-          overlay={value}
+          overlay={tipFormatter && tipFormatter(value) || value}
           visible={!disabled && (this.state.visibles[index] || dragging)}
           onVisibleChange={visible => this.handleTooltipVisibleChange(index, visible)}
           placement="top"

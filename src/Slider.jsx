@@ -109,6 +109,7 @@ class Slider extends React.Component {
       vertical,
       included,
       disabled,
+      tipFormatter,
       handle: handleGenerator,
     } = this.props;
     const { value, dragging } = this.state;
@@ -120,6 +121,7 @@ class Slider extends React.Component {
       value,
       dragging,
       disabled,
+      tipFormatter,
       ref: h => this.saveHandle(0, h),
     });
     const track = (
