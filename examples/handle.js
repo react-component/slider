@@ -15,6 +15,7 @@ const handle = (props) => {
   const { value, dragging, index, ...restProps } = props;
   return (
     <Tooltip
+      prefixCls="rc-slider-tooltip"
       overlay={value}
       visible={dragging}
       placement="top"
@@ -34,7 +35,7 @@ ReactDOM.render(
     </div>
     <div style={wrapperStyle}>
       <p>Range with custom handle</p>
-      <Range min={0} max={20} defaultValue={[3, 10]} />
+      <Range min={0} max={20} defaultValue={[3, 10]} tipFormatter={value => `${value}%`} />
     </div>
   </div>,
   document.getElementById('__react-content')
