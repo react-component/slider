@@ -28631,7 +28631,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	function createSliderWithTooltip(Component) {
-	  return function (_React$Component) {
+	  var _class, _temp;
+	
+	  return _temp = _class = function (_React$Component) {
 	    (0, _inherits3.default)(ComponentWrapper, _React$Component);
 	
 	    function ComponentWrapper(props) {
@@ -28651,20 +28653,25 @@
 	            index = _ref.index,
 	            disabled = _ref.disabled,
 	            restProps = (0, _objectWithoutProperties3.default)(_ref, ['value', 'dragging', 'index', 'disabled']);
+	        var tipFormatter = _this.props.tipFormatter;
 	
 	        return _react2.default.createElement(
 	          _rcTooltip2.default,
 	          {
 	            prefixCls: 'rc-slider-tooltip',
-	            overlay: value,
+	            overlay: tipFormatter(value),
 	            visible: !disabled && (_this.state.visibles[index] || dragging),
-	            onVisibleChange: function onVisibleChange(visible) {
-	              return _this.handleTooltipVisibleChange(index, visible);
-	            },
 	            placement: 'top',
 	            key: index
 	          },
-	          _react2.default.createElement(_Handle2.default, restProps)
+	          _react2.default.createElement(_Handle2.default, (0, _extends4.default)({}, restProps, {
+	            onMouseEnter: function onMouseEnter() {
+	              return _this.handleTooltipVisibleChange(index, true);
+	            },
+	            onMouseLeave: function onMouseLeave() {
+	              return _this.handleTooltipVisibleChange(index, false);
+	            }
+	          }))
 	        );
 	      };
 	
@@ -28677,7 +28684,13 @@
 	    };
 	
 	    return ComponentWrapper;
-	  }(_react2.default.Component);
+	  }(_react2.default.Component), _class.propTypes = {
+	    tipFormatter: _react2.default.PropTypes.func
+	  }, _class.defaultProps = {
+	    tipFormatter: function tipFormatter(value) {
+	      return value;
+	    }
+	  }, _temp;
 	}
 	module.exports = exports['default'];
 

@@ -39,6 +39,7 @@ webpackJsonp([0],[
 	  return React.createElement(
 	    Tooltip,
 	    {
+	      prefixCls: 'rc-slider-tooltip',
 	      overlay: value,
 	      visible: dragging,
 	      placement: 'top',
@@ -70,7 +71,9 @@ webpackJsonp([0],[
 	      null,
 	      'Range with custom handle'
 	    ),
-	    React.createElement(Range, { min: 0, max: 20, defaultValue: [3, 10] })
+	    React.createElement(Range, { min: 0, max: 20, defaultValue: [3, 10], tipFormatter: function tipFormatter(value) {
+	        return value + '%';
+	      } })
 	  )
 	), document.getElementById('__react-content'));
 
