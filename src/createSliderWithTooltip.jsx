@@ -4,6 +4,12 @@ import Handle from './Handle';
 
 export default function createSliderWithTooltip(Component) {
   return class ComponentWrapper extends React.Component {
+    static propTypes = {
+      tipFormatter: React.PropTypes.func,
+    };
+    static defaultProps = {
+      tipFormatter(value) { return value; },
+    };
     constructor(props) {
       super(props);
       this.state = { visibles: {} };
@@ -17,16 +23,20 @@ export default function createSliderWithTooltip(Component) {
       });
     }
     handleWithTooltip = ({ value, dragging, index, disabled, ...restProps }) => {
+      const { tipFormatter } = this.props;
       return (
         <Tooltip
           prefixCls="rc-slider-tooltip"
-          overlay={value}
+          overlay={tipFormatter(value)}
           visible={!disabled && (this.state.visibles[index] || dragging)}
-          onVisibleChange={visible => this.handleTooltipVisibleChange(index, visible)}
           placement="top"
           key={index}
         >
-          <Handle {...restProps} />
+          <Handle
+            {...restProps}
+            onMouseEnter={() => this.handleTooltipVisibleChange(index, true)}
+            onMouseLeave={() => this.handleTooltipVisibleChange(index, false)}
+          />
         </Tooltip>
       );
     }

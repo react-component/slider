@@ -80,6 +80,12 @@ const Range = createSliderWithTooltip(Slider.Range);
 
 [Online demo](http://react-component.github.io/slider/examples/handle.html)
 
+After Range or Slider was wrapped by createSliderWithTooltip, it will have the following props:
+
+| Name         | Type    | Default | Description |
+| ------------ | ------- | ------- | ----------- |
+| tipFormatter | (value: number): React.ReactNode | value => value | A function to format tooltip's overlay |
+
 ### Common API
 
 The following APIs are shared by Slider and Range.
