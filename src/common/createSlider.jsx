@@ -30,6 +30,7 @@ export default function createSlider(Component) {
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
       style: PropTypes.object,
+      minimumTrackTintColor: PropTypes.string,
     };
 
     static defaultProps = {
@@ -206,6 +207,7 @@ export default function createSlider(Component) {
         min,
         max,
         children,
+        minimumTrackTintColor,
         style,
       } = this.props;
       const { tracks, handles } = super.render();
@@ -217,6 +219,11 @@ export default function createSlider(Component) {
         [`${prefixCls}-vertical`]: vertical,
         [className]: className,
       });
+
+      const trackStyle = minimumTrackTintColor && !disabled ? {
+        backgroundColor: minimumTrackTintColor,
+      } : {};
+
       return (
         <div
           ref={this.saveSlider}
@@ -225,7 +232,7 @@ export default function createSlider(Component) {
           onMouseDown={disabled ? noop : this.onMouseDown}
           style={style}
         >
-          <div className={`${prefixCls}-rail`} />
+          <div className={`${prefixCls}-rail`} style={trackStyle} />
           {tracks}
           <Steps
             prefixCls={prefixCls}

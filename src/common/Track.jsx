@@ -1,6 +1,8 @@
 import React from 'react';
 
-const Track = ({ className, included, vertical, offset, length }) => {
+const Track = ({
+  className, included, vertical, offset, length, maximumTrackTintColor, disabled,
+}) => {
   const style = {
     visibility: included ? 'visible' : 'hidden',
   };
@@ -10,6 +12,9 @@ const Track = ({ className, included, vertical, offset, length }) => {
   } else {
     style.left = `${offset}%`;
     style.width = `${length}%`;
+  }
+  if (maximumTrackTintColor && !disabled) {
+    style.backgroundColor = maximumTrackTintColor;
   }
   return <div className={className} style={style} />;
 };
