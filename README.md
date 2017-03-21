@@ -105,6 +105,8 @@ The following APIs are shared by Slider and Range.
 | onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
 | onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
+| minimumTrackTintColor | String | #e9e9e9 | The color used for the track to the left of the button. |
+| maximumTrackTintColor | String | #abe2fb | The color used for the track to the right of the button. |
 
 ### Slider
 
