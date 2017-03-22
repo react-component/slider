@@ -17955,10 +17955,10 @@
 	 */
 	
 	function getUnboundedScrollPosition(scrollable) {
-	  if (scrollable.Window && scrollable instanceof scrollable.Window) {
+	  if (scrollable === window) {
 	    return {
-	      x: scrollable.pageXOffset || scrollable.document.documentElement.scrollLeft,
-	      y: scrollable.pageYOffset || scrollable.document.documentElement.scrollTop
+	      x: window.pageXOffset || document.documentElement.scrollLeft,
+	      y: window.pageYOffset || document.documentElement.scrollTop
 	    };
 	  }
 	  return {
@@ -18707,9 +18707,7 @@
 	 * @return {boolean} Whether or not the object is a DOM node.
 	 */
 	function isNode(object) {
-	  var doc = object ? object.ownerDocument || object : document;
-	  var defaultView = doc.defaultView || window;
-	  return !!(object && (typeof defaultView.Node === 'function' ? object instanceof defaultView.Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));
+	  return !!(object && (typeof Node === 'function' ? object instanceof Node : typeof object === 'object' && typeof object.nodeType === 'number' && typeof object.nodeName === 'string'));
 	}
 	
 	module.exports = isNode;
@@ -18739,19 +18737,15 @@
 	 *
 	 * The activeElement will be null only if the document or document body is not
 	 * yet defined.
-	 *
-	 * @param {?DOMDocument} doc Defaults to current document.
-	 * @return {?DOMElement}
 	 */
-	function getActiveElement(doc) /*?DOMElement*/{
-	  doc = doc || document;
-	  if (typeof doc === 'undefined') {
+	function getActiveElement() /*?DOMElement*/{
+	  if (typeof document === 'undefined') {
 	    return null;
 	  }
 	  try {
-	    return doc.activeElement || doc.body;
+	    return document.activeElement || document.body;
 	  } catch (e) {
-	    return doc.body;
+	    return document.body;
 	  }
 	}
 	
@@ -21436,10 +21430,6 @@
 	  return '';
 	}
 	
-	function returnDocument() {
-	  return window.document;
-	}
-	
 	var ALL_HANDLERS = ['onClick', 'onMouseDown', 'onTouchStart', 'onMouseEnter', 'onMouseLeave', 'onFocus', 'onBlur'];
 	
 	var Trigger = _react2["default"].createClass({
@@ -21467,7 +21457,6 @@
 	    focusDelay: _react.PropTypes.number,
 	    blurDelay: _react.PropTypes.number,
 	    getPopupContainer: _react.PropTypes.func,
-	    getDocument: _react.PropTypes.func,
 	    destroyPopupOnHide: _react.PropTypes.bool,
 	    mask: _react.PropTypes.bool,
 	    maskClosable: _react.PropTypes.bool,
@@ -21485,16 +21474,8 @@
 	      return instance.state.popupVisible;
 	    },
 	    getContainer: function getContainer(instance) {
-	      var props = instance.props;
-	
 	      var popupContainer = document.createElement('div');
-	      // Make sure default popup container will never cause scrollbar appearing
-	      // https://github.com/react-component/trigger/issues/41
-	      popupContainer.style.position = 'absolute';
-	      popupContainer.style.top = '0';
-	      popupContainer.style.left = '0';
-	      popupContainer.style.width = '100%';
-	      var mountNode = props.getPopupContainer ? props.getPopupContainer((0, _reactDom.findDOMNode)(instance)) : props.getDocument().body;
+	      var mountNode = instance.props.getPopupContainer ? instance.props.getPopupContainer((0, _reactDom.findDOMNode)(instance)) : document.body;
 	      mountNode.appendChild(popupContainer);
 	      return popupContainer;
 	    }
@@ -21504,7 +21485,6 @@
 	    return {
 	      prefixCls: 'rc-trigger-popup',
 	      getPopupClassNameFromAlign: returnEmptyString,
-	      getDocument: returnDocument,
 	      onPopupVisibleChange: noop,
 	      afterPopupVisibleChange: noop,
 	      onPopupAlign: noop,
@@ -21567,26 +21547,30 @@
 	        props.afterPopupVisibleChange(state.popupVisible);
 	      }
 	    });
-	
-	    if (state.popupVisible) {
-	      var currentDocument = void 0;
-	      if (!this.clickOutsideHandler && this.isClickToHide()) {
-	        currentDocument = props.getDocument();
-	        this.clickOutsideHandler = (0, _addEventListener2["default"])(currentDocument, 'mousedown', this.onDocumentClick);
+	    if (this.isClickToHide()) {
+	      if (state.popupVisible) {
+	        if (!this.clickOutsideHandler) {
+	          this.clickOutsideHandler = (0, _addEventListener2["default"])(document, 'mousedown', this.onDocumentClick);
+	          this.touchOutsideHandler = (0, _addEventListener2["default"])(document, 'touchstart', this.onDocumentClick);
+	        }
+	        return;
 	      }
-	      // always hide on mobile
-	      if (!this.touchOutsideHandler) {
-	        currentDocument = currentDocument || props.getDocument();
-	        this.touchOutsideHandler = (0, _addEventListener2["default"])(currentDocument, 'touchstart', this.onDocumentClick);
-	      }
-	      return;
 	    }
-	
-	    this.clearOutsideHandler();
+	    if (this.clickOutsideHandler) {
+	      this.clickOutsideHandler.remove();
+	      this.touchOutsideHandler.remove();
+	      this.clickOutsideHandler = null;
+	      this.touchOutsideHandler = null;
+	    }
 	  },
 	  componentWillUnmount: function componentWillUnmount() {
 	    this.clearDelayTimer();
-	    this.clearOutsideHandler();
+	    if (this.clickOutsideHandler) {
+	      this.clickOutsideHandler.remove();
+	      this.touchOutsideHandler.remove();
+	      this.clickOutsideHandler = null;
+	      this.touchOutsideHandler = null;
+	    }
 	  },
 	  onMouseEnter: function onMouseEnter(e) {
 	    this.fireEvents('onMouseEnter', e);
@@ -21769,17 +21753,6 @@
 	      this.delayTimer = null;
 	    }
 	  },
-	  clearOutsideHandler: function clearOutsideHandler() {
-	    if (this.clickOutsideHandler) {
-	      this.clickOutsideHandler.remove();
-	      this.clickOutsideHandler = null;
-	    }
-	
-	    if (this.touchOutsideHandler) {
-	      this.touchOutsideHandler.remove();
-	      this.touchOutsideHandler = null;
-	    }
-	  },
 	  createTwoChains: function createTwoChains(event) {
 	    var childPros = this.props.children.props;
 	    var props = this.props;
@@ -21853,6 +21826,7 @@
 	    var children = props.children;
 	    var child = _react2["default"].Children.only(children);
 	    var newChildProps = {};
+	
 	    if (this.isClickToHide() || this.isClickToShow()) {
 	      newChildProps.onClick = this.onClick;
 	      newChildProps.onMouseDown = this.onMouseDown;
@@ -24534,8 +24508,6 @@
 	  value: true
 	});
 	
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-	
 	var _react = __webpack_require__(5);
 	
 	var _react2 = _interopRequireDefault(_react);
@@ -24576,7 +24548,6 @@
 	
 	  propTypes: {
 	    component: _react2["default"].PropTypes.any,
-	    componentProps: _react2["default"].PropTypes.object,
 	    animation: _react2["default"].PropTypes.object,
 	    transitionName: _react2["default"].PropTypes.oneOfType([_react2["default"].PropTypes.string, _react2["default"].PropTypes.object]),
 	    transitionEnter: _react2["default"].PropTypes.bool,
@@ -24594,7 +24565,6 @@
 	    return {
 	      animation: {},
 	      component: 'span',
-	      componentProps: {},
 	      transitionEnter: true,
 	      transitionLeave: true,
 	      transitionAppear: false,
@@ -24842,10 +24812,10 @@
 	    if (Component) {
 	      var passedProps = props;
 	      if (typeof Component === 'string') {
-	        passedProps = _extends({
+	        passedProps = {
 	          className: props.className,
 	          style: props.style
-	        }, props.componentProps);
+	        };
 	      }
 	      return _react2["default"].createElement(
 	        Component,
@@ -24992,7 +24962,7 @@
 	  value: true
 	});
 	
-	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol ? "symbol" : typeof obj; };
 	
 	var _react = __webpack_require__(5);
 	
