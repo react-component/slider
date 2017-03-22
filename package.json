@@ -1,7 +1,7 @@
 {
   "name": "rc-slider",
 
-  "version": "6.3.0",
+  "version": "6.3.1",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
