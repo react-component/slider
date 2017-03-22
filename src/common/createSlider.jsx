@@ -30,7 +30,7 @@ export default function createSlider(Component) {
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
       style: PropTypes.object,
-      minimumTrackTintColor: PropTypes.string,
+      maximumTrackTintColor: PropTypes.string,
     };
 
     static defaultProps = {
@@ -207,7 +207,7 @@ export default function createSlider(Component) {
         min,
         max,
         children,
-        minimumTrackTintColor,
+        maximumTrackTintColor,
         style,
       } = this.props;
       const { tracks, handles } = super.render();
@@ -220,8 +220,8 @@ export default function createSlider(Component) {
         [className]: className,
       });
 
-      const trackStyle = minimumTrackTintColor && !disabled ? {
-        backgroundColor: minimumTrackTintColor,
+      const trackStyle = maximumTrackTintColor && !disabled ? {
+        backgroundColor: maximumTrackTintColor,
       } : {};
 
       return (
