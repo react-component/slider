@@ -1,3 +1,14 @@
+/**
+* @Author: Surati Nikhil <nsurte>
+* @Date:   03-29-2017
+* @Email:  c.nikhil.surati@uptake.com
+* @Filename: createSlider.jsx
+* @Last modified by:   nsurte
+* @Last modified time: 03-29-2017
+*/
+
+
+
 import React, { PropTypes } from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
@@ -232,6 +243,8 @@ export default function createSlider(Component) {
           onMouseDown={disabled ? noop : this.onMouseDown}
           style={style}
         >
+
+          {/* TODO: add train track here */}
           <div className={`${prefixCls}-rail`} style={trackStyle} />
           {tracks}
           <Steps

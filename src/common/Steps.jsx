@@ -1,3 +1,14 @@
+/**
+* @Author: Surati Nikhil <nsurte>
+* @Date:   03-29-2017
+* @Email:  c.nikhil.surati@uptake.com
+* @Filename: Steps.jsx
+* @Last modified by:   nsurte
+* @Last modified time: 03-29-2017
+*/
+
+
+
 import React from 'react';
 import classNames from 'classnames';
 import warning from 'warning';
@@ -30,7 +41,7 @@ const Steps = ({ prefixCls, vertical, marks, dots, step, included,
       [`${prefixCls}-dot`]: true,
       [`${prefixCls}-dot-active`]: isActived,
     });
-
+// FIND: checkpoint
     return <span className={pointClassName} style={style} key={point} />;
   });
 
