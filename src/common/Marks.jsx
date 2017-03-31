@@ -1,3 +1,14 @@
+/**
+* @Author: Surati Nikhil <nsurte>
+* @Date:   03-29-2017
+* @Email:  c.nikhil.surati@uptake.com
+* @Filename: Marks.jsx
+* @Last modified by:   nsurte
+* @Last modified time: 03-29-2017
+*/
+
+
+
 import React from 'react';
 import classNames from 'classnames';
 
@@ -44,6 +55,7 @@ const Marks = ({
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
     return (
+
       <span
         className={markClassName}
         style={markStyle}
