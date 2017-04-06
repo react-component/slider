@@ -109,7 +109,8 @@ class Slider extends React.Component {
       vertical,
       included,
       disabled,
-      minimumTrackTintColor,
+      minimumTrackStyle,
+      handleStyle,
       handle: handleGenerator,
     } = this.props;
     const { value, dragging } = this.state;
@@ -121,7 +122,7 @@ class Slider extends React.Component {
       value,
       dragging,
       disabled,
-      minimumTrackTintColor,
+      handleStyle,
       ref: h => this.saveHandle(0, h),
     });
     const track = (
@@ -130,9 +131,8 @@ class Slider extends React.Component {
         vertical={vertical}
         included={included}
         offset={0}
-        disabled={disabled}
         length={offset}
-        minimumTrackTintColor={minimumTrackTintColor}
+        minimumTrackStyle={minimumTrackStyle}
       />
     );
 

@@ -30,7 +30,9 @@ export default function createSlider(Component) {
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
       style: PropTypes.object,
-      maximumTrackTintColor: PropTypes.string,
+      minimumTrackStyle: PropTypes.object,
+      maximumTrackStyle: PropTypes.object,
+      handleStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -53,6 +55,9 @@ export default function createSlider(Component) {
       disabled: false,
       dots: false,
       vertical: false,
+      minimumTrackStyle: {},
+      maximumTrackStyle: {},
+      handleStyle: {},
     };
 
     constructor(props) {
@@ -207,7 +212,7 @@ export default function createSlider(Component) {
         min,
         max,
         children,
-        maximumTrackTintColor,
+        maximumTrackStyle,
         style,
       } = this.props;
       const { tracks, handles } = super.render();
@@ -220,10 +225,6 @@ export default function createSlider(Component) {
         [className]: className,
       });
 
-      const trackStyle = maximumTrackTintColor && !disabled ? {
-        backgroundColor: maximumTrackTintColor,
-      } : {};
-
       return (
         <div
           ref={this.saveSlider}
@@ -232,7 +233,7 @@ export default function createSlider(Component) {
           onMouseDown={disabled ? noop : this.onMouseDown}
           style={style}
         >
-          <div className={`${prefixCls}-rail`} style={trackStyle} />
+          <div className={`${prefixCls}-rail`} style={maximumTrackStyle} />
           {tracks}
           <Steps
             prefixCls={prefixCls}

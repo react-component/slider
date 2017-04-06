@@ -102,6 +102,22 @@ ReactDOM.render(
       <Slider tipFormatter={null} onChange={log} />
     </div>
     <div style={style}>
+      <p>Slider with custom handle and track style</p>
+      <Slider
+        defaultValue={30}
+        maximumTrackStyle={{ backgroundColor: 'red', height: 10 }}
+        minimumTrackStyle={{ backgroundColor: 'blue', height: 10 }}
+        handleStyle={{
+          borderColor: 'blue',
+          height: 28,
+          width: 28,
+          marginLeft: -14,
+          marginTop: -9,
+          backgroundColor: 'blue',
+        }}
+      />
+    </div>
+    <div style={style}>
       <p>Basic Slider, disabled</p>
       <Slider tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} disabled />
     </div>
