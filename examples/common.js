@@ -26038,7 +26038,8 @@
 	        vertical = _props.vertical,
 	        included = _props.included,
 	        disabled = _props.disabled,
-	        minimumTrackTintColor = _props.minimumTrackTintColor,
+	        minimumTrackStyle = _props.minimumTrackStyle,
+	        handleStyle = _props.handleStyle,
 	        handleGenerator = _props.handle;
 	    var _state = this.state,
 	        value = _state.value,
@@ -26052,7 +26053,7 @@
 	      value: value,
 	      dragging: dragging,
 	      disabled: disabled,
-	      minimumTrackTintColor: minimumTrackTintColor,
+	      handleStyle: handleStyle,
 	      ref: function ref(h) {
 	        return _this2.saveHandle(0, h);
 	      }
@@ -26062,9 +26063,8 @@
 	      vertical: vertical,
 	      included: included,
 	      offset: 0,
-	      disabled: disabled,
 	      length: offset,
-	      minimumTrackTintColor: minimumTrackTintColor
+	      minimumTrackStyle: minimumTrackStyle
 	    });
 	
 	    return { tracks: track, handles: handle };
@@ -27084,6 +27084,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _objectAssign = __webpack_require__(8);
+	
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Track = function Track(_ref) {
@@ -27092,8 +27096,7 @@
 	      vertical = _ref.vertical,
 	      offset = _ref.offset,
 	      length = _ref.length,
-	      minimumTrackTintColor = _ref.minimumTrackTintColor,
-	      disabled = _ref.disabled;
+	      minimumTrackStyle = _ref.minimumTrackStyle;
 	
 	  var style = {
 	    visibility: included ? 'visible' : 'hidden'
@@ -27105,10 +27108,8 @@
 	    style.left = offset + '%';
 	    style.width = length + '%';
 	  }
-	  if (minimumTrackTintColor && !disabled) {
-	    style.backgroundColor = minimumTrackTintColor;
-	  }
-	  return _react2.default.createElement('div', { className: className, style: style });
+	
+	  return _react2.default.createElement('div', { className: className, style: (0, _objectAssign2.default)({}, style, minimumTrackStyle) });
 	};
 	
 	exports.default = Track;
@@ -27357,7 +27358,7 @@
 	          min = _props3.min,
 	          max = _props3.max,
 	          children = _props3.children,
-	          maximumTrackTintColor = _props3.maximumTrackTintColor,
+	          maximumTrackStyle = _props3.maximumTrackStyle,
 	          style = _props3.style;
 	
 	      var _Component$prototype$ = _Component.prototype.render.call(this),
@@ -27365,10 +27366,6 @@
 	          handles = _Component$prototype$.handles;
 	
 	      var sliderClassName = (0, _classnames2.default)((_classNames = {}, (0, _defineProperty3.default)(_classNames, prefixCls, true), (0, _defineProperty3.default)(_classNames, prefixCls + '-with-marks', Object.keys(marks).length), (0, _defineProperty3.default)(_classNames, prefixCls + '-disabled', disabled), (0, _defineProperty3.default)(_classNames, prefixCls + '-vertical', vertical), (0, _defineProperty3.default)(_classNames, className, className), _classNames));
-	
-	      var trackStyle = maximumTrackTintColor && !disabled ? {
-	        backgroundColor: maximumTrackTintColor
-	      } : {};
 	
 	      return _react2.default.createElement(
 	        'div',
@@ -27379,7 +27376,7 @@
 	          onMouseDown: disabled ? noop : this.onMouseDown,
 	          style: style
 	        },
-	        _react2.default.createElement('div', { className: prefixCls + '-rail', style: trackStyle }),
+	        _react2.default.createElement('div', { className: prefixCls + '-rail', style: maximumTrackStyle }),
 	        tracks,
 	        _react2.default.createElement(_Steps2.default, {
 	          prefixCls: prefixCls,
@@ -27426,7 +27423,9 @@
 	    dots: _react.PropTypes.bool,
 	    vertical: _react.PropTypes.bool,
 	    style: _react.PropTypes.object,
-	    maximumTrackTintColor: _react.PropTypes.string
+	    minimumTrackStyle: _react.PropTypes.object,
+	    maximumTrackStyle: _react.PropTypes.object,
+	    handleStyle: _react.PropTypes.object
 	  }), _class.defaultProps = (0, _extends3.default)({}, Component.defaultProps, {
 	    prefixCls: 'rc-slider',
 	    className: '',
@@ -27449,7 +27448,10 @@
 	    included: true,
 	    disabled: false,
 	    dots: false,
-	    vertical: false
+	    vertical: false,
+	    minimumTrackStyle: {},
+	    maximumTrackStyle: {},
+	    handleStyle: {}
 	  }), _temp;
 	}
 	module.exports = exports['default'];
@@ -27832,6 +27834,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _objectAssign = __webpack_require__(8);
+	
+	var _objectAssign2 = _interopRequireDefault(_objectAssign);
+	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	var Handle = function (_React$Component) {
@@ -27847,15 +27853,11 @@
 	        className = _props.className,
 	        vertical = _props.vertical,
 	        offset = _props.offset,
-	        minimumTrackTintColor = _props.minimumTrackTintColor,
-	        disabled = _props.disabled,
-	        restProps = (0, _objectWithoutProperties3.default)(_props, ['className', 'vertical', 'offset', 'minimumTrackTintColor', 'disabled']);
+	        handleStyle = _props.handleStyle,
+	        restProps = (0, _objectWithoutProperties3.default)(_props, ['className', 'vertical', 'offset', 'handleStyle']);
 	
 	    var style = vertical ? { bottom: offset + '%' } : { left: offset + '%' };
-	    if (minimumTrackTintColor && !disabled) {
-	      style.borderColor = minimumTrackTintColor;
-	    }
-	    return _react2.default.createElement('div', (0, _extends3.default)({}, restProps, { className: className, style: style }));
+	    return _react2.default.createElement('div', (0, _extends3.default)({}, restProps, { className: className, style: (0, _objectAssign2.default)({}, style, handleStyle) }));
 	  };
 	
 	  return Handle;
@@ -27868,8 +27870,7 @@
 	  className: _react.PropTypes.string,
 	  vertical: _react.PropTypes.bool,
 	  offset: _react.PropTypes.number,
-	  minimumTrackTintColor: _react.PropTypes.string,
-	  disabled: _react.PropTypes.bool
+	  handleStyle: _react.PropTypes.object
 	};
 	module.exports = exports['default'];
 

@@ -161,6 +161,28 @@ webpackJsonp([3],{
 	    React.createElement(
 	      'p',
 	      null,
+	      'Slider with custom handle and track style'
+	    ),
+	    React.createElement(Slider, {
+	      defaultValue: 30,
+	      maximumTrackStyle: { backgroundColor: 'red', height: 10 },
+	      minimumTrackStyle: { backgroundColor: 'blue', height: 10 },
+	      handleStyle: {
+	        borderColor: 'blue',
+	        height: 28,
+	        width: 28,
+	        marginLeft: -14,
+	        marginTop: -9,
+	        backgroundColor: 'blue'
+	      }
+	    })
+	  ),
+	  React.createElement(
+	    'div',
+	    { style: style },
+	    React.createElement(
+	      'p',
+	      null,
 	      'Basic Slider, disabled'
 	    ),
 	    React.createElement(Slider, { tipTransitionName: 'rc-slider-tooltip-zoom-down', onChange: log, disabled: true })

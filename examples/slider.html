@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>slider.js - example - rc-slider@6.3.1</title>
+  <title>slider.js - example - rc-slider@7.0.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-slider@6.3.1</h1>
+      <h1>rc-slider@7.0.0</h1>
 
       <p>Slider UI component for React</p>
     </div>
@@ -371,6 +371,22 @@ ReactDOM.render(
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider without tooltip<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">tipFormatter</span>=<span class="hljs-value">{null}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with custom handle and track style<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span>
+        <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{30}</span>
+        <span class="hljs-attribute">maximumTrackStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">red</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">10</span> }}
+        <span class="hljs-attribute">minimumTrackStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">blue</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">10</span> }}
+        <span class="hljs-attribute">handleStyle</span>=<span class="hljs-value">{{</span>
+          <span class="hljs-attribute">borderColor:</span> '<span class="hljs-attribute">blue</span>',
+          <span class="hljs-attribute">height:</span> <span class="hljs-attribute">28</span>,
+          <span class="hljs-attribute">width:</span> <span class="hljs-attribute">28</span>,
+          <span class="hljs-attribute">marginLeft:</span> <span class="hljs-attribute">-14</span>,
+          <span class="hljs-attribute">marginTop:</span> <span class="hljs-attribute">-9</span>,
+          <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">blue</span>',
+        }}
+      /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider, disabled<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
