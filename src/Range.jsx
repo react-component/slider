@@ -281,6 +281,8 @@ class Range extends React.Component {
       vertical,
       included,
       disabled,
+      minimumTrackStyle,
+      handleStyle,
       handle: handleGenerator,
     } = this.props;
 
@@ -298,6 +300,7 @@ class Range extends React.Component {
       dragging: handle === i,
       index: i,
       disabled,
+      handleStyle,
       ref: h => this.saveHandle(i, h),
     }));
 
@@ -314,6 +317,7 @@ class Range extends React.Component {
           included={included}
           offset={offsets[i - 1]}
           length={offsets[i] - offsets[i - 1]}
+          minimumTrackStyle={minimumTrackStyle}
           key={i}
         />
       );
