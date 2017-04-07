@@ -1,7 +1,8 @@
 import React from 'react';
+import assign from 'object-assign';
 
 const Track = ({
-  className, included, vertical, offset, length, minimumTrackTintColor, disabled,
+  className, included, vertical, offset, length, minimumTrackStyle,
 }) => {
   const style = {
     visibility: included ? 'visible' : 'hidden',
@@ -13,10 +14,8 @@ const Track = ({
     style.left = `${offset}%`;
     style.width = `${length}%`;
   }
-  if (minimumTrackTintColor && !disabled) {
-    style.backgroundColor = minimumTrackTintColor;
-  }
-  return <div className={className} style={style} />;
+
+  return <div className={className} style={assign({}, style, minimumTrackStyle)} />;
 };
 
 export default Track;

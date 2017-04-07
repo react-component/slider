@@ -1,15 +1,13 @@
 import React, { PropTypes } from 'react';
+import assign from 'object-assign';
 
 export default class Handle extends React.Component {
   render() {
     const {
-      className, vertical, offset, minimumTrackTintColor, disabled, ...restProps,
+      className, vertical, offset, handleStyle, ...restProps,
     } = this.props;
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
-    if (minimumTrackTintColor && !disabled) {
-      style.borderColor = minimumTrackTintColor;
-    }
-    return <div {...restProps} className={className} style={style} />;
+    return <div {...restProps} className={className} style={assign({}, style, handleStyle)} />;
   }
 }
 
@@ -17,6 +15,5 @@ Handle.propTypes = {
   className: PropTypes.string,
   vertical: PropTypes.bool,
   offset: PropTypes.number,
-  minimumTrackTintColor: PropTypes.string,
-  disabled: PropTypes.bool,
+  handleStyle: PropTypes.object,
 };
