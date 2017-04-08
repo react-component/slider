@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import assign from 'object-assign';
 
 export default class Handle extends React.Component {

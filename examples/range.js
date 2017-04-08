@@ -3,6 +3,7 @@ require('rc-slider/assets/index.less');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+const createReactClass = require('create-react-class');
 const Slider = require('rc-slider');
 const Range = Slider.Range;
 
@@ -12,7 +13,7 @@ function log(value) {
   console.log(value); //eslint-disable-line
 }
 
-const CustomizedRange = React.createClass({
+const CustomizedRange = createReactClass({
   getInitialState() {
     return {
       lowerBound: 20,
@@ -53,7 +54,7 @@ const CustomizedRange = React.createClass({
   },
 });
 
-const DynamicBounds = React.createClass({
+const DynamicBounds = createReactClass({
   getInitialState() {
     return {
       min: 0,
