@@ -3,6 +3,7 @@ require('rc-slider/assets/index.less');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
+const createReactClass = require('create-react-class');
 const Slider = require('rc-slider');
 
 const style = { width: 400, margin: 50 };
@@ -16,7 +17,7 @@ function percentFormatter(v) {
   return `${v} %`;
 }
 
-const CustomizedSlider = React.createClass({
+const CustomizedSlider = createReactClass({
   getInitialState() {
     return {
       value: 50,
@@ -40,7 +41,7 @@ const CustomizedSlider = React.createClass({
   },
 });
 
-const DynamicBounds = React.createClass({
+const DynamicBounds = createReactClass({
   getInitialState() {
     return {
       min: 0,

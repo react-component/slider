@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';

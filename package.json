@@ -53,6 +53,7 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.15",
+    "create-react-class": "^15.5.1",
     "enzyme": "^2.7.0",
     "enzyme-to-json": "^1.4.5",
     "jest": "^18.1.0",
@@ -69,6 +70,7 @@
     "babel-runtime": "6.x",
     "classnames": "^2.2.5",
     "object-assign": "^4.1.1",
+    "prop-types": "^15.5.4",
     "rc-tooltip": "^3.4.2",
     "rc-util": "^4.0.0",
     "warning": "^3.0.0"
