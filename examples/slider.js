@@ -3,7 +3,6 @@ require('rc-slider/assets/index.less');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
-const createReactClass = require('create-react-class');
 const Slider = require('rc-slider');
 
 const style = { width: 400, margin: 50 };
@@ -17,50 +16,52 @@ function percentFormatter(v) {
   return `${v} %`;
 }
 
-const CustomizedSlider = createReactClass({
-  getInitialState() {
-    return {
+class CustomizedSlider extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       value: 50,
     };
-  },
-  onSliderChange(value) {
+  }
+  onSliderChange = (value) => {
     log(value);
     this.setState({
       value,
     });
-  },
-  onAfterChange(value) {
+  }
+  onAfterChange = (value) => {
     console.log(value); //eslint-disable-line
-  },
+  }
   render() {
     return (
       <Slider value={this.state.value}
         onChange={this.onSliderChange} onAfterChange={this.onAfterChange}
       />
     );
-  },
-});
+  }
+}
 
-const DynamicBounds = createReactClass({
-  getInitialState() {
-    return {
+class DynamicBounds extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       min: 0,
       max: 100,
     };
-  },
-  onSliderChange(value) {
+  }
+  onSliderChange = (value) => {
     log(value);
-  },
-  onMinChange(e) {
+  }
+  onMinChange = (e) => {
     this.setState({
       min: +e.target.value || 0,
     });
-  },
-  onMaxChange(e) {
+  }
+  onMaxChange = (e) => {
     this.setState({
       max: +e.target.value || 100,
     });
-  },
+  }
   render() {
     return (
       <div>
@@ -75,8 +76,8 @@ const DynamicBounds = createReactClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 ReactDOM.render(
   <div>
