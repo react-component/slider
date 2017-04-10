@@ -3,7 +3,6 @@ require('rc-slider/assets/index.less');
 
 const React = require('react');
 const ReactDOM = require('react-dom');
-const createReactClass = require('create-react-class');
 const Slider = require('rc-slider');
 const Range = Slider.Range;
 
@@ -13,30 +12,31 @@ function log(value) {
   console.log(value); //eslint-disable-line
 }
 
-const CustomizedRange = createReactClass({
-  getInitialState() {
-    return {
+class CustomizedRange extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       lowerBound: 20,
       upperBound: 40,
       value: [20, 40],
     };
-  },
-  onLowerBoundChange(e) {
+  }
+  onLowerBoundChange = (e) => {
     this.setState({ lowerBound: +e.target.value });
-  },
-  onUpperBoundChange(e) {
+  }
+  onUpperBoundChange = (e) => {
     this.setState({ upperBound: +e.target.value });
-  },
-  onSliderChange(value) {
+  }
+  onSliderChange = (value) => {
     log(value);
     this.setState({
       value,
     });
-  },
-  handleApply() {
+  }
+  handleApply = () => {
     const { lowerBound, upperBound } = this.state;
     this.setState({ value: [lowerBound, upperBound] });
-  },
+  }
   render() {
     return (
       <div>
@@ -51,29 +51,30 @@ const CustomizedRange = createReactClass({
         <Range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
       </div>
     );
-  },
-});
+  }
+}
 
-const DynamicBounds = createReactClass({
-  getInitialState() {
-    return {
+class DynamicBounds extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
       min: 0,
       max: 100,
     };
-  },
-  onSliderChange(value) {
+  }
+  onSliderChange = (value) => {
     log(value);
-  },
-  onMinChange(e) {
+  }
+  onMinChange = (e) => {
     this.setState({
       min: +e.target.value || 0,
     });
-  },
-  onMaxChange(e) {
+  }
+  onMaxChange = (e) => {
     this.setState({
       max: +e.target.value || 100,
     });
-  },
+  }
   render() {
     return (
       <div>
@@ -88,8 +89,8 @@ const DynamicBounds = createReactClass({
         />
       </div>
     );
-  },
-});
+  }
+}
 
 class ControlledRange extends React.Component {
   constructor(props) {
