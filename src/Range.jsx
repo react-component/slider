@@ -76,7 +76,6 @@ class Range extends React.Component {
     const props = this.props;
     const state = this.state;
     const bounds = this.getValue();
-    props.onBeforeChange(bounds);
 
     const value = this.calcValueByPos(position);
     this.startValue = value;
@@ -84,6 +83,8 @@ class Range extends React.Component {
 
     const closestBound = this.getClosestBound(value);
     const boundNeedMoving = this.getBoundNeedMoving(value, closestBound);
+
+    props.onBeforeChange(bounds, boundNeedMoving + 1);
 
     this.setState({
       handle: boundNeedMoving,
