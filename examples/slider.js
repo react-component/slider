@@ -13,6 +13,20 @@ webpackJsonp([3],{
 
 	'use strict';
 	
+	var _classCallCheck2 = __webpack_require__(259);
+	
+	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	
+	var _possibleConstructorReturn2 = __webpack_require__(260);
+	
+	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+	
+	var _inherits2 = __webpack_require__(296);
+	
+	var _inherits3 = _interopRequireDefault(_inherits2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	
 	/* eslint react/no-multi-comp: 0 */
 	__webpack_require__(3);
 	
@@ -30,51 +44,72 @@ webpackJsonp([3],{
 	  return v + ' %';
 	}
 	
-	var CustomizedSlider = React.createClass({
-	  displayName: 'CustomizedSlider',
-	  getInitialState: function getInitialState() {
-	    return {
+	var CustomizedSlider = function (_React$Component) {
+	  (0, _inherits3.default)(CustomizedSlider, _React$Component);
+	
+	  function CustomizedSlider(props) {
+	    (0, _classCallCheck3.default)(this, CustomizedSlider);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	
+	    _this.onSliderChange = function (value) {
+	      log(value);
+	      _this.setState({
+	        value: value
+	      });
+	    };
+	
+	    _this.onAfterChange = function (value) {
+	      console.log(value); //eslint-disable-line
+	    };
+	
+	    _this.state = {
 	      value: 50
 	    };
-	  },
-	  onSliderChange: function onSliderChange(value) {
-	    log(value);
-	    this.setState({
-	      value: value
-	    });
-	  },
-	  onAfterChange: function onAfterChange(value) {
-	    console.log(value); //eslint-disable-line
-	  },
-	  render: function render() {
+	    return _this;
+	  }
+	
+	  CustomizedSlider.prototype.render = function render() {
 	    return React.createElement(Slider, { value: this.state.value,
 	      onChange: this.onSliderChange, onAfterChange: this.onAfterChange
 	    });
-	  }
-	});
+	  };
 	
-	var DynamicBounds = React.createClass({
-	  displayName: 'DynamicBounds',
-	  getInitialState: function getInitialState() {
-	    return {
+	  return CustomizedSlider;
+	}(React.Component);
+	
+	var DynamicBounds = function (_React$Component2) {
+	  (0, _inherits3.default)(DynamicBounds, _React$Component2);
+	
+	  function DynamicBounds(props) {
+	    (0, _classCallCheck3.default)(this, DynamicBounds);
+	
+	    var _this2 = (0, _possibleConstructorReturn3.default)(this, _React$Component2.call(this, props));
+	
+	    _this2.onSliderChange = function (value) {
+	      log(value);
+	    };
+	
+	    _this2.onMinChange = function (e) {
+	      _this2.setState({
+	        min: +e.target.value || 0
+	      });
+	    };
+	
+	    _this2.onMaxChange = function (e) {
+	      _this2.setState({
+	        max: +e.target.value || 100
+	      });
+	    };
+	
+	    _this2.state = {
 	      min: 0,
 	      max: 100
 	    };
-	  },
-	  onSliderChange: function onSliderChange(value) {
-	    log(value);
-	  },
-	  onMinChange: function onMinChange(e) {
-	    this.setState({
-	      min: +e.target.value || 0
-	    });
-	  },
-	  onMaxChange: function onMaxChange(e) {
-	    this.setState({
-	      max: +e.target.value || 100
-	    });
-	  },
-	  render: function render() {
+	    return _this2;
+	  }
+	
+	  DynamicBounds.prototype.render = function render() {
 	    return React.createElement(
 	      'div',
 	      null,
@@ -97,8 +132,10 @@ webpackJsonp([3],{
 	        onChange: this.onSliderChange
 	      })
 	    );
-	  }
-	});
+	  };
+	
+	  return DynamicBounds;
+	}(React.Component);
 	
 	ReactDOM.render(React.createElement(
 	  'div',

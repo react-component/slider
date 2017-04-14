@@ -25919,6 +25919,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _propTypes = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"prop-types\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+	
 	var _Track = __webpack_require__(304);
 	
 	var _Track2 = _interopRequireDefault(_Track);
@@ -25935,7 +25939,6 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
-	/* eslint-disable react/prop-types */
 	var Slider = function (_React$Component) {
 	  (0, _inherits3.default)(Slider, _React$Component);
 	
@@ -26071,13 +26074,14 @@
 	  };
 	
 	  return Slider;
-	}(_react2.default.Component);
+	}(_react2.default.Component); /* eslint-disable react/prop-types */
+	
 	
 	Slider.displayName = 'Slider';
 	Slider.propTypes = {
-	  defaultValue: _react.PropTypes.number,
-	  value: _react.PropTypes.number,
-	  disabled: _react.PropTypes.bool
+	  defaultValue: _propTypes2.default.number,
+	  value: _propTypes2.default.number,
+	  disabled: _propTypes2.default.bool
 	};
 	Slider.defaultProps = {};
 	exports.default = (0, _createSlider2.default)(Slider);
@@ -27155,6 +27159,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _propTypes = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"prop-types\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+	
 	var _addEventListener = __webpack_require__(226);
 	
 	var _addEventListener2 = _interopRequireDefault(_addEventListener);
@@ -27407,25 +27415,25 @@
 	
 	    return ComponentEnhancer;
 	  }(Component), _class.displayName = 'ComponentEnhancer(' + Component.displayName + ')', _class.propTypes = (0, _extends3.default)({}, Component.propTypes, {
-	    min: _react.PropTypes.number,
-	    max: _react.PropTypes.number,
-	    step: _react.PropTypes.number,
-	    marks: _react.PropTypes.object,
-	    included: _react.PropTypes.bool,
-	    className: _react.PropTypes.string,
-	    prefixCls: _react.PropTypes.string,
-	    disabled: _react.PropTypes.bool,
-	    children: _react.PropTypes.any,
-	    onBeforeChange: _react.PropTypes.func,
-	    onChange: _react.PropTypes.func,
-	    onAfterChange: _react.PropTypes.func,
-	    handle: _react.PropTypes.func,
-	    dots: _react.PropTypes.bool,
-	    vertical: _react.PropTypes.bool,
-	    style: _react.PropTypes.object,
-	    minimumTrackStyle: _react.PropTypes.object,
-	    maximumTrackStyle: _react.PropTypes.object,
-	    handleStyle: _react.PropTypes.object
+	    min: _propTypes2.default.number,
+	    max: _propTypes2.default.number,
+	    step: _propTypes2.default.number,
+	    marks: _propTypes2.default.object,
+	    included: _propTypes2.default.bool,
+	    className: _propTypes2.default.string,
+	    prefixCls: _propTypes2.default.string,
+	    disabled: _propTypes2.default.bool,
+	    children: _propTypes2.default.any,
+	    onBeforeChange: _propTypes2.default.func,
+	    onChange: _propTypes2.default.func,
+	    onAfterChange: _propTypes2.default.func,
+	    handle: _propTypes2.default.func,
+	    dots: _propTypes2.default.bool,
+	    vertical: _propTypes2.default.bool,
+	    style: _propTypes2.default.object,
+	    minimumTrackStyle: _propTypes2.default.object,
+	    maximumTrackStyle: _propTypes2.default.object,
+	    handleStyle: _propTypes2.default.object
 	  }), _class.defaultProps = (0, _extends3.default)({}, Component.defaultProps, {
 	    prefixCls: 'rc-slider',
 	    className: '',
@@ -27834,6 +27842,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _propTypes = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"prop-types\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+	
 	var _objectAssign = __webpack_require__(8);
 	
 	var _objectAssign2 = _interopRequireDefault(_objectAssign);
@@ -27867,10 +27879,10 @@
 	
 	
 	Handle.propTypes = {
-	  className: _react.PropTypes.string,
-	  vertical: _react.PropTypes.bool,
-	  offset: _react.PropTypes.number,
-	  handleStyle: _react.PropTypes.object
+	  className: _propTypes2.default.string,
+	  vertical: _propTypes2.default.bool,
+	  offset: _propTypes2.default.number,
+	  handleStyle: _propTypes2.default.object
 	};
 	module.exports = exports['default'];
 
@@ -28215,6 +28227,10 @@
 	
 	var _react2 = _interopRequireDefault(_react);
 	
+	var _propTypes = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"prop-types\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _propTypes2 = _interopRequireDefault(_propTypes);
+	
 	var _classnames = __webpack_require__(310);
 	
 	var _classnames2 = _interopRequireDefault(_classnames);
@@ -28235,6 +28251,7 @@
 	
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
+	/* eslint-disable react/prop-types */
 	var Range = function (_React$Component) {
 	  (0, _inherits3.default)(Range, _React$Component);
 	
@@ -28583,17 +28600,16 @@
 	  };
 	
 	  return Range;
-	}(_react2.default.Component); /* eslint-disable react/prop-types */
-	
+	}(_react2.default.Component);
 	
 	Range.displayName = 'Range';
 	Range.propTypes = {
-	  defaultValue: _react.PropTypes.arrayOf(_react.PropTypes.number),
-	  value: _react.PropTypes.arrayOf(_react.PropTypes.number),
-	  count: _react.PropTypes.number,
-	  pushable: _react.PropTypes.oneOfType([_react.PropTypes.bool, _react.PropTypes.number]),
-	  allowCross: _react.PropTypes.bool,
-	  disabled: _react.PropTypes.bool
+	  defaultValue: _propTypes2.default.arrayOf(_propTypes2.default.number),
+	  value: _propTypes2.default.arrayOf(_propTypes2.default.number),
+	  count: _propTypes2.default.number,
+	  pushable: _propTypes2.default.oneOfType([_propTypes2.default.bool, _propTypes2.default.number]),
+	  allowCross: _propTypes2.default.bool,
+	  disabled: _propTypes2.default.bool
 	};
 	Range.defaultProps = {
 	  count: 1,
@@ -28642,6 +28658,10 @@
 	var _react = __webpack_require__(5);
 	
 	var _react2 = _interopRequireDefault(_react);
+	
+	var _propTypes = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"prop-types\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	
+	var _propTypes2 = _interopRequireDefault(_propTypes);
 	
 	var _rcTooltip = __webpack_require__(182);
 	
@@ -28708,7 +28728,7 @@
 	
 	    return ComponentWrapper;
 	  }(_react2.default.Component), _class.propTypes = {
-	    tipFormatter: _react2.default.PropTypes.func
+	    tipFormatter: _propTypes2.default.func
 	  }, _class.defaultProps = {
 	    tipFormatter: function tipFormatter(value) {
 	      return value;

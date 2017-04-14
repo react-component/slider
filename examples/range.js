@@ -41,35 +41,46 @@ webpackJsonp([2],{
 	  console.log(value); //eslint-disable-line
 	}
 	
-	var CustomizedRange = React.createClass({
-	  displayName: 'CustomizedRange',
-	  getInitialState: function getInitialState() {
-	    return {
+	var CustomizedRange = function (_React$Component) {
+	  (0, _inherits3.default)(CustomizedRange, _React$Component);
+	
+	  function CustomizedRange(props) {
+	    (0, _classCallCheck3.default)(this, CustomizedRange);
+	
+	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	
+	    _this.onLowerBoundChange = function (e) {
+	      _this.setState({ lowerBound: +e.target.value });
+	    };
+	
+	    _this.onUpperBoundChange = function (e) {
+	      _this.setState({ upperBound: +e.target.value });
+	    };
+	
+	    _this.onSliderChange = function (value) {
+	      log(value);
+	      _this.setState({
+	        value: value
+	      });
+	    };
+	
+	    _this.handleApply = function () {
+	      var _this$state = _this.state,
+	          lowerBound = _this$state.lowerBound,
+	          upperBound = _this$state.upperBound;
+	
+	      _this.setState({ value: [lowerBound, upperBound] });
+	    };
+	
+	    _this.state = {
 	      lowerBound: 20,
 	      upperBound: 40,
 	      value: [20, 40]
 	    };
-	  },
-	  onLowerBoundChange: function onLowerBoundChange(e) {
-	    this.setState({ lowerBound: +e.target.value });
-	  },
-	  onUpperBoundChange: function onUpperBoundChange(e) {
-	    this.setState({ upperBound: +e.target.value });
-	  },
-	  onSliderChange: function onSliderChange(value) {
-	    log(value);
-	    this.setState({
-	      value: value
-	    });
-	  },
-	  handleApply: function handleApply() {
-	    var _state = this.state,
-	        lowerBound = _state.lowerBound,
-	        upperBound = _state.upperBound;
+	    return _this;
+	  }
 	
-	    this.setState({ value: [lowerBound, upperBound] });
-	  },
-	  render: function render() {
+	  CustomizedRange.prototype.render = function render() {
 	    return React.createElement(
 	      'div',
 	      null,
@@ -96,31 +107,43 @@ webpackJsonp([2],{
 	      React.createElement('br', null),
 	      React.createElement(Range, { allowCross: false, value: this.state.value, onChange: this.onSliderChange })
 	    );
-	  }
-	});
+	  };
 	
-	var DynamicBounds = React.createClass({
-	  displayName: 'DynamicBounds',
-	  getInitialState: function getInitialState() {
-	    return {
+	  return CustomizedRange;
+	}(React.Component);
+	
+	var DynamicBounds = function (_React$Component2) {
+	  (0, _inherits3.default)(DynamicBounds, _React$Component2);
+	
+	  function DynamicBounds(props) {
+	    (0, _classCallCheck3.default)(this, DynamicBounds);
+	
+	    var _this2 = (0, _possibleConstructorReturn3.default)(this, _React$Component2.call(this, props));
+	
+	    _this2.onSliderChange = function (value) {
+	      log(value);
+	    };
+	
+	    _this2.onMinChange = function (e) {
+	      _this2.setState({
+	        min: +e.target.value || 0
+	      });
+	    };
+	
+	    _this2.onMaxChange = function (e) {
+	      _this2.setState({
+	        max: +e.target.value || 100
+	      });
+	    };
+	
+	    _this2.state = {
 	      min: 0,
 	      max: 100
 	    };
-	  },
-	  onSliderChange: function onSliderChange(value) {
-	    log(value);
-	  },
-	  onMinChange: function onMinChange(e) {
-	    this.setState({
-	      min: +e.target.value || 0
-	    });
-	  },
-	  onMaxChange: function onMaxChange(e) {
-	    this.setState({
-	      max: +e.target.value || 100
-	    });
-	  },
-	  render: function render() {
+	    return _this2;
+	  }
+	
+	  DynamicBounds.prototype.render = function render() {
 	    return React.createElement(
 	      'div',
 	      null,
@@ -143,27 +166,29 @@ webpackJsonp([2],{
 	        onChange: this.onSliderChange
 	      })
 	    );
-	  }
-	});
+	  };
 	
-	var ControlledRange = function (_React$Component) {
-	  (0, _inherits3.default)(ControlledRange, _React$Component);
+	  return DynamicBounds;
+	}(React.Component);
+	
+	var ControlledRange = function (_React$Component3) {
+	  (0, _inherits3.default)(ControlledRange, _React$Component3);
 	
 	  function ControlledRange(props) {
 	    (0, _classCallCheck3.default)(this, ControlledRange);
 	
-	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	    var _this3 = (0, _possibleConstructorReturn3.default)(this, _React$Component3.call(this, props));
 	
-	    _this.handleChange = function (value) {
-	      _this.setState({
+	    _this3.handleChange = function (value) {
+	      _this3.setState({
 	        value: value
 	      });
 	    };
 	
-	    _this.state = {
+	    _this3.state = {
 	      value: [20, 40, 60, 80]
 	    };
-	    return _this;
+	    return _this3;
 	  }
 	
 	  ControlledRange.prototype.render = function render() {
