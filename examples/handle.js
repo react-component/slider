@@ -11,20 +11,16 @@ webpackJsonp([0],[
 
 	'use strict';
 	
-	var _objectWithoutProperties2 = __webpack_require__(2);
-	
-	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
 	
 	/* eslint-disable react/prop-types */
 	
+	__webpack_require__(2);
 	__webpack_require__(3);
-	__webpack_require__(4);
 	
-	var React = __webpack_require__(5);
-	var ReactDOM = __webpack_require__(36);
-	var Tooltip = __webpack_require__(182);
+	var React = __webpack_require__(4);
+	var ReactDOM = __webpack_require__(35);
+	var Tooltip = __webpack_require__(181);
 	var Slider = __webpack_require__(256);
 	var createSliderWithTooltip = Slider.createSliderWithTooltip;
 	var Range = createSliderWithTooltip(Slider.Range);
@@ -34,7 +30,7 @@ webpackJsonp([0],[
 	  var value = props.value,
 	      dragging = props.dragging,
 	      index = props.index,
-	      restProps = (0, _objectWithoutProperties3.default)(props, ['value', 'dragging', 'index']);
+	      restProps = _objectWithoutProperties(props, ['value', 'dragging', 'index']);
 	
 	  return React.createElement(
 	    Tooltip,
@@ -79,8 +75,7 @@ webpackJsonp([0],[
 
 /***/ },
 /* 2 */,
-/* 3 */,
-/* 4 */
-3
+/* 3 */
+2
 ]);
 //# sourceMappingURL=handle.js.map

@@ -3,35 +3,29 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(330);
+	module.exports = __webpack_require__(271);
 
 
 /***/ },
 
-/***/ 330:
+/***/ 271:
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _classCallCheck2 = __webpack_require__(259);
+	function _defaults(obj, defaults) { var keys = Object.getOwnPropertyNames(defaults); for (var i = 0; i < keys.length; i++) { var key = keys[i]; var value = Object.getOwnPropertyDescriptor(defaults, key); if (value && value.configurable && obj[key] === undefined) { Object.defineProperty(obj, key, value); } } return obj; }
 	
-	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 	
-	var _possibleConstructorReturn2 = __webpack_require__(260);
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 	
-	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
-	
-	var _inherits2 = __webpack_require__(296);
-	
-	var _inherits3 = _interopRequireDefault(_inherits2);
-	
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : _defaults(subClass, superClass); }
 	
 	/* eslint react/no-multi-comp: 0 */
-	__webpack_require__(3);
+	__webpack_require__(2);
 	
-	var React = __webpack_require__(5);
-	var ReactDOM = __webpack_require__(36);
+	var React = __webpack_require__(4);
+	var ReactDOM = __webpack_require__(35);
 	var Slider = __webpack_require__(256);
 	
 	var style = { width: 400, margin: 50 };
@@ -45,12 +39,12 @@ webpackJsonp([3],{
 	}
 	
 	var CustomizedSlider = function (_React$Component) {
-	  (0, _inherits3.default)(CustomizedSlider, _React$Component);
+	  _inherits(CustomizedSlider, _React$Component);
 	
 	  function CustomizedSlider(props) {
-	    (0, _classCallCheck3.default)(this, CustomizedSlider);
+	    _classCallCheck(this, CustomizedSlider);
 	
-	    var _this = (0, _possibleConstructorReturn3.default)(this, _React$Component.call(this, props));
+	    var _this = _possibleConstructorReturn(this, _React$Component.call(this, props));
 	
 	    _this.onSliderChange = function (value) {
 	      log(value);
@@ -79,12 +73,12 @@ webpackJsonp([3],{
 	}(React.Component);
 	
 	var DynamicBounds = function (_React$Component2) {
-	  (0, _inherits3.default)(DynamicBounds, _React$Component2);
+	  _inherits(DynamicBounds, _React$Component2);
 	
 	  function DynamicBounds(props) {
-	    (0, _classCallCheck3.default)(this, DynamicBounds);
+	    _classCallCheck(this, DynamicBounds);
 	
-	    var _this2 = (0, _possibleConstructorReturn3.default)(this, _React$Component2.call(this, props));
+	    var _this2 = _possibleConstructorReturn(this, _React$Component2.call(this, props));
 	
 	    _this2.onSliderChange = function (value) {
 	      log(value);
