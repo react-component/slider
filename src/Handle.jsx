@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import assign from 'object-assign';
 
 export default class Handle extends React.Component {
   render() {
@@ -8,7 +7,12 @@ export default class Handle extends React.Component {
       className, vertical, offset, handleStyle, ...restProps,
     } = this.props;
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
-    return <div {...restProps} className={className} style={assign({}, style, handleStyle)} />;
+
+    const elStyle = {
+      ...style,
+      ...handleStyle,
+    };
+    return <div {...restProps} className={className} style={elStyle} />;
   }
 }
 

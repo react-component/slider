@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "7.0.1",
+  "version": "7.0.2",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
@@ -68,7 +68,6 @@
   "dependencies": {
     "babel-runtime": "6.x",
     "classnames": "^2.2.5",
-    "object-assign": "^4.1.1",
     "prop-types": "^15.5.4",
     "rc-tooltip": "^3.4.2",
     "rc-util": "^4.0.0",

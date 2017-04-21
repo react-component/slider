@@ -1,5 +1,4 @@
 import React from 'react';
-import assign from 'object-assign';
 
 const Track = ({
   className, included, vertical, offset, length, minimumTrackStyle,
@@ -14,8 +13,11 @@ const Track = ({
     style.left = `${offset}%`;
     style.width = `${length}%`;
   }
-
-  return <div className={className} style={assign({}, style, minimumTrackStyle)} />;
+  const elStyle = {
+    ...style,
+    ...minimumTrackStyle,
+  };
+  return <div className={className} style={elStyle} />;
 };
 
 export default Track;
