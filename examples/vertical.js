@@ -1,23 +1,23 @@
 webpackJsonp([4],{
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(280);
+	module.exports = __webpack_require__(337);
 
 
-/***/ },
+/***/ }),
 
-/***/ 280:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 337:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(2);
+	__webpack_require__(3);
 	
-	var React = __webpack_require__(4);
-	var ReactDOM = __webpack_require__(35);
-	var Slider = __webpack_require__(256);
+	var React = __webpack_require__(5);
+	var ReactDOM = __webpack_require__(40);
+	var Slider = __webpack_require__(260);
 	
 	var style = { float: 'left', width: 160, height: 400, marginBottom: 160, marginLeft: 50 };
 	var parentStyle = { overflow: 'hidden' };
@@ -115,7 +115,7 @@ webpackJsonp([4],{
 	  )
 	), document.getElementById('__react-content'));
 
-/***/ }
+/***/ })
 
 });
 //# sourceMappingURL=vertical.js.map

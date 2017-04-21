@@ -1,27 +1,31 @@
 webpackJsonp([0],[
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(1);
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
+	var _objectWithoutProperties2 = __webpack_require__(2);
+	
+	var _objectWithoutProperties3 = _interopRequireDefault(_objectWithoutProperties2);
+	
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 	
 	/* eslint-disable react/prop-types */
 	
-	__webpack_require__(2);
 	__webpack_require__(3);
+	__webpack_require__(4);
 	
-	var React = __webpack_require__(4);
-	var ReactDOM = __webpack_require__(35);
-	var Tooltip = __webpack_require__(181);
-	var Slider = __webpack_require__(256);
+	var React = __webpack_require__(5);
+	var ReactDOM = __webpack_require__(40);
+	var Tooltip = __webpack_require__(186);
+	var Slider = __webpack_require__(260);
 	var createSliderWithTooltip = Slider.createSliderWithTooltip;
 	var Range = createSliderWithTooltip(Slider.Range);
 	var Handle = Slider.Handle;
@@ -30,7 +34,7 @@ webpackJsonp([0],[
 	  var value = props.value,
 	      dragging = props.dragging,
 	      index = props.index,
-	      restProps = _objectWithoutProperties(props, ['value', 'dragging', 'index']);
+	      restProps = (0, _objectWithoutProperties3.default)(props, ['value', 'dragging', 'index']);
 	
 	  return React.createElement(
 	    Tooltip,
@@ -73,9 +77,10 @@ webpackJsonp([0],[
 	  )
 	), document.getElementById('__react-content'));
 
-/***/ },
+/***/ }),
 /* 2 */,
-/* 3 */
-2
+/* 3 */,
+/* 4 */
+3
 ]);
 //# sourceMappingURL=handle.js.map

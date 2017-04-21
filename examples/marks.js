@@ -1,23 +1,23 @@
 webpackJsonp([1],{
 
 /***/ 0:
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(277);
+	module.exports = __webpack_require__(334);
 
 
-/***/ },
+/***/ }),
 
-/***/ 277:
-/***/ function(module, exports, __webpack_require__) {
+/***/ 334:
+/***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	__webpack_require__(2);
+	__webpack_require__(3);
 	
-	var React = __webpack_require__(4);
-	var ReactDOM = __webpack_require__(35);
-	var Slider = __webpack_require__(256);
+	var React = __webpack_require__(5);
+	var ReactDOM = __webpack_require__(40);
+	var Slider = __webpack_require__(260);
 	
 	var style = { width: 400, margin: 50 };
 	var marks = {
@@ -111,7 +111,7 @@ webpackJsonp([1],{
 	  )
 	), document.getElementById('__react-content'));
 
-/***/ }
+/***/ })
 
 });
 //# sourceMappingURL=marks.js.map
