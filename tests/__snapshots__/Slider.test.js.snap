@@ -9,7 +9,12 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
   <div
     class="rc-slider-step" />
   <div
+    aria-disabled="false"
+    aria-valuemax="100"
+    aria-valuemin="0"
+    aria-valuenow="0"
     class="rc-slider-handle"
+    role="slider"
     style="left:0%;" />
   <div
     class="rc-slider-mark" />

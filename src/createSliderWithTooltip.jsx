@@ -35,6 +35,7 @@ export default function createSliderWithTooltip(Component) {
         >
           <Handle
             {...restProps}
+            value={value}
             onMouseEnter={() => this.handleTooltipVisibleChange(index, true)}
             onMouseLeave={() => this.handleTooltipVisibleChange(index, false)}
           />
