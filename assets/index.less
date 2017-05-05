@@ -59,11 +59,9 @@
     &:hover {
       border-color: tint(@primary-color, 20%);
     }
-    &-active {
-      &:active {
-        border-color: tint(@primary-color, 20%);
-        box-shadow: 0 0 5px tint(@primary-color, 20%);
-      }
+    &:active {
+      border-color: tint(@primary-color, 20%);
+      box-shadow: 0 0 5px tint(@primary-color, 20%);
     }
   }
 
@@ -126,6 +124,7 @@
 
     .@{prefixClass}-handle, .@{prefixClass}-dot {
       border-color: @disabledColor;
+      box-shadow: none;
       background-color: #fff;
       cursor: not-allowed;
     }
