@@ -52,6 +52,8 @@
     width: 14px;
     height: 14px;
     cursor: pointer;
+    cursor: -webkit-grab;
+    cursor: grab;
     border-radius: 50%;
     border: solid 2px tint(@primary-color, 50%);
     background-color: #fff;
@@ -62,6 +64,8 @@
     &:active {
       border-color: tint(@primary-color, 20%);
       box-shadow: 0 0 5px tint(@primary-color, 20%);
+      cursor: -webkit-grabbing;
+      cursor: grabbing;
     }
   }
 
