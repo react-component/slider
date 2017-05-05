@@ -18,6 +18,14 @@ class Range extends React.Component {
     ]),
     allowCross: PropTypes.bool,
     disabled: PropTypes.bool,
+    rangeTrackStyle: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object,
+    ]),
+    rangeHandleStyle: PropTypes.oneOfType([
+      PropTypes.arrayOf(PropTypes.object),
+      PropTypes.object,
+    ]),
   };
 
   static defaultProps = {
@@ -282,8 +290,8 @@ class Range extends React.Component {
       vertical,
       included,
       disabled,
-      minimumTrackStyle,
-      handleStyle,
+      rangeTrackStyle,
+      rangeHandleStyle,
       handle: handleGenerator,
     } = this.props;
 
@@ -301,7 +309,7 @@ class Range extends React.Component {
       dragging: handle === i,
       index: i,
       disabled,
-      handleStyle,
+      handleStyle: rangeHandleStyle[i] || rangeHandleStyle,
       ref: h => this.saveHandle(i, h),
     }));
 
@@ -311,6 +319,7 @@ class Range extends React.Component {
         [`${prefixCls}-track`]: true,
         [`${prefixCls}-track-${i}`]: true,
       });
+
       return (
         <Track
           className={trackClassName}
@@ -318,7 +327,7 @@ class Range extends React.Component {
           included={included}
           offset={offsets[i - 1]}
           length={offsets[i] - offsets[i - 1]}
-          minimumTrackStyle={minimumTrackStyle}
+          minimumTrackStyle={rangeTrackStyle[i - 1] || rangeTrackStyle}
           key={i}
         />
       );
