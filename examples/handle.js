@@ -25,7 +25,7 @@ webpackJsonp([0],[
 	var React = __webpack_require__(5);
 	var ReactDOM = __webpack_require__(40);
 	var Tooltip = __webpack_require__(186);
-	var Slider = __webpack_require__(260);
+	var Slider = __webpack_require__(309);
 	var createSliderWithTooltip = Slider.createSliderWithTooltip;
 	var Range = createSliderWithTooltip(Slider.Range);
 	var Handle = Slider.Handle;

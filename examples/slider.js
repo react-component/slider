@@ -3,25 +3,25 @@ webpackJsonp([3],{
 /***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(336);
+	module.exports = __webpack_require__(338);
 
 
 /***/ }),
 
-/***/ 336:
+/***/ 338:
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var _classCallCheck2 = __webpack_require__(263);
+	var _classCallCheck2 = __webpack_require__(226);
 	
 	var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
 	
-	var _possibleConstructorReturn2 = __webpack_require__(264);
+	var _possibleConstructorReturn2 = __webpack_require__(227);
 	
 	var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 	
-	var _inherits2 = __webpack_require__(300);
+	var _inherits2 = __webpack_require__(263);
 	
 	var _inherits3 = _interopRequireDefault(_inherits2);
 	
@@ -32,7 +32,7 @@ webpackJsonp([3],{
 	
 	var React = __webpack_require__(5);
 	var ReactDOM = __webpack_require__(40);
-	var Slider = __webpack_require__(260);
+	var Slider = __webpack_require__(309);
 	
 	var style = { width: 400, margin: 50 };
 	

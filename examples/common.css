@@ -32,6 +32,8 @@
   width: 14px;
   height: 14px;
   cursor: pointer;
+  cursor: -webkit-grab;
+  cursor: grab;
   border-radius: 50%;
   border: solid 2px #96dbfa;
   background-color: #fff;
@@ -39,9 +41,11 @@
 .rc-slider-handle:hover {
   border-color: #57c5f7;
 }
-.rc-slider-handle-active:active {
+.rc-slider-handle:active {
   border-color: #57c5f7;
   box-shadow: 0 0 5px #57c5f7;
+  cursor: -webkit-grabbing;
+  cursor: grabbing;
 }
 .rc-slider-mark {
   position: absolute;
@@ -97,6 +101,7 @@
 .rc-slider-disabled .rc-slider-handle,
 .rc-slider-disabled .rc-slider-dot {
   border-color: #ccc;
+  box-shadow: none;
   background-color: #fff;
   cursor: not-allowed;
 }
