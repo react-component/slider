@@ -1,5 +1,6 @@
 *.iml
 *.log
+*.log.*
 .idea/
 .ipr
 .iws
