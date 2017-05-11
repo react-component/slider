@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "7.0.4",
+  "version": "7.0.5",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
@@ -19,6 +19,7 @@
   "files": [
     "assets/*.css",
     "lib",
+    "es",
     "dist"
   ],
   "license": "MIT",
@@ -38,6 +39,7 @@
     "build": "rc-tools run build",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
+    "compile": "rc-tools run compile --babel-runtime",
     "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
     "test": "jest",
