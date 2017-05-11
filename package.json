@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "7.0.3",
+  "version": "7.0.4",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
@@ -9,7 +9,6 @@
     "slider"
   ],
   "homepage": "http://github.com/react-component/slider",
-  "author": "sima.zhang1990@gmail.com",
   "repository": {
     "type": "git",
     "url": "git@github.com:react-component/slider.git"
@@ -24,6 +23,7 @@
   ],
   "license": "MIT",
   "main": "./lib/index.js",
+  "module": "./es/index",
   "entry": {
     "rc-slider": [
       "./assets/index.less",
@@ -40,16 +40,17 @@
     "start": "rc-tools run server",
     "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
-    "karma": "rc-tools run karma",
-    "saucelabs": "rc-tools run saucelabs",
     "test": "jest",
-    "chrome-test": "rc-tools run chrome-test",
     "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
   },
   "jest": {
     "collectCoverageFrom": [
       "src/*"
-    ]
+    ],
+    "transform": {
+      "\\.tsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js",
+      "\\.jsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js"
+    }
   },
   "devDependencies": {
     "coveralls": "^2.11.15",
@@ -57,9 +58,9 @@
     "enzyme-to-json": "^1.4.5",
     "jest": "^18.1.0",
     "pre-commit": "1.x",
-    "rc-tools": "^5.6.8",
+    "rc-tools": "6.x",
     "react": "^15.2.1",
-    "react-addons-test-utils": "^15.2.1",
+    "react-addons-test-utils": "^15.5.1",
     "react-dom": "^15.2.1"
   },
   "pre-commit": [
