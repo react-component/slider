@@ -25,5 +25,6 @@ dist
 assets/**/*.css
 build
 lib
+es
 /coverage
 yarn.lock
