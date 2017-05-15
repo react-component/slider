@@ -77,7 +77,6 @@ class Range extends React.Component {
     const props = this.props;
     const state = this.state;
     const bounds = this.getValue();
-    props.onBeforeChange(bounds);
 
     const value = this.calcValueByPos(position);
     this.startValue = value;
@@ -85,6 +84,8 @@ class Range extends React.Component {
 
     const closestBound = this.getClosestBound(value);
     const boundNeedMoving = this.getBoundNeedMoving(value, closestBound);
+
+    props.onBeforeChange(bounds, boundNeedMoving + 1);
 
     this.setState({
       handle: boundNeedMoving,
@@ -100,9 +101,10 @@ class Range extends React.Component {
   }
 
   onEnd = () => {
+    const state = this.state;
     this.setState({ handle: null });
     this.removeDocumentEvents();
-    this.props.onAfterChange(this.getValue());
+    this.props.onAfterChange(this.getValue(), state.handle + 1);
   }
 
   onMove(e, position) {
@@ -282,6 +284,8 @@ class Range extends React.Component {
       vertical,
       included,
       disabled,
+      minimumTrackStyle,
+      handleStyle,
       handle: handleGenerator,
     } = this.props;
 
@@ -299,6 +303,7 @@ class Range extends React.Component {
       dragging: handle === i,
       index: i,
       disabled,
+      handleStyle,
       ref: h => this.saveHandle(i, h),
     }));
 
@@ -315,6 +320,7 @@ class Range extends React.Component {
           included={included}
           offset={offsets[i - 1]}
           length={offsets[i] - offsets[i - 1]}
+          minimumTrackStyle={minimumTrackStyle}
           key={i}
         />
       );

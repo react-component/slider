@@ -16,11 +16,13 @@ export default function createSliderWithTooltip(Component) {
       this.state = { visibles: {} };
     }
     handleTooltipVisibleChange = (index, visible) => {
-      this.setState({
-        visibles: {
-          ...this.state.visibles,
-          [index]: visible,
-        },
+      this.setState((prevState) => {
+        return {
+          visibles: {
+            ...prevState.visibles,
+            [index]: visible,
+          },
+        };
       });
     }
     handleWithTooltip = ({ value, dragging, index, disabled, ...restProps }) => {
