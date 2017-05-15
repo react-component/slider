@@ -7,3 +7,4 @@ Slider.Range = Range;
 Slider.Handle = Handle;
 Slider.createSliderWithTooltip = createSliderWithTooltip;
 export default Slider;
+export { Range, Handle, createSliderWithTooltip };
