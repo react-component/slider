@@ -22,7 +22,6 @@ Thumbs.db
 node_modules
 .cache
 dist
-assets/**/*.css
 build
 /coverage
 yarn.lock
