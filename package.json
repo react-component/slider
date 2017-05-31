@@ -56,14 +56,14 @@
   },
   "devDependencies": {
     "coveralls": "^2.11.15",
-    "enzyme": "^2.7.0",
-    "enzyme-to-json": "^1.4.5",
+    "enzyme": "^2.8.0",
+    "enzyme-to-json": "^1.5.1",
     "jest": "^18.1.0",
     "pre-commit": "1.x",
     "rc-tools": "6.x",
     "react": "^15.2.1",
-    "react-addons-test-utils": "^15.5.1",
-    "react-dom": "^15.2.1"
+    "react-dom": "^15.2.1",
+    "react-test-renderer": "^15.5.4"
   },
   "pre-commit": [
     "lint"
