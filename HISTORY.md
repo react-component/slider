@@ -1,5 +1,10 @@
 # History
 ----
+## 8.0.0 / 2017-05-31
+
+[Breaking Change] custom `Handle` won't get props.value automatically.
+
+[Feature] rc-slider support aria. [#260](https://github.com/react-component/slider/pull/260/)
 
 ## 6.0.0 / 2017-01-25
 
