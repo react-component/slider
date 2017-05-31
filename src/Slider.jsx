@@ -112,6 +112,8 @@ class Slider extends React.Component {
       disabled,
       minimumTrackStyle,
       handleStyle,
+      min,
+      max,
       handle: handleGenerator,
     } = this.props;
     const { value, dragging } = this.state;
@@ -123,6 +125,8 @@ class Slider extends React.Component {
       value,
       dragging,
       disabled,
+      min,
+      max,
       handleStyle,
       ref: h => this.saveHandle(0, h),
     });

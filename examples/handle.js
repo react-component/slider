@@ -21,7 +21,7 @@ const handle = (props) => {
       placement="top"
       key={index}
     >
-      <Handle {...restProps} />
+      <Handle value={value} {...restProps} />
     </Tooltip>
   );
 };

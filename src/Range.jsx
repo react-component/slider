@@ -282,6 +282,8 @@ class Range extends React.Component {
       vertical,
       included,
       disabled,
+      min,
+      max,
       handle: handleGenerator,
     } = this.props;
 
@@ -298,6 +300,8 @@ class Range extends React.Component {
       value: v,
       dragging: handle === i,
       index: i,
+      min,
+      max,
       disabled,
       ref: h => this.saveHandle(i, h),
     }));
