@@ -13838,8 +13838,10 @@ function createSliderWithTooltip(Component) {
       var _this = __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_possibleConstructorReturn___default()(this, (ComponentWrapper.__proto__ || Object.getPrototypeOf(ComponentWrapper)).call(this, props));
 
       _this.handleTooltipVisibleChange = function (index, visible) {
-        _this.setState({
-          visibles: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, _this.state.visibles, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, index, visible))
+        _this.setState(function (prevState) {
+          return {
+            visibles: __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, prevState.visibles, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, index, visible))
+          };
         });
       };
 
