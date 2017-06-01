@@ -3,6 +3,9 @@ import React from 'react';
 import { render, mount } from 'enzyme';
 import { renderToJson } from 'enzyme-to-json';
 import Range from '../src/Range';
+import createSliderWithTooltip from '../src/createSliderWithTooltip';
+
+const RangeWithTooltip = createSliderWithTooltip(Range);
 
 describe('Range', () => {
   it('should render Range with correct DOM structure', () => {
@@ -74,5 +77,18 @@ describe('Range', () => {
     wrapper.setState({ value: [2, 4] });
     expect(wrapper.instance().getSlider().state.bounds.length).toBe(2);
     expect(wrapper.find('.rc-slider-handle').length).toBe(2);
+  });
+
+  // https://github.com/react-component/slider/pull/256
+  it('should handle mutli handle mouseEnter correctly', () => {
+    const wrapper = mount(<RangeWithTooltip min={0} max={1000} defaultValue={[50, 55]} />);
+    wrapper.find('.rc-slider-handle').at(0).simulate('mouseEnter');
+    expect(wrapper.state().visibles[0]).toBe(true);
+    wrapper.find('.rc-slider-handle').at(1).simulate('mouseEnter');
+    expect(wrapper.state().visibles[1]).toBe(true);
+    wrapper.find('.rc-slider-handle').at(0).simulate('mouseLeave');
+    expect(wrapper.state().visibles[0]).toBe(false);
+    wrapper.find('.rc-slider-handle').at(1).simulate('mouseLeave');
+    expect(wrapper.state().visibles[1]).toBe(false);
   });
 });
