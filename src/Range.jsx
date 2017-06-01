@@ -169,25 +169,24 @@ class Range extends React.Component {
     return bounds[bounds.length - 1];
   }
 
-  /**
-   * Returns an array of possible slider points, taking into account both
-   * `marks` and `step`. The result is cached.
-   */
-  getPoints() {
-    const { marks, step, min, max } = this.props;
-    const cache = this._getPointsCache;
-    if (!cache || cache.marks !== marks || cache.step !== step) {
-      const pointsObject = { ...marks };
-      if (step !== null) {
-        for (let point = min; point <= max; point += step) {
-          pointsObject[point] = point;
-        }
-      }
-      const points = Object.keys(pointsObject).map(parseFloat);
-      points.sort((a, b) => a - b);
-      this._getPointsCache = { marks, step, points };
-    }
-    return this._getPointsCache.points;
+  pointsRule() {
+    const { step, min, max } = this.props;
+    const pointsLength = (max - min) / step;
+    const getPoint = (index) => {
+      return index * step;
+    };
+    const getIndex = (val) => {
+      return val >= min && val <= max && val / step;
+    };
+    const isValid = (val) => {
+      return val >= min && val <= max && val % step === 0;
+    };
+    return {
+      pointsLength,
+      getPoint,
+      getIndex,
+      isValid,
+    };
   }
 
   pushSurroundingHandles(bounds, handle, originalValue) {
@@ -229,15 +228,15 @@ class Range extends React.Component {
   }
 
   pushHandleOnePoint(bounds, handle, direction) {
-    const points = this.getPoints();
-    const pointIndex = points.indexOf(bounds[handle]);
+    const { pointsLength, getIndex, getPoint } = this.pointsRule();
+    const pointIndex = getIndex(bounds[handle]);
     const nextPointIndex = pointIndex + direction;
-    if (nextPointIndex >= points.length || nextPointIndex < 0) {
+    if (nextPointIndex >= pointsLength || nextPointIndex < 0) {
       // reached the minimum or maximum available point, can't push anymore
       return false;
     }
     const nextHandle = handle + direction;
-    const nextValue = points[nextPointIndex];
+    const nextValue = getPoint(nextPointIndex);
     const { pushable: threshold } = this.props;
     const diffToNext = direction * (bounds[nextHandle] - nextValue);
     if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
