@@ -16,7 +16,7 @@ export default class Handle extends React.Component {
         'aria-valuemin': min,
         'aria-valuemax': max,
         'aria-valuenow': value,
-        'aria-disabled': 'disabled',
+        'aria-disabled': !!disabled,
       };
     }
     return (
