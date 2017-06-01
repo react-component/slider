@@ -5891,13 +5891,18 @@ var Handle = function (_React$Component) {
 
       var style = vertical ? { bottom: offset + '%' } : { left: offset + '%' };
       var elStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, style, handleStyle);
+      var ariaProps = {};
+      if (value !== undefined) {
+        ariaProps = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, ariaProps, {
+          'aria-valuemin': min,
+          'aria-valuemax': max,
+          'aria-valuenow': value,
+          'aria-disabled': !!disabled
+        });
+      }
       return __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement('div', __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({
-        role: 'slider',
-        'aria-valuemin': min,
-        'aria-valuemax': max,
-        'aria-valuenow': value,
-        'aria-disabled': disabled
-      }, restProps, {
+        role: 'slider'
+      }, ariaProps, restProps, {
         className: className,
         style: elStyle
       }));
