@@ -9,13 +9,20 @@ export default class Handle extends React.Component {
 
     const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
     const elStyle = { ...style, ...handleStyle };
+    let ariaProps = {};
+    if (value !== undefined) {
+      ariaProps = {
+        ...ariaProps,
+        'aria-valuemin': min,
+        'aria-valuemax': max,
+        'aria-valuenow': value,
+        'aria-disabled': !!disabled,
+      };
+    }
     return (
       <div
         role="slider"
-        aria-valuemin={min}
-        aria-valuemax={max}
-        aria-valuenow={value}
-        aria-disabled={disabled}
+        {...ariaProps}
         {...restProps}
         className={className}
         style={elStyle}
