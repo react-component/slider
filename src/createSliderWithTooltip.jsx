@@ -45,12 +45,12 @@ export default function createSliderWithTooltip(Component) {
 
       return (
         <Tooltip
-          visible={!disabled && (this.state.visibles[index] || dragging)}
-          key={index}
+          {...restTooltipProps}
           prefixCls={prefixCls}
           overlay={overlay}
           placement={placement}
-          {...restTooltipProps}
+          visible={!disabled && (this.state.visibles[index] || dragging)}
+          key={index}
         >
           <Handle
             {...restProps}
