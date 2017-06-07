@@ -13,6 +13,7 @@ export default function createSliderWithTooltip(Component) {
     static defaultProps = {
       tipFormatter(value) { return value; },
       handleStyle: [{}],
+      tipProps: {},
     };
     constructor(props) {
       super(props);
