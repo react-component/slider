@@ -1,21 +1,21 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
 
-const Track = ({
-  className, included, vertical, offset, length, minimumTrackStyle,
-}) => {
-  const style = {
-    visibility: included ? 'visible' : 'hidden',
+const Track = (props) => {
+  const { className, included, vertical, offset, length, style } = props;
+
+  const positonStyle = vertical ? {
+    bottom: `${offset}%`,
+    height: `${length}%`,
+  } : {
+    left: `${offset}%`,
+    width: `${length}%`,
   };
-  if (vertical) {
-    style.bottom = `${offset}%`;
-    style.height = `${length}%`;
-  } else {
-    style.left = `${offset}%`;
-    style.width = `${length}%`;
-  }
+
   const elStyle = {
+    visibility: included ? 'visible' : 'hidden',
     ...style,
-    ...minimumTrackStyle,
+    ...positonStyle,
   };
   return <div className={className} style={elStyle} />;
 };

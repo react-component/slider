@@ -31,9 +31,11 @@ export default function createSlider(Component) {
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
       style: PropTypes.object,
-      minimumTrackStyle: PropTypes.object,
-      maximumTrackStyle: PropTypes.object,
-      handleStyle: PropTypes.object,
+      minimumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
+      maximumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
+      handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
+      trackStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
+      railStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -55,9 +57,9 @@ export default function createSlider(Component) {
       disabled: false,
       dots: false,
       vertical: false,
-      minimumTrackStyle: {},
-      maximumTrackStyle: {},
-      handleStyle: {},
+      trackStyle: [{}],
+      handleStyle: [{}],
+      railStyle: {},
     };
 
     constructor(props) {
@@ -71,8 +73,15 @@ export default function createSlider(Component) {
           max - min,
           step
         );
+        warning(
+          !('minimumTrackStyle' in props),
+          'minimumTrackStyle will be deprecate, please use trackStyle[0] instead.'
+        );
+        warning(
+          !('maximumTrackStyle' in props),
+          'maximumTrackStyle will be deprecate, please use railStyle instead.'
+        );
       }
-
       this.handlesRefs = {};
     }
 
@@ -214,17 +223,16 @@ export default function createSlider(Component) {
         children,
         maximumTrackStyle,
         style,
+        railStyle,
       } = this.props;
       const { tracks, handles } = super.render();
 
-      const sliderClassName = classNames({
-        [prefixCls]: true,
+      const sliderClassName = classNames(prefixCls, {
         [`${prefixCls}-with-marks`]: Object.keys(marks).length,
         [`${prefixCls}-disabled`]: disabled,
         [`${prefixCls}-vertical`]: vertical,
         [className]: className,
       });
-
       return (
         <div
           ref={this.saveSlider}
@@ -233,7 +241,13 @@ export default function createSlider(Component) {
           onMouseDown={disabled ? noop : this.onMouseDown}
           style={style}
         >
-          <div className={`${prefixCls}-rail`} style={maximumTrackStyle} />
+          <div
+            className={`${prefixCls}-rail`}
+            style={{
+              ...maximumTrackStyle,
+              ...railStyle,
+            }}
+          />
           {tracks}
           <Steps
             prefixCls={prefixCls}

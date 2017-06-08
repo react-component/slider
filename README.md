@@ -105,9 +105,12 @@ The following APIs are shared by Slider and Range.
 | onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
 | onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
-| minimumTrackStyle | Object |`{}` | The style used for the track to the left of the button. |
-| maximumTrackStyle | Object | `{}` | The style used for the track to the right of the button. |
-| handleStyle | Object | `{}` | The style used for handle. |
+| minimumTrackStyle | Object |  | please use  `trackStyle[0]` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
+| maximumTrackStyle | Object |  | please use  `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
+| handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider and range, the array will be used for mutli handle follow element order`) |
+| trackStyle | Array[Object] | `[{}]` | The style used for track. (`both for slider and range, the array will be used for mutli track follow element order`)|
+| railStyle | Object | `{}` | The style used for the track base color.  |
+
 
 ### Slider
 

@@ -1,11 +1,11 @@
-/* eslint react/no-multi-comp: 0 */
+/* eslint react/no-multi-comp: 0, max-len: 0 */
 import 'rc-slider/assets/index.less';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Slider from 'rc-slider';
 
-const style = { width: 400, margin: 50 };
+const style = { width: 600, margin: 50 };
 
 function log(value) {
   console.log(value); //eslint-disable-line
@@ -104,7 +104,7 @@ ReactDOM.render(
       <Slider tipFormatter={null} onChange={log} />
     </div>
     <div style={style}>
-      <p>Slider with custom handle and track style</p>
+      <p>Slider with custom handle and track style.<strong>(old api, will be deperacete)</strong></p>
       <Slider
         defaultValue={30}
         maximumTrackStyle={{ backgroundColor: 'red', height: 10 }}
@@ -115,8 +115,24 @@ ReactDOM.render(
           width: 28,
           marginLeft: -14,
           marginTop: -9,
-          backgroundColor: 'blue',
+          backgroundColor: 'black',
         }}
+      />
+    </div>
+    <div style={style}>
+      <p>Slider with custom handle and track style.<strong>(The recommended new api)</strong></p>
+      <Slider
+        defaultValue={30}
+        trackStyle={[{ backgroundColor: 'blue', height: 10 }]}
+        handleStyle={[{
+          borderColor: 'blue',
+          height: 28,
+          width: 28,
+          marginLeft: -14,
+          marginTop: -9,
+          backgroundColor: 'black',
+        }]}
+        railStyle={{ backgroundColor: 'red', height: 10 }}
       />
     </div>
     <div style={style}>
