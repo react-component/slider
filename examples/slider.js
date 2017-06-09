@@ -3,7 +3,7 @@ import 'rc-slider/assets/index.less';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Slider from 'rc-slider';
+import Slider, { createSliderWithTooltip } from 'rc-slider';
 
 const style = { width: 600, margin: 50 };
 
@@ -15,6 +15,8 @@ function log(value) {
 function percentFormatter(v) {
   return `${v} %`;
 }
+
+const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 class CustomizedSlider extends React.Component {
   constructor(props) {
@@ -83,7 +85,7 @@ ReactDOM.render(
   <div>
     <div style={style}>
       <p>Basic Slider</p>
-      <Slider tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} />
+      <Slider onChange={log} />
     </div>
     <div style={style}>
       <p>Basic Slider，`step=20`</p>
@@ -94,14 +96,12 @@ ReactDOM.render(
       <Slider dots step={20} defaultValue={100} onAfterChange={log} />
     </div>
     <div style={style}>
-      <p>Basic Slider with `tipFormatter`</p>
-      <Slider tipFormatter={percentFormatter}
-        tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log}
+      <p>Slider with tooltip, with custom `tipFormatter`</p>
+      <SliderWithTooltip
+        tipFormatter={percentFormatter}
+        tipProps={{ overlayClassName: 'foo' }}
+        onChange={log}
       />
-    </div>
-    <div style={style}>
-      <p>Basic Slider without tooltip</p>
-      <Slider tipFormatter={null} onChange={log} />
     </div>
     <div style={style}>
       <p>Slider with custom handle and track style.<strong>(old api, will be deperacete)</strong></p>
@@ -137,7 +137,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Basic Slider, disabled</p>
-      <Slider tipTransitionName="rc-slider-tooltip-zoom-down" onChange={log} disabled />
+      <Slider onChange={log} disabled />
     </div>
     <div style={style}>
       <p>Controlled Slider</p>
