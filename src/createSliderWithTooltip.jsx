@@ -8,10 +8,12 @@ export default function createSliderWithTooltip(Component) {
     static propTypes = {
       tipFormatter: PropTypes.func,
       handleStyle: PropTypes.arrayOf(PropTypes.object),
+      tipProps: PropTypes.object,
     };
     static defaultProps = {
       tipFormatter(value) { return value; },
       handleStyle: [{}],
+      tipProps: {},
     };
     constructor(props) {
       super(props);
@@ -28,13 +30,26 @@ export default function createSliderWithTooltip(Component) {
       });
     }
     handleWithTooltip = ({ value, dragging, index, disabled, ...restProps }) => {
-      const { tipFormatter, handleStyle } = this.props;
+      const {
+        tipFormatter,
+        tipProps,
+        handleStyle,
+      } = this.props;
+
+      const {
+        prefixCls = 'rc-slider-tooltip',
+        overlay = tipFormatter(value),
+        placement = 'top',
+        ...restTooltipProps,
+      } = tipProps;
+
       return (
         <Tooltip
-          prefixCls="rc-slider-tooltip"
-          overlay={tipFormatter(value)}
+          {...restTooltipProps}
+          prefixCls={prefixCls}
+          overlay={overlay}
+          placement={placement}
           visible={!disabled && (this.state.visibles[index] || dragging)}
-          placement="top"
           key={index}
         >
           <Handle
