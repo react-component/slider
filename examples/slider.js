@@ -238,15 +238,15 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     ),
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, {
       defaultValue: 30,
-      trackStyle: [{ backgroundColor: 'blue', height: 10 }],
-      handleStyle: [{
+      trackStyle: { backgroundColor: 'blue', height: 10 },
+      handleStyle: {
         borderColor: 'blue',
         height: 28,
         width: 28,
         marginLeft: -14,
         marginTop: -9,
         backgroundColor: 'black'
-      }],
+      },
       railStyle: { backgroundColor: 'red', height: 10 }
     })
   ),
