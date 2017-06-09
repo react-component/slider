@@ -1,5 +1,10 @@
 # History
 ----
+
+## 8.1.0 / 2017-06-09
+
+[Feature] rc-slider support custom style. [#281](https://github.com/react-component/slider/pull/281)
+
 ## 8.0.0 / 2017-05-31
 
 [Feature] rc-slider support aria. [#260](https://github.com/react-component/slider/pull/260/)
