@@ -27,6 +27,7 @@
   padding: 5px 0;
   width: 100%;
   border-radius: @border-radius-base;
+  touch-action: none;
   .borderBox();
 
   &-rail {
@@ -57,6 +58,7 @@
     border-radius: 50%;
     border: solid 2px tint(@primary-color, 50%);
     background-color: #fff;
+    touch-action: pan-x;
 
     &:hover {
       border-color: tint(@primary-color, 20%);
@@ -159,6 +161,7 @@
     &-handle {
       margin-left: -5px;
       margin-bottom: -7px;
+      touch-action: pan-y;
     }
 
     &-mark {
