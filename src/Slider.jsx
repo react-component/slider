@@ -6,14 +6,11 @@ import createSlider from './common/createSlider';
 import * as utils from './utils';
 
 class Slider extends React.Component {
-  static displayName = 'Slider';
   static propTypes = {
     defaultValue: PropTypes.number,
     value: PropTypes.number,
     disabled: PropTypes.bool,
   };
-
-  static defaultProps = {};
 
   constructor(props) {
     super(props);
@@ -111,6 +108,7 @@ class Slider extends React.Component {
       included,
       disabled,
       minimumTrackStyle,
+      trackStyle,
       handleStyle,
       min,
       max,
@@ -127,9 +125,10 @@ class Slider extends React.Component {
       disabled,
       min,
       max,
-      handleStyle,
+      style: handleStyle[0] || handleStyle,
       ref: h => this.saveHandle(0, h),
     });
+
     const track = (
       <Track
         className={`${prefixCls}-track`}
@@ -137,7 +136,10 @@ class Slider extends React.Component {
         included={included}
         offset={0}
         length={offset}
-        minimumTrackStyle={minimumTrackStyle}
+        style={{
+          ...minimumTrackStyle,
+          ...trackStyle[0],
+        }}
       />
     );
 

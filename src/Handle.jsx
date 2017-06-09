@@ -4,11 +4,14 @@ import PropTypes from 'prop-types';
 export default class Handle extends React.Component {
   render() {
     const {
-      className, vertical, offset, handleStyle, disabled, min, max, value, ...restProps,
+      className, vertical, offset, style, disabled, min, max, value, ...restProps,
     } = this.props;
 
-    const style = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
-    const elStyle = { ...style, ...handleStyle };
+    const postionStyle = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
+    const elStyle = {
+      ...style,
+      ...postionStyle,
+    };
     let ariaProps = {};
     if (value !== undefined) {
       ariaProps = {
@@ -35,7 +38,7 @@ Handle.propTypes = {
   className: PropTypes.string,
   vertical: PropTypes.bool,
   offset: PropTypes.number,
-  handleStyle: PropTypes.object,
+  style: PropTypes.object,
   disabled: PropTypes.bool,
   min: PropTypes.number,
   max: PropTypes.number,

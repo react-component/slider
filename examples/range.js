@@ -138,6 +138,14 @@ ReactDOM.render(
       <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />
     </div>
     <div style={style}>
+      <p>Multi Range with custom track and handle style</p>
+      <Range count={3} defaultValue={[20, 40, 60, 80]} pushable
+        trackStyle={[{ backgroundColor: 'red' }, { backgroundColor: 'green' }]}
+        handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }]}
+        railStyle={{ backgroundColor: 'black' }}
+      />
+    </div>
+    <div style={style}>
       <p>Customized Range</p>
       <CustomizedRange />
     </div>
