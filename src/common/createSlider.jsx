@@ -73,14 +73,6 @@ export default function createSlider(Component) {
           max - min,
           step
         );
-        warning(
-          !('minimumTrackStyle' in props),
-          'minimumTrackStyle will be deprecate, please use trackStyle[0] instead.'
-        );
-        warning(
-          !('maximumTrackStyle' in props),
-          'maximumTrackStyle will be deprecate, please use railStyle instead.'
-        );
       }
       this.handlesRefs = {};
     }

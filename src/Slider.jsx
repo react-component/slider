@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
+import warning from 'warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -24,6 +25,16 @@ class Slider extends React.Component {
       value: this.trimAlignValue(value),
       dragging: false,
     };
+    if (process.env.NODE_ENV !== 'production') {
+      warning(
+        !('minimumTrackStyle' in props),
+        'minimumTrackStyle will be deprecate, please use trackStyle instead.'
+      );
+      warning(
+        !('maximumTrackStyle' in props),
+        'maximumTrackStyle will be deprecate, please use railStyle instead.'
+      );
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -129,6 +140,7 @@ class Slider extends React.Component {
       ref: h => this.saveHandle(0, h),
     });
 
+    const _trackStyle = trackStyle[0] || trackStyle;
     const track = (
       <Track
         className={`${prefixCls}-track`}
@@ -138,7 +150,7 @@ class Slider extends React.Component {
         length={offset}
         style={{
           ...minimumTrackStyle,
-          ...trackStyle[0],
+          ..._trackStyle,
         }}
       />
     );
