@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@8.0.2 - Slider UI component for React</title>
+  <title>rc-slider@8.1.0 - Slider UI component for React</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@8.0.2</h1>
+  <h1>rc-slider@8.1.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -906,20 +906,33 @@ ReactDOM.render(
 <tr>
 <td>minimumTrackStyle</td>
 <td>Object</td>
-<td><code>{}</code></td>
-<td>The style used for the track to the left of the button.</td>
+<td></td>
+<td>please use  <code>trackStyle[0]</code> instead. (<code>only used for slider, just for compatibility , will be deprecate at rc-slider@9.x</code>)</td>
 </tr>
 <tr>
 <td>maximumTrackStyle</td>
 <td>Object</td>
-<td><code>{}</code></td>
-<td>The style used for the track to the right of the button.</td>
+<td></td>
+<td>please use  <code>railStyle</code> instead (<code>only used for slider, just for compatibility , will be deprecate at rc-slider@9.x</code>)</td>
 </tr>
 <tr>
 <td>handleStyle</td>
+<td>Array[Object] \</td>
+<td>Object</td>
+<td><code>[{}]</code></td>
+<td>The style used for handle. (<code>both for slider and range, the array will be used for mutli handle follow element order</code>)</td>
+</tr>
+<tr>
+<td>trackStyle</td>
+<td>Array[Object]</td>
+<td><code>[{}]</code></td>
+<td>The style used for track. (<code>both for slider and range, the array will be used for mutli track follow element order</code>)</td>
+</tr>
+<tr>
+<td>railStyle</td>
 <td>Object</td>
 <td><code>{}</code></td>
-<td>The style used for handle.</td>
+<td>The style used for the track base color.</td>
 </tr>
 </tbody>
 </table>

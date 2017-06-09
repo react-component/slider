@@ -7,11 +7,11 @@ webpackJsonp([2],{
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits__ = __webpack_require__(17);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rc_slider_assets_index_less__ = __webpack_require__(48);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_rc_slider_assets_index_less___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_rc_slider_assets_index_less__);
@@ -25,14 +25,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/* eslint react/no-multi-comp: 0 */
+/* eslint react/no-multi-comp: 0, max-len: 0 */
 
 
 
 
 
 
-var style = { width: 400, margin: 50 };
+var style = { width: 600, margin: 50 };
 
 function log(value) {
   console.log(value); //eslint-disable-line
@@ -202,7 +202,12 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
       'p',
       null,
-      'Slider with custom handle and track style'
+      'Slider with custom handle and track style.',
+      __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'strong',
+        null,
+        '(old api, will be deperacete)'
+      )
     ),
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, {
       defaultValue: 30,
@@ -214,8 +219,35 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
         width: 28,
         marginLeft: -14,
         marginTop: -9,
-        backgroundColor: 'blue'
+        backgroundColor: 'black'
       }
+    })
+  ),
+  __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      'p',
+      null,
+      'Slider with custom handle and track style.',
+      __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'strong',
+        null,
+        '(The recommended new api)'
+      )
+    ),
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, {
+      defaultValue: 30,
+      trackStyle: [{ backgroundColor: 'blue', height: 10 }],
+      handleStyle: [{
+        borderColor: 'blue',
+        height: 28,
+        width: 28,
+        marginLeft: -14,
+        marginTop: -9,
+        backgroundColor: 'black'
+      }],
+      railStyle: { backgroundColor: 'red', height: 10 }
     })
   ),
   __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
@@ -262,7 +294,7 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 
-/***/ 351:
+/***/ 350:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(157);
@@ -270,5 +302,5 @@ module.exports = __webpack_require__(157);
 
 /***/ })
 
-},[351]);
+},[350]);
 //# sourceMappingURL=slider.js.map
