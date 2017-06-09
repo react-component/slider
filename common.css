@@ -4,6 +4,8 @@
   padding: 5px 0;
   width: 100%;
   border-radius: 6px;
+  -ms-touch-action: none;
+      touch-action: none;
   box-sizing: border-box;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 }
@@ -37,6 +39,8 @@
   border-radius: 50%;
   border: solid 2px #96dbfa;
   background-color: #fff;
+  -ms-touch-action: pan-x;
+      touch-action: pan-x;
 }
 .rc-slider-handle:hover {
   border-color: #57c5f7;
@@ -126,6 +130,8 @@
 .rc-slider-vertical .rc-slider-handle {
   margin-left: -5px;
   margin-bottom: -7px;
+  -ms-touch-action: pan-y;
+      touch-action: pan-y;
 }
 .rc-slider-vertical .rc-slider-mark {
   top: 0;
