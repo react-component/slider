@@ -274,7 +274,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 
 <span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
 <span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
-<span class="hljs-keyword">import</span> Slider <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-slider'</span>;
+<span class="hljs-keyword">import</span> Slider, { createSliderWithTooltip } <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-slider'</span>;
 
 <span class="hljs-keyword">const</span> style = { width: <span class="hljs-number">600</span>, margin: <span class="hljs-number">50</span> };
 
@@ -286,6 +286,8 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">percentFormatter</span>(<span class="hljs-params">v</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${v}</span> %`</span>;
 }
+
+<span class="hljs-keyword">const</span> SliderWithTooltip = createSliderWithTooltip(Slider);
 
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CustomizedSlider</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   constructor(props) {
@@ -354,7 +356,7 @@ ReactDOM.render(
   <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">tipTransitionName</span>=<span class="hljs-value">"rc-slider-tooltip-zoom-down"</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider，`step=20`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
@@ -365,14 +367,12 @@ ReactDOM.render(
       <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">dots</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{100}</span> <span class="hljs-attribute">onAfterChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider with `tipFormatter`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">tipFormatter</span>=<span class="hljs-value">{percentFormatter}</span>
-        <span class="hljs-attribute">tipTransitionName</span>=<span class="hljs-value">"rc-slider-tooltip-zoom-down"</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with tooltip, with custom `tipFormatter`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">SliderWithTooltip</span>
+        <span class="hljs-attribute">tipFormatter</span>=<span class="hljs-value">{percentFormatter}</span>
+        <span class="hljs-attribute">tipProps</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">overlayClassName:</span> '<span class="hljs-attribute">foo</span>' }}
+        <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span>
       /&gt;</span>
-    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider without tooltip<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">tipFormatter</span>=<span class="hljs-value">{null}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with custom handle and track style.<span class="hljs-tag">&lt;<span class="hljs-title">strong</span>&gt;</span>(old api, will be deperacete)<span class="hljs-tag">&lt;/<span class="hljs-title">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
@@ -408,7 +408,7 @@ ReactDOM.render(
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider, disabled<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">tipTransitionName</span>=<span class="hljs-value">"rc-slider-tooltip-zoom-down"</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">disabled</span> /&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">disabled</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Controlled Slider<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
