@@ -12,7 +12,7 @@ const Marks = ({
 }) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
-  const unit = 100 / (marksCount - 1);
+  const unit = marksCount > 1 ? 100 / (marksCount - 1) : 100;
   const markWidth = unit * 0.9;
 
   const range = max - min;
