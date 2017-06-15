@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shallowEqual from 'shallowequal';
+import warning from 'warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -134,6 +135,10 @@ class Range extends React.Component {
       handle: nextHandle,
       bounds: nextBounds,
     });
+  }
+
+  onKeyboard() {
+    warning(true, 'Keyboard support is not yet supported for ranges.');
   }
 
   getValue() {
