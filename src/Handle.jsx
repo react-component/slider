@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 export default class Handle extends React.Component {
   render() {
     const {
-      className, vertical, offset, style, disabled, min, max, value, ...restProps,
+      className, vertical, offset, style, disabled, min, max, value, valueFormatter, ...restProps,
     } = this.props;
 
     const postionStyle = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
@@ -18,7 +18,7 @@ export default class Handle extends React.Component {
         ...ariaProps,
         'aria-valuemin': min,
         'aria-valuemax': max,
-        'aria-valuenow': value,
+        'aria-valuenow': valueFormatter ? valueFormatter(value) : value,
         'aria-disabled': !!disabled,
       };
     }
@@ -43,4 +43,5 @@ Handle.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   value: PropTypes.number,
+  valueFormatter: PropTypes.func,
 };

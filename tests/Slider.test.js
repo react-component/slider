@@ -20,4 +20,9 @@ describe('Slider', () => {
     expect(trackStyle).toMatch(/width: 50%;/);
     expect(trackStyle).toMatch(/visibility: visible;/);
   });
+
+  it('should use valueFormatter to format aria-valuenow', () => {
+    const wrapper = mount(<Slider value={50} valueFormatter={(value) => `${value}%`} />);
+    expect(wrapper.find('[aria-valuenow]').get(0).getAttribute('aria-valuenow')).toBe('50%');
+  });
 });
