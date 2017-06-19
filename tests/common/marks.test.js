@@ -1,7 +1,8 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
-import { mount } from 'enzyme';
-import Slider from '../../src';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
+import Slider from '../..';
 const { Range } = Slider;
 
 describe('marks', () => {
@@ -19,6 +20,18 @@ describe('marks', () => {
     expect(rangeWrapper.find('.rc-slider-mark-text').get(0).innerHTML).toBe('0');
     expect(rangeWrapper.find('.rc-slider-mark-text').get(1).innerHTML).toBe('30');
     expect(rangeWrapper.find('.rc-slider-mark-text').get(2).innerHTML).toBe('100');
+  });
+
+  it('should position mark correctly when slider is horizontal', () => {
+    const marks = { 0: '0', 30: '30', 100: '100' };
+    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} />);
+    expect(renderToJson(rangeWrapper)).toMatchSnapshot();
+  });
+
+  it('should position mark correctly when slider is vertical', () => {
+    const marks = { 0: '0', 30: '30', 100: '100' };
+    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} vertical={true} />);
+    expect(renderToJson(rangeWrapper)).toMatchSnapshot();
   });
 
   it.skip('should select correct value while click on marks', () => {

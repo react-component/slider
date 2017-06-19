@@ -1,0 +1,113 @@
+exports[`marks should position mark correctly when slider is horizontal 1`] = `
+<div
+  class="rc-slider rc-slider-with-marks">
+  <div
+    class="rc-slider-rail" />
+  <div
+    class="rc-slider-track rc-slider-track-1"
+    style="visibility:visible;left:0%;width:30%;" />
+  <div
+    class="rc-slider-step">
+    <span
+      class="rc-slider-dot rc-slider-dot-active"
+      style="left:0%;" />
+    <span
+      class="rc-slider-dot rc-slider-dot-active"
+      style="left:30%;" />
+    <span
+      class="rc-slider-dot"
+      style="left:100%;" />
+  </div>
+  <div
+    aria-disabled="false"
+    aria-valuemax="100"
+    aria-valuemin="0"
+    aria-valuenow="0"
+    class="rc-slider-handle rc-slider-handle-1"
+    role="slider"
+    style="left:0%;" />
+  <div
+    aria-disabled="false"
+    aria-valuemax="100"
+    aria-valuemin="0"
+    aria-valuenow="30"
+    class="rc-slider-handle rc-slider-handle-2"
+    role="slider"
+    style="left:30%;" />
+  <div
+    class="rc-slider-mark">
+    <span
+      class="rc-slider-mark-text rc-slider-mark-text-active"
+      style="left:-2%;">
+      0
+    </span>
+    <span
+      class="rc-slider-mark-text rc-slider-mark-text-active"
+      style="left:28%;">
+      30
+    </span>
+    <span
+      class="rc-slider-mark-text"
+      style="left:98%;">
+      100
+    </span>
+  </div>
+</div>
+`;
+
+exports[`marks should position mark correctly when slider is vertical 1`] = `
+<div
+  class="rc-slider rc-slider-with-marks rc-slider-vertical">
+  <div
+    class="rc-slider-rail" />
+  <div
+    class="rc-slider-track rc-slider-track-1"
+    style="visibility:visible;bottom:0%;height:30%;" />
+  <div
+    class="rc-slider-step">
+    <span
+      class="rc-slider-dot rc-slider-dot-active"
+      style="bottom:0%;" />
+    <span
+      class="rc-slider-dot rc-slider-dot-active"
+      style="bottom:30%;" />
+    <span
+      class="rc-slider-dot"
+      style="bottom:100%;" />
+  </div>
+  <div
+    aria-disabled="false"
+    aria-valuemax="100"
+    aria-valuemin="0"
+    aria-valuenow="0"
+    class="rc-slider-handle rc-slider-handle-1"
+    role="slider"
+    style="bottom:0%;" />
+  <div
+    aria-disabled="false"
+    aria-valuemax="100"
+    aria-valuemin="0"
+    aria-valuenow="30"
+    class="rc-slider-handle rc-slider-handle-2"
+    role="slider"
+    style="bottom:30%;" />
+  <div
+    class="rc-slider-mark">
+    <span
+      class="rc-slider-mark-text rc-slider-mark-text-active"
+      style="bottom:-2%;">
+      0
+    </span>
+    <span
+      class="rc-slider-mark-text rc-slider-mark-text-active"
+      style="bottom:28%;">
+      30
+    </span>
+    <span
+      class="rc-slider-mark-text"
+      style="bottom:98%;">
+      100
+    </span>
+  </div>
+</div>
+`;

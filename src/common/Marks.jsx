@@ -11,9 +11,6 @@ const Marks = ({
   max, min,
 }) => {
   const marksKeys = Object.keys(marks);
-  const marksCount = marksKeys.length;
-  const unit = marksCount > 1 ? 100 / (marksCount - 1) : 100;
-  const markWidth = unit * 0.9;
 
   const range = max - min;
   const elements = marksKeys.map(parseFloat).sort((a, b) => a - b).map(point => {
@@ -24,15 +21,13 @@ const Marks = ({
       [`${className}-text-active`]: isActive,
     });
 
+    const PADDING = 2;
     const bottomStyle = {
-      marginBottom: '-50%',
-      bottom: `${(point - min) / range * 100}%`,
+      bottom: `${(point - min) / range * 100 - PADDING}%`,
     };
 
     const leftStyle = {
-      width: `${markWidth}%`,
-      marginLeft: `${-markWidth / 2}%`,
-      left: `${(point - min) / range * 100}%`,
+      left: `${(point - min) / range * 100 - PADDING}%`,
     };
 
     const style = vertical ? bottomStyle : leftStyle;
