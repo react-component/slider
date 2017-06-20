@@ -21,13 +21,12 @@ const Marks = ({
       [`${className}-text-active`]: isActive,
     });
 
-    const PADDING = 2;
     const bottomStyle = {
-      bottom: `${(point - min) / range * 100 - PADDING}%`,
+      bottom: `${(point - min) / range * 100}%`,
     };
 
     const leftStyle = {
-      left: `${(point - min) / range * 100 - PADDING}%`,
+      left: `${(point - min) / range * 100}%`,
     };
 
     const style = vertical ? bottomStyle : leftStyle;

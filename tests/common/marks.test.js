@@ -30,7 +30,7 @@ describe('marks', () => {
 
   it('should position mark correctly when slider is vertical', () => {
     const marks = { 0: '0', 30: '30', 100: '100' };
-    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} vertical={true} />);
+    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} vertical />);
     expect(renderToJson(rangeWrapper)).toMatchSnapshot();
   });
 
