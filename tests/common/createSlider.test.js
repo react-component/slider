@@ -13,7 +13,7 @@ const polyfillJsDomApi = property => (object, value) => {
   });
 };
 
-const setClientWith = polyfillJsDomApi('clientWidth');
+const setClientWidth = polyfillJsDomApi('clientWidth');
 
 describe('createSlider', () => {
   it('should render vertical Slider/Range, when `vertical` is true', () => {
@@ -81,7 +81,7 @@ describe('createSlider', () => {
   it('Should remove event listeners if unmounted during drag', () => {
     const wrapper = mount(<Slider />);
 
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const sliderTrack = wrapper.find('.rc-slider-track').get(0);
     wrapper.simulate('touchstart', {
       type: 'touchstart',
@@ -99,7 +99,7 @@ describe('createSlider', () => {
   // TODO: should update the following test cases for it should test API instead implementation
   it('should set `dragOffset` to correct value when the left handle is clicked off-center', () => {
     const wrapper = mount(<Slider />);
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const leftHandle = wrapper.find('.rc-slider-handle').get(0);
     wrapper.simulate('mousedown', {
       type: 'mousedown',
@@ -113,7 +113,7 @@ describe('createSlider', () => {
 
   it('should respect `dragOffset` while dragging the handle via MouseEvents', () => {
     const wrapper = mount(<Slider />);
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const leftHandle = wrapper.find('.rc-slider-handle').get(0);
     wrapper.simulate('mousedown', {
       type: 'mousedown',
@@ -135,7 +135,7 @@ describe('createSlider', () => {
 
   it('should not go to right direction when mouse go to the left', () => {
     const wrapper = mount(<Slider />);
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const leftHandle = wrapper.find('.rc-slider-handle').get(0);
     wrapper.simulate('mousedown', {
       type: 'mousedown',
@@ -157,7 +157,7 @@ describe('createSlider', () => {
 
   it('should set `dragOffset` to 0 when the MouseEvent target isn\'t a handle', () => {
     const wrapper = mount(<Slider />);
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const sliderTrack = wrapper.find('.rc-slider-track').get(0);
     wrapper.simulate('mousedown', {
       type: 'mousedown',
@@ -171,7 +171,7 @@ describe('createSlider', () => {
 
   it('should set `dragOffset` to correct value when the left handle is touched off-center', () => {
     const wrapper = mount(<Slider />);
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const leftHandle = wrapper.find('.rc-slider-handle').get(0);
     wrapper.simulate('touchstart', {
       type: 'touchstart',
@@ -185,7 +185,7 @@ describe('createSlider', () => {
 
   it('should respect `dragOffset` while dragging the handle via TouchEvents', () => {
     const wrapper = mount(<Slider />);
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const leftHandle = wrapper.find('.rc-slider-handle').get(0);
     wrapper.simulate('touchstart', {
       type: 'touchstart',
@@ -207,7 +207,7 @@ describe('createSlider', () => {
 
   it('should set `dragOffset` to 0 when the TouchEvent target isn\'t a handle', () => {
     const wrapper = mount(<Slider />);
-    setClientWith(wrapper.node.sliderRef, 100);
+    setClientWidth(wrapper.node.sliderRef, 100);
     const sliderTrack = wrapper.find('.rc-slider-track').get(0);
     wrapper.simulate('touchstart', {
       type: 'touchstart',
