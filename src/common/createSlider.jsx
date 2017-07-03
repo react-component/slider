@@ -170,7 +170,7 @@ export default function createSlider(Component) {
       }
 
       return this.props.vertical ?
-        slider.clientHeight : slider.clientWidth;
+        slider.getBoundingClientRect().height : slider.getBoundingClientRect().width;
     }
 
     calcValue(offset) {
