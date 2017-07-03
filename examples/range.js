@@ -1,4 +1,4 @@
-/* eslint react/no-multi-comp: 0 */
+/* eslint react/no-multi-comp: 0, no-console: 0 */
 import 'rc-slider/assets/index.less';
 
 import React from 'react';
