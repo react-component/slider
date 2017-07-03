@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import shallowEqual from 'shallowequal';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -48,6 +49,11 @@ class Range extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
+    if (this.props.min === nextProps.min &&
+        this.props.max === nextProps.max &&
+        shallowEqual(this.props.value, nextProps.value)) {
+      return;
+    }
     const { bounds } = this.state;
     const value = nextProps.value || bounds;
     const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));

@@ -111,6 +111,27 @@ class ControlledRange extends React.Component {
   }
 }
 
+// https://github.com/react-component/slider/issues/226
+class PureRenderRange extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      foo: false,
+    };
+  }
+  handleChange = (value) => {
+    console.log(value);
+    this.setState({
+      foo: !this.state.foo,
+    });
+  }
+  render() {
+    return (
+      <Range defaultValue={[20, 40, 60, 80]} onChange={this.handleChange} allowCross={false} />
+    );
+  }
+}
+
 ReactDOM.render(
   <div>
     <div style={style}>
@@ -152,6 +173,10 @@ ReactDOM.render(
     <div style={style}>
       <p>Range with dynamic `max` `min`</p>
       <DynamicBounds />
+    </div>
+    <div style={style}>
+      <p>Range as child component</p>
+      <PureRenderRange />
     </div>
   </div>
   , document.getElementById('__react-content'));
