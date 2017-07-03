@@ -288,7 +288,7 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ }),
 
-/***/ 350:
+/***/ 351:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(159);
@@ -296,5 +296,5 @@ module.exports = __webpack_require__(159);
 
 /***/ })
 
-},[350]);
+},[351]);
 //# sourceMappingURL=slider.js.map

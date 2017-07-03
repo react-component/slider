@@ -25,7 +25,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
-/* eslint react/no-multi-comp: 0 */
+/* eslint react/no-multi-comp: 0, no-console: 0 */
 
 
 
@@ -205,6 +205,40 @@ var ControlledRange = function (_React$Component3) {
   return ControlledRange;
 }(__WEBPACK_IMPORTED_MODULE_5_react___default.a.Component);
 
+// https://github.com/react-component/slider/issues/226
+
+
+var PureRenderRange = function (_React$Component4) {
+  __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(PureRenderRange, _React$Component4);
+
+  function PureRenderRange(props) {
+    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, PureRenderRange);
+
+    var _this4 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (PureRenderRange.__proto__ || Object.getPrototypeOf(PureRenderRange)).call(this, props));
+
+    _this4.handleChange = function (value) {
+      console.log(value);
+      _this4.setState({
+        foo: !_this4.state.foo
+      });
+    };
+
+    _this4.state = {
+      foo: false
+    };
+    return _this4;
+  }
+
+  __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(PureRenderRange, [{
+    key: 'render',
+    value: function render() {
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(Range, { defaultValue: [20, 40, 60, 80], onChange: this.handleChange, allowCross: false });
+    }
+  }]);
+
+  return PureRenderRange;
+}(__WEBPACK_IMPORTED_MODULE_5_react___default.a.Component);
+
 __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
   'div',
   null,
@@ -301,12 +335,22 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
       'Range with dynamic `max` `min`'
     ),
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(DynamicBounds, null)
+  ),
+  __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      'p',
+      null,
+      'Range as child component'
+    ),
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(PureRenderRange, null)
   )
 ), document.getElementById('__react-content'));
 
 /***/ }),
 
-/***/ 349:
+/***/ 350:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__(158);
@@ -314,5 +358,5 @@ module.exports = __webpack_require__(158);
 
 /***/ })
 
-},[349]);
+},[350]);
 //# sourceMappingURL=range.js.map
