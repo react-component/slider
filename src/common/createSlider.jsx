@@ -169,8 +169,8 @@ export default function createSlider(Component) {
         return 0;
       }
 
-      return this.props.vertical ?
-        slider.clientHeight : slider.clientWidth;
+      const coords = slider.getBoundingClientRect();
+      return this.props.vertical ? coords.height : coords.width;
     }
 
     calcValue(offset) {
