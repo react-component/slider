@@ -36,6 +36,8 @@ export default function createSlider(Component) {
       handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
       trackStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
       railStyle: PropTypes.object,
+      dotStyle: PropTypes.object,
+      activeDotStyle: PropTypes.object,
     };
 
     static defaultProps = {
@@ -60,6 +62,8 @@ export default function createSlider(Component) {
       trackStyle: [{}],
       handleStyle: [{}],
       railStyle: {},
+      dotStyle: {},
+      activeDotStyle: {},
     };
 
     constructor(props) {
@@ -216,6 +220,8 @@ export default function createSlider(Component) {
         maximumTrackStyle,
         style,
         railStyle,
+        dotStyle,
+        activeDotStyle,
       } = this.props;
       const { tracks, handles } = super.render();
 
@@ -252,6 +258,8 @@ export default function createSlider(Component) {
             upperBound={this.getUpperBound()}
             max={max}
             min={min}
+            dotStyle={dotStyle}
+            activeDotStyle={activeDotStyle}
           />
           {handles}
           <Marks
