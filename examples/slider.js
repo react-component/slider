@@ -182,6 +182,20 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
       'p',
       null,
+      'Basic Slider\uFF0C`step=20, dots, dotStyle=',
+      "{borderColor: 'orange'}",
+      ', activeDotStyle=',
+      "{borderColor: 'yellow'}",
+      '`'
+    ),
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, { dots: true, step: 20, defaultValue: 100, onAfterChange: log, dotStyle: { borderColor: 'orange' }, activeDotStyle: { borderColor: 'yellow' } })
+  ),
+  __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      'p',
+      null,
       'Slider with tooltip, with custom `tipFormatter`'
     ),
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(SliderWithTooltip, {

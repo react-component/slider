@@ -8606,7 +8606,9 @@ function createSlider(Component) {
             children = _props3.children,
             maximumTrackStyle = _props3.maximumTrackStyle,
             style = _props3.style,
-            railStyle = _props3.railStyle;
+            railStyle = _props3.railStyle,
+            dotStyle = _props3.dotStyle,
+            activeDotStyle = _props3.activeDotStyle;
 
         var _get$call = __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_get___default()(ComponentEnhancer.prototype.__proto__ || Object.getPrototypeOf(ComponentEnhancer.prototype), 'render', this).call(this),
             tracks = _get$call.tracks,
@@ -8637,7 +8639,9 @@ function createSlider(Component) {
             lowerBound: this.getLowerBound(),
             upperBound: this.getUpperBound(),
             max: max,
-            min: min
+            min: min,
+            dotStyle: dotStyle,
+            activeDotStyle: activeDotStyle
           }),
           handles,
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_14__Marks__["a" /* default */], {
@@ -8677,7 +8681,9 @@ function createSlider(Component) {
     maximumTrackStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object, // just for compatibility, will be deperecate
     handleStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.oneOfType([__WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object, __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object)]),
     trackStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.oneOfType([__WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object, __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object)]),
-    railStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object
+    railStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object,
+    dotStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object,
+    activeDotStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object
   }), _class.defaultProps = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Component.defaultProps, {
     prefixCls: 'rc-slider',
     className: '',
@@ -8702,7 +8708,9 @@ function createSlider(Component) {
     vertical: false,
     trackStyle: [{}],
     handleStyle: [{}],
-    railStyle: {}
+    railStyle: {},
+    dotStyle: {},
+    activeDotStyle: {}
   }), _temp;
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
@@ -14868,19 +14876,22 @@ var Marks = function Marks(_ref) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(32);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_classnames__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_warning__ = __webpack_require__(101);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_warning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_warning__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_classnames__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_classnames___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_classnames__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_warning__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4_warning___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4_warning__);
+
 
 
 
 
 
 var calcPoints = function calcPoints(vertical, marks, dots, step, min, max) {
-  __WEBPACK_IMPORTED_MODULE_3_warning___default()(dots ? step > 0 : true, '`Slider[step]` should be a positive number in order to make Slider[dots] work.');
+  __WEBPACK_IMPORTED_MODULE_4_warning___default()(dots ? step > 0 : true, '`Slider[step]` should be a positive number in order to make Slider[dots] work.');
   var points = Object.keys(marks).map(parseFloat);
   if (dots) {
     for (var i = min; i <= max; i = i + step) {
@@ -14901,22 +14912,28 @@ var Steps = function Steps(_ref) {
       lowerBound = _ref.lowerBound,
       upperBound = _ref.upperBound,
       max = _ref.max,
-      min = _ref.min;
+      min = _ref.min,
+      dotStyle = _ref.dotStyle,
+      activeDotStyle = _ref.activeDotStyle;
 
   var range = max - min;
   var elements = calcPoints(vertical, marks, dots, step, min, max).map(function (point) {
     var _classNames;
 
     var offset = Math.abs(point - min) / range * 100 + '%';
-    var style = vertical ? { bottom: offset } : { left: offset };
 
     var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
-    var pointClassName = __WEBPACK_IMPORTED_MODULE_2_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot-active', isActived), _classNames));
+    var style = vertical ? __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({ bottom: offset }, dotStyle) : __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({ left: offset }, dotStyle);
+    if (isActived) {
+      style = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, style, activeDotStyle);
+    }
 
-    return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('span', { className: pointClassName, style: style, key: point });
+    var pointClassName = __WEBPACK_IMPORTED_MODULE_3_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot-active', isActived), _classNames));
+
+    return __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement('span', { className: pointClassName, style: style, key: point });
   });
 
-  return __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+  return __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement(
     'div',
     { className: prefixCls + '-step' },
     elements
