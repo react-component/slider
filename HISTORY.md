@@ -1,6 +1,10 @@
 # History
 ----
 
+## 8.2.0 / 2017-07-04
+
+[Feature] Support custom dot style with `dotStyle` & `activeDotStyle` api.[#292](https://github.com/react-component/slider/pull/292)
+
 ## 8.1.0 / 2017-06-09
 
 [Feature] rc-slider support custom style. [#281](https://github.com/react-component/slider/pull/281)
