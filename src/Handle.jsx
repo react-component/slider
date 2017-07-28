@@ -25,6 +25,7 @@ export default class Handle extends React.Component {
     return (
       <div
         role="slider"
+        tabIndex="0"
         {...ariaProps}
         {...restProps}
         className={className}

@@ -94,6 +94,21 @@ class Slider extends React.Component {
     this.onChange({ value });
   }
 
+  onKeyboard(e) {
+    const valueMutator = utils.getKeyboardValueMutator(e);
+
+    if (valueMutator) {
+      utils.pauseEvent(e);
+      const state = this.state;
+      const oldValue = state.value;
+      const mutatedValue = valueMutator(oldValue, this.props);
+      const value = this.trimAlignValue(mutatedValue);
+      if (value === oldValue) return;
+
+      this.onChange({ value });
+    }
+  }
+
   getValue() {
     return this.state.value;
   }

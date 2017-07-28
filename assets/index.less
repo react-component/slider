@@ -69,6 +69,11 @@
       cursor: -webkit-grabbing;
       cursor: grabbing;
     }
+    &:focus {
+      border-color: tint(@primary-color, 20%);
+      box-shadow: 0 0 0 5px tint(@primary-color, 50%);
+      outline: none;
+    }
   }
 
   &-mark {

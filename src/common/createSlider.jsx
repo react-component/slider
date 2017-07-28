@@ -120,6 +120,22 @@ export default function createSlider(Component) {
       utils.pauseEvent(e);
     }
 
+    onFocus = (e) => {
+      const isVertical = this.props.vertical;
+
+      if (utils.isEventFromHandle(e, this.handlesRefs)) {
+        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
+
+        this.dragOffset = 0;
+        this.onStart(handlePosition);
+        utils.pauseEvent(e);
+      }
+    }
+
+    onBlur = (e) => {
+      this.onEnd(e);
+    };
+
     addDocumentTouchEvents() {
       // just work for Chrome iOS Safari and Android Browser
       this.onTouchMoveListener = addEventListener(document, 'touchmove', this.onTouchMove);
@@ -158,6 +174,12 @@ export default function createSlider(Component) {
 
       const position = utils.getTouchPosition(this.props.vertical, e);
       this.onMove(e, position - this.dragOffset);
+    }
+
+    onKeyDown = (e) => {
+      if (this.sliderRef && utils.isEventFromHandle(e, this.handlesRefs)) {
+        this.onKeyboard(e);
+      }
     }
 
     getSliderStart() {
@@ -237,6 +259,9 @@ export default function createSlider(Component) {
           className={sliderClassName}
           onTouchStart={disabled ? noop : this.onTouchStart}
           onMouseDown={disabled ? noop : this.onMouseDown}
+          onKeyDown={disabled ? noop : this.onKeyDown}
+          onFocus={disabled ? noop : this.onFocus}
+          onBlur={disabled ? noop : this.onBlur}
           style={style}
         >
           <div

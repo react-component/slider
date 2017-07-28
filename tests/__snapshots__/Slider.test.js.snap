@@ -15,7 +15,8 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle"
     role="slider"
-    style="left:0%;" />
+    style="left:0%;"
+    tabindex="0" />
   <div
     class="rc-slider-mark" />
 </div>
