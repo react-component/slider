@@ -86,9 +86,8 @@ class Slider extends React.Component {
 
   onMove(e, position) {
     utils.pauseEvent(e);
-    const state = this.state;
+    const { value: oldValue } = this.state;
     const value = this.calcValueByPos(position);
-    const oldValue = state.value;
     if (value === oldValue) return;
 
     this.onChange({ value });

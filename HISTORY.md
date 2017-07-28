@@ -1,6 +1,10 @@
 # History
 ----
 
+## 8.3.0 / 2017-07-28
+
+[Feature] Support keyboard accessibility.[#282](https://github.com/react-component/slider/pull/282)
+
 ## 8.2.0 / 2017-07-04
 
 [Feature] Support custom dot style with `dotStyle` & `activeDotStyle` api.[#292](https://github.com/react-component/slider/pull/292)
