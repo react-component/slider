@@ -51,6 +51,11 @@
   cursor: -webkit-grabbing;
   cursor: grabbing;
 }
+.rc-slider-handle:focus {
+  border-color: #57c5f7;
+  box-shadow: 0 0 0 5px #96dbfa;
+  outline: none;
+}
 .rc-slider-mark {
   position: absolute;
   top: 18px;
