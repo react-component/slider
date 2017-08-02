@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "8.3.0",
+  "version": "8.3.1",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
@@ -25,18 +25,19 @@
   "license": "MIT",
   "main": "./lib/index.js",
   "module": "./es/index",
-  "entry": {
-    "rc-slider": [
-      "./assets/index.less",
-      "./src/index.js"
-    ]
-  },
   "style": "./assets/index.css",
   "config": {
-    "port": 8005
+    "port": 8005,
+    "entry": {
+      "rc-slider": [
+        "./assets/index.less",
+        "./src/index.js"
+      ]
+    }
   },
   "scripts": {
     "build": "rc-tools run build",
+    "dist": "rc-tools run dist",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",
     "compile": "rc-tools run compile --babel-runtime",

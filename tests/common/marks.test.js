@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
 import { mount } from 'enzyme';
-import Slider from '../..';
+import Slider from '../../src';
 const { Range } = Slider;
 
 describe('marks', () => {
