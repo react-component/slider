@@ -123,13 +123,10 @@ class Range extends React.Component {
 
     const nextBounds = [...state.bounds];
     nextBounds[state.handle] = value;
-    let nextHandle = state.handle;
+    const nextHandle = state.handle;
     if (props.pushable !== false) {
       const originalValue = state.bounds[nextHandle];
       this.pushSurroundingHandles(nextBounds, nextHandle, originalValue);
-    } else if (props.allowCross) {
-      nextBounds.sort((a, b) => a - b);
-      nextHandle = nextBounds.indexOf(value);
     }
     this.onChange({
       handle: nextHandle,
@@ -331,8 +328,8 @@ class Range extends React.Component {
           className={trackClassName}
           vertical={vertical}
           included={included}
-          offset={offsets[i - 1]}
-          length={offsets[i] - offsets[i - 1]}
+          offset={Math.min(offsets[i - 1], offsets[i])}
+          length={Math.abs(offsets[i] - offsets[i - 1])}
           style={trackStyle[index]}
           key={i}
         />
