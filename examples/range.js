@@ -48,7 +48,12 @@ class CustomizedRange extends React.Component {
         <br />
         <button onClick={this.handleApply}>Apply</button>
         <br /><br />
-        <Range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
+        <Range
+          allowCross={false}
+          pushable={10}
+          value={this.state.value}
+          onChange={this.onSliderChange}
+        />
       </div>
     );
   }
@@ -156,11 +161,11 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Multi Range</p>
-      <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />
+      <Range count={3} defaultValue={[20, 40, 60, 80]} />
     </div>
     <div style={style}>
       <p>Multi Range with custom track and handle style</p>
-      <Range count={3} defaultValue={[20, 40, 60, 80]} pushable
+      <Range count={3} defaultValue={[20, 40, 60, 80]} pushable={10}
         trackStyle={[{ backgroundColor: 'red' }, { backgroundColor: 'green' }]}
         handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }]}
         railStyle={{ backgroundColor: 'black' }}
