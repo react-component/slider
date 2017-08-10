@@ -269,17 +269,16 @@ class Range extends React.Component {
 
   ensureValueNotConflict(i, val, { allowCross, pushable: thershold }) {
     const state = this.state || {};
-    const { handle, bounds } = state;
+    const { bounds } = state;
+    const handle = (i === undefined) ? state.handle : i;
     thershold = Number(thershold);
     /* eslint-disable eqeqeq */
-    if (!allowCross && handle != null) {
-      if (i === undefined || i === handle) {
-        if (handle > 0 && val <= (bounds[handle - 1] + thershold)) {
-          return bounds[handle - 1] + thershold;
-        }
-        if (handle < bounds.length - 1 && val >= (bounds[handle + 1] - thershold)) {
-          return bounds[handle + 1] - thershold;
-        }
+    if (!allowCross && handle != null && bounds !== undefined) {
+      if (handle > 0 && val <= (bounds[handle - 1] + thershold)) {
+        return bounds[handle - 1] + thershold;
+      }
+      if (handle < bounds.length - 1 && val >= (bounds[handle + 1] - thershold)) {
+        return bounds[handle + 1] - thershold;
       }
     }
     /* eslint-enable eqeqeq */
