@@ -98,6 +98,7 @@ export default function createSlider(Component) {
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
+      this.removeDocumentEvents();
       this.onStart(position);
       this.addDocumentMouseEvents();
       utils.pauseEvent(e);
@@ -115,6 +116,7 @@ export default function createSlider(Component) {
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
+      this.removeDocumentEvents();
       this.onStart(position);
       this.addDocumentTouchEvents();
       utils.pauseEvent(e);
@@ -155,6 +157,10 @@ export default function createSlider(Component) {
       this.onMouseMoveListener && this.onMouseMoveListener.remove();
       this.onMouseUpListener && this.onMouseUpListener.remove();
       /* eslint-enable no-unused-expressions */
+    }
+
+    onMouseUp = () => {
+      this.removeDocumentEvents();
     }
 
     onMouseMove = (e) => {
@@ -259,6 +265,7 @@ export default function createSlider(Component) {
           className={sliderClassName}
           onTouchStart={disabled ? noop : this.onTouchStart}
           onMouseDown={disabled ? noop : this.onMouseDown}
+          onMouseUp={disabled ? noop : this.onMouseUp}
           onKeyDown={disabled ? noop : this.onKeyDown}
           onFocus={disabled ? noop : this.onFocus}
           onBlur={disabled ? noop : this.onBlur}
