@@ -49,7 +49,7 @@ export default function createSliderWithTooltip(Component) {
           prefixCls={prefixCls}
           overlay={overlay}
           placement={placement}
-          visible={!disabled && (this.state.visibles[index] || dragging)}
+          visible={!disabled && tipProps.alwaysVisible || (this.state.visibles[index] || dragging)}
           key={index}
         >
           <Handle
