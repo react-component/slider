@@ -35,6 +35,7 @@ exports[`marks should handle different markFontSize 1`] = `
     class="rc-slider-handle rc-slider-handle-1"
     role="slider"
     style="left:0%;"
+    tabindex="0"
   />
   <div
     aria-disabled="false"
@@ -44,25 +45,26 @@ exports[`marks should handle different markFontSize 1`] = `
     class="rc-slider-handle rc-slider-handle-2"
     role="slider"
     style="left:30%;"
+    tabindex="0"
   />
   <div
     class="rc-slider-mark"
   >
     <span
       class="rc-slider-mark-text rc-slider-mark-text-active"
-      style="left:-2%;"
+      style="width:29.250px;margin-left:-14.625px;left:0%;font-size:15px;"
     >
-      0
+      zero
     </span>
     <span
       class="rc-slider-mark-text rc-slider-mark-text-active"
-      style="left:28%;"
+      style="width:16.800px;margin-left:-8.4px;left:30%;font-size:15px;"
     >
       30
     </span>
     <span
       class="rc-slider-mark-text"
-      style="left:98%;"
+      style="width:25.200px;margin-left:-12.6px;left:100%;font-size:15px;"
     >
       100
     </span>
@@ -105,6 +107,7 @@ exports[`marks should position mark correctly when slider is horizontal 1`] = `
     class="rc-slider-handle rc-slider-handle-1"
     role="slider"
     style="left:0%;"
+    tabindex="0"
   />
   <div
     aria-disabled="false"
@@ -114,25 +117,26 @@ exports[`marks should position mark correctly when slider is horizontal 1`] = `
     class="rc-slider-handle rc-slider-handle-2"
     role="slider"
     style="left:30%;"
+    tabindex="0"
   />
   <div
     class="rc-slider-mark"
   >
     <span
       class="rc-slider-mark-text rc-slider-mark-text-active"
-      style="left:-2%;"
+      style="width:5.600px;margin-left:-2.8px;left:0%;font-size:10px;"
     >
       0
     </span>
     <span
       class="rc-slider-mark-text rc-slider-mark-text-active"
-      style="left:28%;"
+      style="width:11.200px;margin-left:-5.6px;left:30%;font-size:10px;"
     >
       30
     </span>
     <span
       class="rc-slider-mark-text"
-      style="left:98%;"
+      style="width:16.800px;margin-left:-8.4px;left:100%;font-size:10px;"
     >
       100
     </span>
@@ -175,6 +179,7 @@ exports[`marks should position mark correctly when slider is vertical 1`] = `
     class="rc-slider-handle rc-slider-handle-1"
     role="slider"
     style="bottom:0%;"
+    tabindex="0"
   />
   <div
     aria-disabled="false"
@@ -184,25 +189,26 @@ exports[`marks should position mark correctly when slider is vertical 1`] = `
     class="rc-slider-handle rc-slider-handle-2"
     role="slider"
     style="bottom:30%;"
+    tabindex="0"
   />
   <div
     class="rc-slider-mark"
   >
     <span
       class="rc-slider-mark-text rc-slider-mark-text-active"
-      style="bottom:-2%;"
+      style="margin-bottom:-50%;bottom:0%;"
     >
       0
     </span>
     <span
       class="rc-slider-mark-text rc-slider-mark-text-active"
-      style="bottom:28%;"
+      style="margin-bottom:-50%;bottom:30%;"
     >
       30
     </span>
     <span
       class="rc-slider-mark-text"
-      style="bottom:98%;"
+      style="margin-bottom:-50%;bottom:100%;"
     >
       100
     </span>
