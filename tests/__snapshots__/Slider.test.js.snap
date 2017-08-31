@@ -1,13 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
 exports[`Slider should render Slider with correct DOM structure 1`] = `
 <div
-  class="rc-slider">
+  class="rc-slider"
+>
   <div
-    class="rc-slider-rail" />
+    class="rc-slider-rail"
+  />
   <div
     class="rc-slider-track"
-    style="visibility:visible;left:0%;width:0%;" />
+    style="visibility:visible;left:0%;width:0%;"
+  />
   <div
-    class="rc-slider-step" />
+    class="rc-slider-step"
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -16,8 +22,10 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
     class="rc-slider-handle"
     role="slider"
     style="left:0%;"
-    tabindex="0" />
+    tabindex="0"
+  />
   <div
-    class="rc-slider-mark" />
+    class="rc-slider-mark"
+  />
 </div>
 `;
