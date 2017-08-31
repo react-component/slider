@@ -205,6 +205,10 @@ export function getWidthOfText(text, fontSize) {
     // widthsMap has width of letters in pixels for 100px
     const widthForThisLetter =
       FONT_WIDTHS.arial[letter] * (fontSize / BASE_FONT_SIZE);
+
+    if (isNaN(widthForThisLetter)) {
+      return totalWidth + 5;
+    }
     return totalWidth + widthForThisLetter;
-  }, 0);
+  }, 0).toFixed(3);
 }

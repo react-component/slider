@@ -28,13 +28,20 @@ describe('marks', () => {
     expect(renderToJson(rangeWrapper)).toMatchSnapshot();
   });
 
+  it('should handle different markFontSize', () => {
+    const marks = { 0: '0', 30: '30', 100: '100' };
+    console.log('foooosdfsdf');
+    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} markFontSize={15} />);
+    expect(renderToJson(rangeWrapper)).toMatchSnapshot();
+  });
+
   it('should position mark correctly when slider is vertical', () => {
     const marks = { 0: '0', 30: '30', 100: '100' };
     const rangeWrapper = render(<Range value={[0, 30]} marks={marks} vertical />);
     expect(renderToJson(rangeWrapper)).toMatchSnapshot();
   });
 
-  it.skip('should select correct value while click on marks', () => {
+  it('should select correct value while click on marks', () => {
     const marks = { 0: '0', 30: '30', 100: '100' };
 
     const sliderWrapper = mount(<Slider marks={marks} />);
