@@ -45,7 +45,7 @@ ReactDOM.render(
 
     <div style={style}>
       <p>Range with marks</p>
-      <Slider.Range min={-10} marks={marks} onChange={log} defaultValue={[20, 40]} />
+      <Slider.Range min={-10} marks={marks} onChange={log} defaultValue={[20, 25, 30, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
