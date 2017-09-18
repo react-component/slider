@@ -91,4 +91,30 @@ describe('Range', () => {
     wrapper.find('.rc-slider-handle').at(1).simulate('mouseLeave');
     expect(wrapper.state().visibles[1]).toBe(false);
   });
+
+  it('should keep pushable when not allowCross and setState', () => {
+    class CustomizedRange extends React.Component { // eslint-disable-line
+      constructor(props) {
+        super(props);
+        this.state = {
+          value: [20, 40],
+        };
+      }
+      getSlider() {
+        return this.refs.slider;
+      }
+      render() {
+        return <Range ref="slider" allowCross={false} value={this.state.value} pushable={10} />;
+      }
+    }
+    const wrapper = mount(<CustomizedRange />);
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(20);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+    wrapper.setState({ value: [30, 40] });
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+    wrapper.setState({ value: [35, 40] });
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+  });
 });
