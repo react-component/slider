@@ -201,8 +201,9 @@ class Range extends React.Component {
   }
 
   pushSurroundingHandles(bounds, handle) {
-    const { pushable: threshold } = this.props;
     const value = bounds[handle];
+    let { pushable: threshold } = this.props;
+    threshold = Number(threshold);
 
     let direction = 0;
     if (bounds[handle + 1] - value < threshold) {
