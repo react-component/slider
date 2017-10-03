@@ -138,13 +138,13 @@ export default function createSlider(Component) {
 
     addDocumentTouchEvents() {
       // just work for Chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = addEventListener(document, 'touchmove', this.onTouchMove);
-      this.onTouchUpListener = addEventListener(document, 'touchend', this.onEnd);
+      this.onTouchMoveListener = addEventListener(this.sliderRef.ownerDocument, 'touchmove', this.onTouchMove);
+      this.onTouchUpListener = addEventListener(this.sliderRef.ownerDocument, 'touchend', this.onEnd);
     }
 
     addDocumentMouseEvents() {
-      this.onMouseMoveListener = addEventListener(document, 'mousemove', this.onMouseMove);
-      this.onMouseUpListener = addEventListener(document, 'mouseup', this.onEnd);
+      this.onMouseMoveListener = addEventListener(this.sliderRef.ownerDocument, 'mousemove', this.onMouseMove);
+      this.onMouseUpListener = addEventListener(this.sliderRef.ownerDocument, 'mouseup', this.onEnd);
     }
 
     removeDocumentEvents() {
