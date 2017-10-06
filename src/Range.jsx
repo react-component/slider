@@ -59,7 +59,7 @@ class Range extends React.Component {
     const value = nextProps.value || bounds;
     const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
     if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
-
+    
     this.setState({ bounds: nextBounds });
     if (bounds.some(v => utils.isValueOutOfRange(v, nextProps))) {
       this.props.onChange(nextBounds);
@@ -124,7 +124,9 @@ class Range extends React.Component {
     const nextBounds = [...state.bounds];
     nextBounds[state.handle] = value;
     let nextHandle = state.handle;
-    if (props.pushable !== false) {
+
+    if ((typeof props.pushable === 'boolean' && props.pushable !== false) || 
+        (typeof props.pushable === 'number' && props.pushable >= 0)) {
       const originalValue = state.bounds[nextHandle];
       this.pushSurroundingHandles(nextBounds, nextHandle, originalValue);
     } else if (props.allowCross) {
@@ -207,15 +209,18 @@ class Range extends React.Component {
     const value = bounds[handle];
 
     let direction = 0;
-    if (bounds[handle + 1] - value < threshold) {
+    if (bounds[handle + 1] - value < threshold && threshold > 0) {
       direction = +1; // push to right
     }
-    if (value - bounds[handle - 1] < threshold) {
+    if (value - bounds[handle - 1] < threshold && threshold > 0) {
       direction = -1; // push to left
+    }
+    if (threshold === 0 && (originalValue === bounds[handle - 1] || originalValue === bounds[handle + 1])) {
+      bounds.forEach((v, i, a) => a[i] === originalValue ? a[i] = value : a[i] = v)
     }
 
     if (direction === 0) { return; }
-
+    
     const nextHandle = handle + direction;
     const diffToNext = direction * (bounds[nextHandle] - value);
     if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
@@ -227,7 +232,7 @@ class Range extends React.Component {
   pushHandle(bounds, handle, direction, amount) {
     const originalValue = bounds[handle];
     let currentValue = bounds[handle];
-    while (direction * (currentValue - originalValue) < amount) {
+    while (direction * (currentValue - originalValue) <= amount) {
       if (!this.pushHandleOnePoint(bounds, handle, direction)) {
         // can't push handle enough to create the needed `amount` gap, so we
         // revert its position to the original value
@@ -271,12 +276,15 @@ class Range extends React.Component {
   ensureValueNotConflict(val, { allowCross }) {
     const state = this.state || {};
     const { handle, bounds } = state;
+    const { pushable: threshold } = this.props;
+
+
     /* eslint-disable eqeqeq */
     if (!allowCross && handle != null) {
-      if (handle > 0 && val <= bounds[handle - 1]) {
+      if (threshold > 0 && handle > 0 && val <= bounds[handle - 1]) {
         return bounds[handle - 1];
       }
-      if (handle < bounds.length - 1 && val >= bounds[handle + 1]) {
+      if (threshold > 0 && handle < bounds.length - 1 && val >= bounds[handle + 1] ) {
         return bounds[handle + 1];
       }
     }
