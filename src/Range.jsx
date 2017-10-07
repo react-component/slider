@@ -59,7 +59,7 @@ class Range extends React.Component {
     const value = nextProps.value || bounds;
     const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
     if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
-    
+
     this.setState({ bounds: nextBounds });
     if (bounds.some(v => utils.isValueOutOfRange(v, nextProps))) {
       this.props.onChange(nextBounds);
@@ -125,7 +125,7 @@ class Range extends React.Component {
     nextBounds[state.handle] = value;
     let nextHandle = state.handle;
 
-    if ((typeof props.pushable === 'boolean' && props.pushable !== false) || 
+    if ((typeof props.pushable === 'boolean' && props.pushable !== false) ||
         (typeof props.pushable === 'number' && props.pushable >= 0)) {
       const originalValue = state.bounds[nextHandle];
       this.pushSurroundingHandles(nextBounds, nextHandle, originalValue);
@@ -215,12 +215,13 @@ class Range extends React.Component {
     if (value - bounds[handle - 1] < threshold && threshold > 0) {
       direction = -1; // push to left
     }
-    if (threshold === 0 && (originalValue === bounds[handle - 1] || originalValue === bounds[handle + 1])) {
-      bounds.forEach((v, i, a) => a[i] === originalValue ? a[i] = value : a[i] = v)
+    if (threshold === 0 && (originalValue === bounds[handle - 1] ||
+      originalValue === bounds[handle + 1])) {
+      bounds.forEach((v, i, a) => a[i] === originalValue ? a[i] = value : a[i] = v);
     }
 
     if (direction === 0) { return; }
-    
+
     const nextHandle = handle + direction;
     const diffToNext = direction * (bounds[nextHandle] - value);
     if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
@@ -284,7 +285,7 @@ class Range extends React.Component {
       if (threshold > 0 && handle > 0 && val <= bounds[handle - 1]) {
         return bounds[handle - 1];
       }
-      if (threshold > 0 && handle < bounds.length - 1 && val >= bounds[handle + 1] ) {
+      if (threshold > 0 && handle < bounds.length - 1 && val >= bounds[handle + 1]) {
         return bounds[handle + 1];
       }
     }
