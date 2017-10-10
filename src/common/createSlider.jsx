@@ -19,6 +19,7 @@ export default function createSlider(Component) {
       max: PropTypes.number,
       step: PropTypes.number,
       marks: PropTypes.object,
+      markFontSize: PropTypes.number,
       included: PropTypes.bool,
       className: PropTypes.string,
       prefixCls: PropTypes.string,
@@ -48,6 +49,7 @@ export default function createSlider(Component) {
       max: 100,
       step: 1,
       marks: {},
+      markFontSize: 10,
       handle({ index, ...restProps }) {
         delete restProps.dragging;
         return <Handle {...restProps} key={index} />;
@@ -244,6 +246,7 @@ export default function createSlider(Component) {
         railStyle,
         dotStyle,
         activeDotStyle,
+        markFontSize,
       } = this.props;
       const { tracks, handles } = super.render();
 
@@ -291,6 +294,7 @@ export default function createSlider(Component) {
             className={`${prefixCls}-mark`}
             vertical={vertical}
             marks={marks}
+            markFontSize={markFontSize}
             included={included}
             lowerBound={this.getLowerBound()}
             upperBound={this.getUpperBound()}

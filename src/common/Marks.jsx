@@ -1,5 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
+import { getWidthOfText } from '../utils';
 
 const Marks = ({
   className,
@@ -9,12 +10,9 @@ const Marks = ({
   upperBound,
   lowerBound,
   max, min,
+  markFontSize,
 }) => {
   const marksKeys = Object.keys(marks);
-  const marksCount = marksKeys.length;
-  const unit = marksCount > 1 ? 100 / (marksCount - 1) : 100;
-  const markWidth = unit * 0.9;
-
   const range = max - min;
   const elements = marksKeys.map(parseFloat).sort((a, b) => a - b).map(point => {
     const isActive = (!included && point === upperBound) ||
@@ -24,25 +22,28 @@ const Marks = ({
       [`${className}-text-active`]: isActive,
     });
 
+    const markPoint = marks[point];
+    const markPointIsObject = typeof markPoint === 'object' &&
+            !React.isValidElement(markPoint);
+    const markLabel = markPointIsObject ? markPoint.label : markPoint;
+    const markWidth = getWidthOfText(markLabel, markFontSize);
+
     const bottomStyle = {
       marginBottom: '-50%',
       bottom: `${(point - min) / range * 100}%`,
     };
 
     const leftStyle = {
-      width: `${markWidth}%`,
-      marginLeft: `${-markWidth / 2}%`,
+      width: `${markWidth}px`,
+      marginLeft: `${-markWidth / 2}px`,
       left: `${(point - min) / range * 100}%`,
+      fontSize: `${markFontSize}px`,
     };
 
     const style = vertical ? bottomStyle : leftStyle;
-
-    const markPoint = marks[point];
-    const markPointIsObject = typeof markPoint === 'object' &&
-            !React.isValidElement(markPoint);
-    const markLabel = markPointIsObject ? markPoint.label : markPoint;
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
+
     return (
       <span
         className={markClassName}

@@ -1,6 +1,7 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
-import { mount } from 'enzyme';
+import { render, mount } from 'enzyme';
+import { renderToJson } from 'enzyme-to-json';
 import Slider from '../../src';
 const { Range } = Slider;
 
@@ -19,6 +20,24 @@ describe('marks', () => {
     expect(rangeWrapper.find('.rc-slider-mark-text').at(0).instance().innerHTML).toBe('0');
     expect(rangeWrapper.find('.rc-slider-mark-text').at(1).instance().innerHTML).toBe('30');
     expect(rangeWrapper.find('.rc-slider-mark-text').at(2).instance().innerHTML).toBe('100');
+  });
+
+  it('should position mark correctly when slider is horizontal', () => {
+    const marks = { 0: '0', 30: '30', 100: '100' };
+    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} />);
+    expect(renderToJson(rangeWrapper)).toMatchSnapshot();
+  });
+
+  it('should handle different markFontSize', () => {
+    const marks = { 0: 'zero', 30: '30', 100: '100' };
+    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} markFontSize={15} />);
+    expect(renderToJson(rangeWrapper)).toMatchSnapshot();
+  });
+
+  it('should position mark correctly when slider is vertical', () => {
+    const marks = { 0: '0', 30: '30', 100: '100' };
+    const rangeWrapper = render(<Range value={[0, 30]} marks={marks} vertical />);
+    expect(renderToJson(rangeWrapper)).toMatchSnapshot();
   });
 
   it.skip('should select correct value while click on marks', () => {
