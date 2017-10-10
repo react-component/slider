@@ -6,7 +6,9 @@
     "react",
     "react-component",
     "react-slider",
-    "slider"
+    "slider",
+    "input",
+    "range"
   ],
   "homepage": "http://github.com/react-component/gesture/",
   "repository": {
