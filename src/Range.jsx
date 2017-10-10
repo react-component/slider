@@ -64,13 +64,7 @@ class Range extends React.Component {
 
     if (bounds.some(v => utils.isValueOutOfRange(v, nextProps))) {
       const newValues = value.map((v) => {
-        if (v < nextBounds[0]) {
-          v = nextBounds[0];
-        }
-        if (v > nextBounds[1]) {
-          v = nextBounds[1];
-        }
-        return v;
+        return utils.ensureValueInRange(v, nextProps);
       });
       this.props.onChange(newValues);
     }
