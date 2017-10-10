@@ -215,7 +215,7 @@ export default function createSlider(Component) {
     calcOffset(value) {
       const { min, max } = this.props;
       const ratio = (value - min) / (max - min);
-      return ratio * 100;
+      return isNaN(ratio) ? 0 : ratio * 100;
     }
 
     saveSlider = (slider) => {
