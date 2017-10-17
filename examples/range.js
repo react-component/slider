@@ -147,6 +147,18 @@ ReactDOM.render(
       <Range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
     <div style={style}>
+      <p>Inverted Basic Range，`allowCross=false`</p>
+      <Range inverted allowCross={false} defaultValue={[0, 20]} onChange={log} />
+    </div>
+    <div style={style}>
+      <p>Inverted Basic Range，`step=20` </p>
+      <Range inverted step={20} defaultValue={[20, 20]} onBeforeChange={log} />
+    </div>
+    <div style={style}>
+      <p>Inverted Basic Range，`step=20, dots` </p>
+      <Range inverted dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+    </div>
+    <div style={style}>
       <p>Basic Range，disabled</p>
       <Range allowCross={false} defaultValue={[0, 20]} onChange={log} disabled />
     </div>

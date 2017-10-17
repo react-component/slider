@@ -86,7 +86,7 @@ class Range extends React.Component {
     const bounds = this.getValue();
     props.onBeforeChange(bounds);
 
-    const value = this.calcValueByPos(position);
+    const value = this.calcValueByPos(position, props.inverted);
     this.startValue = value;
     this.startPosition = position;
 
@@ -117,7 +117,7 @@ class Range extends React.Component {
     const props = this.props;
     const state = this.state;
 
-    const value = this.calcValueByPos(position);
+    const value = this.calcValueByPos(position, props.inverted);
     const oldValue = state.bounds[state.handle];
     if (value === oldValue) return;
 
@@ -173,12 +173,12 @@ class Range extends React.Component {
   }
 
   getLowerBound() {
-    return this.state.bounds[0];
+    return this.props.inverted ? this.props.max - this.state.bounds[0] : this.state.bounds[0];
   }
 
   getUpperBound() {
     const { bounds } = this.state;
-    return bounds[bounds.length - 1];
+    return this.props.inverted ? this.state.bounds[0] : bounds[bounds.length - 1];
   }
 
   /**
@@ -332,8 +332,8 @@ class Range extends React.Component {
           className={trackClassName}
           vertical={vertical}
           included={included}
-          offset={offsets[i - 1]}
-          length={offsets[i] - offsets[i - 1]}
+          offset={this.props.inverted ? offsets[i] : offsets[i - 1]}
+          length={this.props.inverted ? offsets[i - 1] - offsets[i] : offsets[i] - offsets[i - 1]}
           style={trackStyle[index]}
           key={i}
         />

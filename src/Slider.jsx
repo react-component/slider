@@ -113,11 +113,11 @@ class Slider extends React.Component {
   }
 
   getLowerBound() {
-    return this.props.min;
+    return this.props.inverted ? this.state.value : this.props.min;
   }
 
   getUpperBound() {
-    return this.state.value;
+    return this.props.inverted ? this.props.max : this.state.value;
   }
 
   trimAlignValue(v, nextProps = {}) {
@@ -144,7 +144,7 @@ class Slider extends React.Component {
     const handle = handleGenerator({
       className: `${prefixCls}-handle`,
       vertical,
-      offset,
+      offset: this.props.inverted ? 100 - offset : offset,
       value,
       dragging,
       disabled,
@@ -160,7 +160,7 @@ class Slider extends React.Component {
         className={`${prefixCls}-track`}
         vertical={vertical}
         included={included}
-        offset={0}
+        offset={this.props.inverted ? 100 - offset : 0}
         length={offset}
         style={{
           ...minimumTrackStyle,

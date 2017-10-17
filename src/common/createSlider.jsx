@@ -20,6 +20,7 @@ export default function createSlider(Component) {
       step: PropTypes.number,
       marks: PropTypes.object,
       included: PropTypes.bool,
+      inverted: PropTypes.bool,
       className: PropTypes.string,
       prefixCls: PropTypes.string,
       disabled: PropTypes.bool,
@@ -56,6 +57,7 @@ export default function createSlider(Component) {
       onChange: noop,
       onAfterChange: noop,
       included: true,
+      inverted: false,
       disabled: false,
       dots: false,
       vertical: false,
@@ -199,22 +201,22 @@ export default function createSlider(Component) {
       return this.props.vertical ? coords.height : coords.width;
     }
 
-    calcValue(offset) {
+    calcValue(offset, range) {
       const { vertical, min, max } = this.props;
       const ratio = Math.abs(Math.max(offset, 0) / this.getSliderLength());
       const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
-      return value;
+      return range ? max - value : value;
     }
 
-    calcValueByPos(position) {
+    calcValueByPos(position, range = false) {
       const pixelOffset = position - this.getSliderStart();
-      const nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
+      const nextValue = this.trimAlignValue(this.calcValue(pixelOffset, range));
       return nextValue;
     }
 
     calcOffset(value) {
-      const { min, max } = this.props;
-      const ratio = (value - min) / (max - min);
+      const { min, max, inverted } = this.props;
+      const ratio = inverted ? (max - value) / (max - min) : (value - min) / (max - min);
       return ratio * 100;
     }
 

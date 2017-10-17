@@ -100,6 +100,22 @@ ReactDOM.render(
       <Slider dots step={20} defaultValue={100} onAfterChange={log} dotStyle={{ borderColor: 'orange' }} activeDotStyle={{ borderColor: 'yellow' }} />
     </div>
     <div style={style}>
+      <p>Inverted Basic Slider</p>
+      <Slider inverted onChange={log} />
+    </div>
+    <div style={style}>
+      <p>Inverted Basic Slider，`step=20`</p>
+      <Slider inverted step={20} defaultValue={50} onBeforeChange={log} />
+    </div>
+    <div style={style}>
+      <p>Inverted Basic Slider，`step=20, dots`</p>
+      <Slider dots inverted step={20} defaultValue={100} onAfterChange={log} />
+    </div>
+    <div style={style}>
+      <p>Inverted Basic Slider，`step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle={"{borderColor: 'yellow'}"}`</p>
+      <Slider dots inverted step={20} defaultValue={100} onAfterChange={log} dotStyle={{ borderColor: 'orange' }} activeDotStyle={{ borderColor: 'yellow' }} />
+    </div>
+    <div style={style}>
       <p>Slider with tooltip, with custom `tipFormatter`</p>
       <SliderWithTooltip
         tipFormatter={percentFormatter}

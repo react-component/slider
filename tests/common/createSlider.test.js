@@ -40,6 +40,16 @@ describe('createSlider', () => {
     expect(rangeWrapper.find('.rc-slider-dot-active').length).toBe(4);
   });
 
+  it('should render inverted when `inverted=true`', () => {
+    const sliderWrapper = mount(<Slider inverted value={40} step={10} />);
+    expect(sliderWrapper.find('.rc-slider-track').first().prop('offset')).toBe(40);
+    expect(sliderWrapper.find('.rc-slider-track').first().prop('length')).toBe(60);
+
+    const rangeWrapper = mount(<Range value={[20, 50]} step={10} dots />);
+    expect(rangeWrapper.find('.rc-slider-track').first().prop('offset')).toBe(20);
+    expect(rangeWrapper.find('.rc-slider-track').first().prop('length')).toBe(30);
+  });
+
   it('should not set value greater than `max` or smaller `min`', () => {
     const sliderWithMinWrapper = mount(<Slider value={0} min={10} />);
     expect(sliderWithMinWrapper.state('value')).toBe(10);
