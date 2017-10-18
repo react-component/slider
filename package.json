@@ -79,7 +79,7 @@
     "babel-runtime": "6.x",
     "classnames": "^2.2.5",
     "prop-types": "^15.5.4",
-    "rc-tooltip": "^3.4.2",
+    "rc-tooltip": "^3.4.3",
     "rc-util": "^4.0.4",
     "shallowequal": "^1.0.1",
     "warning": "^3.0.0"
