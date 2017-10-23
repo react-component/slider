@@ -116,7 +116,6 @@ export default function createSlider(Component) {
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
-      this.removeDocumentEvents();
       this.onStart(position);
       this.addDocumentTouchEvents();
       utils.pauseEvent(e);
