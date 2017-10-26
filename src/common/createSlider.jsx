@@ -163,6 +163,7 @@ export default function createSlider(Component) {
     }
 
     onMouseUp = () => {
+      this.onEnd();
       this.removeDocumentEvents();
     }
 
