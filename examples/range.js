@@ -4,7 +4,6 @@ import 'rc-slider/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Slider from 'rc-slider';
-import PropTypes from 'prop-types';
 
 const Range = Slider.Range;
 
@@ -95,9 +94,6 @@ class DynamicBounds extends React.Component {
 }
 
 class ControlledRange extends React.Component {
-  static propTypes = {
-    allowCross: PropTypes.bool,
-  }
   constructor(props) {
     super(props);
     this.state = {
@@ -110,9 +106,27 @@ class ControlledRange extends React.Component {
     });
   }
   render() {
-    const { allowCross = true } = this.props;
     return (
-      <Range value={this.state.value} onChange={this.handleChange} allowCross={allowCross}/>
+      <Range value={this.state.value} onChange={this.handleChange} />
+    );
+  }
+}
+
+class ControlledRangeDisableAcross extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: [20, 40, 60, 80],
+    };
+  }
+  handleChange = (value) => {
+    this.setState({
+      value,
+    });
+  }
+  render() {
+    return (
+      <Range value={this.state.value} onChange={this.handleChange} allowCross={false} />
     );
   }
 }
@@ -161,9 +175,9 @@ ReactDOM.render(
       <ControlledRange />
     </div>
     <div style={style}>
-      <p>Controlled Range with not allowCross</p>
-      <ControlledRange allowCross={false} />
-    </div>
+    <p>Controlled Range, not allow across</p>
+    <ControlledRangeDisableAcross />
+  </div>
     <div style={style}>
       <p>Multi Range</p>
       <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />

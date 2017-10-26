@@ -150,6 +150,7 @@ class Slider extends React.Component {
       disabled,
       min,
       max,
+      index: 0,
       style: handleStyle[0] || handleStyle,
       ref: h => this.saveHandle(0, h),
     });

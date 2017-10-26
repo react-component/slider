@@ -1,4 +1,4 @@
-global.requestAnimationFrame = global.requestAnimationFrame || function raf(cb) {
+global.requestAnimationFrame = global.requestAnimationFrame || function _raf(cb) {
   return setTimeout(cb, 0);
 };
 
