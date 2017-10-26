@@ -111,6 +111,25 @@ class ControlledRange extends React.Component {
   }
 }
 
+class ControlledRangeDisableAcross extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: [20, 40, 60, 80],
+    };
+  }
+  handleChange = (value) => {
+    this.setState({
+      value,
+    });
+  }
+  render() {
+    return (
+      <Range value={this.state.value} onChange={this.handleChange} allowCross={false} />
+    );
+  }
+}
+
 // https://github.com/react-component/slider/issues/226
 class PureRenderRange extends React.Component {
   constructor(props) {
@@ -154,6 +173,10 @@ ReactDOM.render(
       <p>Controlled Range</p>
       <ControlledRange />
     </div>
+    <div style={style}>
+    <p>Controlled Range, not allow across</p>
+    <ControlledRangeDisableAcross />
+  </div>
     <div style={style}>
       <p>Multi Range</p>
       <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />
