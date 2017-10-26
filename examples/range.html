@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>range.js - example - rc-slider@8.3.4</title>
+  <title>range.js - example - rc-slider@8.3.5</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-slider@8.3.4</h1>
+      <h1>rc-slider@8.3.5</h1>
 
       <p>Slider UI component for React</p>
     </div>
@@ -382,6 +382,25 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
 }
 
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">ControlledRangeDisableAcross</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>.state = {
+      value: [<span class="hljs-number">20</span>, <span class="hljs-number">40</span>, <span class="hljs-number">60</span>, <span class="hljs-number">80</span>],
+    };
+  }
+  handleChange = (value) =&gt; {
+    <span class="hljs-keyword">this</span>.setState({
+      value,
+    });
+  }
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Range</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.handleChange}</span> <span class="hljs-attribute">allowCross</span>=<span class="hljs-value">{false}</span> /&gt;</span>
+    )</span>;
+  }
+}
+
 <span class="hljs-comment">// https://github.com/react-component/slider/issues/226</span>
 <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">PureRenderRange</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
   constructor(props) {
@@ -425,6 +444,10 @@ ReactDOM.render(
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Controlled Range<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">ControlledRange</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Controlled Range, not allow across<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">ControlledRangeDisableAcross</span> /&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Multi Range<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Range</span> <span class="hljs-attribute">count</span>=<span class="hljs-value">{3}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[20,</span> <span class="hljs-attribute">40</span>, <span class="hljs-attribute">60</span>, <span class="hljs-attribute">80</span>]} <span class="hljs-attribute">pushable</span> /&gt;</span>
