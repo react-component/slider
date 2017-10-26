@@ -86,6 +86,10 @@ export default function createSlider(Component) {
       this.removeDocumentEvents();
     }
 
+    componentDidMount() {
+      this.document = this.sliderRef.ownerDocument;
+    }
+
     onMouseDown = (e) => {
       if (e.button !== 0) { return; }
 
@@ -98,6 +102,7 @@ export default function createSlider(Component) {
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
+      this.removeDocumentEvents();
       this.onStart(position);
       this.addDocumentMouseEvents();
       utils.pauseEvent(e);
@@ -138,13 +143,13 @@ export default function createSlider(Component) {
 
     addDocumentTouchEvents() {
       // just work for Chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = addEventListener(document, 'touchmove', this.onTouchMove);
-      this.onTouchUpListener = addEventListener(document, 'touchend', this.onEnd);
+      this.onTouchMoveListener = addEventListener(this.document, 'touchmove', this.onTouchMove);
+      this.onTouchUpListener = addEventListener(this.document, 'touchend', this.onEnd);
     }
 
     addDocumentMouseEvents() {
-      this.onMouseMoveListener = addEventListener(document, 'mousemove', this.onMouseMove);
-      this.onMouseUpListener = addEventListener(document, 'mouseup', this.onEnd);
+      this.onMouseMoveListener = addEventListener(this.document, 'mousemove', this.onMouseMove);
+      this.onMouseUpListener = addEventListener(this.document, 'mouseup', this.onEnd);
     }
 
     removeDocumentEvents() {
@@ -155,6 +160,10 @@ export default function createSlider(Component) {
       this.onMouseMoveListener && this.onMouseMoveListener.remove();
       this.onMouseUpListener && this.onMouseUpListener.remove();
       /* eslint-enable no-unused-expressions */
+    }
+
+    onMouseUp = () => {
+      this.removeDocumentEvents();
     }
 
     onMouseMove = (e) => {
@@ -259,6 +268,7 @@ export default function createSlider(Component) {
           className={sliderClassName}
           onTouchStart={disabled ? noop : this.onTouchStart}
           onMouseDown={disabled ? noop : this.onMouseDown}
+          onMouseUp={disabled ? noop : this.onMouseUp}
           onKeyDown={disabled ? noop : this.onKeyDown}
           onFocus={disabled ? noop : this.onFocus}
           onBlur={disabled ? noop : this.onBlur}

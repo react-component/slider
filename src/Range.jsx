@@ -162,7 +162,8 @@ class Range extends React.Component {
     const { bounds, recent } = this.state;
     let boundNeedMoving = closestBound;
     const isAtTheSamePoint = (bounds[closestBound + 1] === bounds[closestBound]);
-    if (isAtTheSamePoint) {
+
+    if (isAtTheSamePoint && bounds[recent] === bounds[closestBound]) {
       boundNeedMoving = recent;
     }
 
