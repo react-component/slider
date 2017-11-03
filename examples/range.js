@@ -125,7 +125,12 @@ class ControlledRangeDisableAcross extends React.Component {
   }
   render() {
     return (
-      <Range value={this.state.value} onChange={this.handleChange} allowCross={false} />
+      <Range
+        value={this.state.value}
+        onChange={this.handleChange}
+        allowCross={false}
+        {...this.props}
+      />
     );
   }
 }
@@ -174,9 +179,13 @@ ReactDOM.render(
       <ControlledRange />
     </div>
     <div style={style}>
-    <p>Controlled Range, not allow across</p>
-    <ControlledRangeDisableAcross />
-  </div>
+      <p>Controlled Range, not allow across</p>
+      <ControlledRangeDisableAcross />
+    </div>
+    <div style={style}>
+      <p>Controlled Range, not allow across, pushable</p>
+      <ControlledRangeDisableAcross pushable/>
+    </div>
     <div style={style}>
       <p>Multi Range</p>
       <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />
