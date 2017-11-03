@@ -17,6 +17,14 @@ const Marks = ({
 
   const range = max - min;
   const elements = marksKeys.map(parseFloat).sort((a, b) => a - b).map(point => {
+    const markPoint = marks[point];
+    const markPointIsObject = typeof markPoint === 'object' &&
+            !React.isValidElement(markPoint);
+    const markLabel = markPointIsObject ? markPoint.label : markPoint;
+    if (!markLabel) {
+      return null;
+    }
+
     const isActive = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
     const markClassName = classNames({
@@ -36,11 +44,6 @@ const Marks = ({
     };
 
     const style = vertical ? bottomStyle : leftStyle;
-
-    const markPoint = marks[point];
-    const markPointIsObject = typeof markPoint === 'object' &&
-            !React.isValidElement(markPoint);
-    const markLabel = markPointIsObject ? markPoint.label : markPoint;
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
     return (
