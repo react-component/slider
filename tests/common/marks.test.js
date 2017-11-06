@@ -6,7 +6,7 @@ const { Range } = Slider;
 
 describe('marks', () => {
   it('should render marks correctly when `marks` is not an empty object', () => {
-    const marks = { 0: '0', 30: '30', 100: '100' };
+    const marks = { 0: '0', 30: '30', 99: '', 100: '100' };
 
     const sliderWrapper = mount(<Slider value={30} marks={marks} />);
     expect(sliderWrapper.find('.rc-slider-mark-text').length).toBe(3);
