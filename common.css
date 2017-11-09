@@ -92,12 +92,6 @@
   border-radius: 50%;
   vertical-align: middle;
 }
-.rc-slider-dot:first-child {
-  margin-left: -4px;
-}
-.rc-slider-dot:last-child {
-  margin-left: -4px;
-}
 .rc-slider-dot-active {
   border-color: #96dbfa;
 }

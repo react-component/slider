@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>range.js - example - rc-slider@8.3.5</title>
+  <title>range.js - example - rc-slider@8.4.0</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -263,7 +263,7 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-slider@8.3.5</h1>
+      <h1>rc-slider@8.4.0</h1>
 
       <p>Slider UI component for React</p>
     </div>
@@ -396,7 +396,12 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   }
   render() {
     <span class="hljs-keyword">return</span> (
-      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Range</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.handleChange}</span> <span class="hljs-attribute">allowCross</span>=<span class="hljs-value">{false}</span> /&gt;</span>
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Range</span>
+        <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span>
+        <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.handleChange}</span>
+        <span class="hljs-attribute">allowCross</span>=<span class="hljs-value">{false}</span>
+        {<span class="hljs-attribute">...this.props</span>}
+      /&gt;</span>
     )</span>;
   }
 }
@@ -445,9 +450,13 @@ ReactDOM.render(
       <span class="hljs-tag">&lt;<span class="hljs-title">ControlledRange</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Controlled Range, not allow across<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
-    <span class="hljs-tag">&lt;<span class="hljs-title">ControlledRangeDisableAcross</span> /&gt;</span>
-  <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Controlled Range, not allow across<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">ControlledRangeDisableAcross</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Controlled Range, not allow across, pushable<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">ControlledRangeDisableAcross</span> <span class="hljs-attribute">pushable</span>/&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Multi Range<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">Range</span> <span class="hljs-attribute">count</span>=<span class="hljs-value">{3}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{[20,</span> <span class="hljs-attribute">40</span>, <span class="hljs-attribute">60</span>, <span class="hljs-attribute">80</span>]} <span class="hljs-attribute">pushable</span> /&gt;</span>
