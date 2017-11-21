@@ -7,7 +7,10 @@ export default function createSliderWithTooltip(Component) {
   return class ComponentWrapper extends React.Component {
     static propTypes = {
       tipFormatter: PropTypes.func,
-      handleStyle: PropTypes.arrayOf(PropTypes.object),
+      handleStyle: PropTypes.oneOfType([
+        PropTypes.arrayOf(PropTypes.object),
+        PropTypes.object,
+      ]),
       tipProps: PropTypes.object,
     };
     static defaultProps = {
@@ -43,6 +46,17 @@ export default function createSliderWithTooltip(Component) {
         ...restTooltipProps,
       } = tipProps;
 
+      let customHandleStyle = {};
+      if (Array.isArray(handleStyle)) {
+        customHandleStyle = {
+          ...handleStyle[index],
+        };
+      } else {
+        customHandleStyle = {
+          ...handleStyle,
+        };
+      }
+
       return (
         <Tooltip
           {...restTooltipProps}
@@ -54,9 +68,7 @@ export default function createSliderWithTooltip(Component) {
         >
           <Handle
             {...restProps}
-            style={{
-              ...handleStyle[0],
-            }}
+            style={customHandleStyle}
             value={value}
             onMouseEnter={() => this.handleTooltipVisibleChange(index, true)}
             onMouseLeave={() => this.handleTooltipVisibleChange(index, false)}
