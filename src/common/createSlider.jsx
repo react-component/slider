@@ -87,7 +87,8 @@ export default function createSlider(Component) {
     }
 
     componentDidMount() {
-      this.document = this.sliderRef.ownerDocument;
+      // Snapshot testing cannot handle refs, so be sure to null-check this.
+      this.document = this.sliderRef && this.sliderRef.ownerDocument;
     }
 
     onMouseDown = (e) => {
