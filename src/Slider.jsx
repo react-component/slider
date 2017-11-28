@@ -11,6 +11,7 @@ class Slider extends React.Component {
     defaultValue: PropTypes.number,
     value: PropTypes.number,
     disabled: PropTypes.bool,
+    autoFocus: PropTypes.bool,
   };
 
   constructor(props) {
@@ -34,6 +35,13 @@ class Slider extends React.Component {
         !('maximumTrackStyle' in props),
         'maximumTrackStyle will be deprecate, please use railStyle instead.'
       );
+    }
+  }
+
+  componentDidMount() {
+    const { autoFocus, disabled } = this.props;
+    if (autoFocus && !disabled) {
+      this.focus();
     }
   }
 

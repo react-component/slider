@@ -2,6 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 export default class Handle extends React.Component {
+  focus() {
+    this.handle.focus();
+  }
+
+  blur() {
+    this.handle.blur();
+  }
+
   render() {
     const {
       className, vertical, offset, style, disabled, min, max, value, ...restProps,
@@ -24,6 +32,7 @@ export default class Handle extends React.Component {
     }
     return (
       <div
+        ref={node => (this.handle = node)}
         role="slider"
         tabIndex="0"
         {...ariaProps}
