@@ -1,6 +1,10 @@
 # History
 ----
 
+## 8.5.0
+
+[Feature] Add focus() blur() and autoFocus.
+
 ## 8.4.0 / 2017-11-09
 
 Support React 16.
