@@ -2167,7 +2167,17 @@ var Handle = function (_React$Component) {
     return __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_possibleConstructorReturn___default()(this, _React$Component.apply(this, arguments));
   }
 
+  Handle.prototype.focus = function focus() {
+    this.handle.focus();
+  };
+
+  Handle.prototype.blur = function blur() {
+    this.handle.blur();
+  };
+
   Handle.prototype.render = function render() {
+    var _this2 = this;
+
     var _props = this.props,
         className = _props.className,
         vertical = _props.vertical,
@@ -2191,6 +2201,9 @@ var Handle = function (_React$Component) {
       });
     }
     return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement('div', __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({
+      ref: function ref(node) {
+        return _this2.handle = node;
+      },
       role: 'slider',
       tabIndex: '0'
     }, ariaProps, restProps, {
@@ -3307,19 +3320,28 @@ function createSlider(Component) {
       };
 
       _this.onFocus = function (e) {
-        var isVertical = _this.props.vertical;
+        var _this$props = _this.props,
+            onFocus = _this$props.onFocus,
+            vertical = _this$props.vertical;
 
         if (__WEBPACK_IMPORTED_MODULE_13__utils__["g" /* isEventFromHandle */](e, _this.handlesRefs)) {
-          var handlePosition = __WEBPACK_IMPORTED_MODULE_13__utils__["c" /* getHandleCenterPosition */](isVertical, e.target);
-
+          var handlePosition = __WEBPACK_IMPORTED_MODULE_13__utils__["c" /* getHandleCenterPosition */](vertical, e.target);
           _this.dragOffset = 0;
           _this.onStart(handlePosition);
           __WEBPACK_IMPORTED_MODULE_13__utils__["j" /* pauseEvent */](e);
+          if (onFocus) {
+            onFocus(e);
+          }
         }
       };
 
       _this.onBlur = function (e) {
+        var onBlur = _this.props.onBlur;
+
         _this.onEnd(e);
+        if (onBlur) {
+          onBlur(e);
+        }
       };
 
       _this.onMouseUp = function () {
@@ -3373,7 +3395,8 @@ function createSlider(Component) {
     };
 
     ComponentEnhancer.prototype.componentDidMount = function componentDidMount() {
-      this.document = this.sliderRef.ownerDocument;
+      // Snapshot testing cannot handle refs, so be sure to null-check this.
+      this.document = this.sliderRef && this.sliderRef.ownerDocument;
     };
 
     ComponentEnhancer.prototype.addDocumentTouchEvents = function addDocumentTouchEvents() {
@@ -3395,6 +3418,18 @@ function createSlider(Component) {
       this.onMouseMoveListener && this.onMouseMoveListener.remove();
       this.onMouseUpListener && this.onMouseUpListener.remove();
       /* eslint-enable no-unused-expressions */
+    };
+
+    ComponentEnhancer.prototype.focus = function focus() {
+      if (!this.props.disabled) {
+        this.handlesRefs[0].focus();
+      }
+    };
+
+    ComponentEnhancer.prototype.blur = function blur() {
+      if (!this.props.disabled) {
+        this.handlesRefs[0].blur();
+      }
     };
 
     ComponentEnhancer.prototype.getSliderStart = function getSliderStart() {
@@ -3541,7 +3576,10 @@ function createSlider(Component) {
     trackStyle: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.oneOfType([__WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object, __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object)]),
     railStyle: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object,
     dotStyle: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object,
-    activeDotStyle: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object
+    activeDotStyle: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.object,
+    autoFocus: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.bool,
+    onFocus: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.func,
+    onBlur: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.func
   }), _class.defaultProps = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, Component.defaultProps, {
     prefixCls: 'rc-slider',
     className: '',
@@ -26947,6 +26985,16 @@ var Slider = function (_React$Component) {
     return _this;
   }
 
+  Slider.prototype.componentDidMount = function componentDidMount() {
+    var _props = this.props,
+        autoFocus = _props.autoFocus,
+        disabled = _props.disabled;
+
+    if (autoFocus && !disabled) {
+      this.focus();
+    }
+  };
+
   Slider.prototype.componentWillReceiveProps = function componentWillReceiveProps(nextProps) {
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
 
@@ -27035,17 +27083,17 @@ var Slider = function (_React$Component) {
   Slider.prototype.render = function render() {
     var _this2 = this;
 
-    var _props = this.props,
-        prefixCls = _props.prefixCls,
-        vertical = _props.vertical,
-        included = _props.included,
-        disabled = _props.disabled,
-        minimumTrackStyle = _props.minimumTrackStyle,
-        trackStyle = _props.trackStyle,
-        handleStyle = _props.handleStyle,
-        min = _props.min,
-        max = _props.max,
-        handleGenerator = _props.handle;
+    var _props2 = this.props,
+        prefixCls = _props2.prefixCls,
+        vertical = _props2.vertical,
+        included = _props2.included,
+        disabled = _props2.disabled,
+        minimumTrackStyle = _props2.minimumTrackStyle,
+        trackStyle = _props2.trackStyle,
+        handleStyle = _props2.handleStyle,
+        min = _props2.min,
+        max = _props2.max,
+        handleGenerator = _props2.handle;
     var _state = this.state,
         value = _state.value,
         dragging = _state.dragging;
@@ -27086,7 +27134,8 @@ var Slider = function (_React$Component) {
 Slider.propTypes = {
   defaultValue: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.number,
   value: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.number,
-  disabled: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.bool
+  disabled: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.bool,
+  autoFocus: __WEBPACK_IMPORTED_MODULE_5_prop_types___default.a.bool
 };
 
 
