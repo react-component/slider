@@ -38,6 +38,9 @@ export default function createSlider(Component) {
       railStyle: PropTypes.object,
       dotStyle: PropTypes.object,
       activeDotStyle: PropTypes.object,
+      autoFocus: PropTypes.bool,
+      onFocus: PropTypes.func,
+      onBlur: PropTypes.func,
     };
 
     static defaultProps = {
@@ -127,19 +130,24 @@ export default function createSlider(Component) {
     }
 
     onFocus = (e) => {
-      const isVertical = this.props.vertical;
-
+      const { onFocus, vertical } = this.props;
       if (utils.isEventFromHandle(e, this.handlesRefs)) {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
-
+        const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
         this.dragOffset = 0;
         this.onStart(handlePosition);
         utils.pauseEvent(e);
+        if (onFocus) {
+          onFocus(e);
+        }
       }
     }
 
     onBlur = (e) => {
+      const { onBlur } = this.props;
       this.onEnd(e);
+      if (onBlur) {
+        onBlur(e);
+      }
     };
 
     addDocumentTouchEvents() {
@@ -190,6 +198,18 @@ export default function createSlider(Component) {
     onKeyDown = (e) => {
       if (this.sliderRef && utils.isEventFromHandle(e, this.handlesRefs)) {
         this.onKeyboard(e);
+      }
+    }
+
+    focus() {
+      if (!this.props.disabled) {
+        this.handlesRefs[0].focus();
+      }
+    }
+
+    blur() {
+      if (!this.props.disabled) {
+        this.handlesRefs[0].blur();
       }
     }
 

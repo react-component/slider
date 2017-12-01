@@ -101,4 +101,47 @@ describe('Slider', () => {
 
     expect(wrapper.state('value')).toBe(100);
   });
+
+  describe('focus & blur', () => {
+    let container;
+
+    beforeEach(() => {
+      container = document.createElement('div');
+      document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(container);
+    });
+
+    const mockRect = (wrapper) => {
+      wrapper.instance().sliderRef.getBoundingClientRect = () => ({
+        left: 10,
+        width: 100,
+      });
+    };
+
+    it('focus()', () => {
+      const handleFocus = jest.fn();
+      const wrapper = mount(
+        <Slider min={0} max={10} defaultValue={0} onFocus={handleFocus} />,
+        { attachTo: container }
+      );
+      mockRect(wrapper);
+      wrapper.instance().focus();
+      expect(handleFocus).toBeCalled();
+    });
+
+    it('blur', () => {
+      const handleBlur = jest.fn();
+      const wrapper = mount(
+        <Slider min={0} max={10} defaultValue={0} onBlur={handleBlur} />,
+        { attachTo: container }
+      );
+      mockRect(wrapper);
+      wrapper.instance().focus();
+      wrapper.instance().blur();
+      expect(handleBlur).toBeCalled();
+    });
+  });
 });
