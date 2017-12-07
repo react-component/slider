@@ -257,6 +257,11 @@ export default function createSlider(Component) {
       this.handlesRefs[index] = handle;
     }
 
+    onClickMarkLabel = (e, value) => {
+      e.stopPropagation();
+      this.onChange({ value });
+    }
+
     render() {
       const {
         prefixCls,
@@ -321,6 +326,7 @@ export default function createSlider(Component) {
           {handles}
           <Marks
             className={`${prefixCls}-mark`}
+            onClickLabel={disabled ? noop : this.onClickMarkLabel}
             vertical={vertical}
             marks={marks}
             included={included}
