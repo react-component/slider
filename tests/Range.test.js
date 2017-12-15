@@ -4,6 +4,7 @@ import { render, mount } from 'enzyme';
 import { renderToJson } from 'enzyme-to-json';
 import Range from '../src/Range';
 import createSliderWithTooltip from '../src/createSliderWithTooltip';
+import {setWidth} from "./common/util";
 
 const RangeWithTooltip = createSliderWithTooltip(Range);
 
@@ -29,6 +30,23 @@ describe('Range', () => {
     expect(trackStyle.left).toMatch('0%');
     expect(trackStyle.width).toMatch('50%');
     expect(trackStyle.visibility).toMatch('visible');
+  });
+
+  it('When dragging a handle in a Range that does not allow cross, do not adjust unrelated values', () => {
+    const rangeWrapper = mount(<Range value={[5, 50, 75]} allowCross={false} pushable={false}/>);
+    setWidth(rangeWrapper.instance().sliderRef, 100);
+    const rangeHandle = rangeWrapper.find('.rc-slider-handle').at(0).instance();
+    rangeWrapper.simulate('mousedown', {
+      type: 'mousedown',
+      target: rangeHandle,
+      pageX: 5, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+
+    rangeWrapper.setProps({value: [0, 50, 75]});
+
+    expect(rangeWrapper.state('bounds')[2]).toBe(75);
   });
 
   it('should render Multi-Range with value correctly', () => {
