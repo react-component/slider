@@ -15,4 +15,4 @@ const setWidth = (object, width) => {
   });
 };
 
-export {setWidth}
+export { setWidth };

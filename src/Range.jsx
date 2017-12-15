@@ -268,13 +268,13 @@ class Range extends React.Component {
     return utils.ensureValuePrecision(valNotConflict, mergedProps);
   }
 
-  ensureValueNotConflict(val, valsHandle, { allowCross }) {
+  ensureValueNotConflict(val, valueHandle, { allowCross }) {
     const state = this.state || {};
     const { handle, bounds } = state;
     /* eslint-disable eqeqeq */
     if (!allowCross && handle != null) {
       // If the value's handle is not the neighbour of the current handle, there is no conflict
-      if (handle - 1 !== valsHandle && handle + 1 !== valsHandle) {
+      if (handle - 1 !== valueHandle && handle + 1 !== valueHandle) {
         return val;
       }
       if (handle > 0 && val <= bounds[handle - 1]) {

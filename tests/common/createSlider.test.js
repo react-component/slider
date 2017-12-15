@@ -3,7 +3,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import Slider from '../../src';
 const { Range } = Slider;
-import {setWidth} from './util';
+import { setWidth } from './util';
 
 describe('createSlider', () => {
   it('should render vertical Slider/Range, when `vertical` is true', () => {

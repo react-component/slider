@@ -4,7 +4,7 @@ import { render, mount } from 'enzyme';
 import { renderToJson } from 'enzyme-to-json';
 import Range from '../src/Range';
 import createSliderWithTooltip from '../src/createSliderWithTooltip';
-import {setWidth} from "./common/util";
+import { setWidth } from './common/util';
 
 const RangeWithTooltip = createSliderWithTooltip(Range);
 
@@ -44,7 +44,7 @@ describe('Range', () => {
       preventDefault() {},
     });
 
-    rangeWrapper.setProps({value: [0, 50, 75]});
+    rangeWrapper.setProps({ value: [0, 50, 75] });
 
     expect(rangeWrapper.state('bounds')[2]).toBe(75);
   });
