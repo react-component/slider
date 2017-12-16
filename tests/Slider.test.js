@@ -22,7 +22,7 @@ describe('Slider', () => {
     expect(trackStyle.visibility).toMatch('visible');
   });
 
-  it('increments the value when key "up" was pressed', () => {
+  it('increases the value when key "up" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -32,7 +32,7 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(51);
   });
 
-  it('increments the value when key "right" was pressed', () => {
+  it('increases the value when key "right" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -42,7 +42,7 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(51);
   });
 
-  it('increases the value when key "page up" was pressed, by a factor 2', () => {
+  it('increases the value when key "page up" is pressed, by a factor 2', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -52,7 +52,7 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(52);
   });
 
-  it('decreases the value when key "down" was pressed', () => {
+  it('decreases the value when key "down" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -62,7 +62,7 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(49);
   });
 
-  it('decreases the value when key "left" was pressed', () => {
+  it('decreases the value when key "left" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -72,7 +72,7 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(49);
   });
 
-  it('decreases the value when key "page down" was pressed, by a factor 2', () => {
+  it('decreases the value when key "page down" is pressed, by a factor 2', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -82,7 +82,7 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(48);
   });
 
-  it('sets the value to minimum when key "home" was pressed', () => {
+  it('sets the value to minimum when key "home" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -92,7 +92,7 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(0);
   });
 
-  it('sets the value to maximum when the key "end" was pressed', () => {
+  it('sets the value to maximum when the key "end" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
@@ -100,5 +100,48 @@ describe('Slider', () => {
     handler.simulate('keyDown', { keyCode: keyCode.END });
 
     expect(wrapper.state('value')).toBe(100);
+  });
+
+  describe('focus & blur', () => {
+    let container;
+
+    beforeEach(() => {
+      container = document.createElement('div');
+      document.body.appendChild(container);
+    });
+
+    afterEach(() => {
+      document.body.removeChild(container);
+    });
+
+    const mockRect = (wrapper) => {
+      wrapper.instance().sliderRef.getBoundingClientRect = () => ({
+        left: 10,
+        width: 100,
+      });
+    };
+
+    it('focus()', () => {
+      const handleFocus = jest.fn();
+      const wrapper = mount(
+        <Slider min={0} max={10} defaultValue={0} onFocus={handleFocus} />,
+        { attachTo: container }
+      );
+      mockRect(wrapper);
+      wrapper.instance().focus();
+      expect(handleFocus).toBeCalled();
+    });
+
+    it('blur', () => {
+      const handleBlur = jest.fn();
+      const wrapper = mount(
+        <Slider min={0} max={10} defaultValue={0} onBlur={handleBlur} />,
+        { attachTo: container }
+      );
+      mockRect(wrapper);
+      wrapper.instance().focus();
+      wrapper.instance().blur();
+      expect(handleBlur).toBeCalled();
+    });
   });
 });

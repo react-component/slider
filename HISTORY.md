@@ -1,6 +1,14 @@
 # History
 ----
 
+## 8.5.0
+
+[Feature] Add focus() blur() and autoFocus.
+
+## 8.4.0 / 2017-11-09
+
+Support React 16.
+
 ## 8.3.0 / 2017-07-28
 
 [Feature] Support keyboard accessibility.[#282](https://github.com/react-component/slider/pull/282)

@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "8.3.5",
+  "version": "8.5.0",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
@@ -10,7 +10,7 @@
     "input",
     "range"
   ],
-  "homepage": "http://github.com/react-component/gesture/",
+  "homepage": "http://github.com/react-component/slider/",
   "repository": {
     "type": "git",
     "url": "git@github.com:react-component/slider.git"
@@ -67,7 +67,7 @@
     "enzyme-to-json": "^3.0.0",
     "jest": "^20.0.0",
     "pre-commit": "1.x",
-    "rc-tools": "6.x",
+    "rc-tools": "7.x",
     "rc-trigger": "^2.2.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
@@ -80,7 +80,7 @@
     "babel-runtime": "6.x",
     "classnames": "^2.2.5",
     "prop-types": "^15.5.4",
-    "rc-tooltip": "^3.4.3",
+    "rc-tooltip": "^3.7.0",
     "rc-util": "^4.0.4",
     "shallowequal": "^1.0.1",
     "warning": "^3.0.0"
