@@ -20,12 +20,14 @@ class Range extends React.Component {
     ]),
     allowCross: PropTypes.bool,
     disabled: PropTypes.bool,
+    tabIndex: PropTypes.arrayOf(PropTypes.number),
   };
 
   static defaultProps = {
     count: 1,
     allowCross: true,
     pushable: false,
+    tabIndex: [],
   };
 
   constructor(props) {
@@ -299,6 +301,7 @@ class Range extends React.Component {
       handle: handleGenerator,
       trackStyle,
       handleStyle,
+      tabIndex,
     } = this.props;
 
     const offsets = bounds.map(v => this.calcOffset(v));
@@ -314,6 +317,7 @@ class Range extends React.Component {
       value: v,
       dragging: handle === i,
       index: i,
+      tabIndex: tabIndex[i] || 0,
       min,
       max,
       disabled,
