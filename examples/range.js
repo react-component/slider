@@ -117,8 +117,6 @@ class ControlledRangeDisableAcross extends React.Component {
     super(props);
     this.state = {
       value: [20, 40, 60, 80],
-      enablePushable: true,
-      pushable: 5,
     };
   }
   handleChange = (value) => {
@@ -126,45 +124,14 @@ class ControlledRangeDisableAcross extends React.Component {
       value,
     });
   }
-  enablePushable = e => {
-    this.setState({
-      enablePushable: e.target.checked,
-    });
-  }
-  changePushable = e => {
-    this.setState({
-      pushable: e.target.value || 0,
-    });
-  }
   render() {
     return (
-      <div>
-        <label htmlFor="enpushable">enable pushable:</label>
-        <input
-          type="checkbox"
-          name="enpushable"
-          onChange={this.enablePushable}
-          checked={this.state.enablePushable}
-        />
-        <br />
-        <label htmlFor="pushable">pushable:</label>
-        <input
-          type="number"
-          name="pushable"
-          onChange={this.changePushable}
-          value={this.state.pushable}
-          disabled={!this.state.enablePushable}
-        />
-        <br />
-        <br />
-        <Range
-          value={this.state.value}
-          onChange={this.handleChange}
-          allowCross={false}
-          pushable={this.state.enablePushable && this.state.pushable}
-          {...this.props}
-        />
-      </div>
+      <Range
+        value={this.state.value}
+        onChange={this.handleChange}
+        allowCross={false}
+        {...this.props}
+      />
     );
   }
 }
@@ -213,8 +180,12 @@ ReactDOM.render(
       <ControlledRange />
     </div>
     <div style={style}>
-      <p>Controlled Range, not allow across, with pushable</p>
+      <p>Controlled Range, not allow across</p>
       <ControlledRangeDisableAcross />
+    </div>
+    <div style={style}>
+      <p>Controlled Range, not allow across, pushable=5</p>
+      <ControlledRangeDisableAcross pushable={5} />
     </div>
     <div style={style}>
       <p>Multi Range</p>
