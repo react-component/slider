@@ -128,21 +128,51 @@ describe('Range', () => {
         this.state = {
           value: [20, 40],
         };
+        this.onChange = this.onChange.bind(this);
+      }
+      onChange(value) {
+        this.setState({
+          value,
+        });
       }
       getSlider() {
         return this.refs.slider;
       }
       render() {
-        return <Range ref="slider" allowCross={false} value={this.state.value} pushable />;
+        return <Range ref="slider" allowCross={false} value={this.state.value} pushable onChange={this.onChange} />;
       }
     }
-    const wrapper = mount(<CustomizedRange />);
+    const map = {};
+    document.addEventListener = jest.genMockFn().mockImplementation((event, cb) => {
+      map[event] = cb;
+    });
+
+    const mockRect = (wrapper) => {
+      wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
+        left: 10,
+        width: 100,
+      });
+    };
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const wrapper = mount(<CustomizedRange />, { attachTo: container });
+    mockRect(wrapper);
+
     expect(wrapper.instance().getSlider().state.bounds[0]).toBe(20);
     expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
-    wrapper.setState({ value: [40, 40] });
-    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(39);
+
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 10, pageY: 0 });
+    map.mousemove({ type: 'mousemove', pageX: 40, pageY: 0 });
+    map.mouseup({ type: 'mouseup', pageX: 40, pageY: 0 });
+
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
     expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
-    wrapper.setState({ value: [39, 38] });
+
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 10, pageY: 0 });
+    map.mousemove({ type: 'mousemove', pageX: 60, pageY: 0 });
+    map.mouseup({ type: 'mouseup', pageX: 60, pageY: 0 });
     expect(wrapper.instance().getSlider().state.bounds[0]).toBe(39);
     expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
   });
