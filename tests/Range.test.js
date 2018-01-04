@@ -31,6 +31,12 @@ describe('Range', () => {
     expect(trackStyle.visibility).toMatch('visible');
   });
 
+  it('should render Range with tabIndex correctly', () => {
+    const wrapper = mount(<Range tabIndex={[1, 2]} />);
+    expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().tabIndex).toEqual(1);
+    expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().tabIndex).toEqual(2);
+  });
+
   it('should render Multi-Range with value correctly', () => {
     const wrapper = mount(<Range count={3} value={[0, 25, 50, 75]} />);
     expect(wrapper.state('bounds')[0]).toBe(0);
