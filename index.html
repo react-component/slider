@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@8.5.0 - Slider UI component for React</title>
+  <title>rc-slider@8.6.0 - Slider UI component for React</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@8.5.0</h1>
+  <h1>rc-slider@8.6.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -978,6 +978,12 @@ ReactDOM.render(
 <td>-</td>
 <td>Set current value of slider.</td>
 </tr>
+<tr>
+<td>tabIndex</td>
+<td>number</td>
+<td><code>0</code></td>
+<td>Set the tabIndex of the slider handle.</td>
+</tr>
 </tbody>
 </table>
 <h3>Range<a id="user-content-range" name="range" class="anchor" aria-hidden="true" href="#range"><span class="octicon octicon-link"></span></a></h3><table>
@@ -1001,6 +1007,12 @@ ReactDOM.render(
 <td><code>number[]</code></td>
 <td></td>
 <td>Set current positions of handles.</td>
+</tr>
+<tr>
+<td>tabIndex</td>
+<td>number[]</td>
+<td><code>[0, 0]</code></td>
+<td>Set the tabIndex of each handle.</td>
 </tr>
 <tr>
 <td>count</td>
