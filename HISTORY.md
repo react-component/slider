@@ -1,6 +1,10 @@
 # History
 ----
 
+## 8.6.0
+
+[Feature] Allow tabIndex to be set explicitly on Handle. [#381](https://github.com/react-component/slider/pull/381)
+
 ## 8.5.0
 
 [Feature] Add focus() blur() and autoFocus.
