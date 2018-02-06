@@ -221,10 +221,10 @@ class Range extends React.Component {
       // known problem: because setState is async,
       // so trigger focus will invoke handler's onEnd and another handler's onStart too early,
       // cause onBeforeChange and onAfterChange receive wrong value.
-      // here use setTimeout to hack，but not elegant
-      setTimeout(() => {
+      // here use setState callback to hack，but not elegant
+      this.setState({}, () => {
         this.handlesRefs[nextHandle].focus();
-      }, 0);
+      });
     }
   }
 
