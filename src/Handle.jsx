@@ -12,7 +12,7 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      className, vertical, offset, style, disabled, min, max, value, ...restProps,
+      className, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps,
     } = this.props;
 
     const postionStyle = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
@@ -34,7 +34,7 @@ export default class Handle extends React.Component {
       <div
         ref={node => (this.handle = node)}
         role="slider"
-        tabIndex="0"
+        tabIndex= {tabIndex || 0}
         {...ariaProps}
         {...restProps}
         className={className}
@@ -53,4 +53,5 @@ Handle.propTypes = {
   min: PropTypes.number,
   max: PropTypes.number,
   value: PropTypes.number,
+  tabIndex: PropTypes.number,
 };

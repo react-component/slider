@@ -22,6 +22,11 @@ describe('Slider', () => {
     expect(trackStyle.visibility).toMatch('visible');
   });
 
+  it('should allow tabIndex to be set on Handle via Slider', () => {
+    const wrapper = mount(<Slider tabIndex={1} />);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().tabIndex).toEqual(1);
+  });
+
   it('increases the value when key "up" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);

@@ -108,7 +108,7 @@ ReactDOM.render(
       />
     </div>
     <div style={style}>
-      <p>Slider with custom handle and track style.<strong>(old api, will be deperacete)</strong></p>
+      <p>Slider with custom handle and track style.<strong>(old api, will be deprecated)</strong></p>
       <Slider
         defaultValue={30}
         maximumTrackStyle={{ backgroundColor: 'red', height: 10 }}
