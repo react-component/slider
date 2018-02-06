@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shallowEqual from 'shallowequal';
-import warning from 'warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -117,30 +116,29 @@ class Range extends React.Component {
 
   onMove(e, position) {
     utils.pauseEvent(e);
-    const props = this.props;
     const state = this.state;
 
     const value = this.calcValueByPos(position);
     const oldValue = state.bounds[state.handle];
     if (value === oldValue) return;
 
-    const nextBounds = [...state.bounds];
-    nextBounds[state.handle] = value;
-    let nextHandle = state.handle;
-    if (props.pushable !== false) {
-      this.pushSurroundingHandles(nextBounds, nextHandle);
-    } else if (props.allowCross) {
-      nextBounds.sort((a, b) => a - b);
-      nextHandle = nextBounds.indexOf(value);
-    }
-    this.onChange({
-      handle: nextHandle,
-      bounds: nextBounds,
-    });
+    this.moveTo(value);
   }
 
-  onKeyboard() {
-    warning(true, 'Keyboard support is not yet supported for ranges.');
+  onKeyboard(e) {
+    const valueMutator = utils.getKeyboardValueMutator(e);
+
+    if (valueMutator) {
+      utils.pauseEvent(e);
+      const { state, props } = this;
+      const { bounds, handle } = state;
+      const oldValue = bounds[handle];
+      const mutatedValue = valueMutator(oldValue, props);
+      const value = this.trimAlignValue(mutatedValue);
+      if (value === oldValue) return;
+      const isFromKeyboardEvent = true;
+      this.moveTo(value, isFromKeyboardEvent);
+    }
   }
 
   getValue() {
@@ -202,6 +200,32 @@ class Range extends React.Component {
       this._getPointsCache = { marks, step, points };
     }
     return this._getPointsCache.points;
+  }
+
+  moveTo(value, isFromKeyboardEvent) {
+    const { state, props } = this;
+    const nextBounds = [...state.bounds];
+    nextBounds[state.handle] = value;
+    let nextHandle = state.handle;
+    if (props.pushable !== false) {
+      this.pushSurroundingHandles(nextBounds, nextHandle);
+    } else if (props.allowCross) {
+      nextBounds.sort((a, b) => a - b);
+      nextHandle = nextBounds.indexOf(value);
+    }
+    this.onChange({
+      handle: nextHandle,
+      bounds: nextBounds,
+    });
+    if (isFromKeyboardEvent) {
+      // known problem: because setState is async,
+      // so trigger focus will invoke handler's onEnd and another handler's onStart too early,
+      // cause onBeforeChange and onAfterChange receive wrong value.
+      // here use setTimeout to hack，but not elegant
+      setTimeout(() => {
+        this.handlesRefs[nextHandle].focus();
+      }, 0);
+    }
   }
 
   pushSurroundingHandles(bounds, handle) {
