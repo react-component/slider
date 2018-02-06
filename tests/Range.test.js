@@ -155,7 +155,7 @@ describe('Range', () => {
 
     const mockRect = (wrapper) => {
       wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
-        left: 10,
+        left: 0,
         width: 100,
       });
     };
@@ -169,16 +169,16 @@ describe('Range', () => {
     expect(wrapper.instance().getSlider().state.bounds[0]).toBe(20);
     expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
 
-    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 10, pageY: 0 });
-    map.mousemove({ type: 'mousemove', pageX: 40, pageY: 0 });
-    map.mouseup({ type: 'mouseup', pageX: 40, pageY: 0 });
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
+    map.mousemove({ type: 'mousemove', pageX: 30, pageY: 0 });
+    map.mouseup({ type: 'mouseup', pageX: 30, pageY: 0 });
 
     expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
     expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
 
-    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 10, pageY: 0 });
-    map.mousemove({ type: 'mousemove', pageX: 60, pageY: 0 });
-    map.mouseup({ type: 'mouseup', pageX: 60, pageY: 0 });
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
+    map.mousemove({ type: 'mousemove', pageX: 50, pageY: 0 });
+    map.mouseup({ type: 'mouseup', pageX: 50, pageY: 0 });
     expect(wrapper.instance().getSlider().state.bounds[0]).toBe(39);
     expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
   });

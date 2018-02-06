@@ -263,7 +263,7 @@ class Range extends React.Component {
     return true;
   }
 
-  trimAlignValue(v, handle = this.state.handle, nextProps = {}) {
+  trimAlignValue(v, handle, nextProps = {}) {
     const mergedProps = { ...this.props, ...nextProps };
     const valInRange = utils.ensureValueInRange(v, mergedProps);
     const valNotConflict = this.ensureValueNotConflict(handle, valInRange, mergedProps);
@@ -273,6 +273,7 @@ class Range extends React.Component {
   ensureValueNotConflict(handle, val, { allowCross, pushable: thershold }) {
     const state = this.state || {};
     const { bounds } = state;
+    handle = handle === undefined ? state.handle : handle;
     thershold = Number(thershold);
     /* eslint-disable eqeqeq */
     if (!allowCross && handle != null && bounds !== undefined) {
