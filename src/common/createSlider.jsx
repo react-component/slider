@@ -109,7 +109,6 @@ export default function createSlider(Component) {
       this.removeDocumentEvents();
       this.onStart(position);
       this.addDocumentMouseEvents();
-      utils.pauseEvent(e);
     }
 
     onTouchStart = (e) => {
@@ -126,7 +125,6 @@ export default function createSlider(Component) {
       }
       this.onStart(position);
       this.addDocumentTouchEvents();
-      utils.pauseEvent(e);
     }
 
     onFocus = (e) => {
@@ -135,7 +133,6 @@ export default function createSlider(Component) {
         const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
         this.dragOffset = 0;
         this.onStart(handlePosition);
-        utils.pauseEvent(e);
         if (onFocus) {
           onFocus(e);
         }

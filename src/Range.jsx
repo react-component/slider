@@ -115,7 +115,6 @@ class Range extends React.Component {
   }
 
   onMove(e, position) {
-    utils.pauseEvent(e);
     const props = this.props;
     const state = this.state;
 

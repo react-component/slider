@@ -94,7 +94,6 @@ class Slider extends React.Component {
   }
 
   onMove(e, position) {
-    utils.pauseEvent(e);
     const { value: oldValue } = this.state;
     const value = this.calcValueByPos(position);
     if (value === oldValue) return;
@@ -106,7 +105,6 @@ class Slider extends React.Component {
     const valueMutator = utils.getKeyboardValueMutator(e);
 
     if (valueMutator) {
-      utils.pauseEvent(e);
       const state = this.state;
       const oldValue = state.value;
       const mutatedValue = valueMutator(oldValue, this.props);
