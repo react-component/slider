@@ -127,8 +127,7 @@ class Range extends React.Component {
     nextBounds[state.handle] = value;
     let nextHandle = state.handle;
     if (props.pushable !== false) {
-      const originalValue = state.bounds[nextHandle];
-      this.pushSurroundingHandles(nextBounds, nextHandle, originalValue);
+      this.pushSurroundingHandles(nextBounds, nextHandle);
     } else if (props.allowCross) {
       nextBounds.sort((a, b) => a - b);
       nextHandle = nextBounds.indexOf(value);
@@ -204,9 +203,10 @@ class Range extends React.Component {
     return this._getPointsCache.points;
   }
 
-  pushSurroundingHandles(bounds, handle, originalValue) {
-    const { pushable: threshold } = this.props;
+  pushSurroundingHandles(bounds, handle) {
     const value = bounds[handle];
+    let { pushable: threshold } = this.props;
+    threshold = Number(threshold);
 
     let direction = 0;
     if (bounds[handle + 1] - value < threshold) {
@@ -222,7 +222,7 @@ class Range extends React.Component {
     const diffToNext = direction * (bounds[nextHandle] - value);
     if (!this.pushHandle(bounds, nextHandle, direction, threshold - diffToNext)) {
       // revert to original value if pushing is impossible
-      bounds[handle] = originalValue;
+      bounds[handle] = bounds[nextHandle] - (direction * threshold);
     }
   }
 
