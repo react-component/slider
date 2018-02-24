@@ -53,7 +53,7 @@
       "./tests/setup.js"
     ],
     "collectCoverageFrom": [
-      "src/*"
+      "src/**/*.{js,jsx}"
     ],
     "transform": {
       "\\.tsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js",
