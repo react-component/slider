@@ -1,14 +1,13 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
 import { render, mount } from 'enzyme';
-import { renderToJson } from 'enzyme-to-json';
 import keyCode from 'rc-util/lib/KeyCode';
 import Slider from '../src/Slider';
 
 describe('Slider', () => {
   it('should render Slider with correct DOM structure', () => {
     const wrapper = render(<Slider />);
-    expect(renderToJson(wrapper)).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should render Slider with value correctly', () => {

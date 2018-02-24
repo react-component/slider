@@ -1,7 +1,6 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
 import { render, mount } from 'enzyme';
-import { renderToJson } from 'enzyme-to-json';
 import Range from '../src/Range';
 import createSliderWithTooltip from '../src/createSliderWithTooltip';
 
@@ -10,12 +9,12 @@ const RangeWithTooltip = createSliderWithTooltip(Range);
 describe('Range', () => {
   it('should render Range with correct DOM structure', () => {
     const wrapper = render(<Range />);
-    expect(renderToJson(wrapper)).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should render Multi-Range with correct DOM structure', () => {
     const wrapper = render(<Range count={3} />);
-    expect(renderToJson(wrapper)).toMatchSnapshot();
+    expect(wrapper).toMatchSnapshot();
   });
 
   it('should render Range with value correctly', () => {
