@@ -18,7 +18,6 @@ describe('Slider', () => {
     const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
     expect(trackStyle.left).toMatch('0%');
     expect(trackStyle.width).toMatch('50%');
-    expect(trackStyle.visibility).toMatch('visible');
   });
 
   it('should allow tabIndex to be set on Handle via Slider', () => {
