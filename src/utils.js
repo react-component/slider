@@ -67,11 +67,6 @@ export function ensureValuePrecision(val, props) {
     parseFloat(closestPoint.toFixed(getPrecision(step)));
 }
 
-export function pauseEvent(e) {
-  e.stopPropagation();
-  e.preventDefault();
-}
-
 export function getKeyboardValueMutator(e) {
   switch (e.keyCode) {
     case keyCode.UP:
