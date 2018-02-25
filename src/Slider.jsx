@@ -84,6 +84,8 @@ class Slider extends React.Component {
 
     if (value === prevValue) return;
 
+    this.prevMovedHandleIndex = 0;
+
     this.onChange({ value });
   }
 
@@ -153,6 +155,7 @@ class Slider extends React.Component {
     const offset = this.calcOffset(value);
     const handle = handleGenerator({
       className: `${prefixCls}-handle`,
+      prefixCls,
       vertical,
       offset,
       value,

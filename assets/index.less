@@ -74,6 +74,11 @@
       box-shadow: 0 0 0 5px tint(@primary-color, 50%);
       outline: none;
     }
+
+    &-click-focused:focus {
+      border-color: tint(@primary-color, 50%);
+      box-shadow: unset;
+    }
   }
 
   &-mark {

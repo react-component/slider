@@ -94,18 +94,18 @@ class Range extends React.Component {
     this.startPosition = position;
 
     const closestBound = this.getClosestBound(value);
-    const boundNeedMoving = this.getBoundNeedMoving(value, closestBound);
+    this.prevMovedHandleIndex = this.getBoundNeedMoving(value, closestBound);
 
     this.setState({
-      handle: boundNeedMoving,
-      recent: boundNeedMoving,
+      handle: this.prevMovedHandleIndex,
+      recent: this.prevMovedHandleIndex,
     });
 
-    const prevValue = bounds[boundNeedMoving];
+    const prevValue = bounds[this.prevMovedHandleIndex];
     if (value === prevValue) return;
 
     const nextBounds = [...state.bounds];
-    nextBounds[boundNeedMoving] = value;
+    nextBounds[this.prevMovedHandleIndex] = value;
     this.onChange({ bounds: nextBounds });
   }
 
@@ -315,6 +315,7 @@ class Range extends React.Component {
         [handleClassName]: true,
         [`${handleClassName}-${i + 1}`]: true,
       }),
+      prefixCls,
       vertical,
       offset: offsets[i],
       value: v,
