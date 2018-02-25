@@ -28,7 +28,6 @@ describe('Range', () => {
     const trackStyle = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
     expect(trackStyle.left).toMatch('0%');
     expect(trackStyle.width).toMatch('50%');
-    expect(trackStyle.visibility).toMatch('visible');
   });
 
   it('should render Multi-Range with value correctly', () => {
@@ -45,17 +44,14 @@ describe('Range', () => {
     const track1Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
     expect(track1Style.left).toMatch('0%');
     expect(track1Style.width).toMatch('25%');
-    expect(track1Style.visibility).toMatch('visible');
 
     const track2Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(1).props().style;
     expect(track2Style.left).toMatch('25%');
     expect(track2Style.width).toMatch('25%');
-    expect(track2Style.visibility).toMatch('visible');
 
     const track3Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(2).props().style;
     expect(track3Style.left).toMatch('50%');
     expect(track3Style.width).toMatch('25%');
-    expect(track3Style.visibility).toMatch('visible');
   });
 
   it('should update Range correctly in controllered model', () => {

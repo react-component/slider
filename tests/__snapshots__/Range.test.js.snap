@@ -11,19 +11,19 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
   </div>
   <div
     class="rc-slider-track rc-slider-track-1"
-    style="visibility:visible;left:0%;width:0%"
+    style="left:0%;width:0%"
   >
     
   </div>
   <div
     class="rc-slider-track rc-slider-track-2"
-    style="visibility:visible;left:0%;width:0%"
+    style="left:0%;width:0%"
   >
     
   </div>
   <div
     class="rc-slider-track rc-slider-track-3"
-    style="visibility:visible;left:0%;width:0%"
+    style="left:0%;width:0%"
   >
     
   </div>
@@ -99,7 +99,7 @@ exports[`Range should render Range with correct DOM structure 1`] = `
   </div>
   <div
     class="rc-slider-track rc-slider-track-1"
-    style="visibility:visible;left:0%;width:0%"
+    style="left:0%;width:0%"
   >
     
   </div>
