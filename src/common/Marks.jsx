@@ -21,7 +21,7 @@ const Marks = ({
     const markPointIsObject = typeof markPoint === 'object' &&
             !React.isValidElement(markPoint);
     const markLabel = markPointIsObject ? markPoint.label : markPoint;
-    if (!markLabel) {
+    if (!markLabel && markLabel !== 0) {
       return null;
     }
 

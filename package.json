@@ -52,8 +52,11 @@
     "setupFiles": [
       "./tests/setup.js"
     ],
+    "snapshotSerializers": [
+      "enzyme-to-json/serializer"
+    ],
     "collectCoverageFrom": [
-      "src/*"
+      "src/**/*.{js,jsx}"
     ],
     "transform": {
       "\\.tsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js",
