@@ -3,6 +3,7 @@ import React from 'react';
 import { render, mount } from 'enzyme';
 import Range from '../src/Range';
 import createSliderWithTooltip from '../src/createSliderWithTooltip';
+import { setWidth } from './common/util';
 
 const RangeWithTooltip = createSliderWithTooltip(Range);
 
@@ -33,6 +34,23 @@ describe('Range', () => {
     const wrapper = mount(<Range tabIndex={[1, 2]} />);
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().tabIndex).toEqual(1);
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().tabIndex).toEqual(2);
+  });
+
+  it('When dragging a handle in a Range that does not allow cross, do not adjust unrelated values', () => {
+    const rangeWrapper = mount(<Range value={[5, 50, 75]} allowCross={false} pushable={false}/>);
+    setWidth(rangeWrapper.instance().sliderRef, 100);
+    const rangeHandle = rangeWrapper.find('.rc-slider-handle').at(0).instance();
+    rangeWrapper.simulate('mousedown', {
+      type: 'mousedown',
+      target: rangeHandle,
+      pageX: 5, button: 0,
+      stopPropagation() {},
+      preventDefault() {},
+    });
+
+    rangeWrapper.setProps({ value: [0, 50, 75] });
+
+    expect(rangeWrapper.state('bounds')[2]).toBe(75);
   });
 
   it('should render Multi-Range with value correctly', () => {

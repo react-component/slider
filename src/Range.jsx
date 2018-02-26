@@ -40,7 +40,7 @@ class Range extends React.Component {
             props.defaultValue : initialValue;
     const value = props.value !== undefined ?
             props.value : defaultValue;
-    const bounds = value.map(v => this.trimAlignValue(v));
+    const bounds = value.map((v, i) => this.trimAlignValue(v, i));
     const recent = bounds[0] === max ? 0 : bounds.length - 1;
 
     this.state = {
@@ -59,7 +59,7 @@ class Range extends React.Component {
     }
     const { bounds } = this.state;
     const value = nextProps.value || bounds;
-    const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
+    const nextBounds = value.map((v, i) => this.trimAlignValue(v, i, nextProps));
     if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
 
     this.setState({ bounds: nextBounds });
@@ -263,18 +263,22 @@ class Range extends React.Component {
     return true;
   }
 
-  trimAlignValue(v, nextProps = {}) {
+  trimAlignValue(v, index, nextProps = {}) {
     const mergedProps = { ...this.props, ...nextProps };
     const valInRange = utils.ensureValueInRange(v, mergedProps);
-    const valNotConflict = this.ensureValueNotConflict(valInRange, mergedProps);
+    const valNotConflict = this.ensureValueNotConflict(valInRange, index, mergedProps);
     return utils.ensureValuePrecision(valNotConflict, mergedProps);
   }
 
-  ensureValueNotConflict(val, { allowCross }) {
+  ensureValueNotConflict(val, valueHandle, { allowCross }) {
     const state = this.state || {};
     const { handle, bounds } = state;
     /* eslint-disable eqeqeq */
     if (!allowCross && handle != null) {
+      // If the value's handle is not the neighbour of the current handle, there is no conflict
+      if (handle - 1 !== valueHandle && handle + 1 !== valueHandle) {
+        return val;
+      }
       if (handle > 0 && val <= bounds[handle - 1]) {
         return bounds[handle - 1];
       }
