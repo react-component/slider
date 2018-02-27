@@ -1,7 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 
 export default class Handle extends React.Component {
+  state = {
+    clickFocused: false,
+  }
+
+  setClickFocus(focused) {
+    this.setState({ clickFocused: focused });
+  }
+
+  handleMouseDown = () => {
+    if (document.activeElement !== this.handle) {
+      this.setClickFocus(true);
+    }
+  }
+
+  handleBlur = () => {
+    this.setClickFocus(false);
+  }
+
+  handleKeyDown = () => {
+    this.setClickFocus(false);
+  }
+
+  clickFocus() {
+    this.setClickFocus(true);
+    this.focus();
+  }
+
   focus() {
     this.handle.focus();
   }
@@ -12,8 +40,15 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      className, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps,
+      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps,
     } = this.props;
+
+    const className = classNames(
+      this.props.className,
+      {
+        [`${prefixCls}-handle-click-focused`]: this.state.clickFocused,
+      }
+    );
 
     const postionStyle = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
     const elStyle = {
@@ -39,12 +74,16 @@ export default class Handle extends React.Component {
         {...restProps}
         className={className}
         style={elStyle}
+        onMouseDown={this.handleMouseDown}
+        onBlur={this.handleBlur}
+        onKeyDown={this.handleKeyDown}
       />
     );
   }
 }
 
 Handle.propTypes = {
+  prefixCls: PropTypes.string,
   className: PropTypes.string,
   vertical: PropTypes.bool,
   offset: PropTypes.number,

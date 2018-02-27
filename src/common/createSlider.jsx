@@ -109,7 +109,6 @@ export default function createSlider(Component) {
       this.removeDocumentEvents();
       this.onStart(position);
       this.addDocumentMouseEvents();
-      utils.pauseEvent(e);
     }
 
     onTouchStart = (e) => {
@@ -169,6 +168,14 @@ export default function createSlider(Component) {
       this.onMouseMoveListener && this.onMouseMoveListener.remove();
       this.onMouseUpListener && this.onMouseUpListener.remove();
       /* eslint-enable no-unused-expressions */
+    }
+
+    onMouseUp = () => {
+      if (this.handlesRefs[this.prevMovedHandleIndex]) {
+        this.handlesRefs[this.prevMovedHandleIndex].clickFocus();
+      }
+      this.onEnd();
+      this.removeDocumentEvents();
     }
 
     onMouseMove = (e) => {
