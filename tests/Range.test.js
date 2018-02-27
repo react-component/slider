@@ -93,6 +93,91 @@ describe('Range', () => {
     expect(wrapper.state().visibles[1]).toBe(false);
   });
 
+  it('should keep pushable when not allowCross and setState', () => {
+    class CustomizedRange extends React.Component { // eslint-disable-line
+      constructor(props) {
+        super(props);
+        this.state = {
+          value: [20, 40],
+        };
+      }
+      getSlider() {
+        return this.refs.slider;
+      }
+      render() {
+        return <Range ref="slider" allowCross={false} value={this.state.value} pushable={10} />;
+      }
+    }
+    const wrapper = mount(<CustomizedRange />);
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(20);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+    wrapper.setState({ value: [30, 40] });
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+    wrapper.setState({ value: [35, 40] });
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+    wrapper.setState({ value: [30, 30] });
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+  });
+
+  it('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
+    class CustomizedRange extends React.Component { // eslint-disable-line
+      constructor(props) {
+        super(props);
+        this.state = {
+          value: [20, 40],
+        };
+        this.onChange = this.onChange.bind(this);
+      }
+      onChange(value) {
+        this.setState({
+          value,
+        });
+      }
+      getSlider() {
+        return this.refs.slider;
+      }
+      render() {
+        return <Range ref="slider" allowCross={false} value={this.state.value} pushable onChange={this.onChange} />;
+      }
+    }
+    const map = {};
+    document.addEventListener = jest.genMockFn().mockImplementation((event, cb) => {
+      map[event] = cb;
+    });
+
+    const mockRect = (wrapper) => {
+      wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
+        left: 0,
+        width: 100,
+      });
+    };
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const wrapper = mount(<CustomizedRange />, { attachTo: container });
+    mockRect(wrapper);
+
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(20);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
+    map.mousemove({ type: 'mousemove', pageX: 30, pageY: 0 });
+    map.mouseup({ type: 'mouseup', pageX: 30, pageY: 0 });
+
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
+    map.mousemove({ type: 'mousemove', pageX: 50, pageY: 0 });
+    map.mouseup({ type: 'mouseup', pageX: 50, pageY: 0 });
+    expect(wrapper.instance().getSlider().state.bounds[0]).toBe(39);
+    expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
+  });
+
   describe('focus & blur', () => {
     let container;
 

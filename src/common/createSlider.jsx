@@ -171,11 +171,6 @@ export default function createSlider(Component) {
       /* eslint-enable no-unused-expressions */
     }
 
-    onMouseUp = () => {
-      this.onEnd();
-      this.removeDocumentEvents();
-    }
-
     onMouseMove = (e) => {
       if (!this.sliderRef) {
         this.onEnd();
@@ -290,7 +285,6 @@ export default function createSlider(Component) {
           className={sliderClassName}
           onTouchStart={disabled ? noop : this.onTouchStart}
           onMouseDown={disabled ? noop : this.onMouseDown}
-          onMouseUp={disabled ? noop : this.onMouseUp}
           onKeyDown={disabled ? noop : this.onKeyDown}
           onFocus={disabled ? noop : this.onFocus}
           onBlur={disabled ? noop : this.onBlur}

@@ -4,6 +4,7 @@ import 'rc-slider/assets/index.less';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import Slider from 'rc-slider';
+
 const Range = Slider.Range;
 
 const style = { width: 400, margin: 50 };
@@ -106,7 +107,7 @@ class ControlledRange extends React.Component {
   }
   render() {
     return (
-      <Range value={this.state.value} onChange={this.handleChange}/>
+      <Range value={this.state.value} onChange={this.handleChange} />
     );
   }
 }
@@ -183,8 +184,8 @@ ReactDOM.render(
       <ControlledRangeDisableAcross />
     </div>
     <div style={style}>
-      <p>Controlled Range, not allow across, pushable</p>
-      <ControlledRangeDisableAcross pushable/>
+      <p>Controlled Range, not allow across, pushable=5</p>
+      <ControlledRangeDisableAcross pushable={5} />
     </div>
     <div style={style}>
       <p>Multi Range</p>

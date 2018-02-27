@@ -40,7 +40,7 @@ class Range extends React.Component {
             props.defaultValue : initialValue;
     const value = props.value !== undefined ?
             props.value : defaultValue;
-    const bounds = value.map(v => this.trimAlignValue(v));
+    const bounds = value.map((v, i) => this.trimAlignValue(v, i));
     const recent = bounds[0] === max ? 0 : bounds.length - 1;
 
     this.state = {
@@ -57,9 +57,10 @@ class Range extends React.Component {
         shallowEqual(this.props.value, nextProps.value)) {
       return;
     }
+
     const { bounds } = this.state;
     const value = nextProps.value || bounds;
-    const nextBounds = value.map(v => this.trimAlignValue(v, nextProps));
+    const nextBounds = value.map((v, i) => this.trimAlignValue(v, i, nextProps));
     if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
 
     this.setState({ bounds: nextBounds });
@@ -263,23 +264,25 @@ class Range extends React.Component {
     return true;
   }
 
-  trimAlignValue(v, nextProps = {}) {
+  trimAlignValue(v, handle, nextProps = {}) {
     const mergedProps = { ...this.props, ...nextProps };
     const valInRange = utils.ensureValueInRange(v, mergedProps);
-    const valNotConflict = this.ensureValueNotConflict(valInRange, mergedProps);
+    const valNotConflict = this.ensureValueNotConflict(handle, valInRange, mergedProps);
     return utils.ensureValuePrecision(valNotConflict, mergedProps);
   }
 
-  ensureValueNotConflict(val, { allowCross }) {
+  ensureValueNotConflict(handle, val, { allowCross, pushable: thershold }) {
     const state = this.state || {};
-    const { handle, bounds } = state;
+    const { bounds } = state;
+    handle = handle === undefined ? state.handle : handle;
+    thershold = Number(thershold);
     /* eslint-disable eqeqeq */
-    if (!allowCross && handle != null) {
-      if (handle > 0 && val <= bounds[handle - 1]) {
-        return bounds[handle - 1];
+    if (!allowCross && handle != null && bounds !== undefined) {
+      if (handle > 0 && val <= (bounds[handle - 1] + thershold)) {
+        return bounds[handle - 1] + thershold;
       }
-      if (handle < bounds.length - 1 && val >= bounds[handle + 1]) {
-        return bounds[handle + 1];
+      if (handle < bounds.length - 1 && val >= (bounds[handle + 1] - thershold)) {
+        return bounds[handle + 1] - thershold;
       }
     }
     /* eslint-enable eqeqeq */
