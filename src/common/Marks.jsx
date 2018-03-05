@@ -46,8 +46,12 @@ const Marks = ({
     const style = vertical ? bottomStyle : leftStyle;
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
+
+    const otherProps = markPointIsObject ? { ...markPoint.data } : null
+
     return (
       <span
+        {...otherProps}
         className={markClassName}
         style={markStyle}
         key={point}
