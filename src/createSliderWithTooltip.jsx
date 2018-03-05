@@ -43,6 +43,11 @@ export default function createSliderWithTooltip(Component) {
         visible = visible || false,
         ...restTooltipProps,
       } = tipProps;
+      
+      let handleStyleWithIndex = handleStyle[0];
+      if (handleStyle[index]) {
+          handleStyleWithIndex = handleStyle[index];
+      }
 
       return (
         <Tooltip
@@ -57,7 +62,7 @@ export default function createSliderWithTooltip(Component) {
           <Handle
             {...restProps}
             style={{
-              ...handleStyle[0],
+              ...handleStyleWithIndex,
             }}
             value={value}
             onMouseEnter={() => this.handleTooltipVisibleChange(index, true)}
