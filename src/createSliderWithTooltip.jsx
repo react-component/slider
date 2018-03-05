@@ -43,10 +43,10 @@ export default function createSliderWithTooltip(Component) {
         visible = visible || false,
         ...restTooltipProps,
       } = tipProps;
-      
+
       let handleStyleWithIndex = handleStyle[0];
       if (handleStyle[index]) {
-          handleStyleWithIndex = handleStyle[index];
+        handleStyleWithIndex = handleStyle[index];
       }
 
       return (
