@@ -193,6 +193,11 @@ export default function createSlider(Component) {
         return;
       }
 
+      window.rightDirection = utils.isRightDirection(e, this.props.vertical);
+      if (!utils.isRightDirection(e, this.props.vertical)) {
+        return;
+      }
+
       const position = utils.getTouchPosition(this.props.vertical, e);
       this.onMove(e, position - this.dragOffset);
     }
