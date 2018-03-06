@@ -47,17 +47,16 @@ const Marks = ({
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
 
-    const otherProps = markPointIsObject ? { ...markPoint.data } : null;
+    const markProps = markPointIsObject ?
+      {
+        className: markClassName,
+        style: markStyle,
+        key: point,
+        ...markPoint.resetProps,
+      } : null;
 
     return (
-      <span
-        {...otherProps}
-        className={markClassName}
-        style={markStyle}
-        key={point}
-      >
-        {markLabel}
-      </span>
+      <span {...markProps}>{markLabel}</span>
     );
   });
 
