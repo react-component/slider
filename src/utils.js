@@ -98,10 +98,6 @@ export const DIRECTION_RIGHT = 4;    // 00100
 export const DIRECTION_UP = 8;       // 01000
 export const DIRECTION_DOWN = 16;    // 10000
 
-export const DIRECTION_HORIZONTAL = DIRECTION_LEFT | DIRECTION_RIGHT;   // 00110 6
-export const DIRECTION_VERTICAL = DIRECTION_UP | DIRECTION_DOWN;        // 11000 24
-export const DIRECTION_ALL = DIRECTION_HORIZONTAL | DIRECTION_VERTICAL; // 11110  30
-
 /**
  * @private
  * get the direction between two points
@@ -119,31 +115,9 @@ export function getDirection(x, y) {
   return y < 0 ? DIRECTION_UP : DIRECTION_DOWN;
 }
 
-export function getDirectionEventName(direction) {
-  let name;
-  switch (direction) {
-    case DIRECTION_NONE:
-      break;
-    case DIRECTION_LEFT:
-      name = 'left';
-      break;
-    case DIRECTION_RIGHT:
-      name = 'right';
-      break;
-    case DIRECTION_UP:
-      name = 'up';
-      break;
-    case DIRECTION_DOWN:
-      name = 'down';
-      break;
-    default:
-  }
-  return name;
-}
-
 export function getTouchDirection(startTouches, touches) {
-  const { x: x1, y: y1 } = startTouches[0];
-  const { x: x2, y: y2 } = touches[0];
+  const { clientX: x1, clientY: y1 } = startTouches[0];
+  const { clientX: x2, clientY: y2 } = touches[0];
   const deltaX = x2 - x1;
   const deltaY = y2 - y1;
   return getDirection(deltaX, deltaY);

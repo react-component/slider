@@ -114,18 +114,18 @@ export default function createSlider(Component) {
     onTouchStart = (e) => {
       if (utils.isNotTouchEvent(e)) return;
 
-      const isVertical = this.props.vertical;
-      let position = utils.getTouchPosition(isVertical, e);
-      if (!utils.isEventFromHandle(e, this.handlesRefs)) {
-        this.dragOffset = 0;
-      } else {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
-        this.dragOffset = position - handlePosition;
-        position = handlePosition;
-      }
-      this.onStart(position);
+
+      this.previousTouches = e.touches;
+      this.isDragging = true;
+      this.isFirstTouchMoveDone = false;
       this.addDocumentTouchEvents();
-      utils.pauseEvent(e);
+    }
+
+    onTouchEnd = (e) => {
+      if (utils.isNotTouchEvent(e)) return;
+
+      this.previousTouches = null;
+      this.isDragging = false;
     }
 
     onFocus = (e) => {
@@ -193,13 +193,35 @@ export default function createSlider(Component) {
         return;
       }
 
-      window.rightDirection = utils.isRightDirection(e, this.props.vertical);
-      if (!utils.isRightDirection(e, this.props.vertical)) {
+      if (!this.isFirstTouchMoveDone) {
+        if (!utils.isRightDirection(e.touches, this.previousTouches, this.props.vertical)) {
+          this.onEnd();
+          return;
+        }
+
+        this.onFirstTouchMove(e);
+        this.previousTouches = e.touches;
+        this.isFirstTouchMoveDone = true;
         return;
       }
 
       const position = utils.getTouchPosition(this.props.vertical, e);
       this.onMove(e, position - this.dragOffset);
+      this.previousTouches = e.touches;
+    }
+
+    onFirstTouchMove = (e) => {
+      const isVertical = this.props.vertical;
+      let position = utils.getTouchPosition(isVertical, e);
+      if (!utils.isEventFromHandle(e, this.handlesRefs)) {
+          this.dragOffset = 0;
+        } else {
+          const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
+          this.dragOffset = position - handlePosition;
+          position = handlePosition;
+        }
+      this.onStart(position);
+      utils.pauseEvent(e);
     }
 
     onKeyDown = (e) => {
@@ -289,6 +311,7 @@ export default function createSlider(Component) {
         [`${prefixCls}-with-marks`]: Object.keys(marks).length,
         [`${prefixCls}-disabled`]: disabled,
         [`${prefixCls}-vertical`]: vertical,
+        [`${prefixCls}-dragging`]: this.isDragging,
         [className]: className,
       });
       return (
@@ -296,6 +319,7 @@ export default function createSlider(Component) {
           ref={this.saveSlider}
           className={sliderClassName}
           onTouchStart={disabled ? noop : this.onTouchStart}
+          onTouchEnd={disabled ? noop : this.onTouchEnd}
           onMouseDown={disabled ? noop : this.onMouseDown}
           onKeyDown={disabled ? noop : this.onKeyDown}
           onFocus={disabled ? noop : this.onFocus}
