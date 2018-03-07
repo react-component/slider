@@ -174,8 +174,6 @@ export default function createSlider(Component) {
       if (this.handlesRefs[this.prevMovedHandleIndex]) {
         this.handlesRefs[this.prevMovedHandleIndex].clickFocus();
       }
-      this.onEnd();
-      this.removeDocumentEvents();
     }
 
     onMouseMove = (e) => {
@@ -292,6 +290,7 @@ export default function createSlider(Component) {
           className={sliderClassName}
           onTouchStart={disabled ? noop : this.onTouchStart}
           onMouseDown={disabled ? noop : this.onMouseDown}
+          onMouseUp={disabled ? noop : this.onMouseUp}
           onKeyDown={disabled ? noop : this.onKeyDown}
           onFocus={disabled ? noop : this.onFocus}
           onBlur={disabled ? noop : this.onBlur}

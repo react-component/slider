@@ -109,7 +109,6 @@ class Range extends React.Component {
   }
 
   onEnd = () => {
-    this.setState({ handle: null });
     this.removeDocumentEvents();
     this.props.onAfterChange(this.getValue());
   }
