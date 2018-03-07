@@ -9,6 +9,8 @@ export default class Handle extends React.Component {
   }
 
   componentDidMount() {
+    // mouseup won't trigger if mouse moved out of handle,
+    // so we listen on document here.
     this.onMouseUpListener = addEventListener(document, 'mouseup', this.handleMouseUp);
   }
 
