@@ -80,6 +80,14 @@ describe('Range', () => {
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').length).toBe(2);
   });
 
+  it('should only update bounds that are out of range', () => {
+    const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
+    const range = mount(<Range {...props} step={0.1} />);
+    range.setProps({ min: 0, max: 500 });
+
+    expect(props.onChange).toHaveBeenCalledWith([0.01, 500]);
+  });
+
   // https://github.com/react-component/slider/pull/256
   it('should handle mutli handle mouseEnter correctly', () => {
     const wrapper = mount(<RangeWithTooltip min={0} max={1000} defaultValue={[50, 55]} />);
