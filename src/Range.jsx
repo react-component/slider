@@ -3,7 +3,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shallowEqual from 'shallowequal';
-import warning from 'warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -139,8 +138,34 @@ class Range extends React.Component {
     });
   }
 
-  onKeyboard() {
-    warning(true, 'Keyboard support is not yet supported for ranges.');
+  onKeyboard(e) {
+    const valueMutator = utils.getKeyboardValueMutator(e);
+
+    if (valueMutator) {
+      utils.pauseEvent(e);
+      const props = this.props;
+      const state = this.state;
+
+      const oldValue = state.bounds[state.handle];
+      const mutatedValue = valueMutator(oldValue, this.props);
+      const value = this.trimAlignValue(mutatedValue);
+      if (value === oldValue) return;
+
+      const nextBounds = [...state.bounds];
+      nextBounds[state.handle] = value;
+      let nextHandle = state.handle;
+      if (props.pushable !== false) {
+        const originalValue = state.bounds[nextHandle];
+        this.pushSurroundingHandles(nextBounds, nextHandle, originalValue);
+      } else if (props.allowCross) {
+        nextBounds.sort((a, b) => a - b);
+        nextHandle = nextBounds.indexOf(value);
+      }
+      this.onChange({
+        handle: nextHandle,
+        bounds: nextBounds,
+      });
+    }
   }
 
   getValue() {
