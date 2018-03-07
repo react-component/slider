@@ -60,15 +60,6 @@
     background-color: #fff;
     touch-action: pan-x;
 
-    &:hover {
-      border-color: tint(@primary-color, 20%);
-    }
-    &:active {
-      border-color: tint(@primary-color, 20%);
-      box-shadow: 0 0 5px tint(@primary-color, 20%);
-      cursor: -webkit-grabbing;
-      cursor: grabbing;
-    }
     &:focus {
       border-color: tint(@primary-color, 20%);
       box-shadow: 0 0 0 5px tint(@primary-color, 50%);
@@ -78,6 +69,17 @@
     &-click-focused:focus {
       border-color: tint(@primary-color, 50%);
       box-shadow: unset;
+    }
+
+    &:hover {
+      border-color: tint(@primary-color, 20%);
+    }
+
+    &:active {
+      border-color: tint(@primary-color, 20%);
+      box-shadow: 0 0 5px tint(@primary-color, 20%);
+      cursor: -webkit-grabbing;
+      cursor: grabbing;
     }
   }
 

@@ -1,18 +1,29 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
 export default class Handle extends React.Component {
   state = {
     clickFocused: false,
   }
 
+  componentDidMount() {
+    this.onMouseUpListener = addEventListener(document, 'mouseup', this.handleMouseUp);
+  }
+
+  componentWillUnmount() {
+    if (this.onMouseUpListener) {
+      this.onMouseUpListener.remove();
+    }
+  }
+
   setClickFocus(focused) {
     this.setState({ clickFocused: focused });
   }
 
-  handleMouseDown = () => {
-    if (document.activeElement !== this.handle) {
+  handleMouseUp = () => {
+    if (document.activeElement === this.handle) {
       this.setClickFocus(true);
     }
   }
@@ -75,7 +86,6 @@ export default class Handle extends React.Component {
         {...restProps}
         className={className}
         style={elStyle}
-        onMouseDown={this.handleMouseDown}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyDown}
       />

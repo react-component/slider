@@ -146,20 +146,5 @@ describe('Slider', () => {
       wrapper.instance().blur();
       expect(handleBlur).toBeCalled();
     });
-
-
-    it('click to focus handle', () => {
-      const wrapper = mount(
-        <Slider />
-        , { attachTo: container }
-      );
-      mockRect(wrapper);
-
-      wrapper.find('.rc-slider-handle').hostNodes().simulate('mousedown');
-      wrapper.find('.rc-slider-handle').hostNodes().simulate('focus');
-      expect(
-        wrapper.find('.rc-slider-handle').hostNodes().hasClass('rc-slider-handle-click-focused')
-      ).toBe(true);
-    });
   });
 });
