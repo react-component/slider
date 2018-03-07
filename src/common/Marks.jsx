@@ -9,6 +9,7 @@ const Marks = ({
   upperBound,
   lowerBound,
   max, min,
+  onClickLabel,
 }) => {
   const marksKeys = Object.keys(marks);
   const marksCount = marksKeys.length;
@@ -51,6 +52,8 @@ const Marks = ({
         className={markClassName}
         style={markStyle}
         key={point}
+        onMouseDown={(e) => onClickLabel(e, point)}
+        onTouchStart={(e) => onClickLabel(e, point)}
       >
         {markLabel}
       </span>
