@@ -65,11 +65,12 @@ export default class Handle extends React.Component {
         'aria-disabled': !!disabled,
       };
     }
+
     return (
       <div
         ref={node => (this.handle = node)}
         role="slider"
-        tabIndex= {tabIndex || 0}
+        tabIndex= {disabled ? null : (tabIndex || 0)}
         {...ariaProps}
         {...restProps}
         className={className}
