@@ -46,14 +46,17 @@ const Marks = ({
     const style = vertical ? bottomStyle : leftStyle;
     const markStyle = markPointIsObject ?
             { ...style, ...markPoint.style } : style;
+
+    const markProps = markPointIsObject ?
+      {
+        className: markClassName,
+        style: markStyle,
+        key: point,
+        ...markPoint.resetProps,
+      } : null;
+
     return (
-      <span
-        className={markClassName}
-        style={markStyle}
-        key={point}
-      >
-        {markLabel}
-      </span>
+      <span {...markProps}>{markLabel}</span>
     );
   });
 

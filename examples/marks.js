@@ -11,6 +11,12 @@ const marks = {
   26: '26°C',
   37: '37°C',
   50: '50°C',
+  85: {
+    data: {
+      id: 'custom_id_01234',
+    },
+    label: '85°C',
+  },
   100: {
     style: {
       color: 'red',
