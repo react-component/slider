@@ -14,8 +14,8 @@ Slider UI component for React
 [npm-url]: http://npmjs.org/package/rc-slider
 [travis-image]: https://img.shields.io/travis/react-component/slider.svg?style=flat-square
 [travis-url]: https://travis-ci.org/react-component/slider
-[coveralls-image]: https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/slider?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/react-component/slider/master.svg?style=flat-square
+[codecov-url]: https://codecov.io/gh/react-component/slider/branch/master
 [gemnasium-image]: http://img.shields.io/gemnasium/react-component/slider.svg?style=flat-square
 [gemnasium-url]: https://gemnasium.com/react-component/slider
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square

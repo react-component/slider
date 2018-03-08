@@ -46,7 +46,7 @@
     "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
     "test": "jest",
-    "coverage": "jest --coverage && cat ./coverage/lcov.info | coveralls"
+    "coverage": "jest --coverage"
   },
   "jest": {
     "setupFiles": [
@@ -64,7 +64,6 @@
     }
   },
   "devDependencies": {
-    "coveralls": "^2.11.15",
     "enzyme": "^3.0.0",
     "enzyme-adapter-react-16": "^1.0.1",
     "enzyme-to-json": "^3.0.0",

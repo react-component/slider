@@ -22,7 +22,8 @@ before_install:
 script:
 - |
     if [ "$TEST_TYPE" = test ]; then
-      npm test
+      npm test -- --coverage && \
+      bash <(curl -s https://codecov.io/bash)
     else
       npm run $TEST_TYPE
     fi
