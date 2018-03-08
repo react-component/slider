@@ -32,7 +32,6 @@ env:
   matrix:
   - TEST_TYPE=lint
   - TEST_TYPE=test
-  - TEST_TYPE=coverage
   - TEST_TYPE=saucelabs
   global:
   - secure: S1VwbaPzLnSH/IUT/wlJulxAX5VHRIDmSt53h/ycHcZsszUpWcLCJRQAe0fTVB2dAx5MdBbSZ+o+tr3tRwVB5TRAYm0oTCsYAkOZaWOB28RuUQtdGt3wf9xxTG1UiPiaLLUW3waX9zAaf3yqKBcJGf1op0RD8dksxbCFw/7xVbU=
