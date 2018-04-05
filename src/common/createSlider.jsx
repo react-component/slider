@@ -217,7 +217,7 @@ export default function createSlider(Component) {
       const slider = this.sliderRef;
       const rect = slider.getBoundingClientRect();
 
-      return this.props.vertical ? rect.top : (rect.left + window.scrollX);
+      return this.props.vertical ? rect.top : (rect.left + window.pageXOffset);
     }
 
     getSliderLength() {
