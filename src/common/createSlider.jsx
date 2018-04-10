@@ -30,7 +30,7 @@ export default function createSlider(Component) {
       handle: PropTypes.func,
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
-      zoom: PropTypes.float,
+      zoom: PropTypes.number,
       style: PropTypes.object,
       minimumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
       maximumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
