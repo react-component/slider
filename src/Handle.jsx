@@ -62,7 +62,20 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls, vertical, reverse, offset, style, disabled, min, max, value, tabIndex, ...restProps
+      prefixCls,
+      vertical,
+      reverse,
+      offset,
+      style,
+      disabled,
+      min,
+      max,
+      value,
+      tabIndex,
+      'aria-label': ariaLabel,
+      'aria-labelledby': ariaLabelledBy,
+      ariaValueTextFormatter,
+      ...restProps
     } = this.props;
 
     const className = classNames(
@@ -90,6 +103,11 @@ export default class Handle extends React.Component {
       _tabIndex = null;
     }
 
+    let ariaValueText;
+    if (ariaValueTextFormatter) {
+      ariaValueText = ariaValueTextFormatter(value);
+    }
+
     return (
       <div
         ref={this.setHandleRef}
@@ -107,6 +125,9 @@ export default class Handle extends React.Component {
         aria-valuemax={max}
         aria-valuenow={value}
         aria-disabled={!!disabled}
+        aria-label={ariaLabel}
+        aria-labelledby={ariaLabelledBy}
+        aria-valuetext={ariaValueText}
       />
     );
   }
@@ -124,4 +145,7 @@ Handle.propTypes = {
   value: PropTypes.number,
   tabIndex: PropTypes.number,
   reverse: PropTypes.bool,
+  'aria-label': PropTypes.string,
+  'aria-labelledby': PropTypes.string,
+  ariaValueTextFormatter: PropTypes.func,
 };
