@@ -238,6 +238,28 @@ describe('Slider', () => {
     });
   });
 
+  it('sets aria-label on the handle', () => {
+    const wrapper = mount(<Slider aria-label="Some Label" />);
+    expect(wrapper.find('.rc-slider-handle').at(1).prop('aria-label')).toEqual('Some Label');
+  });
+
+  it('sets aria-labelledby on the handle', () => {
+    const wrapper = mount(<Slider aria-labelledby="some_id" />);
+    expect(wrapper.find('.rc-slider-handle').at(1).prop('aria-labelledby')).toEqual('some_id');
+  });
+
+  it('sets aria-valuetext on the handle', () => {
+    const wrapper = mount(<Slider min={0} max={5} defaultValue={3} ariaValueTextFormatter={(value) => `${value} of something`} />);
+    const handle = wrapper.find('.rc-slider-handle').at(1);
+
+    expect(handle.prop('aria-valuetext')).toEqual('3 of something');
+
+    wrapper.simulate('focus');
+    handle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(wrapper.find('.rc-slider-handle').at(1).props()['aria-valuetext']).toEqual('4 of something');
+  });
+
   describe('focus & blur', () => {
     let container;
 
