@@ -47,7 +47,7 @@ export function getHandleCenterPosition(vertical, handle) {
   const coords = handle.getBoundingClientRect();
   return vertical ?
     coords.top + (coords.height * 0.5) :
-    coords.left + (coords.width * 0.5);
+    window.pageXOffset + coords.left + (coords.width * 0.5);
 }
 
 export function ensureValueInRange(val, { max, min }) {
