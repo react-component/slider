@@ -10,7 +10,15 @@ const marks = {
   0: <strong>0°C</strong>,
   26: '26°C',
   37: '37°C',
-  50: '50°C',
+  50: {
+    dotStyle: {
+      backgroundColor: 'orange',
+    },
+    activeDotStyle: {
+      backgroundColor: 'blue',
+    },
+    label: '50°C',
+  },
   100: {
     style: {
       color: 'red',
