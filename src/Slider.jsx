@@ -132,6 +132,10 @@ class Slider extends React.Component {
   }
 
   trimAlignValue(v, nextProps = {}) {
+    if (v === null) {
+      return null;
+    }
+
     const mergedProps = { ...this.props, ...nextProps };
     const val = utils.ensureValueInRange(v, mergedProps);
     return utils.ensureValuePrecision(val, mergedProps);

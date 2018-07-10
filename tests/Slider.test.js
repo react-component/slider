@@ -20,6 +20,11 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('50%');
   });
 
+  it('should render Slider without handle if value is null', () => {
+    const wrapper = render(<Slider value={null} />);
+    expect(wrapper).toMatchSnapshot();
+  });
+
   it('should allow tabIndex to be set on Handle via Slider', () => {
     const wrapper = mount(<Slider tabIndex={1} />);
     expect(wrapper.find('.rc-slider-handle').at(1).props().tabIndex).toEqual(1);
