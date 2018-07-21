@@ -8,7 +8,7 @@ export default function createSliderWithTooltip(Component) {
     static propTypes = {
       tipFormatter: PropTypes.func,
       handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-      tipProps: PropTypes.object,
+      tipProps: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
     };
     static defaultProps = {
       tipFormatter(value) { return value; },
@@ -36,13 +36,20 @@ export default function createSliderWithTooltip(Component) {
         handleStyle,
       } = this.props;
 
+      let tipPropsWithIndex;
+      if (Array.isArray(tipProps)) {
+        tipPropsWithIndex = { ...tipProps[0], ...(tipProps[index] || {}) };
+      } else {
+        tipPropsWithIndex = tipProps;
+      }
+
       const {
         prefixCls = 'rc-slider-tooltip',
         overlay = tipFormatter(value),
         placement = 'top',
         visible = visible || false,
         ...restTooltipProps,
-      } = tipProps;
+      } = tipPropsWithIndex;
 
       let handleStyleWithIndex;
       if (Array.isArray(handleStyle)) {
