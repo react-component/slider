@@ -37,6 +37,16 @@ ReactDOM.render(
       <p>Range with custom handle</p>
       <Range min={0} max={20} defaultValue={[3, 10]} tipFormatter={value => `${value}%`} />
     </div>
+    <div style={wrapperStyle}>
+      <p>Range with custom handle</p>
+      <Range
+        min={0}
+        max={20}
+        defaultValue={[3, 10]}
+        tipFormatter={value => `${value}%`}
+        tipProps={[{ placement: 'bottomLeft' }, { placement: 'bottomRight' }]}
+      />
+    </div>
   </div>,
   document.getElementById('__react-content')
 );

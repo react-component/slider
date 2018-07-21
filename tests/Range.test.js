@@ -1,6 +1,6 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
-import { render, mount } from 'enzyme';
+import { render, shallow, mount } from 'enzyme';
 import Range from '../src/Range';
 import createSliderWithTooltip from '../src/createSliderWithTooltip';
 
@@ -99,6 +99,18 @@ describe('Range', () => {
     expect(wrapper.state().visibles[0]).toBe(false);
     wrapper.find('.rc-slider-handle').at(3).simulate('mouseLeave');
     expect(wrapper.state().visibles[1]).toBe(false);
+  });
+
+  it('should pass different props to the Tooltips', () => {
+    const wrapper = shallow((
+      <RangeWithTooltip
+        min={0}
+        max={1000}
+        defaultValue={[50, 55]}
+        tipProps={[{ placement: 'bottomLeft' }, { placement: 'bottomRight' }]}
+      />)).dive();
+    expect(wrapper.find('Tooltip[placement="bottomLeft"]')).toHaveLength(1);
+    expect(wrapper.find('Tooltip[placement="bottomRight"]')).toHaveLength(1);
   });
 
   it('should keep pushable when not allowCross and setState', () => {
