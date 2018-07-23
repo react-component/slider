@@ -74,8 +74,9 @@ export default function createSlider(Component) {
 
       if (process.env.NODE_ENV !== 'production') {
         const { step, max, min } = props;
+        const isPointDiffEven = isFinite(max - min) ? (max - min) % step === 0 : true;
         warning(
-          step && Math.floor(step) === step ? (max - min) % step === 0 : true,
+          step && Math.floor(step) === step ? isPointDiffEven : true,
           'Slider[max] - Slider[min] (%s) should be a multiple of Slider[step] (%s)',
           max - min,
           step
