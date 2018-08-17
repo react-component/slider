@@ -46,8 +46,7 @@
     "pub": "rc-tools run pub --babel-runtime",
     "lint": "rc-tools run lint",
     "test": "jest",
-    "coverage": "jest --coverage",
-    "postinstall": "npm run compile"
+    "coverage": "jest --coverage"
   },
   "jest": {
     "setupFiles": [
