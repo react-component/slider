@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>slider.js - example - rc-slider@8.6.1</title>
+  <meta name="viewport"
+        content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
+  <meta charset="utf-8"/>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <link href="https://a.alipayobjects.com/normalize.css/3.0.1/normalize.css" rel="stylesheet"/>
+  <style>
+    .highlight pre {
+      padding: .8em 1em;
+      font: 14px/20px Consolas, Monaco, 'Andale Mono', monospace;
+      border: 1px solid #e5e8ec;
+      border-radius: 3px;
+      background-color: #21221d;
+      background-image: -webkit-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: -moz-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: -ms-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: -o-linear-gradient(#21221d 50%, #272822 50%);
+      background-image: linear-gradient(#21221d 50%, #272822 50%);
+      background-size: 40px 40px;
+      background-origin: content-box;
+      overflow: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .highlight pre > code {
+      font-family: inherit;
+      direction: ltr;
+      text-align: left;
+      white-space: pre;
+      word-spacing: normal;
+      vertical-align: 2px;
+      display: block;
+      -moz-tab-size: 2;
+      -o-tab-size: 2;
+      tab-size: 2;
+      -webkit-hyphens: none;
+      -moz-hyphens: none;
+      -ms-hyphens: none;
+      hyphens: none;
+      color: #E5E5C2;
+    }
+  </style>
+  <style>
+/*
+
+Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-license.org/
+
+*/
+
+.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 0.5em;
+  background: #23241f;
+  -webkit-text-size-adjust: none;
+}
+
+.hljs,
+.hljs-tag,
+.css .hljs-rule,
+.css .hljs-value,
+.aspectj .hljs-function,
+.css .hljs-function
+.hljs-preprocessor,
+.hljs-pragma {
+  color: #f8f8f2;
+}
+
+.hljs-strongemphasis,
+.hljs-strong,
+.hljs-emphasis {
+  color: #a8a8a2;
+}
+
+.hljs-bullet,
+.hljs-blockquote,
+.hljs-horizontal_rule,
+.hljs-number,
+.hljs-regexp,
+.alias .hljs-keyword,
+.hljs-literal,
+.hljs-hexcolor {
+  color: #ae81ff;
+}
+
+.hljs-code,
+.hljs-title,
+.css .hljs-class,
+.hljs-class .hljs-title:last-child {
+  color: #a6e22e;
+  /*color: #e6db74;*/
+}
+
+.hljs-link_url {
+  font-size: 80%;
+}
+
+.hljs-strong,
+.hljs-strongemphasis {
+  font-weight: bold;
+}
+
+.hljs-emphasis,
+.hljs-strongemphasis,
+.hljs-class .hljs-title:last-child,
+.hljs-typename {
+  font-style: italic;
+}
+
+.hljs-keyword,
+.ruby .hljs-class .hljs-keyword:first-child,
+.ruby .hljs-function .hljs-keyword,
+.hljs-function,
+.hljs-change,
+.hljs-winutils,
+.hljs-flow,
+.nginx .hljs-title,
+.tex .hljs-special,
+.hljs-header,
+.hljs-symbol,
+.hljs-symbol .hljs-string,
+.hljs-tag .hljs-title,
+.hljs-value,
+.alias .hljs-keyword:first-child,
+.css .hljs-tag,
+.css .unit,
+.css .hljs-important {
+  color: #f92672;
+}
+
+.hljs-function .hljs-keyword,
+.hljs-class .hljs-keyword:first-child,
+.hljs-aspect .hljs-keyword:first-child,
+.hljs-constant,
+.hljs-typename,
+.hljs-name,
+.css .hljs-attribute {
+  color: #66d9ef;
+}
+
+.hljs-variable,
+.hljs-params,
+.hljs-class .hljs-title,
+.hljs-aspect .hljs-title {
+  color: #f8f8f2;
+}
+
+.hljs-tag .hljs-value,
+.hljs-string,
+.css .hljs-id,
+.hljs-subst,
+.hljs-type,
+.ruby .hljs-class .hljs-parent,
+.django .hljs-template_tag,
+.django .hljs-variable,
+.smalltalk .hljs-class,
+.django .hljs-filter .hljs-argument,
+.smalltalk .hljs-localvars,
+.smalltalk .hljs-array,
+.hljs-attr_selector,
+.hljs-pseudo,
+.hljs-addition,
+.hljs-stream,
+.hljs-envvar,
+.apache .hljs-tag,
+.apache .hljs-cbracket,
+.tex .hljs-command,
+.hljs-prompt,
+.hljs-link_label,
+.hljs-link_url {
+  color: #e6db74;
+}
+
+.hljs-comment,
+.hljs-annotation,
+.hljs-decorator,
+.hljs-pi,
+.hljs-doctype,
+.hljs-deletion,
+.hljs-shebang,
+.apache .hljs-sqbracket,
+.tex .hljs-formula {
+  color: #75715e;
+}
+
+.coffeescript .javascript,
+.javascript .xml,
+.tex .hljs-formula,
+.xml .javascript,
+.xml .vbscript,
+.xml .css,
+.xml .hljs-cdata,
+.xml .php,
+.php .xml {
+  opacity: 0.5;
+}
+/***********/
+.hljs-attribute{
+  color: #a6e22e;
+}
+/***** node keyword ******/
+.hljs-built_in{
+  color: #3396dc;
+  font-weight: bold;
+}
+  </style>
+  <style>
+    .container {
+      width: 86%;
+      max-width: 1000px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .header p {
+      color: #666;
+    }
+
+    .example {
+      padding: 20px 0;
+    }
+  </style>
+
+  <script>
+    // Console-polyfill. MIT license.
+    // https://github.com/paulmillr/console-polyfill
+    // Make it safe to do console.log() always.
+    (function (global) {
+      'use strict';
+      global.console = global.console || {};
+      var con = global.console;
+      var prop, method;
+      var empty = {};
+      var dummy = function () {
+      };
+      var properties = 'memory'.split(',');
+      var methods = ('assert,clear,count,debug,dir,dirxml,error,exception,group,' +
+      'groupCollapsed,groupEnd,info,log,markTimeline,profile,profiles,profileEnd,' +
+      'show,table,time,timeEnd,timeline,timelineEnd,timeStamp,trace,warn').split(',');
+      while (prop = properties.pop()) con[prop] = con[prop] || empty;
+      while (method = methods.pop()) con[method] = con[method] || dummy;
+    })(typeof window === 'undefined' ? this : window);
+    // Using `this` for web workers while maintaining compatibility with browser
+    // targeted script loaders such as Browserify or Webpack where the only way to
+    // get to the global object is via `window`.
+  </script>
+  <!--[if lt IE 9]>
+  <script src="https://a.alipayobjects.com/??es5-shim/4.0.5/es5-shim.js,es5-shim/4.0.5/es5-sham.js,html5shiv/3.7.2/src/html5shiv.js"></script>
+  <![endif]-->
+  <script src="https://as.alipayobjects.com/g/component/??modernizr/2.8.3/modernizr.js,fastclick/1.0.6/fastclick.js"></script>
+  <script>
+  if(!window.Promise) {
+    document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
+  }
+  </script>
+  <link rel="stylesheet" href="../common.css" />
+</head>
+
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>rc-slider@8.6.1</h1>
+
+      <p>Slider UI component for React</p>
+    </div>
+    <div class="example" id="__react-content"></div>
+
+    <div class="highlight"><pre><code language="js"><span class="hljs-comment">/* eslint react/no-multi-comp: 0, max-len: 0 */</span>
+<span class="hljs-keyword">import</span> <span class="hljs-string">'rc-slider/assets/index.css'</span>;
+
+<span class="hljs-keyword">import</span> React <span class="hljs-keyword">from</span> <span class="hljs-string">'react'</span>;
+<span class="hljs-keyword">import</span> ReactDOM <span class="hljs-keyword">from</span> <span class="hljs-string">'react-dom'</span>;
+<span class="hljs-keyword">import</span> Slider, { createSliderWithTooltip } <span class="hljs-keyword">from</span> <span class="hljs-string">'rc-slider'</span>;
+
+<span class="hljs-keyword">const</span> style = { width: <span class="hljs-number">600</span>, margin: <span class="hljs-number">50</span> };
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">log</span>(<span class="hljs-params">value</span>) </span>{
+  <span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">//eslint-disable-line</span>
+}
+
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">percentFormatter</span>(<span class="hljs-params">v</span>) </span>{
+  <span class="hljs-keyword">return</span> <span class="hljs-string">`<span class="hljs-subst">${v}</span> %`</span>;
+}
+
+<span class="hljs-keyword">const</span> SliderWithTooltip = createSliderWithTooltip(Slider);
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">CustomizedSlider</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>.state = {
+      value: <span class="hljs-number">50</span>,
+    };
+  }
+  onSliderChange = (value) =&gt; {
+    log(value);
+    <span class="hljs-keyword">this</span>.setState({
+      value,
+    });
+  }
+  onAfterChange = (value) =&gt; {
+    <span class="hljs-built_in">console</span>.log(value); <span class="hljs-comment">//eslint-disable-line</span>
+  }
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span>
+        <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span> <span class="hljs-attribute">onAfterChange</span>=<span class="hljs-value">{this.onAfterChange}</span>
+      /&gt;</span>
+    )</span>;
+  }
+}
+
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">DynamicBounds</span> <span class="hljs-keyword">extends</span> <span class="hljs-title">React</span>.<span class="hljs-title">Component</span> </span>{
+  constructor(props) {
+    <span class="hljs-keyword">super</span>(props);
+    <span class="hljs-keyword">this</span>.state = {
+      min: <span class="hljs-number">0</span>,
+      max: <span class="hljs-number">100</span>,
+    };
+  }
+  onSliderChange = (value) =&gt; {
+    log(value);
+  }
+  onMinChange = (e) =&gt; {
+    <span class="hljs-keyword">this</span>.setState({
+      min: +e.target.value || <span class="hljs-number">0</span>,
+    });
+  }
+  onMaxChange = (e) =&gt; {
+    <span class="hljs-keyword">this</span>.setState({
+      max: +e.target.value || <span class="hljs-number">100</span>,
+    });
+  }
+  render() {
+    <span class="hljs-keyword">return</span> (
+      <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Min: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMinChange}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Max: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMaxChange}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{50}</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{this.state.max}</span>
+          <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span>
+        /&gt;</span>
+      <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    )</span>;
+  }
+}
+
+ReactDOM.render(
+  <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider，`step=20`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{50}</span> <span class="hljs-attribute">onBeforeChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider，`step=20, dots`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">dots</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{100}</span> <span class="hljs-attribute">onAfterChange</span>=<span class="hljs-value">{log}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider，`step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle={"{borderColor: 'yellow'}"}`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">dots</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{20}</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{100}</span> <span class="hljs-attribute">onAfterChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">dotStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">borderColor:</span> '<span class="hljs-attribute">orange</span>' }} <span class="hljs-attribute">activeDotStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">borderColor:</span> '<span class="hljs-attribute">yellow</span>' }} /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with tooltip, with custom `tipFormatter`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">SliderWithTooltip</span>
+        <span class="hljs-attribute">tipFormatter</span>=<span class="hljs-value">{percentFormatter}</span>
+        <span class="hljs-attribute">tipProps</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">overlayClassName:</span> '<span class="hljs-attribute">foo</span>' }}
+        <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span>
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with custom handle and track style.<span class="hljs-tag">&lt;<span class="hljs-title">strong</span>&gt;</span>(old api, will be deprecated)<span class="hljs-tag">&lt;/<span class="hljs-title">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span>
+        <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{30}</span>
+        <span class="hljs-attribute">maximumTrackStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">red</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">10</span> }}
+        <span class="hljs-attribute">minimumTrackStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">blue</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">10</span> }}
+        <span class="hljs-attribute">handleStyle</span>=<span class="hljs-value">{{</span>
+          <span class="hljs-attribute">borderColor:</span> '<span class="hljs-attribute">blue</span>',
+          <span class="hljs-attribute">height:</span> <span class="hljs-attribute">28</span>,
+          <span class="hljs-attribute">width:</span> <span class="hljs-attribute">28</span>,
+          <span class="hljs-attribute">marginLeft:</span> <span class="hljs-attribute">-14</span>,
+          <span class="hljs-attribute">marginTop:</span> <span class="hljs-attribute">-9</span>,
+          <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">black</span>',
+        }}
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with custom handle and track style.<span class="hljs-tag">&lt;<span class="hljs-title">strong</span>&gt;</span>(The recommended new api)<span class="hljs-tag">&lt;/<span class="hljs-title">strong</span>&gt;</span><span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span>
+        <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{30}</span>
+        <span class="hljs-attribute">trackStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">blue</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">10</span> }}
+        <span class="hljs-attribute">handleStyle</span>=<span class="hljs-value">{{</span>
+          <span class="hljs-attribute">borderColor:</span> '<span class="hljs-attribute">blue</span>',
+          <span class="hljs-attribute">height:</span> <span class="hljs-attribute">28</span>,
+          <span class="hljs-attribute">width:</span> <span class="hljs-attribute">28</span>,
+          <span class="hljs-attribute">marginLeft:</span> <span class="hljs-attribute">-14</span>,
+          <span class="hljs-attribute">marginTop:</span> <span class="hljs-attribute">-9</span>,
+          <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">black</span>',
+        }}
+        <span class="hljs-attribute">railStyle</span>=<span class="hljs-value">{{</span> <span class="hljs-attribute">backgroundColor:</span> '<span class="hljs-attribute">red</span>', <span class="hljs-attribute">height:</span> <span class="hljs-attribute">10</span> }}
+      /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Basic Slider, disabled<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{log}</span> <span class="hljs-attribute">disabled</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Controlled Slider<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{50}</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Customized Slider<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">CustomizedSlider</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+    <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with dynamic `min` `max`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">DynamicBounds</span> /&gt;</span>
+    <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+  <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
+  , document.getElementById('__react-content'));
+</span></code></pre></div>
+  </div>
+  <a href="http://github.com/react-component/slider/">
+    <img style="position: absolute; top: 0; right: 0; border: 0;"
+         src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67"
+         alt="Fork me on GitHub"
+         data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png">
+  </a>
+  <script>FastClick.attach(document.body);</script>
+  <script src="../common.js?nowrap"></script>
+  <script src="slider.js?nowrap"></script>
+</body>
+
+</html>

@@ -21,10 +21,10 @@ Thumbs.db
 .build
 node_modules
 .cache
-dist
-assets/**/*.css
-build
+
+
+
 lib
-es
+
 /coverage
 yarn.lock
