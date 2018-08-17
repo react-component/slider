@@ -67,9 +67,7 @@ class Slider extends React.Component {
     if (isNotControlled) {
       this.setState(state);
     }
-
-    const changedValue = state.value;
-    props.onChange(changedValue);
+    props.onChange(state);
   }
 
   onStart(position) {
@@ -101,7 +99,7 @@ class Slider extends React.Component {
     const value = this.calcValueByPos(position);
     if (value === oldValue) return;
 
-    this.onChange({ value });
+    this.onChange({ value, source:'slider' });
   }
 
   onKeyboard(e) {
@@ -115,7 +113,7 @@ class Slider extends React.Component {
       const value = this.trimAlignValue(mutatedValue);
       if (value === oldValue) return;
 
-      this.onChange({ value });
+      this.onChange({ value, source:'keyboard' });
     }
   }
 
