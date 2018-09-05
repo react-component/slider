@@ -42,6 +42,15 @@
   -ms-touch-action: pan-x;
       touch-action: pan-x;
 }
+.rc-slider-handle:focus {
+  border-color: #57c5f7;
+  box-shadow: 0 0 0 5px #96dbfa;
+  outline: none;
+}
+.rc-slider-handle-click-focused:focus {
+  border-color: #96dbfa;
+  box-shadow: unset;
+}
 .rc-slider-handle:hover {
   border-color: #57c5f7;
 }
@@ -50,11 +59,6 @@
   box-shadow: 0 0 5px #57c5f7;
   cursor: -webkit-grabbing;
   cursor: grabbing;
-}
-.rc-slider-handle:focus {
-  border-color: #57c5f7;
-  box-shadow: 0 0 0 5px #96dbfa;
-  outline: none;
 }
 .rc-slider-mark {
   position: absolute;
@@ -249,4 +253,4 @@
   border-top-color: #6c6c6c;
 }
 
-/*# sourceMappingURL=common.css.map*/
+/*# sourceMappingURL=marks.css.map*/
