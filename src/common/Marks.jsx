@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const Marks = ({
@@ -8,7 +9,8 @@ const Marks = ({
   included,
   upperBound,
   lowerBound,
-  max, min,
+  max,
+  min,
   onClickLabel,
 }) => {
   const marksKeys = Object.keys(marks);
@@ -46,7 +48,7 @@ const Marks = ({
 
     const style = vertical ? bottomStyle : leftStyle;
     const markStyle = markPointIsObject ?
-            { ...style, ...markPoint.style } : style;
+      { ...style, ...markPoint.style } : style;
     return (
       <span
         className={markClassName}
@@ -61,6 +63,18 @@ const Marks = ({
   });
 
   return <div className={className}>{elements}</div>;
+};
+
+Marks.propTypes = {
+  className: PropTypes.string,
+  vertical: PropTypes.bool,
+  marks: PropTypes.object,
+  included: PropTypes.bool,
+  upperBound: PropTypes.number,
+  lowerBound: PropTypes.number,
+  max: PropTypes.number,
+  min: PropTypes.number,
+  onClickLabel: PropTypes.func,
 };
 
 export default Marks;

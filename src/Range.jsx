@@ -33,12 +33,12 @@ class Range extends React.Component {
     super(props);
 
     const { count, min, max } = props;
-    const initialValue = Array.apply(null, Array(count + 1))
-            .map(() => min);
+    const initialValue = Array(...Array(count + 1))
+      .map(() => min);
     const defaultValue = 'defaultValue' in props ?
-            props.defaultValue : initialValue;
+      props.defaultValue : initialValue;
     const value = props.value !== undefined ?
-            props.value : defaultValue;
+      props.value : defaultValue;
     const bounds = value.map((v, i) => this.trimAlignValue(v, i));
     const recent = bounds[0] === max ? 0 : bounds.length - 1;
 
@@ -155,7 +155,7 @@ class Range extends React.Component {
       if (value > bounds[i]) { closestBound = i; }
     }
     if (Math.abs(bounds[closestBound + 1] - value) < Math.abs(bounds[closestBound] - value)) {
-      closestBound = closestBound + 1;
+      closestBound += 1;
     }
     return closestBound;
   }

@@ -1,4 +1,4 @@
-/* eslint-disable max-len, no-undef */
+/* eslint-disable max-len, no-undef, react/no-string-refs */
 import React from 'react';
 import { render, mount } from 'enzyme';
 import Range from '../src/Range';

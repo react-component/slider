@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "8.6.1",
+  "version": "8.6.2",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
@@ -69,7 +69,7 @@
     "enzyme-to-json": "^3.0.0",
     "jest": "^20.0.0",
     "pre-commit": "1.x",
-    "rc-tools": "7.x",
+    "rc-tools": "8.x",
     "rc-trigger": "^2.2.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",

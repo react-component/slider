@@ -19,9 +19,9 @@ class Slider extends React.Component {
     super(props);
 
     const defaultValue = props.defaultValue !== undefined ?
-            props.defaultValue : props.min;
+      props.defaultValue : props.min;
     const value = props.value !== undefined ?
-            props.value : defaultValue;
+      props.value : defaultValue;
 
     this.state = {
       value: this.trimAlignValue(value),
@@ -51,7 +51,7 @@ class Slider extends React.Component {
 
     const prevValue = this.state.value;
     const value = nextProps.value !== undefined ?
-            nextProps.value : prevValue;
+      nextProps.value : prevValue;
     const nextValue = this.trimAlignValue(value, nextProps);
     if (nextValue === prevValue) return;
 

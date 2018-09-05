@@ -40,8 +40,8 @@ export default function createSliderWithTooltip(Component) {
         prefixCls = 'rc-slider-tooltip',
         overlay = tipFormatter(value),
         placement = 'top',
-        visible = visible || false,
-        ...restTooltipProps,
+        visible = false,
+        ...restTooltipProps
       } = tipProps;
 
       let handleStyleWithIndex;

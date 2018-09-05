@@ -1,4 +1,4 @@
-/* eslint-disable max-len, no-undef */
+/* eslint-disable max-len, no-undef, jsx-a11y/tabindex-no-positive */
 import React from 'react';
 import { render, mount } from 'enzyme';
 import keyCode from 'rc-util/lib/KeyCode';

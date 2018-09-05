@@ -84,14 +84,14 @@ export default function createSlider(Component) {
       this.handlesRefs = {};
     }
 
-    componentWillUnmount() {
-      if (super.componentWillUnmount) super.componentWillUnmount();
-      this.removeDocumentEvents();
-    }
-
     componentDidMount() {
       // Snapshot testing cannot handle refs, so be sure to null-check this.
       this.document = this.sliderRef && this.sliderRef.ownerDocument;
+    }
+
+    componentWillUnmount() {
+      if (super.componentWillUnmount) super.componentWillUnmount();
+      this.removeDocumentEvents();
     }
 
     onMouseDown = (e) => {
@@ -149,27 +149,6 @@ export default function createSlider(Component) {
       }
     };
 
-    addDocumentTouchEvents() {
-      // just work for Chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = addEventListener(this.document, 'touchmove', this.onTouchMove);
-      this.onTouchUpListener = addEventListener(this.document, 'touchend', this.onEnd);
-    }
-
-    addDocumentMouseEvents() {
-      this.onMouseMoveListener = addEventListener(this.document, 'mousemove', this.onMouseMove);
-      this.onMouseUpListener = addEventListener(this.document, 'mouseup', this.onEnd);
-    }
-
-    removeDocumentEvents() {
-      /* eslint-disable no-unused-expressions */
-      this.onTouchMoveListener && this.onTouchMoveListener.remove();
-      this.onTouchUpListener && this.onTouchUpListener.remove();
-
-      this.onMouseMoveListener && this.onMouseMoveListener.remove();
-      this.onMouseUpListener && this.onMouseUpListener.remove();
-      /* eslint-enable no-unused-expressions */
-    }
-
     onMouseUp = () => {
       if (this.handlesRefs[this.prevMovedHandleIndex]) {
         this.handlesRefs[this.prevMovedHandleIndex].clickFocus();
@@ -201,16 +180,9 @@ export default function createSlider(Component) {
       }
     }
 
-    focus() {
-      if (!this.props.disabled) {
-        this.handlesRefs[0].focus();
-      }
-    }
-
-    blur() {
-      if (!this.props.disabled) {
-        this.handlesRefs[0].blur();
-      }
+    onClickMarkLabel = (e, value) => {
+      e.stopPropagation();
+      this.onChange({ value });
     }
 
     getSliderStart() {
@@ -228,6 +200,39 @@ export default function createSlider(Component) {
 
       const coords = slider.getBoundingClientRect();
       return this.props.vertical ? coords.height : coords.width;
+    }
+
+    addDocumentTouchEvents() {
+      // just work for Chrome iOS Safari and Android Browser
+      this.onTouchMoveListener = addEventListener(this.document, 'touchmove', this.onTouchMove);
+      this.onTouchUpListener = addEventListener(this.document, 'touchend', this.onEnd);
+    }
+
+    addDocumentMouseEvents() {
+      this.onMouseMoveListener = addEventListener(this.document, 'mousemove', this.onMouseMove);
+      this.onMouseUpListener = addEventListener(this.document, 'mouseup', this.onEnd);
+    }
+
+    removeDocumentEvents() {
+      /* eslint-disable no-unused-expressions */
+      this.onTouchMoveListener && this.onTouchMoveListener.remove();
+      this.onTouchUpListener && this.onTouchUpListener.remove();
+
+      this.onMouseMoveListener && this.onMouseMoveListener.remove();
+      this.onMouseUpListener && this.onMouseUpListener.remove();
+      /* eslint-enable no-unused-expressions */
+    }
+
+    focus() {
+      if (!this.props.disabled) {
+        this.handlesRefs[0].focus();
+      }
+    }
+
+    blur() {
+      if (!this.props.disabled) {
+        this.handlesRefs[0].blur();
+      }
     }
 
     calcValue(offset) {
@@ -255,11 +260,6 @@ export default function createSlider(Component) {
 
     saveHandle(index, handle) {
       this.handlesRefs[index] = handle;
-    }
-
-    onClickMarkLabel = (e, value) => {
-      e.stopPropagation();
-      this.onChange({ value });
     }
 
     render() {

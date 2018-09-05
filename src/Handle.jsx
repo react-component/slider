@@ -20,6 +20,10 @@ export default class Handle extends React.Component {
     }
   }
 
+  setHandleRef = (node) => {
+    this.handle = node;
+  };
+
   setClickFocus(focused) {
     this.setState({ clickFocused: focused });
   }
@@ -53,7 +57,7 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps,
+      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps
     } = this.props;
 
     const className = classNames(
@@ -68,28 +72,23 @@ export default class Handle extends React.Component {
       ...style,
       ...postionStyle,
     };
-    let ariaProps = {};
-    if (value !== undefined) {
-      ariaProps = {
-        ...ariaProps,
-        'aria-valuemin': min,
-        'aria-valuemax': max,
-        'aria-valuenow': value,
-        'aria-disabled': !!disabled,
-      };
-    }
 
     return (
       <div
-        ref={node => (this.handle = node)}
-        role="slider"
+        ref={this.setHandleRef}
         tabIndex= {disabled ? null : (tabIndex || 0)}
-        {...ariaProps}
         {...restProps}
         className={className}
         style={elStyle}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyDown}
+
+        // aria attribute
+        role="slider"
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        aria-disabled={!!disabled}
       />
     );
   }
