@@ -31,6 +31,7 @@ export default function createSlider(Component) {
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
       style: PropTypes.object,
+      inverted: PropTypes.bool,
       minimumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
       maximumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
       handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
@@ -62,6 +63,7 @@ export default function createSlider(Component) {
       disabled: false,
       dots: false,
       vertical: false,
+      inverted: false,
       trackStyle: [{}],
       handleStyle: [{}],
       railStyle: {},
@@ -187,9 +189,12 @@ export default function createSlider(Component) {
 
     getSliderStart() {
       const slider = this.sliderRef;
+      const { vertical, inverted } = this.props;
       const rect = slider.getBoundingClientRect();
-
-      return this.props.vertical ? rect.top : rect.left;
+      if (vertical) {
+        return inverted ? rect.bottom : rect.top;
+      }
+      return inverted ? rect.right : rect.left;
     }
 
     getSliderLength() {
@@ -243,7 +248,8 @@ export default function createSlider(Component) {
     }
 
     calcValueByPos(position) {
-      const pixelOffset = position - this.getSliderStart();
+      const sign = this.props.inverted ? -1 : +1;
+      const pixelOffset = sign * (position - this.getSliderStart());
       const nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
       return nextValue;
     }

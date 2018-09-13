@@ -57,7 +57,7 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps
+      prefixCls, vertical, inverted, offset, style, disabled, min, max, value, tabIndex, ...restProps
     } = this.props;
 
     const className = classNames(
@@ -66,8 +66,13 @@ export default class Handle extends React.Component {
         [`${prefixCls}-handle-click-focused`]: this.state.clickFocused,
       }
     );
-
-    const postionStyle = vertical ? { bottom: `${offset}%` } : { left: `${offset}%` };
+    const postionStyle = vertical ? {
+      [inverted ? 'top' : 'bottom']: `${offset}%`,
+      [inverted ? 'bottom' : 'top']: 'auto',
+    } : {
+      [inverted ? 'right' : 'left']: `${offset}%`,
+      [inverted ? 'left' : 'right']: 'auto',
+    };
     const elStyle = {
       ...style,
       ...postionStyle,

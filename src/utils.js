@@ -72,15 +72,17 @@ export function pauseEvent(e) {
   e.preventDefault();
 }
 
-export function getKeyboardValueMutator(e) {
+export function getKeyboardValueMutator(e, vertical, inverted) {
+  let sign = 1;
   switch (e.keyCode) {
     case keyCode.UP:
+      sign = vertical && inverted ? -1: +1; break;
     case keyCode.RIGHT:
-      return (value, props) => value + props.step;
-
+      sign = !vertical && inverted ? -1: +1; break;
     case keyCode.DOWN:
+      sign = vertical && inverted ? +1: -1; break;
     case keyCode.LEFT:
-      return (value, props) => value - props.step;
+      sign = !vertical && inverted ? +1: -1; break;
 
     case keyCode.END: return (value, props) => props.max;
     case keyCode.HOME: return (value, props) => props.min;
@@ -89,4 +91,5 @@ export function getKeyboardValueMutator(e) {
 
     default: return undefined;
   }
+  return (value, props) => value + sign * props.step;
 }

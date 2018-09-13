@@ -11,19 +11,19 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
   </div>
   <div
     class="rc-slider-track rc-slider-track-1"
-    style="left:0%;width:0%"
+    style="left:0%;right:auto;width:0%"
   >
     
   </div>
   <div
     class="rc-slider-track rc-slider-track-2"
-    style="left:0%;width:0%"
+    style="left:0%;right:auto;width:0%"
   >
     
   </div>
   <div
     class="rc-slider-track rc-slider-track-3"
-    style="left:0%;width:0%"
+    style="left:0%;right:auto;width:0%"
   >
     
   </div>
@@ -39,7 +39,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle rc-slider-handle-1"
     role="slider"
-    style="left:0%"
+    style="left:0%;right:auto"
     tabindex="0"
   >
     
@@ -51,7 +51,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle rc-slider-handle-2"
     role="slider"
-    style="left:0%"
+    style="left:0%;right:auto"
     tabindex="0"
   >
     
@@ -63,7 +63,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle rc-slider-handle-3"
     role="slider"
-    style="left:0%"
+    style="left:0%;right:auto"
     tabindex="0"
   >
     
@@ -75,7 +75,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle rc-slider-handle-4"
     role="slider"
-    style="left:0%"
+    style="left:0%;right:auto"
     tabindex="0"
   >
     
@@ -99,7 +99,7 @@ exports[`Range should render Range with correct DOM structure 1`] = `
   </div>
   <div
     class="rc-slider-track rc-slider-track-1"
-    style="left:0%;width:0%"
+    style="left:0%;right:auto;width:0%"
   >
     
   </div>
@@ -115,7 +115,7 @@ exports[`Range should render Range with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle rc-slider-handle-1"
     role="slider"
-    style="left:0%"
+    style="left:0%;right:auto"
     tabindex="0"
   >
     
@@ -127,7 +127,7 @@ exports[`Range should render Range with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle rc-slider-handle-2"
     role="slider"
-    style="left:0%"
+    style="left:0%;right:auto"
     tabindex="0"
   >
     

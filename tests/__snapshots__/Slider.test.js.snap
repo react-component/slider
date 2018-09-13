@@ -11,7 +11,7 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
   </div>
   <div
     class="rc-slider-track"
-    style="left:0%;width:0%"
+    style="left:0%;right:auto;width:0%"
   >
     
   </div>
@@ -27,7 +27,7 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
     aria-valuenow="0"
     class="rc-slider-handle"
     role="slider"
-    style="left:0%"
+    style="left:0%;right:auto"
     tabindex="0"
   >
     

@@ -88,6 +88,10 @@ ReactDOM.render(
       <Slider onChange={log} />
     </div>
     <div style={style}>
+      <p>Slider inverted</p>
+      <Slider onChange={log} inverted min={20} max={60}/>
+    </div>
+    <div style={style}>
       <p>Basic Slider，`step=20`</p>
       <Slider step={20} defaultValue={50} onBeforeChange={log} />
     </div>
