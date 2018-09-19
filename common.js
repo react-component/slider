@@ -3792,8 +3792,14 @@ function createSlider(Component) {
     }, {
       key: 'blur',
       value: function blur() {
+        var _this2 = this;
+
         if (!this.props.disabled) {
-          this.handlesRefs[0].blur();
+          Object.keys(this.handlesRefs).forEach(function (key) {
+            if (_this2.handlesRefs[key] && _this2.handlesRefs[key].blur) {
+              _this2.handlesRefs[key].blur();
+            }
+          });
         }
       }
     }, {
@@ -29963,6 +29969,9 @@ var Range = function (_React$Component) {
     var _this = __WEBPACK_IMPORTED_MODULE_5_babel_runtime_helpers_possibleConstructorReturn___default()(this, (Range.__proto__ || Object.getPrototypeOf(Range)).call(this, props));
 
     _this.onEnd = function () {
+      _this.setState({
+        handle: null
+      }, _this.blur);
       _this.removeDocumentEvents();
       _this.props.onAfterChange(_this.getValue());
     };
