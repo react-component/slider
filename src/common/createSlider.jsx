@@ -231,7 +231,11 @@ export default function createSlider(Component) {
 
     blur() {
       if (!this.props.disabled) {
-        this.handlesRefs[0].blur();
+        Object.keys(this.handlesRefs).forEach((key) => {
+          if (this.handlesRefs[key] && this.handlesRefs[key].blur) {
+            this.handlesRefs[key].blur();
+          }
+        });
       }
     }
 
