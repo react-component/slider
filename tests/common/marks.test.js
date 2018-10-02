@@ -29,7 +29,7 @@ describe('marks', () => {
     sliderWrapper.simulate('mousedown', {
       type: 'mousedown',
       target: sliderMark,
-      pageX: 25, button: 0,
+      clientX: 25, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -41,7 +41,7 @@ describe('marks', () => {
     rangeWrapper.simulate('mousedown', {
       type: 'mousedown',
       target: rangeMark,
-      pageX: 25, button: 0,
+      clientX: 25, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });

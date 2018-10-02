@@ -91,7 +91,7 @@ describe('createSlider', () => {
     wrapper.simulate('touchstart', {
       type: 'touchstart',
       target: sliderTrack,
-      touches: [{ pageX: 5 }],
+      touches: [{ clientX: 5 }],
       stopPropagation() {},
       preventDefault() {},
     });
@@ -109,7 +109,7 @@ describe('createSlider', () => {
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: leftHandle,
-      pageX: 5, button: 0,
+      clientX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -123,7 +123,7 @@ describe('createSlider', () => {
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: leftHandle,
-      pageX: 5, button: 0,
+      clientX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -131,7 +131,7 @@ describe('createSlider', () => {
     wrapper.instance().onMouseMove({ // to propagation
       type: 'mousemove',
       target: leftHandle,
-      pageX: 14, button: 0,
+      clientX: 14, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -145,7 +145,7 @@ describe('createSlider', () => {
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: leftHandle,
-      pageX: 5, button: 0,
+      clientX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -153,7 +153,7 @@ describe('createSlider', () => {
     wrapper.instance().onMouseMove({ // to propagation
       type: 'mousemove',
       target: leftHandle,
-      pageX: 0, button: 0,
+      clientX: 0, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -167,7 +167,7 @@ describe('createSlider', () => {
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: sliderTrack,
-      pageX: 5, button: 0,
+      clientX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -181,7 +181,7 @@ describe('createSlider', () => {
     wrapper.simulate('touchstart', {
       type: 'touchstart',
       target: leftHandle,
-      touches: [{ pageX: 5 }],
+      touches: [{ clientX: 5 }],
       stopPropagation() {},
       preventDefault() {},
     });
@@ -195,7 +195,7 @@ describe('createSlider', () => {
     wrapper.simulate('touchstart', {
       type: 'touchstart',
       target: leftHandle,
-      touches: [{ pageX: 5 }],
+      touches: [{ clientX: 5 }],
       stopPropagation() {},
       preventDefault() {},
     });
@@ -203,7 +203,7 @@ describe('createSlider', () => {
     wrapper.instance().onTouchMove({ // to propagation
       type: 'touchmove',
       target: leftHandle,
-      touches: [{ pageX: 14 }],
+      touches: [{ clientX: 14 }],
       stopPropagation() {},
       preventDefault() {},
     });
@@ -217,7 +217,7 @@ describe('createSlider', () => {
     wrapper.simulate('touchstart', {
       type: 'touchstart',
       target: sliderTrack,
-      touches: [{ pageX: 5 }],
+      touches: [{ clientX: 5 }],
       stopPropagation() {},
       preventDefault() {},
     });
