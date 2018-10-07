@@ -41,7 +41,7 @@ export default function createSliderWithTooltip(Component) {
         overlay = tipFormatter(value),
         placement = 'top',
         visible = false,
-        ...restTooltipProps
+        ...restTooltipProps,
       } = tipProps;
 
       let handleStyleWithIndex;
