@@ -57,7 +57,7 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps,
+      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps
     } = this.props;
 
     const className = classNames(
