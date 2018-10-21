@@ -32,8 +32,8 @@ describe('Range', () => {
     expect(trackStyle.width).toMatch('50%');
   });
 
-  it('should render inverted Range with value correctly', () => {
-    const wrapper = mount(<Range value={[0, 50]} inverted />);
+  it('should render reverse Range with value correctly', () => {
+    const wrapper = mount(<Range value={[0, 50]} reverse />);
     expect(wrapper.state('bounds')[0]).toBe(0);
     expect(wrapper.state('bounds')[1]).toBe(50);
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().style.right).toMatch('0%');

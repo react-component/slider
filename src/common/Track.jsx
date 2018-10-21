@@ -2,14 +2,14 @@
 import React from 'react';
 
 const Track = (props) => {
-  const { className, included, vertical, offset, length, style, inverted } = props;
+  const { className, included, vertical, offset, length, style, reverse } = props;
   const positonStyle = vertical ? {
-    [inverted ? 'top' : 'bottom']: `${offset}%`,
-    [inverted ? 'bottom' : 'top']: 'auto',
+    [reverse ? 'top' : 'bottom']: `${offset}%`,
+    [reverse ? 'bottom' : 'top']: 'auto',
     height: `${length}%`,
   } : {
-    [inverted ? 'right' : 'left']: `${offset}%`,
-    [inverted ? 'left' : 'right']: 'auto',
+    [reverse ? 'right' : 'left']: `${offset}%`,
+    [reverse ? 'left' : 'right']: 'auto',
     width: `${length}%`,
   };
 

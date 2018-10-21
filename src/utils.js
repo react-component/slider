@@ -72,17 +72,17 @@ export function pauseEvent(e) {
   e.preventDefault();
 }
 
-export function getKeyboardValueMutator(e, vertical, inverted) {
+export function getKeyboardValueMutator(e, vertical, reverse) {
   let sign = 1;
   switch (e.keyCode) {
     case keyCode.UP:
-      sign = vertical && inverted ? -1: +1; break;
+      sign = vertical && reverse ? -1: +1; break;
     case keyCode.RIGHT:
-      sign = !vertical && inverted ? -1: +1; break;
+      sign = !vertical && reverse ? -1: +1; break;
     case keyCode.DOWN:
-      sign = vertical && inverted ? +1: -1; break;
+      sign = vertical && reverse ? +1: -1; break;
     case keyCode.LEFT:
-      sign = !vertical && inverted ? +1: -1; break;
+      sign = !vertical && reverse ? +1: -1; break;
 
     case keyCode.END: return (value, props) => props.max;
     case keyCode.HOME: return (value, props) => props.min;

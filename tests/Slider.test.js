@@ -22,8 +22,8 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('50%');
   });
 
-  it('should render inverted Slider with value correctly', () => {
-    const wrapper = mount(<Slider value={50} inverted />);
+  it('should render reverse Slider with value correctly', () => {
+    const wrapper = mount(<Slider value={50} reverse />);
     expect(wrapper.state('value')).toBe(50);
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
@@ -49,8 +49,8 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(51);
   });
 
-  it('decreases the value for inverted-vertical when key "up" is pressed', () => {
-    const wrapper = mount(<Slider defaultValue={50} inverted vertical />);
+  it('decreases the value for reverse-vertical when key "up" is pressed', () => {
+    const wrapper = mount(<Slider defaultValue={50} reverse vertical />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
     wrapper.simulate('focus');
@@ -69,8 +69,8 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(51);
   });
 
-  it('decreases the value for inverted-horizontal when key "right" is pressed', () => {
-    const wrapper = mount(<Slider defaultValue={50} inverted />);
+  it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
+    const wrapper = mount(<Slider defaultValue={50} reverse />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
 
     wrapper.simulate('focus');

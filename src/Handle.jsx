@@ -57,7 +57,7 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls, vertical, inverted, offset, style, disabled, min, max, value, tabIndex, ...restProps
+      prefixCls, vertical, reverse, offset, style, disabled, min, max, value, tabIndex, ...restProps
     } = this.props;
 
     const className = classNames(
@@ -67,11 +67,11 @@ export default class Handle extends React.Component {
       }
     );
     const postionStyle = vertical ? {
-      [inverted ? 'top' : 'bottom']: `${offset}%`,
-      [inverted ? 'bottom' : 'top']: 'auto',
+      [reverse ? 'top' : 'bottom']: `${offset}%`,
+      [reverse ? 'bottom' : 'top']: 'auto',
     } : {
-      [inverted ? 'right' : 'left']: `${offset}%`,
-      [inverted ? 'left' : 'right']: 'auto',
+      [reverse ? 'right' : 'left']: `${offset}%`,
+      [reverse ? 'left' : 'right']: 'auto',
     };
     const elStyle = {
       ...style,

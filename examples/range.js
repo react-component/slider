@@ -164,8 +164,8 @@ ReactDOM.render(
       <Range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
-      <p>Basic inverted Range`</p>
-      <Range allowCross={false} defaultValue={[0, 20]} onChange={log} inverted />
+      <p>Basic reverse Range`</p>
+      <Range allowCross={false} defaultValue={[0, 20]} onChange={log} reverse />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>

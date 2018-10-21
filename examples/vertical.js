@@ -32,8 +32,8 @@ ReactDOM.render(
       <Slider vertical min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
     </div>
     <div style={style}>
-      <p>Inverted Slider with marks, `step=null`</p>
-      <Slider vertical min={-10} marks={marks} step={null} onChange={log} defaultValue={20} inverted />
+      <p>Reverse Slider with marks, `step=null`</p>
+      <Slider vertical min={-10} marks={marks} step={null} onChange={log} defaultValue={20} reverse />
     </div>
     <div style={style}>
       <p>Slider with marks and steps</p>
