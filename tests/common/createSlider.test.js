@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
-import { mount } from 'enzyme';
-import Slider, { Range } from '../../src';
+import {mount} from 'enzyme';
+import Slider, {Range} from '../../src';
 
 const setWidth = (object, width) => {
   // https://github.com/tmpvar/jsdom/commit/0cdb2efcc69b6672dc2928644fc0172df5521176
@@ -234,5 +234,28 @@ describe('createSlider', () => {
       preventDefault() {},
     });
     expect(wrapper.instance().dragOffset).toBe(0);
+  });
+
+  it('should call onAfterChange when clicked on mark label', () => {
+    const labelId = 'to-be-clicked';
+    const marks = {
+      0: 'some other label',
+      100: <span id={labelId}>some label</span>
+    };
+
+    const sliderOnAfterChange = jest.fn();
+    const sliderWrapper = mount(<Slider value={0} marks={marks} onAfterChange={sliderOnAfterChange} />);
+    const sliderHandleWrapper = sliderWrapper.find(`#${labelId}`).at(0);
+    sliderHandleWrapper.simulate('mousedown');
+    sliderHandleWrapper.simulate('mouseup');
+    expect(sliderOnAfterChange).toHaveBeenCalled();
+
+    const rangeOnAfterChange = jest.fn();
+    const rangeWrapper = mount(<Range value={[0, 1]} marks={marks} onAfterChange={rangeOnAfterChange} />);
+    const rangeHandleWrapper = rangeWrapper.find(`#${labelId}`).at(0);
+    rangeHandleWrapper.simulate('mousedown');
+    rangeHandleWrapper.simulate('mouseup');
+
+    expect(rangeOnAfterChange).toHaveBeenCalled();
   });
 });
