@@ -110,6 +110,68 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(100);
   });
 
+  describe.only('when component has fixed values', () => {
+    it('increases the value when key "up" is pressed', () => {
+      const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
+      const handler = wrapper.find('.rc-slider-handle').at(1);
+
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.UP });
+
+      expect(wrapper.state('value')).toBe(100);
+    });
+
+    it('increases the value when key "right" is pressed', () => {
+      const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
+      const handler = wrapper.find('.rc-slider-handle').at(1);
+
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+      expect(wrapper.state('value')).toBe(100);
+    });
+
+    it('decreases the value when key "down" is pressed', () => {
+      const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
+      const handler = wrapper.find('.rc-slider-handle').at(1);
+
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+
+      expect(wrapper.state('value')).toBe(20);
+    });
+
+    it('decreases the value when key "left" is pressed', () => {
+      const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
+      const handler = wrapper.find('.rc-slider-handle').at(1);
+
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.LEFT });
+
+      expect(wrapper.state('value')).toBe(20);
+    });
+
+    it('sets the value to minimum when key "home" is pressed', () => {
+      const wrapper = mount(<Slider min={20} defaultValue={100} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
+      const handler = wrapper.find('.rc-slider-handle').at(1);
+
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.HOME });
+
+      expect(wrapper.state('value')).toBe(20);
+    });
+
+    it('sets the value to maximum when the key "end" is pressed', () => {
+      const wrapper = mount(<Slider min={20} defaultValue={20} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
+      const handler = wrapper.find('.rc-slider-handle').at(1);
+
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.END });
+
+      expect(wrapper.state('value')).toBe(100);
+    });
+  });
+
   describe('focus & blur', () => {
     let container;
 

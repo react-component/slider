@@ -80,15 +80,32 @@ export function pauseEvent(e) {
   e.preventDefault();
 }
 
+export function calculateNextValue(func, value, props) {
+  const operations = {
+    increase: (a, b) => a + b,
+    decrease: (a, b) => a - b,
+  };
+
+  const indexToGet = operations[func](Object.keys(props.marks).indexOf(JSON.stringify(value)), 1);
+  const keyToGet = Object.keys(props.marks)[indexToGet];
+
+  if (props.step) {
+    return operations[func](value, props.step);
+  } else if (!!Object.keys(props.marks).length && !!props.marks[keyToGet]) {
+    return props.marks[keyToGet];
+  }
+  return value;
+}
+
 export function getKeyboardValueMutator(e) {
   switch (e.keyCode) {
     case keyCode.UP:
     case keyCode.RIGHT:
-      return (value, props) => value + props.step;
+      return (value, props) => calculateNextValue('increase', value, props);
 
     case keyCode.DOWN:
     case keyCode.LEFT:
-      return (value, props) => value - props.step;
+      return (value, props) => calculateNextValue('decrease', value, props);
 
     case keyCode.END: return (value, props) => props.max;
     case keyCode.HOME: return (value, props) => props.min;
