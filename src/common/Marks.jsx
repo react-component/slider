@@ -41,9 +41,8 @@ const Marks = ({
     };
 
     const leftStyle = {
-      width: `${markWidth}%`,
-      marginLeft: `${-markWidth / 2}%`,
       left: `${(point - min) / range * 100}%`,
+      transform: translateX(-50%);
     };
 
     const style = vertical ? bottomStyle : leftStyle;
