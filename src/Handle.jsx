@@ -66,16 +66,17 @@ export default class Handle extends React.Component {
         [`${prefixCls}-handle-click-focused`]: this.state.clickFocused,
       }
     );
-    const postionStyle = vertical ? {
+    const positionStyle = vertical ? {
       [reverse ? 'top' : 'bottom']: `${offset}%`,
       [reverse ? 'bottom' : 'top']: 'auto',
     } : {
       [reverse ? 'right' : 'left']: `${offset}%`,
       [reverse ? 'left' : 'right']: 'auto',
+      transform: `translateX(${reverse ? '+' : '-'}50%)`,
     };
     const elStyle = {
       ...style,
-      ...postionStyle,
+      ...positionStyle,
     };
 
     return (
