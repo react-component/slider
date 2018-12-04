@@ -278,6 +278,7 @@ export default function createSlider(Component) {
         included,
         disabled,
         vertical,
+        reverse,
         min,
         max,
         children,
@@ -318,6 +319,7 @@ export default function createSlider(Component) {
           <Steps
             prefixCls={prefixCls}
             vertical={vertical}
+            reverse={reverse}
             marks={marks}
             dots={dots}
             step={step}
@@ -340,6 +342,7 @@ export default function createSlider(Component) {
             upperBound={this.getUpperBound()}
             max={max}
             min={min}
+            reverse={reverse}
           />
           {children}
         </div>

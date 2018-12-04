@@ -5,6 +5,7 @@ import classNames from 'classnames';
 const Marks = ({
   className,
   vertical,
+  reverse,
   marks,
   included,
   upperBound,
@@ -37,13 +38,13 @@ const Marks = ({
 
     const bottomStyle = {
       marginBottom: '-50%',
-      bottom: `${(point - min) / range * 100}%`,
+      [reverse? 'top' : 'bottom']: `${(point - min) / range * 100}%`,
     };
 
     const leftStyle = {
       width: `${markWidth}%`,
       marginLeft: `${-markWidth / 2}%`,
-      left: `${(point - min) / range * 100}%`,
+      [reverse ? 'right' : 'left']: `${(point - min) / range * 100}%`,
     };
 
     const style = vertical ? bottomStyle : leftStyle;
@@ -68,6 +69,7 @@ const Marks = ({
 Marks.propTypes = {
   className: PropTypes.string,
   vertical: PropTypes.bool,
+  reverse: PropTypes.bool,
   marks: PropTypes.object,
   included: PropTypes.bool,
   upperBound: PropTypes.number,

@@ -19,7 +19,7 @@ const calcPoints = (vertical, marks, dots, step, min, max) => {
   return points;
 };
 
-const Steps = ({ prefixCls, vertical, marks, dots, step, included,
+const Steps = ({ prefixCls, vertical, reverse, marks, dots, step, included,
   lowerBound, upperBound, max, min, dotStyle, activeDotStyle }) => {
   const range = max - min;
   const elements = calcPoints(vertical, marks, dots, step, min, max).map((point) => {
@@ -27,7 +27,8 @@ const Steps = ({ prefixCls, vertical, marks, dots, step, included,
 
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
-    let style = vertical ? { bottom: offset, ...dotStyle } : { left: offset, ...dotStyle };
+    let style = vertical ? { ...dotStyle, [reverse ? 'top' :'bottom']: offset }
+      : { ...dotStyle, [reverse ? 'right' :'left']: offset };
     if (isActived) {
       style = { ...style, ...activeDotStyle };
     }
@@ -56,6 +57,7 @@ Steps.propTypes = {
   step: PropTypes.number,
   marks: PropTypes.object,
   vertical: PropTypes.bool,
+  reverse: PropTypes.bool,
 };
 
 export default Steps;
