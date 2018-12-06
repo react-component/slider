@@ -27,7 +27,7 @@ class Slider extends React.Component {
       value: this.trimAlignValue(value),
       dragging: false,
     };
-    if (process.env.NODE_ENV !== 'production') {
+    if (utils.isDev()) {
       warning(
         !('minimumTrackStyle' in props),
         'minimumTrackStyle will be deprecate, please use trackStyle instead.'

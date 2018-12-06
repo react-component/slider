@@ -72,7 +72,7 @@ export default function createSlider(Component) {
     constructor(props) {
       super(props);
 
-      if (process.env.NODE_ENV !== 'production') {
+      if (utils.isDev()) {
         const { step, max, min } = props;
         warning(
           step && Math.floor(step) === step ? (max - min) % step === 0 : true,
