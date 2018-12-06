@@ -78,7 +78,7 @@ export default function createSlider(Component) {
 
       if (utils.isDev()) {
         const { step, max, min } = props;
-        const isPointDiffEven = isFinite(max - min) ? (max - min) % step === 0 : true;
+        const isPointDiffEven = isFinite(max - min) ? (max - min) % step === 0 : true; // eslint-disable-line
         warning(
           step && Math.floor(step) === step ? isPointDiffEven : true,
           'Slider[max] - Slider[min] (%s) should be a multiple of Slider[step] (%s)',
