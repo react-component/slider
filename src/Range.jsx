@@ -20,6 +20,8 @@ class Range extends React.Component {
     allowCross: PropTypes.bool,
     disabled: PropTypes.bool,
     tabIndex: PropTypes.arrayOf(PropTypes.number),
+    min: PropTypes.number,
+    max: PropTypes.number,
   };
 
   static defaultProps = {

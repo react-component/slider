@@ -51,6 +51,18 @@ describe('createSlider', () => {
     expect(rangeWrapper.state('bounds')[1]).toBe(90);
   });
 
+  it('should not set values when sending invalid numbers', () => {
+    const sliderWithMinWrapper = mount(<Slider value={0} min={Math.min()} />);
+    expect(sliderWithMinWrapper.state('value')).toBe(0);
+
+    const sliderWithMaxWrapper = mount(<Slider value={100} max={Math.max()} />);
+    expect(sliderWithMaxWrapper.state('value')).toBe(0);
+
+    const rangeWrapper = mount(<Range value={[0, 100]} min={Math.min()} max={Math.max()} />);
+    expect(rangeWrapper.state('bounds')[0]).toBe(0);
+    expect(rangeWrapper.state('bounds')[1]).toBe(0);
+  });
+
   it('should update value when it is out of range', () => {
     const sliderOnChange = jest.fn();
     const sliderWrapper = mount(<Slider onChange={sliderOnChange} />);

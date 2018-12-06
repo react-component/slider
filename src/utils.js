@@ -70,7 +70,7 @@ export function ensureValueInRange(val, { max, min }) {
 
 export function ensureValuePrecision(val, props) {
   const { step } = props;
-  const closestPoint = getClosestPoint(val, props);
+  const closestPoint = isFinite(getClosestPoint(val, props)) ? getClosestPoint(val, props) : 0;
   return step === null ? closestPoint :
     parseFloat(closestPoint.toFixed(getPrecision(step)));
 }
