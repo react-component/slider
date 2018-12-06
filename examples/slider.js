@@ -18,6 +18,40 @@ function percentFormatter(v) {
 
 const SliderWithTooltip = createSliderWithTooltip(Slider);
 
+class NullableSlider extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
+  onSliderChange = (value) => {
+    log(value);
+    this.setState({
+      value,
+    });
+  };
+  onAfterChange = (value) => {
+    console.log(value); //eslint-disable-line
+  };
+  reset = () => {
+    console.log('reset value') // eslint-disable-line
+    this.setState({ value: null });
+  };
+  render() {
+    return (
+      <div>
+        <Slider
+          value={this.state.value}
+          onChange={this.onSliderChange}
+          onAfterChange={this.onAfterChange}
+        />
+        <button onClick={this.reset}>Reset</button>
+      </div>
+    );
+  }
+}
+
 class CustomizedSlider extends React.Component {
   constructor(props) {
     super(props);
@@ -150,6 +184,10 @@ ReactDOM.render(
     <div style={style}>
       <p>Customized Slider</p>
       <CustomizedSlider />
+    </div>
+    <div style={style}>
+      <p>Slider with null value and reset button</p>
+      <NullableSlider />
     </div>
     <div style={style}>
       <p>Slider with dynamic `min` `max`</p>
