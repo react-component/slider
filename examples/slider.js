@@ -7,15 +7,15 @@ webpackJsonp([3],{
 
 /***/ }),
 
-/***/ 196:
+/***/ 189:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(197);
+module.exports = __webpack_require__(190);
 
 
 /***/ }),
 
-/***/ 197:
+/***/ 190:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -59,13 +59,13 @@ function percentFormatter(v) {
 
 var SliderWithTooltip = Object(__WEBPACK_IMPORTED_MODULE_7_rc_slider__["createSliderWithTooltip"])(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a);
 
-var CustomizedSlider = function (_React$Component) {
-  __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(CustomizedSlider, _React$Component);
+var NullableSlider = function (_React$Component) {
+  __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(NullableSlider, _React$Component);
 
-  function CustomizedSlider(props) {
-    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, CustomizedSlider);
+  function NullableSlider(props) {
+    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, NullableSlider);
 
-    var _this = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (CustomizedSlider.__proto__ || Object.getPrototypeOf(CustomizedSlider)).call(this, props));
+    var _this = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (NullableSlider.__proto__ || Object.getPrototypeOf(NullableSlider)).call(this, props));
 
     _this.onSliderChange = function (value) {
       log(value);
@@ -78,10 +78,63 @@ var CustomizedSlider = function (_React$Component) {
       console.log(value); //eslint-disable-line
     };
 
+    _this.reset = function () {
+      console.log('reset value'); // eslint-disable-line
+      _this.setState({ value: null });
+    };
+
     _this.state = {
-      value: 50
+      value: null
     };
     return _this;
+  }
+
+  __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(NullableSlider, [{
+    key: 'render',
+    value: function render() {
+      return __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'div',
+        null,
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, {
+          value: this.state.value,
+          onChange: this.onSliderChange,
+          onAfterChange: this.onAfterChange
+        }),
+        __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+          'button',
+          { onClick: this.reset },
+          'Reset'
+        )
+      );
+    }
+  }]);
+
+  return NullableSlider;
+}(__WEBPACK_IMPORTED_MODULE_5_react___default.a.Component);
+
+var CustomizedSlider = function (_React$Component2) {
+  __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(CustomizedSlider, _React$Component2);
+
+  function CustomizedSlider(props) {
+    __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, CustomizedSlider);
+
+    var _this2 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (CustomizedSlider.__proto__ || Object.getPrototypeOf(CustomizedSlider)).call(this, props));
+
+    _this2.onSliderChange = function (value) {
+      log(value);
+      _this2.setState({
+        value: value
+      });
+    };
+
+    _this2.onAfterChange = function (value) {
+      console.log(value); //eslint-disable-line
+    };
+
+    _this2.state = {
+      value: 50
+    };
+    return _this2;
   }
 
   __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(CustomizedSlider, [{
@@ -96,35 +149,35 @@ var CustomizedSlider = function (_React$Component) {
   return CustomizedSlider;
 }(__WEBPACK_IMPORTED_MODULE_5_react___default.a.Component);
 
-var DynamicBounds = function (_React$Component2) {
-  __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(DynamicBounds, _React$Component2);
+var DynamicBounds = function (_React$Component3) {
+  __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(DynamicBounds, _React$Component3);
 
   function DynamicBounds(props) {
     __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_classCallCheck___default()(this, DynamicBounds);
 
-    var _this2 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (DynamicBounds.__proto__ || Object.getPrototypeOf(DynamicBounds)).call(this, props));
+    var _this3 = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_possibleConstructorReturn___default()(this, (DynamicBounds.__proto__ || Object.getPrototypeOf(DynamicBounds)).call(this, props));
 
-    _this2.onSliderChange = function (value) {
+    _this3.onSliderChange = function (value) {
       log(value);
     };
 
-    _this2.onMinChange = function (e) {
-      _this2.setState({
+    _this3.onMinChange = function (e) {
+      _this3.setState({
         min: +e.target.value || 0
       });
     };
 
-    _this2.onMaxChange = function (e) {
-      _this2.setState({
+    _this3.onMaxChange = function (e) {
+      _this3.setState({
         max: +e.target.value || 100
       });
     };
 
-    _this2.state = {
+    _this3.state = {
       min: 0,
       max: 100
     };
-    return _this2;
+    return _this3;
   }
 
   __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_createClass___default()(DynamicBounds, [{
@@ -309,6 +362,16 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
       'p',
       null,
+      'Slider with null value and reset button'
+    ),
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(NullableSlider, null)
+  ),
+  __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      'p',
+      null,
       'Slider with dynamic `min` `max`'
     ),
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(DynamicBounds, null)
@@ -317,5 +380,5 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ })
 
-},[196]);
+},[189]);
 //# sourceMappingURL=slider.js.map
