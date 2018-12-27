@@ -54,6 +54,10 @@ export default function createSlider(Component) {
       marks: {},
       handle({ index, ...restProps }) {
         delete restProps.dragging;
+        if (restProps.value === null) {
+          return null;
+        }
+
         return <Handle {...restProps} key={index} />;
       },
       onBeforeChange: noop,
@@ -74,10 +78,11 @@ export default function createSlider(Component) {
     constructor(props) {
       super(props);
 
-      if (process.env.NODE_ENV !== 'production') {
+      if (utils.isDev()) {
         const { step, max, min } = props;
+        const isPointDiffEven = isFinite(max - min) ? (max - min) % step === 0 : true; // eslint-disable-line
         warning(
-          step && Math.floor(step) === step ? (max - min) % step === 0 : true,
+          step && Math.floor(step) === step ? isPointDiffEven : true,
           'Slider[max] - Slider[min] (%s) should be a multiple of Slider[step] (%s)',
           max - min,
           step
@@ -185,6 +190,7 @@ export default function createSlider(Component) {
     onClickMarkLabel = (e, value) => {
       e.stopPropagation();
       this.onChange({ value });
+      this.onEnd();
     }
 
     getSliderStart() {
@@ -194,7 +200,7 @@ export default function createSlider(Component) {
       if (vertical) {
         return reverse ? rect.bottom : rect.top;
       }
-      return reverse ? rect.right : rect.left;
+      return window.pageXOffset + (reverse ? rect.right : rect.left);
     }
 
     getSliderLength() {
@@ -236,7 +242,11 @@ export default function createSlider(Component) {
 
     blur() {
       if (!this.props.disabled) {
-        this.handlesRefs[0].blur();
+        Object.keys(this.handlesRefs).forEach((key) => {
+          if (this.handlesRefs[key] && this.handlesRefs[key].blur) {
+            this.handlesRefs[key].blur();
+          }
+        });
       }
     }
 

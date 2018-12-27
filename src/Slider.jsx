@@ -14,6 +14,8 @@ class Slider extends React.Component {
     autoFocus: PropTypes.bool,
     tabIndex: PropTypes.number,
     reverse: PropTypes.bool,
+    min: PropTypes.number,
+    max: PropTypes.number,
   };
 
   constructor(props) {
@@ -28,7 +30,7 @@ class Slider extends React.Component {
       value: this.trimAlignValue(value),
       dragging: false,
     };
-    if (process.env.NODE_ENV !== 'production') {
+    if (utils.isDev()) {
       warning(
         !('minimumTrackStyle' in props),
         'minimumTrackStyle will be deprecate, please use trackStyle instead.'
@@ -133,6 +135,10 @@ class Slider extends React.Component {
   }
 
   trimAlignValue(v, nextProps = {}) {
+    if (v === null) {
+      return null;
+    }
+
     const mergedProps = { ...this.props, ...nextProps };
     const val = utils.ensureValueInRange(v, mergedProps);
     return utils.ensureValuePrecision(val, mergedProps);

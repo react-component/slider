@@ -21,6 +21,8 @@ class Range extends React.Component {
     disabled: PropTypes.bool,
     reverse: PropTypes.bool,
     tabIndex: PropTypes.arrayOf(PropTypes.number),
+    min: PropTypes.number,
+    max: PropTypes.number,
   };
 
   static defaultProps = {
@@ -65,7 +67,7 @@ class Range extends React.Component {
 
     this.setState({ bounds: nextBounds });
 
-    if (bounds.some(v => utils.isValueOutOfRange(v, nextProps))) {
+    if (value.some(v => utils.isValueOutOfRange(v, nextProps))) {
       const newValues = value.map((v) => {
         return utils.ensureValueInRange(v, nextProps);
       });
@@ -114,6 +116,9 @@ class Range extends React.Component {
   }
 
   onEnd = () => {
+    this.setState({
+      handle: null,
+    });
     this.removeDocumentEvents();
     this.props.onAfterChange(this.getValue());
   }

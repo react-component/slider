@@ -15,9 +15,6 @@ const Marks = ({
   onClickLabel,
 }) => {
   const marksKeys = Object.keys(marks);
-  const marksCount = marksKeys.length;
-  const unit = marksCount > 1 ? 100 / (marksCount - 1) : 100;
-  const markWidth = unit * 0.9;
 
   const range = max - min;
   const elements = marksKeys.map(parseFloat).sort((a, b) => a - b).map(point => {
@@ -42,8 +39,8 @@ const Marks = ({
     };
 
     const leftStyle = {
-      width: `${markWidth}%`,
-      marginLeft: `${-markWidth / 2}%`,
+      transform: `translateX(-50%)`,
+      msTransform: `translateX(-50%)`,
       [reverse ? 'right' : 'left']: `${(point - min) / range * 100}%`,
     };
 

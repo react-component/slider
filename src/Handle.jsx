@@ -73,7 +73,7 @@ export default class Handle extends React.Component {
     } : {
       [reverse ? 'right' : 'left']: `${offset}%`,
       [reverse ? 'left' : 'right']: 'auto',
-      transform: `translateX(${reverse ? '+' : '-'}50%)`,
+      transform: `translate(${reverse ? '+' : '-'}50%, -25%)`,
     };
     const elStyle = {
       ...style,
