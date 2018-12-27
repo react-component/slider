@@ -107,9 +107,9 @@ export function getKeyboardValueMutator(e, vertical, reverse) {
     case keyCode.RIGHT:
       method = !vertical && reverse ? decrease: increase; break;
     case keyCode.DOWN:
-      method = vertical && reverse ? decrease: increase; break;
+      method = vertical && reverse ? increase: decrease; break;
     case keyCode.LEFT:
-      method = !vertical && reverse ? decrease: increase; break;
+      method = !vertical && reverse ? increase: decrease; break;
 
     case keyCode.END: return (value, props) => props.max;
     case keyCode.HOME: return (value, props) => props.min;
