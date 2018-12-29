@@ -359,7 +359,9 @@ class Range extends React.Component {
       value: v,
       dragging: handle === i,
       index: i,
-      tabIndex: tabIndex[i] || 0,
+      tabIndex: tabIndex[i] === null
+        ? null
+        : (tabIndex[i] || 0),
       min,
       max,
       disabled,

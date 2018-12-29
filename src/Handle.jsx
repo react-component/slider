@@ -76,7 +76,11 @@ export default class Handle extends React.Component {
     return (
       <div
         ref={this.setHandleRef}
-        tabIndex= {disabled ? null : (tabIndex || 0)}
+        tabIndex= {disabled
+          ? null
+          : tabIndex === null
+            ? null
+            : (tabIndex || 0)}
         {...restProps}
         className={className}
         style={elStyle}
