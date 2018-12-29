@@ -69,11 +69,11 @@ export default class Handle extends React.Component {
     const positionStyle = vertical ? {
       [reverse ? 'top' : 'bottom']: `${offset}%`,
       [reverse ? 'bottom' : 'top']: 'auto',
-      transform: `translateY(${reverse ? '-' : '+'}50%)`,
+      transform: `translateY(+50%)`,
     } : {
       [reverse ? 'right' : 'left']: `${offset}%`,
       [reverse ? 'left' : 'right']: 'auto',
-      transform: `translate(${reverse ? '+' : '-'}50%, -25%)`,
+      transform: `translateX(${reverse ? '+' : '-'}50%)`,
     };
     const elStyle = {
       ...style,
