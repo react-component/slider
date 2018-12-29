@@ -30,6 +30,12 @@ describe('Slider', () => {
     expect(wrapper.find('.rc-slider-handle').at(1).props().tabIndex).toEqual(1);
   });
 
+  it('should allow tabIndex to be set on Handle via Slider and be equal null', () => {
+    const wrapper = mount(<Slider tabIndex={null} />);
+    const handle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).getDOMNode();
+    expect(handle.hasAttribute('tabIndex')).toEqual(false);
+  });
+
   it('increases the value when key "up" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
