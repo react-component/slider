@@ -112,4 +112,5 @@ Handle.propTypes = {
   max: PropTypes.number,
   value: PropTypes.number,
   tabIndex: PropTypes.number,
+  reverse: PropTypes.bool,
 };
