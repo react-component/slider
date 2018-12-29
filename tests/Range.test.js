@@ -35,6 +35,14 @@ describe('Range', () => {
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().tabIndex).toEqual(2);
   });
 
+  it('should render Range without tabIndex (equal null) correctly', () => {
+    const wrapper = mount(<Range tabIndex={[null, null]} />);
+    const firstHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).getDOMNode();
+    const secondHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).getDOMNode();
+    expect(firstHandle.hasAttribute('tabIndex')).toEqual(false);
+    expect(secondHandle.hasAttribute('tabIndex')).toEqual(false);
+  });
+
   it('should render Multi-Range with value correctly', () => {
     const wrapper = mount(<Range count={3} value={[0, 25, 50, 75]} />);
     expect(wrapper.state('bounds')[0]).toBe(0);
