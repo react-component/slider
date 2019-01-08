@@ -34,6 +34,14 @@ ReactDOM.render(
       <Slider min={0} max={20} defaultValue={3} handle={handle} />
     </div>
     <div style={wrapperStyle}>
+      <p>Slider with custom component in handle</p>
+      <Slider min={0} max={20} defaultValue={3} handle={(props) => (
+        <Handle {...props} style={{ ...props.style, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <span style={{ fontSize: 10 }}>{ props.value }</span>
+        </Handle>
+      )} />
+    </div>
+    <div style={wrapperStyle}>
       <p>Slider with fixed values</p>
       <Slider min={20} defaultValue={20} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />
     </div>

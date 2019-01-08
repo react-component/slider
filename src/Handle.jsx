@@ -57,7 +57,7 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps
+      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, children, ...restProps
     } = this.props;
 
     const className = classNames(
@@ -89,13 +89,16 @@ export default class Handle extends React.Component {
         aria-valuemax={max}
         aria-valuenow={value}
         aria-disabled={!!disabled}
-      />
+      >
+        { children }
+      </div>
     );
   }
 }
 
 Handle.propTypes = {
   prefixCls: PropTypes.string,
+  children: PropTypes.node,
   className: PropTypes.string,
   vertical: PropTypes.bool,
   offset: PropTypes.number,
