@@ -73,14 +73,15 @@ export default class Handle extends React.Component {
       ...postionStyle,
     };
 
+    let _tabIndex = tabIndex || 0;
+    if (disabled || tabIndex === null) {
+      _tabIndex = null;
+    }
+
     return (
       <div
         ref={this.setHandleRef}
-        tabIndex= {disabled
-          ? null
-          : tabIndex === null
-            ? null
-            : (tabIndex || 0)}
+        tabIndex= {_tabIndex}
         {...restProps}
         className={className}
         style={elStyle}
