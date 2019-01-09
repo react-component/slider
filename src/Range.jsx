@@ -348,26 +348,30 @@ class Range extends React.Component {
     const offsets = bounds.map(v => this.calcOffset(v));
 
     const handleClassName = `${prefixCls}-handle`;
-    const handles = bounds.map((v, i) => handleGenerator({
-      className: classNames({
-        [handleClassName]: true,
-        [`${handleClassName}-${i + 1}`]: true,
-      }),
-      prefixCls,
-      vertical,
-      offset: offsets[i],
-      value: v,
-      dragging: handle === i,
-      index: i,
-      tabIndex: tabIndex[i] === null
-        ? null
-        : (tabIndex[i] || 0),
-      min,
-      max,
-      disabled,
-      style: handleStyle[i],
-      ref: h => this.saveHandle(i, h),
-    }));
+    const handles = bounds.map((v, i) => {
+      let _tabIndex = tabIndex[i] || 0;
+      if (disabled || tabIndex[i] === null) {
+          _tabIndex = null;
+      }
+      return handleGenerator({
+        className: classNames({
+          [handleClassName]: true,
+          [`${handleClassName}-${i + 1}`]: true,
+        }),
+        prefixCls,
+        vertical,
+        offset: offsets[i],
+        value: v,
+        dragging: handle === i,
+        index: i,
+        tabIndex: _tabIndex,
+        min,
+        max,
+        disabled,
+        style: handleStyle[i],
+        ref: h => this.saveHandle(i, h),
+      })
+    });
 
     const tracks = bounds.slice(0, -1).map((_, index) => {
       const i = index + 1;
