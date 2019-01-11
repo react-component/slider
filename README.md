@@ -108,8 +108,8 @@ The following APIs are shared by Slider and Range.
 | onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
 | minimumTrackStyle | Object |  | please use  `trackStyle` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
 | maximumTrackStyle | Object |  | please use  `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
-| handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for mutli handle follow element order`) |
-| trackStyle | Array[Object] \| Object | `[{}]` | The style used for track. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for mutli track follow element order`)|w
+| handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi handle following element order`) |
+| trackStyle | Array[Object] \| Object | `[{}]` | The style used for track. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi track following element order`)|
 | railStyle | Object | `{}` | The style used for the track base color.  |
 | dotStyle | Object | `{}` | The style used for the dots. |
 | activeDotStyle | Object | `{}` | The style used for the active dots. |
@@ -131,7 +131,7 @@ The following APIs are shared by Slider and Range.
 | tabIndex | number[] | `[0, 0]` | Set the tabIndex of each handle. |
 | count | number | `1` | Determine how many ranges to render, and multiple handles will be rendered (number + 1). |
 | allowCross | boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
-| pushable | boolean or number | `false` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving an handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
+| pushable | boolean or number | `false` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving a handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
 
 ## Development
 
