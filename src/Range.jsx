@@ -114,12 +114,17 @@ class Range extends React.Component {
     this.onChange({ bounds: nextBounds });
   }
 
-  onEnd = () => {
+  onEnd = (force) => {
+    const { handle } = this.state;
+    this.removeDocumentEvents();
+
+    if (handle || force) {
+      this.props.onAfterChange(this.getValue());
+    }
+
     this.setState({
       handle: null,
     });
-    this.removeDocumentEvents();
-    this.props.onAfterChange(this.getValue());
   }
 
   onMove(e, position) {
