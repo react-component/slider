@@ -39,6 +39,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 
+var marks = {
+  26: '26°C'
+};
+
 var Demo = function (_React$Component) {
   __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_inherits___default()(Demo, _React$Component);
 
@@ -63,7 +67,7 @@ var Demo = function (_React$Component) {
         'div',
         null,
         __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement('input', null),
-        __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_rc_slider___default.a, null)
+        __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_6_rc_slider___default.a, { marks: marks, onAfterChange: console.log })
       );
     }
   }]);
