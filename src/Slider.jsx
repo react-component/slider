@@ -32,11 +32,11 @@ class Slider extends React.Component {
     if (utils.isDev()) {
       warning(
         !('minimumTrackStyle' in props),
-        'minimumTrackStyle will be deprecate, please use trackStyle instead.'
+        'minimumTrackStyle will be deprecated, please use trackStyle instead.'
       );
       warning(
         !('maximumTrackStyle' in props),
-        'maximumTrackStyle will be deprecate, please use railStyle instead.'
+        'maximumTrackStyle will be deprecated, please use railStyle instead.'
       );
     }
   }
@@ -66,11 +66,12 @@ class Slider extends React.Component {
   onChange(state) {
     const props = this.props;
     const isNotControlled = !('value' in props);
+    const nextState = state.value > this.props.max ? {...state, value: this.props.max} : state;
     if (isNotControlled) {
-      this.setState(state);
+      this.setState(nextState);
     }
 
-    const changedValue = state.value;
+    const changedValue = nextState.value;
     props.onChange(changedValue);
   }
 
