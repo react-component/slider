@@ -33,6 +33,10 @@ ReactDOM.render(
       <p>Slider with marks and steps</p>
       <Slider dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
+    <div style={style}>
+      <p>Reversed Slider with marks and steps</p>
+      <Slider dots reverse min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
+    </div>
 
     <div style={style}>
       <p>Slider with marks, `included=false`</p>
