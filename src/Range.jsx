@@ -219,7 +219,7 @@ class Range extends React.Component {
     const { state, props } = this;
     const nextBounds = [...state.bounds];
     nextBounds[state.handle] = value;
-    let nextHandle = state.handle;
+    let nextHandle = state.handle || state.recent;
     if (props.pushable !== false) {
       this.pushSurroundingHandles(nextBounds, nextHandle);
     } else if (props.allowCross) {
