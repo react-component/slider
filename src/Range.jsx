@@ -218,8 +218,8 @@ class Range extends React.Component {
   moveTo(value, isFromKeyboardEvent) {
     const { state, props } = this;
     const nextBounds = [...state.bounds];
-    nextBounds[state.handle] = value;
-    let nextHandle = state.handle;
+    nextBounds[this.prevMovedHandleIndex] = value;
+    let nextHandle = this.prevMovedHandleIndex;
     if (props.pushable !== false) {
       this.pushSurroundingHandles(nextBounds, nextHandle);
     } else if (props.allowCross) {
