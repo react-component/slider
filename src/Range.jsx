@@ -145,7 +145,7 @@ class Range extends React.Component {
       utils.pauseEvent(e);
       const { state, props } = this;
       const { bounds, handle } = state;
-      const oldValue = bounds[handle];
+      const oldValue = bounds[handle === null ? state.recent : handle];
       const mutatedValue = valueMutator(oldValue, props);
       const value = this.trimAlignValue(mutatedValue);
       if (value === oldValue) return;
@@ -218,8 +218,9 @@ class Range extends React.Component {
   moveTo(value, isFromKeyboardEvent) {
     const { state, props } = this;
     const nextBounds = [...state.bounds];
-    nextBounds[state.handle] = value;
-    let nextHandle = state.handle;
+    const handle = state.handle === null ? state.recent : state.handle;
+    nextBounds[handle] = value;
+    let nextHandle = handle;
     if (props.pushable !== false) {
       this.pushSurroundingHandles(nextBounds, nextHandle);
     } else if (props.allowCross) {

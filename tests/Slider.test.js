@@ -80,6 +80,21 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(49);
   });
 
+  it('it should work fine when arrow key is pressed', () => {
+    const wrapper = mount(<Slider range defaultValue={[20, 50]} />);
+    const handler = wrapper.find('.rc-slider-handle').at(1);
+    
+    wrapper.simulate('click');
+    handler.simulate('keyDown', { keyCode: keyCode.LEFT });
+    expect(wrapper.state('value')).toBe(49);
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    expect(wrapper.state('value')).toBe(50);
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(wrapper.state('value')).toBe(51);
+    handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(wrapper.state('value')).toBe(50);
+  });
+
   it('decreases the value when key "page down" is pressed, by a factor 2', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
