@@ -24,12 +24,22 @@ const Steps = ({ prefixCls, vertical, marks, dots, step, included,
   const range = max - min;
   const elements = calcPoints(vertical, marks, dots, step, min, max).map((point) => {
     const offset = `${Math.abs(point - min) / range * 100}%`;
+    const mark = marks[point];
 
     const isActived = (!included && point === upperBound) ||
             (included && point <= upperBound && point >= lowerBound);
     let style = vertical ? { bottom: offset, ...dotStyle } : { left: offset, ...dotStyle };
+
+    if (mark && mark.dotStyle) {
+      style = { ...style, ...mark.dotStyle };
+    }
+
     if (isActived) {
       style = { ...style, ...activeDotStyle };
+
+      if (mark && mark.activeDotStyle) {
+        style = { ...style, ...mark.activeDotStyle };
+      }
     }
 
     const pointClassName = classNames({
