@@ -96,7 +96,7 @@ The following APIs are shared by Slider and Range.
 | className | string | `''` | Additional CSS class for the root DOM node |
 | min | number | `0` | The minimum value of the slider |
 | max | number | `100` | The maximum value of the slider |
-| marks | `{number: string}` or`{number: { style, label }}` | `{}` | Marks on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
+| marks | `{number: ReactElement}` or`{number: { style, label }}` | `{}` | Marks on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
 | step | number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero, and `max` - `min` should be evenly divisible by the step value. <br /> When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. |
 | vertical | boolean | `false` | If vertical is `true`, the slider will be vertical. |
 | handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
