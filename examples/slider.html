@@ -2,7 +2,7 @@
 <html>
 
 <head>
-  <title>slider.js - example - rc-slider@8.6.6</title>
+  <title>slider.js - example - rc-slider@8.6.7</title>
   <meta name="viewport"
         content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no">
   <meta charset="utf-8"/>
@@ -257,13 +257,13 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
     document.writeln('<script src="https://as.alipayobjects.com/g/component/es6-promise/3.2.2/es6-promise.min.js"'+'>'+'<'+'/'+'script>');
   }
   </script>
-  <link rel="stylesheet" href="slider.css" />
+  <link rel="stylesheet" href="../common.css" />
 </head>
 
 <body>
   <div class="container">
     <div class="header">
-      <h1>rc-slider@8.6.6</h1>
+      <h1>rc-slider@8.6.7</h1>
 
       <p>Slider UI component for React</p>
     </div>
@@ -352,12 +352,15 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
   constructor(props) {
     <span class="hljs-keyword">super</span>(props);
     <span class="hljs-keyword">this</span>.state = {
-      min: <span class="hljs-number">0</span>,
+      min: <span class="hljs-number">1</span>,
       max: <span class="hljs-number">100</span>,
+      step: <span class="hljs-number">10</span>,
+      value: <span class="hljs-number">1</span>,
     };
   }
   onSliderChange = (value) =&gt; {
     log(value);
+    <span class="hljs-keyword">this</span>.setState({value});
   }
   onMinChange = (e) =&gt; {
     <span class="hljs-keyword">this</span>.setState({
@@ -369,16 +372,28 @@ Monokai Sublime style. Derived from Monokai by noformnocontent http://nn.mit-lic
       max: +e.target.value || <span class="hljs-number">100</span>,
     });
   }
+  onStepChange = (e) =&gt; {
+    <span class="hljs-keyword">this</span>.setState({
+      step: +e.target.value || <span class="hljs-number">1</span>,
+    });
+  }
   render() {
+    <span class="hljs-keyword">const</span> labelStyle = { minWidth: <span class="hljs-string">'60px'</span>, display: <span class="hljs-string">'inline-block'</span> };
+    <span class="hljs-keyword">const</span> inputStyle = { marginBottom: <span class="hljs-string">'10px'</span>};
     <span class="hljs-keyword">return</span> (
       <span class="xml"><span class="hljs-tag">&lt;<span class="hljs-title">div</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Min: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMinChange}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{labelStyle}</span>&gt;</span>Min: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMinChange}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{inputStyle}</span> /&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">label</span>&gt;</span>Max: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMaxChange}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{labelStyle}</span>&gt;</span>Max: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onMaxChange}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{inputStyle}</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{labelStyle}</span>&gt;</span>Step: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">input</span> <span class="hljs-attribute">type</span>=<span class="hljs-value">"number"</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.step}</span> <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onStepChange}</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{inputStyle}</span> /&gt;</span>
         <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
-        <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">defaultValue</span>=<span class="hljs-value">{50}</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{this.state.max}</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">label</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{labelStyle}</span>&gt;</span>Value: <span class="hljs-tag">&lt;/<span class="hljs-title">label</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">span</span>&gt;</span>{this.state.value}<span class="hljs-tag">&lt;/<span class="hljs-title">span</span>&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span><span class="hljs-tag">&lt;<span class="hljs-title">br</span> /&gt;</span>
+        <span class="hljs-tag">&lt;<span class="hljs-title">Slider</span> <span class="hljs-attribute">value</span>=<span class="hljs-value">{this.state.value}</span> <span class="hljs-attribute">min</span>=<span class="hljs-value">{this.state.min}</span> <span class="hljs-attribute">max</span>=<span class="hljs-value">{this.state.max}</span> <span class="hljs-attribute">step</span>=<span class="hljs-value">{this.state.step}</span>
           <span class="hljs-attribute">onChange</span>=<span class="hljs-value">{this.onSliderChange}</span>
         /&gt;</span>
       <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
@@ -461,7 +476,7 @@ ReactDOM.render(
       <span class="hljs-tag">&lt;<span class="hljs-title">NullableSlider</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
     <span class="hljs-tag">&lt;<span class="hljs-title">div</span> <span class="hljs-attribute">style</span>=<span class="hljs-value">{style}</span>&gt;</span>
-      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with dynamic `min` `max`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
+      <span class="hljs-tag">&lt;<span class="hljs-title">p</span>&gt;</span>Slider with dynamic `min` `max` `step`<span class="hljs-tag">&lt;/<span class="hljs-title">p</span>&gt;</span>
       <span class="hljs-tag">&lt;<span class="hljs-title">DynamicBounds</span> /&gt;</span>
     <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
   <span class="hljs-tag">&lt;/<span class="hljs-title">div</span>&gt;</span>
