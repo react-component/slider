@@ -118,7 +118,7 @@ class Range extends React.Component {
     const { handle } = this.state;
     this.removeDocumentEvents();
 
-    if (handle || force) {
+    if (handle !== null || force) {
       this.props.onAfterChange(this.getValue());
     }
 
