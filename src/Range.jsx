@@ -118,7 +118,7 @@ class Range extends React.Component {
     const { handle } = this.state;
     this.removeDocumentEvents();
 
-    if (handle || force) {
+    if (handle !== null || force) { //change to !== null so when the left handle with index 0 is moved it triggers the onAfterChange
       this.props.onAfterChange(this.getValue());
     }
 
