@@ -1,6 +1,7 @@
 /* eslint-disable max-len, no-undef, react/no-string-refs */
 import React from 'react';
 import { render, mount } from 'enzyme';
+import keyCode from 'rc-util/lib/KeyCode';
 import Range from '../src/Range';
 import createSliderWithTooltip from '../src/createSliderWithTooltip';
 
@@ -41,6 +42,17 @@ describe('Range', () => {
     const secondHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).getDOMNode();
     expect(firstHandle.hasAttribute('tabIndex')).toEqual(false);
     expect(secondHandle.hasAttribute('tabIndex')).toEqual(false);
+  });
+
+  it('it should trigger onAfterChange when key pressed', () => {
+    const onAfterChange = jest.fn();
+    const wrapper = mount(<Range defaultValue={[20, 50]} onAfterChange={onAfterChange} />);
+
+    const secondHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1);
+    wrapper.simulate('focus');
+    secondHandle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(onAfterChange).toBeCalled();
   });
 
   it('should render Multi-Range with value correctly', () => {
