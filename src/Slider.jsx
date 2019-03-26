@@ -122,6 +122,7 @@ class Slider extends React.Component {
       if (value === oldValue) return;
 
       this.onChange({ value });
+      this.props.onAfterChange(value);
     }
   }
 

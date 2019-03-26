@@ -56,6 +56,17 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(51);
   });
 
+  it('it should trigger onAfterChange when key pressed', () => {
+    const onAfterChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onAfterChange={onAfterChange} />);
+    const handler = wrapper.find('.rc-slider-handle').at(1);
+
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(onAfterChange).toBeCalled();
+  });
+
   it('increases the value when key "page up" is pressed, by a factor 2', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);

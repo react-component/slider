@@ -151,6 +151,7 @@ class Range extends React.Component {
       if (value === oldValue) return;
       const isFromKeyboardEvent = true;
       this.moveTo(value, isFromKeyboardEvent);
+      console.log(value)
     }
   }
 
@@ -236,6 +237,7 @@ class Range extends React.Component {
       // so trigger focus will invoke handler's onEnd and another handler's onStart too early,
       // cause onBeforeChange and onAfterChange receive wrong value.
       // here use setState callback to hack，but not elegant
+      this.props.onAfterChange(nextBounds);
       this.setState({}, () => {
         this.handlesRefs[nextHandle].focus();
       });
