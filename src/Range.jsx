@@ -151,7 +151,6 @@ class Range extends React.Component {
       if (value === oldValue) return;
       const isFromKeyboardEvent = true;
       this.moveTo(value, isFromKeyboardEvent);
-      console.log(value)
     }
   }
 
