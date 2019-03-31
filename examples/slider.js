@@ -160,8 +160,8 @@ ReactDOM.render(
       <p>Slider with custom handle and track style.<strong>(old api, will be deprecated)</strong></p>
       <Slider
         defaultValue={30}
-        maximumTrackStyle={{ backgroundColor: 'red', height: 10 }}
-        minimumTrackStyle={{ backgroundColor: 'blue', height: 10 }}
+        railStyle={{ backgroundColor: 'red', height: 10 }}
+        trackStyle={{ backgroundColor: 'blue', height: 10 }}
         handleStyle={{
           borderColor: 'blue',
           height: 28,
