@@ -6,20 +6,14 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
 >
   <div
     class="rc-slider-rail"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-track"
     style="left:0%;width:0%"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-step"
-  >
-    
-  </div>
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -29,14 +23,10 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
     role="slider"
     style="left:0%"
     tabindex="0"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-mark"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -46,24 +36,16 @@ exports[`Slider should render Slider without handle if value is null 1`] = `
 >
   <div
     class="rc-slider-rail"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-track"
     style="left:0%;width:0%"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-step"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-mark"
-  >
-    
-  </div>
+  />
 </div>
 `;
