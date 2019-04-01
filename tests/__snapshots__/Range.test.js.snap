@@ -6,32 +6,22 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
 >
   <div
     class="rc-slider-rail"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-track rc-slider-track-1"
     style="left:0%;width:0%"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-track rc-slider-track-2"
     style="left:0%;width:0%"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-track rc-slider-track-3"
     style="left:0%;width:0%"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-step"
-  >
-    
-  </div>
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -41,9 +31,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     role="slider"
     style="left:0%"
     tabindex="0"
-  >
-    
-  </div>
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -53,9 +41,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     role="slider"
     style="left:0%"
     tabindex="0"
-  >
-    
-  </div>
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -65,9 +51,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     role="slider"
     style="left:0%"
     tabindex="0"
-  >
-    
-  </div>
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -77,14 +61,10 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     role="slider"
     style="left:0%"
     tabindex="0"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-mark"
-  >
-    
-  </div>
+  />
 </div>
 `;
 
@@ -94,20 +74,14 @@ exports[`Range should render Range with correct DOM structure 1`] = `
 >
   <div
     class="rc-slider-rail"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-track rc-slider-track-1"
     style="left:0%;width:0%"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-step"
-  >
-    
-  </div>
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -117,9 +91,7 @@ exports[`Range should render Range with correct DOM structure 1`] = `
     role="slider"
     style="left:0%"
     tabindex="0"
-  >
-    
-  </div>
+  />
   <div
     aria-disabled="false"
     aria-valuemax="100"
@@ -129,13 +101,9 @@ exports[`Range should render Range with correct DOM structure 1`] = `
     role="slider"
     style="left:0%"
     tabindex="0"
-  >
-    
-  </div>
+  />
   <div
     class="rc-slider-mark"
-  >
-    
-  </div>
+  />
 </div>
 `;

@@ -180,7 +180,7 @@ describe('Range', () => {
       }
     }
     const map = {};
-    document.addEventListener = jest.genMockFn().mockImplementation((event, cb) => {
+    document.addEventListener = jest.fn().mockImplementation((event, cb) => {
       map[event] = cb;
     });
 
