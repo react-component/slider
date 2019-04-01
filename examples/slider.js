@@ -310,8 +310,8 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     ),
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, {
       defaultValue: 30,
-      maximumTrackStyle: { backgroundColor: 'red', height: 10 },
-      minimumTrackStyle: { backgroundColor: 'blue', height: 10 },
+      railStyle: { backgroundColor: 'red', height: 10 },
+      trackStyle: { backgroundColor: 'blue', height: 10 },
       handleStyle: {
         borderColor: 'blue',
         height: 28,
