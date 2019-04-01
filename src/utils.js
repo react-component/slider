@@ -46,11 +46,11 @@ export function getPrecision(step) {
 }
 
 export function getMousePosition(vertical, e) {
-  return vertical ? e.clientY : e.pageX;
+  return vertical ? e.clientY : e.clientX;
 }
 
 export function getTouchPosition(vertical, e) {
-  return vertical ? e.touches[0].clientY : e.touches[0].pageX;
+  return vertical ? e.touches[0].clientY : e.touches[0].clientX;
 }
 
 export function getHandleCenterPosition(vertical, handle) {
