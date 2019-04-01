@@ -123,6 +123,7 @@ class Slider extends React.Component {
 
       this.onChange({ value });
       this.props.onAfterChange(value);
+      this.onEnd();
     }
   }
 

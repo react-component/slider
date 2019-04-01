@@ -240,6 +240,7 @@ class Range extends React.Component {
       this.setState({}, () => {
         this.handlesRefs[nextHandle].focus();
       });
+      this.onEnd()
     }
   }
 
