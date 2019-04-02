@@ -1,14 +1,14 @@
 webpackJsonp([1],{
 
-/***/ 194:
+/***/ 191:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(195);
+module.exports = __webpack_require__(192);
 
 
 /***/ }),
 
-/***/ 195:
+/***/ 192:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -125,5 +125,5 @@ __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
 
 /***/ })
 
-},[194]);
+},[191]);
 //# sourceMappingURL=vertical.js.map
