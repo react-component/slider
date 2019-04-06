@@ -38,7 +38,7 @@ ReactDOM.render(
       <Slider min={20} defaultValue={20} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />
     </div>
     <div style={wrapperStyle}>
-      <p>Range with custom handle</p>
+      <p>Range with custom tooltip</p>
       <Range min={0} max={20} defaultValue={[3, 10]} tipFormatter={value => `${value}%`} />
     </div>
   </div>,
