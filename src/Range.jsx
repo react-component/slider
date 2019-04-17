@@ -79,8 +79,18 @@ class Range extends React.Component {
     const isNotControlled = !('value' in props);
     if (isNotControlled) {
       this.setState(state);
-    } else if (state.handle !== undefined) {
-      this.setState({ handle: state.handle });
+    } else {
+      const controlledState = {};
+
+      ['handle', 'recent'].forEach((item) => {
+        if (state[item] !== undefined) {
+          controlledState[item] = state[item];
+        }
+      });
+
+      if (Object.keys(controlledState).length) {
+        this.setState(controlledState);
+      }
     }
 
     const data = { ...this.state, ...state };
@@ -228,6 +238,7 @@ class Range extends React.Component {
       nextHandle = nextBounds.indexOf(value);
     }
     this.onChange({
+      recent: nextHandle,
       handle: nextHandle,
       bounds: nextBounds,
     });
