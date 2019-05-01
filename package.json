@@ -39,6 +39,7 @@
   },
   "scripts": {
     "build": "rc-tools run build",
+    "prepare": "npm run compile",
     "dist": "rc-tools run dist",
     "gh-pages": "rc-tools run gh-pages",
     "start": "rc-tools run server",

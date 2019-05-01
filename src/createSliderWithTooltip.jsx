@@ -39,6 +39,8 @@ export default function createSliderWithTooltip(Component) {
       const {
         prefixCls = 'rc-slider-tooltip',
         overlay = tipFormatter(value),
+        overlayClassName = '',
+        overlayStyle = {},
         placement = 'top',
         visible = false,
         ...restTooltipProps
@@ -56,6 +58,8 @@ export default function createSliderWithTooltip(Component) {
           {...restTooltipProps}
           prefixCls={prefixCls}
           overlay={overlay}
+          overlayClassName={overlayClassName}
+          overlayStyle={overlayStyle}
           placement={placement}
           visible={(!disabled && (this.state.visibles[index] || dragging)) || visible}
           key={index}
