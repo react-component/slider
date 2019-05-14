@@ -35514,8 +35514,18 @@ var Range = function (_React$Component) {
       var isNotControlled = !('value' in props);
       if (isNotControlled) {
         this.setState(state);
-      } else if (state.handle !== undefined) {
-        this.setState({ handle: state.handle });
+      } else {
+        var controlledState = {};
+
+        ['handle', 'recent'].forEach(function (item) {
+          if (state[item] !== undefined) {
+            controlledState[item] = state[item];
+          }
+        });
+
+        if (Object.keys(controlledState).length) {
+          this.setState(controlledState);
+        }
       }
 
       var data = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, this.state, state);
@@ -35685,6 +35695,7 @@ var Range = function (_React$Component) {
         nextHandle = nextBounds.indexOf(value);
       }
       this.onChange({
+        recent: nextHandle,
         handle: nextHandle,
         bounds: nextBounds
       });
