@@ -34,6 +34,11 @@ export default class Handle extends React.Component {
     }
   }
 
+  handleMouseDown = () => {
+    // fix https://github.com/ant-design/ant-design/issues/15324
+    this.focus();
+  }
+
   handleBlur = () => {
     this.setClickFocus(false);
   }
@@ -80,15 +85,21 @@ export default class Handle extends React.Component {
       ...positionStyle,
     };
 
+    let _tabIndex = tabIndex || 0;
+    if (disabled || tabIndex === null) {
+      _tabIndex = null;
+    }
+
     return (
       <div
         ref={this.setHandleRef}
-        tabIndex= {disabled ? null : (tabIndex || 0)}
+        tabIndex= {_tabIndex}
         {...restProps}
         className={className}
         style={elStyle}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyDown}
+        onMouseDown={this.handleMouseDown}
 
         // aria attribute
         role="slider"

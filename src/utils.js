@@ -23,11 +23,13 @@ export function isNotTouchEvent(e) {
     (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
 }
 
-export function getClosestPoint(val, { marks, step, min }) {
+export function getClosestPoint(val, { marks, step, min, max }) {
   const points = Object.keys(marks).map(parseFloat);
   if (step !== null) {
+    const maxSteps = Math.floor((max - min) / step);
+    const steps = Math.min((val - min) / step, maxSteps);
     const closestStep =
-            Math.round((val - min) / step) * step + min;
+            Math.round(steps) * step + min;
     points.push(closestStep);
   }
   const diffs = points.map(point => Math.abs(val - point));

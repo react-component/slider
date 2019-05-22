@@ -190,7 +190,7 @@ export default function createSlider(Component) {
     onClickMarkLabel = (e, value) => {
       e.stopPropagation();
       this.onChange({ value });
-      this.onEnd(true);
+      this.setState({ value }, () => this.onEnd(true));
     }
 
     getSliderStart() {

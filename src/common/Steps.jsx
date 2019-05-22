@@ -9,7 +9,7 @@ const calcPoints = (vertical, marks, dots, step, min, max) => {
     '`Slider[step]` should be a positive number in order to make Slider[dots] work.'
   );
   const points = Object.keys(marks).map(parseFloat).sort((a, b) => a - b);
-  if (dots) {
+  if (dots && step) {
     for (let i = min; i <= max; i += step) {
       if (points.indexOf(i) === -1) {
         points.push(i);

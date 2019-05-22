@@ -6,7 +6,8 @@ Slider UI component for React
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
 [![Test coverage][codecov-image]][codecov-url]
-[![gemnasium deps][gemnasium-image]][gemnasium-url]
+[![david-dm deps][david-dm-image]][david-dm-url]
+[![david-dm dev deps][david-dm-dev-image]][david-dm-dev-url]
 [![node version][node-image]][node-url]
 [![npm download][download-image]][download-url]
 
@@ -16,8 +17,10 @@ Slider UI component for React
 [travis-url]: https://travis-ci.org/react-component/slider
 [codecov-image]: https://img.shields.io/codecov/c/github/react-component/slider/master.svg?style=flat-square
 [codecov-url]: https://codecov.io/gh/react-component/slider/branch/master
-[gemnasium-image]: http://img.shields.io/gemnasium/react-component/slider.svg?style=flat-square
-[gemnasium-url]: https://gemnasium.com/react-component/slider
+[david-dm-image]: https://david-dm.org/react-component/slider/status.svg
+[david-dm-url]: https://david-dm.org/react-component/slider
+[david-dm-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg
+[david-dm-dev-url]: https://david-dm.org/react-component/slider?type=dev
 [node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
 [node-url]: http://nodejs.org/download/
 [download-image]: https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square
@@ -96,7 +99,7 @@ The following APIs are shared by Slider and Range.
 | className | string | `''` | Additional CSS class for the root DOM node |
 | min | number | `0` | The minimum value of the slider |
 | max | number | `100` | The maximum value of the slider |
-| marks | `{number: string}` or`{number: { style, label }}` | `{}` | Marks on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
+| marks | `{number: ReactNode}` or`{number: { style, label }}` | `{}` | Marks on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
 | step | number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero, and `max` - `min` should be evenly divisible by the step value. <br /> When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. |
 | vertical | boolean | `false` | If vertical is `true`, the slider will be vertical. |
 | handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
