@@ -150,7 +150,7 @@ export default function createSlider(Component) {
 
     onBlur = (e) => {
       const { onBlur } = this.props;
-      this.onEnd(e);
+      this.onEnd();
       if (onBlur) {
         onBlur(e);
       }
@@ -190,7 +190,7 @@ export default function createSlider(Component) {
     onClickMarkLabel = (e, value) => {
       e.stopPropagation();
       this.onChange({ value });
-      this.onEnd();
+      this.onEnd(true);
     }
 
     getSliderStart() {

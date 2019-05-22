@@ -258,4 +258,15 @@ describe('createSlider', () => {
 
     expect(rangeOnAfterChange).toHaveBeenCalled();
   });
+
+  it('only call onAfterChange once', () => {
+    const sliderOnAfterChange = jest.fn();
+    const sliderWrapper = mount(<Slider value={0} onAfterChange={sliderOnAfterChange} />);
+
+    sliderWrapper.instance().onStart();
+    sliderWrapper.instance().onEnd();
+    sliderWrapper.instance().onEnd();
+    expect(sliderOnAfterChange).toHaveBeenCalled();
+    expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
+  });
 });
