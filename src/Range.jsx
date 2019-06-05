@@ -172,7 +172,7 @@ class Range extends React.Component {
     const { bounds } = this.state;
     let closestBound = 0;
     for (let i = 1; i < bounds.length - 1; ++i) {
-      if (value > bounds[i]) { closestBound = i; }
+      if (value >= bounds[i]) { closestBound = i; }
     }
     if (Math.abs(bounds[closestBound + 1] - value) < Math.abs(bounds[closestBound] - value)) {
       closestBound += 1;
