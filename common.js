@@ -35603,7 +35603,7 @@ var Range = function (_React$Component) {
 
       var closestBound = 0;
       for (var i = 1; i < bounds.length - 1; ++i) {
-        if (value > bounds[i]) {
+        if (value >= bounds[i]) {
           closestBound = i;
         }
       }
