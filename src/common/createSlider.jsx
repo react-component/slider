@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import addEventListener from "rc-util/lib/Dom/addEventListener";
-import classNames from "classnames";
-import warning from "warning";
-import Steps from "./Steps";
-import Marks from "./Marks";
-import Handle from "../Handle";
-import * as utils from "../utils";
+import React from 'react';
+import PropTypes from 'prop-types';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
+import classNames from 'classnames';
+import warning from 'warning';
+import Steps from './Steps';
+import Marks from './Marks';
+import Handle from '../Handle';
+import * as utils from '../utils';
 
 function noop() {}
 
@@ -206,9 +206,10 @@ export default function createSlider(Component) {
 
     onClickMarkLabel = (e, value) => {
       e.stopPropagation();
-      this.onChange({ value });
+      this.onChange({ value, source: "label" });
       this.setState({ value }, () => this.onEnd(true));
     };
+
 
     getSliderStart() {
       const slider = this.sliderRef;
@@ -308,11 +309,6 @@ export default function createSlider(Component) {
     saveHandle(index, handle) {
       this.handlesRefs[index] = handle;
     }
-
-    onClickMarkLabel = (e, value) => {
-      e.stopPropagation();
-      this.onChange({ value, source: "label" });
-    };
 
     render() {
       const {
