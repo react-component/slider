@@ -20,6 +20,8 @@ class Range extends React.Component {
     allowCross: PropTypes.bool,
     disabled: PropTypes.bool,
     tabIndex: PropTypes.arrayOf(PropTypes.number),
+    min: PropTypes.number,
+    max: PropTypes.number,
   };
 
   static defaultProps = {
@@ -33,12 +35,12 @@ class Range extends React.Component {
     super(props);
 
     const { count, min, max } = props;
-    const initialValue = Array.apply(null, Array(count + 1))
-            .map(() => min);
+    const initialValue = Array(...Array(count + 1))
+      .map(() => min);
     const defaultValue = 'defaultValue' in props ?
-            props.defaultValue : initialValue;
+      props.defaultValue : initialValue;
     const value = props.value !== undefined ?
-            props.value : defaultValue;
+      props.value : defaultValue;
     const bounds = value.map((v, i) => this.trimAlignValue(v, i));
     const recent = bounds[0] === max ? 0 : bounds.length - 1;
 
@@ -64,7 +66,7 @@ class Range extends React.Component {
 
     this.setState({ bounds: nextBounds });
 
-    if (bounds.some(v => utils.isValueOutOfRange(v, nextProps))) {
+    if (value.some(v => utils.isValueOutOfRange(v, nextProps))) {
       const newValues = value.map((v) => {
         return utils.ensureValueInRange(v, nextProps);
       });
@@ -77,8 +79,18 @@ class Range extends React.Component {
     const isNotControlled = !('value' in props);
     if (isNotControlled) {
       this.setState(state);
-    } else if (state.handle !== undefined) {
-      this.setState({ handle: state.handle });
+    } else {
+      const controlledState = {};
+
+      ['handle', 'recent'].forEach((item) => {
+        if (state[item] !== undefined) {
+          controlledState[item] = state[item];
+        }
+      });
+
+      if (Object.keys(controlledState).length) {
+        this.setState(controlledState);
+      }
     }
 
     const data = { ...this.state, ...state };
@@ -112,9 +124,17 @@ class Range extends React.Component {
     this.onChange({ bounds: nextBounds });
   }
 
-  onEnd = () => {
+  onEnd = (force) => {
+    const { handle } = this.state;
     this.removeDocumentEvents();
-    this.props.onAfterChange(this.getValue());
+
+    if (handle !== null || force) {
+      this.props.onAfterChange(this.getValue());
+    }
+
+    this.setState({
+      handle: null,
+    });
   }
 
   onMove(e, position) {
@@ -135,7 +155,7 @@ class Range extends React.Component {
       utils.pauseEvent(e);
       const { state, props } = this;
       const { bounds, handle } = state;
-      const oldValue = bounds[handle];
+      const oldValue = bounds[handle === null ? state.recent : handle];
       const mutatedValue = valueMutator(oldValue, props);
       const value = this.trimAlignValue(mutatedValue);
       if (value === oldValue) return;
@@ -152,10 +172,10 @@ class Range extends React.Component {
     const { bounds } = this.state;
     let closestBound = 0;
     for (let i = 1; i < bounds.length - 1; ++i) {
-      if (value > bounds[i]) { closestBound = i; }
+      if (value >= bounds[i]) { closestBound = i; }
     }
     if (Math.abs(bounds[closestBound + 1] - value) < Math.abs(bounds[closestBound] - value)) {
-      closestBound = closestBound + 1;
+      closestBound += 1;
     }
     return closestBound;
   }
@@ -208,8 +228,9 @@ class Range extends React.Component {
   moveTo(value, isFromKeyboardEvent) {
     const { state, props } = this;
     const nextBounds = [...state.bounds];
-    nextBounds[state.handle] = value;
-    let nextHandle = state.handle;
+    const handle = state.handle === null ? state.recent : state.handle;
+    nextBounds[handle] = value;
+    let nextHandle = handle;
     if (props.pushable !== false) {
       this.pushSurroundingHandles(nextBounds, nextHandle);
     } else if (props.allowCross) {
@@ -217,6 +238,7 @@ class Range extends React.Component {
       nextHandle = nextBounds.indexOf(value);
     }
     this.onChange({
+      recent: nextHandle,
       handle: nextHandle,
       bounds: nextBounds,
     });
@@ -225,9 +247,11 @@ class Range extends React.Component {
       // so trigger focus will invoke handler's onEnd and another handler's onStart too early,
       // cause onBeforeChange and onAfterChange receive wrong value.
       // here use setState callback to hack，but not elegant
+      this.props.onAfterChange(nextBounds);
       this.setState({}, () => {
         this.handlesRefs[nextHandle].focus();
       });
+      this.onEnd()
     }
   }
 
@@ -337,24 +361,30 @@ class Range extends React.Component {
     const offsets = bounds.map(v => this.calcOffset(v));
 
     const handleClassName = `${prefixCls}-handle`;
-    const handles = bounds.map((v, i) => handleGenerator({
-      className: classNames({
-        [handleClassName]: true,
-        [`${handleClassName}-${i + 1}`]: true,
-      }),
-      prefixCls,
-      vertical,
-      offset: offsets[i],
-      value: v,
-      dragging: handle === i,
-      index: i,
-      tabIndex: tabIndex[i] || 0,
-      min,
-      max,
-      disabled,
-      style: handleStyle[i],
-      ref: h => this.saveHandle(i, h),
-    }));
+    const handles = bounds.map((v, i) => {
+      let _tabIndex = tabIndex[i] || 0;
+      if (disabled || tabIndex[i] === null) {
+          _tabIndex = null;
+      }
+      return handleGenerator({
+        className: classNames({
+          [handleClassName]: true,
+          [`${handleClassName}-${i + 1}`]: true,
+        }),
+        prefixCls,
+        vertical,
+        offset: offsets[i],
+        value: v,
+        dragging: handle === i,
+        index: i,
+        tabIndex: _tabIndex,
+        min,
+        max,
+        disabled,
+        style: handleStyle[i],
+        ref: h => this.saveHandle(i, h),
+      })
+    });
 
     const tracks = bounds.slice(0, -1).map((_, index) => {
       const i = index + 1;

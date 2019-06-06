@@ -1,6 +1,7 @@
-/* eslint-disable max-len, no-undef */
+/* eslint-disable max-len, no-undef, react/no-string-refs */
 import React from 'react';
 import { render, mount } from 'enzyme';
+import keyCode from 'rc-util/lib/KeyCode';
 import Range from '../src/Range';
 import createSliderWithTooltip from '../src/createSliderWithTooltip';
 
@@ -33,6 +34,25 @@ describe('Range', () => {
     const wrapper = mount(<Range tabIndex={[1, 2]} />);
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().tabIndex).toEqual(1);
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().tabIndex).toEqual(2);
+  });
+
+  it('should render Range without tabIndex (equal null) correctly', () => {
+    const wrapper = mount(<Range tabIndex={[null, null]} />);
+    const firstHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).getDOMNode();
+    const secondHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).getDOMNode();
+    expect(firstHandle.hasAttribute('tabIndex')).toEqual(false);
+    expect(secondHandle.hasAttribute('tabIndex')).toEqual(false);
+  });
+
+  it('it should trigger onAfterChange when key pressed', () => {
+    const onAfterChange = jest.fn();
+    const wrapper = mount(<Range defaultValue={[20, 50]} onAfterChange={onAfterChange} />);
+
+    const secondHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1);
+    wrapper.simulate('focus');
+    secondHandle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(onAfterChange).toBeCalled();
   });
 
   it('should render Multi-Range with value correctly', () => {
@@ -86,6 +106,14 @@ describe('Range', () => {
     range.setProps({ min: 0, max: 500 });
 
     expect(props.onChange).toHaveBeenCalledWith([0.01, 500]);
+  });
+
+  it('should only update bounds if they are out of range', () => {
+    const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
+    const range = mount(<Range {...props} />);
+    range.setProps({ min: 0, max: 500, value: [0.01, 466] });
+
+    expect(props.onChange).toHaveBeenCalledTimes(0);
   });
 
   // https://github.com/react-component/slider/pull/256
@@ -152,7 +180,7 @@ describe('Range', () => {
       }
     }
     const map = {};
-    document.addEventListener = jest.genMockFn().mockImplementation((event, cb) => {
+    document.addEventListener = jest.fn().mockImplementation((event, cb) => {
       map[event] = cb;
     });
 

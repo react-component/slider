@@ -1,8 +1,7 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
 import { mount } from 'enzyme';
-import Slider from '../../src';
-const { Range } = Slider;
+import Slider, { Range } from '../../src';
 
 const setWidth = (object, width) => {
   // https://github.com/tmpvar/jsdom/commit/0cdb2efcc69b6672dc2928644fc0172df5521176
@@ -50,6 +49,18 @@ describe('createSlider', () => {
     const rangeWrapper = mount(<Range value={[0, 100]} min={10} max={90} />);
     expect(rangeWrapper.state('bounds')[0]).toBe(10);
     expect(rangeWrapper.state('bounds')[1]).toBe(90);
+  });
+
+  it('should not set values when sending invalid numbers', () => {
+    const sliderWithMinWrapper = mount(<Slider value={0} min={Math.min()} />);
+    expect(sliderWithMinWrapper.state('value')).toBe(0);
+
+    const sliderWithMaxWrapper = mount(<Slider value={100} max={Math.max()} />);
+    expect(sliderWithMaxWrapper.state('value')).toBe(0);
+
+    const rangeWrapper = mount(<Range value={[0, 100]} min={Math.min()} max={Math.max()} />);
+    expect(rangeWrapper.state('bounds')[0]).toBe(0);
+    expect(rangeWrapper.state('bounds')[1]).toBe(0);
   });
 
   it('should update value when it is out of range', () => {
@@ -223,5 +234,39 @@ describe('createSlider', () => {
       preventDefault() {},
     });
     expect(wrapper.instance().dragOffset).toBe(0);
+  });
+
+  it('should call onAfterChange when clicked on mark label', () => {
+    const labelId = 'to-be-clicked';
+    const marks = {
+      0: 'some other label',
+      100: <span id={labelId}>some label</span>
+    };
+
+    const sliderOnAfterChange = jest.fn();
+    const sliderWrapper = mount(<Slider value={0} marks={marks} onAfterChange={sliderOnAfterChange} />);
+    const sliderHandleWrapper = sliderWrapper.find(`#${labelId}`).at(0);
+    sliderHandleWrapper.simulate('mousedown');
+    sliderHandleWrapper.simulate('mouseup');
+    expect(sliderOnAfterChange).toHaveBeenCalled();
+
+    const rangeOnAfterChange = jest.fn();
+    const rangeWrapper = mount(<Range value={[0, 1]} marks={marks} onAfterChange={rangeOnAfterChange} />);
+    const rangeHandleWrapper = rangeWrapper.find(`#${labelId}`).at(0);
+    rangeHandleWrapper.simulate('mousedown');
+    rangeHandleWrapper.simulate('mouseup');
+
+    expect(rangeOnAfterChange).toHaveBeenCalled();
+  });
+
+  it('only call onAfterChange once', () => {
+    const sliderOnAfterChange = jest.fn();
+    const sliderWrapper = mount(<Slider value={0} onAfterChange={sliderOnAfterChange} />);
+
+    sliderWrapper.instance().onStart();
+    sliderWrapper.instance().onEnd();
+    sliderWrapper.instance().onEnd();
+    expect(sliderOnAfterChange).toHaveBeenCalled();
+    expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,10 +1,10 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
-import PropTypes from 'prop-types';
-import warning from 'warning';
-import Track from './common/Track';
-import createSlider from './common/createSlider';
-import * as utils from './utils';
+import React from "react";
+import PropTypes from "prop-types";
+import warning from "warning";
+import Track from "./common/Track";
+import createSlider from "./common/createSlider";
+import * as utils from "./utils";
 
 class Slider extends React.Component {
   static propTypes = {
@@ -13,28 +13,29 @@ class Slider extends React.Component {
     disabled: PropTypes.bool,
     autoFocus: PropTypes.bool,
     tabIndex: PropTypes.number,
+    min: PropTypes.number,
+    max: PropTypes.number,
   };
 
   constructor(props) {
     super(props);
 
-    const defaultValue = props.defaultValue !== undefined ?
-            props.defaultValue : props.min;
-    const value = props.value !== undefined ?
-            props.value : defaultValue;
+    const defaultValue =
+      props.defaultValue !== undefined ? props.defaultValue : props.min;
+    const value = props.value !== undefined ? props.value : defaultValue;
 
     this.state = {
       value: this.trimAlignValue(value),
       dragging: false,
     };
-    if (process.env.NODE_ENV !== 'production') {
+    if (utils.isDev()) {
       warning(
-        !('minimumTrackStyle' in props),
-        'minimumTrackStyle will be deprecate, please use trackStyle instead.'
+        !("minimumTrackStyle" in props),
+        "minimumTrackStyle will be deprecated, please use trackStyle instead.",
       );
       warning(
-        !('maximumTrackStyle' in props),
-        'maximumTrackStyle will be deprecate, please use railStyle instead.'
+        !("maximumTrackStyle" in props),
+        "maximumTrackStyle will be deprecated, please use railStyle instead.",
       );
     }
   }
@@ -47,11 +48,11 @@ class Slider extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
+    if (!("value" in nextProps || "min" in nextProps || "max" in nextProps))
+      return;
 
     const prevValue = this.state.value;
-    const value = nextProps.value !== undefined ?
-            nextProps.value : prevValue;
+    const value = nextProps.value !== undefined ? nextProps.value : prevValue;
     const nextValue = this.trimAlignValue(value, nextProps);
     if (nextValue === prevValue) return;
 
@@ -63,11 +64,17 @@ class Slider extends React.Component {
 
   onChange(state) {
     const props = this.props;
-    const isNotControlled = !('value' in props);
+    const isNotControlled = !("value" in props);
+    const nextState =
+      state.value > this.props.max
+        ? { ...state, value: this.props.max }
+        : state;
     if (isNotControlled) {
-      this.setState(state);
+      this.setState(nextState);
     }
-    props.onChange(state);
+
+    const changedValue = nextState.value;
+    props.onChange(changedValue);
   }
 
   onStart(position) {
@@ -87,11 +94,14 @@ class Slider extends React.Component {
     this.onChange({ value });
   }
 
-  onEnd = () => {
-    this.setState({ dragging: false });
+  onEnd = force => {
+    const { dragging } = this.state;
     this.removeDocumentEvents();
-    this.props.onAfterChange(this.getValue());
-  }
+    if (dragging || force) {
+      this.props.onAfterChange(this.getValue());
+    }
+    this.setState({ dragging: false });
+  };
 
   onMove(e, position) {
     utils.pauseEvent(e);
@@ -99,7 +109,7 @@ class Slider extends React.Component {
     const value = this.calcValueByPos(position);
     if (value === oldValue) return;
 
-    this.onChange({ value, source: 'slider' });
+    this.onChange({ value, source: "slider" });
   }
 
   onKeyboard(e) {
@@ -113,7 +123,9 @@ class Slider extends React.Component {
       const value = this.trimAlignValue(mutatedValue);
       if (value === oldValue) return;
 
-      this.onChange({ value, source: 'keyboard' });
+      this.onChange({ value, source: "keyboard" });
+      this.props.onAfterChange(value);
+      this.onEnd();
     }
   }
 
@@ -130,6 +142,10 @@ class Slider extends React.Component {
   }
 
   trimAlignValue(v, nextProps = {}) {
+    if (v === null) {
+      return null;
+    }
+
     const mergedProps = { ...this.props, ...nextProps };
     const val = utils.ensureValueInRange(v, mergedProps);
     return utils.ensureValuePrecision(val, mergedProps);

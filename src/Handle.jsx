@@ -20,6 +20,10 @@ export default class Handle extends React.Component {
     }
   }
 
+  setHandleRef = (node) => {
+    this.handle = node;
+  };
+
   setClickFocus(focused) {
     this.setState({ clickFocused: focused });
   }
@@ -28,6 +32,11 @@ export default class Handle extends React.Component {
     if (document.activeElement === this.handle) {
       this.setClickFocus(true);
     }
+  }
+
+  handleMouseDown = () => {
+    // fix https://github.com/ant-design/ant-design/issues/15324
+    this.focus();
   }
 
   handleBlur = () => {
@@ -53,7 +62,7 @@ export default class Handle extends React.Component {
 
   render() {
     const {
-      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps,
+      prefixCls, vertical, offset, style, disabled, min, max, value, tabIndex, ...restProps
     } = this.props;
 
     const className = classNames(
@@ -68,28 +77,29 @@ export default class Handle extends React.Component {
       ...style,
       ...postionStyle,
     };
-    let ariaProps = {};
-    if (value !== undefined) {
-      ariaProps = {
-        ...ariaProps,
-        'aria-valuemin': min,
-        'aria-valuemax': max,
-        'aria-valuenow': value,
-        'aria-disabled': !!disabled,
-      };
+
+    let _tabIndex = tabIndex || 0;
+    if (disabled || tabIndex === null) {
+      _tabIndex = null;
     }
 
     return (
       <div
-        ref={node => (this.handle = node)}
-        role="slider"
-        tabIndex= {disabled ? null : (tabIndex || 0)}
-        {...ariaProps}
+        ref={this.setHandleRef}
+        tabIndex= {_tabIndex}
         {...restProps}
         className={className}
         style={elStyle}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyDown}
+        onMouseDown={this.handleMouseDown}
+
+        // aria attribute
+        role="slider"
+        aria-valuemin={min}
+        aria-valuemax={max}
+        aria-valuenow={value}
+        aria-disabled={!!disabled}
       />
     );
   }

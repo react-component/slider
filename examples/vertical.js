@@ -32,7 +32,7 @@ ReactDOM.render(
       <Slider vertical min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
     </div>
     <div style={style}>
-       <p>Slider with marks and steps</p>
+      <p>Slider with marks and steps</p>
       <Slider vertical dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
     <div style={style}>
