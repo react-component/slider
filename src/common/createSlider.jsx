@@ -92,6 +92,11 @@ export default function createSlider(Component) {
     componentDidMount() {
       // Snapshot testing cannot handle refs, so be sure to null-check this.
       this.document = this.sliderRef && this.sliderRef.ownerDocument;
+
+      const { autoFocus, disabled } = this.props;
+      if (autoFocus && !disabled) {
+        this.focus();
+      }
     }
 
     componentWillUnmount() {

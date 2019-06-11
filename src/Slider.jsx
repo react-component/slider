@@ -41,13 +41,6 @@ class Slider extends React.Component {
     }
   }
 
-  componentDidMount() {
-    const { autoFocus, disabled } = this.props;
-    if (autoFocus && !disabled) {
-      this.focus();
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
 

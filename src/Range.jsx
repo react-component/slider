@@ -10,6 +10,7 @@ import * as utils from './utils';
 class Range extends React.Component {
   static displayName = 'Range';
   static propTypes = {
+    autoFocus: PropTypes.bool,
     defaultValue: PropTypes.arrayOf(PropTypes.number),
     value: PropTypes.arrayOf(PropTypes.number),
     count: PropTypes.number,
