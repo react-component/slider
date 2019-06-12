@@ -33,8 +33,14 @@ export default function createSlider(Component) {
       style: PropTypes.object,
       minimumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
       maximumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
-      handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-      trackStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
+      handleStyle: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.arrayOf(PropTypes.object),
+      ]),
+      trackStyle: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.arrayOf(PropTypes.object),
+      ]),
       railStyle: PropTypes.object,
       dotStyle: PropTypes.object,
       activeDotStyle: PropTypes.object,
@@ -45,8 +51,8 @@ export default function createSlider(Component) {
 
     static defaultProps = {
       ...Component.defaultProps,
-      prefixCls: 'rc-slider',
-      className: '',
+      prefixCls: "rc-slider",
+      className: "",
       min: 0,
       max: 100,
       step: 1,
@@ -78,12 +84,14 @@ export default function createSlider(Component) {
 
       if (utils.isDev()) {
         const { step, max, min } = props;
-        const isPointDiffEven = isFinite(max - min) ? (max - min) % step === 0 : true; // eslint-disable-line
+        const isPointDiffEven = isFinite(max - min) // eslint-disable-line
+          ? (max - min) % step === 0
+          : true;
         warning(
           step && Math.floor(step) === step ? isPointDiffEven : true,
-          'Slider[max] - Slider[min] (%s) should be a multiple of Slider[step] (%s)',
+          "Slider[max] - Slider[min] (%s) should be a multiple of Slider[step] (%s)",
           max - min,
-          step
+          step,
         );
       }
       this.handlesRefs = {};
@@ -104,24 +112,29 @@ export default function createSlider(Component) {
       this.removeDocumentEvents();
     }
 
-    onMouseDown = (e) => {
-      if (e.button !== 0) { return; }
+    onMouseDown = e => {
+      if (e.button !== 0) {
+        return;
+      }
 
       const isVertical = this.props.vertical;
       let position = utils.getMousePosition(isVertical, e);
       if (!utils.isEventFromHandle(e, this.handlesRefs)) {
         this.dragOffset = 0;
       } else {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
+        const handlePosition = utils.getHandleCenterPosition(
+          isVertical,
+          e.target,
+        );
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
       this.removeDocumentEvents();
       this.onStart(position);
       this.addDocumentMouseEvents();
-    }
+    };
 
-    onTouchStart = (e) => {
+    onTouchStart = e => {
       if (utils.isNotTouchEvent(e)) return;
 
       const isVertical = this.props.vertical;
@@ -129,19 +142,25 @@ export default function createSlider(Component) {
       if (!utils.isEventFromHandle(e, this.handlesRefs)) {
         this.dragOffset = 0;
       } else {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
+        const handlePosition = utils.getHandleCenterPosition(
+          isVertical,
+          e.target,
+        );
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
       this.onStart(position);
       this.addDocumentTouchEvents();
       utils.pauseEvent(e);
-    }
+    };
 
-    onFocus = (e) => {
+    onFocus = e => {
       const { onFocus, vertical } = this.props;
       if (utils.isEventFromHandle(e, this.handlesRefs)) {
-        const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
+        const handlePosition = utils.getHandleCenterPosition(
+          vertical,
+          e.target,
+        );
         this.dragOffset = 0;
         this.onStart(handlePosition);
         utils.pauseEvent(e);
@@ -149,9 +168,9 @@ export default function createSlider(Component) {
           onFocus(e);
         }
       }
-    }
+    };
 
-    onBlur = (e) => {
+    onBlur = e => {
       const { onBlur } = this.props;
       this.onEnd();
       if (onBlur) {
@@ -163,18 +182,18 @@ export default function createSlider(Component) {
       if (this.handlesRefs[this.prevMovedHandleIndex]) {
         this.handlesRefs[this.prevMovedHandleIndex].clickFocus();
       }
-    }
+    };
 
-    onMouseMove = (e) => {
+    onMouseMove = e => {
       if (!this.sliderRef) {
         this.onEnd();
         return;
       }
       const position = utils.getMousePosition(this.props.vertical, e);
       this.onMove(e, position - this.dragOffset);
-    }
+    };
 
-    onTouchMove = (e) => {
+    onTouchMove = e => {
       if (utils.isNotTouchEvent(e) || !this.sliderRef) {
         this.onEnd();
         return;
@@ -182,25 +201,26 @@ export default function createSlider(Component) {
 
       const position = utils.getTouchPosition(this.props.vertical, e);
       this.onMove(e, position - this.dragOffset);
-    }
+    };
 
-    onKeyDown = (e) => {
+    onKeyDown = e => {
       if (this.sliderRef && utils.isEventFromHandle(e, this.handlesRefs)) {
         this.onKeyboard(e);
       }
-    }
+    };
 
     onClickMarkLabel = (e, value) => {
       e.stopPropagation();
-      this.onChange({ value });
+      this.onChange({ value, source: "label" });
       this.setState({ value }, () => this.onEnd(true));
-    }
+    };
+
 
     getSliderStart() {
       const slider = this.sliderRef;
       const rect = slider.getBoundingClientRect();
 
-      return this.props.vertical ? rect.top : (rect.left + window.pageXOffset);
+      return this.props.vertical ? rect.top : rect.left + window.pageXOffset;
     }
 
     getSliderLength() {
@@ -215,13 +235,29 @@ export default function createSlider(Component) {
 
     addDocumentTouchEvents() {
       // just work for Chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = addEventListener(this.document, 'touchmove', this.onTouchMove);
-      this.onTouchUpListener = addEventListener(this.document, 'touchend', this.onEnd);
+      this.onTouchMoveListener = addEventListener(
+        this.document,
+        "touchmove",
+        this.onTouchMove,
+      );
+      this.onTouchUpListener = addEventListener(
+        this.document,
+        "touchend",
+        this.onEnd,
+      );
     }
 
     addDocumentMouseEvents() {
-      this.onMouseMoveListener = addEventListener(this.document, 'mousemove', this.onMouseMove);
-      this.onMouseUpListener = addEventListener(this.document, 'mouseup', this.onEnd);
+      this.onMouseMoveListener = addEventListener(
+        this.document,
+        "mousemove",
+        this.onMouseMove,
+      );
+      this.onMouseUpListener = addEventListener(
+        this.document,
+        "mouseup",
+        this.onEnd,
+      );
     }
 
     removeDocumentEvents() {
@@ -242,7 +278,7 @@ export default function createSlider(Component) {
 
     blur() {
       if (!this.props.disabled) {
-        Object.keys(this.handlesRefs).forEach((key) => {
+        Object.keys(this.handlesRefs).forEach(key => {
           if (this.handlesRefs[key] && this.handlesRefs[key].blur) {
             this.handlesRefs[key].blur();
           }
@@ -253,7 +289,9 @@ export default function createSlider(Component) {
     calcValue(offset) {
       const { vertical, min, max } = this.props;
       const ratio = Math.abs(Math.max(offset, 0) / this.getSliderLength());
-      const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
+      const value = vertical
+        ? (1 - ratio) * (max - min) + min
+        : ratio * (max - min) + min;
       return value;
     }
 
@@ -269,9 +307,9 @@ export default function createSlider(Component) {
       return ratio * 100;
     }
 
-    saveSlider = (slider) => {
+    saveSlider = slider => {
       this.sliderRef = slider;
-    }
+    };
 
     saveHandle(index, handle) {
       this.handlesRefs[index] = handle;
