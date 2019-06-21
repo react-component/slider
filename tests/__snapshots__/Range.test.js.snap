@@ -8,6 +8,10 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
     class="rc-slider-rail"
   />
   <div
+    class="rc-slider-track rc-slider-track-0"
+    style="left:0%;width:0%"
+  />
+  <div
     class="rc-slider-track rc-slider-track-1"
     style="left:0%;width:0%"
   />
@@ -74,6 +78,10 @@ exports[`Range should render Range with correct DOM structure 1`] = `
 >
   <div
     class="rc-slider-rail"
+  />
+  <div
+    class="rc-slider-track rc-slider-track-0"
+    style="left:0%;width:0%"
   />
   <div
     class="rc-slider-track rc-slider-track-1"

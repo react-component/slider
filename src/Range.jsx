@@ -387,24 +387,37 @@ class Range extends React.Component {
       })
     });
 
+    const getTrackClassName = (i) => classNames({
+      [`${prefixCls}-track`]: true,
+      [`${prefixCls}-track-${i}`]: true,
+    });
+
     const tracks = bounds.slice(0, -1).map((_, index) => {
       const i = index + 1;
-      const trackClassName = classNames({
-        [`${prefixCls}-track`]: true,
-        [`${prefixCls}-track-${i}`]: true,
-      });
       return (
         <Track
-          className={trackClassName}
+          className={getTrackClassName(i)}
           vertical={vertical}
           included={included}
           offset={offsets[i - 1]}
           length={offsets[i] - offsets[i - 1]}
-          style={trackStyle[index]}
+          style={trackStyle[index + 1]}
           key={i}
         />
       );
     });
+
+    tracks.unshift(
+      <Track
+        className={getTrackClassName(0)}
+        vertical={vertical}
+        included={included}
+        offset={0}
+        length={offsets[0]}
+        style={trackStyle[0]}
+        key={0}
+      />
+    );
 
     return { tracks, handles };
   }

@@ -25,9 +25,13 @@ describe('Range', () => {
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().style.left).toMatch('0%');
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.left).toMatch('50%');
 
-    const trackStyle = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
-    expect(trackStyle.left).toMatch('0%');
-    expect(trackStyle.width).toMatch('50%');
+    const trackStyle0 = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
+    expect(trackStyle0.left).toMatch('0%');
+    expect(trackStyle0.width).toMatch('0%');
+
+    const trackStyle1 = wrapper.find('.rc-slider-track > .rc-slider-track').at(1).props().style;
+    expect(trackStyle1.left).toMatch('0%');
+    expect(trackStyle1.width).toMatch('50%');
   });
 
   it('should render Range with tabIndex correctly', () => {
@@ -66,15 +70,19 @@ describe('Range', () => {
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(2).props().style.left).toMatch('50%');
     expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(3).props().style.left).toMatch('75%');
 
-    const track1Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
+    const track0Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
+    expect(track0Style.left).toMatch('0%');
+    expect(track0Style.width).toMatch('0%');
+
+    const track1Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(1).props().style;
     expect(track1Style.left).toMatch('0%');
     expect(track1Style.width).toMatch('25%');
 
-    const track2Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(1).props().style;
+    const track2Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(2).props().style;
     expect(track2Style.left).toMatch('25%');
     expect(track2Style.width).toMatch('25%');
 
-    const track3Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(2).props().style;
+    const track3Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(3).props().style;
     expect(track3Style.left).toMatch('50%');
     expect(track3Style.width).toMatch('25%');
   });
