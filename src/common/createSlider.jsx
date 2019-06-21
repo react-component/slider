@@ -30,6 +30,7 @@ export default function createSlider(Component) {
       handle: PropTypes.func,
       dots: PropTypes.bool,
       vertical: PropTypes.bool,
+      zoom: PropTypes.number,
       style: PropTypes.object,
       minimumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
       maximumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
@@ -66,6 +67,7 @@ export default function createSlider(Component) {
       disabled: false,
       dots: false,
       vertical: false,
+      zoom: 1.0,
       trackStyle: [{}],
       handleStyle: [{}],
       railStyle: {},
@@ -107,12 +109,12 @@ export default function createSlider(Component) {
     onMouseDown = (e) => {
       if (e.button !== 0) { return; }
 
-      const isVertical = this.props.vertical;
-      let position = utils.getMousePosition(isVertical, e);
+      const { vertical, zoom } = this.props;
+      let position = utils.getMousePosition(vertical, zoom, e);
       if (!utils.isEventFromHandle(e, this.handlesRefs)) {
         this.dragOffset = 0;
       } else {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
+        const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
@@ -124,12 +126,12 @@ export default function createSlider(Component) {
     onTouchStart = (e) => {
       if (utils.isNotTouchEvent(e)) return;
 
-      const isVertical = this.props.vertical;
-      let position = utils.getTouchPosition(isVertical, e);
+      const { vertical, zoom } = this.props;
+      let position = utils.getTouchPosition(vertical, zoom, e);
       if (!utils.isEventFromHandle(e, this.handlesRefs)) {
         this.dragOffset = 0;
       } else {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
+        const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
@@ -170,7 +172,8 @@ export default function createSlider(Component) {
         this.onEnd();
         return;
       }
-      const position = utils.getMousePosition(this.props.vertical, e);
+      const { vertical, zoom } = this.props;
+      const position = utils.getMousePosition(vertical, zoom, e);
       this.onMove(e, position - this.dragOffset);
     }
 
@@ -180,7 +183,8 @@ export default function createSlider(Component) {
         return;
       }
 
-      const position = utils.getTouchPosition(this.props.vertical, e);
+      const { vertical, zoom } = this.props;
+      const position = utils.getTouchPosition(vertical, zoom, e);
       this.onMove(e, position - this.dragOffset);
     }
 
