@@ -117,3 +117,29 @@ export function getKeyboardValueMutator(e) {
     default: return undefined;
   }
 }
+
+// http://hammerjs.github.io/api/#directions
+const DIRECTION_NONE  = 1;  // 00001
+const DIRECTION_LEFT  = 2;  // 00010
+const DIRECTION_RIGHT = 4;  // 00100
+const DIRECTION_UP    = 8;  // 01000
+const DIRECTION_DOWN  = 16; // 10000
+
+export function isCorrectTouchDirection(firstTouch, secondTouch, vertical) {
+  const x = secondTouch.clientX - firstTouch.clientX;
+  const y = secondTouch.clientY - firstTouch.clientY;
+
+  let direction;
+
+  if (x === y) {
+    direction = DIRECTION_NONE;
+  } else if (Math.abs(x) >= Math.abs(y)) {
+    direction = x < 0 ? DIRECTION_LEFT : DIRECTION_RIGHT;
+  } else {
+    direction = y < 0 ? DIRECTION_UP : DIRECTION_DOWN;
+  }
+
+  return vertical
+    ? (direction === DIRECTION_UP || direction === DIRECTION_DOWN)
+    : (direction === DIRECTION_LEFT || direction === DIRECTION_RIGHT);
+}
