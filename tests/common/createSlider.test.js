@@ -207,7 +207,7 @@ describe('createSlider', () => {
     wrapper.simulate('touchstart', {
       type: 'touchstart',
       target: leftHandle,
-      touches: [{ pageX: 5 }],
+      touches: [{ pageX: 5, clientX: 5, clientY: 0 }],
       stopPropagation() {},
       preventDefault() {},
     });
@@ -215,11 +215,41 @@ describe('createSlider', () => {
     wrapper.instance().onTouchMove({ // to propagation
       type: 'touchmove',
       target: leftHandle,
-      touches: [{ pageX: 14 }],
+      touches: [{ pageX: 14, clientX: 14, clientY: 0 }],
       stopPropagation() {},
       preventDefault() {},
     });
     expect(wrapper.instance().getValue()).toBe(9);
+  });
+
+  it('should ignore TouchEvents in the wrong direction', () => {
+    const wrapper = mount(<Slider />);
+    setWidth(wrapper.instance().sliderRef, 100);
+    const leftHandle = wrapper.find('.rc-slider-handle').at(1).instance();
+    wrapper.simulate('touchstart', {
+      type: 'touchstart',
+      target: leftHandle,
+      touches: [{ pageX: 5, clientX: 5, clientY: 0 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(wrapper.instance().dragOffset).toBe(5);
+    wrapper.instance().onTouchMove({
+      type: 'touchmove',
+      target: leftHandle,
+      touches: [{ pageX: 10, clientX: 10, clientY: 8 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(wrapper.instance().getValue()).toBe(0);
+    wrapper.instance().onTouchMove({
+      type: 'touchmove',
+      target: leftHandle,
+      touches: [{ pageX: 14, clientX: 14, clientY: 8 }],
+      stopPropagation() {},
+      preventDefault() {},
+    });
+    expect(wrapper.instance().getValue()).toBe(0);
   });
 
   it('should set `dragOffset` to 0 when the TouchEvent target isn\'t a handle', () => {

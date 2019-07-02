@@ -47,4 +47,45 @@ describe('utils', () => {
       expect(utils.getClosestPoint(value, props)).toBe(96);
     });
   });
+
+  describe('isCorrectTouchDirection', () => {
+    let vertical;
+    let firstTouch;
+    let verticalTouch;
+    let horizontalTouch;
+
+    beforeEach(() => {
+      firstTouch = {clientX: 0, clientY: 0}
+      verticalTouch = {clientX: 0, clientY: 5}
+      horizontalTouch = {clientX: 5, clientY: 0}
+    })
+
+    describe('when vertical=FALSE', () => {
+      beforeEach(() => { vertical = false; })
+
+      it('is FALSE when secondTouch is vertically positioned from firstTouch', () => {
+        expect(utils.isCorrectTouchDirection(firstTouch, verticalTouch, vertical)).toBe(false);
+      });
+
+      it('is TRUE when secondTouch is horizontally positioned from firstTouch', () => {
+        expect(utils.isCorrectTouchDirection(firstTouch, horizontalTouch, vertical)).toBe(true);
+      });
+    });
+
+    describe('when vertical=TRUE', () => {
+      beforeEach(() => { vertical = true; })
+
+      it('is TRUE when secondTouch is vertically positioned from firstTouch', () => {
+        expect(utils.isCorrectTouchDirection(firstTouch, verticalTouch, vertical)).toBe(true);
+      });
+
+      it('is FALSE when secondTouch is horizontally positioned from firstTouch', () => {
+        expect(utils.isCorrectTouchDirection(firstTouch, horizontalTouch, vertical)).toBe(false);
+      });
+    });
+
+    it('is FALSE when secondTouch is identical to firstTouch', () => {
+      expect(utils.isCorrectTouchDirection(firstTouch, firstTouch, false)).toBe(false);
+    })
+  });
 });
