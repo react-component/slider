@@ -83,5 +83,9 @@ describe('utils', () => {
         expect(utils.isCorrectTouchDirection(firstTouch, horizontalTouch, vertical)).toBe(false);
       });
     });
+
+    it('is FALSE when secondTouch is identical to firstTouch', () => {
+      expect(utils.isCorrectTouchDirection(firstTouch, firstTouch, false)).toBe(false);
+    })
   });
 });
