@@ -153,7 +153,6 @@ export default function createSlider(Component) {
 
     onBlur = (e) => {
       const { onBlur } = this.props;
-      this.onEnd();
       if (onBlur) {
         onBlur(e);
       }
