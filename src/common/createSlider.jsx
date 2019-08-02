@@ -232,6 +232,10 @@ export default function createSlider(Component) {
       this.onMouseMoveListener && this.onMouseMoveListener.remove();
       this.onMouseUpListener && this.onMouseUpListener.remove();
       /* eslint-enable no-unused-expressions */
+
+      // added to remove focus from handle which causing not closing the tooltip mentioned in issue id number #579
+      this.blur();
+
     }
 
     focus() {
