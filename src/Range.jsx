@@ -52,24 +52,24 @@ class Range extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
-    if (this.props.min === nextProps.min &&
-        this.props.max === nextProps.max &&
-        shallowEqual(this.props.value, nextProps.value)) {
+  componentDidUpdate(previousProps) {
+    if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) return;
+    if (this.props.min === previousProps.min &&
+        this.props.max === previousProps.max &&
+        shallowEqual(previousProps.value, this.props.value)) {
       return;
     }
 
     const { bounds } = this.state;
-    const value = nextProps.value || bounds;
-    const nextBounds = value.map((v, i) => this.trimAlignValue(v, i, nextProps));
+    const value = this.props.value || bounds;
+    const nextBounds = value.map((v, i) => this.trimAlignValue(v, i, this.props));
     if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
 
     this.setState({ bounds: nextBounds });
 
-    if (value.some(v => utils.isValueOutOfRange(v, nextProps))) {
+    if (value.some(v => utils.isValueOutOfRange(v, this.props))) {
       const newValues = value.map((v) => {
-        return utils.ensureValueInRange(v, nextProps);
+        return utils.ensureValueInRange(v, this.props);
       });
       this.props.onChange(newValues);
     }
