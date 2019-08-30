@@ -36,6 +36,7 @@ const Steps = ({ prefixCls, vertical, reverse, marks, dots, step, included,
     const pointClassName = classNames({
       [`${prefixCls}-dot`]: true,
       [`${prefixCls}-dot-active`]: isActived,
+      [`${prefixCls}-dot-reverse`]: reverse,
     });
 
     return <span className={pointClassName} style={style} key={point} />;
