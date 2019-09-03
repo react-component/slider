@@ -548,7 +548,7 @@ var global = __webpack_require__(13);
 var core = __webpack_require__(8);
 var ctx = __webpack_require__(36);
 var hide = __webpack_require__(20);
-var has = __webpack_require__(16);
+var has = __webpack_require__(17);
 var PROTOTYPE = 'prototype';
 
 var $export = function (type, name, source) {
@@ -654,6 +654,36 @@ module.exports = !__webpack_require__(23)(function () {
 
 /***/ }),
 /* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+exports.__esModule = true;
+
+var _defineProperty = __webpack_require__(71);
+
+var _defineProperty2 = _interopRequireDefault(_defineProperty);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+exports.default = function (obj, key, value) {
+  if (key in obj) {
+    (0, _defineProperty2.default)(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+};
+
+/***/ }),
+/* 17 */
 /***/ (function(module, exports) {
 
 var hasOwnProperty = {}.hasOwnProperty;
@@ -663,7 +693,7 @@ module.exports = function (it, key) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // to indexed object, toObject with fallback for non-array-like ES3 strings
@@ -675,7 +705,7 @@ module.exports = function (it) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1263,36 +1293,6 @@ var utils = {
 mix(utils, domUtils);
 
 /* harmony default export */ __webpack_exports__["a"] = (utils);
-
-/***/ }),
-/* 19 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-exports.__esModule = true;
-
-var _defineProperty = __webpack_require__(71);
-
-var _defineProperty2 = _interopRequireDefault(_defineProperty);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-exports.default = function (obj, key, value) {
-  if (key in obj) {
-    (0, _defineProperty2.default)(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-};
 
 /***/ }),
 /* 20 */
@@ -1947,7 +1947,7 @@ module.exports = Object.create || function create(O, Properties) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var def = __webpack_require__(14).f;
-var has = __webpack_require__(16);
+var has = __webpack_require__(17);
 var TAG = __webpack_require__(10)('toStringTag');
 
 module.exports = function (it, tag, stat) {
@@ -1983,9 +1983,9 @@ module.exports = function (name) {
 
 var pIE = __webpack_require__(34);
 var createDesc = __webpack_require__(28);
-var toIObject = __webpack_require__(17);
+var toIObject = __webpack_require__(18);
 var toPrimitive = __webpack_require__(37);
-var has = __webpack_require__(16);
+var has = __webpack_require__(17);
 var IE8_DOM_DEFINE = __webpack_require__(56);
 var gOPD = Object.getOwnPropertyDescriptor;
 
@@ -2076,7 +2076,7 @@ module.exports = warning;
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_objectWithoutProperties__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_objectWithoutProperties___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_objectWithoutProperties__);
@@ -2177,9 +2177,12 @@ var Handle = function (_React$Component) {
   }, {
     key: 'render',
     value: function render() {
+      var _ref2, _ref3;
+
       var _props = this.props,
           prefixCls = _props.prefixCls,
           vertical = _props.vertical,
+          reverse = _props.reverse,
           offset = _props.offset,
           style = _props.style,
           disabled = _props.disabled,
@@ -2187,12 +2190,11 @@ var Handle = function (_React$Component) {
           max = _props.max,
           value = _props.value,
           tabIndex = _props.tabIndex,
-          restProps = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_objectWithoutProperties___default()(_props, ['prefixCls', 'vertical', 'offset', 'style', 'disabled', 'min', 'max', 'value', 'tabIndex']);
+          restProps = __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_objectWithoutProperties___default()(_props, ['prefixCls', 'vertical', 'reverse', 'offset', 'style', 'disabled', 'min', 'max', 'value', 'tabIndex']);
 
       var className = __WEBPACK_IMPORTED_MODULE_9_classnames___default()(this.props.className, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({}, prefixCls + '-handle-click-focused', this.state.clickFocused));
-
-      var postionStyle = vertical ? { bottom: offset + '%' } : { left: offset + '%' };
-      var elStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, style, postionStyle);
+      var positionStyle = vertical ? (_ref2 = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref2, reverse ? 'top' : 'bottom', offset + '%'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref2, reverse ? 'bottom' : 'top', 'auto'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref2, 'transform', 'translateY(+50%)'), _ref2) : (_ref3 = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref3, reverse ? 'right' : 'left', offset + '%'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref3, reverse ? 'left' : 'right', 'auto'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref3, 'transform', 'translateX(' + (reverse ? '+' : '-') + '50%)'), _ref3);
+      var elStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, style, positionStyle);
 
       var _tabIndex = tabIndex || 0;
       if (disabled || tabIndex === null) {
@@ -2235,7 +2237,8 @@ Handle.propTypes = {
   min: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number,
   max: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number,
   value: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number,
-  tabIndex: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number
+  tabIndex: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number,
+  reverse: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool
 };
 
 /***/ }),
@@ -2378,19 +2381,19 @@ function calculateNextValue(func, value, props) {
   return value;
 }
 
-function getKeyboardValueMutator(e) {
+function getKeyboardValueMutator(e, vertical, reverse) {
+  var increase = 'increase';
+  var decrease = 'decrease';
+  var method = increase;
   switch (e.keyCode) {
     case __WEBPACK_IMPORTED_MODULE_2_rc_util_es_KeyCode__["a" /* default */].UP:
+      method = vertical && reverse ? decrease : increase;break;
     case __WEBPACK_IMPORTED_MODULE_2_rc_util_es_KeyCode__["a" /* default */].RIGHT:
-      return function (value, props) {
-        return calculateNextValue('increase', value, props);
-      };
-
+      method = !vertical && reverse ? decrease : increase;break;
     case __WEBPACK_IMPORTED_MODULE_2_rc_util_es_KeyCode__["a" /* default */].DOWN:
+      method = vertical && reverse ? increase : decrease;break;
     case __WEBPACK_IMPORTED_MODULE_2_rc_util_es_KeyCode__["a" /* default */].LEFT:
-      return function (value, props) {
-        return calculateNextValue('decrease', value, props);
-      };
+      method = !vertical && reverse ? increase : decrease;break;
 
     case __WEBPACK_IMPORTED_MODULE_2_rc_util_es_KeyCode__["a" /* default */].END:
       return function (value, props) {
@@ -2412,6 +2415,9 @@ function getKeyboardValueMutator(e) {
     default:
       return undefined;
   }
+  return function (value, props) {
+    return calculateNextValue(method, value, props);
+  };
 }
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(6)))
 
@@ -2441,8 +2447,8 @@ module.exports = function (it) {
 /* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var has = __webpack_require__(16);
-var toIObject = __webpack_require__(17);
+var has = __webpack_require__(17);
+var toIObject = __webpack_require__(18);
 var arrayIndexOf = __webpack_require__(91)(false);
 var IE_PROTO = __webpack_require__(41)('IE_PROTO');
 
@@ -2648,7 +2654,7 @@ module.exports = __webpack_require__(20);
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 / 15.2.3.2 Object.getPrototypeOf(O)
-var has = __webpack_require__(16);
+var has = __webpack_require__(17);
 var toObject = __webpack_require__(29);
 var IE_PROTO = __webpack_require__(41)('IE_PROTO');
 var ObjectProto = Object.prototype;
@@ -2758,7 +2764,7 @@ function saveRef(name, component) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getVisibleRectForElement__ = __webpack_require__(74);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__adjustForViewport__ = __webpack_require__(150);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__getRegion__ = __webpack_require__(76);
@@ -2965,7 +2971,7 @@ function doAlign(el, tgtRegion, align, isTgtRegionVisible) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getOffsetParent__ = __webpack_require__(75);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isAncestorFixed__ = __webpack_require__(149);
 
@@ -3072,7 +3078,7 @@ function getVisibleRectForElement(element) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(19);
 
 
 /**
@@ -3124,7 +3130,7 @@ function getOffsetParent(element) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(19);
 
 
 function getRegion(node) {
@@ -3263,31 +3269,30 @@ LazyRenderBox.propTypes = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react__ = __webpack_require__(0);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_react__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react__ = __webpack_require__(0);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
+
 
 /* eslint-disable react/prop-types */
 
 
 var Track = function Track(props) {
+  var _ref, _ref2;
+
   var className = props.className,
       included = props.included,
       vertical = props.vertical,
       offset = props.offset,
       length = props.length,
-      style = props.style;
+      style = props.style,
+      reverse = props.reverse;
 
-
-  var positonStyle = vertical ? {
-    bottom: offset + '%',
-    height: length + '%'
-  } : {
-    left: offset + '%',
-    width: length + '%'
-  };
+  var positonStyle = vertical ? (_ref = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref, reverse ? 'top' : 'bottom', offset + '%'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref, reverse ? 'bottom' : 'top', 'auto'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref, 'height', length + '%'), _ref) : (_ref2 = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref2, reverse ? 'right' : 'left', offset + '%'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref2, reverse ? 'left' : 'right', 'auto'), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_ref2, 'width', length + '%'), _ref2);
 
   var elStyle = __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, style, positonStyle);
-  return included ? __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement('div', { className: className, style: elStyle }) : null;
+  return included ? __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement('div', { className: className, style: elStyle }) : null;
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Track);
@@ -3302,7 +3307,7 @@ var Track = function Track(props) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3_babel_runtime_helpers_classCallCheck__);
@@ -3498,9 +3503,15 @@ function createSlider(Component) {
       key: 'getSliderStart',
       value: function getSliderStart() {
         var slider = this.sliderRef;
-        var rect = slider.getBoundingClientRect();
+        var _props2 = this.props,
+            vertical = _props2.vertical,
+            reverse = _props2.reverse;
 
-        return this.props.vertical ? rect.top : rect.left + window.pageXOffset;
+        var rect = slider.getBoundingClientRect();
+        if (vertical) {
+          return reverse ? rect.bottom : rect.top;
+        }
+        return window.pageXOffset + (reverse ? rect.right : rect.left);
       }
     }, {
       key: 'getSliderLength',
@@ -3560,10 +3571,10 @@ function createSlider(Component) {
     }, {
       key: 'calcValue',
       value: function calcValue(offset) {
-        var _props2 = this.props,
-            vertical = _props2.vertical,
-            min = _props2.min,
-            max = _props2.max;
+        var _props3 = this.props,
+            vertical = _props3.vertical,
+            min = _props3.min,
+            max = _props3.max;
 
         var ratio = Math.abs(Math.max(offset, 0) / this.getSliderLength());
         var value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
@@ -3572,16 +3583,17 @@ function createSlider(Component) {
     }, {
       key: 'calcValueByPos',
       value: function calcValueByPos(position) {
-        var pixelOffset = position - this.getSliderStart();
+        var sign = this.props.reverse ? -1 : +1;
+        var pixelOffset = sign * (position - this.getSliderStart());
         var nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
         return nextValue;
       }
     }, {
       key: 'calcOffset',
       value: function calcOffset(value) {
-        var _props3 = this.props,
-            min = _props3.min,
-            max = _props3.max;
+        var _props4 = this.props,
+            min = _props4.min,
+            max = _props4.max;
 
         var ratio = (value - min) / (max - min);
         return ratio * 100;
@@ -3596,23 +3608,24 @@ function createSlider(Component) {
       value: function render() {
         var _classNames;
 
-        var _props4 = this.props,
-            prefixCls = _props4.prefixCls,
-            className = _props4.className,
-            marks = _props4.marks,
-            dots = _props4.dots,
-            step = _props4.step,
-            included = _props4.included,
-            disabled = _props4.disabled,
-            vertical = _props4.vertical,
-            min = _props4.min,
-            max = _props4.max,
-            children = _props4.children,
-            maximumTrackStyle = _props4.maximumTrackStyle,
-            style = _props4.style,
-            railStyle = _props4.railStyle,
-            dotStyle = _props4.dotStyle,
-            activeDotStyle = _props4.activeDotStyle;
+        var _props5 = this.props,
+            prefixCls = _props5.prefixCls,
+            className = _props5.className,
+            marks = _props5.marks,
+            dots = _props5.dots,
+            step = _props5.step,
+            included = _props5.included,
+            disabled = _props5.disabled,
+            vertical = _props5.vertical,
+            reverse = _props5.reverse,
+            min = _props5.min,
+            max = _props5.max,
+            children = _props5.children,
+            maximumTrackStyle = _props5.maximumTrackStyle,
+            style = _props5.style,
+            railStyle = _props5.railStyle,
+            dotStyle = _props5.dotStyle,
+            activeDotStyle = _props5.activeDotStyle;
 
         var _get$call = __WEBPACK_IMPORTED_MODULE_6_babel_runtime_helpers_get___default()(ComponentEnhancer.prototype.__proto__ || Object.getPrototypeOf(ComponentEnhancer.prototype), 'render', this).call(this),
             tracks = _get$call.tracks,
@@ -3640,6 +3653,7 @@ function createSlider(Component) {
           __WEBPACK_IMPORTED_MODULE_8_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_13__Steps__["a" /* default */], {
             prefixCls: prefixCls,
             vertical: vertical,
+            reverse: reverse,
             marks: marks,
             dots: dots,
             step: step,
@@ -3661,7 +3675,8 @@ function createSlider(Component) {
             lowerBound: this.getLowerBound(),
             upperBound: this.getUpperBound(),
             max: max,
-            min: min
+            min: min,
+            reverse: reverse
           }),
           children
         );
@@ -3686,6 +3701,7 @@ function createSlider(Component) {
     dots: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.bool,
     vertical: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.bool,
     style: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object,
+    reverse: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.bool,
     minimumTrackStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object, // just for compatibility, will be deperecate
     maximumTrackStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object, // just for compatibility, will be deperecate
     handleStyle: __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.oneOfType([__WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object, __WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_9_prop_types___default.a.object)]),
@@ -3722,6 +3738,7 @@ function createSlider(Component) {
     disabled: false,
     dots: false,
     vertical: false,
+    reverse: false,
     trackStyle: [{}],
     handleStyle: [{}],
     railStyle: {},
@@ -3860,7 +3877,7 @@ module.exports = !$assign || __webpack_require__(23)(function () {
 
 // false -> Array#indexOf
 // true  -> Array#includes
-var toIObject = __webpack_require__(17);
+var toIObject = __webpack_require__(18);
 var toLength = __webpack_require__(60);
 var toAbsoluteIndex = __webpack_require__(92);
 module.exports = function (IS_INCLUDES) {
@@ -28879,7 +28896,7 @@ for (var i = 0; i < DOMIterables.length; i++) {
 var addToUnscopables = __webpack_require__(112);
 var step = __webpack_require__(113);
 var Iterators = __webpack_require__(30);
-var toIObject = __webpack_require__(17);
+var toIObject = __webpack_require__(18);
 
 // 22.1.3.4 Array.prototype.entries()
 // 22.1.3.13 Array.prototype.keys()
@@ -28952,7 +28969,7 @@ module.exports = __webpack_require__(8).Symbol;
 
 // ECMAScript 6 symbols shim
 var global = __webpack_require__(13);
-var has = __webpack_require__(16);
+var has = __webpack_require__(17);
 var DESCRIPTORS = __webpack_require__(15);
 var $export = __webpack_require__(12);
 var redefine = __webpack_require__(66);
@@ -28969,7 +28986,7 @@ var isArray = __webpack_require__(119);
 var anObject = __webpack_require__(21);
 var isObject = __webpack_require__(22);
 var toObject = __webpack_require__(29);
-var toIObject = __webpack_require__(17);
+var toIObject = __webpack_require__(18);
 var toPrimitive = __webpack_require__(37);
 var createDesc = __webpack_require__(28);
 var _create = __webpack_require__(48);
@@ -29203,7 +29220,7 @@ setToStringTag(global.JSON, 'JSON', true);
 
 var META = __webpack_require__(33)('meta');
 var isObject = __webpack_require__(22);
-var has = __webpack_require__(16);
+var has = __webpack_require__(17);
 var setDesc = __webpack_require__(14).f;
 var id = 0;
 var isExtensible = Object.isExtensible || function () {
@@ -29293,7 +29310,7 @@ module.exports = Array.isArray || function isArray(arg) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // fallback for IE11 buggy Object.getOwnPropertyNames with iframe and window
-var toIObject = __webpack_require__(17);
+var toIObject = __webpack_require__(18);
 var gOPN = __webpack_require__(68).f;
 var toString = {}.toString;
 
@@ -30935,7 +30952,10 @@ var _initialiseProps = function _initialiseProps() {
     }
     _this5.preClickTime = 0;
     _this5.preTouchTime = 0;
-    if (event && event.preventDefault) {
+
+    // Only prevent default when all the action is click.
+    // https://github.com/ant-design/ant-design/issues/17043
+    if (_this5.isClickToShow() && _this5.isClickToHide() && event && event.preventDefault) {
       event.preventDefault();
     }
     var nextVisible = !_this5.state.popupVisible;
@@ -32506,7 +32526,7 @@ function setTransformXY(node, xy) {
 
 "use strict";
 /* harmony export (immutable) */ __webpack_exports__["a"] = isAncestorFixed;
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(19);
 
 
 function isAncestorFixed(element) {
@@ -32531,7 +32551,7 @@ function isAncestorFixed(element) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(19);
 
 
 function adjustForViewport(elFuturePos, elRegion, visibleRect, overflow) {
@@ -32641,7 +32661,7 @@ function getAlignOffset(region, align) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__utils__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__align__ = __webpack_require__(73);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -32766,7 +32786,7 @@ function restoreFocus(activeElement, container) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_classCallCheck__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_classCallCheck___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_classCallCheck__);
@@ -34280,8 +34300,11 @@ var Slider = function (_React$Component) {
   }, {
     key: 'onKeyboard',
     value: function onKeyboard(e) {
-      var valueMutator = __WEBPACK_IMPORTED_MODULE_10__utils__["d" /* getKeyboardValueMutator */](e);
+      var _props = this.props,
+          reverse = _props.reverse,
+          vertical = _props.vertical;
 
+      var valueMutator = __WEBPACK_IMPORTED_MODULE_10__utils__["d" /* getKeyboardValueMutator */](e, vertical, reverse);
       if (valueMutator) {
         __WEBPACK_IMPORTED_MODULE_10__utils__["k" /* pauseEvent */](e);
         var state = this.state;
@@ -34328,18 +34351,19 @@ var Slider = function (_React$Component) {
     value: function render() {
       var _this2 = this;
 
-      var _props = this.props,
-          prefixCls = _props.prefixCls,
-          vertical = _props.vertical,
-          included = _props.included,
-          disabled = _props.disabled,
-          minimumTrackStyle = _props.minimumTrackStyle,
-          trackStyle = _props.trackStyle,
-          handleStyle = _props.handleStyle,
-          tabIndex = _props.tabIndex,
-          min = _props.min,
-          max = _props.max,
-          handleGenerator = _props.handle;
+      var _props2 = this.props,
+          prefixCls = _props2.prefixCls,
+          vertical = _props2.vertical,
+          included = _props2.included,
+          disabled = _props2.disabled,
+          minimumTrackStyle = _props2.minimumTrackStyle,
+          trackStyle = _props2.trackStyle,
+          handleStyle = _props2.handleStyle,
+          tabIndex = _props2.tabIndex,
+          min = _props2.min,
+          max = _props2.max,
+          reverse = _props2.reverse,
+          handleGenerator = _props2.handle;
       var _state = this.state,
           value = _state.value,
           dragging = _state.dragging;
@@ -34355,6 +34379,7 @@ var Slider = function (_React$Component) {
         disabled: disabled,
         min: min,
         max: max,
+        reverse: reverse,
         index: 0,
         tabIndex: tabIndex,
         style: handleStyle[0] || handleStyle,
@@ -34369,6 +34394,7 @@ var Slider = function (_React$Component) {
         vertical: vertical,
         included: included,
         offset: 0,
+        reverse: reverse,
         length: offset,
         style: __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, minimumTrackStyle, _trackStyle)
       });
@@ -34386,6 +34412,7 @@ Slider.propTypes = {
   disabled: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.bool,
   autoFocus: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.bool,
   tabIndex: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.number,
+  reverse: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.bool,
   min: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.number,
   max: __WEBPACK_IMPORTED_MODULE_6_prop_types___default.a.number
 };
@@ -34488,7 +34515,7 @@ module.exports = function getOwnPropertyDescriptor(it, key) {
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
-var toIObject = __webpack_require__(17);
+var toIObject = __webpack_require__(18);
 var $getOwnPropertyDescriptor = __webpack_require__(52).f;
 
 __webpack_require__(82)('getOwnPropertyDescriptor', function () {
@@ -34503,7 +34530,7 @@ __webpack_require__(82)('getOwnPropertyDescriptor', function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__);
@@ -34540,6 +34567,7 @@ var calcPoints = function calcPoints(vertical, marks, dots, step, min, max) {
 var Steps = function Steps(_ref) {
   var prefixCls = _ref.prefixCls,
       vertical = _ref.vertical,
+      reverse = _ref.reverse,
       marks = _ref.marks,
       dots = _ref.dots,
       step = _ref.step,
@@ -34558,12 +34586,12 @@ var Steps = function Steps(_ref) {
     var offset = Math.abs(point - min) / range * 100 + '%';
 
     var isActived = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
-    var style = vertical ? __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({ bottom: offset }, dotStyle) : __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({ left: offset }, dotStyle);
+    var style = vertical ? __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, dotStyle, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({}, reverse ? 'top' : 'bottom', offset)) : __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, dotStyle, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()({}, reverse ? 'right' : 'left', offset));
     if (isActived) {
       style = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default()({}, style, activeDotStyle);
     }
 
-    var pointClassName = __WEBPACK_IMPORTED_MODULE_4_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot-active', isActived), _classNames));
+    var pointClassName = __WEBPACK_IMPORTED_MODULE_4_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot', true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot-active', isActived), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, prefixCls + '-dot-reverse', reverse), _classNames));
 
     return __WEBPACK_IMPORTED_MODULE_2_react___default.a.createElement('span', { className: pointClassName, style: style, key: point });
   });
@@ -34587,7 +34615,8 @@ Steps.propTypes = {
   dots: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool,
   step: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.number,
   marks: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.object,
-  vertical: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool
+  vertical: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool,
+  reverse: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Steps);
@@ -34599,7 +34628,7 @@ Steps.propTypes = {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_react__);
@@ -34616,6 +34645,7 @@ Steps.propTypes = {
 var Marks = function Marks(_ref) {
   var className = _ref.className,
       vertical = _ref.vertical,
+      reverse = _ref.reverse,
       marks = _ref.marks,
       included = _ref.included,
       upperBound = _ref.upperBound,
@@ -34642,16 +34672,14 @@ var Marks = function Marks(_ref) {
     var isActive = !included && point === upperBound || included && point <= upperBound && point >= lowerBound;
     var markClassName = __WEBPACK_IMPORTED_MODULE_4_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_classNames, className + '-text', true), __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()(_classNames, className + '-text-active', isActive), _classNames));
 
-    var bottomStyle = {
-      marginBottom: '-50%',
-      bottom: (point - min) / range * 100 + '%'
-    };
+    var bottomStyle = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({
+      marginBottom: '-50%'
+    }, reverse ? 'top' : 'bottom', (point - min) / range * 100 + '%');
 
-    var leftStyle = {
-      left: (point - min) / range * 100 + '%',
+    var leftStyle = __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default()({
       transform: 'translateX(-50%)',
       msTransform: 'translateX(-50%)'
-    };
+    }, reverse ? 'right' : 'left', reverse ? (point - min / 4) / range * 100 + '%' : (point - min) / range * 100 + '%');
 
     var style = vertical ? bottomStyle : leftStyle;
     var markStyle = markPointIsObject ? __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_extends___default()({}, style, markPoint.style) : style;
@@ -34682,6 +34710,7 @@ var Marks = function Marks(_ref) {
 Marks.propTypes = {
   className: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.string,
   vertical: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool,
+  reverse: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool,
   marks: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.object,
   included: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.bool,
   upperBound: __WEBPACK_IMPORTED_MODULE_3_prop_types___default.a.number,
@@ -35399,7 +35428,7 @@ KeyCode.isCharacterKey = function isCharacterKey(keyCode) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_extends__);
@@ -35582,7 +35611,11 @@ var Range = function (_React$Component) {
   }, {
     key: 'onKeyboard',
     value: function onKeyboard(e) {
-      var valueMutator = __WEBPACK_IMPORTED_MODULE_13__utils__["d" /* getKeyboardValueMutator */](e);
+      var _props = this.props,
+          reverse = _props.reverse,
+          vertical = _props.vertical;
+
+      var valueMutator = __WEBPACK_IMPORTED_MODULE_13__utils__["d" /* getKeyboardValueMutator */](e, vertical, reverse);
 
       if (valueMutator) {
         __WEBPACK_IMPORTED_MODULE_13__utils__["k" /* pauseEvent */](e);
@@ -35660,11 +35693,11 @@ var Range = function (_React$Component) {
   }, {
     key: 'getPoints',
     value: function getPoints() {
-      var _props = this.props,
-          marks = _props.marks,
-          step = _props.step,
-          min = _props.min,
-          max = _props.max;
+      var _props2 = this.props,
+          marks = _props2.marks,
+          step = _props2.step,
+          min = _props2.min,
+          max = _props2.max;
 
       var cache = this._getPointsCache;
       if (!cache || cache.marks !== marks || cache.step !== step) {
@@ -35827,17 +35860,18 @@ var Range = function (_React$Component) {
       var _state2 = this.state,
           handle = _state2.handle,
           bounds = _state2.bounds;
-      var _props2 = this.props,
-          prefixCls = _props2.prefixCls,
-          vertical = _props2.vertical,
-          included = _props2.included,
-          disabled = _props2.disabled,
-          min = _props2.min,
-          max = _props2.max,
-          handleGenerator = _props2.handle,
-          trackStyle = _props2.trackStyle,
-          handleStyle = _props2.handleStyle,
-          tabIndex = _props2.tabIndex;
+      var _props3 = this.props,
+          prefixCls = _props3.prefixCls,
+          vertical = _props3.vertical,
+          included = _props3.included,
+          disabled = _props3.disabled,
+          min = _props3.min,
+          max = _props3.max,
+          reverse = _props3.reverse,
+          handleGenerator = _props3.handle,
+          trackStyle = _props3.trackStyle,
+          handleStyle = _props3.handleStyle,
+          tabIndex = _props3.tabIndex;
 
 
       var offsets = bounds.map(function (v) {
@@ -35863,6 +35897,7 @@ var Range = function (_React$Component) {
           tabIndex: _tabIndex,
           min: min,
           max: max,
+          reverse: reverse,
           disabled: disabled,
           style: handleStyle[i],
           ref: function ref(h) {
@@ -35879,6 +35914,7 @@ var Range = function (_React$Component) {
         return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_11__common_Track__["a" /* default */], {
           className: trackClassName,
           vertical: vertical,
+          reverse: reverse,
           included: included,
           offset: offsets[i - 1],
           length: offsets[i] - offsets[i - 1],
@@ -35903,6 +35939,7 @@ Range.propTypes = {
   pushable: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.oneOfType([__WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool, __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number]),
   allowCross: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool,
   disabled: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool,
+  reverse: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.bool,
   tabIndex: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number),
   min: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number,
   max: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.number
@@ -35977,7 +36014,7 @@ module.exports = function shallowEqual(objA, objB, compare, compareContext) {
 /* harmony export (immutable) */ __webpack_exports__["a"] = createSliderWithTooltip;
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__ = __webpack_require__(24);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_objectWithoutProperties__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__ = __webpack_require__(16);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_babel_runtime_helpers_defineProperty__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends__ = __webpack_require__(5);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends__);

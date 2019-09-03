@@ -260,6 +260,16 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
       'p',
       null,
+      'Slider reverse'
+    ),
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, { onChange: log, reverse: true, min: 20, max: 60 })
+  ),
+  __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      'p',
+      null,
       'Basic Slider\uFF0C`step=20`'
     ),
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, { step: 20, defaultValue: 50, onBeforeChange: log })
@@ -345,6 +355,34 @@ __WEBPACK_IMPORTED_MODULE_6_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, {
       defaultValue: 30,
       trackStyle: { backgroundColor: 'blue', height: 10 },
+      handleStyle: {
+        borderColor: 'blue',
+        height: 28,
+        width: 28,
+        marginLeft: -14,
+        marginTop: -9,
+        backgroundColor: 'black'
+      },
+      railStyle: { backgroundColor: 'red', height: 10 }
+    })
+  ),
+  __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+      'p',
+      null,
+      'Reversed Slider with custom handle and track style.',
+      __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(
+        'strong',
+        null,
+        '(The recommended new api)'
+      )
+    ),
+    __WEBPACK_IMPORTED_MODULE_5_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, {
+      defaultValue: 30,
+      trackStyle: { backgroundColor: 'blue', height: 10 },
+      reverse: true,
       handleStyle: {
         borderColor: 'blue',
         height: 28,

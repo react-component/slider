@@ -311,6 +311,16 @@ __WEBPACK_IMPORTED_MODULE_7_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
       'p',
       null,
+      'Basic reverse Range`'
+    ),
+    __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(Range, { allowCross: false, defaultValue: [0, 20], onChange: log, reverse: true })
+  ),
+  __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(
+      'p',
+      null,
       'Basic Range\uFF0C`step=20` '
     ),
     __WEBPACK_IMPORTED_MODULE_6_react___default.a.createElement(Range, { step: 20, defaultValue: [20, 20], onBeforeChange: log })

@@ -89,6 +89,16 @@ __WEBPACK_IMPORTED_MODULE_5_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
       'p',
       null,
+      'Reversed Slider with custom handle'
+    ),
+    __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, { min: 0, max: 20, reverse: true, defaultValue: 3, handle: handle })
+  ),
+  __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+    'div',
+    { style: wrapperStyle },
+    __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(
+      'p',
+      null,
       'Slider with fixed values'
     ),
     __WEBPACK_IMPORTED_MODULE_4_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_7_rc_slider___default.a, { min: 20, defaultValue: 20, marks: { 20: 20, 40: 40, 100: 100 }, step: null })

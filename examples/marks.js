@@ -90,6 +90,16 @@ __WEBPACK_IMPORTED_MODULE_2_react_dom___default.a.render(__WEBPACK_IMPORTED_MODU
     __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
       'p',
       null,
+      'Reversed Slider with marks and steps'
+    ),
+    __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_rc_slider___default.a, { dots: true, reverse: true, min: -10, marks: marks, step: 10, onChange: log, defaultValue: 20 })
+  ),
+  __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+    'div',
+    { style: style },
+    __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(
+      'p',
+      null,
       'Slider with marks, `included=false`'
     ),
     __WEBPACK_IMPORTED_MODULE_1_react___default.a.createElement(__WEBPACK_IMPORTED_MODULE_3_rc_slider___default.a, { min: -10, marks: marks, included: false, defaultValue: 20 })
