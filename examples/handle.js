@@ -34,6 +34,10 @@ ReactDOM.render(
       <Slider min={0} max={20} defaultValue={3} handle={handle} />
     </div>
     <div style={wrapperStyle}>
+      <p>Reversed Slider with custom handle</p>
+      <Slider min={0} max={20} reverse defaultValue={3} handle={handle} />
+    </div>
+    <div style={wrapperStyle}>
       <p>Slider with fixed values</p>
       <Slider min={20} defaultValue={20} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />
     </div>

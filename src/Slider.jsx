@@ -13,6 +13,7 @@ class Slider extends React.Component {
     disabled: PropTypes.bool,
     autoFocus: PropTypes.bool,
     tabIndex: PropTypes.number,
+    reverse: PropTypes.bool,
     min: PropTypes.number,
     max: PropTypes.number,
   };
@@ -104,8 +105,8 @@ class Slider extends React.Component {
   }
 
   onKeyboard(e) {
-    const valueMutator = utils.getKeyboardValueMutator(e);
-
+    const { reverse, vertical } = this.props;
+    const valueMutator = utils.getKeyboardValueMutator(e, vertical, reverse);
     if (valueMutator) {
       utils.pauseEvent(e);
       const state = this.state;
@@ -154,6 +155,7 @@ class Slider extends React.Component {
       tabIndex,
       min,
       max,
+      reverse,
       handle: handleGenerator,
     } = this.props;
     const { value, dragging } = this.state;
@@ -168,6 +170,7 @@ class Slider extends React.Component {
       disabled,
       min,
       max,
+      reverse,
       index: 0,
       tabIndex,
       style: handleStyle[0] || handleStyle,
@@ -181,6 +184,7 @@ class Slider extends React.Component {
         vertical={vertical}
         included={included}
         offset={0}
+        reverse={reverse}
         length={offset}
         style={{
           ...minimumTrackStyle,

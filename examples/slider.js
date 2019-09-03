@@ -137,6 +137,10 @@ ReactDOM.render(
       <Slider onChange={log} />
     </div>
     <div style={style}>
+      <p>Slider reverse</p>
+      <Slider onChange={log} reverse min={20} max={60}/>
+    </div>
+    <div style={style}>
       <p>Basic Slider，`step=20`</p>
       <Slider step={20} defaultValue={50} onBeforeChange={log} />
     </div>
@@ -177,6 +181,23 @@ ReactDOM.render(
       <Slider
         defaultValue={30}
         trackStyle={{ backgroundColor: 'blue', height: 10 }}
+        handleStyle={{
+          borderColor: 'blue',
+          height: 28,
+          width: 28,
+          marginLeft: -14,
+          marginTop: -9,
+          backgroundColor: 'black',
+        }}
+        railStyle={{ backgroundColor: 'red', height: 10 }}
+      />
+    </div>
+    <div style={style}>
+      <p>Reversed Slider with custom handle and track style.<strong>(The recommended new api)</strong></p>
+      <Slider
+        defaultValue={30}
+        trackStyle={{ backgroundColor: 'blue', height: 10 }}
+        reverse
         handleStyle={{
           borderColor: 'blue',
           height: 28,

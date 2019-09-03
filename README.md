@@ -104,6 +104,7 @@ The following APIs are shared by Slider and Range.
 | vertical | boolean | `false` | If vertical is `true`, the slider will be vertical. |
 | handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
 | included | boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
+| reverse | boolean | `false` | If the value is `true`, it means the component is rendered reverse. |
 | disabled | boolean | `false` | If `true`, handles can't be moved. |
 | dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
 | onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |

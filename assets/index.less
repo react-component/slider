@@ -48,12 +48,11 @@
 
   &-handle {
     position: absolute;
-    margin-left: -7px;
-    margin-top: -5px;
     width: 14px;
     height: 14px;
     cursor: pointer;
     cursor: -webkit-grab;
+    margin-top: -5px;
     cursor: grab;
     border-radius: 50%;
     border: solid 2px tint(@primary-color, 50%);
@@ -125,6 +124,10 @@
     &-active {
       border-color: tint(@primary-color, 50%);
     }
+    &-reverse {
+      margin-left: 0;
+      margin-right: -4px;
+    }
   }
 
   &-disabled {
@@ -166,7 +169,6 @@
 
     &-handle {
       margin-left: -5px;
-      margin-bottom: -7px;
       touch-action: pan-y;
     }
 

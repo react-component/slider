@@ -15,9 +15,23 @@ describe('Slider', () => {
     const wrapper = mount(<Slider value={50} />);
     expect(wrapper.state('value')).toBe(50);
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
 
     const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
     expect(trackStyle.left).toMatch('0%');
+    expect(trackStyle.right).toMatch('auto');
+    expect(trackStyle.width).toMatch('50%');
+  });
+
+  it('should render reverse Slider with value correctly', () => {
+    const wrapper = mount(<Slider value={50} reverse />);
+    expect(wrapper.state('value')).toBe(50);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.right).toMatch('0%');
+    expect(trackStyle.left).toMatch('auto');
     expect(trackStyle.width).toMatch('50%');
   });
 
@@ -47,6 +61,16 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(51);
   });
 
+  it('decreases the value for reverse-vertical when key "up" is pressed', () => {
+    const wrapper = mount(<Slider defaultValue={50} reverse vertical />);
+    const handler = wrapper.find('.rc-slider-handle').at(1);
+
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+
+    expect(wrapper.state('value')).toBe(49);
+  });
+
   it('increases the value when key "right" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
@@ -66,6 +90,16 @@ describe('Slider', () => {
     handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
     expect(onAfterChange).toBeCalled();
+  });
+
+  it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
+    const wrapper = mount(<Slider defaultValue={50} reverse />);
+    const handler = wrapper.find('.rc-slider-handle').at(1);
+
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(wrapper.state('value')).toBe(49);
   });
 
   it('increases the value when key "page up" is pressed, by a factor 2', () => {

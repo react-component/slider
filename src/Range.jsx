@@ -20,6 +20,7 @@ class Range extends React.Component {
     ]),
     allowCross: PropTypes.bool,
     disabled: PropTypes.bool,
+    reverse: PropTypes.bool,
     tabIndex: PropTypes.arrayOf(PropTypes.number),
     min: PropTypes.number,
     max: PropTypes.number,
@@ -55,8 +56,8 @@ class Range extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
     if (this.props.min === nextProps.min &&
-        this.props.max === nextProps.max &&
-        shallowEqual(this.props.value, nextProps.value)) {
+      this.props.max === nextProps.max &&
+      shallowEqual(this.props.value, nextProps.value)) {
       return;
     }
 
@@ -150,7 +151,8 @@ class Range extends React.Component {
   }
 
   onKeyboard(e) {
-    const valueMutator = utils.getKeyboardValueMutator(e);
+    const { reverse, vertical } = this.props;
+    const valueMutator = utils.getKeyboardValueMutator(e, vertical, reverse);
 
     if (valueMutator) {
       utils.pauseEvent(e);
@@ -353,6 +355,7 @@ class Range extends React.Component {
       disabled,
       min,
       max,
+      reverse,
       handle: handleGenerator,
       trackStyle,
       handleStyle,
@@ -381,6 +384,7 @@ class Range extends React.Component {
         tabIndex: _tabIndex,
         min,
         max,
+        reverse,
         disabled,
         style: handleStyle[i],
         ref: h => this.saveHandle(i, h),
@@ -397,6 +401,7 @@ class Range extends React.Component {
         <Track
           className={trackClassName}
           vertical={vertical}
+          reverse={reverse}
           included={included}
           offset={offsets[i - 1]}
           length={offsets[i] - offsets[i - 1]}

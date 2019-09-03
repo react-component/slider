@@ -99,15 +99,19 @@ export function calculateNextValue(func, value, props) {
   return value;
 }
 
-export function getKeyboardValueMutator(e) {
+export function getKeyboardValueMutator(e, vertical, reverse) {
+  const increase = 'increase';
+  const decrease = 'decrease';
+  let  method = increase;
   switch (e.keyCode) {
     case keyCode.UP:
+      method = vertical && reverse ? decrease: increase; break;
     case keyCode.RIGHT:
-      return (value, props) => calculateNextValue('increase', value, props);
-
+      method = !vertical && reverse ? decrease: increase; break;
     case keyCode.DOWN:
+      method = vertical && reverse ? increase: decrease; break;
     case keyCode.LEFT:
-      return (value, props) => calculateNextValue('decrease', value, props);
+      method = !vertical && reverse ? increase: decrease; break;
 
     case keyCode.END: return (value, props) => props.max;
     case keyCode.HOME: return (value, props) => props.min;
@@ -116,4 +120,5 @@ export function getKeyboardValueMutator(e) {
 
     default: return undefined;
   }
+  return (value, props) => calculateNextValue(method, value, props);
 }
