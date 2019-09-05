@@ -1,10 +1,6 @@
 import { findDOMNode } from 'react-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 
-export function isDev() {
-  return (process.env.NODE_ENV !== 'production');
-}
-
 export function isEventFromHandle(e, handles) {
   try {
     return Object.keys(handles)

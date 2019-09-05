@@ -30,16 +30,15 @@ class Slider extends React.Component {
       value: this.trimAlignValue(value),
       dragging: false,
     };
-    if (utils.isDev()) {
-      warning(
-        !('minimumTrackStyle' in props),
-        'minimumTrackStyle will be deprecated, please use trackStyle instead.'
-      );
-      warning(
-        !('maximumTrackStyle' in props),
-        'maximumTrackStyle will be deprecated, please use railStyle instead.'
-      );
-    }
+
+    warning(
+      !('minimumTrackStyle' in props),
+      'minimumTrackStyle will be deprecated, please use trackStyle instead.'
+    );
+    warning(
+      !('maximumTrackStyle' in props),
+      'maximumTrackStyle will be deprecated, please use railStyle instead.'
+    );
   }
 
   componentWillReceiveProps(nextProps) {
