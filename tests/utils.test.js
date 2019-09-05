@@ -2,14 +2,6 @@
 import * as utils from '../src/utils';
 
 describe('utils', () => {
-  it('should detect if not in production', () => {
-    process.env.NODE_ENV = 'development';
-    expect(utils.isDev()).toBe(true);
-
-    process.env.NODE_ENV = 'production';
-    expect(utils.isDev()).toBe(false);
-  });
-
   describe('getClosestPoint', () => {
     it('should return closest value', () => {
       const value = 40;
