@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { polyfill } from 'react-lifecycles-compat';
 import shallowEqual from 'shallowequal';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
@@ -414,5 +415,7 @@ class Range extends React.Component {
     return { tracks, handles };
   }
 }
+
+polyfill(Range);
 
 export default createSlider(Range);
