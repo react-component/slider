@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import warning from 'warning';
-import { polyfill } from 'react-lifecycles-compat';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -42,18 +41,24 @@ class Slider extends React.Component {
     );
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
-
-    const prevValue = this.state.value;
-    const value = nextProps.value !== undefined ?
-      nextProps.value : prevValue;
-    const nextValue = this.trimAlignValue(value, nextProps);
-    if (nextValue === prevValue) return;
-
-    this.setState({ value: nextValue });
-    if (utils.isValueOutOfRange(value, nextProps)) {
-      this.props.onChange(nextValue);
+  componentDidUpdate(prevProps) {
+    if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
+      return;
+    }
+    if (this.props.value === prevProps.value ||
+        this.props.min === prevProps.min ||
+        this.props.max === prevProps.max) {
+      return;
+    }
+    const { value, onChange } = this.props;
+    const theValue = value !== undefined ? value : prevProps.value;
+    const nextValue = this.trimAlignValue(theValue, this.props);
+    if (nextValue !== prevProps.value) {
+      // eslint-disable-next-line
+      this.setState({ value: nextValue });
+      if (utils.isValueOutOfRange(value, this.props)) {
+        onChange(nextValue);
+      }
     }
   }
 
@@ -196,7 +201,5 @@ class Slider extends React.Component {
     return { tracks: track, handles: handle };
   }
 }
-
-polyfill(Slider);
 
 export default createSlider(Slider);

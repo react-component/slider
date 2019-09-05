@@ -99,6 +99,9 @@ class Range extends React.Component {
   }
 
   componentDidUpdate() {
+    if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
+      return;
+    }
     const { bounds } = this.state;
     const { onChange, value } = this.props;
     const currentValue = value || bounds;
