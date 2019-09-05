@@ -15,10 +15,9 @@ export default function createSliderWithTooltip(Component) {
       handleStyle: [{}],
       tipProps: {},
     };
-    constructor(props) {
-      super(props);
-      this.state = { visibles: {} };
-    }
+    state = {
+      visibles: {},
+    };
     handleTooltipVisibleChange = (index, visible) => {
       this.setState((prevState) => {
         return {
