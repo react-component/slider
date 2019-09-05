@@ -3,10 +3,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
-import shallowEqual from 'shallowequal';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
+
+const trimAlignValue = ({
+  value,
+  handle,
+  bounds,
+  props,
+}) => {
+  const { allowCross, pushable } = props;
+  const thershold = Number(pushable);
+  let valNotConflict = value;
+  if (!allowCross && handle != null && bounds !== undefined) {
+    if (handle > 0 && value <= (bounds[handle - 1] + thershold)) {
+      valNotConflict = bounds[handle - 1] + thershold;
+    }
+    if (handle < bounds.length - 1 && value >= (bounds[handle + 1] - thershold)) {
+      valNotConflict = bounds[handle + 1] - thershold;
+    }
+  }
+  return utils.ensureValuePrecision(valNotConflict, props);
+}
 
 class Range extends React.Component {
   static displayName = 'Range';
@@ -44,7 +63,11 @@ class Range extends React.Component {
       props.defaultValue : initialValue;
     const value = props.value !== undefined ?
       props.value : defaultValue;
-    const bounds = value.map((v, i) => this.trimAlignValue(v, i));
+    const bounds = value.map((v, i) => trimAlignValue({
+      value: v,
+      handle: i,
+      props,
+    }));
     const recent = bounds[0] === max ? 0 : bounds.length - 1;
 
     this.state = {
@@ -54,26 +77,34 @@ class Range extends React.Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (!('value' in nextProps || 'min' in nextProps || 'max' in nextProps)) return;
-    if (this.props.min === nextProps.min &&
-      this.props.max === nextProps.max &&
-      shallowEqual(this.props.value, nextProps.value)) {
-      return;
+  static getDerivedStateFromProps(props, state) {
+    if ('value' in props || 'min' in props || 'max' in props) {
+      const value = props.value || state.bounds;
+      const nextBounds = value.map((v, i) => trimAlignValue({
+        value: v,
+        handle: i,
+        bounds: state.bounds,
+        props,
+      }));
+      if (nextBounds.length === state.bounds.length &&
+          nextBounds.every((v, i) => v === state.bounds[i])) {
+        return null;
+      }
+      return {
+        ...state,
+        bounds: nextBounds,
+      }
     }
+    return null;
+  }
 
+  componentDidUpdate() {
     const { bounds } = this.state;
-    const value = nextProps.value || bounds;
-    const nextBounds = value.map((v, i) => this.trimAlignValue(v, i, nextProps));
-    if (nextBounds.length === bounds.length && nextBounds.every((v, i) => v === bounds[i])) return;
-
-    this.setState({ bounds: nextBounds });
-
-    if (value.some(v => utils.isValueOutOfRange(v, nextProps))) {
-      const newValues = value.map((v) => {
-        return utils.ensureValueInRange(v, nextProps);
-      });
-      this.props.onChange(newValues);
+    const { onChange, value } = this.props;
+    const currentValue = value || bounds;
+    if (currentValue.some(v => utils.isValueOutOfRange(v, this.props))) {
+      const newValues = currentValue.map(v => utils.ensureValueInRange(v, this.props));
+      onChange(newValues);
     }
   }
 
@@ -161,7 +192,12 @@ class Range extends React.Component {
       const { bounds, handle } = state;
       const oldValue = bounds[handle === null ? state.recent : handle];
       const mutatedValue = valueMutator(oldValue, props);
-      const value = this.trimAlignValue(mutatedValue);
+      const value = trimAlignValue({
+        value: mutatedValue,
+        handle,
+        bounds: state.bounds,
+        props,
+      });
       if (value === oldValue) return;
       const isFromKeyboardEvent = true;
       this.moveTo(value, isFromKeyboardEvent);
@@ -319,29 +355,14 @@ class Range extends React.Component {
     return true;
   }
 
-  trimAlignValue(v, handle, nextProps = {}) {
-    const mergedProps = { ...this.props, ...nextProps };
-    const valInRange = utils.ensureValueInRange(v, mergedProps);
-    const valNotConflict = this.ensureValueNotConflict(handle, valInRange, mergedProps);
-    return utils.ensureValuePrecision(valNotConflict, mergedProps);
-  }
-
-  ensureValueNotConflict(handle, val, { allowCross, pushable: thershold }) {
-    const state = this.state || {};
-    const { bounds } = state;
-    handle = handle === undefined ? state.handle : handle;
-    thershold = Number(thershold);
-    /* eslint-disable eqeqeq */
-    if (!allowCross && handle != null && bounds !== undefined) {
-      if (handle > 0 && val <= (bounds[handle - 1] + thershold)) {
-        return bounds[handle - 1] + thershold;
-      }
-      if (handle < bounds.length - 1 && val >= (bounds[handle + 1] - thershold)) {
-        return bounds[handle + 1] - thershold;
-      }
-    }
-    /* eslint-enable eqeqeq */
-    return val;
+  trimAlignValue(value) {
+    const { handle, bounds } = this.state;
+    trimAlignValue({
+      value,
+      handle,
+      bounds,
+      props: this.props,
+    });
   }
 
   render() {
