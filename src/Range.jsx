@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { polyfill } from 'react-lifecycles-compat';
+import shallowEqual from 'shallowequal';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -15,12 +16,13 @@ const trimAlignValue = ({
 }) => {
   const { allowCross, pushable } = props;
   const thershold = Number(pushable);
-  let valNotConflict = value;
+  const valInRange = utils.ensureValueInRange(value, props);
+  let valNotConflict = valInRange;
   if (!allowCross && handle != null && bounds !== undefined) {
-    if (handle > 0 && value <= (bounds[handle - 1] + thershold)) {
+    if (handle > 0 && valInRange <= (bounds[handle - 1] + thershold)) {
       valNotConflict = bounds[handle - 1] + thershold;
     }
-    if (handle < bounds.length - 1 && value >= (bounds[handle + 1] - thershold)) {
+    if (handle < bounds.length - 1 && valInRange >= (bounds[handle + 1] - thershold)) {
       valNotConflict = bounds[handle + 1] - thershold;
     }
   }
@@ -98,13 +100,19 @@ class Range extends React.Component {
     return null;
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
       return;
     }
-    const { bounds } = this.state;
+    if (
+      this.props.min === prevProps.min &&
+      this.props.max === prevProps.max &&
+      shallowEqual(this.props.value, prevProps.value)
+    ) {
+      return;
+    }
     const { onChange, value } = this.props;
-    const currentValue = value || bounds;
+    const currentValue = value || prevState.bounds;
     if (currentValue.some(v => utils.isValueOutOfRange(v, this.props))) {
       const newValues = currentValue.map(v => utils.ensureValueInRange(v, this.props));
       onChange(newValues);
@@ -360,7 +368,7 @@ class Range extends React.Component {
 
   trimAlignValue(value) {
     const { handle, bounds } = this.state;
-    trimAlignValue({
+    return trimAlignValue({
       value,
       handle,
       bounds,

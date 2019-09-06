@@ -68,13 +68,13 @@ describe('createSlider', () => {
     const sliderWrapper = mount(<Slider onChange={sliderOnChange} />);
     sliderWrapper.setProps({ min: 10 });
     expect(sliderWrapper.state('value')).toBe(10);
-    expect(sliderOnChange).toHaveBeenCalledWith(10);
+    expect(sliderOnChange).toHaveBeenLastCalledWith(10);
 
     const rangeOnChange = jest.fn();
     const rangeWrapper = mount(<Range onChange={rangeOnChange} />);
     rangeWrapper.setProps({ min: 10 });
     expect(rangeWrapper.state('bounds')).toEqual([10, 10]);
-    expect(rangeOnChange).toHaveBeenCalledWith([10, 10]);
+    expect(rangeOnChange).toHaveBeenLastCalledWith([10, 10]);
   });
 
   it('should not call onChange when value is the same', () => {

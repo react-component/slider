@@ -85,6 +85,7 @@
     "rc-tooltip": "^3.7.0",
     "rc-util": "^4.0.4",
     "react-lifecycles-compat": "^3.0.4",
+    "shallowequal": "^1.1.0",
     "warning": "^4.0.3"
   }
 }

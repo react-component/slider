@@ -41,22 +41,17 @@ class Slider extends React.Component {
     );
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
       return;
     }
-    if (this.props.value === prevProps.value ||
-        this.props.min === prevProps.min ||
-        this.props.max === prevProps.max) {
-      return;
-    }
     const { value, onChange } = this.props;
-    const theValue = value !== undefined ? value : prevProps.value;
+    const theValue = value !== undefined ? value : prevState.value;
     const nextValue = this.trimAlignValue(theValue, this.props);
-    if (nextValue !== prevProps.value) {
+    if (nextValue !== prevState.value) {
       // eslint-disable-next-line
       this.setState({ value: nextValue });
-      if (utils.isValueOutOfRange(value, this.props)) {
+      if (utils.isValueOutOfRange(theValue, this.props)) {
         onChange(nextValue);
       }
     }
