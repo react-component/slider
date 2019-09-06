@@ -193,11 +193,11 @@ describe('Range', () => {
           value,
         });
       }
+      getSlider() {
+        return this.slider;
+      }
       saveSlider = (slider) => {
         this.slider = slider;
-      }
-      getSlider(slider) {
-        return this.slider;
       }
       render() {
         return <Range ref={this.saveSlider} allowCross={false} value={this.state.value} pushable onChange={this.onChange} />;
