@@ -46,6 +46,7 @@ class Range extends React.Component {
     tabIndex: PropTypes.arrayOf(PropTypes.number),
     min: PropTypes.number,
     max: PropTypes.number,
+    setupDown:PropTypes.string
   };
 
   static defaultProps = {
