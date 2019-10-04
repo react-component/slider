@@ -63,6 +63,10 @@
       "\\.jsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js"
     }
   },
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
   "devDependencies": {
     "enzyme": "^3.0.0",
     "enzyme-adapter-react-16": "^1.0.1",
@@ -71,8 +75,6 @@
     "pre-commit": "1.x",
     "rc-tools": "8.x",
     "rc-trigger": "^2.2.0",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0"
   },
   "pre-commit": [
