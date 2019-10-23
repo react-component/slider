@@ -236,21 +236,19 @@ describe('Range', () => {
   });
 
   it('sets aria-label on the handles', () => {
-    // eslint-disable-next-line jsx-a11y/aria-proptypes
-    const wrapper = mount(<Range aria-label={['Some Label', 'Some other Label']} />);
+    const wrapper = mount(<Range ariaLabelGroupForHandles={['Some Label', 'Some other Label']} />);
     expect(wrapper.find('.rc-slider-handle-1').at(1).prop('aria-label')).toEqual('Some Label');
     expect(wrapper.find('.rc-slider-handle-2').at(1).prop('aria-label')).toEqual('Some other Label');
   });
 
   it('sets aria-labelledby on the handles', () => {
-    // eslint-disable-next-line jsx-a11y/aria-proptypes
-    const wrapper = mount(<Range aria-labelledby={['some_id', 'some_other_id']} />);
+    const wrapper = mount(<Range ariaLabelledByGroupForHandles={['some_id', 'some_other_id']} />);
     expect(wrapper.find('.rc-slider-handle-1').at(1).prop('aria-labelledby')).toEqual('some_id');
     expect(wrapper.find('.rc-slider-handle-2').at(1).prop('aria-labelledby')).toEqual('some_other_id');
   });
 
   it('sets aria-valuetext on the handles', () => {
-    const wrapper = mount(<Range min={0} max={5} defaultValue={[1, 3]} ariaValueTextFormatter={[(value) => `${value} of something`, (value) => `${value} of something else`]} />);
+    const wrapper = mount(<Range min={0} max={5} defaultValue={[1, 3]} ariaValueTextFormatterGroupForHandles={[(value) => `${value} of something`, (value) => `${value} of something else`]} />);
     expect(wrapper.find('.rc-slider-handle-1').at(1).prop('aria-valuetext')).toEqual('1 of something');
     expect(wrapper.find('.rc-slider-handle-2').at(1).prop('aria-valuetext')).toEqual('3 of something else');
   });
