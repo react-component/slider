@@ -125,9 +125,9 @@ The following APIs are shared by Slider and Range.
 | defaultValue | number | `0` | Set initial value of slider. |
 | value | number | - | Set current value of slider. |
 | tabIndex | number | `0` | Set the tabIndex of the slider handle. |
-| aria-label | string | - | Set the `aria-label` attribute on the slider handle.  |
-| aria-labelledby | string | - | Set the `aria-labelledby` attribute on the slider handle. |
-| ariaValueTextFormatter | (value) => string | - | A function to set the `aria-valuetext` attribute on the slider handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
+| ariaLabelForHandle | string | - | Set the `aria-label` attribute on the slider handle.  |
+| ariaLabelledByForHandle | string | - | Set the `aria-labelledby` attribute on the slider handle. |
+| ariaValueTextFormatterForHandle | (value) => string | - | A function to set the `aria-valuetext` attribute on the slider handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
 
 ### Range
 
@@ -136,9 +136,9 @@ The following APIs are shared by Slider and Range.
 | defaultValue | `number[]` | `[0, 0]` | Set initial positions of handles. |
 | value | `number[]` | | Set current positions of handles. |
 | tabIndex | number[] | `[0, 0]` | Set the tabIndex of each handle. |
-| aria-label | Array[string] | - | Set the `aria-label` attribute on each handle. |
-| aria-labelledby | Array[string] | - | Set the `aria-labelledby` attribute on each handle. |
-| ariaValueTextFormatter | Array[(value) => string] | - | A function to set the `aria-valuetext` attribute on each handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
+| ariaLabelGroupForHandles | Array[string] | - | Set the `aria-label` attribute on each handle. |
+| ariaLabelledByGroupForHandles | Array[string] | - | Set the `aria-labelledby` attribute on each handle. |
+| ariaValueTextFormatterGroupForHandles | Array[(value) => string] | - | A function to set the `aria-valuetext` attribute on each handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
 | count | number | `1` | Determine how many ranges to render, and multiple handles will be rendered (number + 1). |
 | allowCross | boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
 | pushable | boolean or number | `false` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving a handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |

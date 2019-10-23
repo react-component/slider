@@ -72,8 +72,8 @@ export default class Handle extends React.Component {
       max,
       value,
       tabIndex,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
+      ariaLabel,
+      ariaLabelledBy,
       ariaValueTextFormatter,
       ...restProps
     } = this.props;
@@ -145,7 +145,7 @@ Handle.propTypes = {
   value: PropTypes.number,
   tabIndex: PropTypes.number,
   reverse: PropTypes.bool,
-  'aria-label': PropTypes.string,
-  'aria-labelledby': PropTypes.string,
+  ariaLabel: PropTypes.string,
+  ariaLabelledBy: PropTypes.string,
   ariaValueTextFormatter: PropTypes.func,
 };

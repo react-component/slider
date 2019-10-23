@@ -16,9 +16,9 @@ class Slider extends React.Component {
     reverse: PropTypes.bool,
     min: PropTypes.number,
     max: PropTypes.number,
-    'aria-label': PropTypes.string,
-    'aria-labelledby': PropTypes.string,
-    ariaValueTextFormatter: PropTypes.func,
+    ariaLabelForHandle: PropTypes.string,
+    ariaLabelledByForHandle: PropTypes.string,
+    ariaValueTextFormatterForHandle: PropTypes.func,
   };
 
   constructor(props) {
@@ -156,9 +156,9 @@ class Slider extends React.Component {
       trackStyle,
       handleStyle,
       tabIndex,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
-      ariaValueTextFormatter,
+      ariaLabelForHandle,
+      ariaLabelledByForHandle,
+      ariaValueTextFormatterForHandle,
       min,
       max,
       reverse,
@@ -179,9 +179,9 @@ class Slider extends React.Component {
       reverse,
       index: 0,
       tabIndex,
-      'aria-label': ariaLabel,
-      'aria-labelledby': ariaLabelledBy,
-      ariaValueTextFormatter,
+      ariaLabel: ariaLabelForHandle,
+      ariaLabelledBy: ariaLabelledByForHandle,
+      ariaValueTextFormatter: ariaValueTextFormatterForHandle,
       style: handleStyle[0] || handleStyle,
       ref: h => this.saveHandle(0, h),
     });
