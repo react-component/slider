@@ -137,6 +137,10 @@ ReactDOM.render(
       <Slider onChange={log} />
     </div>
     <div style={style}>
+      <p>Basic Slider, `pivot=50`</p>
+      <Slider onChange={log} pivot={50} />
+    </div>
+    <div style={style}>
       <p>Slider reverse</p>
       <Slider onChange={log} reverse min={20} max={60}/>
     </div>
