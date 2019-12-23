@@ -7,7 +7,7 @@
   <meta charset="utf-8"/>
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <link href="//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.3/normalize.css" rel="stylesheet"/>
-  <title>rc-slider@8.7.1 - Slider UI component for React</title>
+  <title>rc-slider@9.0.0-alpha.0 - Slider UI component for React</title>
   <style>
     @font-face {
       font-family: octicons-anchor;
@@ -737,7 +737,7 @@
 
 <body>
 <div class="header">
-  <h1>rc-slider@8.7.1</h1>
+  <h1>rc-slider@9.0.0-alpha.0</h1>
 </div>
 <div class="examples">
   <h3>EXAMPLES</h3>
@@ -990,6 +990,24 @@ ReactDOM.render(
 <td><code>0</code></td>
 <td>Set the tabIndex of the slider handle.</td>
 </tr>
+<tr>
+<td>ariaLabelForHandle</td>
+<td>string</td>
+<td>-</td>
+<td>Set the <code>aria-label</code> attribute on the slider handle.</td>
+</tr>
+<tr>
+<td>ariaLabelledByForHandle</td>
+<td>string</td>
+<td>-</td>
+<td>Set the <code>aria-labelledby</code> attribute on the slider handle.</td>
+</tr>
+<tr>
+<td>ariaValueTextFormatterForHandle</td>
+<td>(value) =&gt; string</td>
+<td>-</td>
+<td>A function to set the <code>aria-valuetext</code> attribute on the slider handle. It receives the current value of the slider and returns a formatted string describing the value. See <a href="https://www.w3.org/TR/wai-aria-practices-1.1/#slider" title="null">WAI-ARIA Authoring Practices 1.1</a> for more information.</td>
+</tr>
 </tbody>
 </table>
 <h3>Range<a id="user-content-range" name="range" class="anchor" aria-hidden="true" href="#range"><span class="octicon octicon-link"></span></a></h3><table>
@@ -1019,6 +1037,24 @@ ReactDOM.render(
 <td>number[]</td>
 <td><code>[0, 0]</code></td>
 <td>Set the tabIndex of each handle.</td>
+</tr>
+<tr>
+<td>ariaLabelGroupForHandles</td>
+<td>Array[string]</td>
+<td>-</td>
+<td>Set the <code>aria-label</code> attribute on each handle.</td>
+</tr>
+<tr>
+<td>ariaLabelledByGroupForHandles</td>
+<td>Array[string]</td>
+<td>-</td>
+<td>Set the <code>aria-labelledby</code> attribute on each handle.</td>
+</tr>
+<tr>
+<td>ariaValueTextFormatterGroupForHandles</td>
+<td>Array[(value) =&gt; string]</td>
+<td>-</td>
+<td>A function to set the <code>aria-valuetext</code> attribute on each handle. It receives the current value of the slider and returns a formatted string describing the value. See <a href="https://www.w3.org/TR/wai-aria-practices-1.1/#slider" title="null">WAI-ARIA Authoring Practices 1.1</a> for more information.</td>
 </tr>
 <tr>
 <td>count</td>
