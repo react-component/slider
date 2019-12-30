@@ -23,8 +23,8 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('50%');
   });
 
-  it('should render Slider with greater value than pivot correctly', () => {
-    const wrapper = mount(<Slider value={50} pivot={20} />);
+  it('should render Slider correctly where value > trackStart', () => {
+    const wrapper = mount(<Slider value={50} trackStart={20} />);
     expect(wrapper.state('value')).toBe(50);
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('50%');
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
@@ -35,8 +35,8 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('30%');
   });
 
-  it('should render Slider with lesser value than pivot correctly', () => {
-    const wrapper = mount(<Slider value={40} pivot={60} />);
+  it('should render Slider correctly where value < trackStart', () => {
+    const wrapper = mount(<Slider value={40} trackStart={60} />);
     expect(wrapper.state('value')).toBe(40);
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('40%');
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
@@ -59,8 +59,8 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('50%');
   });
 
-  it('should render reverse Slider with greater value than pivot correctly', () => {
-    const wrapper = mount(<Slider value={50} pivot={20} reverse />);
+  it('should render reverse Slider correctly where value > trackStart', () => {
+    const wrapper = mount(<Slider value={50} trackStart={20} reverse />);
     expect(wrapper.state('value')).toBe(50);
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
@@ -71,8 +71,8 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('30%');
   });
 
-  it('should render reverse Slider with lesser value than pivot correctly', () => {
-    const wrapper = mount(<Slider value={30} pivot={50} reverse />);
+  it('should render reverse Slider correctly where value < trackStart', () => {
+    const wrapper = mount(<Slider value={30} trackStart={50} reverse />);
     expect(wrapper.state('value')).toBe(30);
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('30%');
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');

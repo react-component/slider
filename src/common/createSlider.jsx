@@ -17,7 +17,7 @@ export default function createSlider(Component) {
       ...Component.propTypes,
       min: PropTypes.number,
       max: PropTypes.number,
-      pivot: PropTypes.number,
+      trackStart: PropTypes.number,
       step: PropTypes.number,
       marks: PropTypes.object,
       included: PropTypes.bool,
