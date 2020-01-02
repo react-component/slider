@@ -87,12 +87,7 @@ class Range extends React.Component {
   static getDerivedStateFromProps(props, state) {
     if ('value' in props || 'min' in props || 'max' in props) {
       const value = props.value || state.bounds;
-      const nextBounds = value.map((v, i) => trimAlignValue({
-        value: v,
-        handle: i,
-        bounds: state.bounds,
-        props,
-      }));
+      const nextBounds = value;
       if (nextBounds.length === state.bounds.length &&
           nextBounds.every((v, i) => v === state.bounds[i])) {
         return null;
