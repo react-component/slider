@@ -18,7 +18,7 @@ export default function createSliderWithTooltip(Component) {
       },
       handleStyle: [{}],
       tipProps: {},
-      getTooltipContainer: () => document.body
+      getTooltipContainer: (node) => node.parentNode
     };
 
     state = {
