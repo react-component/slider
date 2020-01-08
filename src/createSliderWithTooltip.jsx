@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Tooltip from 'rc-tooltip';
-import { Handle } from 'rc-slider';
+import Handle from './Handle';
 
 export default function createSliderWithTooltip(Component) {
   return class ComponentWrapper extends React.Component {
