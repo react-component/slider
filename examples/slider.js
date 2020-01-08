@@ -130,6 +130,36 @@ class DynamicBounds extends React.Component {
   }
 }
 
+class StartFromMarkedPoint extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 20,
+    };
+  }
+  onSliderChange = (value) => {
+    log(value);
+    this.setState({
+      value,
+    });
+  };
+  onAfterChange = (value) => {
+    console.log(value); //eslint-disable-line
+  };
+  render(){
+    return(
+      <Slider
+          min={0}
+          max={100}
+          value={this.state.value}
+          onChange={this.onSliderChange}
+          onAfterChange={this.onAfterChange}
+          handleStartPoint={20}
+        />
+    )
+  }
+}
+
 ReactDOM.render(
   <div>
     <div style={style}>
@@ -228,6 +258,10 @@ ReactDOM.render(
     <div style={style}>
       <p>Slider with dynamic `min` `max` `step`</p>
       <DynamicBounds />
+    </div>
+    <div style={style}>
+      <p>Slider starting from marked point `20`</p>
+      <StartFromMarkedPoint />
     </div>
   </div>
   , document.getElementById('__react-content'));

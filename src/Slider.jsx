@@ -163,9 +163,15 @@ class Slider extends React.Component {
       max,
       reverse,
       handle: handleGenerator,
+      handleStartPoint
     } = this.props;
     const { value, dragging } = this.state;
     const offset = this.calcOffset(value);
+    const reversed = reverse || (offset-(handleStartPoint || 0 )) < 0;
+    const startPoint = reversed ? 
+                       max-(handleStartPoint||0) : (handleStartPoint||0);
+    const length = handleStartPoint ? Math.abs(offset-handleStartPoint): offset;
+
     const handle = handleGenerator({
       className: `${prefixCls}-handle`,
       prefixCls,
@@ -187,14 +193,16 @@ class Slider extends React.Component {
     });
 
     const _trackStyle = trackStyle[0] || trackStyle;
-    const track = (
+   // console.log('offset-handleStartPoint',`${offset}-${handleStartPoint}`)
+   
+   const track = (
       <Track
         className={`${prefixCls}-track`}
         vertical={vertical}
         included={included}
-        offset={0}
-        reverse={reverse}
-        length={offset}
+        offset={startPoint}
+        reverse={reversed}
+        length={length}
         style={{
           ...minimumTrackStyle,
           ..._trackStyle,
