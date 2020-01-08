@@ -134,7 +134,7 @@ class StartFromMarkedPoint extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: 20,
+      value: 40,
     };
   }
   onSliderChange = (value) => {
@@ -154,7 +154,8 @@ class StartFromMarkedPoint extends React.Component {
           value={this.state.value}
           onChange={this.onSliderChange}
           onAfterChange={this.onAfterChange}
-          handleStartPoint={20}
+          handleStartPoint={40}
+         
         />
     )
   }
@@ -260,8 +261,9 @@ ReactDOM.render(
       <DynamicBounds />
     </div>
     <div style={style}>
-      <p>Slider starting from marked point `20`</p>
+      <p>Slider starting from marked point `40` (`handleStartPoint` will be ignored for truthy reverse)</p>
       <StartFromMarkedPoint />
     </div>
+
   </div>
   , document.getElementById('__react-content'));

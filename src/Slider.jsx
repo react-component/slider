@@ -169,7 +169,7 @@ class Slider extends React.Component {
     const offset = this.calcOffset(value);
     const reversed = reverse || (offset-(handleStartPoint || 0 )) < 0;
     const startPoint = reversed ? 
-                       max-(handleStartPoint||0) : (handleStartPoint||0);
+                       max-(handleStartPoint || 0) : (handleStartPoint||0);
     const length = handleStartPoint ? Math.abs(offset-handleStartPoint): offset;
 
     const handle = handleGenerator({
@@ -200,9 +200,9 @@ class Slider extends React.Component {
         className={`${prefixCls}-track`}
         vertical={vertical}
         included={included}
-        offset={startPoint}
+        offset={reverse?0:startPoint}
         reverse={reversed}
-        length={length}
+        length={reverse?offset:length}
         style={{
           ...minimumTrackStyle,
           ..._trackStyle,
