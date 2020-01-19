@@ -137,8 +137,8 @@ ReactDOM.render(
       <Slider onChange={log} />
     </div>
     <div style={style}>
-      <p>Basic Slider, `trackStart=50`</p>
-      <Slider onChange={log} trackStart={50} />
+      <p>Basic Slider, `startPoint=50`</p>
+      <Slider onChange={log} startPoint={50} />
     </div>
     <div style={style}>
       <p>Slider reverse</p>

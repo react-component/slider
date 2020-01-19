@@ -32,8 +32,8 @@ ReactDOM.render(
       <Slider vertical min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
     </div>
     <div style={style}>
-      <p>Slider with marks, `step=null` and `trackStart=0`</p>
-      <Slider vertical min={-10} trackStart={0} marks={marks} step={null} onChange={log} defaultValue={20} />
+      <p>Slider with marks, `step=null` and `startPoint=0`</p>
+      <Slider vertical min={-10} startPoint={0} marks={marks} step={null} onChange={log} defaultValue={20} />
     </div>
     <div style={style}>
       <p>Reverse Slider with marks, `step=null`</p>
