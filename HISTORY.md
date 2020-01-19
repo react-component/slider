@@ -1,6 +1,10 @@
 # History
 ----
 
+## 9.1.0
+
+[Feature] Support `startPoint` prop.
+
 ## 8.7.0
 
 [Feature] Supprot `reverse` prop.
