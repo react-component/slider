@@ -124,6 +124,7 @@ The following APIs are shared by Slider and Range.
 | ------------ | ------- | ------- | ----------- |
 | defaultValue | number | `0` | Set initial value of slider. |
 | value | number | - | Set current value of slider. |
+| startPoint | number | `undefined` | Track starts from this value. If `undefined`, `min` is used. |
 | tabIndex | number | `0` | Set the tabIndex of the slider handle. |
 | ariaLabelForHandle | string | - | Set the `aria-label` attribute on the slider handle.  |
 | ariaLabelledByForHandle | string | - | Set the `aria-labelledby` attribute on the slider handle. |

@@ -23,6 +23,30 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('50%');
   });
 
+  it('should render Slider correctly where value > startPoint', () => {
+    const wrapper = mount(<Slider value={50} startPoint={20} />);
+    expect(wrapper.state('value')).toBe(50);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.left).toMatch('20%');
+    expect(trackStyle.right).toMatch('auto');
+    expect(trackStyle.width).toMatch('30%');
+  });
+
+  it('should render Slider correctly where value < startPoint', () => {
+    const wrapper = mount(<Slider value={40} startPoint={60} />);
+    expect(wrapper.state('value')).toBe(40);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('40%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.left).toMatch('auto');
+    expect(trackStyle.right).toMatch('40%');
+    expect(trackStyle.width).toMatch('20%');
+  });
+
   it('should render reverse Slider with value correctly', () => {
     const wrapper = mount(<Slider value={50} reverse />);
     expect(wrapper.state('value')).toBe(50);
@@ -33,6 +57,30 @@ describe('Slider', () => {
     expect(trackStyle.right).toMatch('0%');
     expect(trackStyle.left).toMatch('auto');
     expect(trackStyle.width).toMatch('50%');
+  });
+
+  it('should render reverse Slider correctly where value > startPoint', () => {
+    const wrapper = mount(<Slider value={50} startPoint={20} reverse />);
+    expect(wrapper.state('value')).toBe(50);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.right).toMatch('20%');
+    expect(trackStyle.left).toMatch('auto');
+    expect(trackStyle.width).toMatch('30%');
+  });
+
+  it('should render reverse Slider correctly where value < startPoint', () => {
+    const wrapper = mount(<Slider value={30} startPoint={50} reverse />);
+    expect(wrapper.state('value')).toBe(30);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('30%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.right).toMatch('auto');
+    expect(trackStyle.left).toMatch('50%');
+    expect(trackStyle.width).toMatch('20%');
   });
 
   it('should render Slider without handle if value is null', () => {

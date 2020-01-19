@@ -16,6 +16,7 @@ class Slider extends React.Component {
     reverse: PropTypes.bool,
     min: PropTypes.number,
     max: PropTypes.number,
+    startPoint: PropTypes.number,
     ariaLabelForHandle: PropTypes.string,
     ariaLabelledByForHandle: PropTypes.string,
     ariaValueTextFormatterForHandle: PropTypes.func,
@@ -161,6 +162,7 @@ class Slider extends React.Component {
       ariaValueTextFormatterForHandle,
       min,
       max,
+      startPoint,
       reverse,
       handle: handleGenerator,
     } = this.props;
@@ -186,15 +188,16 @@ class Slider extends React.Component {
       ref: h => this.saveHandle(0, h),
     });
 
+    const trackOffset = startPoint !== undefined ? this.calcOffset(startPoint) : 0;
     const _trackStyle = trackStyle[0] || trackStyle;
     const track = (
       <Track
         className={`${prefixCls}-track`}
         vertical={vertical}
         included={included}
-        offset={0}
+        offset={trackOffset}
         reverse={reverse}
-        length={offset}
+        length={offset - trackOffset}
         style={{
           ...minimumTrackStyle,
           ..._trackStyle,
