@@ -19,19 +19,6 @@ export function isNotTouchEvent(e) {
     (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
 }
 
-export function getClosestPoint(val, { marks, step, min, max }) {
-  const points = Object.keys(marks).map(parseFloat);
-  if (step !== null) {
-    const maxSteps = Math.floor((max - min) / step);
-    const steps = Math.min((val - min) / step, maxSteps);
-    const closestStep =
-            Math.round(steps) * step + min;
-    points.push(closestStep);
-  }
-  const diffs = points.map(point => Math.abs(val - point));
-  return points[diffs.indexOf(Math.min(...diffs))];
-}
-
 export function getPrecision(step) {
   const stepString = step.toString();
   let precision = 0;
@@ -39,6 +26,36 @@ export function getPrecision(step) {
     precision = stepString.length - stepString.indexOf('.') - 1;
   }
   return precision;
+}
+
+function withPrecision(value, precision) {
+  return parseFloat(value.toFixed(precision));
+}
+
+// safeDivideBy and safeMultiply: if either term is a float,
+// then round the result to the combined precision
+
+function safeDivideBy(a, b) {
+  const precision = getPrecision(a) + getPrecision(b);
+  return precision === 0 ? a / b : withPrecision(a / b, precision);
+}
+
+function safeMultiply(a, b) {
+  const precision = getPrecision(a) + getPrecision(b);
+  return precision === 0 ? a * b : withPrecision(a * b, precision);
+}
+
+export function getClosestPoint(val, { marks, step, min, max }) {
+  const points = Object.keys(marks).map(parseFloat);
+  if (step !== null) {
+    const maxSteps = Math.floor(safeDivideBy(max - min, step));
+    const steps = Math.min(safeDivideBy(val - min, step), maxSteps);
+    const closestStep =
+            safeMultiply(Math.round(steps), step) + min;
+    points.push(closestStep);
+  }
+  const diffs = points.map(point => Math.abs(val - point));
+  return points[diffs.indexOf(Math.min(...diffs))];
 }
 
 export function getMousePosition(vertical, e) {
@@ -70,7 +87,7 @@ export function ensureValuePrecision(val, props) {
   const { step } = props;
   const closestPoint = isFinite(getClosestPoint(val, props)) ? getClosestPoint(val, props) : 0; // eslint-disable-line
   return step === null ? closestPoint :
-    parseFloat(closestPoint.toFixed(getPrecision(step)));
+    withPrecision(closestPoint, getPrecision(step));
 }
 
 export function pauseEvent(e) {

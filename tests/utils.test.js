@@ -38,5 +38,17 @@ describe('utils', () => {
 
       expect(utils.getClosestPoint(value, props)).toBe(96);
     });
+
+    it('should properly handle floating point arithmetic', () => {
+      const value = 5.3;
+      const props = {
+        marks: {},
+        step: 0.05,
+        min: 0,
+        max: 5.3
+      };
+
+      expect(utils.getClosestPoint(value, props)).toBe(5.3);
+    });
   });
 });
