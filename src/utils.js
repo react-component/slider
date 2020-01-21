@@ -1,6 +1,8 @@
 import { findDOMNode } from 'react-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 
+const MAX_PRECISION_FOR_OPERATIONS = 15;
+
 export function isEventFromHandle(e, handles) {
   try {
     return Object.keys(handles)
@@ -36,13 +38,19 @@ function withPrecision(value, precision) {
 // then round the result to the combined precision
 
 function safeDivideBy(a, b) {
-  const precision = getPrecision(a) + getPrecision(b);
+  const precision = Math.min(
+    getPrecision(a) + getPrecision(b),
+    MAX_PRECISION_FOR_OPERATIONS
+  );
   return precision === 0 ? a / b : withPrecision(a / b, precision);
 }
 
 function safeMultiply(a, b) {
-  const precision = getPrecision(a) + getPrecision(b);
-  return precision === 0 ? a * b : withPrecision(a * b, precision);
+  const precision = Math.min(
+    getPrecision(a) + getPrecision(b),
+    MAX_PRECISION_FOR_OPERATIONS
+  );
+  return withPrecision(a * b, precision);
 }
 
 export function getClosestPoint(val, { marks, step, min, max }) {
