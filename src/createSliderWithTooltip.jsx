@@ -31,7 +31,8 @@ export default function createSliderWithTooltip(Component) {
       });
     }
     handleWithTooltip = ({ value, dragging, index, disabled, ...restProps }) => {
-      const { tipFormatter,
+      const {
+        tipFormatter,
         tipProps,
         handleStyle,
         getTooltipContainer,

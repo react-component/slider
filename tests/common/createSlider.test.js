@@ -80,13 +80,13 @@ describe('createSlider', () => {
   it('should not call onChange when value is the same', () => {
     const handler = jest.fn();
 
-    const sliderWrapper = mount(<Slider onChange={handler} />);
+    const sliderWrapper = mount(<Slider onChange={handler}/>);
     const sliderHandleWrapper = sliderWrapper.find('.rc-slider-handle').at(1);
     sliderHandleWrapper.simulate('mousedown');
     sliderHandleWrapper.simulate('mousemove');
     sliderHandleWrapper.simulate('mouseup');
 
-    const rangeWrapper = mount(<Range onChange={handler} />);
+    const rangeWrapper = mount(<Range onChange={handler}/>);
     const rangeHandleWrapper = rangeWrapper.find('.rc-slider-handle-1').at(1);
     rangeHandleWrapper.simulate('mousedown');
     rangeHandleWrapper.simulate('mousemove');
@@ -117,15 +117,11 @@ describe('createSlider', () => {
   it('should set `dragOffset` to correct value when the left handle is clicked off-center', () => {
     const wrapper = mount(<Slider />);
     setWidth(wrapper.instance().sliderRef, 100);
-    const leftHandle = wrapper
-      .find('.rc-slider-handle')
-      .at(1)
-      .instance();
+    const leftHandle = wrapper.find('.rc-slider-handle').at(1).instance();
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: leftHandle,
-      pageX: 5,
-      button: 0,
+      pageX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -135,25 +131,19 @@ describe('createSlider', () => {
   it('should respect `dragOffset` while dragging the handle via MouseEvents', () => {
     const wrapper = mount(<Slider />);
     setWidth(wrapper.instance().sliderRef, 100);
-    const leftHandle = wrapper
-      .find('.rc-slider-handle')
-      .at(1)
-      .instance();
+    const leftHandle = wrapper.find('.rc-slider-handle').at(1).instance();
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: leftHandle,
-      pageX: 5,
-      button: 0,
+      pageX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
     expect(wrapper.instance().dragOffset).toBe(5);
-    wrapper.instance().onMouseMove({
-      // to propagation
+    wrapper.instance().onMouseMove({ // to propagation
       type: 'mousemove',
       target: leftHandle,
-      pageX: 14,
-      button: 0,
+      pageX: 14, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -163,40 +153,33 @@ describe('createSlider', () => {
   it('should not go to right direction when mouse go to the left', () => {
     const wrapper = mount(<Slider />);
     setWidth(wrapper.instance().sliderRef, 100);
-    const leftHandle = wrapper
-      .find('.rc-slider-handle')
-      .at(1)
-      .instance();
+    const leftHandle = wrapper.find('.rc-slider-handle').at(1).instance();
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: leftHandle,
-      pageX: 5,
-      button: 0,
+      pageX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
     expect(wrapper.instance().getValue()).toBe(0); // zero on start
-    wrapper.instance().onMouseMove({
-      // to propagation
+    wrapper.instance().onMouseMove({ // to propagation
       type: 'mousemove',
       target: leftHandle,
-      pageX: 0,
-      button: 0,
+      pageX: 0, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
     expect(wrapper.instance().getValue()).toBe(0); // still zero
   });
 
-  it("should set `dragOffset` to 0 when the MouseEvent target isn't a handle", () => {
+  it('should set `dragOffset` to 0 when the MouseEvent target isn\'t a handle', () => {
     const wrapper = mount(<Slider />);
     setWidth(wrapper.instance().sliderRef, 100);
     const sliderTrack = wrapper.find('.rc-slider-track').get(0);
     wrapper.simulate('mousedown', {
       type: 'mousedown',
       target: sliderTrack,
-      pageX: 5,
-      button: 0,
+      pageX: 5, button: 0,
       stopPropagation() {},
       preventDefault() {},
     });
@@ -206,10 +189,7 @@ describe('createSlider', () => {
   it('should set `dragOffset` to correct value when the left handle is touched off-center', () => {
     const wrapper = mount(<Slider />);
     setWidth(wrapper.instance().sliderRef, 100);
-    const leftHandle = wrapper
-      .find('.rc-slider-handle')
-      .at(1)
-      .instance();
+    const leftHandle = wrapper.find('.rc-slider-handle').at(1).instance();
     wrapper.simulate('touchstart', {
       type: 'touchstart',
       target: leftHandle,
@@ -223,10 +203,7 @@ describe('createSlider', () => {
   it('should respect `dragOffset` while dragging the handle via TouchEvents', () => {
     const wrapper = mount(<Slider />);
     setWidth(wrapper.instance().sliderRef, 100);
-    const leftHandle = wrapper
-      .find('.rc-slider-handle')
-      .at(1)
-      .instance();
+    const leftHandle = wrapper.find('.rc-slider-handle').at(1).instance();
     wrapper.simulate('touchstart', {
       type: 'touchstart',
       target: leftHandle,
@@ -235,8 +212,7 @@ describe('createSlider', () => {
       preventDefault() {},
     });
     expect(wrapper.instance().dragOffset).toBe(5);
-    wrapper.instance().onTouchMove({
-      // to propagation
+    wrapper.instance().onTouchMove({ // to propagation
       type: 'touchmove',
       target: leftHandle,
       touches: [{ pageX: 14 }],
@@ -246,7 +222,7 @@ describe('createSlider', () => {
     expect(wrapper.instance().getValue()).toBe(9);
   });
 
-  it("should set `dragOffset` to 0 when the TouchEvent target isn't a handle", () => {
+  it('should set `dragOffset` to 0 when the TouchEvent target isn\'t a handle', () => {
     const wrapper = mount(<Slider />);
     setWidth(wrapper.instance().sliderRef, 100);
     const sliderTrack = wrapper.find('.rc-slider-track').get(0);
@@ -264,7 +240,7 @@ describe('createSlider', () => {
     const labelId = 'to-be-clicked';
     const marks = {
       0: 'some other label',
-      100: <span id={labelId}>some label</span>,
+      100: <span id={labelId}>some label</span>
     };
 
     const sliderOnAfterChange = jest.fn();
