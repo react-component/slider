@@ -36150,7 +36150,8 @@ function createSliderWithTooltip(Component) {
         var _this$props = _this.props,
             tipFormatter = _this$props.tipFormatter,
             tipProps = _this$props.tipProps,
-            handleStyle = _this$props.handleStyle;
+            handleStyle = _this$props.handleStyle,
+            getTooltipContainer = _this$props.getTooltipContainer;
 
         var _tipProps$prefixCls = tipProps.prefixCls,
             prefixCls = _tipProps$prefixCls === undefined ? 'rc-slider-tooltip' : _tipProps$prefixCls,
@@ -36172,6 +36173,7 @@ function createSliderWithTooltip(Component) {
         return __WEBPACK_IMPORTED_MODULE_7_react___default.a.createElement(
           __WEBPACK_IMPORTED_MODULE_9_rc_tooltip__["a" /* default */],
           __WEBPACK_IMPORTED_MODULE_2_babel_runtime_helpers_extends___default()({}, restTooltipProps, {
+            getTooltipContainer: getTooltipContainer,
             prefixCls: prefixCls,
             overlay: overlay,
             placement: placement,
@@ -36203,14 +36205,18 @@ function createSliderWithTooltip(Component) {
   }(__WEBPACK_IMPORTED_MODULE_7_react___default.a.Component), _class.propTypes = {
     tipFormatter: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.func,
     handleStyle: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.oneOfType([__WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.object, __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.arrayOf(__WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.object)]),
-    tipProps: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.object
+    tipProps: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.object,
+    getTooltipContainer: __WEBPACK_IMPORTED_MODULE_8_prop_types___default.a.func
   }, _class.defaultProps = {
     tipFormatter: function tipFormatter(value) {
       return value;
     },
 
     handleStyle: [{}],
-    tipProps: {}
+    tipProps: {},
+    getTooltipContainer: function getTooltipContainer(node) {
+      return node.parentNode;
+    }
   }, _temp2;
 }
 
