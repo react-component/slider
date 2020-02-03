@@ -9,11 +9,13 @@ export default function createSliderWithTooltip(Component) {
       tipFormatter: PropTypes.func,
       handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
       tipProps: PropTypes.object,
+      getTooltipContainer: PropTypes.func,
     };
     static defaultProps = {
       tipFormatter(value) { return value; },
       handleStyle: [{}],
       tipProps: {},
+      getTooltipContainer: node => node.parentNode,
     };
     state = {
       visibles: {},
@@ -33,6 +35,7 @@ export default function createSliderWithTooltip(Component) {
         tipFormatter,
         tipProps,
         handleStyle,
+        getTooltipContainer,
       } = this.props;
 
       const {
@@ -53,6 +56,7 @@ export default function createSliderWithTooltip(Component) {
       return (
         <Tooltip
           {...restTooltipProps}
+          getTooltipContainer={getTooltipContainer}
           prefixCls={prefixCls}
           overlay={overlay}
           placement={placement}
