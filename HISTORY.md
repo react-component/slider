@@ -1,6 +1,10 @@
 # History
 ----
 
+## 9.2.0
+
+[Feature] createSliderWithTooltip support getTooltipContainer
+
 ## 9.1.0
 
 [Feature] Support `startPoint` prop.
