@@ -183,6 +183,53 @@ describe('Range', () => {
     expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
   });
 
+  it('should render correctly when allowCross', () => {
+    class CustomizedRange extends React.Component { // eslint-disable-line
+      constructor(props) {
+        super(props);
+        this.state = {
+          value: [20, 40],
+        };
+      }
+      onChange = (value) => {
+        this.setState({
+          value,
+        });
+      }
+      getSlider() {
+        return this.refs.slider;
+      }
+      render() {
+        return <Range ref="slider" onChange={this.onChange} value={this.state.value} />;
+      }
+    }
+    const map = {};
+    document.addEventListener = jest.fn().mockImplementation((event, cb) => {
+      map[event] = cb;
+    });
+
+    const mockRect = (wrapper) => {
+      wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
+        left: 0,
+        width: 100,
+      });
+    };
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const wrapper = mount(<CustomizedRange />, { attachTo: container });
+    mockRect(wrapper);
+
+    expect(wrapper.instance().getSlider().state.bounds).toEqual([20, 40]);
+
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
+    map.mousemove({ type: 'mousemove', pageX: 60, pageY: 0 });
+
+    expect(wrapper.instance().getSlider().state.bounds).toEqual([40, 60]);
+    expect(wrapper.find('.rc-slider-handle-2').at(1).getDOMNode().className).toContain('rc-slider-handle-dragging');
+  });
+
   it('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
     class CustomizedRange extends React.Component { // eslint-disable-line
       state = {
