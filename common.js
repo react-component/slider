@@ -35924,13 +35924,14 @@ var Range = function (_React$Component) {
         if (disabled || tabIndex[i] === null) {
           _tabIndex = null;
         }
+        var dragging = handle === i;
         return handleGenerator({
-          className: __WEBPACK_IMPORTED_MODULE_9_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, handleClassName, true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, handleClassName + '-' + (i + 1), true), _classNames)),
+          className: __WEBPACK_IMPORTED_MODULE_9_classnames___default()((_classNames = {}, __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, handleClassName, true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, handleClassName + '-' + (i + 1), true), __WEBPACK_IMPORTED_MODULE_0_babel_runtime_helpers_defineProperty___default()(_classNames, handleClassName + '-dragging', dragging), _classNames)),
           prefixCls: prefixCls,
           vertical: vertical,
+          dragging: dragging,
           offset: offsets[i],
           value: v,
-          dragging: handle === i,
           index: i,
           tabIndex: _tabIndex,
           min: min,

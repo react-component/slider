@@ -41,9 +41,11 @@
   -ms-touch-action: pan-x;
       touch-action: pan-x;
 }
-.rc-slider-handle:focus {
+.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
   border-color: #57c5f7;
   box-shadow: 0 0 0 5px #96dbfa;
+}
+.rc-slider-handle:focus {
   outline: none;
 }
 .rc-slider-handle-click-focused:focus {
