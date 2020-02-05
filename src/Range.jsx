@@ -411,16 +411,18 @@ class Range extends React.Component {
       if (disabled || tabIndex[i] === null) {
           _tabIndex = null;
       }
+      const dragging = handle === i;
       return handleGenerator({
         className: classNames({
           [handleClassName]: true,
           [`${handleClassName}-${i + 1}`]: true,
+          [`${handleClassName}-dragging`]: dragging,
         }),
         prefixCls,
         vertical,
+        dragging,
         offset: offsets[i],
         value: v,
-        dragging: handle === i,
         index: i,
         tabIndex: _tabIndex,
         min,
