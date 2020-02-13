@@ -43,6 +43,7 @@ export default function createSlider(Component) {
       autoFocus: PropTypes.bool,
       onFocus: PropTypes.func,
       onBlur: PropTypes.func,
+      rootListenerRef: PropTypes.object,
     };
 
     static defaultProps = {
@@ -91,10 +92,10 @@ export default function createSlider(Component) {
     }
 
     componentDidMount() {
+      const { autoFocus, disabled, rootListenerRef } = this.props;
       // Snapshot testing cannot handle refs, so be sure to null-check this.
-      this.document = this.sliderRef && this.sliderRef.ownerDocument;
+      this.rootListeningElement = (rootListenerRef && rootListenerRef.current) || (this.sliderRef && this.sliderRef.ownerDocument);
 
-      const { autoFocus, disabled } = this.props;
       if (autoFocus && !disabled) {
         this.focus();
       }
@@ -102,7 +103,7 @@ export default function createSlider(Component) {
 
     componentWillUnmount() {
       if (super.componentWillUnmount) super.componentWillUnmount();
-      this.removeDocumentEvents();
+      this.removeEventHandlers();
     }
 
     onMouseDown = (e) => {
@@ -117,9 +118,9 @@ export default function createSlider(Component) {
         this.dragOffset = position - handlePosition;
         position = handlePosition;
       }
-      this.removeDocumentEvents();
+      this.removeEventHandlers();
       this.onStart(position);
-      this.addDocumentMouseEvents();
+      this.addMouseEventHandlers();
     }
 
     onTouchStart = (e) => {
@@ -135,7 +136,7 @@ export default function createSlider(Component) {
         position = handlePosition;
       }
       this.onStart(position);
-      this.addDocumentTouchEvents();
+      this.addTouchEventHandlers();
       utils.pauseEvent(e);
     }
 
@@ -217,18 +218,18 @@ export default function createSlider(Component) {
       return this.props.vertical ? coords.height : coords.width;
     }
 
-    addDocumentTouchEvents() {
+    addTouchEventHandlers() {
       // just work for Chrome iOS Safari and Android Browser
-      this.onTouchMoveListener = addEventListener(this.document, 'touchmove', this.onTouchMove);
-      this.onTouchUpListener = addEventListener(this.document, 'touchend', this.onEnd);
+      this.onTouchMoveListener = addEventListener(this.rootListeningElement, 'touchmove', this.onTouchMove);
+      this.onTouchUpListener = addEventListener(this.rootListeningElement, 'touchend', this.onEnd);
     }
 
-    addDocumentMouseEvents() {
-      this.onMouseMoveListener = addEventListener(this.document, 'mousemove', this.onMouseMove);
-      this.onMouseUpListener = addEventListener(this.document, 'mouseup', this.onEnd);
+    addMouseEventHandlers() {
+      this.onMouseMoveListener = addEventListener(this.rootListeningElement, 'mousemove', this.onMouseMove);
+      this.onMouseUpListener = addEventListener(this.rootListeningElement, 'mouseup', this.onEnd);
     }
 
-    removeDocumentEvents() {
+    removeEventHandlers() {
       /* eslint-disable no-unused-expressions */
       this.onTouchMoveListener && this.onTouchMoveListener.remove();
       this.onTouchUpListener && this.onTouchUpListener.remove();

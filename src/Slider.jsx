@@ -92,7 +92,7 @@ class Slider extends React.Component {
 
   onEnd = (force) => {
     const { dragging } = this.state;
-    this.removeDocumentEvents();
+    this.removeEventHandlers();
     if (dragging || force) {
       this.props.onAfterChange(this.getValue());
     }
