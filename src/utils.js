@@ -1,10 +1,9 @@
-import { findDOMNode } from 'react-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 
 export function isEventFromHandle(e, handles) {
   try {
     return Object.keys(handles)
-      .some(key => e.target === findDOMNode(handles[key]));
+      .some(key => e.target === handles[key].handle);
   } catch(error) {
     return false;
   }
@@ -25,7 +24,7 @@ export function getClosestPoint(val, { marks, step, min, max }) {
     const maxSteps = Math.floor((max - min) / step);
     const steps = Math.min((val - min) / step, maxSteps);
     const closestStep =
-            Math.round(steps) * step + min;
+        Math.round(steps) * step + min;
     points.push(closestStep);
   }
   const diffs = points.map(point => Math.abs(val - point));
