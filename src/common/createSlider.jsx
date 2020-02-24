@@ -43,7 +43,7 @@ export default function createSlider(Component) {
       autoFocus: PropTypes.bool,
       onFocus: PropTypes.func,
       onBlur: PropTypes.func,
-      rootListenerRef: PropTypes.object,
+      rootListener: PropTypes.object,
     };
 
     static defaultProps = {
@@ -92,9 +92,9 @@ export default function createSlider(Component) {
     }
 
     componentDidMount() {
-      const { autoFocus, disabled, rootListenerRef } = this.props;
+      const { autoFocus, disabled, rootListener } = this.props;
       // Snapshot testing cannot handle refs, so be sure to null-check this.
-      this.rootListeningElement = (rootListenerRef && rootListenerRef.current) || (this.sliderRef && this.sliderRef.ownerDocument);
+      this.rootListeningElement = rootListener || (this.sliderRef && this.sliderRef.ownerDocument);
 
       if (autoFocus && !disabled) {
         this.focus();
