@@ -117,7 +117,7 @@ The following APIs are shared by Slider and Range.
 | railStyle | Object | `{}` | The style used for the track base color.  |
 | dotStyle | Object | `{}` | The style used for the dots. |
 | activeDotStyle | Object | `{}` | The style used for the active dots. |
-| rootListener | HtmlElement | document | Root element reference which restrict events in bounds of it. |
+| rootListener | HtmlElement | document | Root element which restrict events in bounds of it. |
 
 ### Slider
 
