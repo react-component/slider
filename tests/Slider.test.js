@@ -83,6 +83,12 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('20%');
   });
 
+  it('should render reverse Slider with marks correctly', () => {
+    const marks = {5:'5', 6:'6', 7:'7', 8:'8', 9:'9', 10:'10'};
+    const wrapper = mount(<Slider value={0} marks={marks} min={5} max={10} reverse />);
+    expect(wrapper.find('.rc-slider-mark-text').at(0).props().style.right).toMatch('0%');
+  });
+
   it('should render Slider without handle if value is null', () => {
     const wrapper = render(<Slider value={null} />);
     expect(wrapper).toMatchSnapshot();
