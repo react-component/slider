@@ -70,7 +70,7 @@
     "jest": "^23.0.0",
     "pre-commit": "1.x",
     "rc-tools": "8.x",
-    "rc-trigger": "^2.2.0",
+    "rc-trigger": "^4.0.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-test-renderer": "^16.0.0"
