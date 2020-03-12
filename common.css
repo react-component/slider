@@ -101,7 +101,6 @@
   border-color: #96dbfa;
 }
 .rc-slider-dot-reverse {
-  margin-left: 0;
   margin-right: -4px;
 }
 .rc-slider-disabled {
@@ -257,4 +256,4 @@
   border-top-color: #6c6c6c;
 }
 
-/*# sourceMappingURL=range.css.map*/
+/*# sourceMappingURL=common.css.map*/
