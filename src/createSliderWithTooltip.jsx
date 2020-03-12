@@ -1,16 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Tooltip from 'rc-tooltip';
 import Handle from './Handle';
 
 export default function createSliderWithTooltip(Component) {
   return class ComponentWrapper extends React.Component {
-    static propTypes = {
-      tipFormatter: PropTypes.func,
-      handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-      tipProps: PropTypes.object,
-      getTooltipContainer: PropTypes.func,
-    };
     static defaultProps = {
       tipFormatter(value) { return value; },
       handleStyle: [{}],

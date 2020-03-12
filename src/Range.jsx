@@ -1,6 +1,4 @@
-/* eslint-disable react/prop-types */
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import shallowEqual from 'shallowequal';
 import Track from './common/Track';
@@ -30,25 +28,6 @@ const trimAlignValue = ({
 
 class Range extends React.Component {
   static displayName = 'Range';
-  static propTypes = {
-    autoFocus: PropTypes.bool,
-    defaultValue: PropTypes.arrayOf(PropTypes.number),
-    value: PropTypes.arrayOf(PropTypes.number),
-    count: PropTypes.number,
-    pushable: PropTypes.oneOfType([
-      PropTypes.bool,
-      PropTypes.number,
-    ]),
-    allowCross: PropTypes.bool,
-    disabled: PropTypes.bool,
-    reverse: PropTypes.bool,
-    tabIndex: PropTypes.arrayOf(PropTypes.number),
-    min: PropTypes.number,
-    max: PropTypes.number,
-    ariaLabelGroupForHandles: PropTypes.arrayOf(PropTypes.string),
-    ariaLabelledByGroupForHandles: PropTypes.arrayOf(PropTypes.string),
-    ariaValueTextFormatterGroupForHandles: PropTypes.arrayOf(PropTypes.func),
-  };
 
   static defaultProps = {
     count: 1,

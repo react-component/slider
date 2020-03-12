@@ -1,5 +1,3 @@
-/* eslint-disable react/prop-types */
-
 import 'rc-slider/assets/index.less';
 import 'rc-tooltip/assets/bootstrap.css';
 import React from 'react';

@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import classNames from 'classnames';
 
 const Marks = ({
@@ -61,19 +60,6 @@ const Marks = ({
   });
 
   return <div className={className}>{elements}</div>;
-};
-
-Marks.propTypes = {
-  className: PropTypes.string,
-  vertical: PropTypes.bool,
-  reverse: PropTypes.bool,
-  marks: PropTypes.object,
-  included: PropTypes.bool,
-  upperBound: PropTypes.number,
-  lowerBound: PropTypes.number,
-  max: PropTypes.number,
-  min: PropTypes.number,
-  onClickLabel: PropTypes.func,
 };
 
 export default Marks;

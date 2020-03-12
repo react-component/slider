@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
 import warning from 'warning';
@@ -13,37 +12,6 @@ function noop() {}
 export default function createSlider(Component) {
   return class ComponentEnhancer extends Component {
     static displayName = `ComponentEnhancer(${Component.displayName})`;
-    static propTypes = {
-      ...Component.propTypes,
-      min: PropTypes.number,
-      max: PropTypes.number,
-      startPoint: PropTypes.number,
-      step: PropTypes.number,
-      marks: PropTypes.object,
-      included: PropTypes.bool,
-      className: PropTypes.string,
-      prefixCls: PropTypes.string,
-      disabled: PropTypes.bool,
-      children: PropTypes.any,
-      onBeforeChange: PropTypes.func,
-      onChange: PropTypes.func,
-      onAfterChange: PropTypes.func,
-      handle: PropTypes.func,
-      dots: PropTypes.bool,
-      vertical: PropTypes.bool,
-      style: PropTypes.object,
-      reverse: PropTypes.bool,
-      minimumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
-      maximumTrackStyle: PropTypes.object, // just for compatibility, will be deperecate
-      handleStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-      trackStyle: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.object)]),
-      railStyle: PropTypes.object,
-      dotStyle: PropTypes.object,
-      activeDotStyle: PropTypes.object,
-      autoFocus: PropTypes.bool,
-      onFocus: PropTypes.func,
-      onBlur: PropTypes.func,
-    };
 
     static defaultProps = {
       ...Component.defaultProps,
