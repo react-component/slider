@@ -105,6 +105,20 @@ class Range extends React.Component {
 
   onChange(state) {
     const props = this.props;
+
+    if ('value' in state) {
+      const bounds = this.getValue();
+      const closestBound = this.getClosestBound(state.value);
+      this.prevMovedHandleIndex = this.getBoundNeedMoving(state.value, closestBound);
+
+      const prevValue = bounds[this.prevMovedHandleIndex];
+      if (state.value === prevValue) return;
+
+      const nextBounds = [...this.state.bounds];
+      nextBounds[this.prevMovedHandleIndex] = state.value;
+      state.bounds = nextBounds;
+    }
+
     const isNotControlled = !('value' in props);
     if (isNotControlled) {
       this.setState(state);
