@@ -33,17 +33,26 @@ export default class Handle extends React.Component {
     }
   }
 
-  handleMouseDown = () => {
+  handleMouseDown = (event) => {
     // fix https://github.com/ant-design/ant-design/issues/15324
     this.focus();
+    if (this.props.onMouseDown) {
+      this.props.onMouseDown(event);
+    }
   }
 
-  handleBlur = () => {
+  handleBlur = (event) => {
     this.setClickFocus(false);
+    if (this.props.onBlur) {
+      this.props.onBlur(event);
+    }
   }
 
-  handleKeyDown = () => {
+  handleKeyDown = (event) => {
     this.setClickFocus(false);
+    if (this.props.onKeyDown) {
+      this.props.onKeyDown(event);
+    }
   }
 
   clickFocus() {
