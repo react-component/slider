@@ -90,7 +90,7 @@ export function calculateNextValue(func, value, props) {
   if (props.step) {
     return operations[func](value, props.step);
   } else if (!!Object.keys(props.marks).length && !!props.marks[keyToGet]) {
-    return props.marks[keyToGet];
+    return keyToGet;
   }
   return value;
 }
