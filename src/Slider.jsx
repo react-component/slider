@@ -60,10 +60,8 @@ class Slider extends React.Component {
     this.setState({ dragging: true });
     const props = this.props;
     const prevValue = this.getValue();
-    props.onBeforeChange(prevValue);
-
     const value = this.calcValueByPos(position);
-    this.startValue = value;
+    props.onBeforeChange(prevValue, 0);
     this.startPosition = position;
 
     if (value === prevValue) return;

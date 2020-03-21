@@ -131,13 +131,11 @@ class Range extends React.Component {
     const props = this.props;
     const state = this.state;
     const bounds = this.getValue();
-    props.onBeforeChange(bounds);
-
     const value = this.calcValueByPos(position);
     this.startValue = value;
     this.startPosition = position;
-
     const closestBound = this.getClosestBound(value);
+    props.onBeforeChange(bounds, closestBound);
     this.prevMovedHandleIndex = this.getBoundNeedMoving(value, closestBound);
 
     this.setState({
