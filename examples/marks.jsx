@@ -1,8 +1,8 @@
-import 'rc-slider/assets/index.less';
+import '../assets/index.less';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Slider from 'rc-slider';
+import Slider from '../src';
 
 const style = { width: 400, margin: 50 };
 const marks = {
@@ -56,5 +56,6 @@ ReactDOM.render(
       <p>Range with marks and steps</p>
       <Slider.Range min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
     </div>
-  </div>
-  , document.getElementById('__react-content'));
+  </div>,
+  document.getElementById('__react-content'),
+);

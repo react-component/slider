@@ -1,11 +1,11 @@
 /* eslint react/no-multi-comp: 0, no-console: 0 */
-import 'rc-slider/assets/index.less';
+import '../assets/index.less';
 
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Slider from 'rc-slider';
+import Slider from '../src';
 
-const Range = Slider.Range;
+const { Range } = Slider;
 
 const style = { width: 400, margin: 50 };
 
@@ -22,22 +22,27 @@ class CustomizedRange extends React.Component {
       value: [20, 40],
     };
   }
-  onLowerBoundChange = (e) => {
+
+  onLowerBoundChange = e => {
     this.setState({ lowerBound: +e.target.value });
-  }
-  onUpperBoundChange = (e) => {
+  };
+
+  onUpperBoundChange = e => {
     this.setState({ upperBound: +e.target.value });
-  }
-  onSliderChange = (value) => {
+  };
+
+  onSliderChange = value => {
     log(value);
     this.setState({
       value,
     });
-  }
+  };
+
   handleApply = () => {
     const { lowerBound, upperBound } = this.state;
     this.setState({ value: [lowerBound, upperBound] });
-  }
+  };
+
   render() {
     return (
       <div>
@@ -47,8 +52,11 @@ class CustomizedRange extends React.Component {
         <label>UpperBound: </label>
         <input type="number" value={this.state.upperBound} onChange={this.onUpperBoundChange} />
         <br />
-        <button onClick={this.handleApply}>Apply</button>
-        <br /><br />
+        <button type="button" onClick={this.handleApply}>
+          Apply
+        </button>
+        <br />
+        <br />
         <Range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
       </div>
     );
@@ -63,19 +71,23 @@ class DynamicBounds extends React.Component {
       max: 100,
     };
   }
-  onSliderChange = (value) => {
+
+  onSliderChange = value => {
     log(value);
-  }
-  onMinChange = (e) => {
+  };
+
+  onMinChange = e => {
     this.setState({
       min: +e.target.value || 0,
     });
-  }
-  onMaxChange = (e) => {
+  };
+
+  onMaxChange = e => {
     this.setState({
       max: +e.target.value || 100,
     });
-  }
+  };
+
   render() {
     return (
       <div>
@@ -84,8 +96,12 @@ class DynamicBounds extends React.Component {
         <br />
         <label>Max: </label>
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
-        <br /><br />
-        <Range defaultValue={[20, 50]} min={this.state.min} max={this.state.max}
+        <br />
+        <br />
+        <Range
+          defaultValue={[20, 50]}
+          min={this.state.min}
+          max={this.state.max}
           onChange={this.onSliderChange}
         />
       </div>
@@ -100,15 +116,15 @@ class ControlledRange extends React.Component {
       value: [20, 40, 60, 80],
     };
   }
-  handleChange = (value) => {
+
+  handleChange = value => {
     this.setState({
       value,
     });
-  }
+  };
+
   render() {
-    return (
-      <Range value={this.state.value} onChange={this.handleChange} />
-    );
+    return <Range value={this.state.value} onChange={this.handleChange} />;
   }
 }
 
@@ -119,11 +135,13 @@ class ControlledRangeDisableAcross extends React.Component {
       value: [20, 40, 60, 80],
     };
   }
-  handleChange = (value) => {
+
+  handleChange = value => {
     this.setState({
       value,
     });
-  }
+  };
+
   render() {
     return (
       <Range
@@ -144,12 +162,12 @@ class PureRenderRange extends React.Component {
       foo: false,
     };
   }
-  handleChange = (value) => {
+
+  handleChange = value => {
     console.log(value);
-    this.setState({
-      foo: !this.state.foo,
-    });
-  }
+    this.setState(({ foo }) => ({ foo: !foo }));
+  };
+
   render() {
     return (
       <Range defaultValue={[20, 40, 60, 80]} onChange={this.handleChange} allowCross={false} />
@@ -197,7 +215,10 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Multi Range with custom track and handle style</p>
-      <Range count={3} defaultValue={[20, 40, 60, 80]} pushable
+      <Range
+        count={3}
+        defaultValue={[20, 40, 60, 80]}
+        pushable
         trackStyle={[{ backgroundColor: 'red' }, { backgroundColor: 'green' }]}
         handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }]}
         railStyle={{ backgroundColor: 'black' }}
@@ -215,5 +236,6 @@ ReactDOM.render(
       <p>Range as child component</p>
       <PureRenderRange />
     </div>
-  </div>
-  , document.getElementById('__react-content'));
+  </div>,
+  document.getElementById('__react-content'),
+);
