@@ -2,23 +2,23 @@ import React from 'react';
 import Tooltip from 'rc-tooltip';
 import Handle from './Handle';
 
+interface ComponentWrapperProps {
+  tipFormatter: (value: number) => React.ReactNode;
+  tipProps: {
+    prefixCls?: string;
+    overlay?: string;
+    placement?: string;
+    visible?: boolean;
+  };
+  handleStyle?: React.CSSProperties;
+  getTooltipContainer?: () => HTMLElement;
+}
+
+interface ComponentWrapperState {
+  visibles: Record<number, boolean>;
+}
+
 export default function createSliderWithTooltip(Component) {
-  interface ComponentWrapperProps {
-    tipFormatter: (value: number) => React.ReactNode;
-    tipProps: {
-      prefixCls?: string;
-      overlay?: string;
-      placement?: string;
-      visible?: boolean;
-    };
-    handleStyle?: React.CSSProperties;
-    getTooltipContainer?: () => HTMLElement;
-  }
-
-  interface ComponentWrapperState {
-    visibles: Record<number, boolean>;
-  }
-
   return class ComponentWrapper extends React.Component<
     ComponentWrapperProps,
     ComponentWrapperState
