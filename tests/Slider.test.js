@@ -356,4 +356,9 @@ describe('Slider', () => {
       expect(handleBlur).toBeCalled();
     });
   });
+
+  it('should not be out of range when value is null', () => {
+    const wrapper = mount(<Slider value={null} min={1} max={10} />);
+    expect(wrapper.find('Track').props().length >= 0).toBeTruthy();
+  });
 });
