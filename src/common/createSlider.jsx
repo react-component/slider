@@ -21,7 +21,8 @@ export default function createSlider(Component) {
       max: 100,
       step: 1,
       marks: {},
-      handle({ index, ...restProps }) {
+      handle(props) {
+        const { index, ...restProps } = props;
         delete restProps.dragging;
         if (restProps.value === null) {
           return null;

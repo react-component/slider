@@ -170,7 +170,7 @@ class Slider extends React.Component {
     });
 
     const trackOffset = startPoint !== undefined ? this.calcOffset(startPoint) : 0;
-    const _trackStyle = trackStyle[0] || trackStyle;
+    const mergedTrackStyle = trackStyle[0] || trackStyle;
     const track = (
       <Track
         className={`${prefixCls}-track`}
@@ -181,7 +181,7 @@ class Slider extends React.Component {
         length={offset - trackOffset}
         style={{
           ...minimumTrackStyle,
-          ..._trackStyle,
+          ...mergedTrackStyle,
         }}
       />
     );
