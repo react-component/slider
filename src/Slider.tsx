@@ -4,8 +4,72 @@ import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
 
-class Slider extends React.Component {
-  constructor(props) {
+export interface SliderProps {
+  value?: number;
+  defaultValue?: number;
+  min?: number;
+  max?: number;
+  prefixCls?: string;
+  onChange?: (value: number) => void;
+  onBeforeChange?: (value: number) => void;
+  onAfterChange?: (value: number) => void;
+  vertical?: boolean;
+  included?: boolean;
+  disabled?: boolean;
+  reverse?: boolean;
+  minimumTrackStyle?: React.CSSProperties;
+  trackStyle?: React.CSSProperties;
+  handleStyle?: React.CSSProperties;
+  tabIndex?: number;
+  ariaLabelForHandle?: string;
+  ariaLabelledByForHandle?: string;
+  ariaValueTextFormatterForHandle?: string;
+  startPoint?: number;
+  handle: (props: {
+    className: string;
+    prefixCls?: string;
+    vertical?: boolean;
+    offset: number;
+    value: number;
+    dragging?: boolean;
+    disabled?: boolean;
+    min?: number;
+    max?: number;
+    reverse?: boolean;
+    index: number;
+    tabIndex?: number;
+    ariaLabel: string;
+    ariaLabelledBy: string;
+    ariaValueTextFormatter: string;
+    style?: React.CSSProperties;
+    ref?: React.Ref<any>;
+  }) => React.ReactElement;
+}
+export interface SliderState {
+  value: number;
+  dragging: boolean;
+}
+
+class Slider extends React.Component<SliderProps, SliderState> {
+  /**
+   * [Legacy] Used for inherit other component.
+   * It's a bad code style which should be refactor.
+   */
+  /* eslint-disable @typescript-eslint/no-unused-vars, class-methods-use-this */
+  calcValueByPos(value: number) {
+    return 0;
+  }
+
+  calcOffset(value: number) {
+    return 0;
+  }
+
+  saveHandle(index: number, h: any) {}
+
+  removeDocumentEvents() {}
+  /* eslint-enable */
+
+  constructor(props: SliderProps) {
     super(props);
 
     const defaultValue = props.defaultValue !== undefined ? props.defaultValue : props.min;
@@ -26,7 +90,13 @@ class Slider extends React.Component {
     );
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  startValue: number;
+
+  startPosition: number;
+
+  prevMovedHandleIndex: number;
+
+  componentDidUpdate(_: SliderProps, prevState: SliderState) {
     if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
       return;
     }
@@ -42,7 +112,7 @@ class Slider extends React.Component {
     }
   }
 
-  onChange(state) {
+  onChange(state: { value: number }) {
     const { props } = this;
     const isNotControlled = !('value' in props);
     const nextState = state.value > this.props.max ? { ...state, value: this.props.max } : state;
@@ -54,7 +124,7 @@ class Slider extends React.Component {
     props.onChange(changedValue);
   }
 
-  onStart(position) {
+  onStart(position: number) {
     this.setState({ dragging: true });
     const { props } = this;
     const prevValue = this.getValue();
@@ -71,7 +141,7 @@ class Slider extends React.Component {
     this.onChange({ value });
   }
 
-  onEnd = force => {
+  onEnd = (force?: boolean) => {
     const { dragging } = this.state;
     this.removeDocumentEvents();
     if (dragging || force) {
@@ -118,7 +188,7 @@ class Slider extends React.Component {
     return this.state.value;
   }
 
-  trimAlignValue(v, nextProps = {}) {
+  trimAlignValue(v: number, nextProps: Partial<SliderProps> = {}) {
     if (v === null) {
       return null;
     }

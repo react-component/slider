@@ -3,20 +3,18 @@ import keyCode from 'rc-util/lib/KeyCode';
 
 export function isEventFromHandle(e, handles) {
   try {
-    return Object.keys(handles)
-      .some(key => e.target === findDOMNode(handles[key]));
-  } catch(error) {
+    return Object.keys(handles).some(key => e.target === findDOMNode(handles[key]));
+  } catch (error) {
     return false;
   }
 }
 
-export function isValueOutOfRange(value, { min, max }) {
+export function isValueOutOfRange(value: number, { min, max }: { min?: number; max?: number }) {
   return value < min || value > max;
 }
 
 export function isNotTouchEvent(e) {
-  return e.touches.length > 1 ||
-    (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
+  return e.touches.length > 1 || (e.type.toLowerCase() === 'touchend' && e.touches.length > 0);
 }
 
 export function getClosestPoint(val, { marks, step, min, max }) {
@@ -24,8 +22,7 @@ export function getClosestPoint(val, { marks, step, min, max }) {
   if (step !== null) {
     const maxSteps = Math.floor((max - min) / step);
     const steps = Math.min((val - min) / step, maxSteps);
-    const closestStep =
-            Math.round(steps) * step + min;
+    const closestStep = Math.round(steps) * step + min;
     points.push(closestStep);
   }
   const diffs = points.map(point => Math.abs(val - point));
@@ -51,12 +48,12 @@ export function getTouchPosition(vertical, e) {
 
 export function getHandleCenterPosition(vertical, handle) {
   const coords = handle.getBoundingClientRect();
-  return vertical ?
-    coords.top + (coords.height * 0.5) :
-    window.pageXOffset + coords.left + (coords.width * 0.5);
+  return vertical
+    ? coords.top + coords.height * 0.5
+    : window.pageXOffset + coords.left + coords.width * 0.5;
 }
 
-export function ensureValueInRange(val, { max, min }) {
+export function ensureValueInRange(val: number, { max, min }: { max?: number; min?: number }) {
   if (val <= min) {
     return min;
   }
@@ -69,8 +66,7 @@ export function ensureValueInRange(val, { max, min }) {
 export function ensureValuePrecision(val, props) {
   const { step } = props;
   const closestPoint = isFinite(getClosestPoint(val, props)) ? getClosestPoint(val, props) : 0; // eslint-disable-line
-  return step === null ? closestPoint :
-    parseFloat(closestPoint.toFixed(getPrecision(step)));
+  return step === null ? closestPoint : parseFloat(closestPoint.toFixed(getPrecision(step)));
 }
 
 export function pauseEvent(e) {
@@ -89,7 +85,7 @@ export function calculateNextValue(func, value, props) {
 
   if (props.step) {
     return operations[func](value, props.step);
-  } else if (!!Object.keys(props.marks).length && !!props.marks[keyToGet]) {
+  } if (!!Object.keys(props.marks).length && !!props.marks[keyToGet]) {
     return props.marks[keyToGet];
   }
   return value;
@@ -98,23 +94,32 @@ export function calculateNextValue(func, value, props) {
 export function getKeyboardValueMutator(e, vertical, reverse) {
   const increase = 'increase';
   const decrease = 'decrease';
-  let  method = increase;
+  let method = increase;
   switch (e.keyCode) {
     case keyCode.UP:
-      method = vertical && reverse ? decrease: increase; break;
+      method = vertical && reverse ? decrease : increase;
+      break;
     case keyCode.RIGHT:
-      method = !vertical && reverse ? decrease: increase; break;
+      method = !vertical && reverse ? decrease : increase;
+      break;
     case keyCode.DOWN:
-      method = vertical && reverse ? increase: decrease; break;
+      method = vertical && reverse ? increase : decrease;
+      break;
     case keyCode.LEFT:
-      method = !vertical && reverse ? increase: decrease; break;
+      method = !vertical && reverse ? increase : decrease;
+      break;
 
-    case keyCode.END: return (value, props) => props.max;
-    case keyCode.HOME: return (value, props) => props.min;
-    case keyCode.PAGE_UP: return (value, props) => value + props.step * 2;
-    case keyCode.PAGE_DOWN: return (value, props) => value - props.step * 2;
+    case keyCode.END:
+      return (value, props) => props.max;
+    case keyCode.HOME:
+      return (value, props) => props.min;
+    case keyCode.PAGE_UP:
+      return (value, props) => value + props.step * 2;
+    case keyCode.PAGE_DOWN:
+      return (value, props) => value - props.step * 2;
 
-    default: return undefined;
+    default:
+      return undefined;
   }
   return (value, props) => calculateNextValue(method, value, props);
 }
