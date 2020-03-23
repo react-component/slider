@@ -2574,7 +2574,7 @@ function createSlider(Component) {
             max = _props4.max;
 
         var ratio = (value - min) / (max - min);
-        return ratio * 100;
+        return Math.max(0, ratio * 100);
       }
     }, {
       key: 'saveHandle',
