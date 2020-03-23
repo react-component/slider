@@ -2,6 +2,9 @@
   "name": "rc-slider",
   "version": "9.2.4",
   "description": "Slider UI component for React",
+  "engines": {
+    "node": ">=8.x"
+  },
   "keywords": [
     "react",
     "react-component",
@@ -25,65 +28,47 @@
     "dist"
   ],
   "license": "MIT",
-  "main": "./lib/index.js",
+  "main": "./lib/index",
   "module": "./es/index",
   "style": "./assets/index.css",
-  "config": {
-    "port": 8005,
-    "entry": {
-      "rc-slider": [
-        "./assets/index.less",
-        "./src/index.js"
-      ]
-    }
-  },
   "scripts": {
-    "build": "rc-tools run build",
-    "dist": "rc-tools run dist",
-    "gh-pages": "rc-tools run gh-pages",
-    "start": "rc-tools run server",
-    "compile": "rc-tools run compile --babel-runtime",
-    "pub": "rc-tools run pub --babel-runtime",
-    "lint": "rc-tools run lint",
-    "test": "jest",
-    "coverage": "jest --coverage"
+    "start": "cross-env NODE_ENV=development father doc dev --storybook",
+    "build": "father doc build --storybook",
+    "compile": "father build && lessc assets/index.less assets/index.css",
+    "gh-pages": "npm run build && father doc deploy",
+    "prepublishOnly": "npm run compile && np --no-cleanup --yolo --no-publish",
+    "postpublish": "npm run gh-pages",
+    "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
+    "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "test": "father test",
+    "coverage": "father test --coverage"
   },
-  "jest": {
-    "setupFiles": [
-      "./tests/setup.js"
-    ],
-    "snapshotSerializers": [
-      "enzyme-to-json/serializer"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx}"
-    ],
-    "transform": {
-      "\\.tsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js",
-      "\\.jsx?$": "./node_modules/rc-tools/scripts/jestPreprocessor.js"
-    }
+  "peerDependencies": {
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0"
+  },
+  "dependencies": {
+    "classnames": "^2.2.5",
+    "rc-tooltip": "^4.0.0",
+    "rc-util": "^4.20.1",
+    "shallowequal": "^1.1.0"
   },
   "devDependencies": {
-    "enzyme": "^3.0.0",
+    "@types/classnames": "^2.2.9",
+    "@types/jest": "^25.1.0",
+    "@types/react": "^16.9.2",
+    "@types/react-dom": "^16.9.0",
+    "@umijs/fabric": "^2.0.0",
+    "cross-env": "^7.0.0",
+    "enzyme": "^3.1.0",
     "enzyme-adapter-react-16": "^1.0.1",
-    "enzyme-to-json": "^3.0.0",
-    "jest": "^23.0.0",
-    "pre-commit": "1.x",
-    "rc-tools": "8.x",
+    "enzyme-to-json": "^3.1.2",
+    "father": "^2.22.0",
+    "less": "^3.10.3",
+    "np": "^6.0.0",
     "rc-trigger": "^4.0.2",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
-    "react-test-renderer": "^16.0.0"
-  },
-  "pre-commit": [
-    "lint"
-  ],
-  "dependencies": {
-    "babel-runtime": "6.x",
-    "classnames": "^2.2.5",
-    "rc-tooltip": "^4.0.0",
-    "rc-util": "^4.0.4",
-    "shallowequal": "^1.1.0",
-    "warning": "^4.0.3"
+    "typescript": "^3.7.2"
   }
 }

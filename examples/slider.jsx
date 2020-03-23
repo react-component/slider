@@ -1,16 +1,14 @@
 /* eslint react/no-multi-comp: 0, max-len: 0 */
-import 'rc-slider/assets/index.less';
+import '../assets/index.less';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
+import Slider, { createSliderWithTooltip } from '../src';
 
 const style = { width: 600, margin: 50 };
 
 function log(value) {
   console.log(value); //eslint-disable-line
 }
-
 
 function percentFormatter(v) {
   return `${v} %`;
@@ -25,19 +23,23 @@ class NullableSlider extends React.Component {
       value: null,
     };
   }
-  onSliderChange = (value) => {
+
+  onSliderChange = value => {
     log(value);
     this.setState({
       value,
     });
   };
-  onAfterChange = (value) => {
+
+  onAfterChange = value => {
     console.log(value); //eslint-disable-line
   };
+
   reset = () => {
-    console.log('reset value') // eslint-disable-line
+    console.log('reset value'); // eslint-disable-line
     this.setState({ value: null });
   };
+
   render() {
     return (
       <div>
@@ -46,7 +48,9 @@ class NullableSlider extends React.Component {
           onChange={this.onSliderChange}
           onAfterChange={this.onAfterChange}
         />
-        <button onClick={this.reset}>Reset</button>
+        <button type="button" onClick={this.reset}>
+          Reset
+        </button>
       </div>
     );
   }
@@ -59,19 +63,24 @@ class CustomizedSlider extends React.Component {
       value: 50,
     };
   }
-  onSliderChange = (value) => {
+
+  onSliderChange = value => {
     log(value);
     this.setState({
       value,
     });
-  }
-  onAfterChange = (value) => {
+  };
+
+  onAfterChange = value => {
     console.log(value); //eslint-disable-line
-  }
+  };
+
   render() {
     return (
-      <Slider value={this.state.value}
-        onChange={this.onSliderChange} onAfterChange={this.onAfterChange}
+      <Slider
+        value={this.state.value}
+        onChange={this.onSliderChange}
+        onAfterChange={this.onAfterChange}
       />
     );
   }
@@ -87,42 +96,69 @@ class DynamicBounds extends React.Component {
       value: 1,
     };
   }
-  onSliderChange = (value) => {
+
+  onSliderChange = value => {
     log(value);
-    this.setState({value});
-  }
-  onMinChange = (e) => {
+    this.setState({ value });
+  };
+
+  onMinChange = e => {
     this.setState({
       min: +e.target.value || 0,
     });
-  }
-  onMaxChange = (e) => {
+  };
+
+  onMaxChange = e => {
     this.setState({
       max: +e.target.value || 100,
     });
-  }
-  onStepChange = (e) => {
+  };
+
+  onStepChange = e => {
     this.setState({
       step: +e.target.value || 1,
     });
-  }
+  };
+
   render() {
     const labelStyle = { minWidth: '60px', display: 'inline-block' };
-    const inputStyle = { marginBottom: '10px'};
+    const inputStyle = { marginBottom: '10px' };
     return (
       <div>
         <label style={labelStyle}>Min: </label>
-        <input type="number" value={this.state.min} onChange={this.onMinChange} style={inputStyle} />
+        <input
+          type="number"
+          value={this.state.min}
+          onChange={this.onMinChange}
+          style={inputStyle}
+        />
         <br />
         <label style={labelStyle}>Max: </label>
-        <input type="number" value={this.state.max} onChange={this.onMaxChange} style={inputStyle} />
+        <input
+          type="number"
+          value={this.state.max}
+          onChange={this.onMaxChange}
+          style={inputStyle}
+        />
         <br />
         <label style={labelStyle}>Step: </label>
-        <input type="number" value={this.state.step} onChange={this.onStepChange} style={inputStyle} />
-        <br /><br />
-        <label style={labelStyle}>Value: </label><span>{this.state.value}</span>
-        <br /><br />
-        <Slider value={this.state.value} min={this.state.min} max={this.state.max} step={this.state.step}
+        <input
+          type="number"
+          value={this.state.step}
+          onChange={this.onStepChange}
+          style={inputStyle}
+        />
+        <br />
+        <br />
+        <label style={labelStyle}>Value: </label>
+        <span>{this.state.value}</span>
+        <br />
+        <br />
+        <Slider
+          value={this.state.value}
+          min={this.state.min}
+          max={this.state.max}
+          step={this.state.step}
           onChange={this.onSliderChange}
         />
       </div>
@@ -130,7 +166,7 @@ class DynamicBounds extends React.Component {
   }
 }
 
-ReactDOM.render(
+export default () => (
   <div>
     <div style={style}>
       <p>Basic Slider</p>
@@ -142,7 +178,7 @@ ReactDOM.render(
     </div>
     <div style={style}>
       <p>Slider reverse</p>
-      <Slider onChange={log} reverse min={20} max={60}/>
+      <Slider onChange={log} reverse min={20} max={60} />
     </div>
     <div style={style}>
       <p>Basic Slider，`step=20`</p>
@@ -153,8 +189,18 @@ ReactDOM.render(
       <Slider dots step={20} defaultValue={100} onAfterChange={log} />
     </div>
     <div style={style}>
-      <p>Basic Slider，`step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle={"{borderColor: 'yellow'}"}`</p>
-      <Slider dots step={20} defaultValue={100} onAfterChange={log} dotStyle={{ borderColor: 'orange' }} activeDotStyle={{ borderColor: 'yellow' }} />
+      <p>
+        Basic Slider，`step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle=
+        {"{borderColor: 'yellow'}"}`
+      </p>
+      <Slider
+        dots
+        step={20}
+        defaultValue={100}
+        onAfterChange={log}
+        dotStyle={{ borderColor: 'orange' }}
+        activeDotStyle={{ borderColor: 'yellow' }}
+      />
     </div>
     <div style={style}>
       <p>Slider with tooltip, with custom `tipFormatter`</p>
@@ -165,7 +211,9 @@ ReactDOM.render(
       />
     </div>
     <div style={style}>
-      <p>Slider with custom handle and track style.<strong>(old api, will be deprecated)</strong></p>
+      <p>
+        Slider with custom handle and track style.<strong>(old api, will be deprecated)</strong>
+      </p>
       <Slider
         defaultValue={30}
         railStyle={{ backgroundColor: 'red', height: 10 }}
@@ -181,7 +229,9 @@ ReactDOM.render(
       />
     </div>
     <div style={style}>
-      <p>Slider with custom handle and track style.<strong>(The recommended new api)</strong></p>
+      <p>
+        Slider with custom handle and track style.<strong>(The recommended new api)</strong>
+      </p>
       <Slider
         defaultValue={30}
         trackStyle={{ backgroundColor: 'blue', height: 10 }}
@@ -197,7 +247,10 @@ ReactDOM.render(
       />
     </div>
     <div style={style}>
-      <p>Reversed Slider with custom handle and track style.<strong>(The recommended new api)</strong></p>
+      <p>
+        Reversed Slider with custom handle and track style.
+        <strong>(The recommended new api)</strong>
+      </p>
       <Slider
         defaultValue={30}
         trackStyle={{ backgroundColor: 'blue', height: 10 }}
@@ -234,4 +287,4 @@ ReactDOM.render(
       <DynamicBounds />
     </div>
   </div>
-  , document.getElementById('__react-content'));
+);

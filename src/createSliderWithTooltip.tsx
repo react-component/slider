@@ -2,19 +2,42 @@ import React from 'react';
 import Tooltip from 'rc-tooltip';
 import Handle from './Handle';
 
+interface ComponentWrapperProps {
+  tipFormatter: (value: number) => React.ReactNode;
+  tipProps: {
+    prefixCls?: string;
+    overlay?: string;
+    placement?: string;
+    visible?: boolean;
+  };
+  handleStyle?: React.CSSProperties;
+  getTooltipContainer?: () => HTMLElement;
+}
+
+interface ComponentWrapperState {
+  visibles: Record<number, boolean>;
+}
+
 export default function createSliderWithTooltip(Component) {
-  return class ComponentWrapper extends React.Component {
+  return class ComponentWrapper extends React.Component<
+    ComponentWrapperProps,
+    ComponentWrapperState
+  > {
     static defaultProps = {
-      tipFormatter(value) { return value; },
+      tipFormatter(value: number) {
+        return value;
+      },
       handleStyle: [{}],
       tipProps: {},
       getTooltipContainer: node => node.parentNode,
     };
+
     state = {
       visibles: {},
     };
+
     handleTooltipVisibleChange = (index, visible) => {
-      this.setState((prevState) => {
+      this.setState(prevState => {
         return {
           visibles: {
             ...prevState.visibles,
@@ -22,14 +45,10 @@ export default function createSliderWithTooltip(Component) {
           },
         };
       });
-    }
+    };
+
     handleWithTooltip = ({ value, dragging, index, disabled, ...restProps }) => {
-      const {
-        tipFormatter,
-        tipProps,
-        handleStyle,
-        getTooltipContainer,
-      } = this.props;
+      const { tipFormatter, tipProps, handleStyle, getTooltipContainer } = this.props;
 
       const {
         prefixCls = 'rc-slider-tooltip',
@@ -56,7 +75,6 @@ export default function createSliderWithTooltip(Component) {
           visible={(!disabled && (this.state.visibles[index] || dragging)) || visible}
           key={index}
         >
-
           <Handle
             {...restProps}
             style={{
@@ -68,7 +86,8 @@ export default function createSliderWithTooltip(Component) {
           />
         </Tooltip>
       );
-    }
+    };
+
     render() {
       return <Component {...this.props} handle={this.handleWithTooltip} />;
     }

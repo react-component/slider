@@ -2,10 +2,33 @@ import React from 'react';
 import classNames from 'classnames';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 
-export default class Handle extends React.Component {
+export interface HandleProps {
+  prefixCls?: string;
+  className?: string;
+  vertical?: boolean;
+  reverse?: boolean;
+  offset?: number;
+  style?: React.CSSProperties;
+  disabled?: boolean;
+  min?: number;
+  max?: number;
+  value?: number;
+  tabIndex?: number;
+  ariaLabel?: string;
+  ariaLabelledBy?: string;
+  ariaValueTextFormatter?: (val: number) => string;
+  onMouseEnter?: React.MouseEventHandler;
+  onMouseLeave?: React.MouseEventHandler;
+}
+
+export default class Handle extends React.Component<HandleProps> {
   state = {
     clickFocused: false,
-  }
+  };
+
+  onMouseUpListener: { remove: () => void };
+
+  handle: HTMLElement;
 
   componentDidMount() {
     // mouseup won't trigger if mouse moved out of handle,
@@ -19,7 +42,7 @@ export default class Handle extends React.Component {
     }
   }
 
-  setHandleRef = (node) => {
+  setHandleRef = node => {
     this.handle = node;
   };
 
@@ -31,20 +54,20 @@ export default class Handle extends React.Component {
     if (document.activeElement === this.handle) {
       this.setClickFocus(true);
     }
-  }
+  };
 
   handleMouseDown = () => {
     // fix https://github.com/ant-design/ant-design/issues/15324
     this.focus();
-  }
+  };
 
   handleBlur = () => {
     this.setClickFocus(false);
-  }
+  };
 
   handleKeyDown = () => {
     this.setClickFocus(false);
-  }
+  };
 
   clickFocus() {
     this.setClickFocus(true);
@@ -77,29 +100,28 @@ export default class Handle extends React.Component {
       ...restProps
     } = this.props;
 
-    const className = classNames(
-      this.props.className,
-      {
-        [`${prefixCls}-handle-click-focused`]: this.state.clickFocused,
-      }
-    );
-    const positionStyle = vertical ? {
-      [reverse ? 'top' : 'bottom']: `${offset}%`,
-      [reverse ? 'bottom' : 'top']: 'auto',
-      transform: reverse ? null : `translateY(+50%)`,
-    } : {
-      [reverse ? 'right' : 'left']: `${offset}%`,
-      [reverse ? 'left' : 'right']: 'auto',
-      transform: `translateX(${reverse ? '+' : '-'}50%)`,
-    };
+    const className = classNames(this.props.className, {
+      [`${prefixCls}-handle-click-focused`]: this.state.clickFocused,
+    });
+    const positionStyle = vertical
+      ? {
+          [reverse ? 'top' : 'bottom']: `${offset}%`,
+          [reverse ? 'bottom' : 'top']: 'auto',
+          transform: reverse ? null : `translateY(+50%)`,
+        }
+      : {
+          [reverse ? 'right' : 'left']: `${offset}%`,
+          [reverse ? 'left' : 'right']: 'auto',
+          transform: `translateX(${reverse ? '+' : '-'}50%)`,
+        };
     const elStyle = {
       ...style,
       ...positionStyle,
     };
 
-    let _tabIndex = tabIndex || 0;
+    let mergedTabIndex = tabIndex || 0;
     if (disabled || tabIndex === null) {
-      _tabIndex = null;
+      mergedTabIndex = null;
     }
 
     let ariaValueText;
@@ -110,14 +132,13 @@ export default class Handle extends React.Component {
     return (
       <div
         ref={this.setHandleRef}
-        tabIndex= {_tabIndex}
+        tabIndex={mergedTabIndex}
         {...restProps}
         className={className}
         style={elStyle}
         onBlur={this.handleBlur}
         onKeyDown={this.handleKeyDown}
         onMouseDown={this.handleMouseDown}
-
         // aria attribute
         role="slider"
         aria-valuemin={min}

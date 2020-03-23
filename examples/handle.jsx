@@ -1,15 +1,14 @@
-import 'rc-slider/assets/index.less';
+import '../assets/index.less';
 import 'rc-tooltip/assets/bootstrap.css';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Tooltip from 'rc-tooltip';
-import Slider from 'rc-slider';
+import Slider from '../src';
 
-const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
-const Handle = Slider.Handle;
+const { Handle } = Slider;
 
-const handle = (props) => {
+const handle = props => {
   const { value, dragging, index, ...restProps } = props;
   return (
     <Tooltip
@@ -25,7 +24,8 @@ const handle = (props) => {
 };
 
 const wrapperStyle = { width: 400, margin: 50 };
-ReactDOM.render(
+
+export default () => (
   <div>
     <div style={wrapperStyle}>
       <p>Slider with custom handle</p>
@@ -43,6 +43,5 @@ ReactDOM.render(
       <p>Range with custom tooltip</p>
       <Range min={0} max={20} defaultValue={[3, 10]} tipFormatter={value => `${value}%`} />
     </div>
-  </div>,
-  document.getElementById('__react-content')
+  </div>
 );
