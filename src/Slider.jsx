@@ -1,5 +1,5 @@
 import React from 'react';
-import warning from 'warning';
+import warning from 'rc-util/lib/warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -8,10 +8,8 @@ class Slider extends React.Component {
   constructor(props) {
     super(props);
 
-    const defaultValue = props.defaultValue !== undefined ?
-      props.defaultValue : props.min;
-    const value = props.value !== undefined ?
-      props.value : defaultValue;
+    const defaultValue = props.defaultValue !== undefined ? props.defaultValue : props.min;
+    const value = props.value !== undefined ? props.value : defaultValue;
 
     this.state = {
       value: this.trimAlignValue(value),
@@ -20,11 +18,11 @@ class Slider extends React.Component {
 
     warning(
       !('minimumTrackStyle' in props),
-      'minimumTrackStyle will be deprecated, please use trackStyle instead.'
+      'minimumTrackStyle will be deprecated, please use trackStyle instead.',
     );
     warning(
       !('maximumTrackStyle' in props),
-      'maximumTrackStyle will be deprecated, please use railStyle instead.'
+      'maximumTrackStyle will be deprecated, please use railStyle instead.',
     );
   }
 
@@ -45,9 +43,9 @@ class Slider extends React.Component {
   }
 
   onChange(state) {
-    const props = this.props;
+    const { props } = this;
     const isNotControlled = !('value' in props);
-    const nextState = state.value > this.props.max ? {...state, value: this.props.max} : state;
+    const nextState = state.value > this.props.max ? { ...state, value: this.props.max } : state;
     if (isNotControlled) {
       this.setState(nextState);
     }
@@ -58,7 +56,7 @@ class Slider extends React.Component {
 
   onStart(position) {
     this.setState({ dragging: true });
-    const props = this.props;
+    const { props } = this;
     const prevValue = this.getValue();
     props.onBeforeChange(prevValue);
 
@@ -73,14 +71,14 @@ class Slider extends React.Component {
     this.onChange({ value });
   }
 
-  onEnd = (force) => {
+  onEnd = force => {
     const { dragging } = this.state;
     this.removeDocumentEvents();
     if (dragging || force) {
       this.props.onAfterChange(this.getValue());
     }
     this.setState({ dragging: false });
-  }
+  };
 
   onMove(e, position) {
     utils.pauseEvent(e);
@@ -96,7 +94,7 @@ class Slider extends React.Component {
     const valueMutator = utils.getKeyboardValueMutator(e, vertical, reverse);
     if (valueMutator) {
       utils.pauseEvent(e);
-      const state = this.state;
+      const { state } = this;
       const oldValue = state.value;
       const mutatedValue = valueMutator(oldValue, this.props);
       const value = this.trimAlignValue(mutatedValue);
