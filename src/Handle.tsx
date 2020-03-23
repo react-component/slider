@@ -17,6 +17,8 @@ export interface HandleProps {
   ariaLabel?: string;
   ariaLabelledBy?: string;
   ariaValueTextFormatter?: (val: number) => string;
+  onMouseEnter?: React.MouseEventHandler;
+  onMouseLeave?: React.MouseEventHandler;
 }
 
 export default class Handle extends React.Component<HandleProps> {
