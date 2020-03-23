@@ -2,7 +2,6 @@
 import '../assets/index.less';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Slider, { createSliderWithTooltip } from '../src';
 
 const style = { width: 600, margin: 50 };
@@ -167,7 +166,7 @@ class DynamicBounds extends React.Component {
   }
 }
 
-ReactDOM.render(
+export default () => (
   <div>
     <div style={style}>
       <p>Basic Slider</p>
@@ -287,6 +286,5 @@ ReactDOM.render(
       <p>Slider with dynamic `min` `max` `step`</p>
       <DynamicBounds />
     </div>
-  </div>,
-  document.getElementById('__react-content'),
+  </div>
 );

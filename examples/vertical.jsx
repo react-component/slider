@@ -1,7 +1,6 @@
 import '../assets/index.less';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Slider from '../src';
 
 const style = { float: 'left', width: 160, height: 400, marginBottom: 160, marginLeft: 50 };
@@ -25,7 +24,7 @@ function log(value) {
   console.log(value); //eslint-disable-line
 }
 
-ReactDOM.render(
+export default () => (
   <div style={parentStyle}>
     <div style={style}>
       <p>Slider with marks, `step=null`</p>
@@ -82,6 +81,5 @@ ReactDOM.render(
         defaultValue={[20, 40]}
       />
     </div>
-  </div>,
-  document.getElementById('__react-content'),
+  </div>
 );

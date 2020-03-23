@@ -2,7 +2,6 @@
 import '../assets/index.less';
 
 import React from 'react';
-import ReactDOM from 'react-dom';
 import Slider from '../src';
 
 const { Range } = Slider;
@@ -175,7 +174,7 @@ class PureRenderRange extends React.Component {
   }
 }
 
-ReactDOM.render(
+export default () => (
   <div>
     <div style={style}>
       <p>Basic Range，`allowCross=false`</p>
@@ -236,6 +235,5 @@ ReactDOM.render(
       <p>Range as child component</p>
       <PureRenderRange />
     </div>
-  </div>,
-  document.getElementById('__react-content'),
+  </div>
 );
