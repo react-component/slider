@@ -82,15 +82,15 @@ export function calculateNextValue(func, value, props) {
     increase: (a, b) => a + b,
     decrease: (a, b) => a - b,
   };
-
-  const indexToGet = operations[func](Object.keys(props.marks).indexOf(JSON.stringify(value)), 1);
-  const keyToGet = Object.keys(props.marks)[indexToGet];
+  const indexes = Object.keys(props.marks).sort((a, b) => operations.decrease(a, b)); // ascending sort // moves "-1" to start
+  const indexToGet = operations[func](indexes.indexOf(JSON.stringify(value)), 1);
+  const keyToGet = indexes[indexToGet];
 
   if (props.step) {
     return operations[func](value, props.step);
   }
-  if (!!Object.keys(props.marks).length && !!props.marks[keyToGet]) {
-    return props.marks[keyToGet];
+  if (!!Object.keys(props.marks).length && keyToGet) {
+    return keyToGet;
   }
   return value;
 }
