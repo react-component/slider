@@ -223,8 +223,8 @@ describe('Range', () => {
 
     expect(wrapper.instance().getSlider().state.bounds).toEqual([20, 40]);
 
-    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
-    map.mousemove({ type: 'mousemove', pageX: 60, pageY: 0 });
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
+    map.mousemove({ type: 'mousemove', pageX: 60, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
 
     expect(wrapper.instance().getSlider().state.bounds).toEqual([40, 60]);
     expect(wrapper.find('.rc-slider-handle-2').at(1).getDOMNode().className).toContain('rc-slider-handle-dragging');
@@ -270,15 +270,15 @@ describe('Range', () => {
 
     expect(wrapper.instance().getSlider().state.bounds).toEqual([20, 40]);
 
-    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
-    map.mousemove({ type: 'mousemove', pageX: 30, pageY: 0 });
-    map.mouseup({ type: 'mouseup', pageX: 30, pageY: 0 });
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
+    map.mousemove({ type: 'mousemove', pageX: 30, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
+    map.mouseup({ type: 'mouseup', pageX: 30, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
 
     expect(wrapper.instance().getSlider().state.bounds).toEqual([30, 40]);
 
-    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0 });
-    map.mousemove({ type: 'mousemove', pageX: 50, pageY: 0 });
-    map.mouseup({ type: 'mouseup', pageX: 50, pageY: 0 });
+    wrapper.find('.rc-slider').simulate('mouseDown', { button: 0, pageX: 0, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
+    map.mousemove({ type: 'mousemove', pageX: 50, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
+    map.mouseup({ type: 'mouseup', pageX: 50, pageY: 0, stopPropagation: () => {}, preventDefault: () => {} });
     expect(wrapper.instance().getSlider().state.bounds).toEqual([39, 40]);
   });
 
