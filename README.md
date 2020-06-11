@@ -5,69 +5,52 @@ Slider UI component for React
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![david-dm deps][david-dm-image]][david-dm-url]
-[![david-dm dev deps][david-dm-dev-image]][david-dm-dev-url]
-[![node version][node-image]][node-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Dependencies][david-image]][david-url]
+[![DevDependencies][david-dev-image]][david-dev-url]
 [![npm download][download-image]][download-url]
+[![bundle size][bundlephobia-image]][bundlephobia-url]
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-slider
-[travis-image]: https://img.shields.io/travis/react-component/slider.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/react-component/slider/master?style=flat-square
 [travis-url]: https://travis-ci.org/react-component/slider
-[codecov-image]: https://img.shields.io/codecov/c/github/react-component/slider/master.svg?style=flat-square
-[codecov-url]: https://codecov.io/gh/react-component/slider/branch/master
-[david-dm-image]: https://david-dm.org/react-component/slider/status.svg
-[david-dm-url]: https://david-dm.org/react-component/slider
-[david-dm-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg
-[david-dm-dev-url]: https://david-dm.org/react-component/slider?type=dev
-[node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
-[node-url]: http://nodejs.org/download/
+[circleci-image]: https://img.shields.io/circleci/react-component/slider/master?style=flat-square
+[circleci-url]: https://circleci.com/gh/react-component/slider
+[coveralls-image]: https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/react-component/slider?branch=master
+[david-url]: https://david-dm.org/react-component/slider
+[david-image]: https://david-dm.org/react-component/slider/status.svg?style=flat-square
+[david-dev-url]: https://david-dm.org/react-component/slider?type=dev
+[david-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg?style=flat-square
 [download-image]: https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square
 [download-url]: https://npmjs.org/package/rc-slider
-
-## Screenshots
-
-<img src="https://t.alipayobjects.com/images/T1ki8fXeprXXXXXXXX.png" width="550"/>
-
-<img src="https://t.alipayobjects.com/images/T1pPhfXhBqXXXXXXXX.png" width="550"/>
-
-<img src="https://t.alipayobjects.com/images/T1wO8fXd4rXXXXXXXX.png" width="550"/>
-
-<img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/>
-
-
-## Features
-
-* Supports IE9, IE9+, Chrome, Firefox & Safari
+[bundlephobia-url]: https://bundlephobia.com/result?p=rc-slider
+[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/rc-slider
 
 ## Install
-
-```bash
-npm install --save rc-slider
-```
 
 [![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
 
 ## Usage
 
-````js
-import React from 'react';
-import ReactDOM from 'react-dom';
+```js
 import Slider, { Range } from 'rc-slider';
-// We can just import Slider or Range to reduce bundle size
-// import Slider from 'rc-slider/lib/Slider';
-// import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 
-ReactDOM.render(
-  <div>
+export default () => (
+  <>
     <Slider />
     <Range />
-  </div>,
-  container
+  </>
 );
-`````
+```
+
+## Compatibility
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Electron |
+| --- | --- | --- | --- | --- |
+| IE11, Edge | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
 
 ## API
 
