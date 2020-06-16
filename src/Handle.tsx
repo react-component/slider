@@ -56,7 +56,10 @@ export default class Handle extends React.Component<HandleProps> {
     }
   };
 
-  handleMouseDown = () => {
+  handleMouseDown = (e) => {
+    // avoid selecting text during drag
+    // https://github.com/ant-design/ant-design/issues/25010
+    e.preventDefault();
     // fix https://github.com/ant-design/ant-design/issues/15324
     this.focus();
   };
