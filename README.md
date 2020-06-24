@@ -64,7 +64,7 @@ const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 ```
 
-[Online demo](http://react-component.github.io/slider/examples/handle.html)
+[Online demo](http://react-component.github.io/slider)
 
 After Range or Slider was wrapped by createSliderWithTooltip, it will have the following props:
 
