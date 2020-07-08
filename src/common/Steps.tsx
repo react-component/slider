@@ -1,6 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import warning from 'rc-util/lib/warning';
+import Tooltip from 'rc-tooltip';
 
 const calcPoints = (vertical, marks, dots, step, min, max) => {
   warning(
@@ -34,6 +35,8 @@ const Steps = ({
   min,
   dotStyle,
   activeDotStyle,
+  stepsTooltip,
+  tipFormatter
 }) => {
   const range = max - min;
   const elements = calcPoints(vertical, marks, dots, step, min, max).map(point => {
@@ -55,7 +58,19 @@ const Steps = ({
       [`${prefixCls}-dot-reverse`]: reverse,
     });
 
+    if (stepsTooltip) {
+    return (
+      <div style={{ display: 'table' }} key={point}>
+        <div style={{ display: 'table-row', }}>
+          <Tooltip placement='top' prefixCls={'rc-slider-tooltip'} overlay={<span>{tipFormatter( point )}</span>} key={point}>
+            <span className={pointClassName} style={style} key={point} />
+          </Tooltip>
+        </div>
+      </div>
+    );
+  } else {
     return <span className={pointClassName} style={style} key={point} />;
+  }
   });
 
   return <div className={`${prefixCls}-step`}>{elements}</div>;

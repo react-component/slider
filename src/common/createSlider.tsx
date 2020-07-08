@@ -43,6 +43,8 @@ export default function createSlider(Component) {
       railStyle: {},
       dotStyle: {},
       activeDotStyle: {},
+      stepsTooltip: false,
+      tipFormatter(value) { return value; },
     };
 
     constructor(props) {
@@ -270,6 +272,8 @@ export default function createSlider(Component) {
         railStyle,
         dotStyle,
         activeDotStyle,
+        stepsTooltip,
+        tipFormatter,
       } = this.props;
       const { tracks, handles } = super.render();
 
@@ -313,6 +317,8 @@ export default function createSlider(Component) {
             min={min}
             dotStyle={dotStyle}
             activeDotStyle={activeDotStyle}
+            stepsTooltip={stepsTooltip}
+            tipFormatter={tipFormatter}
           />
           {handles}
           <Marks

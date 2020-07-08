@@ -30,6 +30,7 @@ export default function createSliderWithTooltip(Component) {
       handleStyle: [{}],
       tipProps: {},
       getTooltipContainer: node => node.parentNode,
+      stepsTooltip: true,
     };
 
     state = {
