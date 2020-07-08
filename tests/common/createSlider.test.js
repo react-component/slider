@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
 import { mount } from 'enzyme';
-import Slider, { Range } from '../../src';
+import Slider, { Range, createSliderWithTooltip } from '../../src';
 
 const setWidth = (object, width) => {
   // https://github.com/tmpvar/jsdom/commit/0cdb2efcc69b6672dc2928644fc0172df5521176
@@ -68,13 +68,13 @@ describe('createSlider', () => {
     const sliderWrapper = mount(<Slider onChange={sliderOnChange} />);
     sliderWrapper.setProps({ min: 10 });
     expect(sliderWrapper.state('value')).toBe(10);
-    expect(sliderOnChange).toHaveBeenCalledWith(10);
+    expect(sliderOnChange).toHaveBeenLastCalledWith(10);
 
     const rangeOnChange = jest.fn();
     const rangeWrapper = mount(<Range onChange={rangeOnChange} />);
     rangeWrapper.setProps({ min: 10 });
     expect(rangeWrapper.state('bounds')).toEqual([10, 10]);
-    expect(rangeOnChange).toHaveBeenCalledWith([10, 10]);
+    expect(rangeOnChange).toHaveBeenLastCalledWith([10, 10]);
   });
 
   it('should not call onChange when value is the same', () => {
@@ -268,5 +268,18 @@ describe('createSlider', () => {
     sliderWrapper.instance().onEnd();
     expect(sliderOnAfterChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('the tooltip should be attach to the container with the id tooltip', () => {
+    const SliderWithTooltip = createSliderWithTooltip(Slider);
+    const tooltipPrefixer = {
+      prefixCls: 'slider-tooltip',
+    };
+    const tooltipParent = document.createElement('div');
+    tooltipParent.setAttribute('id', 'tooltip');
+    const wrapper = mount(
+      <SliderWithTooltip tipProps={tooltipPrefixer} getTooltipContainer={() => document.getElementById('tooltip')} />
+    );
+    expect(wrapper.instance().props.getTooltipContainer).toBeTruthy();
   });
 });

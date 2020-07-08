@@ -1,6 +1,18 @@
 # History
 ----
 
+## 9.2.0
+
+[Feature] createSliderWithTooltip support getTooltipContainer
+
+## 9.1.0
+
+[Feature] Support `startPoint` prop.
+
+## 8.7.0
+
+[Feature] Supprot `reverse` prop.
+
 ## 8.6.0
 
 [Feature] Allow tabIndex to be set explicitly on Handle. [#381](https://github.com/react-component/slider/pull/381)

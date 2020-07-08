@@ -5,69 +5,52 @@ Slider UI component for React
 
 [![NPM version][npm-image]][npm-url]
 [![build status][travis-image]][travis-url]
-[![Test coverage][codecov-image]][codecov-url]
-[![david-dm deps][david-dm-image]][david-dm-url]
-[![david-dm dev deps][david-dm-dev-image]][david-dm-dev-url]
-[![node version][node-image]][node-url]
+[![Test coverage][coveralls-image]][coveralls-url]
+[![Dependencies][david-image]][david-url]
+[![DevDependencies][david-dev-image]][david-dev-url]
 [![npm download][download-image]][download-url]
+[![bundle size][bundlephobia-image]][bundlephobia-url]
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-slider
-[travis-image]: https://img.shields.io/travis/react-component/slider.svg?style=flat-square
+[travis-image]: https://img.shields.io/travis/react-component/slider/master?style=flat-square
 [travis-url]: https://travis-ci.org/react-component/slider
-[codecov-image]: https://img.shields.io/codecov/c/github/react-component/slider/master.svg?style=flat-square
-[codecov-url]: https://codecov.io/gh/react-component/slider/branch/master
-[david-dm-image]: https://david-dm.org/react-component/slider/status.svg
-[david-dm-url]: https://david-dm.org/react-component/slider
-[david-dm-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg
-[david-dm-dev-url]: https://david-dm.org/react-component/slider?type=dev
-[node-image]: https://img.shields.io/badge/node.js-%3E=_0.10-green.svg?style=flat-square
-[node-url]: http://nodejs.org/download/
+[circleci-image]: https://img.shields.io/circleci/react-component/slider/master?style=flat-square
+[circleci-url]: https://circleci.com/gh/react-component/slider
+[coveralls-image]: https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/react-component/slider?branch=master
+[david-url]: https://david-dm.org/react-component/slider
+[david-image]: https://david-dm.org/react-component/slider/status.svg?style=flat-square
+[david-dev-url]: https://david-dm.org/react-component/slider?type=dev
+[david-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg?style=flat-square
 [download-image]: https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square
 [download-url]: https://npmjs.org/package/rc-slider
-
-## Screenshots
-
-<img src="https://t.alipayobjects.com/images/T1ki8fXeprXXXXXXXX.png" width="550"/>
-
-<img src="https://t.alipayobjects.com/images/T1pPhfXhBqXXXXXXXX.png" width="550"/>
-
-<img src="https://t.alipayobjects.com/images/T1wO8fXd4rXXXXXXXX.png" width="550"/>
-
-<img src="http://i.giphy.com/l46Cs36c9HrHMExoc.gif"/>
-
-
-## Features
-
-* Supports IE9, IE9+, Chrome, Firefox & Safari
+[bundlephobia-url]: https://bundlephobia.com/result?p=rc-slider
+[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/rc-slider
 
 ## Install
-
-```bash
-npm install --save rc-slider
-```
 
 [![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
 
 ## Usage
 
-````js
-import React from 'react';
-import ReactDOM from 'react-dom';
+```js
 import Slider, { Range } from 'rc-slider';
-// We can just import Slider or Range to reduce bundle size
-// import Slider from 'rc-slider/lib/Slider';
-// import Range from 'rc-slider/lib/Range';
 import 'rc-slider/assets/index.css';
 
-ReactDOM.render(
-  <div>
+export default () => (
+  <>
     <Slider />
     <Range />
-  </div>,
-  container
+  </>
 );
-`````
+```
+
+## Compatibility
+
+| [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/edge/edge_48x48.png" alt="IE / Edge" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>IE / Edge | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/firefox/firefox_48x48.png" alt="Firefox" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Firefox | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/chrome/chrome_48x48.png" alt="Chrome" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Chrome | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/safari/safari_48x48.png" alt="Safari" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Safari | [<img src="https://raw.githubusercontent.com/alrra/browser-logos/master/src/electron/electron_48x48.png" alt="Electron" width="24px" height="24px" />](http://godban.github.io/browsers-support-badges/)<br>Electron |
+| --- | --- | --- | --- | --- |
+| IE11, Edge | last 2 versions | last 2 versions | last 2 versions | last 2 versions |
 
 ## API
 
@@ -81,7 +64,7 @@ const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 ```
 
-[Online demo](http://react-component.github.io/slider/examples/handle.html)
+[Online demo](http://react-component.github.io/slider/?path=/story/rc-slider--handle)
 
 After Range or Slider was wrapped by createSliderWithTooltip, it will have the following props:
 
@@ -104,6 +87,7 @@ The following APIs are shared by Slider and Range.
 | vertical | boolean | `false` | If vertical is `true`, the slider will be vertical. |
 | handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
 | included | boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
+| reverse | boolean | `false` | If the value is `true`, it means the component is rendered reverse. |
 | disabled | boolean | `false` | If `true`, handles can't be moved. |
 | dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
 | onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
@@ -123,7 +107,11 @@ The following APIs are shared by Slider and Range.
 | ------------ | ------- | ------- | ----------- |
 | defaultValue | number | `0` | Set initial value of slider. |
 | value | number | - | Set current value of slider. |
+| startPoint | number | `undefined` | Track starts from this value. If `undefined`, `min` is used. |
 | tabIndex | number | `0` | Set the tabIndex of the slider handle. |
+| ariaLabelForHandle | string | - | Set the `aria-label` attribute on the slider handle.  |
+| ariaLabelledByForHandle | string | - | Set the `aria-labelledby` attribute on the slider handle. |
+| ariaValueTextFormatterForHandle | (value) => string | - | A function to set the `aria-valuetext` attribute on the slider handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
 
 ### Range
 
@@ -132,6 +120,9 @@ The following APIs are shared by Slider and Range.
 | defaultValue | `number[]` | `[0, 0]` | Set initial positions of handles. |
 | value | `number[]` | | Set current positions of handles. |
 | tabIndex | number[] | `[0, 0]` | Set the tabIndex of each handle. |
+| ariaLabelGroupForHandles | Array[string] | - | Set the `aria-label` attribute on each handle. |
+| ariaLabelledByGroupForHandles | Array[string] | - | Set the `aria-labelledby` attribute on each handle. |
+| ariaValueTextFormatterGroupForHandles | Array[(value) => string] | - | A function to set the `aria-valuetext` attribute on each handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
 | count | number | `1` | Determine how many ranges to render, and multiple handles will be rendered (number + 1). |
 | allowCross | boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
 | pushable | boolean or number | `false` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving a handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |

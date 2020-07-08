@@ -2,7 +2,7 @@
 root = true
 
 # Unix-style newlines with a newline ending every file
-[*.{js,css}]
+[*.{js,jsx,css}]
 end_of_line = lf
 insert_final_newline = true
 indent_style = space

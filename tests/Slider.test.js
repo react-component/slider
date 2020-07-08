@@ -15,10 +15,78 @@ describe('Slider', () => {
     const wrapper = mount(<Slider value={50} />);
     expect(wrapper.state('value')).toBe(50);
     expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
 
     const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
     expect(trackStyle.left).toMatch('0%');
+    expect(trackStyle.right).toMatch('auto');
     expect(trackStyle.width).toMatch('50%');
+  });
+
+  it('should render Slider correctly where value > startPoint', () => {
+    const wrapper = mount(<Slider value={50} startPoint={20} />);
+    expect(wrapper.state('value')).toBe(50);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.left).toMatch('20%');
+    expect(trackStyle.right).toMatch('auto');
+    expect(trackStyle.width).toMatch('30%');
+  });
+
+  it('should render Slider correctly where value < startPoint', () => {
+    const wrapper = mount(<Slider value={40} startPoint={60} />);
+    expect(wrapper.state('value')).toBe(40);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('40%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.left).toMatch('auto');
+    expect(trackStyle.right).toMatch('40%');
+    expect(trackStyle.width).toMatch('20%');
+  });
+
+  it('should render reverse Slider with value correctly', () => {
+    const wrapper = mount(<Slider value={50} reverse />);
+    expect(wrapper.state('value')).toBe(50);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.right).toMatch('0%');
+    expect(trackStyle.left).toMatch('auto');
+    expect(trackStyle.width).toMatch('50%');
+  });
+
+  it('should render reverse Slider correctly where value > startPoint', () => {
+    const wrapper = mount(<Slider value={50} startPoint={20} reverse />);
+    expect(wrapper.state('value')).toBe(50);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.right).toMatch('20%');
+    expect(trackStyle.left).toMatch('auto');
+    expect(trackStyle.width).toMatch('30%');
+  });
+
+  it('should render reverse Slider correctly where value < startPoint', () => {
+    const wrapper = mount(<Slider value={30} startPoint={50} reverse />);
+    expect(wrapper.state('value')).toBe(30);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('30%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('auto');
+
+    const trackStyle = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(trackStyle.right).toMatch('auto');
+    expect(trackStyle.left).toMatch('50%');
+    expect(trackStyle.width).toMatch('20%');
+  });
+
+  it('should render reverse Slider with marks correctly', () => {
+    const marks = {5:'5', 6:'6', 7:'7', 8:'8', 9:'9', 10:'10'};
+    const wrapper = mount(<Slider value={0} marks={marks} min={5} max={10} reverse />);
+    expect(wrapper.find('.rc-slider-mark-text').at(0).props().style.right).toMatch('0%');
   });
 
   it('should render Slider without handle if value is null', () => {
@@ -47,6 +115,16 @@ describe('Slider', () => {
     expect(wrapper.state('value')).toBe(51);
   });
 
+  it('decreases the value for reverse-vertical when key "up" is pressed', () => {
+    const wrapper = mount(<Slider defaultValue={50} reverse vertical />);
+    const handler = wrapper.find('.rc-slider-handle').at(1);
+
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+
+    expect(wrapper.state('value')).toBe(49);
+  });
+
   it('increases the value when key "right" is pressed', () => {
     const wrapper = mount(<Slider defaultValue={50} />);
     const handler = wrapper.find('.rc-slider-handle').at(1);
@@ -66,6 +144,16 @@ describe('Slider', () => {
     handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
     expect(onAfterChange).toBeCalled();
+  });
+
+  it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
+    const wrapper = mount(<Slider defaultValue={50} reverse />);
+    const handler = wrapper.find('.rc-slider-handle').at(1);
+
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(wrapper.state('value')).toBe(49);
   });
 
   it('increases the value when key "page up" is pressed, by a factor 2', () => {
@@ -204,6 +292,28 @@ describe('Slider', () => {
     });
   });
 
+  it('sets aria-label on the handle', () => {
+    const wrapper = mount(<Slider ariaLabelForHandle="Some Label" />);
+    expect(wrapper.find('.rc-slider-handle').at(1).prop('aria-label')).toEqual('Some Label');
+  });
+
+  it('sets aria-labelledby on the handle', () => {
+    const wrapper = mount(<Slider ariaLabelledByForHandle="some_id" />);
+    expect(wrapper.find('.rc-slider-handle').at(1).prop('aria-labelledby')).toEqual('some_id');
+  });
+
+  it('sets aria-valuetext on the handle', () => {
+    const wrapper = mount(<Slider min={0} max={5} defaultValue={3} ariaValueTextFormatterForHandle={(value) => `${value} of something`} />);
+    const handle = wrapper.find('.rc-slider-handle').at(1);
+
+    expect(handle.prop('aria-valuetext')).toEqual('3 of something');
+
+    wrapper.simulate('focus');
+    handle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(wrapper.find('.rc-slider-handle').at(1).props()['aria-valuetext']).toEqual('4 of something');
+  });
+
   describe('focus & blur', () => {
     let container;
 
@@ -245,5 +355,10 @@ describe('Slider', () => {
       wrapper.instance().blur();
       expect(handleBlur).toBeCalled();
     });
+  });
+
+  it('should not be out of range when value is null', () => {
+    const wrapper = mount(<Slider value={null} min={1} max={10} />);
+    expect(wrapper.find('Track').props().length >= 0).toBeTruthy();
   });
 });
