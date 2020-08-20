@@ -1,10 +1,10 @@
-import Slider from './Slider';
-import Range from './Range';
-import Handle from './Handle';
+import Slider, { SliderProps } from './Slider';
+import Range, { RangeProps } from './Range';
+import Handle, { HandleProps } from './Handle';
 import createSliderWithTooltip from './createSliderWithTooltip';
 
 Slider.Range = Range;
 Slider.Handle = Handle;
 Slider.createSliderWithTooltip = createSliderWithTooltip;
 export default Slider;
-export { Range, Handle, createSliderWithTooltip };
+export { SliderProps, Range, RangeProps, Handle, HandleProps, createSliderWithTooltip };
