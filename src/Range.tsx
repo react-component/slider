@@ -40,6 +40,7 @@ export interface RangeProps {
   max?: number;
   allowCross?: boolean;
   pushable: boolean;
+  distanceBetweenHandles?: number;
   onChange?: (value: number[]) => void;
   onBeforeChange?: (value: number[]) => void;
   onAfterChange?: (value: number[]) => void;
@@ -194,7 +195,24 @@ class Range extends React.Component<RangeProps, RangeState> {
     }
 
     const data = { ...this.state, ...state };
-    const changedValue = data.bounds;
+    let changedValue = data.bounds;
+    const { distanceBetweenHandles } = this.props;
+
+    if (distanceBetweenHandles) {
+      const [beforeFirst, beforeSecond] = this.state.bounds;
+      const [afterFirst, afterSecond] = changedValue;
+
+      if (afterSecond - afterFirst < distanceBetweenHandles) {
+        if (beforeFirst < afterFirst) {
+          changedValue = [afterSecond - distanceBetweenHandles, afterSecond];
+        } else if (afterSecond < beforeSecond) {
+          changedValue = [afterFirst, afterFirst + distanceBetweenHandles];
+        }
+      }
+      this.setState({
+        bounds: changedValue,
+      });
+    }
     props.onChange(changedValue);
   }
 
