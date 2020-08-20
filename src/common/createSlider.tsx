@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-unused-expressions */
 import React from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
@@ -163,6 +165,7 @@ export default function createSlider(Component) {
     onClickMarkLabel = (e, value) => {
       e.stopPropagation();
       this.onChange({ value });
+      // eslint-disable-next-line react/no-unused-state
       this.setState({ value }, () => this.onEnd(true));
     };
 
@@ -198,13 +201,11 @@ export default function createSlider(Component) {
     }
 
     removeDocumentEvents() {
-      /* eslint-disable no-unused-expressions */
       this.onTouchMoveListener && this.onTouchMoveListener.remove();
       this.onTouchUpListener && this.onTouchUpListener.remove();
 
       this.onMouseMoveListener && this.onMouseMoveListener.remove();
       this.onMouseUpListener && this.onMouseUpListener.remove();
-      /* eslint-enable no-unused-expressions */
     }
 
     focus() {

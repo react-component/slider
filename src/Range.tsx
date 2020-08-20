@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import classNames from 'classnames';
 import shallowEqual from 'shallowequal';
@@ -106,6 +107,7 @@ class Range extends React.Component<RangeProps, RangeState> {
 
   internalPointsCache: { marks: RangeProps['marks']; step: number; points: number[] };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handlesRefs: Record<number, any>;
 
   constructor(props: RangeProps) {
