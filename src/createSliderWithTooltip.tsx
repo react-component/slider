@@ -2,9 +2,9 @@ import React from 'react';
 import Tooltip from 'rc-tooltip';
 import Handle from './Handle';
 
-interface ComponentWrapperProps {
-  tipFormatter: (value: number) => React.ReactNode;
-  tipProps: {
+export interface ComponentWrapperProps {
+  tipFormatter?: (value: number) => React.ReactNode;
+  tipProps?: {
     prefixCls?: string;
     overlay?: string;
     placement?: string;
@@ -18,9 +18,9 @@ interface ComponentWrapperState {
   visibles: Record<number, boolean>;
 }
 
-export default function createSliderWithTooltip(Component) {
+export default function createSliderWithTooltip<Props>(Component: React.ComponentClass<Props>) {
   return class ComponentWrapper extends React.Component<
-    ComponentWrapperProps,
+    ComponentWrapperProps & React.ComponentProps<typeof Component>,
     ComponentWrapperState
   > {
     static defaultProps = {

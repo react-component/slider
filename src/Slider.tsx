@@ -3,8 +3,9 @@ import warning from 'rc-util/lib/warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
+import { GenericSliderProps, GenericSliderState } from './interface';
 
-export interface SliderProps {
+export interface SliderProps extends GenericSliderProps {
   value?: number;
   defaultValue?: number;
   min?: number;
@@ -26,7 +27,7 @@ export interface SliderProps {
   ariaLabelledByForHandle?: string;
   ariaValueTextFormatterForHandle?: string;
   startPoint?: number;
-  handle: (props: {
+  handle?: (props: {
     className: string;
     prefixCls?: string;
     vertical?: boolean;
@@ -46,7 +47,7 @@ export interface SliderProps {
     ref?: React.Ref<any>;
   }) => React.ReactElement;
 }
-export interface SliderState {
+export interface SliderState extends GenericSliderState {
   value: number;
   dragging: boolean;
 }
