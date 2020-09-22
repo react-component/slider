@@ -4,12 +4,18 @@ import classNames from 'classnames';
 import warning from 'rc-util/lib/warning';
 import Steps from './Steps';
 import Marks from './Marks';
-import Handle from '../Handle';
+import Handle, { HandleProps } from '../Handle';
 import * as utils from '../utils';
+import { GenericSliderProps, GenericSliderState, GenericSlider } from '../interface';
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 function noop() {}
 
-export default function createSlider(Component) {
+export default function createSlider<
+  Props extends GenericSliderProps,
+  State extends GenericSliderState
+>(Component: GenericSlider<Props, State>): React.ComponentClass<Props, State> {
   return class ComponentEnhancer extends Component {
     static displayName = `ComponentEnhancer(${Component.displayName})`;
 
@@ -21,7 +27,7 @@ export default function createSlider(Component) {
       max: 100,
       step: 1,
       marks: {},
-      handle(props) {
+      handle(props: HandleProps & { index: number; dragging: boolean }) {
         const { index, ...restProps } = props;
         delete restProps.dragging;
         if (restProps.value === null) {
@@ -45,7 +51,25 @@ export default function createSlider(Component) {
       activeDotStyle: {},
     };
 
-    constructor(props) {
+    handlesRefs: any;
+
+    sliderRef: HTMLDivElement;
+
+    document: Document;
+
+    dragOffset: number;
+
+    prevMovedHandleIndex: number;
+
+    onTouchMoveListener: any;
+
+    onTouchUpListener: any;
+
+    onMouseMoveListener: any;
+
+    onMouseUpListener: any;
+
+    constructor(props: Props) {
       super(props);
 
       const { step, max, min } = props;
@@ -72,11 +96,10 @@ export default function createSlider(Component) {
       this.removeDocumentEvents();
     }
 
-    onMouseDown = e => {
+    onMouseDown = (e: any) => {
       if (e.button !== 0) {
         return;
       }
-
       const isVertical = this.props.vertical;
       let position = utils.getMousePosition(isVertical, e);
       if (!utils.isEventFromHandle(e, this.handlesRefs)) {
@@ -91,7 +114,7 @@ export default function createSlider(Component) {
       this.addDocumentMouseEvents();
     };
 
-    onTouchStart = e => {
+    onTouchStart = (e: any) => {
       if (utils.isNotTouchEvent(e)) return;
 
       const isVertical = this.props.vertical;
@@ -108,7 +131,7 @@ export default function createSlider(Component) {
       utils.pauseEvent(e);
     };
 
-    onFocus = e => {
+    onFocus = (e: React.FocusEvent<HTMLDivElement>) => {
       const { onFocus, vertical } = this.props;
       if (utils.isEventFromHandle(e, this.handlesRefs)) {
         const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
@@ -121,7 +144,7 @@ export default function createSlider(Component) {
       }
     };
 
-    onBlur = e => {
+    onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
       const { onBlur } = this.props;
       this.onEnd();
       if (onBlur) {
@@ -135,7 +158,7 @@ export default function createSlider(Component) {
       }
     };
 
-    onMouseMove = e => {
+    onMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
       if (!this.sliderRef) {
         this.onEnd();
         return;
@@ -144,7 +167,7 @@ export default function createSlider(Component) {
       this.onMove(e, position - this.dragOffset);
     };
 
-    onTouchMove = e => {
+    onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
       if (utils.isNotTouchEvent(e) || !this.sliderRef) {
         this.onEnd();
         return;
@@ -154,15 +177,16 @@ export default function createSlider(Component) {
       this.onMove(e, position - this.dragOffset);
     };
 
-    onKeyDown = e => {
-      if (this.sliderRef && utils.isEventFromHandle(e, this.handlesRefs)) {
+    onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+      if (this.sliderRef && utils.isEventFromHandle(e as any, this.handlesRefs)) {
         this.onKeyboard(e);
       }
     };
 
-    onClickMarkLabel = (e, value) => {
+    onClickMarkLabel = (e: React.MouseEvent<HTMLDivElement>, value: any) => {
       e.stopPropagation();
       this.onChange({ value });
+      // eslint-disable-next-line react/no-unused-state
       this.setState({ value }, () => this.onEnd(true));
     };
 
@@ -198,7 +222,7 @@ export default function createSlider(Component) {
     }
 
     removeDocumentEvents() {
-      /* eslint-disable no-unused-expressions */
+      /* eslint-disable @typescript-eslint/no-unused-expressions */
       this.onTouchMoveListener && this.onTouchMoveListener.remove();
       this.onTouchUpListener && this.onTouchUpListener.remove();
 
@@ -237,17 +261,17 @@ export default function createSlider(Component) {
       return nextValue;
     }
 
-    calcOffset(value) {
+    calcOffset(value: number) {
       const { min, max } = this.props;
       const ratio = (value - min) / (max - min);
       return Math.max(0, ratio * 100);
     }
 
-    saveSlider = slider => {
+    saveSlider = (slider: HTMLDivElement) => {
       this.sliderRef = slider;
     };
 
-    saveHandle(index, handle) {
+    saveHandle(index: number, handle: any) {
       this.handlesRefs[index] = handle;
     }
 
@@ -270,8 +294,8 @@ export default function createSlider(Component) {
         railStyle,
         dotStyle,
         activeDotStyle,
-      } = this.props;
-      const { tracks, handles } = super.render();
+      } = this.props as any;
+      const { tracks, handles } = super.render() as any;
 
       const sliderClassName = classNames(prefixCls, {
         [`${prefixCls}-with-marks`]: Object.keys(marks).length,

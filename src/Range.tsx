@@ -5,6 +5,7 @@ import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
 import { SliderProps } from './Slider';
+import { GenericSliderProps, GenericSliderState } from './interface';
 
 const trimAlignValue = ({
   value,
@@ -32,14 +33,14 @@ const trimAlignValue = ({
   return utils.ensureValuePrecision(valNotConflict, props);
 };
 
-export interface RangeProps {
+export interface RangeProps extends GenericSliderProps {
   value?: number[];
   defaultValue?: number[];
   count?: number;
   min?: number;
   max?: number;
   allowCross?: boolean;
-  pushable: boolean;
+  pushable?: boolean;
   onChange?: (value: number[]) => void;
   onBeforeChange?: (value: number[]) => void;
   onAfterChange?: (value: number[]) => void;
@@ -53,14 +54,14 @@ export interface RangeProps {
   disabled?: boolean;
   trackStyle?: React.CSSProperties;
   handleStyle?: React.CSSProperties;
-  tabIndex?: number;
-  ariaLabelGroupForHandles?: string;
-  ariaLabelledByGroupForHandles?: string;
-  ariaValueTextFormatterGroupForHandles?: string;
-  handle: SliderProps['handle'];
+  tabIndex?: number | Array<number>;
+  ariaLabelGroupForHandles?: string | Array<string>;
+  ariaLabelledByGroupForHandles?: string | Array<string>;
+  ariaValueTextFormatterGroupForHandles?: string | Array<string>;
+  handle?: SliderProps['handle'];
 }
 
-interface RangeState {
+interface RangeState extends GenericSliderState {
   bounds: number[];
   handle: number | null;
   recent: number;
