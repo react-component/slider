@@ -14,6 +14,14 @@ export interface GenericSliderProps {
   autoFocus?: boolean;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  className?: string;
+  marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
+  dots?: boolean;
+  maximumTrackStyle?: React.CSSProperties;
+  style?: React.CSSProperties;
+  railStyle?: React.CSSProperties;
+  dotStyle?: React.CSSProperties;
+  activeDotStyle?: React.CSSProperties;
 }
 
 export interface GenericSliderState {

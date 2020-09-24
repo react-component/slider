@@ -247,14 +247,14 @@ export default function createSlider<
       }
     }
 
-    calcValue(offset) {
+    calcValue(offset: number) {
       const { vertical, min, max } = this.props;
       const ratio = Math.abs(Math.max(offset, 0) / this.getSliderLength());
       const value = vertical ? (1 - ratio) * (max - min) + min : ratio * (max - min) + min;
       return value;
     }
 
-    calcValueByPos(position) {
+    calcValueByPos(position: number) {
       const sign = this.props.reverse ? -1 : +1;
       const pixelOffset = sign * (position - this.getSliderStart());
       const nextValue = this.trimAlignValue(this.calcValue(pixelOffset));
@@ -294,7 +294,7 @@ export default function createSlider<
         railStyle,
         dotStyle,
         activeDotStyle,
-      } = this.props as any;
+      } = this.props;
       const { tracks, handles } = super.render() as any;
 
       const sliderClassName = classNames(prefixCls, {

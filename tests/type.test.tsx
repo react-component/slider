@@ -33,6 +33,14 @@ describe('Slider.Typescript', () => {
     handle(props) {
       return <span {...props} />;
     },
+    className: 'class',
+    marks: { 0: 'mark1', 1: { style: { color: '#fff' }, label: 'label' } },
+    dots: true,
+    maximumTrackStyle: { color: '#fff' },
+    style: { color: '#fff' },
+    railStyle: { color: '#fff' },
+    dotStyle: { color: '#fff' },
+    activeDotStyle: { color: '#fff' },
   };
 
   const rangeProps: RangeProps = {
@@ -72,6 +80,13 @@ describe('Slider.Typescript', () => {
     handle(props) {
       return <span {...props} />;
     },
+    className: 'class',
+    dots: true,
+    maximumTrackStyle: { color: '#fff' },
+    style: { color: '#fff' },
+    railStyle: { color: '#fff' },
+    dotStyle: { color: '#fff' },
+    activeDotStyle: { color: '#fff' },
   };
 
   const handleProps: HandleProps = {
