@@ -187,7 +187,10 @@ class Slider extends React.Component<SliderProps, SliderState> {
   }
 
   getUpperBound() {
-    return this.state.value < this.props.startPoint ? this.props.startPoint : this.state.value;
+    if (this.state.value < this.props.startPoint) {
+      return this.props.startPoint;
+    }
+    return this.state.value;
   }
 
   trimAlignValue(v: number, nextProps: Partial<SliderProps> = {}) {
