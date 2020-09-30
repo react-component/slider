@@ -24,7 +24,6 @@ node_modules
 dist
 assets/**/*.css
 build
-es
 /coverage
 yarn.lock
 package-lock.json
