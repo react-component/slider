@@ -52,8 +52,8 @@ export interface RangeProps extends GenericSliderProps {
   prefixCls?: string;
   included?: boolean;
   disabled?: boolean;
-  trackStyle?: React.CSSProperties;
-  handleStyle?: React.CSSProperties;
+  trackStyle?: React.CSSProperties[];
+  handleStyle?: React.CSSProperties[];
   tabIndex?: number | Array<number>;
   ariaLabelGroupForHandles?: string | Array<string>;
   ariaLabelledByGroupForHandles?: string | Array<string>;

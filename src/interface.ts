@@ -9,8 +9,8 @@ export interface GenericSliderProps {
   included?: boolean;
   disabled?: boolean;
   reverse?: boolean;
-  trackStyle?: React.CSSProperties;
-  handleStyle?: React.CSSProperties;
+  trackStyle?: React.CSSProperties | React.CSSProperties[];
+  handleStyle?: React.CSSProperties | React.CSSProperties[];
   autoFocus?: boolean;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
