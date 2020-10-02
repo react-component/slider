@@ -10,7 +10,7 @@ export interface SliderProps extends GenericSliderProps {
   defaultValue?: number;
   min?: number;
   max?: number;
-  step?: number;
+  step?: number | null;
   prefixCls?: string;
   onChange?: (value: number) => void;
   onBeforeChange?: (value: number) => void;
