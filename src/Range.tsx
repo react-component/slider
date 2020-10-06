@@ -132,28 +132,36 @@ class Range extends React.Component<RangeProps, RangeState> {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if ('value' in props || 'min' in props || 'max' in props) {
-      const value = props.value || state.bounds;
-      const nextBounds = value.map((v, i) =>
+    if (!('value' in props || 'min' in props || 'max' in props)) return null;
+
+    const value = props.value || state.bounds;
+    let nextBounds = value.map((v, i) =>
+      trimAlignValue({
+        value: v,
+        handle: i,
+        bounds: state.bounds,
+        props,
+      }),
+    );
+
+    if (state.bounds.length === nextBounds.length) {
+      if (nextBounds.every((v, i) => v === state.bounds[i])) {
+        return null;
+      }
+    } else {
+      nextBounds = value.map((v, i) =>
         trimAlignValue({
           value: v,
           handle: i,
-          bounds: state.bounds,
           props,
         }),
       );
-      if (
-        nextBounds.length === state.bounds.length &&
-        nextBounds.every((v, i) => v === state.bounds[i])
-      ) {
-        return null;
-      }
-      return {
-        ...state,
-        bounds: nextBounds,
-      };
     }
-    return null;
+
+    return {
+      ...state,
+      bounds: nextBounds,
+    };
   }
 
   componentDidUpdate(prevProps, prevState) {
