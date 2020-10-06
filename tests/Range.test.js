@@ -540,7 +540,7 @@ describe('Range', () => {
   });
 
   // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
-  it('should correctly display a dynamically decreased number of handles', () => {
+  it('should correctly display a dynamically changed number of handles', () => {
     class RangeUnderTest extends React.Component {
       state = {
         handles: [0, 25, 50, 75, 100],
@@ -565,21 +565,32 @@ describe('Range', () => {
     }
 
     const rangeUnderTest = mount(<RangeUnderTest />);
-    rangeUnderTest.setState({ handles: [0, 75, 100] });
+    const verifyHandles = () => {
+      // Has the number of handles that we set.
+      expect(rangeUnderTest.find('div.rc-slider-handle')).toHaveLength(
+        rangeUnderTest.state('handles').length,
+      );
+      // Handles have the values that we set.
+      expect(
+        rangeUnderTest
+          .find('div.rc-slider-handle')
+          .everyWhere(
+            (element, index) =>
+              Number(element.prop('aria-valuenow')) === rangeUnderTest.state('handles')[index],
+          ),
+      ).toEqual(true);
+    };
 
-    // Has the number of handles that we set.
-    expect(rangeUnderTest.find('div.rc-slider-handle')).toHaveLength(
-      rangeUnderTest.state('handles').length,
-    );
-    // Handles have the values that we set.
-    expect(
-      rangeUnderTest
-        .find('div.rc-slider-handle')
-        .everyWhere(
-          (element, index) =>
-            Number(element.prop('aria-valuenow')) === rangeUnderTest.state('handles')[index],
-        ),
-    ).toEqual(true);
+    // Assert that handles are correct initially.
+    verifyHandles();
+
+    // Assert that handles are correct after decreasing their number.
+    rangeUnderTest.setState({ handles: [0, 75, 100] });
+    verifyHandles();
+
+    // Assert that handles are correct after increasing their number.
+    rangeUnderTest.setState({ handles: [0, 25, 75, 100] });
+    verifyHandles();
   });
 
   describe('focus & blur', () => {
