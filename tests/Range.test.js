@@ -300,6 +300,46 @@ describe('Range', () => {
     expect(wrapper.find('.rc-slider-handle-2').at(1).prop('aria-valuetext')).toEqual('3 of something else');
   });
 
+  // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
+  it('should correctly display a dynamically decreased number of handles', () => {
+    class RangeUnderTest extends React.Component {
+      state = {
+        handles: [0, 25, 50, 75, 100]
+      };
+
+      render() {
+        return (
+          <Range
+            allowCross={false}
+            marks={{
+              0: { label: "0", style: {} },
+              25: { label: "25", style: {} },
+              50: { label: "50", style: {} },
+              75: { label: "75", style: {} },
+              100: { label: "100", style: {} }
+            }}
+            step={null}
+            value={this.state.handles}
+          />
+        );
+      }
+    }
+
+    const rangeUnderTest = mount(<RangeUnderTest />);
+    rangeUnderTest.setState({ handles: [0, 75, 100] });
+
+    // Has the number of handles that we set.
+    expect(rangeUnderTest.find('div.rc-slider-handle')).toHaveLength(rangeUnderTest.state('handles').length);
+    // Handles have the values that we set.
+    expect(
+      rangeUnderTest
+        .find('div.rc-slider-handle')
+        .everyWhere((element, index) =>
+          Number(element.prop('aria-valuenow')) === rangeUnderTest.state('handles')[index]
+        )
+    ).toEqual(true);
+  });
+
   describe('focus & blur', () => {
     let container;
 
