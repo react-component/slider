@@ -3,7 +3,7 @@ import * as React from 'react';
 export interface GenericSliderProps {
   min?: number;
   max?: number;
-  step?: number;
+  step?: number | null;
   prefixCls?: string;
   vertical?: boolean;
   included?: boolean;
