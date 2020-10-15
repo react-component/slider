@@ -13,10 +13,11 @@ const handle = props => {
   return (
     <Tooltip
       prefixCls="rc-slider-tooltip"
-      overlay={value}
-      visible={dragging}
+      overlay={`${value} %`}
+      visible
       placement="top"
       key={index}
+      getTooltipContainer={node => node}
     >
       <Handle value={value} {...restProps} />
     </Tooltip>
