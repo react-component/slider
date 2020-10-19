@@ -127,6 +127,10 @@ The following APIs are shared by Slider and Range.
 | allowCross | boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
 | pushable | boolean or number | `false` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving a handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
 
+### SliderTooltip
+
+The Tooltip Component that keep following with content.
+
 ## Development
 
 ```

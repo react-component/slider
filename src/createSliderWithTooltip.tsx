@@ -1,5 +1,5 @@
 import React from 'react';
-import Tooltip from 'rc-tooltip';
+import Tooltip from './common/SliderTooltip';
 import Handle from './Handle';
 
 export interface ComponentWrapperProps {
