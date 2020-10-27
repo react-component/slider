@@ -24,7 +24,7 @@ function useCombinedRefs(
 }
 
 const SliderTooltip = React.forwardRef<unknown, TooltipProps>((props, ref) => {
-  const { visible } = props;
+  const { visible, overlay } = props;
   const innerRef = React.useRef<any>(null);
   const tooltipRef = useCombinedRefs(ref, innerRef);
 
@@ -39,7 +39,6 @@ const SliderTooltip = React.forwardRef<unknown, TooltipProps>((props, ref) => {
     rafRef.current = window.requestAnimationFrame(() => {
       (tooltipRef.current as any).forcePopupAlign();
       rafRef.current = null;
-      keepAlign();
     });
   }
 
@@ -51,7 +50,7 @@ const SliderTooltip = React.forwardRef<unknown, TooltipProps>((props, ref) => {
     }
 
     return cancelKeepAlign;
-  }, [visible]);
+  }, [visible, overlay]);
 
   return <Tooltip ref={tooltipRef} {...props} />;
 });
