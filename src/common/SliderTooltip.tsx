@@ -1,32 +1,12 @@
 import * as React from 'react';
 import Tooltip from 'rc-tooltip';
 import { TooltipProps } from 'rc-tooltip/lib/Tooltip';
-
-function useCombinedRefs(
-  ...refs: Array<React.MutableRefObject<unknown> | ((instance: unknown) => void) | null>
-) {
-  const targetRef = React.useRef();
-
-  React.useEffect(() => {
-    refs.forEach(ref => {
-      if (!ref) return;
-
-      if (typeof ref === 'function') {
-        ref(targetRef.current);
-      } else {
-        // eslint-disable-next-line no-param-reassign
-        ref.current = targetRef.current;
-      }
-    });
-  }, [refs]);
-
-  return targetRef;
-}
+import { composeRef } from 'rc-util/lib/ref';
 
 const SliderTooltip = React.forwardRef<unknown, TooltipProps>((props, ref) => {
   const { visible, overlay } = props;
   const innerRef = React.useRef<any>(null);
-  const tooltipRef = useCombinedRefs(ref, innerRef);
+  const tooltipRef = composeRef(ref, innerRef);
 
   const rafRef = React.useRef<number | null>(null);
 
@@ -37,7 +17,7 @@ const SliderTooltip = React.forwardRef<unknown, TooltipProps>((props, ref) => {
 
   function keepAlign() {
     rafRef.current = window.requestAnimationFrame(() => {
-      (tooltipRef.current as any).forcePopupAlign();
+      (innerRef.current as any).forcePopupAlign();
       rafRef.current = null;
     });
   }
