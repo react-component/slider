@@ -70,10 +70,12 @@ describe('Slider.Typescript', () => {
     prefixCls: 'rc-slider',
     included: true,
     disabled: false,
-    trackStyle: {
-      borderRadius: '2px',
-    },
-    handleStyle: {},
+    trackStyle: [
+      {
+        borderRadius: '2px',
+      },
+    ],
+    handleStyle: [{}],
     ariaLabelGroupForHandles: 'ariaLabelGroupForHandles',
     ariaLabelledByGroupForHandles: ['ariaLabelledByGroupForHandles'],
     ariaValueTextFormatterGroupForHandles: ['ariaValueTextFormatterGroupForHandles'],
@@ -118,7 +120,6 @@ describe('Slider.Typescript', () => {
       placement: 'top',
       visible: true,
     },
-    handleStyle: {},
     getTooltipContainer: () => document.body,
   };
 
