@@ -4,7 +4,7 @@
 Slider UI component for React
 
 [![NPM version][npm-image]][npm-url]
-[![build status][travis-image]][travis-url]
+[![build status][github-actions-image]][github-actions-url]
 [![Test coverage][coveralls-image]][coveralls-url]
 [![Dependencies][david-image]][david-url]
 [![DevDependencies][david-dev-image]][david-dev-url]
@@ -13,8 +13,8 @@ Slider UI component for React
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-slider
-[travis-image]: https://img.shields.io/travis/react-component/slider/master?style=flat-square
-[travis-url]: https://travis-ci.org/react-component/slider
+[github-actions-image]: https://github.com/react-component/slider/workflows/CI/badge.svg
+[github-actions-url]: https://github.com/react-component/slider/actions
 [circleci-image]: https://img.shields.io/circleci/react-component/slider/master?style=flat-square
 [circleci-url]: https://circleci.com/gh/react-component/slider
 [coveralls-image]: https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square
