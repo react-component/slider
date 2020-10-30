@@ -7,7 +7,6 @@ import SliderTooltip from './common/SliderTooltip';
 interface CompoundedComponent extends React.ComponentClass<SliderProps> {
   Range: typeof Range;
   Handle: typeof Handle;
-  SliderTooltip: typeof SliderTooltip;
   createSliderWithTooltip: typeof createSliderWithTooltip;
 }
 
@@ -16,6 +15,5 @@ const InternalSlider = (Slider as unknown) as CompoundedComponent;
 InternalSlider.Range = Range;
 InternalSlider.Handle = Handle;
 InternalSlider.createSliderWithTooltip = createSliderWithTooltip;
-InternalSlider.SliderTooltip = SliderTooltip;
 export default InternalSlider;
-export { Range, Handle, createSliderWithTooltip };
+export { Range, Handle, createSliderWithTooltip, SliderTooltip };

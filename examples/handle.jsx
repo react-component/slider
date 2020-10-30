@@ -1,9 +1,9 @@
 import '../assets/index.less';
 import 'rc-tooltip/assets/bootstrap.css';
 import React from 'react';
-import Slider from '../src';
+import Slider, { SliderTooltip } from '../src';
 
-const { createSliderWithTooltip, SliderTooltip } = Slider;
+const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 const { Handle } = Slider;
 
