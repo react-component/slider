@@ -31,6 +31,7 @@
   "main": "./lib/index",
   "module": "./es/index",
   "style": "./assets/index.css",
+  "types": "./lib/index.d.ts",
   "scripts": {
     "start": "cross-env NODE_ENV=development father doc dev --storybook",
     "build": "father doc build --storybook",
