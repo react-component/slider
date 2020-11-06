@@ -2,7 +2,14 @@ import React from 'react';
 import classNames from 'classnames';
 import warning from 'rc-util/lib/warning';
 
-const calcPoints = (vertical, marks, dots, step, min, max) => {
+const calcPoints = (
+  vertical: boolean,
+  marks: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>,
+  dots: boolean,
+  step: number,
+  min: number,
+  max: number,
+) => {
   warning(
     dots ? step > 0 : true,
     '`Slider[step]` should be a positive number in order to make Slider[dots] work.',

@@ -6,6 +6,7 @@ import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
 import { SliderProps } from './Slider';
+import { GenericSliderProps, GenericSliderState } from './interface';
 
 const trimAlignValue = ({
   value,
@@ -33,7 +34,7 @@ const trimAlignValue = ({
   return utils.ensureValuePrecision(valNotConflict, props);
 };
 
-export interface RangeProps {
+export interface RangeProps extends GenericSliderProps {
   value?: number[];
   defaultValue?: number[];
   count?: number;
@@ -53,16 +54,16 @@ export interface RangeProps {
   prefixCls?: string;
   included?: boolean;
   disabled?: boolean;
-  trackStyle?: React.CSSProperties;
-  handleStyle?: React.CSSProperties;
-  tabIndex?: number;
-  ariaLabelGroupForHandles?: string;
-  ariaLabelledByGroupForHandles?: string;
-  ariaValueTextFormatterGroupForHandles?: string;
-  handle: SliderProps['handle'];
+  trackStyle?: React.CSSProperties[];
+  handleStyle?: React.CSSProperties[];
+  tabIndex?: number | Array<number>;
+  ariaLabelGroupForHandles?: string | Array<string>;
+  ariaLabelledByGroupForHandles?: string | Array<string>;
+  ariaValueTextFormatterGroupForHandles?: string | Array<string>;
+  handle?: SliderProps['handle'];
 }
 
-interface RangeState {
+interface RangeState extends GenericSliderState {
   bounds: number[];
   handle: number | null;
   recent: number;
@@ -134,28 +135,36 @@ class Range extends React.Component<RangeProps, RangeState> {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if ('value' in props || 'min' in props || 'max' in props) {
-      const value = props.value || state.bounds;
-      const nextBounds = value.map((v, i) =>
+    if (!('value' in props || 'min' in props || 'max' in props)) return null;
+
+    const value = props.value || state.bounds;
+    let nextBounds = value.map((v, i) =>
+      trimAlignValue({
+        value: v,
+        handle: i,
+        bounds: state.bounds,
+        props,
+      }),
+    );
+
+    if (state.bounds.length === nextBounds.length) {
+      if (nextBounds.every((v, i) => v === state.bounds[i])) {
+        return null;
+      }
+    } else {
+      nextBounds = value.map((v, i) =>
         trimAlignValue({
           value: v,
           handle: i,
-          bounds: state.bounds,
           props,
         }),
       );
-      if (
-        nextBounds.length === state.bounds.length &&
-        nextBounds.every((v, i) => v === state.bounds[i])
-      ) {
-        return null;
-      }
-      return {
-        ...state,
-        bounds: nextBounds,
-      };
     }
-    return null;
+
+    return {
+      ...state,
+      bounds: nextBounds,
+    };
   }
 
   componentDidUpdate(prevProps, prevState) {

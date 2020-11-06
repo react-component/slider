@@ -1,8 +1,7 @@
 import '../assets/index.less';
 import 'rc-tooltip/assets/bootstrap.css';
 import React from 'react';
-import Tooltip from 'rc-tooltip';
-import Slider from '../src';
+import Slider, { SliderTooltip } from '../src';
 
 const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -11,15 +10,15 @@ const { Handle } = Slider;
 const handle = props => {
   const { value, dragging, index, ...restProps } = props;
   return (
-    <Tooltip
+    <SliderTooltip
       prefixCls="rc-slider-tooltip"
-      overlay={value}
+      overlay={`${value} %`}
       visible={dragging}
       placement="top"
       key={index}
     >
       <Handle value={value} {...restProps} />
-    </Tooltip>
+    </SliderTooltip>
   );
 };
 

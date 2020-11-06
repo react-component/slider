@@ -4,13 +4,14 @@ import warning from 'rc-util/lib/warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
+import { GenericSliderProps, GenericSliderState } from './interface';
 
-export interface SliderProps {
+export interface SliderProps extends GenericSliderProps {
   value?: number;
   defaultValue?: number;
   min?: number;
   max?: number;
-  step?: number;
+  step?: number | null;
   prefixCls?: string;
   onChange?: (value: number) => void;
   onBeforeChange?: (value: number) => void;
@@ -27,7 +28,7 @@ export interface SliderProps {
   ariaLabelledByForHandle?: string;
   ariaValueTextFormatterForHandle?: string;
   startPoint?: number;
-  handle: (props: {
+  handle?: (props: {
     className: string;
     prefixCls?: string;
     vertical?: boolean;
@@ -47,7 +48,7 @@ export interface SliderProps {
     ref?: React.Ref<any>;
   }) => React.ReactElement;
 }
-export interface SliderState {
+export interface SliderState extends GenericSliderState {
   value: number;
   dragging: boolean;
 }
@@ -183,10 +184,14 @@ class Slider extends React.Component<SliderProps, SliderState> {
   }
 
   getLowerBound() {
-    return this.props.min;
+    const minPoint = this.props.startPoint || this.props.min;
+    return this.state.value > minPoint ? minPoint : this.state.value;
   }
 
   getUpperBound() {
+    if (this.state.value < this.props.startPoint) {
+      return this.props.startPoint;
+    }
     return this.state.value;
   }
 
