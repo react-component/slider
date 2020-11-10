@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import shallowEqual from 'shallowequal';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
@@ -132,7 +131,9 @@ class Range extends React.Component<RangeProps, RangeState> {
   }
 
   static getDerivedStateFromProps(props, state) {
-    if (!('value' in props || 'min' in props || 'max' in props)) return null;
+    if (!('value' in props || 'min' in props || 'max' in props)) {
+      return null;
+    }
 
     const value = props.value || state.bounds;
     let nextBounds = value.map((v, i) =>
@@ -165,17 +166,13 @@ class Range extends React.Component<RangeProps, RangeState> {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
+    const { onChange, value, min, max } = this.props;
+    if (!('min' in this.props || 'max' in this.props)) {
       return;
     }
-    if (
-      this.props.min === prevProps.min &&
-      this.props.max === prevProps.max &&
-      shallowEqual(this.props.value, prevProps.value)
-    ) {
+    if (min === prevProps.min && max === prevProps.max) {
       return;
     }
-    const { onChange, value } = this.props;
     const currentValue = value || prevState.bounds;
     if (currentValue.some(v => utils.isValueOutOfRange(v, this.props))) {
       const newValues = currentValue.map(v => utils.ensureValueInRange(v, this.props));

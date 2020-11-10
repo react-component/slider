@@ -98,19 +98,23 @@ class Slider extends React.Component<SliderProps, SliderState> {
 
   prevMovedHandleIndex: number;
 
-  componentDidUpdate(_: SliderProps, prevState: SliderState) {
-    if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
+  componentDidUpdate(prevProps: SliderProps, prevState: SliderState) {
+    const { min, max, value, onChange } = this.props;
+    if (!('min' in this.props || 'max' in this.props)) {
       return;
     }
-    const { value, onChange } = this.props;
     const theValue = value !== undefined ? value : prevState.value;
     const nextValue = this.trimAlignValue(theValue, this.props);
-    if (nextValue !== prevState.value) {
-      // eslint-disable-next-line
-      this.setState({ value: nextValue });
-      if (utils.isValueOutOfRange(theValue, this.props)) {
-        onChange(nextValue);
-      }
+    if (nextValue === prevState.value) {
+      return;
+    }
+    // eslint-disable-next-line
+    this.setState({ value: nextValue });
+    if (
+      !(min === prevProps.min && max === prevProps.max) &&
+      utils.isValueOutOfRange(theValue, this.props)
+    ) {
+      onChange(nextValue);
     }
   }
 
