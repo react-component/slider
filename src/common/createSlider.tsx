@@ -232,19 +232,19 @@ export default function createSlider<
     }
 
     focus() {
-      if (!this.props.disabled) {
-        this.handlesRefs[0].focus();
+      if (this.props.disabled) {
+        return;
       }
+      this.handlesRefs[0]?.focus();
     }
 
     blur() {
-      if (!this.props.disabled) {
-        Object.keys(this.handlesRefs).forEach(key => {
-          if (this.handlesRefs[key] && this.handlesRefs[key].blur) {
-            this.handlesRefs[key].blur();
-          }
-        });
+      if (this.props.disabled) {
+        return;
       }
+      Object.keys(this.handlesRefs).forEach(key => {
+        this.handlesRefs[key]?.blur?.();
+      });
     }
 
     calcValue(offset: number) {

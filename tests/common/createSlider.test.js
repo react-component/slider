@@ -77,12 +77,30 @@ describe('createSlider', () => {
     expect(rangeOnChange).toHaveBeenLastCalledWith([10, 10]);
   });
 
+  it('should not trigger onChange when no min and max', () => {
+    const sliderOnChange = jest.fn();
+    const sliderWrapper = mount(<Slider onChange={sliderOnChange} />);
+    sliderWrapper.setProps({ value: 100 });
+    expect(sliderOnChange).not.toHaveBeenCalled();
+
+    const rangeOnChange = jest.fn();
+    const rangeWrapper = mount(<Range onChange={rangeOnChange} />);
+    rangeWrapper.setProps({ value: [0, 100] });
+    expect(rangeOnChange).not.toHaveBeenCalled();
+  });
+
   it('should not trigger onChange when value is out of range', () => {
     const sliderOnChange = jest.fn();
     const sliderWrapper = mount(<Slider value={9} max={10} onChange={sliderOnChange} />);
     sliderWrapper.setProps({ value: 11 });
     expect(sliderWrapper.state('value')).toBe(10);
     expect(sliderOnChange).not.toHaveBeenCalled();
+
+    const rangeOnChange = jest.fn();
+    const rangeWrapper = mount(<Range max={10} onChange={rangeOnChange} />);
+    rangeWrapper.setProps({ value: [0, 100] });
+    expect(rangeWrapper.state('bounds')).toEqual([0, 10]);
+    expect(rangeOnChange).not.toHaveBeenCalled();
   });
 
   it('should not call onChange when value is the same', () => {
