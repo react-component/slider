@@ -26,14 +26,10 @@ describe('SliderTooltip', () => {
 
   it('should not crash when unmount', async () => {
     const wrapper = mount(
-      <SliderTooltip
-        title="30"
-        visible
-      >
+      <SliderTooltip title="30" visible>
         <span>aaaa</span>
       </SliderTooltip>,
     );
     wrapper.unmount();
   });
-})
-
+});
