@@ -23,7 +23,8 @@ export function isNotTouchEvent(e: React.TouchEvent) {
 export function getClosestPoint(val: number, { marks, step, min, max }) {
   const points = Object.keys(marks).map(parseFloat);
   if (step !== null) {
-    const maxSteps = Math.floor((max - min) / step);
+    const baseNum = 10 ** getPrecision(step);
+    const maxSteps = Math.floor((max * baseNum - min * baseNum) / (step * baseNum));
     const steps = Math.min((val - min) / step, maxSteps);
     const closestStep = Math.round(steps) * step + min;
     points.push(closestStep);
