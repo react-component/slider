@@ -1,6 +1,6 @@
 import Slider, { SliderProps } from './Slider';
-import Range from './Range';
-import Handle from './Handle';
+import Range, { RangeProps } from './Range';
+import Handle, { HandleProps } from './Handle';
 import createSliderWithTooltip from './createSliderWithTooltip';
 import SliderTooltip from './common/SliderTooltip';
 
@@ -16,4 +16,12 @@ InternalSlider.Range = Range;
 InternalSlider.Handle = Handle;
 InternalSlider.createSliderWithTooltip = createSliderWithTooltip;
 export default InternalSlider;
-export { Range, Handle, createSliderWithTooltip, SliderTooltip };
+export {
+  SliderProps,
+  Range,
+  RangeProps,
+  Handle,
+  HandleProps,
+  createSliderWithTooltip,
+  SliderTooltip,
+};
