@@ -21,6 +21,7 @@ interface ComponentWrapperState {
 export default function createSliderWithTooltip<Props extends GenericSliderProps>(
   Component: React.ComponentClass<Props>,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return class ComponentWrapper extends React.Component<
     ComponentWrapperProps & React.ComponentProps<typeof Component>,
     ComponentWrapperState
