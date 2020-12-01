@@ -16,6 +16,7 @@ export default function createSlider<
   Props extends GenericSliderProps,
   State extends GenericSliderState
 >(Component: GenericSlider<Props, State>): React.ComponentClass<Props, State> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   return class ComponentEnhancer extends Component {
     static displayName = `ComponentEnhancer(${Component.displayName})`;
 
