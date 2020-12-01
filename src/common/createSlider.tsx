@@ -222,7 +222,7 @@ export default function createSlider<
     }
 
     removeDocumentEvents() {
-      /* eslint-disable @typescript-eslint/no-unused-expressions */
+      /* eslint-disable no-unused-expressions */
       this.onTouchMoveListener && this.onTouchMoveListener.remove();
       this.onTouchUpListener && this.onTouchUpListener.remove();
 
