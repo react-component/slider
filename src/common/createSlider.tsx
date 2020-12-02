@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
+/* eslint-disable no-unused-expressions */
 import React from 'react';
 import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
@@ -229,7 +231,6 @@ export default function createSlider<
 
       this.onMouseMoveListener && this.onMouseMoveListener.remove();
       this.onMouseUpListener && this.onMouseUpListener.remove();
-      /* eslint-enable no-unused-expressions */
     }
 
     focus() {

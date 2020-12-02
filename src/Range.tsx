@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import classNames from 'classnames';
 import Track from './common/Track';
@@ -39,7 +40,8 @@ export interface RangeProps extends GenericSliderProps {
   min?: number;
   max?: number;
   allowCross?: boolean;
-  pushable?: boolean;
+  pushable: boolean;
+  distanceBetweenHandles?: number;
   onChange?: (value: number[]) => void;
   onBeforeChange?: (value: number[]) => void;
   onAfterChange?: (value: number[]) => void;
@@ -105,6 +107,7 @@ class Range extends React.Component<RangeProps, RangeState> {
 
   internalPointsCache: { marks: RangeProps['marks']; step: number; points: number[] };
 
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   handlesRefs: Record<number, any>;
 
   constructor(props: RangeProps) {
@@ -200,7 +203,24 @@ class Range extends React.Component<RangeProps, RangeState> {
     }
 
     const data = { ...this.state, ...state };
-    const changedValue = data.bounds;
+    let changedValue = data.bounds;
+    const { distanceBetweenHandles } = this.props;
+
+    if (distanceBetweenHandles) {
+      const [beforeFirst, beforeSecond] = this.state.bounds;
+      const [afterFirst, afterSecond] = changedValue;
+
+      if (afterSecond - afterFirst < distanceBetweenHandles) {
+        if (beforeFirst < afterFirst) {
+          changedValue = [afterSecond - distanceBetweenHandles, afterSecond];
+        } else if (afterSecond < beforeSecond) {
+          changedValue = [afterFirst, afterFirst + distanceBetweenHandles];
+        }
+      }
+      this.setState({
+        bounds: changedValue,
+      });
+    }
     props.onChange(changedValue);
   }
 

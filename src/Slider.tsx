@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react';
 import warning from 'rc-util/lib/warning';
 import Track from './common/Track';
