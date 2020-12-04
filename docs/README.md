@@ -29,7 +29,7 @@ Slider UI component for React
 
 `npm start` and then go to http://localhost:8000
 
-Online examples: http://react-component.github.io/slider/
+Online examples: https://slider.react-component.now.sh/
 
 ## Usage
 
