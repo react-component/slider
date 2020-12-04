@@ -139,12 +139,11 @@ npm start
 
 ## Test Case
 
-`http://localhost:8005/tests/runner.html?coverage`
+`npm run test`
 
 ## Coverage
 
-`http://localhost:8005/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage`
-
+`npm run coverage`
 ## License
 
 `rc-slider` is released under the MIT license.
