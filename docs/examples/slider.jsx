@@ -1,8 +1,7 @@
 /* eslint react/no-multi-comp: 0, max-len: 0 */
-import '../assets/index.less';
-
 import React from 'react';
-import Slider, { createSliderWithTooltip } from '../src';
+import Slider, { createSliderWithTooltip } from 'rc-slider';
+import '../../assets/index.less';
 
 const style = { width: 600, margin: 50 };
 
