@@ -1,8 +1,7 @@
 /* eslint react/no-multi-comp: 0, no-console: 0 */
-import '../assets/index.less';
-
 import React from 'react';
-import Slider from '../src';
+import Slider from 'rc-slider';
+import '../../assets/index.less';
 
 const { Range } = Slider;
 

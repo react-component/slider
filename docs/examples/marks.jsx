@@ -1,7 +1,6 @@
-import '../assets/index.less';
-
 import React from 'react';
-import Slider from '../src';
+import Slider from 'rc-slider';
+import '../../assets/index.less';
 
 const style = { width: 400, margin: 50 };
 const marks = {

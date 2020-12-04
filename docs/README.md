@@ -1,15 +1,8 @@
 # rc-slider
----
 
 Slider UI component for React
 
-[![NPM version][npm-image]][npm-url]
-[![build status][github-actions-image]][github-actions-url]
-[![Test coverage][coveralls-image]][coveralls-url]
-[![Dependencies][david-image]][david-url]
-[![DevDependencies][david-dev-image]][david-dev-url]
-[![npm download][download-image]][download-url]
-[![bundle size][bundlephobia-image]][bundlephobia-url]
+[![NPM version][npm-image]][npm-url] [![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) [![build status][github-actions-image]][github-actions-url] [![Test coverage][coveralls-image]][coveralls-url] [![Dependencies][david-image]][david-url] [![DevDependencies][david-dev-image]][david-dev-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-slider
@@ -31,6 +24,12 @@ Slider UI component for React
 ## Install
 
 [![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
+
+## Example
+
+`npm start` and then go to http://localhost:8000
+
+Online examples: http://react-component.github.io/slider/
 
 ## Usage
 
@@ -137,12 +136,6 @@ The Tooltip Component that keep following with content.
 npm install
 npm start
 ```
-
-## Example
-
-`npm start` and then go to `http://localhost:8005/examples/`
-
-Online examples: [http://react-component.github.io/slider/](http://react-component.github.io/slider/)
 
 ## Test Case
 

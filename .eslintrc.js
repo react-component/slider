@@ -13,6 +13,7 @@ module.exports = {
     'react/require-default-props': 0,
     'no-confusing-arrow': 0,
     'import/no-named-as-default-member': 0,
+    'import/no-extraneous-dependencies': 0,
     'jsx-a11y/label-has-for': 0,
     'jsx-a11y/label-has-associated-control': 0,
   },

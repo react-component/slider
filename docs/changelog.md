@@ -1,5 +1,46 @@
-# History
-----
+# 🗓 Changelog
+
+## 9.6.5
+
+`2020-12-01`
+
+- chore: export slider、range and handle props interface. [#718](https://github.com/react-component/slider/pull/718)
+
+## 9.6.4
+
+`2020-11-21`
+
+- fix: slider cannot drag to max value. [#714](https://github.com/react-component/slider/pull/714)
+
+## 9.6.3
+
+`2020-11-17`
+
+- fix: forcePopupAlign null. [930ad6d](https://github.com/react-component/slider/commit/930ad6d117850505775956f26e025487073615dc) [69dc592](https://github.com/react-component/slider/commit/69dc59270ca46ae2d3c4b5aa073d2bc75dfc5b16)
+
+## 9.6.2
+
+`2020-11-10`
+
+- fix: extra onChange when value out of range. [#711](https://github.com/react-component/slider/pull/711)
+
+## 9.6.1
+
+`2020-10-31`
+
+- fix: update getLowerBound and getUpperBound to check startPoint prop. [#683](https://github.com/react-component/slider/pull/683)
+
+## 9.6.0
+
+`2020-10-30`
+
+- fix: keep tooltip align with handle when dragging. [#696](https://github.com/react-component/slider/pull/696)
+
+---
+
+Middle check in [releases](https://github.com/react-component/slider/releases).
+
+---
 
 ## 9.2.0
 
