@@ -1,4 +1,4 @@
-import React, { Ref } from 'react';
+import React from 'react';
 import classNames from 'classnames';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
@@ -218,7 +218,7 @@ class Range extends React.Component<RangeProps, RangeState> {
     const closestBound = this.getClosestBound(value);
     const index = this.getBoundNeedMoving(value, closestBound);
     const prevValue = bounds[index];
-    if (value === prevValue) return;
+    if (value === prevValue) return null;
 
     const nextBounds = [...bounds];
     nextBounds[index] = value;

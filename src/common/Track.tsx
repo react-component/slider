@@ -1,9 +1,18 @@
 import React from 'react';
 
 const Track = (props) => {
-  let { length, offset, reverse, ...$props } = props;
-  const { className, included, vertical, style, ...tagProps } = $props;
-  
+  let { length, offset, reverse } = props;
+  const {
+    className,
+    included,
+    vertical,
+    style,
+    length: l,
+    offset: o,
+    reverse: r,
+    ...tagProps
+  } = props;
+
   if (length < 0) {
     reverse = !reverse;
     length = Math.abs(length);
