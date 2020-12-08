@@ -21,15 +21,15 @@ class CustomizedRange extends React.Component {
     };
   }
 
-  onLowerBoundChange = e => {
+  onLowerBoundChange = (e) => {
     this.setState({ lowerBound: +e.target.value });
   };
 
-  onUpperBoundChange = e => {
+  onUpperBoundChange = (e) => {
     this.setState({ upperBound: +e.target.value });
   };
 
-  onSliderChange = value => {
+  onSliderChange = (value) => {
     log(value);
     this.setState({
       value,
@@ -70,17 +70,17 @@ class DynamicBounds extends React.Component {
     };
   }
 
-  onSliderChange = value => {
+  onSliderChange = (value) => {
     log(value);
   };
 
-  onMinChange = e => {
+  onMinChange = (e) => {
     this.setState({
       min: +e.target.value || 0,
     });
   };
 
-  onMaxChange = e => {
+  onMaxChange = (e) => {
     this.setState({
       max: +e.target.value || 100,
     });
@@ -115,7 +115,7 @@ class ControlledRange extends React.Component {
     };
   }
 
-  handleChange = value => {
+  handleChange = (value) => {
     this.setState({
       value,
     });
@@ -134,7 +134,7 @@ class ControlledRangeDisableAcross extends React.Component {
     };
   }
 
-  handleChange = value => {
+  handleChange = (value) => {
     this.setState({
       value,
     });
@@ -161,7 +161,7 @@ class PureRenderRange extends React.Component {
     };
   }
 
-  handleChange = value => {
+  handleChange = (value) => {
     console.log(value);
     this.setState(({ foo }) => ({ foo: !foo }));
   };
@@ -233,6 +233,14 @@ export default () => (
     <div style={style}>
       <p>Range as child component</p>
       <PureRenderRange />
+    </div>
+    <div style={style}>
+      <p>draggableTrack two points</p>
+      <Range allowCross={false} defaultValue={[0, 40]} draggableTrack onChange={log} />
+    </div>
+    <div style={style}>
+      <p>draggableTrack multiple points</p>
+      <Range allowCross={false} defaultValue={[0, 20, 30, 40, 50]} draggableTrack onChange={log} />
     </div>
   </div>
 );

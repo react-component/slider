@@ -1,8 +1,9 @@
 import React from 'react';
 
-const Track = props => {
-  const { className, included, vertical, style } = props;
-  let { length, offset, reverse } = props;
+const Track = (props) => {
+  let { length, offset, reverse, ...$props } = props;
+  const { className, included, vertical, style, ...tagProps } = $props;
+  
   if (length < 0) {
     reverse = !reverse;
     length = Math.abs(length);
@@ -25,7 +26,7 @@ const Track = props => {
     ...style,
     ...positonStyle,
   };
-  return included ? <div className={className} style={elStyle} /> : null;
+  return included ? <div className={className} style={elStyle} {...tagProps} /> : null;
 };
 
 export default Track;
