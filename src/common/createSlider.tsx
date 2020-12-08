@@ -110,6 +110,7 @@ export default function createSlider<
 
       const inPoint = utils.isEventFromHandle(e, this.handlesRefs);
       this.inTrack =
+        draggableTrack &&
         !inPoint &&
         !value
           .map((n, i) => {
@@ -120,7 +121,7 @@ export default function createSlider<
 
       const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
 
-      if (draggableTrack && this.inTrack) {
+      if (this.inTrack) {
         this.dragOffset = p;
         this.startBounds = [...bounds];
       } else {
