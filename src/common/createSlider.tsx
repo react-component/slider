@@ -106,7 +106,7 @@ export default function createSlider<
       const { draggableTrack, vertical: isVertical } = this.props;
       const { bounds } = this.state;
 
-      const value = this.positionGetValue(p) || [];
+      const value = draggableTrack && this.positionGetValue ? this.positionGetValue(p) || [] : [];
 
       const inPoint = utils.isEventFromHandle(e, this.handlesRefs);
       this.inTrack =
@@ -119,8 +119,6 @@ export default function createSlider<
           })
           .some((c) => !c);
 
-      const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
-
       if (this.inTrack) {
         this.dragOffset = p;
         this.startBounds = [...bounds];
@@ -128,6 +126,7 @@ export default function createSlider<
         if (!inPoint) {
           this.dragOffset = 0;
         } else {
+          const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
           this.dragOffset = p - handlePosition;
           p = handlePosition;
         }
