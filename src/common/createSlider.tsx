@@ -160,7 +160,6 @@ export default function createSlider<
       if (utils.isEventFromHandle(e, this.handlesRefs) && !this.inTrack) {
         const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
         this.dragOffset = 0;
-        console.log(handlePosition);
         this.onStart(handlePosition);
         utils.pauseEvent(e);
         if (onFocus) {
