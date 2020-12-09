@@ -1,4 +1,4 @@
-/* eslint-disable max-len, no-undef, react/no-string-refs */
+/* eslint-disable max-len, no-undef, react/no-string-refs, no-param-reassign, max-classes-per-file */
 import React from 'react';
 import { render, mount } from 'enzyme';
 import keyCode from 'rc-util/lib/KeyCode';
@@ -528,12 +528,12 @@ describe('Range', () => {
     const container = document.createElement('div');
     document.body.appendChild(container);
 
-    const wrapper = mount(<CustomizedRange />, { attachTo: container });
-    mockRect(wrapper);
-    console.log(wrapper.state().value)
-    expect(wrapper.state().value).toEqual([0, 30]);
+    const range = mount(<CustomizedRange />, { attachTo: container });
+    mockRect(range);
+    console.log(range.state().value);
+    expect(range.state().value).toEqual([0, 30]);
 
-    wrapper.find('.rc-slider').simulate('mouseDown', {
+    range.find('.rc-slider').simulate('mouseDown', {
       button: 0,
       pageX: 10,
       pageY: 0,
@@ -547,8 +547,8 @@ describe('Range', () => {
       stopPropagation: () => {},
       preventDefault: () => {},
     });
-    console.log(wrapper.state().value)
-    expect(wrapper.state().value).toEqual([20, 50]);
+    console.log(range.state().value);
+    expect(range.state().value).toEqual([20, 50]);
   });
 
   it('sets aria-label on the handles', () => {
