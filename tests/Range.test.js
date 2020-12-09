@@ -481,6 +481,76 @@ describe('Range', () => {
     expect(wrapper.instance().getSlider().state.bounds).toEqual([39, 40]);
   });
 
+  it('track draggable', () => {
+    class CustomizedRange extends React.Component {
+      // eslint-disable-line
+      state = {
+        value: [0, 30],
+      };
+
+      onChange = value => {
+        this.setState({
+          value,
+        });
+      };
+
+      getSlider() {
+        return this.slider;
+      }
+
+      saveSlider = slider => {
+        this.slider = slider;
+      };
+
+      render() {
+        return (
+          <Range
+            ref={this.saveSlider}
+            value={this.state.value}
+            onChange={this.onChange}
+            draggableTrack
+          />
+        );
+      }
+    }
+    const map = {};
+    document.addEventListener = jest.fn().mockImplementation((event, cb) => {
+      map[event] = cb;
+    });
+
+    const mockRect = wrapper => {
+      wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
+        left: 0,
+        width: 100,
+      });
+    };
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const wrapper = mount(<CustomizedRange />, { attachTo: container });
+    mockRect(wrapper);
+    console.log(wrapper.state().value)
+    expect(wrapper.state().value).toEqual([0, 30]);
+
+    wrapper.find('.rc-slider').simulate('mouseDown', {
+      button: 0,
+      pageX: 10,
+      pageY: 0,
+      stopPropagation: () => {},
+      preventDefault: () => {},
+    });
+    map.mousemove({
+      type: 'mousemove',
+      pageX: 30,
+      pageY: 0,
+      stopPropagation: () => {},
+      preventDefault: () => {},
+    });
+    console.log(wrapper.state().value)
+    expect(wrapper.state().value).toEqual([20, 50]);
+  });
+
   it('sets aria-label on the handles', () => {
     const wrapper = mount(<Range ariaLabelGroupForHandles={['Some Label', 'Some other Label']} />);
     expect(

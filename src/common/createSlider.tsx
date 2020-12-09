@@ -111,6 +111,7 @@ export default function createSlider<
       const inPoint = utils.isEventFromHandle(e, this.handlesRefs);
       this.inTrack =
         draggableTrack &&
+        bounds.length >= 2 &&
         !inPoint &&
         !value
           .map((n, i) => {
