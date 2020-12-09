@@ -113,7 +113,7 @@ class Range extends React.Component<RangeProps, RangeState> {
 
   handlesRefs: Record<number, any>;
 
-  inTrack: boolean;
+  dragTrack: boolean;
 
   constructor(props: RangeProps) {
     super(props);
@@ -255,7 +255,7 @@ class Range extends React.Component<RangeProps, RangeState> {
     this.removeDocumentEvents();
 
     if (!handle) {
-      this.inTrack = false;
+      this.dragTrack = false;
     }
     if (handle !== null || force) {
       this.props.onAfterChange(this.getValue());
@@ -266,12 +266,12 @@ class Range extends React.Component<RangeProps, RangeState> {
     });
   };
 
-  onMove(e, position, inTrack, startBounds) {
+  onMove(e, position, dragTrack, startBounds) {
     utils.pauseEvent(e);
     const { state, props } = this;
     const maxValue = props.max || 100;
     const minValue = props.min || 0;
-    if (inTrack) {
+    if (dragTrack) {
       const max = maxValue - Math.max(...startBounds);
       const min = minValue - Math.min(...startBounds);
       const ratio = Math.min(Math.max(position / (this.getSliderLength() / 100), min), max);

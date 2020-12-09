@@ -70,7 +70,7 @@ export default function createSlider<
 
     onMouseUpListener: any;
 
-    inTrack: boolean;
+    dragTrack: boolean;
 
     startBounds: number[];
 
@@ -109,7 +109,7 @@ export default function createSlider<
       const value = draggableTrack && this.positionGetValue ? this.positionGetValue(p) || [] : [];
 
       const inPoint = utils.isEventFromHandle(e, this.handlesRefs);
-      this.inTrack =
+      this.dragTrack =
         draggableTrack &&
         bounds.length >= 2 &&
         !inPoint &&
@@ -120,7 +120,7 @@ export default function createSlider<
           })
           .some((c) => !c);
 
-      if (this.inTrack) {
+      if (this.dragTrack) {
         this.dragOffset = p;
         this.startBounds = [...bounds];
       } else {
@@ -158,7 +158,7 @@ export default function createSlider<
 
     onFocus = (e: React.FocusEvent<HTMLDivElement>) => {
       const { onFocus, vertical } = this.props;
-      if (utils.isEventFromHandle(e, this.handlesRefs) && !this.inTrack) {
+      if (utils.isEventFromHandle(e, this.handlesRefs) && !this.dragTrack) {
         const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
         this.dragOffset = 0;
         this.onStart(handlePosition);
@@ -171,7 +171,7 @@ export default function createSlider<
 
     onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
       const { onBlur } = this.props;
-      if (!this.inTrack) {
+      if (!this.dragTrack) {
         this.onEnd();
       }
 
@@ -192,7 +192,7 @@ export default function createSlider<
         return;
       }
       const position = utils.getMousePosition(this.props.vertical, e);
-      this.onMove(e, position - this.dragOffset, this.inTrack, this.startBounds);
+      this.onMove(e, position - this.dragOffset, this.dragTrack, this.startBounds);
     };
 
     onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -202,7 +202,7 @@ export default function createSlider<
       }
 
       const position = utils.getTouchPosition(this.props.vertical, e);
-      this.onMove(e, position - this.dragOffset, this.inTrack, this.startBounds);
+      this.onMove(e, position - this.dragOffset, this.dragTrack, this.startBounds);
     };
 
     onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
