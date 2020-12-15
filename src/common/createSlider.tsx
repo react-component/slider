@@ -70,6 +70,10 @@ export default function createSlider<
 
     onMouseUpListener: any;
 
+    dragTrack: boolean;
+
+    startBounds: number[];
+
     constructor(props: Props) {
       super(props);
 
@@ -97,44 +101,64 @@ export default function createSlider<
       this.removeDocumentEvents();
     }
 
+    onDown = (e, position) => {
+      let p = position;
+      const { draggableTrack, vertical: isVertical } = this.props;
+      const { bounds } = this.state;
+
+      const value = draggableTrack && this.positionGetValue ? this.positionGetValue(p) || [] : [];
+
+      const inPoint = utils.isEventFromHandle(e, this.handlesRefs);
+      this.dragTrack =
+        draggableTrack &&
+        bounds.length >= 2 &&
+        !inPoint &&
+        !value
+          .map((n, i) => {
+            const v = !i ? n >= bounds[i] : true;
+            return i === value.length - 1 ? n <= bounds[i] : v;
+          })
+          .some((c) => !c);
+
+      if (this.dragTrack) {
+        this.dragOffset = p;
+        this.startBounds = [...bounds];
+      } else {
+        if (!inPoint) {
+          this.dragOffset = 0;
+        } else {
+          const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
+          this.dragOffset = p - handlePosition;
+          p = handlePosition;
+        }
+        this.onStart(p);
+      }
+    };
+
     onMouseDown = (e: any) => {
       if (e.button !== 0) {
         return;
       }
-      const isVertical = this.props.vertical;
-      let position = utils.getMousePosition(isVertical, e);
-      if (!utils.isEventFromHandle(e, this.handlesRefs)) {
-        this.dragOffset = 0;
-      } else {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
-        this.dragOffset = position - handlePosition;
-        position = handlePosition;
-      }
+
       this.removeDocumentEvents();
-      this.onStart(position);
+      const isVertical = this.props.vertical;
+      const position = utils.getMousePosition(isVertical, e);
+      this.onDown(e, position);
       this.addDocumentMouseEvents();
     };
 
     onTouchStart = (e: any) => {
       if (utils.isNotTouchEvent(e)) return;
-
       const isVertical = this.props.vertical;
-      let position = utils.getTouchPosition(isVertical, e);
-      if (!utils.isEventFromHandle(e, this.handlesRefs)) {
-        this.dragOffset = 0;
-      } else {
-        const handlePosition = utils.getHandleCenterPosition(isVertical, e.target);
-        this.dragOffset = position - handlePosition;
-        position = handlePosition;
-      }
-      this.onStart(position);
+      const position = utils.getTouchPosition(isVertical, e);
+      this.onDown(e, position);
       this.addDocumentTouchEvents();
       utils.pauseEvent(e);
     };
 
     onFocus = (e: React.FocusEvent<HTMLDivElement>) => {
       const { onFocus, vertical } = this.props;
-      if (utils.isEventFromHandle(e, this.handlesRefs)) {
+      if (utils.isEventFromHandle(e, this.handlesRefs) && !this.dragTrack) {
         const handlePosition = utils.getHandleCenterPosition(vertical, e.target);
         this.dragOffset = 0;
         this.onStart(handlePosition);
@@ -147,7 +171,10 @@ export default function createSlider<
 
     onBlur = (e: React.FocusEvent<HTMLDivElement>) => {
       const { onBlur } = this.props;
-      this.onEnd();
+      if (!this.dragTrack) {
+        this.onEnd();
+      }
+
       if (onBlur) {
         onBlur(e);
       }
@@ -165,7 +192,7 @@ export default function createSlider<
         return;
       }
       const position = utils.getMousePosition(this.props.vertical, e);
-      this.onMove(e, position - this.dragOffset);
+      this.onMove(e, position - this.dragOffset, this.dragTrack, this.startBounds);
     };
 
     onTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
@@ -175,7 +202,7 @@ export default function createSlider<
       }
 
       const position = utils.getTouchPosition(this.props.vertical, e);
-      this.onMove(e, position - this.dragOffset);
+      this.onMove(e, position - this.dragOffset, this.dragTrack, this.startBounds);
     };
 
     onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
@@ -243,7 +270,7 @@ export default function createSlider<
       if (this.props.disabled) {
         return;
       }
-      Object.keys(this.handlesRefs).forEach(key => {
+      Object.keys(this.handlesRefs).forEach((key) => {
         this.handlesRefs[key]?.blur?.();
       });
     }

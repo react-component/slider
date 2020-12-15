@@ -62,6 +62,10 @@ class Slider extends React.Component<SliderProps, SliderState> {
     return 0;
   }
 
+  positionGetValue = (position): number[] => {
+    return [];
+  };
+
   calcOffset(value: number) {
     return 0;
   }
@@ -246,7 +250,7 @@ class Slider extends React.Component<SliderProps, SliderState> {
       ariaLabelledBy: ariaLabelledByForHandle,
       ariaValueTextFormatter: ariaValueTextFormatterForHandle,
       style: handleStyle[0] || handleStyle,
-      ref: h => this.saveHandle(0, h),
+      ref: (h) => this.saveHandle(0, h),
     });
 
     const trackOffset = startPoint !== undefined ? this.calcOffset(startPoint) : 0;

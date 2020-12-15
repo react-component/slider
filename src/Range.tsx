@@ -58,6 +58,7 @@ export interface RangeProps extends GenericSliderProps {
   ariaLabelledByGroupForHandles?: string | Array<string>;
   ariaValueTextFormatterGroupForHandles?: string | Array<string>;
   handle?: SliderProps['handle'];
+  draggableTrack?: boolean;
 }
 
 interface RangeState extends GenericSliderState {
@@ -76,6 +77,10 @@ class Range extends React.Component<RangeProps, RangeState> {
     return 0;
   }
 
+  getSliderLength() {
+    return 0;
+  }
+
   calcOffset(value: number) {
     return 0;
   }
@@ -91,6 +96,7 @@ class Range extends React.Component<RangeProps, RangeState> {
     count: 1,
     allowCross: true,
     pushable: false,
+    draggableTrack: false,
     tabIndex: [],
     ariaLabelGroupForHandles: [],
     ariaLabelledByGroupForHandles: [],
@@ -106,6 +112,8 @@ class Range extends React.Component<RangeProps, RangeState> {
   internalPointsCache: { marks: RangeProps['marks']; step: number; points: number[] };
 
   handlesRefs: Record<number, any>;
+
+  dragTrack: boolean;
 
   constructor(props: RangeProps) {
     super(props);
@@ -204,6 +212,19 @@ class Range extends React.Component<RangeProps, RangeState> {
     props.onChange(changedValue);
   }
 
+  positionGetValue = (position): number[] => {
+    const bounds = this.getValue();
+    const value = this.calcValueByPos(position);
+    const closestBound = this.getClosestBound(value);
+    const index = this.getBoundNeedMoving(value, closestBound);
+    const prevValue = bounds[index];
+    if (value === prevValue) return null;
+
+    const nextBounds = [...bounds];
+    nextBounds[index] = value;
+    return nextBounds;
+  };
+
   onStart(position) {
     const { props, state } = this;
     const bounds = this.getValue();
@@ -233,6 +254,9 @@ class Range extends React.Component<RangeProps, RangeState> {
     const { handle } = this.state;
     this.removeDocumentEvents();
 
+    if (!handle) {
+      this.dragTrack = false;
+    }
     if (handle !== null || force) {
       this.props.onAfterChange(this.getValue());
     }
@@ -242,10 +266,27 @@ class Range extends React.Component<RangeProps, RangeState> {
     });
   };
 
-  onMove(e, position) {
+  onMove(e, position, dragTrack, startBounds) {
     utils.pauseEvent(e);
-    const { state } = this;
-
+    const { state, props } = this;
+    const maxValue = props.max || 100;
+    const minValue = props.min || 0;
+    if (dragTrack) {
+      let pos = props.vertical ? -position : position;
+      pos = props.reverse ? -pos : pos;
+      const max = maxValue - Math.max(...startBounds);
+      const min = minValue - Math.min(...startBounds);
+      const ratio = Math.min(Math.max(pos / (this.getSliderLength() / 100), min), max);
+      const nextBounds = startBounds.map(v =>
+        Math.floor(Math.max(Math.min(v + ratio, maxValue), minValue)),
+      );
+      if (state.bounds.map((c, i) => c === nextBounds[i]).some(c => !c)) {
+        this.onChange({
+          bounds: nextBounds,
+        });
+      }
+      return;
+    }
     const value = this.calcValueByPos(position);
     const oldValue = state.bounds[state.handle];
     if (value === oldValue) return;

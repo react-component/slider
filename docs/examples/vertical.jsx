@@ -80,5 +80,28 @@ export default () => (
         defaultValue={[20, 40]}
       />
     </div>
+    <div style={style}>
+      <p>Range with marks and draggableTrack</p>
+      <Slider.Range
+        draggableTrack
+        vertical
+        min={-10}
+        marks={marks}
+        onChange={log}
+        defaultValue={[20, 40]}
+      />
+    </div>
+    <div style={style}>
+      <p>Range with marks and draggableTrack(reverse)</p>
+      <Slider.Range
+        draggableTrack
+        vertical
+        reverse
+        min={-10}
+        marks={marks}
+        onChange={log}
+        defaultValue={[20, 40]}
+      />
+    </div>
   </div>
 );

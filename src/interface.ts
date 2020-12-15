@@ -22,20 +22,26 @@ export interface GenericSliderProps {
   railStyle?: React.CSSProperties;
   dotStyle?: React.CSSProperties;
   activeDotStyle?: React.CSSProperties;
+  draggableTrack?: boolean;
 }
 
 export interface GenericSliderState {
   value?: any;
+  bounds?: number[];
 }
 
 export interface GenericSliderClass<Props, State> extends React.Component<Props, State> {
   onStart: (position: number) => void;
+
+  positionGetValue: (pos: number) => number[];
 
   onEnd: (force?: boolean) => void;
 
   onMove: (
     e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
     position: number,
+    inTrack: boolean,
+    b: number[]
   ) => void;
 
   onKeyboard: (e: React.KeyboardEvent<HTMLDivElement>) => void;

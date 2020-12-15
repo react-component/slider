@@ -1,4 +1,4 @@
-/* eslint-disable max-len, no-undef, react/no-string-refs */
+/* eslint-disable max-len, no-undef, react/no-string-refs, no-param-reassign, max-classes-per-file */
 import React from 'react';
 import { render, mount } from 'enzyme';
 import keyCode from 'rc-util/lib/KeyCode';
@@ -479,6 +479,76 @@ describe('Range', () => {
       preventDefault: () => {},
     });
     expect(wrapper.instance().getSlider().state.bounds).toEqual([39, 40]);
+  });
+
+  it('track draggable', () => {
+    class CustomizedRange extends React.Component {
+      // eslint-disable-line
+      state = {
+        value: [0, 30],
+      };
+
+      onChange = value => {
+        this.setState({
+          value,
+        });
+      };
+
+      getSlider() {
+        return this.slider;
+      }
+
+      saveSlider = slider => {
+        this.slider = slider;
+      };
+
+      render() {
+        return (
+          <Range
+            ref={this.saveSlider}
+            value={this.state.value}
+            onChange={this.onChange}
+            draggableTrack
+          />
+        );
+      }
+    }
+    const map = {};
+    document.addEventListener = jest.fn().mockImplementation((event, cb) => {
+      map[event] = cb;
+    });
+
+    const mockRect = wrapper => {
+      wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
+        left: 0,
+        width: 100,
+      });
+    };
+
+    const container = document.createElement('div');
+    document.body.appendChild(container);
+
+    const range = mount(<CustomizedRange />, { attachTo: container });
+    mockRect(range);
+    console.log(range.state().value);
+    expect(range.state().value).toEqual([0, 30]);
+
+    range.find('.rc-slider').simulate('mouseDown', {
+      button: 0,
+      pageX: 10,
+      pageY: 0,
+      stopPropagation: () => {},
+      preventDefault: () => {},
+    });
+    map.mousemove({
+      type: 'mousemove',
+      pageX: 30,
+      pageY: 0,
+      stopPropagation: () => {},
+      preventDefault: () => {},
+    });
+    console.log(range.state().value);
+    expect(range.state().value).toEqual([20, 50]);
   });
 
   it('sets aria-label on the handles', () => {
