@@ -239,6 +239,10 @@ export default () => (
       <Range allowCross={false} defaultValue={[0, 40]} draggableTrack onChange={log} />
     </div>
     <div style={style}>
+      <p>draggableTrack two points(reverse)</p>
+      <Range allowCross={false} reverse defaultValue={[0, 40]} draggableTrack onChange={log} />
+    </div>
+    <div style={style}>
       <p>draggableTrack multiple points</p>
       <Range allowCross={false} defaultValue={[0, 20, 30, 40, 50]} draggableTrack onChange={log} />
     </div>

@@ -182,8 +182,8 @@ class Range extends React.Component<RangeProps, RangeState> {
       return;
     }
     const currentValue = value || prevState.bounds;
-    if (currentValue.some((v) => utils.isValueOutOfRange(v, this.props))) {
-      const newValues = currentValue.map((v) => utils.ensureValueInRange(v, this.props));
+    if (currentValue.some(v => utils.isValueOutOfRange(v, this.props))) {
+      const newValues = currentValue.map(v => utils.ensureValueInRange(v, this.props));
       onChange(newValues);
     }
   }
@@ -196,7 +196,7 @@ class Range extends React.Component<RangeProps, RangeState> {
     } else {
       const controlledState = {};
 
-      ['handle', 'recent'].forEach((item) => {
+      ['handle', 'recent'].forEach(item => {
         if (state[item] !== undefined) {
           controlledState[item] = state[item];
         }
@@ -272,13 +272,15 @@ class Range extends React.Component<RangeProps, RangeState> {
     const maxValue = props.max || 100;
     const minValue = props.min || 0;
     if (dragTrack) {
+      let pos = props.vertical ? -position : position;
+      pos = props.reverse ? -pos : pos;
       const max = maxValue - Math.max(...startBounds);
       const min = minValue - Math.min(...startBounds);
-      const ratio = Math.min(Math.max(position / (this.getSliderLength() / 100), min), max);
-      const nextBounds = startBounds.map((v) =>
+      const ratio = Math.min(Math.max(pos / (this.getSliderLength() / 100), min), max);
+      const nextBounds = startBounds.map(v =>
         Math.floor(Math.max(Math.min(v + ratio, maxValue), minValue)),
       );
-      if (state.bounds.map((c, i) => c === nextBounds[i]).some((c) => !c)) {
+      if (state.bounds.map((c, i) => c === nextBounds[i]).some(c => !c)) {
         this.onChange({
           bounds: nextBounds,
         });
@@ -502,7 +504,7 @@ class Range extends React.Component<RangeProps, RangeState> {
       ariaValueTextFormatterGroupForHandles,
     } = this.props;
 
-    const offsets = bounds.map((v) => this.calcOffset(v));
+    const offsets = bounds.map(v => this.calcOffset(v));
 
     const handleClassName = `${prefixCls}-handle`;
     const handles = bounds.map((v, i) => {
@@ -529,7 +531,7 @@ class Range extends React.Component<RangeProps, RangeState> {
         reverse,
         disabled,
         style: handleStyle[i],
-        ref: (h) => this.saveHandle(i, h),
+        ref: h => this.saveHandle(i, h),
         ariaLabel: ariaLabelGroupForHandles[i],
         ariaLabelledBy: ariaLabelledByGroupForHandles[i],
         ariaValueTextFormatter: ariaValueTextFormatterGroupForHandles[i],
