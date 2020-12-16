@@ -1,5 +1,11 @@
 # 🗓 Changelog
 
+## 9.7.1
+
+`2020-12-15`
+
+- feat: add dragableTrack. [#722](https://github.com/react-component/slider/pull/722)
+
 ## 9.6.5
 
 `2020-12-01`
