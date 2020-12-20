@@ -16,7 +16,7 @@ export interface HandleProps {
   tabIndex?: number;
   ariaLabel?: string;
   ariaLabelledBy?: string;
-  ariaValueTextFormatter?: (val: number) => string;
+  ariaValueTextFormatter?: string;
   onMouseEnter?: React.MouseEventHandler;
   onMouseLeave?: React.MouseEventHandler;
 }
