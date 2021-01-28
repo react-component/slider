@@ -53,10 +53,10 @@ export interface RangeProps extends GenericSliderProps {
   disabled?: boolean;
   trackStyle?: React.CSSProperties[];
   handleStyle?: React.CSSProperties[];
-  tabIndex?: number | Array<number>;
-  ariaLabelGroupForHandles?: string | Array<string>;
-  ariaLabelledByGroupForHandles?: string | Array<string>;
-  ariaValueTextFormatterGroupForHandles?: string | Array<string>;
+  tabIndex?: number | number[];
+  ariaLabelGroupForHandles?: string | string[];
+  ariaLabelledByGroupForHandles?: string | string[];
+  ariaValueTextFormatterGroupForHandles?: string | string[];
   handle?: SliderProps['handle'];
   draggableTrack?: boolean;
 }
