@@ -29,7 +29,7 @@ Slider UI component for React
 
 `npm start` and then go to http://localhost:8000
 
-
+Online examples: https://slider.react-component.now.sh/
 
 ## Usage
 
@@ -57,7 +57,7 @@ export default () => (
 
 An extension to make Slider or Range support Tooltip on handle.
 
-```jsx
+```js
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);

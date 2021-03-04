@@ -12,21 +12,10 @@ export default defineConfig({
   outputPath: '.doc',
   exportStatic: {},
   styles: [
-    `a img + svg {
-      display: none;
-    }`
-  ],
-  scripts: [{
-    content: `
-      (function () {
-        var timer = setInterval(function() {
-          try {
-            var menuList = document.getElementsByClassName('__dumi-default-menu-list');
-            menuList[0].childNodes[0].childNodes[0].innerText = '${name}';
-            clearInterval(timer);
-          } catch (e) {}
-        }, 200)
-      })();
     `
-  }]
+      .markdown table {
+        width: auto !important;
+      }
+    `,
+  ]
 });
