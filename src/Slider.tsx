@@ -4,6 +4,7 @@ import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
 import { GenericSliderProps, GenericSliderState } from './interface';
+import classNames from 'classnames';
 
 export interface SliderProps extends GenericSliderProps {
   value?: number;
@@ -233,8 +234,12 @@ class Slider extends React.Component<SliderProps, SliderState> {
     } = this.props;
     const { value, dragging } = this.state;
     const offset = this.calcOffset(value);
+    const handleClassName = `${prefixCls}-handle`;
     const handle = handleGenerator({
-      className: `${prefixCls}-handle`,
+      className: classNames({
+        [handleClassName]: true,
+        [`${handleClassName}-dragging`]: dragging,
+      }),
       prefixCls,
       vertical,
       offset,
