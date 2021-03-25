@@ -1,7 +1,7 @@
 import React from 'react';
 import Tooltip from './common/SliderTooltip';
 import Handle from './Handle';
-import { GenericSliderProps } from './interface';
+import type { GenericSliderProps } from './interface';
 
 export interface ComponentWrapperProps {
   tipFormatter?: (value: number) => React.ReactNode;

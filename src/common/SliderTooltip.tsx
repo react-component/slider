@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tooltip from 'rc-tooltip';
-import { TooltipProps } from 'rc-tooltip/lib/Tooltip';
+import type { TooltipProps } from 'rc-tooltip/lib/Tooltip';
 import { composeRef } from 'rc-util/lib/ref';
 import raf from 'rc-util/lib/raf';
 

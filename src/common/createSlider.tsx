@@ -4,9 +4,10 @@ import classNames from 'classnames';
 import warning from 'rc-util/lib/warning';
 import Steps from './Steps';
 import Marks from './Marks';
-import Handle, { HandleProps } from '../Handle';
+import type { HandleProps } from '../Handle';
+import Handle from '../Handle';
 import * as utils from '../utils';
-import { GenericSliderProps, GenericSliderState, GenericSlider } from '../interface';
+import type { GenericSliderProps, GenericSliderState, GenericSlider } from '../interface';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 

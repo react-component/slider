@@ -3,7 +3,7 @@ import warning from 'rc-util/lib/warning';
 import Track from './common/Track';
 import createSlider from './common/createSlider';
 import * as utils from './utils';
-import { GenericSliderProps, GenericSliderState } from './interface';
+import type { GenericSliderProps, GenericSliderState } from './interface';
 
 export interface SliderProps extends GenericSliderProps {
   value?: number;
