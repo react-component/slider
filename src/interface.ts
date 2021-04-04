@@ -1,6 +1,6 @@
 import type * as React from 'react';
 
-export interface GenericSliderProps {
+export interface GenericSliderProps extends React.HTMLAttributes<HTMLDivElement> {
   min?: number;
   max?: number;
   step?: number | null;
