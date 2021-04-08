@@ -1,13 +1,32 @@
-import React from 'react';
-import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import classNames from 'classnames';
+import addEventListener from 'rc-util/lib/Dom/addEventListener';
 import warning from 'rc-util/lib/warning';
-import Steps from './Steps';
-import Marks from './Marks';
+import React from 'react';
 import type { HandleProps } from '../Handle';
 import Handle from '../Handle';
+import type { GenericSlider, GenericSliderProps, GenericSliderState } from '../interface';
 import * as utils from '../utils';
-import type { GenericSliderProps, GenericSliderState, GenericSlider } from '../interface';
+import Marks from './Marks';
+import Steps from './Steps';
+
+interface RenderHandleProps extends HandleProps {
+  index: number;
+  dragging: boolean;
+}
+
+const RenderHandle: React.ForwardRefRenderFunction<Handle, RenderHandleProps> = (
+  props: RenderHandleProps,
+  ref,
+) => {
+  const { index, ...restProps } = props;
+  delete restProps.dragging;
+  if (restProps.value === null) {
+    return null;
+  }
+
+  return <Handle ref={ref} {...restProps} key={index} />;
+};
+const HandleComponent = React.forwardRef(RenderHandle);
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
@@ -29,15 +48,7 @@ export default function createSlider<
       max: 100,
       step: 1,
       marks: {},
-      handle(props: HandleProps & { index: number; dragging: boolean }) {
-        const { index, ...restProps } = props;
-        delete restProps.dragging;
-        if (restProps.value === null) {
-          return null;
-        }
-
-        return <Handle {...restProps} key={index} />;
-      },
+      handle: HandleComponent,
       onBeforeChange: noop,
       onChange: noop,
       onAfterChange: noop,
