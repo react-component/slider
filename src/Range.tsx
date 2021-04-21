@@ -39,7 +39,7 @@ export interface RangeProps extends GenericSliderProps {
   min?: number;
   max?: number;
   allowCross?: boolean;
-  pushable?: boolean;
+  pushable?: boolean | number;
   onChange?: (value: number[]) => void;
   onBeforeChange?: (value: number[]) => void;
   onAfterChange?: (value: number[]) => void;
