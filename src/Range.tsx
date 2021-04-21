@@ -276,7 +276,7 @@ class Range extends React.Component<RangeProps, RangeState> {
       pos = props.reverse ? -pos : pos;
       const max = maxValue - Math.max(...startBounds);
       const min = minValue - Math.min(...startBounds);
-      const ratio = Math.min(Math.max(pos / (this.getSliderLength() / 100), min), max);
+      const ratio = Math.min(Math.max(pos / (this.getSliderLength() / (maxValue - minValue)), min), max);
       const nextBounds = startBounds.map((v) =>
         Math.floor(Math.max(Math.min(v + ratio, maxValue), minValue)),
       );
