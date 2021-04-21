@@ -495,7 +495,7 @@ class Range extends React.Component<RangeProps, RangeState> {
       min,
       max,
       reverse,
-      handle: handleGenerator,
+      handle: Handle,
       trackStyle,
       handleStyle,
       tabIndex,
@@ -513,7 +513,8 @@ class Range extends React.Component<RangeProps, RangeState> {
         mergedTabIndex = null;
       }
       const dragging = handle === i;
-      return handleGenerator({
+
+      const handleProps = {
         className: classNames({
           [handleClassName]: true,
           [`${handleClassName}-${i + 1}`]: true,
@@ -535,7 +536,9 @@ class Range extends React.Component<RangeProps, RangeState> {
         ariaLabel: ariaLabelGroupForHandles[i],
         ariaLabelledBy: ariaLabelledByGroupForHandles[i],
         ariaValueTextFormatter: ariaValueTextFormatterGroupForHandles[i],
-      });
+      };
+
+      return <Handle key={ariaLabelGroupForHandles[i] || i} {...handleProps} />;
     });
 
     const tracks = bounds.slice(0, -1).map((_, index) => {

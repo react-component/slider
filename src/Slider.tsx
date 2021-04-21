@@ -1,9 +1,9 @@
-import React from 'react';
 import warning from 'rc-util/lib/warning';
-import Track from './common/Track';
+import React from 'react';
 import createSlider from './common/createSlider';
-import * as utils from './utils';
+import Track from './common/Track';
 import type { GenericSliderProps, GenericSliderState } from './interface';
+import * as utils from './utils';
 
 export interface SliderProps extends GenericSliderProps {
   value?: number;
@@ -229,11 +229,11 @@ class Slider extends React.Component<SliderProps, SliderState> {
       max,
       startPoint,
       reverse,
-      handle: handleGenerator,
+      handle: Handle,
     } = this.props;
     const { value, dragging } = this.state;
     const offset = this.calcOffset(value);
-    const handle = handleGenerator({
+    const handleProps = {
       className: `${prefixCls}-handle`,
       prefixCls,
       vertical,
@@ -251,7 +251,8 @@ class Slider extends React.Component<SliderProps, SliderState> {
       ariaValueTextFormatter: ariaValueTextFormatterForHandle,
       style: handleStyle[0] || handleStyle,
       ref: (h) => this.saveHandle(0, h),
-    });
+    };
+    const handle = <Handle {...handleProps} />;
 
     const trackOffset = startPoint !== undefined ? this.calcOffset(startPoint) : 0;
     const mergedTrackStyle = trackStyle[0] || trackStyle;
