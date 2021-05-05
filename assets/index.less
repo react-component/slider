@@ -85,6 +85,42 @@
     }
   }
 
+  &-handle-default {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    cursor: default;
+    margin-top: -5px;
+    border-radius: 50%;
+    border: solid 2px tint(@primary-color, 50%);
+    background-color: #fff;
+    touch-action: pan-x;
+
+    &-dragging&-dragging&-dragging {
+      border-color: tint(@primary-color, 20%);
+      box-shadow: 0 0 0 5px tint(@primary-color, 50%);
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &-click-focused:focus {
+      border-color: tint(@primary-color, 50%);
+      box-shadow: unset;
+    }
+
+    &:hover {
+      border-color: tint(@primary-color, 20%);
+    }
+
+    &:active {
+      border-color: tint(@primary-color, 20%);
+      box-shadow: 0 0 5px tint(@primary-color, 20%);
+      cursor: default;
+    }
+  }
+
   &-mark {
     position: absolute;
     top: 18px;
