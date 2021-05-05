@@ -23,6 +23,12 @@ describe('Slider', () => {
     expect(trackStyle.width).toMatch('50%');
   });
 
+  it('should render Slider with default cursor', () => {
+    const wrapper = mount(<Slider value={50} isUseDefaultCursor={true} />);
+    expect(wrapper.state('value')).toBe(50);
+    expect(wrapper.find('.rc-slider-handle-default').exists()).toBeTruthy();
+  });
+
   it('should render Slider correctly where value > startPoint', () => {
     const wrapper = mount(<Slider value={50} startPoint={20} />);
     expect(wrapper.state('value')).toBe(50);

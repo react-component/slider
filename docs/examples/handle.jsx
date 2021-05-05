@@ -7,7 +7,7 @@ const { createSliderWithTooltip } = Slider;
 const Range = createSliderWithTooltip(Slider.Range);
 const { Handle } = Slider;
 
-const handle = props => {
+const handle = (props) => {
   const { value, dragging, index, ...restProps } = props;
   return (
     <SliderTooltip
@@ -31,6 +31,10 @@ export default () => (
       <Slider min={0} max={20} defaultValue={3} handle={handle} />
     </div>
     <div style={wrapperStyle}>
+      <p>Slider with default cursor</p>
+      <Slider min={0} max={20} defaultValue={3} isUseDefaultCursor={true} handle={handle} />
+    </div>
+    <div style={wrapperStyle}>
       <p>Reversed Slider with custom handle</p>
       <Slider min={0} max={20} reverse defaultValue={3} handle={handle} />
     </div>
@@ -40,7 +44,7 @@ export default () => (
     </div>
     <div style={wrapperStyle}>
       <p>Range with custom tooltip</p>
-      <Range min={0} max={20} defaultValue={[3, 10]} tipFormatter={value => `${value}%`} />
+      <Range min={0} max={20} defaultValue={[3, 10]} tipFormatter={(value) => `${value}%`} />
     </div>
   </div>
 );

@@ -22,6 +22,7 @@ export interface SliderProps extends GenericSliderProps {
   minimumTrackStyle?: React.CSSProperties;
   trackStyle?: React.CSSProperties;
   handleStyle?: React.CSSProperties;
+  isUseDefaultCursor?: boolean;
   tabIndex?: number;
   ariaLabelForHandle?: string;
   ariaLabelledByForHandle?: string;
@@ -221,6 +222,7 @@ class Slider extends React.Component<SliderProps, SliderState> {
       minimumTrackStyle,
       trackStyle,
       handleStyle,
+      isUseDefaultCursor,
       tabIndex,
       ariaLabelForHandle,
       ariaLabelledByForHandle,
@@ -234,7 +236,7 @@ class Slider extends React.Component<SliderProps, SliderState> {
     const { value, dragging } = this.state;
     const offset = this.calcOffset(value);
     const handle = handleGenerator({
-      className: `${prefixCls}-handle`,
+      className: isUseDefaultCursor ? `${prefixCls}-handle-default` : `${prefixCls}-handle`,
       prefixCls,
       vertical,
       offset,
