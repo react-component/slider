@@ -39,7 +39,7 @@ export interface RangeProps extends GenericSliderProps {
   min?: number;
   max?: number;
   allowCross?: boolean;
-  pushable?: boolean;
+  pushable?: boolean | number;
   onChange?: (value: number[]) => void;
   onBeforeChange?: (value: number[]) => void;
   onAfterChange?: (value: number[]) => void;
@@ -276,7 +276,10 @@ class Range extends React.Component<RangeProps, RangeState> {
       pos = props.reverse ? -pos : pos;
       const max = maxValue - Math.max(...startBounds);
       const min = minValue - Math.min(...startBounds);
-      const ratio = Math.min(Math.max(pos / (this.getSliderLength() / (maxValue - minValue)), min), max);
+      const ratio = Math.min(
+        Math.max(pos / (this.getSliderLength() / (maxValue - minValue)), min),
+        max,
+      );
       const nextBounds = startBounds.map((v) =>
         Math.floor(Math.max(Math.min(v + ratio, maxValue), minValue)),
       );
