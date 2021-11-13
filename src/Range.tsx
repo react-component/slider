@@ -56,7 +56,7 @@ export interface RangeProps extends GenericSliderProps {
   tabIndex?: number | number[];
   ariaLabelGroupForHandles?: string | string[];
   ariaLabelledByGroupForHandles?: string | string[];
-  ariaValueTextFormatterGroupForHandles?: string | string[];
+  ariaValueTextFormatterGroupForHandles?: ((value: number) => string)[];
   handle?: SliderProps['handle'];
   draggableTrack?: boolean;
 }

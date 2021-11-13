@@ -1,9 +1,9 @@
 import React from 'react';
 import Slider, { createSliderWithTooltip, Range, Handle } from '../src';
-import { SliderProps } from '../src/Slider';
-import { RangeProps } from '../src/Range';
-import { HandleProps } from '../src/Handle';
-import { ComponentWrapperProps } from '../src/createSliderWithTooltip';
+import type { SliderProps } from '@/Slider';
+import type { RangeProps } from '@/Range';
+import type { HandleProps } from '@/Handle';
+import type { ComponentWrapperProps } from '@/createSliderWithTooltip';
 
 describe('Slider.Typescript', () => {
   const sliderProps: SliderProps = {
@@ -28,7 +28,7 @@ describe('Slider.Typescript', () => {
     tabIndex: 1,
     ariaLabelForHandle: 'ariaLabelForHandle',
     ariaLabelledByForHandle: 'ariaLabelledByForHandle',
-    ariaValueTextFormatterForHandle: 'ariaValueTextFormatterForHandle',
+    ariaValueTextFormatterForHandle: (i: number) => `ariaValueTextFormatterForHandle${i}`,
     startPoint: 1,
     handle(props) {
       return <span {...props} />;
@@ -78,7 +78,7 @@ describe('Slider.Typescript', () => {
     handleStyle: [{}],
     ariaLabelGroupForHandles: 'ariaLabelGroupForHandles',
     ariaLabelledByGroupForHandles: ['ariaLabelledByGroupForHandles'],
-    ariaValueTextFormatterGroupForHandles: ['ariaValueTextFormatterGroupForHandles'],
+    ariaValueTextFormatterGroupForHandles: [(i: number) => `ariaValueTextFormatterGroupForHandles${i}`],
     handle(props) {
       return <span {...props} />;
     },
