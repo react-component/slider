@@ -25,7 +25,7 @@ export interface SliderProps extends GenericSliderProps {
   tabIndex?: number;
   ariaLabelForHandle?: string;
   ariaLabelledByForHandle?: string;
-  ariaValueTextFormatterForHandle?: string;
+  ariaValueTextFormatterForHandle?: (value: number) => string;
   startPoint?: number;
   handle?: (props: {
     className: string;
@@ -42,7 +42,7 @@ export interface SliderProps extends GenericSliderProps {
     tabIndex?: number;
     ariaLabel: string;
     ariaLabelledBy: string;
-    ariaValueTextFormatter: string;
+    ariaValueTextFormatter?: (value: number) => string;
     style?: React.CSSProperties;
     ref?: React.Ref<any>;
   }) => React.ReactElement;
