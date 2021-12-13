@@ -68,9 +68,10 @@ export function ensureValueInRange(val: number, { max, min }: { max?: number; mi
 }
 
 export function ensureValuePrecision(val: number, props) {
-  const { step } = props;
+  const { step, min, max } = props;
   const closestPoint = isFinite(getClosestPoint(val, props)) ? getClosestPoint(val, props) : 0; // eslint-disable-line
-  return step === null ? closestPoint : parseFloat(closestPoint.toFixed(getPrecision(step)));
+  const retValue = step === null ? closestPoint : parseFloat(closestPoint.toFixed(getPrecision(step)));
+  return Math.min(Math.max(retValue, min), max);
 }
 
 export function pauseEvent(e: React.SyntheticEvent) {
