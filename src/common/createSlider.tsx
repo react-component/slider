@@ -366,6 +366,7 @@ export default function createSlider<
             min={min}
             dotStyle={dotStyle}
             activeDotStyle={activeDotStyle}
+            onClick={disabled ? noop : this.onClickMarkLabel}
           />
           {handles}
           <Marks

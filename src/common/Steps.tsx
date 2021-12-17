@@ -41,28 +41,37 @@ const Steps = ({
   min,
   dotStyle,
   activeDotStyle,
+  onClick,
 }) => {
   const range = max - min;
   const elements = calcPoints(vertical, marks, dots, step, min, max).map(point => {
     const offset = `${(Math.abs(point - min) / range) * 100}%`;
 
-    const isActived =
+    const isActive =
       (!included && point === upperBound) ||
       (included && point <= upperBound && point >= lowerBound);
     let style = vertical
       ? { ...dotStyle, [reverse ? 'top' : 'bottom']: offset }
       : { ...dotStyle, [reverse ? 'right' : 'left']: offset };
-    if (isActived) {
+    if (isActive) {
       style = { ...style, ...activeDotStyle };
     }
 
     const pointClassName = classNames({
       [`${prefixCls}-dot`]: true,
-      [`${prefixCls}-dot-active`]: isActived,
+      [`${prefixCls}-dot-active`]: isActive,
       [`${prefixCls}-dot-reverse`]: reverse,
     });
 
-    return <span className={pointClassName} style={style} key={point} />;
+    return (
+      <span
+        className={pointClassName}
+        style={style}
+        key={point}
+        onMouseDown={e => onClick(e, point)}
+        onTouchStart={e => onClick(e, point)}
+      />
+    );
   });
 
   return <div className={`${prefixCls}-step`}>{elements}</div>;
