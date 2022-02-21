@@ -9,9 +9,9 @@ export default function useDrag(
 
     const { pageX: startX, pageY: startY } = e;
 
-    console.log('Mouse Down:', startX, startY, valueIndex);
-
     const onMouseMove = (event: MouseEvent) => {
+      event.preventDefault();
+
       const { pageX: moveX, pageY: moveY } = event;
       const offsetX = moveX - startX;
       const offsetY = moveY - startY;
@@ -21,9 +21,10 @@ export default function useDrag(
       onValueChange(valueIndex, offSetPercent);
     };
     const onMouseUp = (event: MouseEvent) => {
+      event.preventDefault();
+
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
-      console.log('Mouse Up!');
     };
 
     document.addEventListener('mouseup', onMouseUp);

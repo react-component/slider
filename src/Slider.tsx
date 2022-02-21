@@ -1,5 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
+import shallowEqual from 'shallowequal';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import Handles from './Handles';
 import useDrag from './hooks/useDrag';
@@ -15,6 +16,7 @@ export interface SliderProps {
   value?: number | number[];
   defaultValue?: number | number[];
   step?: number | null;
+  onChange?: (value: number | number[]) => void;
 
   range?: boolean;
 
@@ -35,9 +37,6 @@ export interface SliderProps {
   // // dotStyle?: React.CSSProperties;
   // // activeDotStyle?: React.CSSProperties;
   // draggableTrack?: boolean;
-  // min?: number;
-  // max?: number;
-  // onChange?: (value: number) => void;
   // onBeforeChange?: (value: number) => void;
   // onAfterChange?: (value: number) => void;
   // vertical?: boolean;
@@ -90,6 +89,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     value,
     defaultValue,
     range,
+    onChange,
   } = props;
 
   const railRef = React.useRef<HTMLDivElement>();
@@ -117,6 +117,16 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [mergedValue, range, min]);
 
   // =========================== onChange ===========================
+  const valuesRef = React.useRef(rawValues);
+  valuesRef.current = rawValues;
+
+  const triggerChange = (nextValues: number[]) => {
+    if (onChange && !shallowEqual(nextValues, valuesRef.current)) {
+      const triggerValue = range ? nextValues : nextValues[0];
+      onChange(triggerValue);
+    }
+  };
+
   const onValueChange = (valueIndex: number, nextValue: number) => {
     // Format value
     // TODO: align with mark if needed
@@ -133,6 +143,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     console.log('next values', nextValues);
     setValue(nextValues);
+    triggerChange(nextValues);
   };
 
   // ============================= Drag =============================
