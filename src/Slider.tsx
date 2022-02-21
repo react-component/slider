@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import shallowEqual from 'shallowequal';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import Handles from './Handles';
+import Handles, { HandlesRef } from './Handles';
 import useDrag from './hooks/useDrag';
 
 export interface SliderProps {
@@ -120,39 +120,91 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const valuesRef = React.useRef(rawValues);
   valuesRef.current = rawValues;
 
+  const formatValue = (val: number) => {
+    let formatNextValue = Math.min(max, val);
+    formatNextValue = Math.max(min, formatNextValue);
+    formatNextValue = min + Math.round((formatNextValue - min) / step) * step;
+    return formatNextValue;
+  };
+
   const triggerChange = (nextValues: number[]) => {
-    if (onChange && !shallowEqual(nextValues, valuesRef.current)) {
-      const triggerValue = range ? nextValues : nextValues[0];
+    // Order first
+    const cloneNextValues = [...nextValues].sort((a, b) => a - b);
+    setValue(cloneNextValues);
+
+    if (onChange && !shallowEqual(cloneNextValues, valuesRef.current)) {
+      const triggerValue = range ? cloneNextValues : cloneNextValues[0];
       onChange(triggerValue);
     }
   };
 
-  const onValueChange = (valueIndex: number, nextValue: number) => {
-    // Format value
-    // TODO: align with mark if needed
-    let formatNextValue = Math.min(max, nextValue);
-    formatNextValue = Math.max(min, formatNextValue);
-    formatNextValue = min + Math.round((formatNextValue - min) / step) * step;
-
-    // Create next values
-    const nextValues = [...rawValues];
-    nextValues[valueIndex] = formatNextValue;
-
-    // Callback
-    nextValues.sort((a, b) => a - b);
-
-    console.log('next values', nextValues);
-    setValue(nextValues);
-    triggerChange(nextValues);
-  };
-
   // ============================= Drag =============================
-  const onPercentChange = (valueIndex: number, offsetPercent: number) => {
-    const originValue = rawValues[valueIndex];
-    onValueChange(valueIndex, originValue + offsetPercent * (max - min));
+  const handlesRef = React.useRef<HandlesRef>();
+  const [dragging, setDragging] = React.useState(false);
+
+  const [draggingValue, setDraggingValue] = React.useState(null);
+  const [cacheValues, setCacheValues] = React.useState(rawValues);
+  React.useEffect(() => {
+    if (!dragging) {
+      setCacheValues(rawValues);
+    }
+  }, [rawValues, dragging]);
+
+  // Auto focus for updated handle
+  React.useEffect(() => {
+    if (!dragging) {
+      const valueIndex = rawValues.lastIndexOf(draggingValue);
+      handlesRef.current.focus(valueIndex);
+    }
+  }, [dragging]);
+
+  const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
+    const originValue = cacheValues[valueIndex];
+    const nextValue = originValue + offsetPercent * (max - min);
+    const cloneCacheValues = [...cacheValues];
+    const formattedValue = formatValue(nextValue);
+    cloneCacheValues[valueIndex] = formattedValue;
+
+    setDraggingValue(formattedValue);
+    setCacheValues(cloneCacheValues);
+    triggerChange(cloneCacheValues);
+
+    return formattedValue;
   };
 
-  const [onStartMove] = useDrag(railRef, onPercentChange);
+  const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
+    e.preventDefault();
+    setDragging(true);
+
+    const { pageX: startX, pageY: startY } = e;
+    (e.target as HTMLDivElement).focus();
+
+    // Moving
+    const onMouseMove = (event: MouseEvent) => {
+      event.preventDefault();
+
+      const { pageX: moveX, pageY: moveY } = event;
+      const offsetX = moveX - startX;
+      const offsetY = moveY - startY;
+
+      const { width, height } = railRef.current.getBoundingClientRect();
+      const offSetPercent = offsetX / width;
+      updateCacheValue(valueIndex, offSetPercent);
+    };
+
+    // End
+    const onMouseUp = (event: MouseEvent) => {
+      event.preventDefault();
+
+      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mousemove', onMouseMove);
+
+      setDragging(false);
+    };
+
+    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mousemove', onMouseMove);
+  };
 
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
@@ -166,8 +218,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       <div className={`${prefixCls}-rail`} ref={railRef} />
       <div className={`${prefixCls}-track`} />
       <Handles
+        ref={handlesRef}
         prefixCls={prefixCls}
-        values={rawValues}
+        values={cacheValues}
         onStartMove={onStartMove}
         max={max}
         min={min}

@@ -9,7 +9,7 @@ export interface HandleProps {
   onStartMove: (e: React.MouseEvent, valueIndex: number) => void;
 }
 
-export default function Handle(props: HandleProps) {
+const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
   const { prefixCls, value, valueIndex, max, min, onStartMove } = props;
 
   // ============================ Offset ============================
@@ -18,6 +18,7 @@ export default function Handle(props: HandleProps) {
   // ============================ Render ============================
   return (
     <div
+      ref={ref}
       className={`${prefixCls}-handle`}
       style={{
         left: `${offset * 100}%`,
@@ -26,6 +27,18 @@ export default function Handle(props: HandleProps) {
       onMouseDown={(e) => {
         onStartMove(e, valueIndex);
       }}
+      tabIndex={0}
+      role="slider"
+      aria-valuemin={min}
+      aria-valuemax={max}
+      aria-valuenow={value}
+      // aria-disabled="false"
     />
   );
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  Handle.displayName = 'Handle';
 }
+
+export default Handle;

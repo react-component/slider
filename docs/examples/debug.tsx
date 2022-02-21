@@ -11,7 +11,11 @@ export default () => {
         <input type="checkbox" checked={range} onChange={() => setRange(!range)} />
         Range
       </label>
-      <Slider range={range} defaultValue={[10, 50]} />
+      <Slider
+        range={range}
+        defaultValue={[10, 50]}
+        // onChange={(nextValues) => console.log('Change:', nextValues)}
+      />
     </div>
   );
 };
