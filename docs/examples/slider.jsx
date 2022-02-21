@@ -1,289 +1,291 @@
-/* eslint react/no-multi-comp: 0, max-len: 0 */
-import React from 'react';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
-import '../../assets/index.less';
+export default () => null;
 
-const style = { width: 600, margin: 50 };
+// /* eslint react/no-multi-comp: 0, max-len: 0 */
+// import React from 'react';
+// import Slider, { createSliderWithTooltip } from 'rc-slider';
+// import '../../assets/index.less';
 
-function log(value) {
-  console.log(value); //eslint-disable-line
-}
+// const style = { width: 600, margin: 50 };
 
-function percentFormatter(v) {
-  return `${v} %`;
-}
+// function log(value) {
+//   console.log(value); //eslint-disable-line
+// }
 
-const SliderWithTooltip = createSliderWithTooltip(Slider);
+// function percentFormatter(v) {
+//   return `${v} %`;
+// }
 
-class NullableSlider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: null,
-    };
-  }
+// const SliderWithTooltip = createSliderWithTooltip(Slider);
 
-  onSliderChange = value => {
-    log(value);
-    this.setState({
-      value,
-    });
-  };
+// class NullableSlider extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       value: null,
+//     };
+//   }
 
-  onAfterChange = value => {
-    console.log(value); //eslint-disable-line
-  };
+//   onSliderChange = value => {
+//     log(value);
+//     this.setState({
+//       value,
+//     });
+//   };
 
-  reset = () => {
-    console.log('reset value'); // eslint-disable-line
-    this.setState({ value: null });
-  };
+//   onAfterChange = value => {
+//     console.log(value); //eslint-disable-line
+//   };
 
-  render() {
-    return (
-      <div>
-        <Slider
-          value={this.state.value}
-          onChange={this.onSliderChange}
-          onAfterChange={this.onAfterChange}
-        />
-        <button type="button" onClick={this.reset}>
-          Reset
-        </button>
-      </div>
-    );
-  }
-}
+//   reset = () => {
+//     console.log('reset value'); // eslint-disable-line
+//     this.setState({ value: null });
+//   };
 
-class CustomizedSlider extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      value: 50,
-    };
-  }
+//   render() {
+//     return (
+//       <div>
+//         <Slider
+//           value={this.state.value}
+//           onChange={this.onSliderChange}
+//           onAfterChange={this.onAfterChange}
+//         />
+//         <button type="button" onClick={this.reset}>
+//           Reset
+//         </button>
+//       </div>
+//     );
+//   }
+// }
 
-  onSliderChange = value => {
-    log(value);
-    this.setState({
-      value,
-    });
-  };
+// class CustomizedSlider extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       value: 50,
+//     };
+//   }
 
-  onAfterChange = value => {
-    console.log(value); //eslint-disable-line
-  };
+//   onSliderChange = value => {
+//     log(value);
+//     this.setState({
+//       value,
+//     });
+//   };
 
-  render() {
-    return (
-      <Slider
-        value={this.state.value}
-        onChange={this.onSliderChange}
-        onAfterChange={this.onAfterChange}
-      />
-    );
-  }
-}
+//   onAfterChange = value => {
+//     console.log(value); //eslint-disable-line
+//   };
 
-class DynamicBounds extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      min: 1,
-      max: 100,
-      step: 10,
-      value: 1,
-    };
-  }
+//   render() {
+//     return (
+//       <Slider
+//         value={this.state.value}
+//         onChange={this.onSliderChange}
+//         onAfterChange={this.onAfterChange}
+//       />
+//     );
+//   }
+// }
 
-  onSliderChange = value => {
-    log(value);
-    this.setState({ value });
-  };
+// class DynamicBounds extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       min: 1,
+//       max: 100,
+//       step: 10,
+//       value: 1,
+//     };
+//   }
 
-  onMinChange = e => {
-    this.setState({
-      min: +e.target.value || 0,
-    });
-  };
+//   onSliderChange = value => {
+//     log(value);
+//     this.setState({ value });
+//   };
 
-  onMaxChange = e => {
-    this.setState({
-      max: +e.target.value || 100,
-    });
-  };
+//   onMinChange = e => {
+//     this.setState({
+//       min: +e.target.value || 0,
+//     });
+//   };
 
-  onStepChange = e => {
-    this.setState({
-      step: +e.target.value || 1,
-    });
-  };
+//   onMaxChange = e => {
+//     this.setState({
+//       max: +e.target.value || 100,
+//     });
+//   };
 
-  render() {
-    const labelStyle = { minWidth: '60px', display: 'inline-block' };
-    const inputStyle = { marginBottom: '10px' };
-    return (
-      <div>
-        <label style={labelStyle}>Min: </label>
-        <input
-          type="number"
-          value={this.state.min}
-          onChange={this.onMinChange}
-          style={inputStyle}
-        />
-        <br />
-        <label style={labelStyle}>Max: </label>
-        <input
-          type="number"
-          value={this.state.max}
-          onChange={this.onMaxChange}
-          style={inputStyle}
-        />
-        <br />
-        <label style={labelStyle}>Step: </label>
-        <input
-          type="number"
-          value={this.state.step}
-          onChange={this.onStepChange}
-          style={inputStyle}
-        />
-        <br />
-        <br />
-        <label style={labelStyle}>Value: </label>
-        <span>{this.state.value}</span>
-        <br />
-        <br />
-        <Slider
-          value={this.state.value}
-          min={this.state.min}
-          max={this.state.max}
-          step={this.state.step}
-          onChange={this.onSliderChange}
-        />
-      </div>
-    );
-  }
-}
+//   onStepChange = e => {
+//     this.setState({
+//       step: +e.target.value || 1,
+//     });
+//   };
 
-export default () => (
-  <div>
-    <div style={style}>
-      <p>Basic Slider</p>
-      <Slider onChange={log} />
-    </div>
-    <div style={style}>
-      <p>Basic Slider, `startPoint=50`</p>
-      <Slider onChange={log} startPoint={50} />
-    </div>
-    <div style={style}>
-      <p>Slider reverse</p>
-      <Slider onChange={log} reverse min={20} max={60} />
-    </div>
-    <div style={style}>
-      <p>Basic Slider，`step=20`</p>
-      <Slider step={20} defaultValue={50} onBeforeChange={log} />
-    </div>
-    <div style={style}>
-      <p>Basic Slider，`step=20, dots`</p>
-      <Slider dots step={20} defaultValue={100} onAfterChange={log} />
-    </div>
-    <div style={style}>
-      <p>
-        Basic Slider，`step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle=
-        {"{borderColor: 'yellow'}"}`
-      </p>
-      <Slider
-        dots
-        step={20}
-        defaultValue={100}
-        onAfterChange={log}
-        dotStyle={{ borderColor: 'orange' }}
-        activeDotStyle={{ borderColor: 'yellow' }}
-      />
-    </div>
-    <div style={style}>
-      <p>Slider with tooltip, with custom `tipFormatter`</p>
-      <SliderWithTooltip
-        tipFormatter={percentFormatter}
-        tipProps={{ overlayClassName: 'foo' }}
-        onChange={log}
-      />
-    </div>
-    <div style={style}>
-      <p>
-        Slider with custom handle and track style.<strong>(old api, will be deprecated)</strong>
-      </p>
-      <Slider
-        defaultValue={30}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
-        }}
-      />
-    </div>
-    <div style={style}>
-      <p>
-        Slider with custom handle and track style.<strong>(The recommended new api)</strong>
-      </p>
-      <Slider
-        defaultValue={30}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
-        }}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
-      />
-    </div>
-    <div style={style}>
-      <p>
-        Reversed Slider with custom handle and track style.
-        <strong>(The recommended new api)</strong>
-      </p>
-      <Slider
-        defaultValue={30}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        reverse
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
-        }}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
-      />
-    </div>
-    <div style={style}>
-      <p>Basic Slider, disabled</p>
-      <Slider onChange={log} disabled />
-    </div>
-    <div style={style}>
-      <p>Controlled Slider</p>
-      <Slider value={50} />
-    </div>
-    <div style={style}>
-      <p>Customized Slider</p>
-      <CustomizedSlider />
-    </div>
-    <div style={style}>
-      <p>Slider with null value and reset button</p>
-      <NullableSlider />
-    </div>
-    <div style={style}>
-      <p>Slider with dynamic `min` `max` `step`</p>
-      <DynamicBounds />
-    </div>
-  </div>
-);
+//   render() {
+//     const labelStyle = { minWidth: '60px', display: 'inline-block' };
+//     const inputStyle = { marginBottom: '10px' };
+//     return (
+//       <div>
+//         <label style={labelStyle}>Min: </label>
+//         <input
+//           type="number"
+//           value={this.state.min}
+//           onChange={this.onMinChange}
+//           style={inputStyle}
+//         />
+//         <br />
+//         <label style={labelStyle}>Max: </label>
+//         <input
+//           type="number"
+//           value={this.state.max}
+//           onChange={this.onMaxChange}
+//           style={inputStyle}
+//         />
+//         <br />
+//         <label style={labelStyle}>Step: </label>
+//         <input
+//           type="number"
+//           value={this.state.step}
+//           onChange={this.onStepChange}
+//           style={inputStyle}
+//         />
+//         <br />
+//         <br />
+//         <label style={labelStyle}>Value: </label>
+//         <span>{this.state.value}</span>
+//         <br />
+//         <br />
+//         <Slider
+//           value={this.state.value}
+//           min={this.state.min}
+//           max={this.state.max}
+//           step={this.state.step}
+//           onChange={this.onSliderChange}
+//         />
+//       </div>
+//     );
+//   }
+// }
+
+// export default () => (
+//   <div>
+//     <div style={style}>
+//       <p>Basic Slider</p>
+//       <Slider onChange={log} />
+//     </div>
+//     <div style={style}>
+//       <p>Basic Slider, `startPoint=50`</p>
+//       <Slider onChange={log} startPoint={50} />
+//     </div>
+//     <div style={style}>
+//       <p>Slider reverse</p>
+//       <Slider onChange={log} reverse min={20} max={60} />
+//     </div>
+//     <div style={style}>
+//       <p>Basic Slider，`step=20`</p>
+//       <Slider step={20} defaultValue={50} onBeforeChange={log} />
+//     </div>
+//     <div style={style}>
+//       <p>Basic Slider，`step=20, dots`</p>
+//       <Slider dots step={20} defaultValue={100} onAfterChange={log} />
+//     </div>
+//     <div style={style}>
+//       <p>
+//         Basic Slider，`step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle=
+//         {"{borderColor: 'yellow'}"}`
+//       </p>
+//       <Slider
+//         dots
+//         step={20}
+//         defaultValue={100}
+//         onAfterChange={log}
+//         dotStyle={{ borderColor: 'orange' }}
+//         activeDotStyle={{ borderColor: 'yellow' }}
+//       />
+//     </div>
+//     <div style={style}>
+//       <p>Slider with tooltip, with custom `tipFormatter`</p>
+//       <SliderWithTooltip
+//         tipFormatter={percentFormatter}
+//         tipProps={{ overlayClassName: 'foo' }}
+//         onChange={log}
+//       />
+//     </div>
+//     <div style={style}>
+//       <p>
+//         Slider with custom handle and track style.<strong>(old api, will be deprecated)</strong>
+//       </p>
+//       <Slider
+//         defaultValue={30}
+//         railStyle={{ backgroundColor: 'red', height: 10 }}
+//         trackStyle={{ backgroundColor: 'blue', height: 10 }}
+//         handleStyle={{
+//           borderColor: 'blue',
+//           height: 28,
+//           width: 28,
+//           marginLeft: -14,
+//           marginTop: -9,
+//           backgroundColor: 'black',
+//         }}
+//       />
+//     </div>
+//     <div style={style}>
+//       <p>
+//         Slider with custom handle and track style.<strong>(The recommended new api)</strong>
+//       </p>
+//       <Slider
+//         defaultValue={30}
+//         trackStyle={{ backgroundColor: 'blue', height: 10 }}
+//         handleStyle={{
+//           borderColor: 'blue',
+//           height: 28,
+//           width: 28,
+//           marginLeft: -14,
+//           marginTop: -9,
+//           backgroundColor: 'black',
+//         }}
+//         railStyle={{ backgroundColor: 'red', height: 10 }}
+//       />
+//     </div>
+//     <div style={style}>
+//       <p>
+//         Reversed Slider with custom handle and track style.
+//         <strong>(The recommended new api)</strong>
+//       </p>
+//       <Slider
+//         defaultValue={30}
+//         trackStyle={{ backgroundColor: 'blue', height: 10 }}
+//         reverse
+//         handleStyle={{
+//           borderColor: 'blue',
+//           height: 28,
+//           width: 28,
+//           marginLeft: -14,
+//           marginTop: -9,
+//           backgroundColor: 'black',
+//         }}
+//         railStyle={{ backgroundColor: 'red', height: 10 }}
+//       />
+//     </div>
+//     <div style={style}>
+//       <p>Basic Slider, disabled</p>
+//       <Slider onChange={log} disabled />
+//     </div>
+//     <div style={style}>
+//       <p>Controlled Slider</p>
+//       <Slider value={50} />
+//     </div>
+//     <div style={style}>
+//       <p>Customized Slider</p>
+//       <CustomizedSlider />
+//     </div>
+//     <div style={style}>
+//       <p>Slider with null value and reset button</p>
+//       <NullableSlider />
+//     </div>
+//     <div style={style}>
+//       <p>Slider with dynamic `min` `max` `step`</p>
+//       <DynamicBounds />
+//     </div>
+//   </div>
+// );
