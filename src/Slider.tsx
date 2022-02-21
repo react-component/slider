@@ -2,7 +2,8 @@ import * as React from 'react';
 import classNames from 'classnames';
 import shallowEqual from 'shallowequal';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import Handles, { HandlesRef } from './Handles';
+import type { HandlesRef } from './Handles';
+import Handles from './Handles';
 import useDrag from './hooks/useDrag';
 
 export interface SliderProps {
@@ -208,7 +209,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
-    focus: () => {},
+    focus: () => {
+      handlesRef.current.focus(0);
+    },
     blur: () => {},
   }));
 
