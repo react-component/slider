@@ -50,7 +50,7 @@
     position: absolute;
     width: 14px;
     height: 14px;
-    margin-top: -5px;
+    // margin-top: -5px;
     background-color: #fff;
     border: solid 2px tint(@primary-color, 50%);
     border-radius: 50%;
@@ -58,6 +58,7 @@
     cursor: -webkit-grab;
     cursor: grab;
     touch-action: pan-x;
+    opacity: 0.8;
 
     &-dragging&-dragging&-dragging {
       border-color: tint(@primary-color, 20%);
@@ -173,7 +174,7 @@
     }
 
     &-handle {
-      margin-left: -5px;
+      // margin-left: -5px;
       touch-action: pan-y;
     }
 

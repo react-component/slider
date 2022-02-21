@@ -51,10 +51,17 @@ export default function useDrag(
       const { width, height } = containerRef.current.getBoundingClientRect();
 
       let offSetPercent: number;
-      if (direction === 'rtl') {
-        offSetPercent = -offsetX / width;
-      } else {
-        offSetPercent = offsetX / width;
+      switch (direction) {
+        case 'vertical':
+          offSetPercent = offsetY / height;
+          break;
+
+        case 'rtl':
+          offSetPercent = -offsetX / width;
+          break;
+
+        default:
+          offSetPercent = offsetX / width;
       }
       updateCacheValue(valueIndex, offSetPercent);
     };

@@ -191,7 +191,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // ============================ Render ============================
   return (
     <SliderContext.Provider value={context}>
-      <div className={classNames(prefixCls, className)} style={style}>
+      <div
+        className={classNames(prefixCls, className, {
+          [`${prefixCls}-vertical`]: direction === 'vertical',
+        })}
+        style={style}
+      >
         <div className={`${prefixCls}-rail`} ref={railRef} />
         <div className={`${prefixCls}-track`} />
         <Handles
