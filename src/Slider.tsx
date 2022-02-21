@@ -5,7 +5,7 @@ import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { HandlesRef } from './Handles';
 import Handles from './Handles';
 import useDrag from './hooks/useDrag';
-import SliderContext from './context';
+import SliderContext, { SliderContextProps } from './context';
 
 export interface SliderProps {
   prefixCls?: string;
@@ -23,8 +23,8 @@ export interface SliderProps {
 
   // Direction
   reverse?: boolean;
+  vertical?: boolean;
 
-  // vertical?: boolean;
   // included?: boolean;
   // disabled?: boolean;
 
@@ -43,7 +43,6 @@ export interface SliderProps {
   // draggableTrack?: boolean;
   // onBeforeChange?: (value: number) => void;
   // onAfterChange?: (value: number) => void;
-  // vertical?: boolean;
   // included?: boolean;
   // disabled?: boolean;
   // minimumTrackStyle?: React.CSSProperties;
@@ -96,9 +95,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Direction
     reverse,
+    vertical,
   } = props;
 
   const railRef = React.useRef<HTMLDivElement>();
+
+  const direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
 
   // ============================ Values ============================
   const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
@@ -122,10 +124,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     return [val0];
   }, [mergedValue, range, min]);
 
-  // =========================== onChange ===========================
-  const valuesRef = React.useRef(rawValues);
-  valuesRef.current = rawValues;
-
   const formatValue = (val: number) => {
     let formatNextValue = Math.min(max, val);
     formatNextValue = Math.max(min, formatNextValue);
@@ -133,15 +131,22 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     return formatNextValue;
   };
 
+  // =========================== onChange ===========================
+  const rawValuesRef = React.useRef(rawValues);
+  rawValuesRef.current = rawValues;
+
   const triggerChange = (nextValues: number[]) => {
     // Order first
     const cloneNextValues = [...nextValues].sort((a, b) => a - b);
-    setValue(cloneNextValues);
 
-    if (onChange && !shallowEqual(cloneNextValues, valuesRef.current)) {
+    // Trigger event if needed
+    if (onChange && !shallowEqual(cloneNextValues, rawValuesRef.current)) {
       const triggerValue = range ? cloneNextValues : cloneNextValues[0];
       onChange(triggerValue);
     }
+
+    // We set this later since it will re-render component immediately
+    setValue(cloneNextValues);
   };
 
   // ============================= Drag =============================
@@ -149,6 +154,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   const [dragging, draggingValue, cacheValues, onStartMove] = useDrag(
     railRef,
+    direction,
     rawValues,
     min,
     max,
@@ -173,12 +179,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }));
 
   // =========================== Context ============================
-  const context = React.useMemo(
+  const context = React.useMemo<SliderContextProps>(
     () => ({
       min,
       max,
+      direction,
     }),
-    [min, max],
+    [min, max, direction],
   );
 
   // ============================ Render ============================

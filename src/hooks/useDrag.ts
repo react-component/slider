@@ -2,6 +2,7 @@ import * as React from 'react';
 
 export default function useDrag(
   containerRef: React.RefObject<HTMLDivElement>,
+  direction: 'vertical' | 'rtl' | 'ltr',
   rawValues: number[],
   min: number,
   max: number,
@@ -48,7 +49,13 @@ export default function useDrag(
       const offsetY = moveY - startY;
 
       const { width, height } = containerRef.current.getBoundingClientRect();
-      const offSetPercent = offsetX / width;
+
+      let offSetPercent: number;
+      if (direction === 'rtl') {
+        offSetPercent = -offsetX / width;
+      } else {
+        offSetPercent = offsetX / width;
+      }
       updateCacheValue(valueIndex, offSetPercent);
     };
 

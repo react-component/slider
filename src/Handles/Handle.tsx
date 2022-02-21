@@ -10,20 +10,31 @@ export interface HandleProps {
 
 const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
   const { prefixCls, value, valueIndex, onStartMove } = props;
-  const { min, max } = React.useContext(SliderContext);
+  const { min, max, direction } = React.useContext(SliderContext);
 
   // ============================ Offset ============================
   const offset = (value - min) / (max - min);
+
+  const style: React.CSSProperties = {};
+
+  switch (direction) {
+    case 'rtl':
+      style.right = `${offset * 100}%`;
+      style.transform = `translateX(50%)`;
+      break;
+
+    default:
+      style.left = `${offset * 100}%`;
+      style.transform = `translateX(-50%)`;
+      break;
+  }
 
   // ============================ Render ============================
   return (
     <div
       ref={ref}
       className={`${prefixCls}-handle`}
-      style={{
-        left: `${offset * 100}%`,
-        transform: `translateX(-50%)`,
-      }}
+      style={style}
       onMouseDown={(e) => {
         onStartMove(e, valueIndex);
       }}
