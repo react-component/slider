@@ -6,6 +6,8 @@ import type { HandlesRef } from './Handles';
 import Handles from './Handles';
 import useDrag from './hooks/useDrag';
 import SliderContext, { SliderContextProps } from './context';
+import Track from './Track';
+import type { Direction } from './interface';
 
 export interface SliderProps {
   prefixCls?: string;
@@ -25,7 +27,9 @@ export interface SliderProps {
   reverse?: boolean;
   vertical?: boolean;
 
-  // included?: boolean;
+  // Style
+  included?: boolean;
+
   // disabled?: boolean;
 
   // // trackStyle?: React.CSSProperties | React.CSSProperties[];
@@ -96,11 +100,14 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     // Direction
     reverse,
     vertical,
+
+    // Style
+    included = true,
   } = props;
 
   const railRef = React.useRef<HTMLDivElement>();
 
-  const direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
+  const direction: Direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
 
   // ============================ Values ============================
   const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
@@ -194,19 +201,23 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       <div
         className={classNames(prefixCls, className, {
           [`${prefixCls}-vertical`]: direction === 'vertical',
+          [`${prefixCls}-ltr`]: direction === 'ltr',
+          [`${prefixCls}-rtl`]: direction === 'rtl',
         })}
         style={style}
       >
         <div className={`${prefixCls}-rail`} ref={railRef} />
-        <div className={`${prefixCls}-track`} />
+
+        {included && <Track prefixCls={prefixCls} values={cacheValues} />}
+
         <Handles
           ref={handlesRef}
           prefixCls={prefixCls}
           values={cacheValues}
           onStartMove={onStartMove}
         />
-        <div className={`${prefixCls}-mark`} />
       </div>
+      <div className={`${prefixCls}-mark`} />
     </SliderContext.Provider>
   );
 });

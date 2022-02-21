@@ -1,9 +1,10 @@
 import * as React from 'react';
+import type { Direction } from './interface';
 
 export interface SliderContextProps {
   min: number;
   max: number;
-  direction: 'vertical' | 'rtl' | 'ltr';
+  direction: Direction;
 }
 
 const SliderContext = React.createContext<SliderContextProps>({

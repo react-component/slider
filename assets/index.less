@@ -40,7 +40,6 @@
 
   &-track {
     position: absolute;
-    left: 0;
     height: 4px;
     background-color: tint(@primary-color, 60%);
     border-radius: @border-radius-base;
@@ -50,15 +49,15 @@
     position: absolute;
     width: 14px;
     height: 14px;
-    // margin-top: -5px;
+    margin-top: -5px;
     background-color: #fff;
     border: solid 2px tint(@primary-color, 50%);
     border-radius: 50%;
     cursor: pointer;
     cursor: -webkit-grab;
     cursor: grab;
-    touch-action: pan-x;
     opacity: 0.8;
+    touch-action: pan-x;
 
     &-dragging&-dragging&-dragging {
       border-color: tint(@primary-color, 20%);
@@ -156,6 +155,30 @@
   }
 }
 
+.@{prefixClass}-ltr {
+  .@{prefixClass} {
+    &-handle {
+      transform: translateX(-50%);
+    }
+  }
+}
+
+.@{prefixClass}-rtl {
+  .@{prefixClass} {
+    &-handle {
+      transform: translateX(50%);
+    }
+  }
+}
+
+.@{prefixClass}-vertical {
+  .@{prefixClass} {
+    &-handle {
+      transform: translateY(50%);
+    }
+  }
+}
+
 .@{prefixClass}-vertical {
   width: 14px;
   height: 100%;
@@ -174,7 +197,7 @@
     }
 
     &-handle {
-      // margin-left: -5px;
+      margin-left: -5px;
       touch-action: pan-y;
     }
 

@@ -19,21 +19,15 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
 
   switch (direction) {
     case 'rtl':
-      style.top = '50%';
       style.right = `${offset * 100}%`;
-      style.transform = `translate(50%, -50%)`;
       break;
 
     case 'vertical':
-      style.top = `${offset * 100}%`;
-      style.left = '50%';
-      style.transform = `translate(-50%, -50%)`;
+      style.bottom = `${offset * 100}%`;
       break;
 
     default:
-      style.top = '50%';
       style.left = `${offset * 100}%`;
-      style.transform = `translate(-50%, -50%)`;
       break;
   }
 

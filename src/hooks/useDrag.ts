@@ -1,8 +1,9 @@
 import * as React from 'react';
+import type { Direction } from '../interface';
 
 export default function useDrag(
   containerRef: React.RefObject<HTMLDivElement>,
-  direction: 'vertical' | 'rtl' | 'ltr',
+  direction: Direction,
   rawValues: number[],
   min: number,
   max: number,
@@ -53,7 +54,7 @@ export default function useDrag(
       let offSetPercent: number;
       switch (direction) {
         case 'vertical':
-          offSetPercent = offsetY / height;
+          offSetPercent = -offsetY / height;
           break;
 
         case 'rtl':
