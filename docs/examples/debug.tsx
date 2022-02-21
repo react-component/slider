@@ -6,7 +6,9 @@ export default () => {
   const [range, setRange] = React.useState(true);
 
   return (
-    <div>
+    <div style={{
+      // transform: 'scale(0.5)',
+    }}>
       <label>
         <input type="checkbox" checked={range} onChange={() => setRange(!range)} />
         Range

@@ -1,16 +1,16 @@
+import SliderContext from '../context';
 import * as React from 'react';
 
 export interface HandleProps {
   prefixCls: string;
   value: number;
   valueIndex: number;
-  max: number;
-  min: number;
   onStartMove: (e: React.MouseEvent, valueIndex: number) => void;
 }
 
 const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
-  const { prefixCls, value, valueIndex, max, min, onStartMove } = props;
+  const { prefixCls, value, valueIndex, onStartMove } = props;
+  const { min, max } = React.useContext(SliderContext);
 
   // ============================ Offset ============================
   const offset = (value - min) / (max - min);

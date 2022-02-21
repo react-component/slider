@@ -5,6 +5,7 @@ import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { HandlesRef } from './Handles';
 import Handles from './Handles';
 import useDrag from './hooks/useDrag';
+import SliderContext from './context';
 
 export interface SliderProps {
   prefixCls?: string;
@@ -17,14 +18,16 @@ export interface SliderProps {
   value?: number | number[];
   defaultValue?: number | number[];
   step?: number | null;
+  range?: boolean;
   onChange?: (value: number | number[]) => void;
 
-  range?: boolean;
+  // Direction
+  reverse?: boolean;
 
   // vertical?: boolean;
   // included?: boolean;
   // disabled?: boolean;
-  // reverse?: boolean;
+
   // // trackStyle?: React.CSSProperties | React.CSSProperties[];
   // // handleStyle?: React.CSSProperties | React.CSSProperties[];
   // autoFocus?: boolean;
@@ -43,7 +46,6 @@ export interface SliderProps {
   // vertical?: boolean;
   // included?: boolean;
   // disabled?: boolean;
-  // reverse?: boolean;
   // minimumTrackStyle?: React.CSSProperties;
   // trackStyle?: React.CSSProperties;
   // handleStyle?: React.CSSProperties;
@@ -91,6 +93,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     defaultValue,
     range,
     onChange,
+
+    // Direction
+    reverse,
   } = props;
 
   const railRef = React.useRef<HTMLDivElement>();
@@ -141,15 +146,15 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================= Drag =============================
   const handlesRef = React.useRef<HandlesRef>();
-  const [dragging, setDragging] = React.useState(false);
 
-  const [draggingValue, setDraggingValue] = React.useState(null);
-  const [cacheValues, setCacheValues] = React.useState(rawValues);
-  React.useEffect(() => {
-    if (!dragging) {
-      setCacheValues(rawValues);
-    }
-  }, [rawValues, dragging]);
+  const [dragging, draggingValue, cacheValues, onStartMove] = useDrag(
+    railRef,
+    rawValues,
+    min,
+    max,
+    formatValue,
+    triggerChange,
+  );
 
   // Auto focus for updated handle
   React.useEffect(() => {
@@ -159,54 +164,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
   }, [dragging]);
 
-  const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
-    const originValue = cacheValues[valueIndex];
-    const nextValue = originValue + offsetPercent * (max - min);
-    const cloneCacheValues = [...cacheValues];
-    const formattedValue = formatValue(nextValue);
-    cloneCacheValues[valueIndex] = formattedValue;
-
-    setDraggingValue(formattedValue);
-    setCacheValues(cloneCacheValues);
-    triggerChange(cloneCacheValues);
-
-    return formattedValue;
-  };
-
-  const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
-    e.preventDefault();
-    setDragging(true);
-
-    const { pageX: startX, pageY: startY } = e;
-    (e.target as HTMLDivElement).focus();
-
-    // Moving
-    const onMouseMove = (event: MouseEvent) => {
-      event.preventDefault();
-
-      const { pageX: moveX, pageY: moveY } = event;
-      const offsetX = moveX - startX;
-      const offsetY = moveY - startY;
-
-      const { width, height } = railRef.current.getBoundingClientRect();
-      const offSetPercent = offsetX / width;
-      updateCacheValue(valueIndex, offSetPercent);
-    };
-
-    // End
-    const onMouseUp = (event: MouseEvent) => {
-      event.preventDefault();
-
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
-
-      setDragging(false);
-    };
-
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('mousemove', onMouseMove);
-  };
-
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
     focus: () => {
@@ -215,21 +172,30 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     blur: () => {},
   }));
 
+  // =========================== Context ============================
+  const context = React.useMemo(
+    () => ({
+      min,
+      max,
+    }),
+    [min, max],
+  );
+
   // ============================ Render ============================
   return (
-    <div className={classNames(prefixCls, className)} style={style}>
-      <div className={`${prefixCls}-rail`} ref={railRef} />
-      <div className={`${prefixCls}-track`} />
-      <Handles
-        ref={handlesRef}
-        prefixCls={prefixCls}
-        values={cacheValues}
-        onStartMove={onStartMove}
-        max={max}
-        min={min}
-      />
-      <div className={`${prefixCls}-mark`} />
-    </div>
+    <SliderContext.Provider value={context}>
+      <div className={classNames(prefixCls, className)} style={style}>
+        <div className={`${prefixCls}-rail`} ref={railRef} />
+        <div className={`${prefixCls}-track`} />
+        <Handles
+          ref={handlesRef}
+          prefixCls={prefixCls}
+          values={cacheValues}
+          onStartMove={onStartMove}
+        />
+        <div className={`${prefixCls}-mark`} />
+      </div>
+    </SliderContext.Provider>
   );
 });
 

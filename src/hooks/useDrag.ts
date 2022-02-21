@@ -2,21 +2,44 @@ import * as React from 'react';
 
 export default function useDrag(
   containerRef: React.RefObject<HTMLDivElement>,
-  values: number[],
-  onValueChange: (valueIndex: number, offSetPercent: number) => void,
+  rawValues: number[],
+  min: number,
+  max: number,
+  formatValue: (value: number) => number,
+  triggerChange: (values: number[]) => void,
 ) {
-  const [dragIndex, setDragIndex] = React.useState(-1);
+  const [draggingValue, setDraggingValue] = React.useState(null);
   const [dragging, setDragging] = React.useState(false);
-  const [cacheValues, setCacheValues] = React.useState(values);
+  const [cacheValues, setCacheValues] = React.useState(rawValues);
 
-  const onMouseDown = (e: React.MouseEvent, valueIndex: number) => {
+  React.useEffect(() => {
+    if (!dragging) {
+      setCacheValues(rawValues);
+    }
+  }, [rawValues, dragging]);
+
+  const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
+    const originValue = cacheValues[valueIndex];
+    const nextValue = originValue + offsetPercent * (max - min);
+    const cloneCacheValues = [...cacheValues];
+    const formattedValue = formatValue(nextValue);
+    cloneCacheValues[valueIndex] = formattedValue;
+
+    setDraggingValue(formattedValue);
+    setCacheValues(cloneCacheValues);
+    triggerChange(cloneCacheValues);
+
+    return formattedValue;
+  };
+
+  const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
     e.preventDefault();
+    setDragging(true);
 
     const { pageX: startX, pageY: startY } = e;
-    const cloneValues = [...values];
-    setDragging(true);
-    setDragIndex(valueIndex);
+    (e.target as HTMLDivElement).focus();
 
+    // Moving
     const onMouseMove = (event: MouseEvent) => {
       event.preventDefault();
 
@@ -26,8 +49,10 @@ export default function useDrag(
 
       const { width, height } = containerRef.current.getBoundingClientRect();
       const offSetPercent = offsetX / width;
-      onValueChange(valueIndex, offSetPercent);
+      updateCacheValue(valueIndex, offSetPercent);
     };
+
+    // End
     const onMouseUp = (event: MouseEvent) => {
       event.preventDefault();
 
@@ -35,14 +60,11 @@ export default function useDrag(
       document.removeEventListener('mousemove', onMouseMove);
 
       setDragging(false);
-      setDragIndex(-1);
     };
 
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
   };
 
-  const mergedValues = dragging ? cacheValues : values;
-
-  return [onMouseDown, mergedValues];
+  return [dragging, draggingValue, cacheValues, onStartMove];
 }

@@ -5,8 +5,6 @@ export interface HandlesProps {
   prefixCls: string;
   values: number[];
   onStartMove: (e: React.MouseEvent, value: number) => void;
-  max: number;
-  min: number;
 }
 
 export interface HandlesRef {
@@ -14,7 +12,7 @@ export interface HandlesRef {
 }
 
 const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
-  const { prefixCls, onStartMove, values, max, min } = props;
+  const { prefixCls, onStartMove, values } = props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
 
   React.useImperativeHandle(ref, () => ({
@@ -39,8 +37,6 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
           value={value}
           valueIndex={index}
           onStartMove={onStartMove}
-          max={max}
-          min={min}
         />
       ))}
     </>
