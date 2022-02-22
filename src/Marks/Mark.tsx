@@ -7,10 +7,11 @@ export interface MarkProps {
   children?: React.ReactNode;
   style?: React.CSSProperties;
   value: number;
+  onClick: (value: number) => void;
 }
 
 export default function Mark(props: MarkProps) {
-  const { prefixCls, style, children, value } = props;
+  const { prefixCls, style, children, value, onClick } = props;
   const { min, max, direction } = React.useContext(SliderContext);
 
   const textCls = `${prefixCls}-text`;
@@ -25,6 +26,9 @@ export default function Mark(props: MarkProps) {
       style={{
         ...positionStyle,
         ...style,
+      }}
+      onClick={() => {
+        onClick(value);
       }}
     >
       {children}

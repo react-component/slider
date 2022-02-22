@@ -13,10 +13,11 @@ export interface InternalMarkObj extends MarkObj {
 export interface MarksProps {
   prefixCls: string;
   marks?: InternalMarkObj[];
+  onClick: (value: number) => void;
 }
 
 export default function Marks(props: MarksProps) {
-  const { prefixCls, marks } = props;
+  const { prefixCls, marks, onClick } = props;
 
   const markPrefixCls = `${prefixCls}-mark`;
 
@@ -28,7 +29,13 @@ export default function Marks(props: MarksProps) {
   return (
     <div className={markPrefixCls}>
       {marks.map(({ value, style, label }) => (
-        <Mark key={value} prefixCls={markPrefixCls} style={style} value={value}>
+        <Mark
+          key={value}
+          prefixCls={markPrefixCls}
+          style={style}
+          value={value}
+          onClick={onClick}
+        >
           {label}
         </Mark>
       ))}

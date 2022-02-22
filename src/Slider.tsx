@@ -185,7 +185,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     alignValues.forEach((alignValue) => {
       const dist = Math.abs(formatNextValue - alignValue);
-      if (dist < closeDist) {
+      if (dist <= closeDist) {
         closeValue = alignValue;
         closeDist = dist;
       }
@@ -210,6 +210,27 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // We set this later since it will re-render component immediately
     setValue(cloneNextValues);
+  };
+
+  const changeToCloseValue = (newValue: number) => {
+    if (!disabled) {
+      let valueIndex = 0;
+      let valueDist = max - min;
+
+      rawValues.forEach((val, index) => {
+        const dist = Math.abs(newValue - val);
+        if (dist <= valueDist) {
+          valueDist = dist;
+          valueIndex = index;
+        }
+      });
+
+      // Create new values
+      const cloneNextValues = [...rawValues];
+      cloneNextValues[valueIndex] = newValue;
+
+      triggerChange(cloneNextValues);
+    }
   };
 
   // ============================= Drag =============================
@@ -293,7 +314,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           onBlur={onBlur}
         />
 
-        <Marks prefixCls={prefixCls} marks={markList} />
+        <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />
       </div>
     </SliderContext.Provider>
   );
