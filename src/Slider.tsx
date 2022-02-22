@@ -4,12 +4,13 @@ import shallowEqual from 'shallowequal';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { HandlesRef } from './Handles';
 import Handles from './Handles';
+import type { HandlesProps } from './Handles';
 import useDrag from './hooks/useDrag';
 import SliderContext from './context';
 import type { SliderContextProps } from './context';
 import Track from './Track';
 import type { Direction } from './interface';
-import Marks from './Marks';
+import Marks, { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
 import type { MarksProps } from './Marks';
 import Steps from './Steps';
@@ -17,6 +18,7 @@ import Steps from './Steps';
 /**
  * New:
  * - click mark to update range value
+ * - handleRender
  */
 
 export interface SliderProps {
@@ -50,8 +52,12 @@ export interface SliderProps {
   handleStyle?: React.CSSProperties;
 
   // Decorations
-  marks?: MarksProps['marks'];
+  marks?: Record<string | number, React.ReactNode | MarkObj>;
   dots?: boolean;
+
+  // Components
+  handleRender?: HandlesProps['handleRender'];
+
   // draggableTrack?: boolean;
   // onBeforeChange?: (value: number) => void;
   // included?: boolean;
@@ -121,6 +127,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     // Decorations
     marks,
     dots,
+
+    // Components
+    handleRender,
   } = props;
 
   const containerRef = React.useRef<HTMLDivElement>();
@@ -128,7 +137,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const direction: Direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
 
   // ============================= Step =============================
-  const mergedStep = React.useMemo(() => (step <= 0 ? 1 : step), [step]);
+  const mergedStep = React.useMemo(() => (step !== null && step <= 0 ? 1 : step), [step]);
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
@@ -279,7 +288,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
   };
 
-  const [dragging, draggingValue, cacheValues, onStartMove] = useDrag(
+  const [draggingIndex, draggingValue, cacheValues, onStartMove] = useDrag(
     containerRef,
     direction,
     rawValues,
@@ -291,6 +300,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   );
 
   // Auto focus for updated handle
+  const dragging = draggingIndex !== -1;
   React.useEffect(() => {
     if (!dragging) {
       const valueIndex = rawValues.lastIndexOf(draggingValue);
@@ -366,9 +376,11 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           prefixCls={prefixCls}
           style={handleStyle}
           values={cacheValues}
+          draggingIndex={draggingIndex}
           onStartMove={onStartMove}
           onFocus={onFocus}
           onBlur={onBlur}
+          handleRender={handleRender}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />

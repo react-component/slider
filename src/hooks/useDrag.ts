@@ -12,14 +12,14 @@ export default function useDrag(
   finishChange: () => void,
 ) {
   const [draggingValue, setDraggingValue] = React.useState(null);
-  const [dragging, setDragging] = React.useState(false);
+  const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
 
   React.useEffect(() => {
-    if (!dragging) {
+    if (draggingIndex === -1) {
       setCacheValues(rawValues);
     }
-  }, [rawValues, dragging]);
+  }, [rawValues, draggingIndex]);
 
   const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
     const originValue = cacheValues[valueIndex];
@@ -38,7 +38,7 @@ export default function useDrag(
   const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
     e.preventDefault();
     e.stopPropagation();
-    setDragging(true);
+    setDraggingIndex(valueIndex);
 
     const { pageX: startX, pageY: startY } = e;
     (e.target as HTMLDivElement).focus();
@@ -76,7 +76,7 @@ export default function useDrag(
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
 
-      setDragging(false);
+      setDraggingIndex(-1);
       finishChange();
     };
 
@@ -84,5 +84,5 @@ export default function useDrag(
     document.addEventListener('mousemove', onMouseMove);
   };
 
-  return [dragging, draggingValue, cacheValues, onStartMove];
+  return [draggingIndex, draggingValue, cacheValues, onStartMove];
 }

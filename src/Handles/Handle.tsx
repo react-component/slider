@@ -1,29 +1,42 @@
 import * as React from 'react';
+import classNames from 'classnames';
 import SliderContext from '../context';
 import { getDirectionStyle } from '../util';
+
+interface RenderProps {
+  prefixCls: string;
+  value: number;
+  dragging: boolean;
+}
 
 export interface HandleProps {
   prefixCls: string;
   style?: React.CSSProperties;
   value: number;
   valueIndex: number;
+  dragging: boolean;
   onStartMove: (e: React.MouseEvent, valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  render?: (origin: React.ReactElement, props: RenderProps) => React.ReactElement;
 }
 
 const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
-  const { prefixCls, value, valueIndex, onStartMove, style, ...restProps } = props;
+  const { prefixCls, value, valueIndex, onStartMove, style, render, dragging, ...restProps } =
+    props;
   const { min, max, direction, disabled } = React.useContext(SliderContext);
+  const handlePrefixCls = `${prefixCls}-handle`;
 
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);
 
   // ============================ Render ============================
-  return (
+  let handleNode = (
     <div
       ref={ref}
-      className={`${prefixCls}-handle`}
+      className={classNames(handlePrefixCls, {
+        [`${handlePrefixCls}-dragging`]: dragging,
+      })}
       style={{
         ...positionStyle,
         ...style,
@@ -42,6 +55,17 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
       {...restProps}
     />
   );
+
+  // Customize
+  if (render) {
+    handleNode = render(handleNode, {
+      prefixCls,
+      value,
+      dragging,
+    });
+  }
+
+  return handleNode;
 });
 
 if (process.env.NODE_ENV !== 'production') {

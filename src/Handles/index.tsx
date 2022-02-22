@@ -1,5 +1,6 @@
 import * as React from 'react';
 import Handle from './Handle';
+import type { HandleProps } from './Handle';
 
 export interface HandlesProps {
   prefixCls: string;
@@ -8,6 +9,8 @@ export interface HandlesProps {
   onStartMove: (e: React.MouseEvent, value: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  handleRender?: HandleProps['render'];
+  draggingIndex: number;
 }
 
 export interface HandlesRef {
@@ -15,7 +18,8 @@ export interface HandlesRef {
 }
 
 const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
-  const { prefixCls, style, onStartMove, values, ...restProps } = props;
+  const { prefixCls, style, onStartMove, values, handleRender, draggingIndex, ...restProps } =
+    props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
 
   React.useImperativeHandle(ref, () => ({
@@ -35,12 +39,14 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
               handlesRef.current[index] = node;
             }
           }}
+          dragging={draggingIndex === index}
           prefixCls={prefixCls}
           style={style}
           key={index}
           value={value}
           valueIndex={index}
           onStartMove={onStartMove}
+          render={handleRender}
           {...restProps}
         />
       ))}
