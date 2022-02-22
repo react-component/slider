@@ -9,7 +9,10 @@ export default () => {
   const [vertical, setVertical] = React.useState(false);
 
   return (
-    <div>
+    <div style={{
+      transform: 'scale(1.5)',
+      transformOrigin: 'top left',
+    }}>
       <div>
         <label>
           <input type="checkbox" checked={disabled} onChange={() => setDisabled(!disabled)} />
@@ -29,7 +32,7 @@ export default () => {
         </label>
       </div>
 
-      <div style={{ height: 300 }}>
+      <div style={{ height: 300, width: 600 }}>
         <Slider
           disabled={disabled}
           reverse={reverse}

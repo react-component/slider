@@ -9,8 +9,14 @@ import SliderContext from './context';
 import type { SliderContextProps } from './context';
 import Track from './Track';
 import type { Direction } from './interface';
-import Marks, { InternalMarkObj } from './Marks';
+import Marks from './Marks';
+import type { InternalMarkObj } from './Marks';
 import type { MarksProps } from './Marks';
+
+/**
+ * New:
+ * - click mark to update range value
+ */
 
 export interface SliderProps {
   prefixCls?: string;
@@ -115,7 +121,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     marks,
   } = props;
 
-  const railRef = React.useRef<HTMLDivElement>();
+  const containerRef = React.useRef<HTMLDivElement>();
 
   const direction: Direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
 
@@ -180,7 +186,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
 
     // Align with marks
-    let closeValue = markList[0].value;
+    let closeValue = alignValues[0];
     let closeDist = max - min;
 
     alignValues.forEach((alignValue) => {
@@ -233,6 +239,31 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
   };
 
+  // ============================ Click =============================
+  const onSliderMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
+
+    const { width, height, left, bottom, right } = containerRef.current.getBoundingClientRect();
+    const { clientX, clientY } = e;
+
+    let percent: number;
+    switch (direction) {
+      case 'vertical':
+        percent = (bottom - clientY) / height;
+        break;
+
+      case 'rtl':
+        percent = (right - clientX) / width;
+        break;
+
+      default:
+        percent = (clientX - left) / width;
+    }
+
+    const nextValue = min + percent * (max - min);
+    changeToCloseValue(formatValue(nextValue));
+  };
+
   // ============================= Drag =============================
   const handlesRef = React.useRef<HandlesRef>();
 
@@ -244,7 +275,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   };
 
   const [dragging, draggingValue, cacheValues, onStartMove] = useDrag(
-    railRef,
+    containerRef,
     direction,
     rawValues,
     min,
@@ -292,6 +323,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   return (
     <SliderContext.Provider value={context}>
       <div
+        ref={containerRef}
         className={classNames(prefixCls, className, {
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-vertical`]: direction === 'vertical',
@@ -299,8 +331,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           [`${prefixCls}-rtl`]: direction === 'rtl',
         })}
         style={style}
+        onMouseDown={onSliderMouseDown}
       >
-        <div className={`${prefixCls}-rail`} ref={railRef} />
+        <div className={`${prefixCls}-rail`} />
 
         {included && <Track prefixCls={prefixCls} style={trackStyle} values={cacheValues} />}
 

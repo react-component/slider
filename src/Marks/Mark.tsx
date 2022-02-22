@@ -27,6 +27,9 @@ export default function Mark(props: MarkProps) {
         ...positionStyle,
         ...style,
       }}
+      onMouseDown={(e) => {
+        e.stopPropagation();
+      }}
       onClick={() => {
         onClick(value);
       }}

@@ -37,6 +37,7 @@ export default function useDrag(
 
   const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
     e.preventDefault();
+    e.stopPropagation();
     setDragging(true);
 
     const { pageX: startX, pageY: startY } = e;
