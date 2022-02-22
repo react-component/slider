@@ -3,8 +3,11 @@ import Handle from './Handle';
 
 export interface HandlesProps {
   prefixCls: string;
+  style?: React.CSSProperties;
   values: number[];
   onStartMove: (e: React.MouseEvent, value: number) => void;
+  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
 }
 
 export interface HandlesRef {
@@ -12,7 +15,7 @@ export interface HandlesRef {
 }
 
 const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
-  const { prefixCls, onStartMove, values } = props;
+  const { prefixCls, style, onStartMove, values, ...restProps } = props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
 
   React.useImperativeHandle(ref, () => ({
@@ -33,10 +36,12 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
             }
           }}
           prefixCls={prefixCls}
+          style={style}
           key={index}
           value={value}
           valueIndex={index}
           onStartMove={onStartMove}
+          {...restProps}
         />
       ))}
     </>

@@ -3,31 +3,34 @@ import * as React from 'react';
 
 export interface HandleProps {
   prefixCls: string;
+  style?: React.CSSProperties;
   value: number;
   valueIndex: number;
   onStartMove: (e: React.MouseEvent, valueIndex: number) => void;
+  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
 }
 
 const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
-  const { prefixCls, value, valueIndex, onStartMove } = props;
-  const { min, max, direction } = React.useContext(SliderContext);
+  const { prefixCls, value, valueIndex, onStartMove, style, ...restProps } = props;
+  const { min, max, direction, disabled } = React.useContext(SliderContext);
 
   // ============================ Offset ============================
   const offset = (value - min) / (max - min);
 
-  const style: React.CSSProperties = {};
+  const positionStyle: React.CSSProperties = {};
 
   switch (direction) {
     case 'rtl':
-      style.right = `${offset * 100}%`;
+      positionStyle.right = `${offset * 100}%`;
       break;
 
     case 'vertical':
-      style.bottom = `${offset * 100}%`;
+      positionStyle.bottom = `${offset * 100}%`;
       break;
 
     default:
-      style.left = `${offset * 100}%`;
+      positionStyle.left = `${offset * 100}%`;
       break;
   }
 
@@ -36,9 +39,14 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     <div
       ref={ref}
       className={`${prefixCls}-handle`}
-      style={style}
+      style={{
+        ...positionStyle,
+        ...style,
+      }}
       onMouseDown={(e) => {
-        onStartMove(e, valueIndex);
+        if (!disabled) {
+          onStartMove(e, valueIndex);
+        }
       }}
       tabIndex={0}
       role="slider"
@@ -46,6 +54,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
       aria-valuemax={max}
       aria-valuenow={value}
       // aria-disabled="false"
+      {...restProps}
     />
   );
 });

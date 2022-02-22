@@ -3,6 +3,7 @@ import Slider from 'rc-slider';
 import '../../assets/index.less';
 
 export default () => {
+  const [disabled, setDisabled] = React.useState(false);
   const [range, setRange] = React.useState(false);
   const [reverse, setReverse] = React.useState(false);
   const [vertical, setVertical] = React.useState(false);
@@ -10,6 +11,10 @@ export default () => {
   return (
     <div>
       <div>
+        <label>
+          <input type="checkbox" checked={disabled} onChange={() => setDisabled(!disabled)} />
+          Disabled
+        </label>
         <label>
           <input type="checkbox" checked={range} onChange={() => setRange(!range)} />
           Range
@@ -26,6 +31,7 @@ export default () => {
 
       <div style={{ height: 300 }}>
         <Slider
+          disabled={disabled}
           reverse={reverse}
           vertical={vertical}
           range={range}

@@ -5,7 +5,8 @@ import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { HandlesRef } from './Handles';
 import Handles from './Handles';
 import useDrag from './hooks/useDrag';
-import SliderContext, { SliderContextProps } from './context';
+import SliderContext from './context';
+import type { SliderContextProps } from './context';
 import Track from './Track';
 import type { Direction } from './interface';
 
@@ -13,6 +14,12 @@ export interface SliderProps {
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
+
+  // Status
+  disabled?: boolean;
+  autoFocus?: boolean;
+  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
 
   // Value
   min?: number;
@@ -22,6 +29,7 @@ export interface SliderProps {
   step?: number | null;
   range?: boolean;
   onChange?: (value: number | number[]) => void;
+  onAfterChange?: (value: number | number[]) => void;
 
   // Direction
   reverse?: boolean;
@@ -29,29 +37,16 @@ export interface SliderProps {
 
   // Style
   included?: boolean;
+  trackStyle?: React.CSSProperties;
+  handleStyle?: React.CSSProperties;
 
-  // disabled?: boolean;
-
-  // // trackStyle?: React.CSSProperties | React.CSSProperties[];
-  // // handleStyle?: React.CSSProperties | React.CSSProperties[];
-  // autoFocus?: boolean;
-  // onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  // onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   // marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
   // dots?: boolean;
-  // // maximumTrackStyle?: React.CSSProperties;
-  // style?: React.CSSProperties;
-  // // railStyle?: React.CSSProperties;
-  // // dotStyle?: React.CSSProperties;
-  // // activeDotStyle?: React.CSSProperties;
   // draggableTrack?: boolean;
   // onBeforeChange?: (value: number) => void;
-  // onAfterChange?: (value: number) => void;
   // included?: boolean;
   // disabled?: boolean;
   // minimumTrackStyle?: React.CSSProperties;
-  // trackStyle?: React.CSSProperties;
-  // handleStyle?: React.CSSProperties;
   // tabIndex?: number;
   // ariaLabelForHandle?: string;
   // ariaLabelledByForHandle?: string;
@@ -88,6 +83,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     className,
     style,
 
+    // Status
+    disabled,
+    autoFocus,
+    onFocus,
+    onBlur,
+
     // Value
     min = 0,
     max = 100,
@@ -96,6 +97,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     defaultValue,
     range,
     onChange,
+    onAfterChange,
 
     // Direction
     reverse,
@@ -103,6 +105,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Style
     included = true,
+    trackStyle,
+    handleStyle,
   } = props;
 
   const railRef = React.useRef<HTMLDivElement>();
@@ -159,6 +163,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // ============================= Drag =============================
   const handlesRef = React.useRef<HandlesRef>();
 
+  const finishChange = () => {
+    if (onAfterChange) {
+      const triggerValue = range ? rawValuesRef.current : rawValuesRef.current[0];
+      onAfterChange(triggerValue);
+    }
+  };
+
   const [dragging, draggingValue, cacheValues, onStartMove] = useDrag(
     railRef,
     direction,
@@ -167,6 +178,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     max,
     formatValue,
     triggerChange,
+    finishChange,
   );
 
   // Auto focus for updated handle
@@ -185,14 +197,22 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     blur: () => {},
   }));
 
+  // ============================ Effect ============================
+  React.useEffect(() => {
+    if (autoFocus) {
+      handlesRef.current.focus(0);
+    }
+  }, []);
+
   // =========================== Context ============================
   const context = React.useMemo<SliderContextProps>(
     () => ({
       min,
       max,
       direction,
+      disabled,
     }),
-    [min, max, direction],
+    [min, max, direction, disabled],
   );
 
   // ============================ Render ============================
@@ -200,6 +220,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     <SliderContext.Provider value={context}>
       <div
         className={classNames(prefixCls, className, {
+          [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-vertical`]: direction === 'vertical',
           [`${prefixCls}-ltr`]: direction === 'ltr',
           [`${prefixCls}-rtl`]: direction === 'rtl',
@@ -208,13 +229,16 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       >
         <div className={`${prefixCls}-rail`} ref={railRef} />
 
-        {included && <Track prefixCls={prefixCls} values={cacheValues} />}
+        {included && <Track prefixCls={prefixCls} style={trackStyle} values={cacheValues} />}
 
         <Handles
           ref={handlesRef}
           prefixCls={prefixCls}
+          style={handleStyle}
           values={cacheValues}
           onStartMove={onStartMove}
+          onFocus={onFocus}
+          onBlur={onBlur}
         />
       </div>
       <div className={`${prefixCls}-mark`} />

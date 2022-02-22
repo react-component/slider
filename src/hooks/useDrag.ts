@@ -9,6 +9,7 @@ export default function useDrag(
   max: number,
   formatValue: (value: number) => number,
   triggerChange: (values: number[]) => void,
+  finishChange: () => void,
 ) {
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [dragging, setDragging] = React.useState(false);
@@ -75,6 +76,7 @@ export default function useDrag(
       document.removeEventListener('mousemove', onMouseMove);
 
       setDragging(false);
+      finishChange();
     };
 
     document.addEventListener('mouseup', onMouseUp);
