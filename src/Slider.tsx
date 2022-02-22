@@ -298,6 +298,19 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
   }, [dragging]);
 
+  // =========================== Included ===========================
+  // Provide a range values with included [min, max]
+  // Used for Track, Mark & Dot
+  const [includedStart, includedEnd] = React.useMemo(() => {
+    const cloneValues = [...rawValues].sort((a, b) => a - b);
+
+    if (cloneValues.length === 1) {
+      return [min, cloneValues[0]];
+    }
+
+    return cloneValues;
+  }, [rawValues, min]);
+
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
     focus: () => {
@@ -321,8 +334,11 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       direction,
       disabled,
       step: mergedStep,
+      included,
+      includedStart,
+      includedEnd,
     }),
-    [min, max, direction, disabled, mergedStep],
+    [min, max, direction, disabled, mergedStep, included, includedStart, includedEnd],
   );
 
   // ============================ Render ============================
@@ -341,7 +357,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       >
         <div className={`${prefixCls}-rail`} />
 
-        {included && <Track prefixCls={prefixCls} style={trackStyle} values={cacheValues} />}
+        {included && <Track prefixCls={prefixCls} style={trackStyle} />}
 
         <Steps prefixCls={prefixCls} marks={markList} dots={dots} />
 

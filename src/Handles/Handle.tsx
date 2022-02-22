@@ -38,7 +38,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
       aria-valuemin={min}
       aria-valuemax={max}
       aria-valuenow={value}
-      // aria-disabled="false"
+      aria-disabled={disabled}
       {...restProps}
     />
   );
