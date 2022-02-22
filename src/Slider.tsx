@@ -173,26 +173,25 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     let formatNextValue = Math.min(max, val);
     formatNextValue = Math.max(min, formatNextValue);
 
+    // List align values
+    const alignValues = markList.map((mark) => mark.value);
     if (step !== null) {
-      // Align with step
-      formatNextValue = min + Math.round((formatNextValue - min) / step) * step;
-    } else if (markList.length) {
-      // Align with marks
-      let closeValue = markList[0].value;
-      let closeDist = max - min;
-
-      markList.forEach((mark) => {
-        const dist = Math.abs(formatNextValue - mark.value);
-        if (dist < closeDist) {
-          closeValue = mark.value;
-          closeDist = dist;
-        }
-      });
-
-      return closeValue;
+      alignValues.push(min + Math.round((formatNextValue - min) / step) * step);
     }
 
-    return formatNextValue;
+    // Align with marks
+    let closeValue = markList[0].value;
+    let closeDist = max - min;
+
+    alignValues.forEach((alignValue) => {
+      const dist = Math.abs(formatNextValue - alignValue);
+      if (dist < closeDist) {
+        closeValue = alignValue;
+        closeDist = dist;
+      }
+    });
+
+    return closeValue;
   };
 
   // =========================== onChange ===========================

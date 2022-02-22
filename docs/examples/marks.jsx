@@ -28,7 +28,7 @@ export default () => (
       <Slider min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
     </div>
 
-    {/* <div style={style}>
+    <div style={style}>
       <p>Slider with marks and steps</p>
       <Slider dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
@@ -48,11 +48,11 @@ export default () => (
 
     <div style={style}>
       <p>Range with marks</p>
-      <Slider.Range min={-10} marks={marks} onChange={log} defaultValue={[20, 25, 30, 40]} />
+      <Slider range min={-10} marks={marks} onChange={log} defaultValue={[20, 25, 30, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider.Range min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
-    </div> */}
+      <Slider range min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
+    </div>
   </div>
 );
