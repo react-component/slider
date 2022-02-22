@@ -12,6 +12,7 @@ import type { Direction } from './interface';
 import Marks from './Marks';
 import type { InternalMarkObj } from './Marks';
 import type { MarksProps } from './Marks';
+import Steps from './Steps';
 
 /**
  * New:
@@ -50,7 +51,7 @@ export interface SliderProps {
 
   // Decorations
   marks?: MarksProps['marks'];
-  // dots?: boolean;
+  dots?: boolean;
   // draggableTrack?: boolean;
   // onBeforeChange?: (value: number) => void;
   // included?: boolean;
@@ -119,11 +120,15 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Decorations
     marks,
+    dots,
   } = props;
 
   const containerRef = React.useRef<HTMLDivElement>();
 
   const direction: Direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
+
+  // ============================= Step =============================
+  const mergedStep = React.useMemo(() => (step <= 0 ? 1 : step), [step]);
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
@@ -181,8 +186,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // List align values
     const alignValues = markList.map((mark) => mark.value);
-    if (step !== null) {
-      alignValues.push(min + Math.round((formatNextValue - min) / step) * step);
+    if (mergedStep !== null) {
+      alignValues.push(min + Math.round((formatNextValue - min) / mergedStep) * mergedStep);
     }
 
     // Align with marks
@@ -315,8 +320,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       max,
       direction,
       disabled,
+      step: mergedStep,
     }),
-    [min, max, direction, disabled],
+    [min, max, direction, disabled, mergedStep],
   );
 
   // ============================ Render ============================
@@ -336,6 +342,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         <div className={`${prefixCls}-rail`} />
 
         {included && <Track prefixCls={prefixCls} style={trackStyle} values={cacheValues} />}
+
+        <Steps prefixCls={prefixCls} marks={markList} dots={dots} />
 
         <Handles
           ref={handlesRef}

@@ -6,12 +6,14 @@ export interface SliderContextProps {
   max: number;
   direction: Direction;
   disabled?: boolean;
+  step: number | null;
 }
 
 const SliderContext = React.createContext<SliderContextProps>({
   min: 0,
   max: 0,
   direction: 'ltr',
+  step: 1,
 });
 
 export default SliderContext;
