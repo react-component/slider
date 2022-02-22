@@ -9,6 +9,8 @@ import SliderContext from './context';
 import type { SliderContextProps } from './context';
 import Track from './Track';
 import type { Direction } from './interface';
+import Marks from './Marks';
+import type { MarksProps } from './Marks';
 
 export interface SliderProps {
   prefixCls?: string;
@@ -40,7 +42,8 @@ export interface SliderProps {
   trackStyle?: React.CSSProperties;
   handleStyle?: React.CSSProperties;
 
-  // marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
+  // Decorations
+  marks?: MarksProps['marks'];
   // dots?: boolean;
   // draggableTrack?: boolean;
   // onBeforeChange?: (value: number) => void;
@@ -107,6 +110,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     included = true,
     trackStyle,
     handleStyle,
+
+    // Decorations
+    marks,
   } = props;
 
   const railRef = React.useRef<HTMLDivElement>();
@@ -240,8 +246,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           onFocus={onFocus}
           onBlur={onBlur}
         />
+
+        <Marks prefixCls={prefixCls} marks={marks} />
       </div>
-      <div className={`${prefixCls}-mark`} />
     </SliderContext.Provider>
   );
 });

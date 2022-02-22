@@ -1,5 +1,6 @@
-import SliderContext from '../context';
 import * as React from 'react';
+import SliderContext from '../context';
+import { getDirectionStyle } from '../util';
 
 export interface HandleProps {
   prefixCls: string;
@@ -16,23 +17,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
   const { min, max, direction, disabled } = React.useContext(SliderContext);
 
   // ============================ Offset ============================
-  const offset = (value - min) / (max - min);
-
-  const positionStyle: React.CSSProperties = {};
-
-  switch (direction) {
-    case 'rtl':
-      positionStyle.right = `${offset * 100}%`;
-      break;
-
-    case 'vertical':
-      positionStyle.bottom = `${offset * 100}%`;
-      break;
-
-    default:
-      positionStyle.left = `${offset * 100}%`;
-      break;
-  }
+  const positionStyle = getDirectionStyle(direction, value, min, max);
 
   // ============================ Render ============================
   return (
