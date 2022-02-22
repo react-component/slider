@@ -9,7 +9,7 @@ import SliderContext from './context';
 import type { SliderContextProps } from './context';
 import Track from './Track';
 import type { Direction } from './interface';
-import Marks from './Marks';
+import Marks, { InternalMarkObj } from './Marks';
 import type { MarksProps } from './Marks';
 
 export interface SliderProps {
@@ -119,6 +119,34 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   const direction: Direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
 
+  // ============================ Marks =============================
+  const markList = React.useMemo<InternalMarkObj[]>(() => {
+    const keys = Object.keys(marks || {});
+
+    return keys
+      .map((key) => {
+        const mark = marks[key];
+        const markObj: InternalMarkObj = {
+          value: Number(key),
+        };
+
+        if (
+          mark &&
+          typeof mark === 'object' &&
+          !React.isValidElement(mark) &&
+          ('label' in mark || 'style' in mark)
+        ) {
+          markObj.style = mark.style;
+          markObj.label = mark.label;
+        } else {
+          markObj.label = mark;
+        }
+
+        return markObj;
+      })
+      .sort((a, b) => a.value - b.value);
+  }, [marks]);
+
   // ============================ Values ============================
   const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
     value,
@@ -144,7 +172,26 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const formatValue = (val: number) => {
     let formatNextValue = Math.min(max, val);
     formatNextValue = Math.max(min, formatNextValue);
-    formatNextValue = min + Math.round((formatNextValue - min) / step) * step;
+
+    if (step !== null) {
+      // Align with step
+      formatNextValue = min + Math.round((formatNextValue - min) / step) * step;
+    } else if (markList.length) {
+      // Align with marks
+      let closeValue = markList[0].value;
+      let closeDist = max - min;
+
+      markList.forEach((mark) => {
+        const dist = Math.abs(formatNextValue - mark.value);
+        if (dist < closeDist) {
+          closeValue = mark.value;
+          closeDist = dist;
+        }
+      });
+
+      return closeValue;
+    }
+
     return formatNextValue;
   };
 
@@ -247,7 +294,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           onBlur={onBlur}
         />
 
-        <Marks prefixCls={prefixCls} marks={marks} />
+        <Marks prefixCls={prefixCls} marks={markList} />
       </div>
     </SliderContext.Provider>
   );
