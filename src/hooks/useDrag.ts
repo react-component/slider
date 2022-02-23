@@ -13,6 +13,7 @@ export default function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
 ): [number, number, number[], (e: React.MouseEvent, valueIndex: number) => void] {
+  const [originDragValue, setOriginDragValue] = React.useState(null);
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
@@ -25,8 +26,7 @@ export default function useDrag(
 
   const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
     // Align value
-    const originValue = cacheValues[valueIndex];
-    let nextValue = originValue + offsetPercent * (max - min);
+    let nextValue = originDragValue + offsetPercent * (max - min);
 
     // Not pushable will make handle in the range
     if (!allowCross) {
@@ -77,11 +77,19 @@ export default function useDrag(
     return formattedValue;
   };
 
+  // Resolve closure
+  const updateCacheValueRef = React.useRef(updateCacheValue);
+  updateCacheValueRef.current = updateCacheValue;
+
   const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
     e.preventDefault();
     e.stopPropagation();
+
+    const originValue = rawValues[valueIndex];
+
     setDraggingIndex(valueIndex);
-    setDraggingValue(rawValues[valueIndex]);
+    setDraggingValue(originValue);
+    setOriginDragValue(originValue);
 
     const { pageX: startX, pageY: startY } = e;
     (e.target as HTMLDivElement).focus();
@@ -109,7 +117,7 @@ export default function useDrag(
         default:
           offSetPercent = offsetX / width;
       }
-      updateCacheValue(valueIndex, offSetPercent);
+      updateCacheValueRef.current(valueIndex, offSetPercent);
     };
 
     // End
