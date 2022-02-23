@@ -124,7 +124,7 @@ class ControlledRange extends React.Component<any, any> {
   }
 }
 
-class ControlledRangeDisableAcross extends React.Component {
+class ControlledRangeDisableAcross extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -140,7 +140,8 @@ class ControlledRangeDisableAcross extends React.Component {
 
   render() {
     return (
-      <Range
+      <Slider
+        range
         value={this.state.value}
         onChange={this.handleChange}
         allowCross={false}
@@ -197,7 +198,7 @@ export default () => (
       <p>Controlled Range</p>
       <ControlledRange />
     </div>
-    {/* <div style={style}>
+    <div style={style}>
       <p>Controlled Range, not allow across</p>
       <ControlledRangeDisableAcross />
     </div>
@@ -205,7 +206,7 @@ export default () => (
       <p>Controlled Range, not allow across, pushable=5</p>
       <ControlledRangeDisableAcross pushable={5} />
     </div>
-    <div style={style}>
+    {/* <div style={style}>
       <p>Multi Range</p>
       <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />
     </div>

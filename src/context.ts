@@ -10,6 +10,7 @@ export interface SliderContextProps {
   disabled?: boolean;
   included?: boolean;
   step: number | null;
+  range?: boolean;
 }
 
 const SliderContext = React.createContext<SliderContextProps>({

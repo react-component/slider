@@ -1,18 +1,24 @@
 import * as React from 'react';
-import SliderContext from './context';
-import { getOffset } from './util';
+import classNames from 'classnames';
+import SliderContext from '../context';
+import { getOffset } from '../util';
 
 export interface TrackProps {
   prefixCls: string;
   style?: React.CSSProperties;
+  start: number;
+  end: number;
+  index: number;
 }
 
 export default function Track(props: TrackProps) {
-  const { prefixCls, style } = props;
-  const { direction, includedStart, includedEnd, min, max } = React.useContext(SliderContext);
+  const { prefixCls, style, start, end, index } = props;
+  const { direction, min, max } = React.useContext(SliderContext);
 
-  const offsetStart = getOffset(includedStart, min, max);
-  const offsetEnd = getOffset(includedEnd, min, max);
+  const trackPrefixCls = `${prefixCls}-track`;
+
+  const offsetStart = getOffset(start, min, max);
+  const offsetEnd = getOffset(end, min, max);
 
   // ============================ Render ============================
   const positionStyle: React.CSSProperties = {};
@@ -35,7 +41,7 @@ export default function Track(props: TrackProps) {
 
   return (
     <div
-      className={`${prefixCls}-track`}
+      className={classNames(trackPrefixCls, `${trackPrefixCls}-${index + 1}`)}
       style={{
         ...positionStyle,
         ...style,

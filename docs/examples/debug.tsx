@@ -38,7 +38,7 @@ export default () => {
           reverse={reverse}
           vertical={vertical}
           range={range}
-          defaultValue={[48, 50]}
+          defaultValue={[30, 50]}
           onChange={(nextValues) => console.log('Change:', nextValues)}
         />
       </div>

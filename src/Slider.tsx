@@ -8,7 +8,7 @@ import type { HandlesProps } from './Handles';
 import useDrag from './hooks/useDrag';
 import SliderContext from './context';
 import type { SliderContextProps } from './context';
-import Track from './Track';
+import Tracks from './Tracks';
 import type { Direction } from './interface';
 import Marks, { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
@@ -19,7 +19,6 @@ import Steps from './Steps';
  * New:
  * - click mark to update range value
  * - handleRender
- * - Remove allowCross
  */
 
 export interface SliderProps<ValueType = number | number[]> {
@@ -38,8 +37,6 @@ export interface SliderProps<ValueType = number | number[]> {
   min?: number;
   max?: number;
   step?: number | null;
-  /** @deprecated This prop is removed and always allow drag cross the points */
-  allowCross?: boolean;
   value?: ValueType;
   defaultValue?: ValueType;
   onChange?: (value: ValueType) => void;
@@ -47,6 +44,10 @@ export interface SliderProps<ValueType = number | number[]> {
   onBeforeChange?: (value: ValueType) => void;
   /** @deprecated It's always better to use `onChange` instead */
   onAfterChange?: (value: ValueType) => void;
+
+  // Cross
+  allowCross?: boolean;
+  pushable?: boolean | number;
 
   // Direction
   reverse?: boolean;
@@ -92,6 +93,29 @@ export interface SliderProps<ValueType = number | number[]> {
   //   style?: React.CSSProperties;
   //   ref?: React.Ref<any>;
   // }) => React.ReactElement;
+
+  // count?: number;
+  // min?: number;
+  // max?: number;
+  // onChange?: (value: number[]) => void;
+  // onBeforeChange?: (value: number[]) => void;
+  // onAfterChange?: (value: number[]) => void;
+  // reverse?: boolean;
+  // vertical?: boolean;
+  // marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
+  // step?: number | null;
+  // threshold?: number;
+  // prefixCls?: string;
+  // included?: boolean;
+  // disabled?: boolean;
+  // trackStyle?: React.CSSProperties[];
+  // handleStyle?: React.CSSProperties[];
+  // tabIndex?: number | number[];
+  // ariaLabelGroupForHandles?: string | string[];
+  // ariaLabelledByGroupForHandles?: string | string[];
+  // ariaValueTextFormatterGroupForHandles?: ((value: number) => string)[];
+  // handle?: SliderProps['handle'];
+  // draggableTrack?: boolean;
 }
 
 export interface SliderRef {
@@ -122,6 +146,10 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     onBeforeChange,
     onAfterChange,
 
+    // Cross
+    allowCross = true,
+    pushable = false,
+
     // Direction
     reverse,
     vertical,
@@ -146,6 +174,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================= Step =============================
   const mergedStep = React.useMemo(() => (step !== null && step <= 0 ? 1 : step), [step]);
+
+  // ============================= Push =============================
+  const mergedPush = React.useMemo(() => (pushable >= 0 ? pushable : false), [pushable]);
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
@@ -327,6 +358,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     rawValues,
     min,
     max,
+    allowCross,
+    mergedPush,
     formatValue,
     triggerChange,
     finishChange,
@@ -348,17 +381,20 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [dragging]);
 
   // =========================== Included ===========================
+  const sortedCacheValues = React.useMemo(
+    () => [...cacheValues].sort((a, b) => a - b),
+    [cacheValues],
+  );
+
   // Provide a range values with included [min, max]
   // Used for Track, Mark & Dot
   const [includedStart, includedEnd] = React.useMemo(() => {
-    const cloneValues = [...rawValues].sort((a, b) => a - b);
-
-    if (cloneValues.length === 1) {
-      return [min, cloneValues[0]];
+    if (!range) {
+      return [min, sortedCacheValues[0]];
     }
 
-    return [cloneValues[0], cloneValues[cloneValues.length - 1]];
-  }, [rawValues, min]);
+    return [sortedCacheValues[0], sortedCacheValues[sortedCacheValues.length - 1]];
+  }, [sortedCacheValues, range, min]);
 
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
@@ -386,8 +422,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       included,
       includedStart,
       includedEnd,
+      range,
     }),
-    [min, max, direction, disabled, mergedStep, included, includedStart, includedEnd],
+    [min, max, direction, disabled, mergedStep, included, includedStart, includedEnd, range],
   );
 
   // ============================ Render ============================
@@ -406,7 +443,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       >
         <div className={`${prefixCls}-rail`} />
 
-        {included && <Track prefixCls={prefixCls} style={trackStyle} />}
+        <Tracks prefixCls={prefixCls} style={trackStyle} values={sortedCacheValues} />
 
         <Steps prefixCls={prefixCls} marks={markList} dots={dots} />
 
