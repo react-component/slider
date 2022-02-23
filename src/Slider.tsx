@@ -165,6 +165,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     handleRender,
   } = props as InternalSliderProps;
 
+  const handlesRef = React.useRef<HandlesRef>();
   const containerRef = React.useRef<HTMLDivElement>();
 
   const direction: Direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
@@ -251,14 +252,15 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const rawValuesRef = React.useRef(rawValues);
   rawValuesRef.current = rawValues;
 
+  const getTriggerValue = (triggerValues: number[]) => (range ? triggerValues : triggerValues[0]);
+
   const triggerChange = (nextValues: number[]) => {
     // Order first
     const cloneNextValues = [...nextValues].sort((a, b) => a - b);
 
     // Trigger event if needed
     if (onChange && !shallowEqual(cloneNextValues, rawValuesRef.current)) {
-      const triggerValue = range ? cloneNextValues : cloneNextValues[0];
-      onChange(triggerValue);
+      onChange(getTriggerValue(cloneNextValues));
     }
 
     // We set this later since it will re-render component immediately
@@ -311,13 +313,37 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     changeToCloseValue(formatValue(nextValue));
   };
 
+  // =========================== Keyboard ===========================
+  const [keyboardValue, setKeyboardValue] = React.useState<number>(null);
+
+  const onHandleChange = (nextValue: number, valueIndex: number) => {
+    const cloneNextValues = [...rawValues];
+    const formattedValue = formatValue(nextValue);
+    cloneNextValues[valueIndex] = formatValue(formattedValue);
+
+    onBeforeChange?.(getTriggerValue(rawValues));
+    triggerChange(cloneNextValues);
+    onAfterChange?.(getTriggerValue(cloneNextValues));
+
+    setKeyboardValue(formattedValue);
+  };
+
+  React.useEffect(() => {
+    if (keyboardValue !== null) {
+      const valueIndex = rawValues.indexOf(keyboardValue);
+      if (valueIndex >= 0) {
+        handlesRef.current.focus(valueIndex);
+      }
+    }
+
+    setKeyboardValue(null);
+  }, [keyboardValue]);
+
   // ============================= Drag =============================
-  const handlesRef = React.useRef<HandlesRef>();
 
   const finishChange = () => {
     if (onAfterChange) {
-      const triggerValue = range ? rawValuesRef.current : rawValuesRef.current[0];
-      onAfterChange(triggerValue);
+      onAfterChange(getTriggerValue(rawValuesRef.current));
     }
   };
 
@@ -335,7 +361,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
     onStartDrag(e, valueIndex);
 
-    onBeforeChange?.(range ? rawValuesRef.current : rawValuesRef.current[0]);
+    onBeforeChange?.(getTriggerValue(rawValuesRef.current));
   };
 
   // Auto focus for updated handle
@@ -368,7 +394,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     blur: () => {},
   }));
 
-  // ============================ Effect ============================
+  // ========================== Auto Focus ==========================
   React.useEffect(() => {
     if (autoFocus) {
       handlesRef.current.focus(0);
@@ -417,6 +443,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           values={cacheValues}
           draggingIndex={draggingIndex}
           onStartMove={onStartMove}
+          onChange={onHandleChange}
           onFocus={onFocus}
           onBlur={onBlur}
           handleRender={handleRender}

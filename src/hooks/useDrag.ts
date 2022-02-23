@@ -39,6 +39,7 @@ export default function useDrag(
     e.preventDefault();
     e.stopPropagation();
     setDraggingIndex(valueIndex);
+    setDraggingValue(rawValues[valueIndex]);
 
     const { pageX: startX, pageY: startY } = e;
     (e.target as HTMLDivElement).focus();

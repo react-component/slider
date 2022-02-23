@@ -7,6 +7,7 @@ export interface HandlesProps {
   style?: React.CSSProperties;
   values: number[];
   onStartMove: (e: React.MouseEvent, value: number) => void;
+  onChange: (value: number, valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   handleRender?: HandleProps['render'];
@@ -18,8 +19,16 @@ export interface HandlesRef {
 }
 
 const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
-  const { prefixCls, style, onStartMove, values, handleRender, draggingIndex, ...restProps } =
-    props;
+  const {
+    prefixCls,
+    style,
+    onStartMove,
+    onChange,
+    values,
+    handleRender,
+    draggingIndex,
+    ...restProps
+  } = props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
 
   React.useImperativeHandle(ref, () => ({
@@ -46,6 +55,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
           value={value}
           valueIndex={index}
           onStartMove={onStartMove}
+          onChange={onChange}
           render={handleRender}
           {...restProps}
         />

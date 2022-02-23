@@ -4,7 +4,7 @@ import '../../assets/index.less';
 
 export default () => {
   const [disabled, setDisabled] = React.useState(false);
-  const [range, setRange] = React.useState(false);
+  const [range, setRange] = React.useState(true);
   const [reverse, setReverse] = React.useState(false);
   const [vertical, setVertical] = React.useState(false);
 
@@ -38,7 +38,7 @@ export default () => {
           reverse={reverse}
           vertical={vertical}
           range={range}
-          defaultValue={[10, 50]}
+          defaultValue={[48, 50]}
           onChange={(nextValues) => console.log('Change:', nextValues)}
         />
       </div>
