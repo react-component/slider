@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { Direction } from '../interface';
+import type { Direction, OnStartMove } from '../interface';
 
 export default function useDrag(
   containerRef: React.RefObject<HTMLDivElement>,
@@ -12,11 +12,12 @@ export default function useDrag(
   formatValue: (value: number) => number,
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
-): [number, number, number[], (e: React.MouseEvent, valueIndex: number) => void] {
-  const [originDragValue, setOriginDragValue] = React.useState(null);
+): [number, number, number[], OnStartMove] {
+  // const [originDragValue, setOriginDragValue] = React.useState(null);
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
+  const [originValues, setOriginValues] = React.useState(rawValues);
 
   React.useEffect(() => {
     if (draggingIndex === -1) {
@@ -25,63 +26,87 @@ export default function useDrag(
   }, [rawValues, draggingIndex]);
 
   const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
-    // Align value
-    let nextValue = originDragValue + offsetPercent * (max - min);
+    if (valueIndex === -1) {
+      // >>>> Dragging on the track
 
-    // Not pushable will make handle in the range
-    if (!allowCross) {
-      if (pushable === false) {
-        const crossMin = cacheValues[valueIndex - 1] ?? min;
-        const crossMax = cacheValues[valueIndex + 1] ?? max;
+      const startValue = originValues[0];
+      const endValue = originValues[originValues.length - 1];
 
-        nextValue = Math.min(nextValue, crossMax);
-        nextValue = Math.max(nextValue, crossMin);
-      } else if (typeof pushable === 'number') {
-        nextValue = Math.max(nextValue, min + pushable * valueIndex);
-        nextValue = Math.min(nextValue, max - pushable * (rawValues.length - valueIndex - 1));
-      }
-    }
+      const maxStartOffset = min - startValue;
+      const maxEndOffset = max - endValue;
 
-    // Update values
-    const cloneCacheValues = [...cacheValues];
-    const formattedValue = formatValue(nextValue);
-    cloneCacheValues[valueIndex] = formattedValue;
+      // Get valid offset
+      let offset = offsetPercent * (max - min);
+      offset = Math.max(offset, maxStartOffset);
+      offset = Math.min(offset, maxEndOffset);
 
-    // Pushable will makes others moving
-    if (!allowCross && typeof pushable === 'number') {
-      // Right
-      let lastValue = formattedValue;
-      for (let i = valueIndex + 1; i < cacheValues.length; i += 1) {
-        if (lastValue + pushable > cloneCacheValues[i]) {
-          const validValue = formatValue(lastValue + pushable);
-          cloneCacheValues[i] = validValue;
-          lastValue = validValue;
+      // Use first value to revert back of valid offset (like steps marks)
+      const formatStartValue = formatValue(startValue + offset);
+      offset = formatStartValue - startValue;
+
+      const cloneCacheValues = originValues.map((val) => val + offset);
+      setCacheValues(cloneCacheValues);
+      triggerChange(cloneCacheValues);
+    } else {
+      // >>>> Dragging on the handle
+
+      // Align value
+      const originDragValue = originValues[draggingIndex];
+      let nextValue = originDragValue + offsetPercent * (max - min);
+
+      // Not pushable will make handle in the range
+      if (!allowCross) {
+        if (pushable === false) {
+          const crossMin = cacheValues[valueIndex - 1] ?? min;
+          const crossMax = cacheValues[valueIndex + 1] ?? max;
+
+          nextValue = Math.min(nextValue, crossMax);
+          nextValue = Math.max(nextValue, crossMin);
+        } else if (typeof pushable === 'number') {
+          nextValue = Math.max(nextValue, min + pushable * valueIndex);
+          nextValue = Math.min(nextValue, max - pushable * (rawValues.length - valueIndex - 1));
         }
       }
 
-      // Left
-      lastValue = formattedValue;
-      for (let i = valueIndex - 1; i >= 0; i -= 1) {
-        if (lastValue - pushable < cloneCacheValues[i]) {
-          const validValue = formatValue(lastValue - pushable);
-          cloneCacheValues[i] = validValue;
-          lastValue = validValue;
+      // Update values
+      const cloneCacheValues = [...cacheValues];
+      const formattedValue = formatValue(nextValue);
+      cloneCacheValues[valueIndex] = formattedValue;
+
+      // Pushable will makes others moving
+      if (!allowCross && typeof pushable === 'number') {
+        // Right
+        let lastValue = formattedValue;
+        for (let i = valueIndex + 1; i < cacheValues.length; i += 1) {
+          if (lastValue + pushable > cloneCacheValues[i]) {
+            const validValue = formatValue(lastValue + pushable);
+            cloneCacheValues[i] = validValue;
+            lastValue = validValue;
+          }
+        }
+
+        // Left
+        lastValue = formattedValue;
+        for (let i = valueIndex - 1; i >= 0; i -= 1) {
+          if (lastValue - pushable < cloneCacheValues[i]) {
+            const validValue = formatValue(lastValue - pushable);
+            cloneCacheValues[i] = validValue;
+            lastValue = validValue;
+          }
         }
       }
+
+      setDraggingValue(formattedValue);
+      setCacheValues(cloneCacheValues);
+      triggerChange(cloneCacheValues);
     }
-
-    setDraggingValue(formattedValue);
-    setCacheValues(cloneCacheValues);
-    triggerChange(cloneCacheValues);
-
-    return formattedValue;
   };
 
   // Resolve closure
   const updateCacheValueRef = React.useRef(updateCacheValue);
   updateCacheValueRef.current = updateCacheValue;
 
-  const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
+  const onStartMove: OnStartMove = (e, valueIndex) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -89,7 +114,7 @@ export default function useDrag(
 
     setDraggingIndex(valueIndex);
     setDraggingValue(originValue);
-    setOriginDragValue(originValue);
+    setOriginValues(rawValues);
 
     const { pageX: startX, pageY: startY } = e;
     (e.target as HTMLDivElement).focus();

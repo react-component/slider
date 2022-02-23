@@ -1,16 +1,17 @@
 import * as React from 'react';
 import SliderContext from '../context';
-import { getOffset } from '../util';
 import Track from './Track';
+import type { OnStartMove } from '../interface';
 
 export interface TrackProps {
   prefixCls: string;
-  style?: React.CSSProperties;
+  style?: React.CSSProperties | React.CSSProperties[];
   values: number[];
+  onStartMove?: OnStartMove;
 }
 
 export default function Tracks(props: TrackProps) {
-  const { prefixCls, style, values } = props;
+  const { prefixCls, style, values, onStartMove } = props;
   const { included, range, min } = React.useContext(SliderContext);
 
   const trackList = React.useMemo(() => {
@@ -41,10 +42,11 @@ export default function Tracks(props: TrackProps) {
         <Track
           index={index}
           prefixCls={prefixCls}
-          style={style}
+          style={Array.isArray(style) ? style[index] : style}
           start={start}
           end={end}
           key={index}
+          onStartMove={onStartMove}
         />
       ))
     : null) as unknown as React.ReactElement;

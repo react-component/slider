@@ -9,7 +9,7 @@ import useDrag from './hooks/useDrag';
 import SliderContext from './context';
 import type { SliderContextProps } from './context';
 import Tracks from './Tracks';
-import type { Direction } from './interface';
+import type { Direction, OnStartMove } from './interface';
 import Marks, { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
 import type { MarksProps } from './Marks';
@@ -19,6 +19,9 @@ import Steps from './Steps';
  * New:
  * - click mark to update range value
  * - handleRender
+ * - Fix handle with count not correct
+ * - Fix pushable not work in some case
+ * - No more FindDOMNode
  */
 
 export interface SliderProps<ValueType = number | number[]> {
@@ -34,6 +37,7 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Value
   range?: boolean;
+  count?: number;
   min?: number;
   max?: number;
   step?: number | null;
@@ -48,6 +52,8 @@ export interface SliderProps<ValueType = number | number[]> {
   // Cross
   allowCross?: boolean;
   pushable?: boolean | number;
+  /** range only */
+  draggableTrack?: boolean;
 
   // Direction
   reverse?: boolean;
@@ -55,8 +61,9 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Style
   included?: boolean;
-  trackStyle?: React.CSSProperties;
-  handleStyle?: React.CSSProperties;
+  trackStyle?: React.CSSProperties | React.CSSProperties[];
+  handleStyle?: React.CSSProperties | React.CSSProperties[];
+  railStyle?: React.CSSProperties;
 
   // Decorations
   marks?: Record<string | number, React.ReactNode | MarkObj>;
@@ -65,7 +72,6 @@ export interface SliderProps<ValueType = number | number[]> {
   // Components
   handleRender?: HandlesProps['handleRender'];
 
-  // draggableTrack?: boolean;
   // included?: boolean;
   // disabled?: boolean;
   // minimumTrackStyle?: React.CSSProperties;
@@ -94,9 +100,6 @@ export interface SliderProps<ValueType = number | number[]> {
   //   ref?: React.Ref<any>;
   // }) => React.ReactElement;
 
-  // count?: number;
-  // min?: number;
-  // max?: number;
   // onChange?: (value: number[]) => void;
   // onBeforeChange?: (value: number[]) => void;
   // onAfterChange?: (value: number[]) => void;
@@ -108,8 +111,6 @@ export interface SliderProps<ValueType = number | number[]> {
   // prefixCls?: string;
   // included?: boolean;
   // disabled?: boolean;
-  // trackStyle?: React.CSSProperties[];
-  // handleStyle?: React.CSSProperties[];
   // tabIndex?: number | number[];
   // ariaLabelGroupForHandles?: string | string[];
   // ariaLabelledByGroupForHandles?: string | string[];
@@ -142,6 +143,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     value,
     defaultValue,
     range,
+    count,
     onChange,
     onBeforeChange,
     onAfterChange,
@@ -149,6 +151,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     // Cross
     allowCross = true,
     pushable = false,
+    draggableTrack,
 
     // Direction
     reverse,
@@ -158,6 +161,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     included = true,
     trackStyle,
     handleStyle,
+    railStyle,
 
     // Decorations
     marks,
@@ -206,6 +210,35 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       .sort((a, b) => a.value - b.value);
   }, [marks]);
 
+  // ============================ Format ============================
+  const formatValue = React.useCallback(
+    (val: number) => {
+      let formatNextValue = Math.min(max, val);
+      formatNextValue = Math.max(min, formatNextValue);
+
+      // List align values
+      const alignValues = markList.map((mark) => mark.value);
+      if (mergedStep !== null) {
+        alignValues.push(min + Math.round((formatNextValue - min) / mergedStep) * mergedStep);
+      }
+
+      // Align with marks
+      let closeValue = alignValues[0];
+      let closeDist = max - min;
+
+      alignValues.forEach((alignValue) => {
+        const dist = Math.abs(formatNextValue - alignValue);
+        if (dist <= closeDist) {
+          closeValue = alignValue;
+          closeDist = dist;
+        }
+      });
+
+      return closeValue;
+    },
+    [min, max, markList, mergedStep],
+  );
+
   // ============================ Values ============================
   const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
     value,
@@ -220,38 +253,29 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   const rawValues = React.useMemo(() => {
     const [val0 = min] = mergedValue;
+    let returnValues = [val0];
 
+    // Format as range
     if (range) {
-      return [...mergedValue].sort((a, b) => a - b);
-    }
+      returnValues = [...mergedValue];
+      if (count) {
+        returnValues = returnValues.slice(0, count);
 
-    return [val0];
-  }, [mergedValue, range, min]);
-
-  const formatValue = (val: number) => {
-    let formatNextValue = Math.min(max, val);
-    formatNextValue = Math.max(min, formatNextValue);
-
-    // List align values
-    const alignValues = markList.map((mark) => mark.value);
-    if (mergedStep !== null) {
-      alignValues.push(min + Math.round((formatNextValue - min) / mergedStep) * mergedStep);
-    }
-
-    // Align with marks
-    let closeValue = alignValues[0];
-    let closeDist = max - min;
-
-    alignValues.forEach((alignValue) => {
-      const dist = Math.abs(formatNextValue - alignValue);
-      if (dist <= closeDist) {
-        closeValue = alignValue;
-        closeDist = dist;
+        // Fill with count
+        while (returnValues.length < count) {
+          returnValues.push(returnValues[returnValues.length - 1]);
+        }
       }
+      returnValues.sort((a, b) => a - b);
+    }
+
+    // Align in range
+    returnValues.forEach((val, index) => {
+      returnValues[index] = formatValue(val);
     });
 
-    return closeValue;
-  };
+    return returnValues;
+  }, [mergedValue, range, min, count, formatValue]);
 
   // =========================== onChange ===========================
   const rawValuesRef = React.useRef(rawValues);
@@ -365,7 +389,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     finishChange,
   );
 
-  const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
+  const onStartMove: OnStartMove = (e, valueIndex) => {
     onStartDrag(e, valueIndex);
 
     onBeforeChange?.(getTriggerValue(rawValuesRef.current));
@@ -441,9 +465,14 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         style={style}
         onMouseDown={onSliderMouseDown}
       >
-        <div className={`${prefixCls}-rail`} />
+        <div className={`${prefixCls}-rail`} style={railStyle} />
 
-        <Tracks prefixCls={prefixCls} style={trackStyle} values={sortedCacheValues} />
+        <Tracks
+          prefixCls={prefixCls}
+          style={trackStyle}
+          values={sortedCacheValues}
+          onStartMove={draggableTrack ? onStartMove : null}
+        />
 
         <Steps prefixCls={prefixCls} marks={markList} dots={dots} />
 

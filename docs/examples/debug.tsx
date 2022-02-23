@@ -34,6 +34,7 @@ export default () => {
 
       <div style={{ height: 300, width: 600 }}>
         <Slider
+          count={2}
           disabled={disabled}
           reverse={reverse}
           vertical={vertical}

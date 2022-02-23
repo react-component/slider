@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import SliderContext from '../context';
 import { getOffset } from '../util';
+import type { OnStartMove } from '../interface';
 
 export interface TrackProps {
   prefixCls: string;
@@ -9,10 +10,11 @@ export interface TrackProps {
   start: number;
   end: number;
   index: number;
+  onStartMove?: OnStartMove;
 }
 
 export default function Track(props: TrackProps) {
-  const { prefixCls, style, start, end, index } = props;
+  const { prefixCls, style, start, end, index, onStartMove } = props;
   const { direction, min, max } = React.useContext(SliderContext);
 
   const trackPrefixCls = `${prefixCls}-track`;
@@ -45,6 +47,9 @@ export default function Track(props: TrackProps) {
       style={{
         ...positionStyle,
         ...style,
+      }}
+      onMouseDown={(e) => {
+        onStartMove?.(e, -1);
       }}
     />
   );

@@ -4,7 +4,7 @@ import type { HandleProps } from './Handle';
 
 export interface HandlesProps {
   prefixCls: string;
-  style?: React.CSSProperties;
+  style?: React.CSSProperties | React.CSSProperties[];
   values: number[];
   onStartMove: (e: React.MouseEvent, value: number) => void;
   onChange: (value: number, valueIndex: number) => void;
@@ -50,7 +50,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
           }}
           dragging={draggingIndex === index}
           prefixCls={prefixCls}
-          style={style}
+          style={Array.isArray(style) ? style[index] : style}
           key={index}
           value={value}
           valueIndex={index}
