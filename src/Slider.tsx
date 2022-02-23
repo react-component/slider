@@ -22,7 +22,7 @@ import Steps from './Steps';
  * - Remove allowCross
  */
 
-export interface BaseSliderProps {
+export interface SliderProps<ValueType = number | number[]> {
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -34,11 +34,19 @@ export interface BaseSliderProps {
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
 
   // Value
+  range?: boolean;
   min?: number;
   max?: number;
   step?: number | null;
   /** @deprecated This prop is removed and always allow drag cross the points */
   allowCross?: boolean;
+  value?: ValueType;
+  defaultValue?: ValueType;
+  onChange?: (value: ValueType) => void;
+  /** @deprecated It's always better to use `onChange` instead */
+  onBeforeChange?: (value: ValueType) => void;
+  /** @deprecated It's always better to use `onChange` instead */
+  onAfterChange?: (value: ValueType) => void;
 
   // Direction
   reverse?: boolean;
@@ -86,40 +94,6 @@ export interface BaseSliderProps {
   // }) => React.ReactElement;
 }
 
-export interface SingleSliderProps extends BaseSliderProps {
-  value?: number;
-  defaultValue?: number;
-  onChange?: (value: number) => void;
-  /** @deprecated It's always better to use `onChange` instead */
-  onBeforeChange?: (value: number) => void;
-  /** @deprecated It's always better to use `onChange` instead */
-  onAfterChange?: (value: number) => void;
-}
-
-export interface RangeSliderProps extends BaseSliderProps {
-  range: true;
-
-  value?: number[];
-  defaultValue?: number[];
-  onChange?: (value: number[]) => void;
-  /** @deprecated It's always better to use `onChange` instead */
-  onBeforeChange?: (value: number[]) => void;
-  /** @deprecated It's always better to use `onChange` instead */
-  onAfterChange?: (value: number[]) => void;
-}
-
-export type SliderProps = SingleSliderProps | RangeSliderProps;
-
-type InternalSliderProps = SliderProps & {
-  range?: boolean;
-
-  value?: number | number[];
-  defaultValue?: number | number[];
-  onChange?: (value: number | number[]) => void;
-  onBeforeChange?: (value: number | number[]) => void;
-  onAfterChange?: (value: number | number[]) => void;
-};
-
 export interface SliderRef {
   focus: () => void;
   blur: () => void;
@@ -163,7 +137,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Components
     handleRender,
-  } = props as InternalSliderProps;
+  } = props;
 
   const handlesRef = React.useRef<HandlesRef>();
   const containerRef = React.useRef<HTMLDivElement>();
@@ -214,10 +188,10 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   });
 
   const rawValues = React.useMemo(() => {
-    const [val0 = min, val1 = min] = mergedValue;
+    const [val0 = min] = mergedValue;
 
     if (range) {
-      return [val0, val1].sort((a, b) => a - b);
+      return [...mergedValue].sort((a, b) => a - b);
     }
 
     return [val0];
@@ -383,7 +357,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       return [min, cloneValues[0]];
     }
 
-    return cloneValues;
+    return [cloneValues[0], cloneValues[cloneValues.length - 1]];
   }, [rawValues, min]);
 
   // ============================= Refs =============================

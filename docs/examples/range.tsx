@@ -105,7 +105,7 @@ class DynamicBounds extends React.Component {
   }
 }
 
-class ControlledRange extends React.Component {
+class ControlledRange extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -120,7 +120,7 @@ class ControlledRange extends React.Component {
   };
 
   render() {
-    return <Range value={this.state.value} onChange={this.handleChange} />;
+    return <Slider range value={this.state.value} onChange={this.handleChange} />;
   }
 }
 
@@ -173,7 +173,7 @@ class PureRenderRange extends React.Component {
 
 export default () => (
   <div>
-    <div style={style}>
+    {/* <div style={style}>
       <p>Basic Range，`allowCross=false`</p>
       <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
@@ -192,12 +192,12 @@ export default () => (
     <div style={style}>
       <p>Basic Range，disabled</p>
       <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} disabled />
-    </div>
-    {/* <div style={style}>
+    </div> */}
+    <div style={style}>
       <p>Controlled Range</p>
       <ControlledRange />
     </div>
-    <div style={style}>
+    {/* <div style={style}>
       <p>Controlled Range, not allow across</p>
       <ControlledRangeDisableAcross />
     </div>
