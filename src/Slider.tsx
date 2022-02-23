@@ -61,9 +61,12 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Style
   included?: boolean;
+  startPoint?: number;
   trackStyle?: React.CSSProperties | React.CSSProperties[];
   handleStyle?: React.CSSProperties | React.CSSProperties[];
   railStyle?: React.CSSProperties;
+  dotStyle?: React.CSSProperties;
+  activeDotStyle?: React.CSSProperties;
 
   // Decorations
   marks?: Record<string | number, React.ReactNode | MarkObj>;
@@ -79,7 +82,6 @@ export interface SliderProps<ValueType = number | number[]> {
   // ariaLabelForHandle?: string;
   // ariaLabelledByForHandle?: string;
   // ariaValueTextFormatterForHandle?: (value: number) => string;
-  // startPoint?: number;
   // handle?: (props: {
   //   className: string;
   //   prefixCls?: string;
@@ -103,9 +105,6 @@ export interface SliderProps<ValueType = number | number[]> {
   // onChange?: (value: number[]) => void;
   // onBeforeChange?: (value: number[]) => void;
   // onAfterChange?: (value: number[]) => void;
-  // reverse?: boolean;
-  // vertical?: boolean;
-  // marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
   // step?: number | null;
   // threshold?: number;
   // prefixCls?: string;
@@ -116,6 +115,21 @@ export interface SliderProps<ValueType = number | number[]> {
   // ariaLabelledByGroupForHandles?: string | string[];
   // ariaValueTextFormatterGroupForHandles?: ((value: number) => string)[];
   // handle?: SliderProps['handle'];
+  // draggableTrack?: boolean;
+
+  // included?: boolean;
+  // disabled?: boolean;
+  // reverse?: boolean;
+  // trackStyle?: React.CSSProperties | React.CSSProperties[];
+  // handleStyle?: React.CSSProperties | React.CSSProperties[];
+  // autoFocus?: boolean;
+  // onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  // onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  // className?: string;
+  // marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
+  // dots?: boolean;
+  // maximumTrackStyle?: React.CSSProperties;
+  // style?: React.CSSProperties;
   // draggableTrack?: boolean;
 }
 
@@ -159,9 +173,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Style
     included = true,
+    startPoint,
     trackStyle,
     handleStyle,
     railStyle,
+    dotStyle,
+    activeDotStyle,
 
     // Decorations
     marks,
@@ -471,10 +488,17 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           prefixCls={prefixCls}
           style={trackStyle}
           values={sortedCacheValues}
+          startPoint={startPoint}
           onStartMove={draggableTrack ? onStartMove : null}
         />
 
-        <Steps prefixCls={prefixCls} marks={markList} dots={dots} />
+        <Steps
+          prefixCls={prefixCls}
+          marks={markList}
+          dots={dots}
+          style={dotStyle}
+          activeStyle={activeDotStyle}
+        />
 
         <Handles
           ref={handlesRef}

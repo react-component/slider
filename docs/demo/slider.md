@@ -1,3 +1,3 @@
 ## slider
 
-<code src="../examples/slider.jsx">
+<code src="../examples/slider.tsx">

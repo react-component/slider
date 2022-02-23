@@ -8,18 +8,22 @@ export interface TrackProps {
   style?: React.CSSProperties | React.CSSProperties[];
   values: number[];
   onStartMove?: OnStartMove;
+  startPoint?: number;
 }
 
 export default function Tracks(props: TrackProps) {
-  const { prefixCls, style, values, onStartMove } = props;
+  const { prefixCls, style, values, startPoint, onStartMove } = props;
   const { included, range, min } = React.useContext(SliderContext);
 
   const trackList = React.useMemo(() => {
     if (!range) {
+      const startValue = startPoint ?? min;
+      const endValue = values[0];
+
       return [
         {
-          start: min,
-          end: values[0],
+          start: Math.min(startValue, endValue),
+          end: Math.max(startValue, endValue),
         },
       ];
     }
@@ -35,7 +39,7 @@ export default function Tracks(props: TrackProps) {
     }
 
     return list;
-  }, [values, range, min]);
+  }, [values, range, startPoint, min]);
 
   return (included
     ? trackList.map(({ start, end }, index) => (
