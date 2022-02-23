@@ -180,7 +180,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const mergedStep = React.useMemo(() => (step !== null && step <= 0 ? 1 : step), [step]);
 
   // ============================= Push =============================
-  const mergedPush = React.useMemo(() => (pushable >= 0 ? pushable : false), [pushable]);
+  const mergedPush = React.useMemo(() => {
+    if (pushable === true) {
+      return mergedStep;
+    }
+
+    return pushable >= 0 ? pushable : false;
+  }, [pushable, mergedStep]);
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
@@ -253,16 +259,17 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         : [mergedValue];
 
     const [val0 = min] = valueList;
-    let returnValues = [val0];
+    let returnValues = mergedValue === null ? [] : [val0];
 
     // Format as range
     if (range) {
       returnValues = [...valueList];
       if (count) {
-        returnValues = returnValues.slice(0, count);
+        const pointCount = count + 1;
+        returnValues = returnValues.slice(0, pointCount);
 
         // Fill with count
-        while (returnValues.length < count) {
+        while (returnValues.length && returnValues.length < pointCount) {
           returnValues.push(returnValues[returnValues.length - 1]);
         }
       }
@@ -311,7 +318,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       // Create new values
       const cloneNextValues = [...rawValues];
+
       cloneNextValues[valueIndex] = newValue;
+
+      // Fill value to match default 2
+      if (range && !rawValues.length && count === undefined) {
+        cloneNextValues.push(newValue);
+      }
 
       triggerChange(cloneNextValues);
     }

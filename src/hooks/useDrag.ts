@@ -65,17 +65,15 @@ export default function useDrag(
       let nextValue = originDragValue + offsetPercent * (max - min);
 
       // Not pushable will make handle in the range
-      if (!allowCross) {
-        if (pushable === false) {
-          const crossMin = cacheValues[valueIndex - 1] ?? min;
-          const crossMax = cacheValues[valueIndex + 1] ?? max;
+      if (typeof pushable === 'number') {
+        nextValue = Math.max(nextValue, min + pushable * valueIndex);
+        nextValue = Math.min(nextValue, max - pushable * (rawValues.length - valueIndex - 1));
+      } else if (!allowCross) {
+        const crossMin = cacheValues[valueIndex - 1] ?? min;
+        const crossMax = cacheValues[valueIndex + 1] ?? max;
 
-          nextValue = Math.min(nextValue, crossMax);
-          nextValue = Math.max(nextValue, crossMin);
-        } else if (typeof pushable === 'number') {
-          nextValue = Math.max(nextValue, min + pushable * valueIndex);
-          nextValue = Math.min(nextValue, max - pushable * (rawValues.length - valueIndex - 1));
-        }
+        nextValue = Math.min(nextValue, crossMax);
+        nextValue = Math.max(nextValue, crossMin);
       }
 
       // Update values
@@ -84,7 +82,7 @@ export default function useDrag(
       cloneCacheValues[valueIndex] = formattedValue;
 
       // Pushable will makes others moving
-      if (!allowCross && typeof pushable === 'number') {
+      if (typeof pushable === 'number') {
         // Right
         let lastValue = formattedValue;
         for (let i = valueIndex + 1; i < cacheValues.length; i += 1) {

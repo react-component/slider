@@ -17,6 +17,11 @@ export default function Tracks(props: TrackProps) {
 
   const trackList = React.useMemo(() => {
     if (!range) {
+      // null value do not have track
+      if (values.length === 0) {
+        return [];
+      }
+
       const startValue = startPoint ?? min;
       const endValue = values[0];
 

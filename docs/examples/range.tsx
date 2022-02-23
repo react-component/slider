@@ -213,11 +213,11 @@ export default () => (
       <ControlledRangeDisableAcross pushable={5} />
     </div>
     <div style={style}>
-      <p>Multi Range, count=3</p>
+      <p>Multi Range, count=3 and pushable=true</p>
       <Slider range count={3} defaultValue={[20, 40, 60, 80]} pushable />
     </div>
     <div style={style}>
-      <p>Multi Range with custom track and handle style</p>
+      <p>Multi Range with custom track and handle style and pushable</p>
       <Slider
         range
         count={3}
