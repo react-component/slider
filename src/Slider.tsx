@@ -19,9 +19,10 @@ import Steps from './Steps';
  * New:
  * - click mark to update range value
  * - handleRender
+ * - Remove allowCross
  */
 
-export interface SliderProps {
+export interface BaseSliderProps {
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
@@ -35,12 +36,9 @@ export interface SliderProps {
   // Value
   min?: number;
   max?: number;
-  value?: number | number[];
-  defaultValue?: number | number[];
   step?: number | null;
-  range?: boolean;
-  onChange?: (value: number | number[]) => void;
-  onAfterChange?: (value: number | number[]) => void;
+  /** @deprecated This prop is removed and always allow drag cross the points */
+  allowCross?: boolean;
 
   // Direction
   reverse?: boolean;
@@ -59,7 +57,6 @@ export interface SliderProps {
   handleRender?: HandlesProps['handleRender'];
 
   // draggableTrack?: boolean;
-  // onBeforeChange?: (value: number) => void;
   // included?: boolean;
   // disabled?: boolean;
   // minimumTrackStyle?: React.CSSProperties;
@@ -88,6 +85,41 @@ export interface SliderProps {
   //   ref?: React.Ref<any>;
   // }) => React.ReactElement;
 }
+
+export interface SingleSliderProps extends BaseSliderProps {
+  value?: number;
+  defaultValue?: number;
+  onChange?: (value: number) => void;
+  /** @deprecated It's always better to use `onChange` instead */
+  onBeforeChange?: (value: number) => void;
+  /** @deprecated It's always better to use `onChange` instead */
+  onAfterChange?: (value: number) => void;
+}
+
+export interface RangeSliderProps extends BaseSliderProps {
+  range: true;
+
+  value?: number[];
+  defaultValue?: number[];
+  onChange?: (value: number[]) => void;
+  /** @deprecated It's always better to use `onChange` instead */
+  onBeforeChange?: (value: number[]) => void;
+  /** @deprecated It's always better to use `onChange` instead */
+  onAfterChange?: (value: number[]) => void;
+}
+
+export type SliderProps = SingleSliderProps | RangeSliderProps;
+
+type InternalSliderProps = SliderProps & {
+  range?: boolean;
+
+  value?: number | number[];
+  defaultValue?: number | number[];
+  onChange?: (value: number | number[]) => void;
+  onBeforeChange?: (value: number | number[]) => void;
+  onAfterChange?: (value: number | number[]) => void;
+};
+
 export interface SliderRef {
   focus: () => void;
   blur: () => void;
@@ -113,6 +145,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     defaultValue,
     range,
     onChange,
+    onBeforeChange,
     onAfterChange,
 
     // Direction
@@ -130,7 +163,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Components
     handleRender,
-  } = props;
+  } = props as InternalSliderProps;
 
   const containerRef = React.useRef<HTMLDivElement>();
 
@@ -288,7 +321,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
   };
 
-  const [draggingIndex, draggingValue, cacheValues, onStartMove] = useDrag(
+  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
     containerRef,
     direction,
     rawValues,
@@ -298,6 +331,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     triggerChange,
     finishChange,
   );
+
+  const onStartMove = (e: React.MouseEvent, valueIndex: number) => {
+    onStartDrag(e, valueIndex);
+
+    onBeforeChange?.(range ? rawValuesRef.current : rawValuesRef.current[0]);
+  };
 
   // Auto focus for updated handle
   const dragging = draggingIndex !== -1;

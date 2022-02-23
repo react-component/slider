@@ -6,31 +6,13 @@ import raf from 'rc-util/lib/raf';
 import Tooltip from 'rc-tooltip';
 import '../../assets/index.less';
 
-// const { createSliderWithTooltip } = Slider;
-// const Range = createSliderWithTooltip(Slider.Range);
-// const { Handle } = Slider;
-
-// const handle = props => {
-//   const { value, dragging, index, ...restProps } = props;
-//   return (
-//     <SliderTooltip
-//       prefixCls="rc-slider-tooltip"
-//       overlay={`${value} %`}
-//       visible={dragging}
-//       placement="top"
-//       key={index}
-//     >
-//       <Handle value={value} {...restProps} />
-//     </SliderTooltip>
-//   );
-// };
-
 const HandleTooltip = (props: {
   value: number;
   children: React.ReactElement;
   visible: boolean;
+  tipFormatter?: (value: number) => React.ReactNode;
 }) => {
-  const { value, children, visible } = props;
+  const { value, children, visible, tipFormatter = (val) => `${val} %` } = props;
 
   const tooltipRef = React.useRef<any>();
   const rafRef = React.useRef<number | null>(null);
@@ -58,7 +40,7 @@ const HandleTooltip = (props: {
   return (
     <Tooltip
       placement="top"
-      overlay={`${value} %`}
+      overlay={tipFormatter(value)}
       overlayInnerStyle={{ minHeight: 'auto' }}
       ref={tooltipRef}
       visible={visible}
@@ -74,6 +56,25 @@ const handleRender: SliderProps['handleRender'] = (node, props) => {
       {node}
     </HandleTooltip>
   );
+};
+
+const TooltipSlider = ({
+  tipFormatter,
+  ...props
+}: SliderProps & { tipFormatter?: (value: number) => React.ReactNode }) => {
+  const tipHandleRender: SliderProps['handleRender'] = (node, handleProps) => {
+    return (
+      <HandleTooltip
+        value={handleProps.value}
+        visible={handleProps.dragging}
+        tipFormatter={tipFormatter}
+      >
+        {node}
+      </HandleTooltip>
+    );
+  };
+
+  return <Slider {...props} handleRender={tipHandleRender} />;
 };
 
 const wrapperStyle = { width: 400, margin: 50 };
@@ -92,9 +93,15 @@ export default () => (
       <p>Slider with fixed values</p>
       <Slider min={20} defaultValue={20} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />
     </div>
-    {/* <div style={wrapperStyle}>
+    <div style={wrapperStyle}>
       <p>Range with custom tooltip</p>
-      <Range min={0} max={20} defaultValue={[3, 10]} tipFormatter={value => `${value}%`} />
-    </div> */}
+      <TooltipSlider
+        range
+        min={0}
+        max={20}
+        defaultValue={[3, 10]}
+        tipFormatter={(value) => `${value}!`}
+      />
+    </div>
   </div>
 );

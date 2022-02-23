@@ -10,7 +10,7 @@ export default function useDrag(
   formatValue: (value: number) => number,
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
-) {
+): [number, number, number[], (e: React.MouseEvent, valueIndex: number) => void] {
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
