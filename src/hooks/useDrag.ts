@@ -25,6 +25,17 @@ export default function useDrag(
     }
   }, [rawValues, draggingIndex]);
 
+  const flushValues = (nextValues: number[], nextValue?: number) => {
+    // Perf: Only update state when value changed
+    if (cacheValues.some((val, i) => val !== nextValues[i])) {
+      if (nextValue !== undefined) {
+        setDraggingValue(nextValue);
+      }
+      setCacheValues(nextValues);
+      triggerChange(nextValues);
+    }
+  };
+
   const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
     if (valueIndex === -1) {
       // >>>> Dragging on the track
@@ -45,8 +56,7 @@ export default function useDrag(
       offset = formatStartValue - startValue;
 
       const cloneCacheValues = originValues.map((val) => val + offset);
-      setCacheValues(cloneCacheValues);
-      triggerChange(cloneCacheValues);
+      flushValues(cloneCacheValues);
     } else {
       // >>>> Dragging on the handle
 
@@ -96,9 +106,7 @@ export default function useDrag(
         }
       }
 
-      setDraggingValue(formattedValue);
-      setCacheValues(cloneCacheValues);
-      triggerChange(cloneCacheValues);
+      flushValues(cloneCacheValues, formattedValue);
     }
   };
 
