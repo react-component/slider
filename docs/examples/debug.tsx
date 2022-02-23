@@ -7,12 +7,15 @@ export default () => {
   const [range, setRange] = React.useState(true);
   const [reverse, setReverse] = React.useState(false);
   const [vertical, setVertical] = React.useState(false);
+  const [value, setValue] = React.useState(0);
 
   return (
-    <div style={{
-      transform: 'scale(1.5)',
-      transformOrigin: 'top left',
-    }}>
+    <div
+      style={{
+        transform: 'scale(1.5)',
+        transformOrigin: 'top left',
+      }}
+    >
       <div>
         <label>
           <input type="checkbox" checked={disabled} onChange={() => setDisabled(!disabled)} />
@@ -40,7 +43,11 @@ export default () => {
           vertical={vertical}
           range={range}
           defaultValue={[30, 50]}
-          onChange={(nextValues) => console.log('Change:', nextValues)}
+          onChange={(nextValues) => {
+            console.log('Change:', nextValues);
+            setValue(nextValues as any);
+          }}
+          value={value}
         />
       </div>
     </div>

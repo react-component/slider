@@ -25,8 +25,6 @@ export default function useDrag(
     }
   }, [rawValues, draggingIndex]);
 
-  console.log('>>>', rawValues);
-
   const flushValues = (nextValues: number[], nextValue?: number) => {
     // Perf: Only update state when value changed
     if (cacheValues.some((val, i) => val !== nextValues[i])) {
@@ -170,5 +168,15 @@ export default function useDrag(
     document.addEventListener('mousemove', onMouseMove);
   };
 
-  return [draggingIndex, draggingValue, cacheValues, onStartMove];
+  // Only return cache value when it mapping with rawValues
+  const returnValues = React.useMemo(() => {
+    const sourceValues = [...rawValues].sort((a, b) => a - b);
+    const targetValues = [...cacheValues].sort((a, b) => a - b);
+
+    return sourceValues.every((val, index) => val === targetValues[index])
+      ? cacheValues
+      : rawValues;
+  }, [rawValues, cacheValues]);
+
+  return [draggingIndex, draggingValue, returnValues, onStartMove];
 }

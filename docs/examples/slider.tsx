@@ -16,75 +16,75 @@ function percentFormatter(v) {
 
 // const SliderWithTooltip = createSliderWithTooltip(Slider);
 
-// class NullableSlider extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       value: null,
-//     };
-//   }
+class NullableSlider extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: null,
+    };
+  }
 
-//   onSliderChange = (value) => {
-//     log(value);
-//     this.setState({
-//       value,
-//     });
-//   };
+  onSliderChange = (value) => {
+    log(value);
+    this.setState({
+      value,
+    });
+  };
 
-//   onAfterChange = (value) => {
-//     console.log(value); //eslint-disable-line
-//   };
+  onAfterChange = (value) => {
+    console.log(value); //eslint-disable-line
+  };
 
-//   reset = () => {
-//     console.log('reset value'); // eslint-disable-line
-//     this.setState({ value: null });
-//   };
+  reset = () => {
+    console.log('reset value'); // eslint-disable-line
+    this.setState({ value: null });
+  };
 
-//   render() {
-//     return (
-//       <div>
-//         <Slider
-//           value={this.state.value}
-//           onChange={this.onSliderChange}
-//           onAfterChange={this.onAfterChange}
-//         />
-//         <button type="button" onClick={this.reset}>
-//           Reset
-//         </button>
-//       </div>
-//     );
-//   }
-// }
+  render() {
+    return (
+      <div>
+        <Slider
+          value={this.state.value}
+          onChange={this.onSliderChange}
+          onAfterChange={this.onAfterChange}
+        />
+        <button type="button" onClick={this.reset}>
+          Reset
+        </button>
+      </div>
+    );
+  }
+}
 
-// class CustomizedSlider extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       value: 50,
-//     };
-//   }
+class CustomizedSlider extends React.Component<any, any> {
+  constructor(props) {
+    super(props);
+    this.state = {
+      value: 50,
+    };
+  }
 
-//   onSliderChange = (value) => {
-//     log(value);
-//     this.setState({
-//       value,
-//     });
-//   };
+  onSliderChange = (value) => {
+    log(value);
+    this.setState({
+      value,
+    });
+  };
 
-//   onAfterChange = (value) => {
-//     console.log(value); //eslint-disable-line
-//   };
+  onAfterChange = (value) => {
+    console.log(value); //eslint-disable-line
+  };
 
-//   render() {
-//     return (
-//       <Slider
-//         value={this.state.value}
-//         onChange={this.onSliderChange}
-//         onAfterChange={this.onAfterChange}
-//       />
-//     );
-//   }
-// }
+  render() {
+    return (
+      <Slider
+        value={this.state.value}
+        onChange={this.onSliderChange}
+        onAfterChange={this.onAfterChange}
+      />
+    );
+  }
+}
 
 // class DynamicBounds extends React.Component {
 //   constructor(props) {
@@ -168,7 +168,7 @@ function percentFormatter(v) {
 
 export default () => (
   <div>
-    {/* <div style={style}>
+    <div style={style}>
       <p>Basic Slider</p>
       <Slider onChange={log} />
     </div>
@@ -269,12 +269,12 @@ export default () => (
     <div style={style}>
       <p>Basic Slider, disabled</p>
       <Slider onChange={log} disabled />
-    </div> */}
+    </div>
     <div style={style}>
       <p>Controlled Slider</p>
       <Slider value={50} />
     </div>
-    {/*  <div style={style}>
+    <div style={style}>
       <p>Customized Slider</p>
       <CustomizedSlider />
     </div>
@@ -282,7 +282,7 @@ export default () => (
       <p>Slider with null value and reset button</p>
       <NullableSlider />
     </div>
-    <div style={style}>
+    {/*<div style={style}>
       <p>Slider with dynamic `min` `max` `step`</p>
       <DynamicBounds />
     </div> */}
