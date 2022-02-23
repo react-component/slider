@@ -102,35 +102,18 @@ export interface SliderProps<ValueType = number | number[]> {
   //   ref?: React.Ref<any>;
   // }) => React.ReactElement;
 
-  // onChange?: (value: number[]) => void;
-  // onBeforeChange?: (value: number[]) => void;
-  // onAfterChange?: (value: number[]) => void;
-  // step?: number | null;
   // threshold?: number;
-  // prefixCls?: string;
-  // included?: boolean;
-  // disabled?: boolean;
   // tabIndex?: number | number[];
   // ariaLabelGroupForHandles?: string | string[];
   // ariaLabelledByGroupForHandles?: string | string[];
   // ariaValueTextFormatterGroupForHandles?: ((value: number) => string)[];
   // handle?: SliderProps['handle'];
-  // draggableTrack?: boolean;
 
-  // included?: boolean;
-  // disabled?: boolean;
-  // reverse?: boolean;
-  // trackStyle?: React.CSSProperties | React.CSSProperties[];
-  // handleStyle?: React.CSSProperties | React.CSSProperties[];
-  // autoFocus?: boolean;
-  // onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  // onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   // className?: string;
   // marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
   // dots?: boolean;
   // maximumTrackStyle?: React.CSSProperties;
   // style?: React.CSSProperties;
-  // draggableTrack?: boolean;
 }
 
 export interface SliderRef {
@@ -259,22 +242,22 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // ============================ Values ============================
   const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
     value,
-    postState: (rawValue) => {
-      if (rawValue === null || rawValue === undefined) {
-        return [];
-      }
-
-      return Array.isArray(rawValue) ? rawValue : [rawValue];
-    },
   });
 
   const rawValues = React.useMemo(() => {
-    const [val0 = min] = mergedValue;
+    const valueList =
+      mergedValue === null || mergedValue === undefined
+        ? []
+        : Array.isArray(mergedValue)
+        ? mergedValue
+        : [mergedValue];
+
+    const [val0 = min] = valueList;
     let returnValues = [val0];
 
     // Format as range
     if (range) {
-      returnValues = [...mergedValue];
+      returnValues = [...valueList];
       if (count) {
         returnValues = returnValues.slice(0, count);
 
@@ -363,15 +346,17 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const [keyboardValue, setKeyboardValue] = React.useState<number>(null);
 
   const onHandleChange = (nextValue: number, valueIndex: number) => {
-    const cloneNextValues = [...rawValues];
-    const formattedValue = formatValue(nextValue);
-    cloneNextValues[valueIndex] = formatValue(formattedValue);
+    if (!disabled) {
+      const cloneNextValues = [...rawValues];
+      const formattedValue = formatValue(nextValue);
+      cloneNextValues[valueIndex] = formatValue(formattedValue);
 
-    onBeforeChange?.(getTriggerValue(rawValues));
-    triggerChange(cloneNextValues);
-    onAfterChange?.(getTriggerValue(cloneNextValues));
+      onBeforeChange?.(getTriggerValue(rawValues));
+      triggerChange(cloneNextValues);
+      onAfterChange?.(getTriggerValue(cloneNextValues));
 
-    setKeyboardValue(formattedValue);
+      setKeyboardValue(formattedValue);
+    }
   };
 
   React.useEffect(() => {

@@ -15,7 +15,7 @@ export interface TrackProps {
 
 export default function Track(props: TrackProps) {
   const { prefixCls, style, start, end, index, onStartMove } = props;
-  const { direction, min, max } = React.useContext(SliderContext);
+  const { direction, min, max, disabled } = React.useContext(SliderContext);
 
   const trackPrefixCls = `${prefixCls}-track`;
 
@@ -49,7 +49,9 @@ export default function Track(props: TrackProps) {
         ...style,
       }}
       onMouseDown={(e) => {
-        onStartMove?.(e, -1);
+        if (!disabled) {
+          onStartMove?.(e, -1);
+        }
       }}
     />
   );

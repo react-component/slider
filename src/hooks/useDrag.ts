@@ -25,6 +25,8 @@ export default function useDrag(
     }
   }, [rawValues, draggingIndex]);
 
+  console.log('>>>', rawValues);
+
   const flushValues = (nextValues: number[], nextValue?: number) => {
     // Perf: Only update state when value changed
     if (cacheValues.some((val, i) => val !== nextValues[i])) {

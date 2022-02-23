@@ -2,6 +2,7 @@
 import React from 'react';
 import Slider, { createSliderWithTooltip } from 'rc-slider';
 import '../../assets/index.less';
+import TooltipSlider from './components/TooltipSlider';
 
 const style = { width: 600, margin: 50 };
 
@@ -9,9 +10,9 @@ function log(value) {
   console.log(value); //eslint-disable-line
 }
 
-// function percentFormatter(v) {
-//   return `${v} %`;
-// }
+function percentFormatter(v) {
+  return `${v} %`;
+}
 
 // const SliderWithTooltip = createSliderWithTooltip(Slider);
 
@@ -167,7 +168,7 @@ function log(value) {
 
 export default () => (
   <div>
-    <div style={style}>
+    {/* <div style={style}>
       <p>Basic Slider</p>
       <Slider onChange={log} />
     </div>
@@ -201,9 +202,9 @@ export default () => (
         activeDotStyle={{ borderColor: 'yellow' }}
       />
     </div>
-    {/*<div style={style}>
+    <div style={style}>
       <p>Slider with tooltip, with custom `tipFormatter`</p>
-      <SliderWithTooltip
+      <TooltipSlider
         tipFormatter={percentFormatter}
         tipProps={{ overlayClassName: 'foo' }}
         onChange={log}
@@ -268,12 +269,12 @@ export default () => (
     <div style={style}>
       <p>Basic Slider, disabled</p>
       <Slider onChange={log} disabled />
-    </div>
+    </div> */}
     <div style={style}>
       <p>Controlled Slider</p>
       <Slider value={50} />
     </div>
-    <div style={style}>
+    {/*  <div style={style}>
       <p>Customized Slider</p>
       <CustomizedSlider />
     </div>
