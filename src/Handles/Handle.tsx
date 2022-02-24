@@ -57,7 +57,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
       let offset: number = 0;
 
       // Change the value
-      switch (e.which) {
+      switch (e.which || e.keyCode) {
         case KeyCode.LEFT:
           offset = direction === 'ltr' || direction === 'btt' ? -1 : 1;
           break;

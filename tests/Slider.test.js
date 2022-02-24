@@ -87,7 +87,7 @@ describe('Slider', () => {
 
   it('increases the value when key "up" is pressed', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<Slider defaultValue={50} />);
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
     const handler = wrapper.find('.rc-slider-handle').first();
 
     wrapper.simulate('focus');
@@ -96,250 +96,364 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalledWith(51);
   });
 
-  // it('decreases the value for reverse-vertical when key "up" is pressed', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} reverse vertical />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('decreases the value for reverse-vertical when key "up" is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} reverse vertical />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.UP });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
 
-  //   expect(wrapper.state('value')).toBe(49);
-  // });
+    expect(onChange).toHaveBeenCalledWith(49);
+  });
 
-  // it('increases the value when key "right" is pressed', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('increases the value when key "right" is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
-  //   expect(wrapper.state('value')).toBe(51);
-  // });
+    expect(onChange).toHaveBeenCalledWith(51);
+  });
 
-  // it('it should trigger onAfterChange when key pressed', () => {
-  //   const onAfterChange = jest.fn();
-  //   const wrapper = mount(<Slider defaultValue={50} onAfterChange={onAfterChange} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('it should trigger onAfterChange when key pressed', () => {
+    const onAfterChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onAfterChange={onAfterChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
-  //   expect(onAfterChange).toBeCalled();
-  // });
+    expect(onAfterChange).toBeCalled();
+  });
 
-  // it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} reverse />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} reverse onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
-  //   expect(wrapper.state('value')).toBe(49);
-  // });
+    expect(onChange).toHaveBeenCalledWith(49);
+  });
 
-  // it('increases the value when key "page up" is pressed, by a factor 2', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('increases the value when key "page up" is pressed, by a factor 2', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.PAGE_UP });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.PAGE_UP });
 
-  //   expect(wrapper.state('value')).toBe(52);
-  // });
+    expect(onChange).toHaveBeenCalledWith(52);
+  });
 
-  // it('decreases the value when key "down" is pressed', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('decreases the value when key "down" is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.DOWN });
 
-  //   expect(wrapper.state('value')).toBe(49);
-  // });
+    expect(onChange).toHaveBeenCalledWith(49);
+  });
 
-  // it('decreases the value when key "left" is pressed', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('decreases the value when key "left" is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.LEFT });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.LEFT });
 
-  //   expect(wrapper.state('value')).toBe(49);
-  // });
+    expect(onChange).toHaveBeenCalledWith(49);
+  });
 
-  // it('it should work fine when arrow key is pressed', () => {
-  //   const wrapper = mount(<Range defaultValue={[20, 50]} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('it should work fine when arrow key is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider range defaultValue={[20, 50]} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').last();
 
-  //   handler.simulate('keyDown', { keyCode: keyCode.LEFT });
-  //   expect(wrapper.state('bounds')).toEqual([20, 49]);
-  //   handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
-  //   expect(wrapper.state('bounds')).toEqual([20, 50]);
-  //   handler.simulate('keyDown', { keyCode: keyCode.UP });
-  //   expect(wrapper.state('bounds')).toEqual([20, 51]);
-  //   handler.simulate('keyDown', { keyCode: keyCode.DOWN });
-  //   expect(wrapper.state('bounds')).toEqual([20, 50]);
-  // });
+    handler.simulate('keyDown', { keyCode: keyCode.LEFT });
+    expect(onChange).toHaveBeenCalledWith([20, 49]);
+    handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    expect(onChange).toHaveBeenCalledWith([20, 50]);
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).toHaveBeenCalledWith([20, 51]);
+    handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).toHaveBeenCalledWith([20, 50]);
+  });
 
-  // it('decreases the value when key "page down" is pressed, by a factor 2', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('decreases the value when key "page down" is pressed, by a factor 2', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.PAGE_DOWN });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.PAGE_DOWN });
 
-  //   expect(wrapper.state('value')).toBe(48);
-  // });
+    expect(onChange).toHaveBeenCalledWith(48);
+  });
 
-  // it('sets the value to minimum when key "home" is pressed', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('sets the value to minimum when key "home" is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.HOME });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.HOME });
 
-  //   expect(wrapper.state('value')).toBe(0);
-  // });
+    expect(onChange).toHaveBeenCalledWith(0);
+  });
 
-  // it('sets the value to maximum when the key "end" is pressed', () => {
-  //   const wrapper = mount(<Slider defaultValue={50} />);
-  //   const handler = wrapper.find('.rc-slider-handle').at(1);
+  it('sets the value to maximum when the key "end" is pressed', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider defaultValue={50} onChange={onChange} />);
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  //   wrapper.simulate('focus');
-  //   handler.simulate('keyDown', { keyCode: keyCode.END });
+    wrapper.simulate('focus');
+    handler.simulate('keyDown', { keyCode: keyCode.END });
 
-  //   expect(wrapper.state('value')).toBe(100);
-  // });
+    expect(onChange).toHaveBeenCalledWith(100);
+  });
 
-  // describe('when component has fixed values', () => {
-  //   it('increases the value when key "up" is pressed', () => {
-  //     const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
-  //     const handler = wrapper.find('.rc-slider-handle').at(1);
+  describe('when component has fixed values', () => {
+    it('increases the value when key "up" is pressed', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(
+        <Slider
+          min={20}
+          defaultValue={40}
+          marks={{ 20: 20, 40: 40, 100: 100 }}
+          step={null}
+          onChange={onChange}
+        />,
+      );
+      const handler = wrapper.find('.rc-slider-handle').first();
 
-  //     wrapper.simulate('focus');
-  //     handler.simulate('keyDown', { keyCode: keyCode.UP });
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.UP });
 
-  //     expect(wrapper.state('value')).toBe(100);
-  //   });
+      expect(onChange).toHaveBeenCalledWith(100);
+    });
 
-  //   it('increases the value when key "right" is pressed', () => {
-  //     const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
-  //     const handler = wrapper.find('.rc-slider-handle').at(1);
+    it('increases the value when key "right" is pressed', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(
+        <Slider
+          min={20}
+          defaultValue={40}
+          marks={{ 20: 20, 40: 40, 100: 100 }}
+          step={null}
+          onChange={onChange}
+        />,
+      );
+      const handler = wrapper.find('.rc-slider-handle').first();
 
-  //     wrapper.simulate('focus');
-  //     handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
-  //     expect(wrapper.state('value')).toBe(100);
-  //   });
+      expect(onChange).toHaveBeenCalledWith(100);
+    });
 
-  //   it('decreases the value when key "down" is pressed', () => {
-  //     const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
-  //     const handler = wrapper.find('.rc-slider-handle').at(1);
+    it('decreases the value when key "down" is pressed', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(
+        <Slider
+          min={20}
+          defaultValue={40}
+          marks={{ 20: 20, 40: 40, 100: 100 }}
+          step={null}
+          onChange={onChange}
+        />,
+      );
+      const handler = wrapper.find('.rc-slider-handle').first();
 
-  //     wrapper.simulate('focus');
-  //     handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.DOWN });
 
-  //     expect(wrapper.state('value')).toBe(20);
-  //   });
+      expect(onChange).toHaveBeenCalledWith(20);
+    });
 
-  //   it('decreases the value when key "left" is pressed', () => {
-  //     const wrapper = mount(<Slider min={20} defaultValue={40} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
-  //     const handler = wrapper.find('.rc-slider-handle').at(1);
+    it('decreases the value when key "left" is pressed', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(
+        <Slider
+          min={20}
+          defaultValue={40}
+          marks={{ 20: 20, 40: 40, 100: 100 }}
+          step={null}
+          onChange={onChange}
+        />,
+      );
+      const handler = wrapper.find('.rc-slider-handle').first();
 
-  //     wrapper.simulate('focus');
-  //     handler.simulate('keyDown', { keyCode: keyCode.LEFT });
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.LEFT });
 
-  //     expect(wrapper.state('value')).toBe(20);
-  //   });
+      expect(onChange).toHaveBeenCalledWith(20);
+    });
 
-  //   it('sets the value to minimum when key "home" is pressed', () => {
-  //     const wrapper = mount(<Slider min={20} defaultValue={100} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
-  //     const handler = wrapper.find('.rc-slider-handle').at(1);
+    it('sets the value to minimum when key "home" is pressed', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(
+        <Slider
+          min={20}
+          defaultValue={100}
+          marks={{ 20: 20, 40: 40, 100: 100 }}
+          step={null}
+          onChange={onChange}
+        />,
+      );
+      const handler = wrapper.find('.rc-slider-handle').first();
 
-  //     wrapper.simulate('focus');
-  //     handler.simulate('keyDown', { keyCode: keyCode.HOME });
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.HOME });
 
-  //     expect(wrapper.state('value')).toBe(20);
-  //   });
+      expect(onChange).toHaveBeenCalledWith(20);
+    });
 
-  //   it('sets the value to maximum when the key "end" is pressed', () => {
-  //     const wrapper = mount(<Slider min={20} defaultValue={20} marks={{ 20: 20, 40: 40, 100: 100 }} step={null} />);
-  //     const handler = wrapper.find('.rc-slider-handle').at(1);
+    it('sets the value to maximum when the key "end" is pressed', () => {
+      const onChange = jest.fn();
+      const wrapper = mount(
+        <Slider
+          min={20}
+          defaultValue={20}
+          marks={{ 20: 20, 40: 40, 100: 100 }}
+          step={null}
+          onChange={onChange}
+        />,
+      );
+      const handler = wrapper.find('.rc-slider-handle').first();
 
-  //     wrapper.simulate('focus');
-  //     handler.simulate('keyDown', { keyCode: keyCode.END });
+      wrapper.simulate('focus');
+      handler.simulate('keyDown', { keyCode: keyCode.END });
 
-  //     expect(wrapper.state('value')).toBe(100);
-  //   });
-  // });
+      expect(onChange).toHaveBeenCalledWith(100);
+    });
+  });
 
-  // it('sets aria-label on the handle', () => {
-  //   const wrapper = mount(<Slider ariaLabelForHandle="Some Label" />);
-  //   expect(wrapper.find('.rc-slider-handle').at(1).prop('aria-label')).toEqual('Some Label');
-  // });
+  it('keyboard mix with step & marks', () => {
+    const onChange = jest.fn();
 
-  // it('sets aria-labelledby on the handle', () => {
-  //   const wrapper = mount(<Slider ariaLabelledByForHandle="some_id" />);
-  //   expect(wrapper.find('.rc-slider-handle').at(1).prop('aria-labelledby')).toEqual('some_id');
-  // });
+    // [0], 3, 7, 10
+    const wrapper = mount(
+      <Slider
+        min={0}
+        max={10}
+        step={10}
+        defaultValue={0}
+        marks={{ 3: 3, 7: 7 }}
+        onChange={onChange}
+      />,
+    );
+    const handler = wrapper.find('.rc-slider-handle').first();
 
-  // it('sets aria-valuetext on the handle', () => {
-  //   const wrapper = mount(<Slider min={0} max={5} defaultValue={3} ariaValueTextFormatterForHandle={(value) => `${value} of something`} />);
-  //   const handle = wrapper.find('.rc-slider-handle').at(1);
+    // 0, [3], 7, 10
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).toHaveBeenCalledWith(3);
 
-  //   expect(handle.prop('aria-valuetext')).toEqual('3 of something');
+    // 0, 3, [7], 10
+    onChange.mockReset();
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).toHaveBeenCalledWith(7);
 
-  //   wrapper.simulate('focus');
-  //   handle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    // 0, 3, 7, [10]
+    onChange.mockReset();
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).toHaveBeenCalledWith(10);
 
-  //   expect(wrapper.find('.rc-slider-handle').at(1).props()['aria-valuetext']).toEqual('4 of something');
-  // });
+    // 0, 3, 7, [10]
+    onChange.mockReset();
+    handler.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).not.toHaveBeenCalled();
 
-  // describe('focus & blur', () => {
-  //   let container;
+    // 0, 3, [7], 10
+    onChange.mockReset();
+    handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).toHaveBeenCalledWith(7);
 
-  //   beforeEach(() => {
-  //     container = document.createElement('div');
-  //     document.body.appendChild(container);
-  //   });
+    // 0, [3], 7, 10
+    onChange.mockReset();
+    handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).toHaveBeenCalledWith(3);
 
-  //   afterEach(() => {
-  //     document.body.removeChild(container);
-  //   });
+    // [0], 3, 7, 10
+    onChange.mockReset();
+    handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).toHaveBeenCalledWith(0);
 
-  //   const mockRect = (wrapper) => {
-  //     wrapper.instance().sliderRef.getBoundingClientRect = () => ({
-  //       left: 10,
-  //       width: 100,
-  //     });
-  //   };
+    // [0], 3, 7, 10
+    onChange.mockReset();
+    handler.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).not.toHaveBeenCalled();
+  });
 
-  //   it('focus()', () => {
-  //     const handleFocus = jest.fn();
-  //     const wrapper = mount(
-  //       <Slider min={0} max={10} defaultValue={0} onFocus={handleFocus} />,
-  //       { attachTo: container }
-  //     );
-  //     mockRect(wrapper);
-  //     wrapper.instance().focus();
-  //     expect(handleFocus).toBeCalled();
-  //   });
+  it('sets aria-label on the handle', () => {
+    const wrapper = mount(<Slider ariaLabelForHandle="Some Label" />);
+    expect(wrapper.find('.rc-slider-handle').first().prop('aria-label')).toEqual('Some Label');
+  });
 
-  //   it('blur', () => {
-  //     const handleBlur = jest.fn();
-  //     const wrapper = mount(
-  //       <Slider min={0} max={10} defaultValue={0} onBlur={handleBlur} />,
-  //       { attachTo: container }
-  //     );
-  //     mockRect(wrapper);
-  //     wrapper.instance().focus();
-  //     wrapper.instance().blur();
-  //     expect(handleBlur).toBeCalled();
-  //   });
-  // });
+  it('sets aria-labelledby on the handle', () => {
+    const wrapper = mount(<Slider ariaLabelledByForHandle="some_id" />);
+    expect(wrapper.find('.rc-slider-handle').first().prop('aria-labelledby')).toEqual('some_id');
+  });
 
-  // it('should not be out of range when value is null', () => {
-  //   const wrapper = mount(<Slider value={null} min={1} max={10} />);
-  //   expect(wrapper.find('Track').props().length >= 0).toBeTruthy();
-  // });
+  it('sets aria-valuetext on the handle', () => {
+    const wrapper = mount(
+      <Slider
+        min={0}
+        max={5}
+        defaultValue={3}
+        ariaValueTextFormatterForHandle={(value) => `${value} of something`}
+      />,
+    );
+    const handle = wrapper.find('.rc-slider-handle').first();
+
+    expect(handle.prop('aria-valuetext')).toEqual('3 of something');
+
+    wrapper.simulate('focus');
+    handle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+
+    expect(wrapper.find('.rc-slider-handle').first().props()['aria-valuetext']).toEqual(
+      '4 of something',
+    );
+  });
+
+  describe('focus & blur', () => {
+    it('focus()', () => {
+      const handleFocus = jest.fn();
+      const wrapper = mount(<Slider min={0} max={10} defaultValue={0} onFocus={handleFocus} />, {
+        attachTo: document.body,
+      });
+      wrapper.find('.rc-slider-handle').instance().focus();
+      expect(handleFocus).toBeCalled();
+
+      wrapper.unmount();
+    });
+
+    it('blur', () => {
+      const handleBlur = jest.fn();
+      const wrapper = mount(<Slider min={0} max={10} defaultValue={0} onBlur={handleBlur} />, {
+        attachTo: document.body,
+      });
+      wrapper.find('.rc-slider-handle').instance().focus();
+      wrapper.find('.rc-slider-handle').instance().blur();
+      expect(handleBlur).toBeCalled();
+
+      wrapper.unmount();
+    });
+  });
+
+  it('should not be out of range when value is null', () => {
+    const wrapper = mount(<Slider value={null} min={1} max={10} />);
+    expect(wrapper.exists('Track')).toBeFalsy();
+
+    wrapper.setProps({ value: 0 });
+    expect(wrapper.exists('Track')).toBeTruthy();
+  });
 });

@@ -24,7 +24,7 @@ import Steps from './Steps';
  * - No more FindDOMNode
  * - Move all position related style into inline style
  * - Key: up is plus, down is minus
- * - Key with step = null
+ * - fix Key with step = null not align with marks
  */
 
 export interface SliderProps<ValueType = number | number[]> {
@@ -271,8 +271,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         returnValues = returnValues.slice(0, pointCount);
 
         // Fill with count
-        while (returnValues.length && returnValues.length < pointCount) {
-          returnValues.push(returnValues[returnValues.length - 1]);
+        while (returnValues.length < pointCount) {
+          returnValues.push(returnValues[returnValues.length - 1] ?? min);
         }
       }
       returnValues.sort((a, b) => a - b);
