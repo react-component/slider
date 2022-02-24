@@ -48,9 +48,14 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
       let minusKeyCode: number;
 
       switch (direction) {
-        case 'vertical':
+        case 'btt':
           plusKeyCode = KeyCode.UP;
           minusKeyCode = KeyCode.DOWN;
+          break;
+
+        case 'ttb':
+          plusKeyCode = KeyCode.DOWN;
+          minusKeyCode = KeyCode.UP;
           break;
 
         case 'rtl':

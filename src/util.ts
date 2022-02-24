@@ -15,9 +15,14 @@ export function getDirectionStyle(direction: Direction, value: number, min: numb
       positionStyle.transform = 'translateX(50%)';
       break;
 
-    case 'vertical':
+    case 'btt':
       positionStyle.bottom = `${offset * 100}%`;
       positionStyle.transform = 'translateY(50%)';
+      break;
+
+    case 'ttb':
+      positionStyle.top = `${offset * 100}%`;
+      positionStyle.transform = 'translateY(-50%)';
       break;
 
     default:

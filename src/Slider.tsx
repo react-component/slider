@@ -174,7 +174,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const handlesRef = React.useRef<HandlesRef>();
   const containerRef = React.useRef<HTMLDivElement>();
 
-  const direction: Direction = vertical ? 'vertical' : reverse ? 'rtl' : 'ltr';
+  const direction: Direction = React.useMemo(() => {
+    if (vertical) {
+      return reverse ? 'ttb' : 'btt';
+    }
+    return reverse ? 'rtl' : 'ltr';
+  }, [reverse, vertical]);
 
   // ============================= Step =============================
   const mergedStep = React.useMemo(() => (step !== null && step <= 0 ? 1 : step), [step]);
@@ -334,13 +339,18 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const onSliderMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
 
-    const { width, height, left, bottom, right } = containerRef.current.getBoundingClientRect();
+    const { width, height, left, top, bottom, right } =
+      containerRef.current.getBoundingClientRect();
     const { clientX, clientY } = e;
 
     let percent: number;
     switch (direction) {
-      case 'vertical':
+      case 'btt':
         percent = (bottom - clientY) / height;
+        break;
+
+      case 'ttb':
+        percent = (clientY - top) / height;
         break;
 
       case 'rtl':
@@ -473,9 +483,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         ref={containerRef}
         className={classNames(prefixCls, className, {
           [`${prefixCls}-disabled`]: disabled,
-          [`${prefixCls}-vertical`]: direction === 'vertical',
-          [`${prefixCls}-ltr`]: direction === 'ltr',
-          [`${prefixCls}-rtl`]: direction === 'rtl',
+          [`${prefixCls}-vertical`]: vertical,
+          [`${prefixCls}-horizontal`]: !vertical,
         })}
         style={style}
         onMouseDown={onSliderMouseDown}

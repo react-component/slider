@@ -31,8 +31,13 @@ export default function Track(props: TrackProps) {
       positionStyle.width = `${offsetEnd * 100 - offsetStart * 100}%`;
       break;
 
-    case 'vertical':
+    case 'btt':
       positionStyle.bottom = `${offsetStart * 100}%`;
+      positionStyle.height = `${offsetEnd * 100 - offsetStart * 100}%`;
+      break;
+
+    case 'ttb':
+      positionStyle.top = `${offsetStart * 100}%`;
       positionStyle.height = `${offsetEnd * 100 - offsetStart * 100}%`;
       break;
 

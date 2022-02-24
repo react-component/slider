@@ -137,8 +137,12 @@ export default function useDrag(
 
       let offSetPercent: number;
       switch (direction) {
-        case 'vertical':
+        case 'btt':
           offSetPercent = -offsetY / height;
+          break;
+
+        case 'ttb':
+          offSetPercent = offsetY / height;
           break;
 
         case 'rtl':

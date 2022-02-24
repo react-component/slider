@@ -1,3 +1,3 @@
 ## vertical
 
-<code src="../examples/vertical.jsx">
+<code src="../examples/vertical.tsx">
