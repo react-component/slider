@@ -266,8 +266,10 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     // Format as range
     if (range) {
       returnValues = [...valueList];
-      if (count) {
-        const pointCount = count + 1;
+
+      // When count provided or value is `undefined`, we fill values
+      if (count || mergedValue === undefined) {
+        const pointCount = count >= 0 ? count + 1 : 2;
         returnValues = returnValues.slice(0, pointCount);
 
         // Fill with count

@@ -17,71 +17,53 @@ describe('Range', () => {
     expect(wrapper).toMatchSnapshot();
   });
 
-  // it('should render Range with value correctly', () => {
-  //   const wrapper = mount(<Slider range value={[0, 50]} />);
-  //   expect(wrapper.state('bounds')[0]).toBe(0);
-  //   expect(wrapper.state('bounds')[1]).toBe(50);
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().style.left).toMatch(
-  //     '0%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.left).toMatch(
-  //     '50%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().style.right).toMatch(
-  //     'auto',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.right).toMatch(
-  //     'auto',
-  //   );
+  it('should render Range with value correctly', () => {
+    const wrapper = mount(<Slider range value={[0, 50]} />);
+    expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch(
+      '0%',
+    );
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch(
+      '50%',
+    );
 
-  //   const trackStyle = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
-  //   expect(trackStyle.left).toMatch('0%');
-  //   expect(trackStyle.right).toMatch('auto');
-  //   expect(trackStyle.width).toMatch('50%');
-  // });
+    const trackStyle = wrapper.find('.rc-slider-track').at(0).props().style;
+    expect(trackStyle.left).toMatch('0%');
+    expect(trackStyle.width).toMatch('50%');
+  });
 
-  // it('should render reverse Range with value correctly', () => {
-  //   const wrapper = mount(<Slider range value={[0, 50]} reverse />);
-  //   expect(wrapper.state('bounds')[0]).toBe(0);
-  //   expect(wrapper.state('bounds')[1]).toBe(50);
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().style.right).toMatch(
-  //     '0%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.right).toMatch(
-  //     '50%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().style.left).toMatch(
-  //     'auto',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.left).toMatch(
-  //     'auto',
-  //   );
+  it('should render reverse Range with value correctly', () => {
+    const wrapper = mount(<Slider range value={[0, 50]} reverse />);
+    expect(wrapper.find('.rc-slider-handle').at(0).props().style.right).toMatch(
+      '0%',
+    );
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch(
+      '50%',
+    );
 
-  //   const trackStyle = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
-  //   expect(trackStyle.right).toMatch('0%');
-  //   expect(trackStyle.left).toMatch('auto');
-  //   expect(trackStyle.width).toMatch('50%');
-  // });
+    const trackStyle = wrapper.find('.rc-slider-track').at(0).props().style;
+    expect(trackStyle.right).toMatch('0%');
+    expect(trackStyle.width).toMatch('50%');
+  });
 
-  // it('should render Range with tabIndex correctly', () => {
-  //   const wrapper = mount(<Slider range tabIndex={[1, 2]} />);
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().tabIndex).toEqual(1);
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().tabIndex).toEqual(2);
-  // });
+  it('should render Range with tabIndex correctly', () => {
+    const wrapper = mount(<Slider range tabIndex={[1, 2]} />);
+    expect(wrapper.find('.rc-slider-handle').at(0).props().tabIndex).toEqual(1);
+    expect(wrapper.find('.rc-slider-handle').at(1).props().tabIndex).toEqual(2);
+  });
 
-  // it('should render Range without tabIndex (equal null) correctly', () => {
-  //   const wrapper = mount(<Slider range tabIndex={[null, null]} />);
-  //   const firstHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).getDOMNode();
-  //   const secondHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).getDOMNode();
-  //   expect(firstHandle.hasAttribute('tabIndex')).toEqual(false);
-  //   expect(secondHandle.hasAttribute('tabIndex')).toEqual(false);
-  // });
+  it('should render Range without tabIndex (equal null) correctly', () => {
+    const wrapper = mount(<Slider range tabIndex={[null, null]} />);
+    const firstHandle = wrapper.find('.rc-slider-handle').at(0).getDOMNode();
+    const secondHandle = wrapper.find('.rc-slider-handle').at(1).getDOMNode();
+    expect(firstHandle.hasAttribute('tabIndex')).toEqual(false);
+    expect(secondHandle.hasAttribute('tabIndex')).toEqual(false);
+  });
 
   // it('it should trigger onAfterChange when key pressed', () => {
   //   const onAfterChange = jest.fn();
   //   const wrapper = mount(<Slider range defaultValue={[20, 50]} onAfterChange={onAfterChange} />);
 
-  //   const secondHandle = wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1);
+  //   const secondHandle = wrapper.find('.rc-slider-handle').at(1);
   //   wrapper.simulate('focus');
   //   secondHandle.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
@@ -94,42 +76,42 @@ describe('Range', () => {
   //   expect(wrapper.state('bounds')[1]).toBe(25);
   //   expect(wrapper.state('bounds')[2]).toBe(50);
   //   expect(wrapper.state('bounds')[3]).toBe(75);
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(0).props().style.left).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch(
   //     '0%',
   //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.right).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch(
   //     'auto',
   //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.right).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch(
   //     'auto',
   //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(1).props().style.left).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch(
   //     '25%',
   //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(2).props().style.left).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(2).props().style.left).toMatch(
   //     '50%',
   //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(2).props().style.right).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(2).props().style.right).toMatch(
   //     'auto',
   //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(3).props().style.left).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(3).props().style.left).toMatch(
   //     '75%',
   //   );
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').at(3).props().style.right).toMatch(
+  //   expect(wrapper.find('.rc-slider-handle').at(3).props().style.right).toMatch(
   //     'auto',
   //   );
 
-  //   const track1Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(0).props().style;
+  //   const track1Style = wrapper.find('.rc-slider-track').at(0).props().style;
   //   expect(track1Style.left).toMatch('0%');
   //   expect(track1Style.right).toMatch('auto');
   //   expect(track1Style.width).toMatch('25%');
 
-  //   const track2Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(1).props().style;
+  //   const track2Style = wrapper.find('.rc-slider-track').at(1).props().style;
   //   expect(track2Style.left).toMatch('25%');
   //   expect(track2Style.right).toMatch('auto');
   //   expect(track2Style.width).toMatch('25%');
 
-  //   const track3Style = wrapper.find('.rc-slider-track > .rc-slider-track').at(2).props().style;
+  //   const track3Style = wrapper.find('.rc-slider-track').at(2).props().style;
   //   expect(track3Style.left).toMatch('50%');
   //   expect(track3Style.right).toMatch('auto');
   //   expect(track3Style.width).toMatch('25%');
@@ -153,10 +135,10 @@ describe('Range', () => {
   //   const wrapper = mount(<TestParent />);
 
   //   expect(wrapper.instance().getSlider().state.bounds.length).toBe(3);
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').length).toBe(3);
+  //   expect(wrapper.find('.rc-slider-handle').length).toBe(3);
   //   wrapper.setState({ value: [2, 4] });
   //   expect(wrapper.instance().getSlider().state.bounds.length).toBe(2);
-  //   expect(wrapper.find('.rc-slider-handle > .rc-slider-handle').length).toBe(2);
+  //   expect(wrapper.find('.rc-slider-handle').length).toBe(2);
   // });
 
   // it('should only update bounds that are out of range', () => {
