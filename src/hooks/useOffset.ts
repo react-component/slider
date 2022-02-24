@@ -145,18 +145,54 @@ export default function useOffset(
     }
   };
 
+  const needPush = (dist: number) => {
+    return (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
+  };
+
   // Values
   const offsetValues: OffsetValues = (values, offset, valueIndex) => {
     const nextValues = values.map(formatValue);
     const nextValue = offsetValue(nextValues, offset, valueIndex);
     nextValues[valueIndex] = nextValue;
 
-    if (typeof pushable === 'number') {
-      // nextValues[valueIndex] = offsetValue(nextValues, offset, valueIndex);
+    if (typeof pushable === 'number' || pushable === null) {
+      // >>>>>> Basic push
+      // End values
+      for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
+        const dist = nextValues[i] - nextValues[i - 1];
+        if (needPush(dist)) {
+          nextValues[i] = offsetValue(nextValues, 1, i);
+        }
+      }
+
+      // Start values
+      for (let i = valueIndex; i > 0; i -= 1) {
+        const dist = nextValues[i] - nextValues[i - 1];
+        if (needPush(dist)) {
+          nextValues[i - 1] = offsetValue(nextValues, -1, i - 1);
+        }
+      }
+
+      // >>>>> Revert back to safe push range
+      // End to Start
+      for (let i = nextValues.length - 1; i > 0; i -= 1) {
+        const dist = nextValues[i] - nextValues[i - 1];
+        if (needPush(dist)) {
+          nextValues[i - 1] = offsetValue(nextValues, -1, i - 1);
+        }
+      }
+
+      // Start to End
+      for (let i = 0; i < nextValues.length - 1; i += 1) {
+        const dist = nextValues[i + 1] - nextValues[i];
+        if (needPush(dist)) {
+          nextValues[i + 1] = offsetValue(nextValues, 1, i + 1);
+        }
+      }
     }
 
     return {
-      value: nextValue,
+      value: nextValues[valueIndex],
       values: nextValues,
     };
   };
