@@ -19,12 +19,8 @@ describe('Range', () => {
 
   it('should render Range with value correctly', () => {
     const wrapper = mount(<Slider range value={[0, 50]} />);
-    expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch(
-      '0%',
-    );
-    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch(
-      '50%',
-    );
+    expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch('0%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('50%');
 
     const trackStyle = wrapper.find('.rc-slider-track').at(0).props().style;
     expect(trackStyle.left).toMatch('0%');
@@ -33,12 +29,8 @@ describe('Range', () => {
 
   it('should render reverse Range with value correctly', () => {
     const wrapper = mount(<Slider range value={[0, 50]} reverse />);
-    expect(wrapper.find('.rc-slider-handle').at(0).props().style.right).toMatch(
-      '0%',
-    );
-    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch(
-      '50%',
-    );
+    expect(wrapper.find('.rc-slider-handle').at(0).props().style.right).toMatch('0%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
 
     const trackStyle = wrapper.find('.rc-slider-track').at(0).props().style;
     expect(trackStyle.right).toMatch('0%');
@@ -59,106 +51,65 @@ describe('Range', () => {
     expect(secondHandle.hasAttribute('tabIndex')).toEqual(false);
   });
 
-  // it('it should trigger onAfterChange when key pressed', () => {
-  //   const onAfterChange = jest.fn();
-  //   const wrapper = mount(<Slider range defaultValue={[20, 50]} onAfterChange={onAfterChange} />);
+  it('it should trigger onAfterChange when key pressed', () => {
+    const onAfterChange = jest.fn();
+    const wrapper = mount(<Slider range defaultValue={[20, 50]} onAfterChange={onAfterChange} />);
 
-  //   const secondHandle = wrapper.find('.rc-slider-handle').at(1);
-  //   wrapper.simulate('focus');
-  //   secondHandle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    const secondHandle = wrapper.find('.rc-slider-handle').at(1);
+    wrapper.simulate('focus');
+    secondHandle.simulate('keyDown', { keyCode: keyCode.RIGHT });
 
-  //   expect(onAfterChange).toBeCalled();
-  // });
+    expect(onAfterChange).toBeCalled();
+  });
 
-  // it('should render Multi-Range with value correctly', () => {
-  //   const wrapper = mount(<Slider range count={3} value={[0, 25, 50, 75]} />);
-  //   expect(wrapper.state('bounds')[0]).toBe(0);
-  //   expect(wrapper.state('bounds')[1]).toBe(25);
-  //   expect(wrapper.state('bounds')[2]).toBe(50);
-  //   expect(wrapper.state('bounds')[3]).toBe(75);
-  //   expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch(
-  //     '0%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch(
-  //     'auto',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch(
-  //     'auto',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch(
-  //     '25%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle').at(2).props().style.left).toMatch(
-  //     '50%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle').at(2).props().style.right).toMatch(
-  //     'auto',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle').at(3).props().style.left).toMatch(
-  //     '75%',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle').at(3).props().style.right).toMatch(
-  //     'auto',
-  //   );
+  it('should render Multi-Range with value correctly', () => {
+    const wrapper = mount(<Slider range count={3} value={[0, 25, 50, 75]} />);
+    expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch('0%');
+    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('25%');
+    expect(wrapper.find('.rc-slider-handle').at(2).props().style.left).toMatch('50%');
+    expect(wrapper.find('.rc-slider-handle').at(3).props().style.left).toMatch('75%');
 
-  //   const track1Style = wrapper.find('.rc-slider-track').at(0).props().style;
-  //   expect(track1Style.left).toMatch('0%');
-  //   expect(track1Style.right).toMatch('auto');
-  //   expect(track1Style.width).toMatch('25%');
+    const track1Style = wrapper.find('.rc-slider-track').at(0).props().style;
+    expect(track1Style.left).toMatch('0%');
+    expect(track1Style.width).toMatch('25%');
 
-  //   const track2Style = wrapper.find('.rc-slider-track').at(1).props().style;
-  //   expect(track2Style.left).toMatch('25%');
-  //   expect(track2Style.right).toMatch('auto');
-  //   expect(track2Style.width).toMatch('25%');
+    const track2Style = wrapper.find('.rc-slider-track').at(1).props().style;
+    expect(track2Style.left).toMatch('25%');
+    expect(track2Style.width).toMatch('25%');
 
-  //   const track3Style = wrapper.find('.rc-slider-track').at(2).props().style;
-  //   expect(track3Style.left).toMatch('50%');
-  //   expect(track3Style.right).toMatch('auto');
-  //   expect(track3Style.width).toMatch('25%');
-  // });
+    const track3Style = wrapper.find('.rc-slider-track').at(2).props().style;
+    expect(track3Style.left).toMatch('50%');
+    expect(track3Style.width).toMatch('25%');
+  });
 
-  // it('should update Range correctly in controllered model', () => {
-  //   class TestParent extends React.Component {
-  //     // eslint-disable-line
-  //     state = {
-  //       value: [2, 4, 6],
-  //     };
+  it('should update Range correctly in controlled model', () => {
+    const wrapper = mount(<Slider range value={[2, 4, 6]} />);
+    expect(wrapper.find('.rc-slider-handle')).toHaveLength(3);
 
-  //     getSlider() {
-  //       return this.refs.slider;
-  //     }
+    wrapper.setProps({ value: [2, 4] });
+    wrapper.update();
+    expect(wrapper.find('.rc-slider-handle')).toHaveLength(2);
+  });
 
-  //     render() {
-  //       return <Slider range ref="slider" value={this.state.value} />;
-  //     }
-  //   }
-  //   const wrapper = mount(<TestParent />);
+  it.skip('should only update bounds that are out of range', () => {
+    const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
+    const range = mount(<Slider range {...props} step={0.1} />);
+    range.setProps({ min: 0, max: 500 });
 
-  //   expect(wrapper.instance().getSlider().state.bounds.length).toBe(3);
-  //   expect(wrapper.find('.rc-slider-handle').length).toBe(3);
-  //   wrapper.setState({ value: [2, 4] });
-  //   expect(wrapper.instance().getSlider().state.bounds.length).toBe(2);
-  //   expect(wrapper.find('.rc-slider-handle').length).toBe(2);
-  // });
+    expect(props.onChange).toHaveBeenCalledWith([0.01, 500]);
+  });
 
-  // it('should only update bounds that are out of range', () => {
-  //   const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
-  //   const range = mount(<Slider range {...props} step={0.1} />);
-  //   range.setProps({ min: 0, max: 500 });
+  it.skip('should only update bounds if they are out of range', () => {
+    const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
+    const range = mount(<Slider range {...props} />);
+    range.setProps({ min: 0, max: 500, value: [0.01, 466] });
 
-  //   expect(props.onChange).toHaveBeenCalledWith([0.01, 500]);
-  // });
+    expect(props.onChange).toHaveBeenCalledTimes(0);
+  });
 
-  // it('should only update bounds if they are out of range', () => {
-  //   const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
-  //   const range = mount(<Slider range {...props} />);
-  //   range.setProps({ min: 0, max: 500, value: [0.01, 466] });
-
-  //   expect(props.onChange).toHaveBeenCalledTimes(0);
-  // });
-
-  // // https://github.com/react-component/slider/pull/256
-  // it('should handle mutli handle mouseEnter correctly', () => {
+  // https://github.com/react-component/slider/pull/256
+  // Move to antd instead
+  // it('should handle multi handle mouseEnter correctly', () => {
   //   const wrapper = mount(<Slider range WithTooltip min={0} max={1000} defaultValue={[50, 55]} />);
   //   wrapper.find('.rc-slider-handle').at(1).simulate('mouseEnter');
   //   expect(wrapper.state().visibles[0]).toBe(true);
@@ -170,39 +121,18 @@ describe('Range', () => {
   //   expect(wrapper.state().visibles[1]).toBe(false);
   // });
 
-  // it('should keep pushable when not allowCross and setState', () => {
-  //   class CustomizedRange extends React.Component {
-  //     // eslint-disable-line
-  //     constructor(props) {
-  //       super(props);
-  //       this.state = {
-  //         value: [20, 40],
-  //       };
-  //     }
+  it('should keep pushable when not allowCross', () => {
+    const wrapper = mount(
+      <Slider range allowCross={false} value={[20, 40]} pushable={10} />,
+    );
+      expect(wrapper.find('Handles').props().values).toEqual([20, 40]);
 
-  //     getSlider() {
-  //       return this.refs.slider;
-  //     }
+      wrapper.setProps({ value: [30, 40] });
+      expect(wrapper.find('Handles').props().values).toEqual([30, 40]);
 
-  //     render() {
-  //       return (
-  //         <Slider range ref="slider" allowCross={false} value={this.state.value} pushable={10} />
-  //       );
-  //     }
-  //   }
-  //   const wrapper = mount(<CustomizedRange />);
-  //   expect(wrapper.instance().getSlider().state.bounds[0]).toBe(20);
-  //   expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
-  //   wrapper.setState({ value: [30, 40] });
-  //   expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
-  //   expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
-  //   wrapper.setState({ value: [35, 40] });
-  //   expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
-  //   expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
-  //   wrapper.setState({ value: [30, 30] });
-  //   expect(wrapper.instance().getSlider().state.bounds[0]).toBe(30);
-  //   expect(wrapper.instance().getSlider().state.bounds[1]).toBe(40);
-  // });
+      wrapper.find('.rc-slider-handle').first().simulate('keyDown', { keyCode: keyCode.UP });
+      expect(wrapper.find('Handles').props().values).toEqual([31, 41]);
+  });
 
   // it('should render correctly when allowCross', () => {
   //   class CustomizedRange extends React.Component {

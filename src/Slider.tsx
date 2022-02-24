@@ -25,6 +25,7 @@ import Steps from './Steps';
  * - Move all position related style into inline style
  * - Key: up is plus, down is minus
  * - fix Key with step = null not align with marks
+ * - Change range should not trigger onChange
  */
 
 export interface SliderProps<ValueType = number | number[]> {
