@@ -7,6 +7,9 @@ type FormatRangeValue = (value: number) => number;
 /** Format value align with step */
 type FormatStepValue = (value: number) => number;
 
+/** Format value align with step & marks */
+type FormatValue = (value: number) => number;
+
 type OffsetValue = (values: number[], offset: number, valueIndex: number) => number;
 
 export default function useOffset(
@@ -14,7 +17,7 @@ export default function useOffset(
   max: number,
   step: number,
   markList: InternalMarkObj[],
-): [FormatRangeValue, FormatStepValue, OffsetValue] {
+): [FormatRangeValue, FormatStepValue, FormatValue, OffsetValue] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => {
       let formatNextValue = Math.min(max, val);
@@ -33,6 +36,33 @@ export default function useOffset(
       return null;
     },
     [step, min, formatRangeValue],
+  );
+
+  const formatValue: FormatValue = React.useCallback(
+    (val) => {
+      const formatNextValue = formatRangeValue(val);
+
+      // List align values
+      const alignValues = markList.map((mark) => mark.value);
+      if (step !== null) {
+        alignValues.push(formatStepValue(val));
+      }
+
+      // Align with marks
+      let closeValue = alignValues[0];
+      let closeDist = max - min;
+
+      alignValues.forEach((alignValue) => {
+        const dist = Math.abs(formatNextValue - alignValue);
+        if (dist <= closeDist) {
+          closeValue = alignValue;
+          closeDist = dist;
+        }
+      });
+
+      return closeValue;
+    },
+    [min, max, markList, step, formatRangeValue, formatStepValue],
   );
 
   const offsetValue: OffsetValue = (values, offset, valueIndex) => {
@@ -61,8 +91,10 @@ export default function useOffset(
       potentialValues.push(nextStepValue);
     }
 
+    const sign = offset > 0 ? 1 : -1;
+
     // Put offset step value also
-    const nextStepOffsetValue = formatStepValue(originValue + offset * step);
+    const nextStepOffsetValue = formatStepValue(originValue + sign * step);
     if (nextStepValue !== null) {
       potentialValues.push(nextStepOffsetValue);
     }
@@ -79,8 +111,15 @@ export default function useOffset(
       }
     });
 
+    if (Math.abs(offset) > 1) {
+      const cloneValues = [...values];
+      cloneValues[valueIndex] = nextValue;
+
+      return offsetValue(cloneValues, offset - sign, valueIndex);
+    }
+
     return nextValue;
   };
 
-  return [formatRangeValue, formatStepValue, offsetValue];
+  return [formatRangeValue, formatStepValue, formatValue, offsetValue];
 }

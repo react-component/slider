@@ -200,39 +200,11 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [marks]);
 
   // ============================ Format ============================
-  const [formatRangeValue, formatStepValue, offsetValue] = useOffset(
+  const [formatRangeValue, formatStepValue, formatValue, offsetValue] = useOffset(
     min,
     max,
     mergedStep,
     markList,
-  );
-
-  /** Format value align with step & marks */
-  const formatValue = React.useCallback(
-    (val: number) => {
-      const formatNextValue = formatRangeValue(val);
-
-      // List align values
-      const alignValues = markList.map((mark) => mark.value);
-      if (mergedStep !== null) {
-        alignValues.push(formatStepValue(val));
-      }
-
-      // Align with marks
-      let closeValue = alignValues[0];
-      let closeDist = max - min;
-
-      alignValues.forEach((alignValue) => {
-        const dist = Math.abs(formatNextValue - alignValue);
-        if (dist <= closeDist) {
-          closeValue = alignValue;
-          closeDist = dist;
-        }
-      });
-
-      return closeValue;
-    },
-    [min, max, markList, mergedStep, formatRangeValue, formatStepValue],
   );
 
   // ============================ Values ============================

@@ -38,7 +38,6 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
   const {
     min,
     max,
-    step,
     direction,
     disabled,
     range,
