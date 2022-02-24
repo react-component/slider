@@ -23,12 +23,27 @@ function log(value) {
 
 export default () => (
   <div>
-    <div style={style}>
+    {/* <div style={style}>
       <p>Slider with marks, `step=null`</p>
       <Slider min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
-    </div>
+    </div> */}
 
     <div style={style}>
+      <p>Range Slider with marks, `step=null`, pushable, draggableTrack</p>
+      <Slider
+        range
+        min={-10}
+        marks={marks}
+        step={null}
+        onChange={log}
+        defaultValue={[-10, 0]}
+        allowCross={false}
+        pushable
+        draggableTrack
+      />
+    </div>
+
+    {/* <div style={style}>
       <p>Slider with marks and steps</p>
       <Slider dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
@@ -53,6 +68,6 @@ export default () => (
     <div style={style}>
       <p>Range with marks and steps</p>
       <Slider range min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
-    </div>
+    </div> */}
   </div>
 );

@@ -51,9 +51,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
   // =========================== Keyboard ===========================
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (!disabled) {
-      e.preventDefault();
-
-      let offset: number = 0;
+      let offset: number | 'min' | 'max' = null;
 
       // Change the value
       switch (e.which || e.keyCode) {
@@ -76,11 +74,11 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
           break;
 
         case KeyCode.HOME:
-          onOffsetChange('min', valueIndex);
+          offset = 'min';
           break;
 
         case KeyCode.END:
-          onOffsetChange('max', valueIndex);
+          offset = 'max';
           break;
 
         case KeyCode.PAGE_UP:
@@ -92,7 +90,8 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
           break;
       }
 
-      if (offset !== 0) {
+      if (offset !== null) {
+        e.preventDefault();
         onOffsetChange(offset, valueIndex);
       }
     }

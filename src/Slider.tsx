@@ -200,11 +200,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [marks]);
 
   // ============================ Format ============================
-  const [formatRangeValue, formatStepValue, formatValue, offsetValue] = useOffset(
+  const [formatValue, offsetValue, offsetValues] = useOffset(
     min,
     max,
     mergedStep,
     markList,
+    allowCross,
+    mergedPush,
   );
 
   // ============================ Values ============================
@@ -329,31 +331,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
     if (!disabled) {
-      let nextValue: number;
-
-      if (offset === 'min') {
-        nextValue = min;
-      } else if (offset === 'max') {
-        nextValue = max;
-      } else {
-        nextValue = offsetValue(rawValues, offset, valueIndex);
-      }
-
-      const cloneNextValues = [...rawValues];
-      const formattedValue = formatValue(nextValue);
-
-      // Do nothing if not any valid value
-      if (isNaN(formattedValue)) {
-        return;
-      }
-
-      cloneNextValues[valueIndex] = formatValue(formattedValue);
+      const next = offsetValues(rawValues, offset, valueIndex);
 
       onBeforeChange?.(getTriggerValue(rawValues));
-      triggerChange(cloneNextValues);
-      onAfterChange?.(getTriggerValue(cloneNextValues));
+      triggerChange(next.values);
+      onAfterChange?.(getTriggerValue(next.values));
 
-      setKeyboardValue(formattedValue);
+      setKeyboardValue(next.value);
     }
   };
 

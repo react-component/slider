@@ -10,14 +10,25 @@ type FormatStepValue = (value: number) => number;
 /** Format value align with step & marks */
 type FormatValue = (value: number) => number;
 
-type OffsetValue = (values: number[], offset: number, valueIndex: number) => number;
+type OffsetValue = (values: number[], offset: number | 'min' | 'max', valueIndex: number) => number;
+
+type OffsetValues = (
+  values: number[],
+  offset: number | 'min' | 'max',
+  valueIndex: number,
+) => {
+  value: number;
+  values: number[];
+};
 
 export default function useOffset(
   min: number,
   max: number,
   step: number,
   markList: InternalMarkObj[],
-): [FormatRangeValue, FormatStepValue, FormatValue, OffsetValue] {
+  allowCross: boolean,
+  pushable: false | number,
+): [FormatValue, OffsetValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => {
       let formatNextValue = Math.min(max, val);
@@ -65,61 +76,90 @@ export default function useOffset(
     [min, max, markList, step, formatRangeValue, formatStepValue],
   );
 
+  // ========================== Offset ==========================
+  // Single Value
   const offsetValue: OffsetValue = (values, offset, valueIndex) => {
-    let nextValue: number;
-    const originValue = values[valueIndex];
+    if (typeof offset === 'number') {
+      let nextValue: number;
+      const originValue = values[valueIndex];
 
-    // Compare next step value & mark value which is best match
-    const potentialValues: number[] = [];
-    markList.forEach((mark) => {
+      // Compare next step value & mark value which is best match
+      const potentialValues: number[] = [];
+      markList.forEach((mark) => {
+        if (
+          // Negative mark
+          (offset < 0 && mark.value < originValue) ||
+          // Positive mark
+          (offset > 0 && mark.value > originValue)
+        ) {
+          potentialValues.push(mark.value);
+        }
+      });
+
+      // In case origin value is align with mark
+      const nextStepValue = formatStepValue(originValue);
       if (
-        // Negative mark
-        (offset < 0 && mark.value < originValue) ||
-        // Positive mark
-        (offset > 0 && mark.value > originValue)
+        (offset < 0 && nextStepValue < originValue) ||
+        (offset > 0 && nextStepValue > originValue)
       ) {
-        potentialValues.push(mark.value);
+        potentialValues.push(nextStepValue);
       }
-    });
 
-    // In case origin value is align with mark
-    const nextStepValue = formatStepValue(originValue);
-    if (
-      (offset < 0 && nextStepValue < originValue) ||
-      (offset > 0 && nextStepValue > originValue)
-    ) {
-      potentialValues.push(nextStepValue);
-    }
+      const sign = offset > 0 ? 1 : -1;
 
-    const sign = offset > 0 ? 1 : -1;
-
-    // Put offset step value also
-    const nextStepOffsetValue = formatStepValue(originValue + sign * step);
-    if (nextStepValue !== null) {
-      potentialValues.push(nextStepOffsetValue);
-    }
-
-    // Find close one
-    nextValue = potentialValues[0];
-    let valueDist = Math.abs(nextValue - originValue);
-
-    potentialValues.forEach((potentialValue) => {
-      const dist = Math.abs(potentialValue - originValue);
-      if (dist < valueDist) {
-        nextValue = potentialValue;
-        valueDist = dist;
+      // Put offset step value also
+      const nextStepOffsetValue = formatStepValue(originValue + sign * step);
+      if (nextStepValue !== null) {
+        potentialValues.push(nextStepOffsetValue);
       }
-    });
 
-    if (Math.abs(offset) > 1) {
-      const cloneValues = [...values];
-      cloneValues[valueIndex] = nextValue;
+      // Find close one
+      nextValue = potentialValues[0];
+      let valueDist = Math.abs(nextValue - originValue);
 
-      return offsetValue(cloneValues, offset - sign, valueIndex);
+      potentialValues.forEach((potentialValue) => {
+        const dist = Math.abs(potentialValue - originValue);
+        if (dist < valueDist) {
+          nextValue = potentialValue;
+          valueDist = dist;
+        }
+      });
+
+      // Out of range will back to range
+      if (nextValue === undefined) {
+        return offset < 0 ? min : max;
+      }
+
+      if (Math.abs(offset) > 1) {
+        const cloneValues = [...values];
+        cloneValues[valueIndex] = nextValue;
+
+        return offsetValue(cloneValues, offset - sign, valueIndex);
+      }
+
+      return nextValue;
+    } else if (offset === 'min') {
+      return min;
+    } else if (offset === 'max') {
+      return max;
     }
-
-    return nextValue;
   };
 
-  return [formatRangeValue, formatStepValue, formatValue, offsetValue];
+  // Values
+  const offsetValues: OffsetValues = (values, offset, valueIndex) => {
+    const nextValues = values.map(formatValue);
+    const nextValue = offsetValue(nextValues, offset, valueIndex);
+    nextValues[valueIndex] = nextValue;
+
+    if (typeof pushable === 'number') {
+      // nextValues[valueIndex] = offsetValue(nextValues, offset, valueIndex);
+    }
+
+    return {
+      value: nextValue,
+      values: nextValues,
+    };
+  };
+
+  return [formatValue, offsetValue, offsetValues];
 }
