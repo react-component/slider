@@ -8,7 +8,7 @@ export interface HandlesProps {
   style?: React.CSSProperties | React.CSSProperties[];
   values: number[];
   onStartMove: (e: React.MouseEvent, value: number) => void;
-  onChange: (value: number, valueIndex: number) => void;
+  onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   handleRender?: HandleProps['render'];
@@ -24,7 +24,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
     prefixCls,
     style,
     onStartMove,
-    onChange,
+    onOffsetChange,
     values,
     handleRender,
     draggingIndex,
@@ -56,7 +56,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
           value={value}
           valueIndex={index}
           onStartMove={onStartMove}
-          onChange={onChange}
+          onOffsetChange={onOffsetChange}
           render={handleRender}
           {...restProps}
         />

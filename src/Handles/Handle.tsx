@@ -17,7 +17,7 @@ export interface HandleProps {
   valueIndex: number;
   dragging: boolean;
   onStartMove: (e: React.MouseEvent, valueIndex: number) => void;
-  onChange: (value: number, valueIndex: number) => void;
+  onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   render?: (origin: React.ReactElement, props: RenderProps) => React.ReactElement;
@@ -32,7 +32,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     style,
     render,
     dragging,
-    onChange,
+    onOffsetChange,
     ...restProps
   } = props;
   const {
@@ -54,65 +54,47 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     if (!disabled) {
       e.preventDefault();
 
-      // Map the plus /  minus keys to the direction of the current handle
-      let plusKeyCode: number;
-      let minusKeyCode: number;
-
-      switch (direction) {
-        case 'btt':
-          plusKeyCode = KeyCode.UP;
-          minusKeyCode = KeyCode.DOWN;
-          break;
-
-        case 'ttb':
-          plusKeyCode = KeyCode.DOWN;
-          minusKeyCode = KeyCode.UP;
-          break;
-
-        case 'rtl':
-          plusKeyCode = KeyCode.LEFT;
-          minusKeyCode = KeyCode.RIGHT;
-          break;
-
-        default:
-          plusKeyCode = KeyCode.RIGHT;
-          minusKeyCode = KeyCode.LEFT;
-          break;
-      }
+      let offset: number = 0;
 
       // Change the value
       switch (e.which) {
+        case KeyCode.LEFT:
+          offset = direction === 'ltr' || direction === 'btt' ? -1 : 1;
+          break;
+
+        case KeyCode.RIGHT:
+          offset = direction === 'ltr' || direction === 'btt' ? 1 : -1;
+          break;
+
+        // Up is plus
+        case KeyCode.UP:
+          offset = direction !== 'ttb' ? 1 : -1;
+          break;
+
+        // Down is minus
+        case KeyCode.DOWN:
+          offset = direction !== 'ttb' ? -1 : 1;
+          break;
+
         case KeyCode.HOME:
-          onChange(min, valueIndex);
+          onOffsetChange('min', valueIndex);
           break;
 
         case KeyCode.END:
-          onChange(max, valueIndex);
+          onOffsetChange('max', valueIndex);
           break;
 
         case KeyCode.PAGE_UP:
-          if (step !== null) {
-            onChange(value + step * 2, valueIndex);
-          }
+          offset = 2;
           break;
 
         case KeyCode.PAGE_DOWN:
-          if (step !== null) {
-            onChange(value - step * 2, valueIndex);
-          }
+          offset = -2;
           break;
+      }
 
-        case plusKeyCode:
-          if (step !== null) {
-            onChange(value + step, valueIndex);
-          }
-          break;
-
-        case minusKeyCode:
-          if (step !== null) {
-            onChange(value - step, valueIndex);
-          }
-          break;
+      if (offset !== 0) {
+        onOffsetChange(offset, valueIndex);
       }
     }
   };

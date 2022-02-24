@@ -10,7 +10,6 @@ export interface TrackProps {
   start: number;
   end: number;
   index: number;
-  onlyOne: boolean;
   onStartMove?: OnStartMove;
 }
 

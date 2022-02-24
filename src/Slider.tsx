@@ -10,7 +10,8 @@ import SliderContext from './context';
 import type { SliderContextProps } from './context';
 import Tracks from './Tracks';
 import type { AriaValueFormat, Direction, OnStartMove } from './interface';
-import Marks, { MarkObj } from './Marks';
+import Marks from './Marks';
+import type { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
 import Steps from './Steps';
 
@@ -22,6 +23,8 @@ import Steps from './Steps';
  * - Fix pushable not work in some case
  * - No more FindDOMNode
  * - Move all position related style into inline style
+ * - Key: up is plus, down is minus
+ * - Key with step = null
  */
 
 export interface SliderProps<ValueType = number | number[]> {
@@ -194,15 +197,37 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [marks]);
 
   // ============================ Format ============================
-  const formatValue = React.useCallback(
+  /** Format the value in the range of [min, max] */
+  const formatRangeValue = React.useCallback(
     (val: number) => {
       let formatNextValue = Math.min(max, val);
       formatNextValue = Math.max(min, formatNextValue);
 
+      return formatNextValue;
+    },
+    [min, max],
+  );
+
+  /** Format value align with step */
+  const formatStepValue = React.useCallback(
+    (val: number) => {
+      if (mergedStep !== null) {
+        return min + Math.round((formatRangeValue(val) - min) / mergedStep) * mergedStep;
+      }
+      return null;
+    },
+    [mergedStep, min, formatRangeValue],
+  );
+
+  /** Format value align with step & marks */
+  const formatValue = React.useCallback(
+    (val: number) => {
+      const formatNextValue = formatRangeValue(val);
+
       // List align values
       const alignValues = markList.map((mark) => mark.value);
       if (mergedStep !== null) {
-        alignValues.push(min + Math.round((formatNextValue - min) / mergedStep) * mergedStep);
+        alignValues.push(formatStepValue(val));
       }
 
       // Align with marks
@@ -219,7 +244,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       return closeValue;
     },
-    [min, max, markList, mergedStep],
+    [min, max, markList, mergedStep, formatRangeValue, formatStepValue],
   );
 
   // ============================ Values ============================
@@ -340,10 +365,65 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // =========================== Keyboard ===========================
   const [keyboardValue, setKeyboardValue] = React.useState<number>(null);
 
-  const onHandleChange = (nextValue: number, valueIndex: number) => {
+  const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
     if (!disabled) {
+      let nextValue: number;
+      const originValue = rawValues[valueIndex];
+
+      if (offset === 'min') {
+        nextValue = min;
+      } else if (offset === 'max') {
+        nextValue = max;
+      } else {
+        // Compare next step value & mark value which is best match
+        const potentialValues: number[] = [];
+        markList.forEach((mark) => {
+          if (
+            // Negative mark
+            (offset < 0 && mark.value < originValue) ||
+            // Positive mark
+            (offset > 0 && mark.value > originValue)
+          ) {
+            potentialValues.push(mark.value);
+          }
+        });
+
+        // In case origin value is align with mark
+        const nextStepValue = formatStepValue(originValue);
+        if (
+          (offset < 0 && nextStepValue < originValue) ||
+          (offset > 0 && nextStepValue > originValue)
+        ) {
+          potentialValues.push(nextStepValue);
+        }
+
+        // Put offset step value also
+        const nextStepOffsetValue = formatStepValue(originValue + offset * mergedStep);
+        if (nextStepValue !== null) {
+          potentialValues.push(nextStepOffsetValue);
+        }
+
+        // Find close one
+        nextValue = potentialValues[0];
+        let valueDist = Math.abs(nextValue - originValue);
+
+        potentialValues.forEach((potentialValue) => {
+          const dist = Math.abs(potentialValue - originValue);
+          if (dist < valueDist) {
+            nextValue = potentialValue;
+            valueDist = dist;
+          }
+        });
+      }
+
       const cloneNextValues = [...rawValues];
       const formattedValue = formatValue(nextValue);
+
+      // Do nothing if not any valid value
+      if (isNaN(formattedValue)) {
+        return;
+      }
+
       cloneNextValues[valueIndex] = formatValue(formattedValue);
 
       onBeforeChange?.(getTriggerValue(rawValues));
@@ -504,7 +584,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           values={cacheValues}
           draggingIndex={draggingIndex}
           onStartMove={onStartMove}
-          onChange={onHandleChange}
+          onOffsetChange={onHandleOffsetChange}
           onFocus={onFocus}
           onBlur={onBlur}
           handleRender={handleRender}
