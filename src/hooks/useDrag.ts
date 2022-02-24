@@ -13,7 +13,6 @@ export default function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
 ): [number, number, number[], OnStartMove] {
-  // const [originDragValue, setOriginDragValue] = React.useState(null);
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);

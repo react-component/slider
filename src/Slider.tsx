@@ -14,6 +14,7 @@ import Marks from './Marks';
 import type { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
 import Steps from './Steps';
+import useOffset from './hooks/useOffset';
 
 /**
  * New:
@@ -198,27 +199,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [marks]);
 
   // ============================ Format ============================
-  /** Format the value in the range of [min, max] */
-  const formatRangeValue = React.useCallback(
-    (val: number) => {
-      let formatNextValue = Math.min(max, val);
-      formatNextValue = Math.max(min, formatNextValue);
-
-      return formatNextValue;
-    },
-    [min, max],
-  );
-
-  /** Format value align with step */
-  const formatStepValue = React.useCallback(
-    (val: number) => {
-      if (mergedStep !== null) {
-        return min + Math.round((formatRangeValue(val) - min) / mergedStep) * mergedStep;
-      }
-      return null;
-    },
-    [mergedStep, min, formatRangeValue],
-  );
+  const [formatRangeValue, formatStepValue] = useOffset(min, max, mergedStep, markList);
 
   /** Format value align with step & marks */
   const formatValue = React.useCallback(
