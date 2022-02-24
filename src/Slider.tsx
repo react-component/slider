@@ -27,6 +27,7 @@ import useOffset from './hooks/useOffset';
  * - Key: up is plus, down is minus
  * - fix Key with step = null not align with marks
  * - Change range should not trigger onChange
+ * - dragTrack & keyboard support pushable
  */
 
 export interface SliderProps<ValueType = number | number[]> {
@@ -199,7 +200,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [marks]);
 
   // ============================ Format ============================
-  const [formatRangeValue, formatStepValue] = useOffset(min, max, mergedStep, markList);
+  const [formatRangeValue, formatStepValue, offsetValue] = useOffset(
+    min,
+    max,
+    mergedStep,
+    markList,
+  );
 
   /** Format value align with step & marks */
   const formatValue = React.useCallback(
@@ -352,52 +358,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
     if (!disabled) {
       let nextValue: number;
-      const originValue = rawValues[valueIndex];
 
       if (offset === 'min') {
         nextValue = min;
       } else if (offset === 'max') {
         nextValue = max;
       } else {
-        // Compare next step value & mark value which is best match
-        const potentialValues: number[] = [];
-        markList.forEach((mark) => {
-          if (
-            // Negative mark
-            (offset < 0 && mark.value < originValue) ||
-            // Positive mark
-            (offset > 0 && mark.value > originValue)
-          ) {
-            potentialValues.push(mark.value);
-          }
-        });
-
-        // In case origin value is align with mark
-        const nextStepValue = formatStepValue(originValue);
-        if (
-          (offset < 0 && nextStepValue < originValue) ||
-          (offset > 0 && nextStepValue > originValue)
-        ) {
-          potentialValues.push(nextStepValue);
-        }
-
-        // Put offset step value also
-        const nextStepOffsetValue = formatStepValue(originValue + offset * mergedStep);
-        if (nextStepValue !== null) {
-          potentialValues.push(nextStepOffsetValue);
-        }
-
-        // Find close one
-        nextValue = potentialValues[0];
-        let valueDist = Math.abs(nextValue - originValue);
-
-        potentialValues.forEach((potentialValue) => {
-          const dist = Math.abs(potentialValue - originValue);
-          if (dist < valueDist) {
-            nextValue = potentialValue;
-            valueDist = dist;
-          }
-        });
+        nextValue = offsetValue(rawValues, offset, valueIndex);
       }
 
       const cloneNextValues = [...rawValues];

@@ -7,7 +7,7 @@ type FormatRangeValue = (value: number) => number;
 /** Format value align with step */
 type FormatStepValue = (value: number) => number;
 
-type OffsetValue = (values: number[], offset: -1 | 1, valueIndex: number) => number;
+type OffsetValue = (values: number[], offset: number, valueIndex: number) => number;
 
 export default function useOffset(
   min: number,
@@ -16,7 +16,7 @@ export default function useOffset(
   markList: InternalMarkObj[],
 ): [FormatRangeValue, FormatStepValue, OffsetValue] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
-    (val: number) => {
+    (val) => {
       let formatNextValue = Math.min(max, val);
       formatNextValue = Math.max(min, formatNextValue);
 
@@ -26,7 +26,7 @@ export default function useOffset(
   );
 
   const formatStepValue: FormatStepValue = React.useCallback(
-    (val: number) => {
+    (val) => {
       if (step !== null) {
         return min + Math.round((formatRangeValue(val) - min) / step) * step;
       }
@@ -35,7 +35,7 @@ export default function useOffset(
     [step, min, formatRangeValue],
   );
 
-  const offsetValue: OffsetValue = (values: number[], offset: -1 | 1, valueIndex: number) => {
+  const offsetValue: OffsetValue = (values, offset, valueIndex) => {
     let nextValue: number;
     const originValue = values[valueIndex];
 
