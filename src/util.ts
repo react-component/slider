@@ -33,3 +33,8 @@ export function getDirectionStyle(direction: Direction, value: number, min: numb
 
   return positionStyle;
 }
+
+/** Return index value if is list or return value directly */
+export function getIndex<T>(value: T | T[], index: number) {
+  return Array.isArray(value) ? value[index] : value;
+}

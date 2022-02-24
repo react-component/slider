@@ -2,6 +2,7 @@ import * as React from 'react';
 import SliderContext from '../context';
 import Track from './Track';
 import type { OnStartMove } from '../interface';
+import { getIndex } from '@/util';
 
 export interface TrackProps {
   prefixCls: string;
@@ -51,7 +52,7 @@ export default function Tracks(props: TrackProps) {
         <Track
           index={index}
           prefixCls={prefixCls}
-          style={Array.isArray(style) ? style[index] : style}
+          style={getIndex(style, index)}
           start={start}
           end={end}
           key={index}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Handle from './Handle';
 import type { HandleProps } from './Handle';
+import { getIndex } from '@/util';
 
 export interface HandlesProps {
   prefixCls: string;
@@ -50,7 +51,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
           }}
           dragging={draggingIndex === index}
           prefixCls={prefixCls}
-          style={Array.isArray(style) ? style[index] : style}
+          style={getIndex(style, index)}
           key={index}
           value={value}
           valueIndex={index}

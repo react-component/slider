@@ -9,10 +9,9 @@ import useDrag from './hooks/useDrag';
 import SliderContext from './context';
 import type { SliderContextProps } from './context';
 import Tracks from './Tracks';
-import type { Direction, OnStartMove } from './interface';
+import type { AriaValueFormat, Direction, OnStartMove } from './interface';
 import Marks, { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
-import type { MarksProps } from './Marks';
 import Steps from './Steps';
 
 /**
@@ -22,6 +21,7 @@ import Steps from './Steps';
  * - Fix handle with count not correct
  * - Fix pushable not work in some case
  * - No more FindDOMNode
+ * - Move all position related style into inline style
  */
 
 export interface SliderProps<ValueType = number | number[]> {
@@ -75,45 +75,11 @@ export interface SliderProps<ValueType = number | number[]> {
   // Components
   handleRender?: HandlesProps['handleRender'];
 
-  // included?: boolean;
-  // disabled?: boolean;
-  // minimumTrackStyle?: React.CSSProperties;
-  // tabIndex?: number;
-  // ariaLabelForHandle?: string;
-  // ariaLabelledByForHandle?: string;
-  // ariaValueTextFormatterForHandle?: (value: number) => string;
-  // handle?: (props: {
-  //   className: string;
-  //   prefixCls?: string;
-  //   vertical?: boolean;
-  //   offset: number;
-  //   value: number;
-  //   dragging?: boolean;
-  //   disabled?: boolean;
-  //   min?: number;
-  //   max?: number;
-  //   reverse?: boolean;
-  //   index: number;
-  //   tabIndex?: number;
-  //   ariaLabel: string;
-  //   ariaLabelledBy: string;
-  //   ariaValueTextFormatter?: (value: number) => string;
-  //   style?: React.CSSProperties;
-  //   ref?: React.Ref<any>;
-  // }) => React.ReactElement;
-
-  // threshold?: number;
-  // tabIndex?: number | number[];
-  // ariaLabelGroupForHandles?: string | string[];
-  // ariaLabelledByGroupForHandles?: string | string[];
-  // ariaValueTextFormatterGroupForHandles?: ((value: number) => string)[];
-  // handle?: SliderProps['handle'];
-
-  // className?: string;
-  // marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
-  // dots?: boolean;
-  // maximumTrackStyle?: React.CSSProperties;
-  // style?: React.CSSProperties;
+  // Accessibility
+  tabIndex?: number | number[];
+  ariaLabelForHandle?: string | string[];
+  ariaLabelledByForHandle?: string | string[];
+  ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
 }
 
 export interface SliderRef {
@@ -169,6 +135,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Components
     handleRender,
+
+    // Accessibility
+    tabIndex = 0,
+    ariaLabelForHandle,
+    ariaLabelledByForHandle,
+    ariaValueTextFormatterForHandle,
   } = props;
 
   const handlesRef = React.useRef<HandlesRef>();
@@ -472,8 +444,26 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       includedStart,
       includedEnd,
       range,
+      tabIndex,
+      ariaLabelForHandle,
+      ariaLabelledByForHandle,
+      ariaValueTextFormatterForHandle,
     }),
-    [min, max, direction, disabled, mergedStep, included, includedStart, includedEnd, range],
+    [
+      min,
+      max,
+      direction,
+      disabled,
+      mergedStep,
+      included,
+      includedStart,
+      includedEnd,
+      range,
+      tabIndex,
+      ariaLabelForHandle,
+      ariaLabelledByForHandle,
+      ariaValueTextFormatterForHandle,
+    ],
   );
 
   // ============================ Render ============================

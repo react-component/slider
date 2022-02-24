@@ -2,7 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import SliderContext from '../context';
-import { getDirectionStyle } from '../util';
+import { getDirectionStyle, getIndex } from '../util';
 
 interface RenderProps {
   prefixCls: string;
@@ -35,7 +35,17 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     onChange,
     ...restProps
   } = props;
-  const { min, max, step, direction, disabled } = React.useContext(SliderContext);
+  const {
+    min,
+    max,
+    step,
+    direction,
+    disabled,
+    tabIndex,
+    ariaLabelForHandle,
+    ariaLabelledByForHandle,
+    ariaValueTextFormatterForHandle,
+  } = React.useContext(SliderContext);
   const handlePrefixCls = `${prefixCls}-handle`;
 
   // =========================== Keyboard ===========================
@@ -126,12 +136,15 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
         }
       }}
       onKeyDown={onKeyDown}
-      tabIndex={disabled ? null : 0}
+      tabIndex={disabled ? null : getIndex(tabIndex, valueIndex)}
       role="slider"
       aria-valuemin={min}
       aria-valuemax={max}
       aria-valuenow={value}
       aria-disabled={disabled}
+      aria-label={getIndex(ariaLabelForHandle, valueIndex)}
+      aria-labelledby={getIndex(ariaLabelledByForHandle, valueIndex)}
+      aria-valuetext={getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value)}
       {...restProps}
     />
   );
