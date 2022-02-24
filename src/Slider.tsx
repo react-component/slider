@@ -94,7 +94,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     style,
 
     // Status
-    disabled,
+    disabled = false,
     autoFocus,
     onFocus,
     onBlur,

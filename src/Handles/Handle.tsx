@@ -41,6 +41,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     step,
     direction,
     disabled,
+    range,
     tabIndex,
     ariaLabelForHandle,
     ariaLabelledByForHandle,
@@ -124,6 +125,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     <div
       ref={ref}
       className={classNames(handlePrefixCls, {
+        [`${handlePrefixCls}-${valueIndex + 1}`]: range,
         [`${handlePrefixCls}-dragging`]: dragging,
       })}
       style={{

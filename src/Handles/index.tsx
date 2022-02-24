@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Handle from './Handle';
 import type { HandleProps } from './Handle';
-import { getIndex } from '@/util';
+import { getIndex } from '../util';
 
 export interface HandlesProps {
   prefixCls: string;

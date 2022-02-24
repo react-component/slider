@@ -2,7 +2,7 @@ import * as React from 'react';
 import SliderContext from '../context';
 import Track from './Track';
 import type { OnStartMove } from '../interface';
-import { getIndex } from '@/util';
+import { getIndex } from '../util';
 
 export interface TrackProps {
   prefixCls: string;

@@ -10,12 +10,13 @@ export interface TrackProps {
   start: number;
   end: number;
   index: number;
+  onlyOne: boolean;
   onStartMove?: OnStartMove;
 }
 
 export default function Track(props: TrackProps) {
   const { prefixCls, style, start, end, index, onStartMove } = props;
-  const { direction, min, max, disabled } = React.useContext(SliderContext);
+  const { direction, min, max, disabled, range } = React.useContext(SliderContext);
 
   const trackPrefixCls = `${prefixCls}-track`;
 
@@ -48,7 +49,7 @@ export default function Track(props: TrackProps) {
 
   return (
     <div
-      className={classNames(trackPrefixCls, `${trackPrefixCls}-${index + 1}`)}
+      className={classNames(trackPrefixCls, range && `${trackPrefixCls}-${index + 1}`)}
       style={{
         ...positionStyle,
         ...style,
