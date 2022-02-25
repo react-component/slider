@@ -1,8 +1,10 @@
 /* eslint-disable max-len, no-undef, react/no-string-refs, no-param-reassign, max-classes-per-file */
 import React from 'react';
-import { render, mount } from 'enzyme';
+// import { render, mount } from 'enzyme';
 import { act } from 'react-dom/test-utils';
 import keyCode from 'rc-util/lib/KeyCode';
+import { render, fireEvent, waitFor, screen, createEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import Slider from '../src/';
 
@@ -30,104 +32,115 @@ describe('Range', () => {
   });
 
   it('should render Range with correct DOM structure', () => {
-    const wrapper = render(<Slider range />);
-    expect(wrapper).toMatchSnapshot();
+    const { asFragment } = render(<Slider range />);
+    expect(asFragment().firstChild).toMatchSnapshot();
   });
 
   it('should render Multi-Range with correct DOM structure', () => {
-    const wrapper = render(<Slider range count={3} />);
-    expect(wrapper).toMatchSnapshot();
+    const { asFragment } = render(<Slider range count={3} />);
+    expect(asFragment().firstChild).toMatchSnapshot();
   });
 
-  it('should render Range with value correctly', () => {
-    const wrapper = mount(<Slider range value={[0, 50]} />);
-    expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch('0%');
-    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('50%');
+  it('should render Range with value correctly', async () => {
+    const { container } = render(<Slider range value={[0, 50]} />);
 
-    const trackStyle = wrapper.find('.rc-slider-track').at(0).props().style;
-    expect(trackStyle.left).toMatch('0%');
-    expect(trackStyle.width).toMatch('50%');
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('left: 0%');
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('left: 50%');
+
+    expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle(
+      'left: 0%; width: 50%',
+    );
   });
 
   it('should render reverse Range with value correctly', () => {
-    const wrapper = mount(<Slider range value={[0, 50]} reverse />);
-    expect(wrapper.find('.rc-slider-handle').at(0).props().style.right).toMatch('0%');
-    expect(wrapper.find('.rc-slider-handle').at(1).props().style.right).toMatch('50%');
+    const { container } = render(<Slider range value={[0, 50]} reverse />);
 
-    const trackStyle = wrapper.find('.rc-slider-track').at(0).props().style;
-    expect(trackStyle.right).toMatch('0%');
-    expect(trackStyle.width).toMatch('50%');
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('right: 0%');
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('right: 50%');
+
+    expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle(
+      'right: 0%; width: 50%',
+    );
   });
 
   it('should render Range with tabIndex correctly', () => {
-    const wrapper = mount(<Slider range tabIndex={[1, 2]} />);
-    expect(wrapper.find('.rc-slider-handle').at(0).props().tabIndex).toEqual(1);
-    expect(wrapper.find('.rc-slider-handle').at(1).props().tabIndex).toEqual(2);
+    const { container } = render(<Slider range tabIndex={[1, 2]} />);
+
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'tabIndex',
+      '1',
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
+      'tabIndex',
+      '2',
+    );
   });
 
   it('should render Range without tabIndex (equal null) correctly', () => {
-    const wrapper = mount(<Slider range tabIndex={[null, null]} />);
-    const firstHandle = wrapper.find('.rc-slider-handle').at(0).getDOMNode();
-    const secondHandle = wrapper.find('.rc-slider-handle').at(1).getDOMNode();
-    expect(firstHandle.hasAttribute('tabIndex')).toEqual(false);
-    expect(secondHandle.hasAttribute('tabIndex')).toEqual(false);
+    const { container } = render(<Slider range tabIndex={[null, null]} />);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).not.toHaveAttribute('tabIndex');
   });
 
   it('it should trigger onAfterChange when key pressed', () => {
     const onAfterChange = jest.fn();
-    const wrapper = mount(<Slider range defaultValue={[20, 50]} onAfterChange={onAfterChange} />);
+    const { container } = render(
+      <Slider range defaultValue={[20, 50]} onAfterChange={onAfterChange} />,
+    );
 
-    const secondHandle = wrapper.find('.rc-slider-handle').at(1);
-    wrapper.simulate('focus');
-    secondHandle.simulate('keyDown', { keyCode: keyCode.RIGHT });
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+      keyCode: keyCode.RIGHT,
+    });
 
     expect(onAfterChange).toBeCalled();
   });
 
   it('should render Multi-Range with value correctly', () => {
-    const wrapper = mount(<Slider range count={3} value={[0, 25, 50, 75]} />);
-    expect(wrapper.find('.rc-slider-handle').at(0).props().style.left).toMatch('0%');
-    expect(wrapper.find('.rc-slider-handle').at(1).props().style.left).toMatch('25%');
-    expect(wrapper.find('.rc-slider-handle').at(2).props().style.left).toMatch('50%');
-    expect(wrapper.find('.rc-slider-handle').at(3).props().style.left).toMatch('75%');
+    const { container } = render(<Slider range count={3} value={[0, 25, 50, 75]} />);
 
-    const track1Style = wrapper.find('.rc-slider-track').at(0).props().style;
-    expect(track1Style.left).toMatch('0%');
-    expect(track1Style.width).toMatch('25%');
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('left: 0%');
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('left: 25%');
+    expect(container.getElementsByClassName('rc-slider-handle')[2]).toHaveStyle('left: 50%');
+    expect(container.getElementsByClassName('rc-slider-handle')[3]).toHaveStyle('left: 75%');
 
-    const track2Style = wrapper.find('.rc-slider-track').at(1).props().style;
-    expect(track2Style.left).toMatch('25%');
-    expect(track2Style.width).toMatch('25%');
+    expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle(
+      'left: 0%; width: 25%',
+    );
 
-    const track3Style = wrapper.find('.rc-slider-track').at(2).props().style;
-    expect(track3Style.left).toMatch('50%');
-    expect(track3Style.width).toMatch('25%');
+    expect(container.getElementsByClassName('rc-slider-track')[1]).toHaveStyle(
+      'left: 25%; width: 25%',
+    );
+
+    expect(container.getElementsByClassName('rc-slider-track')[2]).toHaveStyle(
+      'left: 50%; width: 25%',
+    );
   });
 
   it('should update Range correctly in controlled model', () => {
-    const wrapper = mount(<Slider range value={[2, 4, 6]} />);
-    expect(wrapper.find('.rc-slider-handle')).toHaveLength(3);
+    const { container, rerender } = render(<Slider range value={[2, 4, 6]} />);
+    expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(3);
 
-    wrapper.setProps({ value: [2, 4] });
-    wrapper.update();
-    expect(wrapper.find('.rc-slider-handle')).toHaveLength(2);
+    rerender(<Slider range value={[2, 4]} />);
+    expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(2);
   });
 
-  it.skip('should only update bounds that are out of range', () => {
-    const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
-    const range = mount(<Slider range {...props} step={0.1} />);
-    range.setProps({ min: 0, max: 500 });
+  // Not trigger onChange anymore
+  // it('should only update bounds that are out of range', () => {
+  //   const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
+  //   const range = mount(<Slider range {...props} step={0.1} />);
+  //   range.setProps({ min: 0, max: 500 });
 
-    expect(props.onChange).toHaveBeenCalledWith([0.01, 500]);
-  });
+  //   expect(props.onChange).toHaveBeenCalledWith([0.01, 500]);
+  // });
 
-  it.skip('should only update bounds if they are out of range', () => {
-    const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
-    const range = mount(<Slider range {...props} />);
-    range.setProps({ min: 0, max: 500, value: [0.01, 466] });
+  // Not trigger onChange anymore
+  // it('should only update bounds if they are out of range', () => {
+  //   const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
+  //   const range = mount(<Slider range {...props} />);
+  //   range.setProps({ min: 0, max: 500, value: [0.01, 466] });
 
-    expect(props.onChange).toHaveBeenCalledTimes(0);
-  });
+  //   expect(props.onChange).toHaveBeenCalledTimes(0);
+  // });
 
   // https://github.com/react-component/slider/pull/256
   // Move to antd instead
@@ -145,60 +158,66 @@ describe('Range', () => {
 
   it('should keep pushable when not allowCross', () => {
     const onChange = jest.fn();
-    const wrapper = mount(
+    const { container } = render(
       <Slider range allowCross={false} onChange={onChange} defaultValue={[29, 40]} pushable={10} />,
     );
 
-    const handle1 = wrapper.find('.rc-slider-handle').first();
-    const handle2 = wrapper.find('.rc-slider-handle').last();
-
-    handle1.simulate('keyDown', { keyCode: keyCode.UP });
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: keyCode.UP,
+    });
     expect(onChange).toHaveBeenCalledWith([30, 40]);
 
     onChange.mockReset();
-    handle1.simulate('keyDown', { keyCode: keyCode.UP });
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: keyCode.UP,
+    });
     expect(onChange).not.toHaveBeenCalled();
 
     onChange.mockReset();
-    handle2.simulate('keyDown', { keyCode: keyCode.UP });
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+      keyCode: keyCode.UP,
+    });
     expect(onChange).toHaveBeenCalledWith([30, 41]);
 
     // Push to the edge
     for (let i = 0; i < 99; i += 1) {
-      handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+        keyCode: keyCode.DOWN,
+      });
     }
     expect(onChange).toHaveBeenCalledWith([30, 40]);
 
     onChange.mockReset();
-    handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+      keyCode: keyCode.DOWN,
+    });
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it.only('should render correctly when allowCross', () => {
+  it('should render correctly when allowCross', () => {
     const onChange = jest.fn();
-    const wrapper = mount(<Slider range onChange={onChange} defaultValue={[20, 40]} />, {
-      attachTo: container,
-    });
+    const { container, unmount } = render(
+      <Slider range onChange={onChange} defaultValue={[20, 40]} />,
+    );
 
     // Mouse Down
-    wrapper.find('.rc-slider-handle').first().simulate('mouseDown', {
-      pageX: 0,
-      clientX: 0,
-    });
+    const mouseDown = createEvent.mouseDown(
+      container.getElementsByClassName('rc-slider-handle')[0],
+    );
+    mouseDown.pageX = 0;
+    fireEvent(container.getElementsByClassName('rc-slider-handle')[0], mouseDown);
 
     // Drag
-    act(() => {
-      const event = new MouseEvent('mousemove');
-      event.pageX = 9999;
-      document.dispatchEvent(event);
-    });
+    const mouseMove = createEvent.mouseMove(document);
+    mouseMove.pageX = 9999;
+    fireEvent(document, mouseMove);
 
     expect(onChange).toHaveBeenCalledWith([40, 100]);
 
-    wrapper.unmount();
+    unmount();
   });
 
-  it.only('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
+  it('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
     const onChange = jest.fn();
 
     const Demo = () => {
@@ -217,77 +236,79 @@ describe('Range', () => {
         />
       );
     };
-    const wrapper = mount(<Demo />, {
-      attachTo: container,
-    });
+
+    global.error = true;
+    const { container, unmount } = render(<Demo />);
 
     // Mouse Down
-    wrapper.find('.rc-slider-handle').first().simulate('mouseDown', {
-      pageX: 0,
-      clientX: 0,
-    });
+    const mouseDown = createEvent.mouseDown(
+      container.getElementsByClassName('rc-slider-handle')[0],
+    );
+    mouseDown.pageX = 0;
+    fireEvent(container.getElementsByClassName('rc-slider-handle')[0], mouseDown);
 
-    console.log(document.body.innerHTML);
     // Drag
-    act(() => {
-      const event = new MouseEvent('mousemove');
-      event.pageX = 9999;
-      document.dispatchEvent(event);
-    });
+    const mouseMove = createEvent.mouseMove(document);
+    mouseMove.pageX = 9999;
+    fireEvent(document, mouseMove);
 
     expect(onChange).toHaveBeenCalledWith([39, 40]);
 
-    wrapper.unmount();
+    unmount();
   });
 
   it('track draggable', () => {
     const onChange = jest.fn();
 
-    const wrapper = mount(
+    const { container, unmount } = render(
       <Slider range defaultValue={[0, 30]} draggableTrack onChange={onChange} />,
-      {
-        attachTo: document.body,
-      },
     );
 
     // Mouse Down
-    wrapper.find('.rc-slider-track').first().simulate('mouseDown', {
-      pageX: 0,
-      clientX: 0,
-    });
+    const mouseDown = createEvent.mouseDown(container.getElementsByClassName('rc-slider-track')[0]);
+    mouseDown.pageX = 0;
+    fireEvent(container.getElementsByClassName('rc-slider-track')[0], mouseDown);
 
     // Drag
-    act(() => {
-      const event = new MouseEvent('mousemove');
-      event.pageX = 20;
-      document.dispatchEvent(event);
-    });
+    const mouseMove = createEvent.mouseMove(document);
+    mouseMove.pageX = 20;
+    fireEvent(document, mouseMove);
 
     expect(onChange).toHaveBeenCalledWith([20, 50]);
 
-    wrapper.unmount();
+    unmount();
   });
 
   it('sets aria-label on the handles', () => {
-    const wrapper = mount(
-      <Slider range ariaLabelGroupForHandles={['Some Label', 'Some other Label']} />,
+    const { container } = render(
+      <Slider range ariaLabelForHandle={['Some Label', 'Some other Label']} />,
     );
-    expect(wrapper.find('.rc-slider-handle-1').first().prop('aria-label')).toEqual('Some Label');
-    expect(wrapper.find('.rc-slider-handle-2').first().prop('aria-label')).toEqual(
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-label',
+      'Some Label',
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
+      'aria-label',
       'Some other Label',
     );
   });
 
   it('sets aria-labelledby on the handles', () => {
-    const wrapper = mount(<Slider range ariaLabelledByForHandle={['some_id', 'some_other_id']} />);
-    expect(wrapper.find('.rc-slider-handle-1').first().prop('aria-labelledby')).toEqual('some_id');
-    expect(wrapper.find('.rc-slider-handle-2').first().prop('aria-labelledby')).toEqual(
+    const { container } = render(
+      <Slider range ariaLabelledByForHandle={['some_id', 'some_other_id']} />,
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-labelledby',
+      'some_id',
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
+      'aria-labelledby',
       'some_other_id',
     );
   });
 
   it('sets aria-valuetext on the handles', () => {
-    const wrapper = mount(
+    const { container } = render(
       <Slider
         range
         min={0}
@@ -299,13 +320,17 @@ describe('Range', () => {
         ]}
       />,
     );
-    expect(wrapper.find('.rc-slider-handle-1').first().prop('aria-valuetext')).toEqual(
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-valuetext',
       '1 of something',
     );
-    expect(wrapper.find('.rc-slider-handle-2').first().prop('aria-valuetext')).toEqual(
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
+      'aria-valuetext',
       '3 of something else',
     );
   });
+
+  // !!!!!!!!!!!!!!!!
 
   // // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
   // it('should correctly display a dynamically changed number of handles', () => {

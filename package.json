@@ -56,6 +56,8 @@
     "shallowequal": "^1.1.0"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^5.16.2",
+    "@testing-library/react": "^12.1.3",
     "@types/classnames": "^2.2.9",
     "@types/jest": "^26.0.0",
     "@types/react": "^16.9.2",
@@ -77,6 +79,7 @@
     "rc-trigger": "^5.0.4",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "regenerator-runtime": "^0.13.9",
     "typescript": "^4.0.5"
   }
 }

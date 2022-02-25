@@ -31,10 +31,13 @@ export default function useDrag(
   }, [rawValues, draggingIndex]);
 
   // Clean up event
-  React.useEffect(() => {
-    document.removeEventListener('mousemove', mouseMoveEventRef.current);
-    document.removeEventListener('mouseup', mouseUpEventRef.current);
-  }, []);
+  React.useEffect(
+    () => () => {
+      document.removeEventListener('mousemove', mouseMoveEventRef.current);
+      document.removeEventListener('mouseup', mouseUpEventRef.current);
+    },
+    [],
+  );
 
   const flushValues = (nextValues: number[], nextValue?: number) => {
     // Perf: Only update state when value changed
