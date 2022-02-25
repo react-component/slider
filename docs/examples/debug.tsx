@@ -4,10 +4,10 @@ import '../../assets/index.less';
 
 export default () => {
   const [disabled, setDisabled] = React.useState(false);
-  const [range, setRange] = React.useState(true);
+  const [range, setRange] = React.useState(false);
   const [reverse, setReverse] = React.useState(false);
   const [vertical, setVertical] = React.useState(false);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(30);
 
   return (
     <div

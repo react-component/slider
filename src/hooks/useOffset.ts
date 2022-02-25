@@ -12,7 +12,7 @@ type FormatValue = (value: number) => number;
 
 type OffsetValue = (values: number[], offset: number | 'min' | 'max', valueIndex: number) => number;
 
-type OffsetValues = (
+export type OffsetValues = (
   values: number[],
   offset: number | 'min' | 'max',
   valueIndex: number,
@@ -83,6 +83,11 @@ export default function useOffset(
       let nextValue: number;
       const originValue = values[valueIndex];
 
+      // No need to change if offset less than the sign
+      if (Math.abs(offset) < 1) {
+        return originValue;
+      }
+
       // Compare next step value & mark value which is best match
       const potentialValues: number[] = [];
       markList.forEach((mark) => {
@@ -145,6 +150,16 @@ export default function useOffset(
     }
   };
 
+  /** Same as `offsetValue` but return `changed` mark to tell value changed */
+  const offsetChangedValue = (values: number[], offset: number, valueIndex: number) => {
+    const originValue = values[valueIndex];
+    const nextValue = offsetValue(values, offset, valueIndex);
+    return {
+      value: nextValue,
+      changed: nextValue !== originValue,
+    };
+  };
+
   const needPush = (dist: number) => {
     return (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
   };
@@ -156,37 +171,39 @@ export default function useOffset(
     nextValues[valueIndex] = nextValue;
 
     if (typeof pushable === 'number' || pushable === null) {
+      let changed = false;
+
       // >>>>>> Basic push
       // End values
       for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
-        const dist = nextValues[i] - nextValues[i - 1];
-        if (needPush(dist)) {
-          nextValues[i] = offsetValue(nextValues, 1, i);
+        while (needPush(nextValues[i] - nextValues[i - 1])) {
+          ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
+          if (!changed) break;
         }
       }
 
       // Start values
       for (let i = valueIndex; i > 0; i -= 1) {
-        const dist = nextValues[i] - nextValues[i - 1];
-        if (needPush(dist)) {
-          nextValues[i - 1] = offsetValue(nextValues, -1, i - 1);
+        while (needPush(nextValues[i] - nextValues[i - 1])) {
+          ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
+          if (!changed) break;
         }
       }
 
       // >>>>> Revert back to safe push range
       // End to Start
       for (let i = nextValues.length - 1; i > 0; i -= 1) {
-        const dist = nextValues[i] - nextValues[i - 1];
-        if (needPush(dist)) {
-          nextValues[i - 1] = offsetValue(nextValues, -1, i - 1);
+        while (needPush(nextValues[i] - nextValues[i - 1])) {
+          ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
+          if (!changed) break;
         }
       }
 
       // Start to End
       for (let i = 0; i < nextValues.length - 1; i += 1) {
-        const dist = nextValues[i + 1] - nextValues[i];
-        if (needPush(dist)) {
-          nextValues[i + 1] = offsetValue(nextValues, 1, i + 1);
+        while (needPush(nextValues[i + 1] - nextValues[i])) {
+          ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
+          if (!changed) break;
         }
       }
     }

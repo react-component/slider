@@ -371,6 +371,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     formatValue,
     triggerChange,
     finishChange,
+    offsetValues,
   );
 
   const onStartMove: OnStartMove = (e, valueIndex) => {
