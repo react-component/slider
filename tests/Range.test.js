@@ -1,12 +1,23 @@
 /* eslint-disable max-len, no-undef, react/no-string-refs, no-param-reassign, max-classes-per-file */
 import React from 'react';
 import { render, mount } from 'enzyme';
+import { act } from 'react-dom/test-utils';
 import keyCode from 'rc-util/lib/KeyCode';
+import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import Slider from '../src/';
 
 // const RangeWithTooltip = createSliderWithTooltip(Range);
 
 describe('Range', () => {
+  beforeAll(() => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        width: 100,
+        height: 100,
+      }),
+    });
+  });
+
   it('should render Range with correct DOM structure', () => {
     const wrapper = render(<Slider range />);
     expect(wrapper).toMatchSnapshot();
@@ -122,184 +133,103 @@ describe('Range', () => {
   // });
 
   it('should keep pushable when not allowCross', () => {
+    const onChange = jest.fn();
     const wrapper = mount(
-      <Slider range allowCross={false} value={[20, 40]} pushable={10} />,
+      <Slider range allowCross={false} onChange={onChange} defaultValue={[30, 40]} pushable={10} />,
     );
-      expect(wrapper.find('Handles').props().values).toEqual([20, 40]);
 
-      wrapper.setProps({ value: [30, 40] });
-      expect(wrapper.find('Handles').props().values).toEqual([30, 40]);
+    const handle1 = wrapper.find('.rc-slider-handle').first();
+    const handle2 = wrapper.find('.rc-slider-handle').last();
 
-      wrapper.find('.rc-slider-handle').first().simulate('keyDown', { keyCode: keyCode.UP });
-      expect(wrapper.find('Handles').props().values).toEqual([31, 41]);
+    handle1.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).toHaveBeenCalledWith([31, 41]);
+
+    onChange.mockReset();
+    handle2.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).toHaveBeenCalledWith([31, 42]);
+
+    onChange.mockReset();
+    handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).toHaveBeenCalledWith([31, 41]);
+
+    onChange.mockReset();
+    handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).toHaveBeenCalledWith([30, 40]);
+
+    // Push to the edge
+    for (let i = 0; i < 99; i += 1) {
+      handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
+    }
+
+    onChange.mockReset();
+    handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
+    expect(onChange).toHaveBeenCalledWith([0, 10]);
   });
 
-  // it('should render correctly when allowCross', () => {
-  //   class CustomizedRange extends React.Component {
-  //     // eslint-disable-line
-  //     constructor(props) {
-  //       super(props);
-  //       this.state = {
-  //         value: [20, 40],
-  //       };
-  //     }
+  it('should render correctly when allowCross', () => {
+    const onChange = jest.fn();
+    const wrapper = mount(<Slider range onChange={onChange} defaultValue={[20, 40]} />, {
+      attachTo: document.body,
+    });
 
-  //     onChange = (value) => {
-  //       this.setState({
-  //         value,
-  //       });
-  //     };
+    // Mouse Down
+    wrapper.find('.rc-slider-handle').first().simulate('mouseDown', {
+      pageX: 0,
+      clientX: 0,
+    });
 
-  //     getSlider() {
-  //       return this.refs.slider;
-  //     }
+    // Drag
+    act(() => {
+      const event = new MouseEvent('mousemove');
+      event.pageX = 9999;
+      document.dispatchEvent(event);
+    });
 
-  //     render() {
-  //       return <Slider range ref="slider" onChange={this.onChange} value={this.state.value} />;
-  //     }
-  //   }
-  //   const map = {};
-  //   document.addEventListener = jest.fn().mockImplementation((event, cb) => {
-  //     map[event] = cb;
-  //   });
+    expect(onChange).toHaveBeenCalledWith([40, 100]);
 
-  //   const mockRect = (wrapper) => {
-  //     wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
-  //       left: 0,
-  //       width: 100,
-  //     });
-  //   };
+    wrapper.unmount();
+  });
 
-  //   const container = document.createElement('div');
-  //   document.body.appendChild(container);
+  it('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
+    const onChange = jest.fn();
 
-  //   const wrapper = mount(<CustomizedRange />, { attachTo: container });
-  //   mockRect(wrapper);
+    const Demo = () => {
+      const [value, setValue] = React.useState([20, 40]);
 
-  //   expect(wrapper.instance().getSlider().state.bounds).toEqual([20, 40]);
+      return (
+        <Slider
+          range
+          onChange={(values) => {
+            setValue(values);
+            onChange(values);
+          }}
+          value={[20, 40]}
+          allowCross={false}
+          pushable
+        />
+      );
+    };
+    const wrapper = mount(<Demo />, {
+      attachTo: document.body,
+    });
 
-  //   wrapper.find('.rc-slider').simulate('mouseDown', {
-  //     button: 0,
-  //     pageX: 0,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   map.mousemove({
-  //     type: 'mousemove',
-  //     pageX: 60,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
+    // Mouse Down
+    wrapper.find('.rc-slider-handle').first().simulate('mouseDown', {
+      pageX: 0,
+      clientX: 0,
+    });
 
-  //   expect(wrapper.instance().getSlider().state.bounds).toEqual([40, 60]);
-  //   expect(wrapper.find('.rc-slider-handle-2').at(1).getDOMNode().className).toContain(
-  //     'rc-slider-handle-dragging',
-  //   );
-  // });
+    // Drag
+    act(() => {
+      const event = new MouseEvent('mousemove');
+      event.pageX = 9999;
+      document.dispatchEvent(event);
+    });
 
-  // it('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
-  //   class CustomizedRange extends React.Component {
-  //     // eslint-disable-line
-  //     state = {
-  //       value: [20, 40],
-  //     };
+    expect(onChange).toHaveBeenCalledWith([39, 40]);
 
-  //     onChange = (value) => {
-  //       this.setState({
-  //         value,
-  //       });
-  //     };
-
-  //     getSlider() {
-  //       return this.slider;
-  //     }
-
-  //     saveSlider = (slider) => {
-  //       this.slider = slider;
-  //     };
-
-  //     render() {
-  //       return (
-  //         <Slider
-  //           range
-  //           ref={this.saveSlider}
-  //           allowCross={false}
-  //           value={this.state.value}
-  //           pushable
-  //           onChange={this.onChange}
-  //         />
-  //       );
-  //     }
-  //   }
-  //   const map = {};
-  //   document.addEventListener = jest.fn().mockImplementation((event, cb) => {
-  //     map[event] = cb;
-  //   });
-
-  //   const mockRect = (wrapper) => {
-  //     wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
-  //       left: 0,
-  //       width: 100,
-  //     });
-  //   };
-
-  //   const container = document.createElement('div');
-  //   document.body.appendChild(container);
-
-  //   const wrapper = mount(<CustomizedRange />, { attachTo: container });
-  //   mockRect(wrapper);
-
-  //   expect(wrapper.instance().getSlider().state.bounds).toEqual([20, 40]);
-
-  //   wrapper.find('.rc-slider').simulate('mouseDown', {
-  //     button: 0,
-  //     pageX: 0,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   map.mousemove({
-  //     type: 'mousemove',
-  //     pageX: 30,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   map.mouseup({
-  //     type: 'mouseup',
-  //     pageX: 30,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-
-  //   expect(wrapper.instance().getSlider().state.bounds).toEqual([30, 40]);
-
-  //   wrapper.find('.rc-slider').simulate('mouseDown', {
-  //     button: 0,
-  //     pageX: 0,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   map.mousemove({
-  //     type: 'mousemove',
-  //     pageX: 50,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   map.mouseup({
-  //     type: 'mouseup',
-  //     pageX: 50,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   expect(wrapper.instance().getSlider().state.bounds).toEqual([39, 40]);
-  // });
+    wrapper.unmount();
+  });
 
   // it('track draggable', () => {
   //   class CustomizedRange extends React.Component {

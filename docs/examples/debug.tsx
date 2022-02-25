@@ -46,7 +46,8 @@ export default () => {
           dots
           step={5}
           draggableTrack
-          // allowCross={false}
+          pushable={5}
+          allowCross={false}
           // onChange={(nextValues) => {
           //   console.log('Change:', nextValues);
           //   setValue(nextValues as any);

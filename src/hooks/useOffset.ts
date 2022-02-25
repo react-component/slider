@@ -97,14 +97,7 @@ export default function useOffset(
       // Compare next step value & mark value which is best match
       let potentialValues: number[] = [];
       markList.forEach((mark) => {
-        if (
-          // Negative mark
-          (offset <= 0 && mark.value <= originValue) ||
-          // Positive mark
-          (offset >= 0 && mark.value >= originValue)
-        ) {
-          potentialValues.push(mark.value);
-        }
+        potentialValues.push(mark.value);
       });
 
       // In case origin value is align with mark but not with step
@@ -120,8 +113,13 @@ export default function useOffset(
       }
 
       // Find close one
-      potentialValues = potentialValues.filter((val) => val !== null);
+      potentialValues = potentialValues
+        .filter((val) => val !== null)
+        // Remove reverse value
+        .filter((val) => (offset < 0 ? val <= originValue : val >= originValue));
+
       if (mode === 'unit') {
+        // `unit` mode can not contain itself
         potentialValues = potentialValues.filter((val) => val !== originValue);
       }
 
@@ -137,8 +135,6 @@ export default function useOffset(
           valueDist = dist;
         }
       });
-
-      console.log('Offset:', potentialValues);
 
       // Out of range will back to range
       if (nextValue === undefined) {

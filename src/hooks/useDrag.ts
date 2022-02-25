@@ -21,11 +21,20 @@ export default function useDrag(
   const [cacheValues, setCacheValues] = React.useState(rawValues);
   const [originValues, setOriginValues] = React.useState(rawValues);
 
+  const mouseMoveEventRef = React.useRef<(event: MouseEvent) => void>(null);
+  const mouseUpEventRef = React.useRef<(event: MouseEvent) => void>(null);
+
   React.useEffect(() => {
     if (draggingIndex === -1) {
       setCacheValues(rawValues);
     }
   }, [rawValues, draggingIndex]);
+
+  // Clean up event
+  React.useEffect(() => {
+    document.removeEventListener('mousemove', mouseMoveEventRef.current);
+    document.removeEventListener('mouseup', mouseUpEventRef.current);
+  }, []);
 
   const flushValues = (nextValues: number[], nextValue?: number) => {
     // Perf: Only update state when value changed
@@ -125,6 +134,8 @@ export default function useDrag(
 
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
+      mouseMoveEventRef.current = null;
+      mouseUpEventRef.current = null;
 
       setDraggingIndex(-1);
       finishChange();
@@ -132,6 +143,8 @@ export default function useDrag(
 
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
+    mouseMoveEventRef.current = onMouseMove;
+    mouseUpEventRef.current = onMouseUp;
   };
 
   // Only return cache value when it mapping with rawValues
