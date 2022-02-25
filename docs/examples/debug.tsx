@@ -4,7 +4,7 @@ import '../../assets/index.less';
 
 export default () => {
   const [disabled, setDisabled] = React.useState(false);
-  const [range, setRange] = React.useState(false);
+  const [range, setRange] = React.useState(true);
   const [reverse, setReverse] = React.useState(false);
   const [vertical, setVertical] = React.useState(false);
   const [value, setValue] = React.useState(30);
@@ -37,17 +37,21 @@ export default () => {
 
       <div style={{ height: 300, width: 600 }}>
         <Slider
-          count={2}
+          // count={2}
           disabled={disabled}
           reverse={reverse}
           vertical={vertical}
           range={range}
           defaultValue={[30, 50]}
-          onChange={(nextValues) => {
-            console.log('Change:', nextValues);
-            setValue(nextValues as any);
-          }}
-          value={value}
+          dots
+          step={5}
+          draggableTrack
+          // allowCross={false}
+          // onChange={(nextValues) => {
+          //   console.log('Change:', nextValues);
+          //   setValue(nextValues as any);
+          // }}
+          // value={value}
         />
       </div>
     </div>

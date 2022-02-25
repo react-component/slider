@@ -180,7 +180,7 @@ class PureRenderRange extends React.Component<any, any> {
 
 export default () => (
   <div>
-    {/* <div style={style}>
+    <div style={style}>
       <p>Basic Range，`allowCross=false`</p>
       <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
@@ -207,12 +207,12 @@ export default () => (
     <div style={style}>
       <p>Controlled Range, not allow across</p>
       <ControlledRangeDisableAcross />
-    </div> */}
+    </div>
     <div style={style}>
       <p>Controlled Range, not allow across, pushable=5</p>
       <ControlledRangeDisableAcross pushable={5} />
     </div>
-    {/* <div style={style}>
+    <div style={style}>
       <p>Multi Range, count=3 and pushable=true</p>
       <Slider range count={3} defaultValue={[20, 40, 60, 80]} pushable />
     </div>
@@ -264,6 +264,6 @@ export default () => (
         draggableTrack
         onChange={log}
       />
-    </div> */}
+    </div>
   </div>
 );

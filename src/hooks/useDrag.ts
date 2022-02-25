@@ -8,6 +8,7 @@ export default function useDrag(
   rawValues: number[],
   min: number,
   max: number,
+  step: number,
   allowCross: boolean,
   pushable: boolean | number,
   formatValue: (value: number) => number,
@@ -38,91 +39,37 @@ export default function useDrag(
   };
 
   const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
-    const offset = (max - min) * offsetPercent;
-
-    // Always start with the valueIndex origin value
-    const cloneValues = [...cacheValues];
-    cloneValues[valueIndex] = originValues[valueIndex];
-
-    console.clear();
-    console.log('Origin:', cloneValues, offset);
-    const next = offsetValues(cloneValues, offset, valueIndex);
-
-    console.log('==>', next, offset);
-
-    flushValues(next.values, next.value);
-
     // Basic point offset
 
-    // if (valueIndex === -1) {
-    //   // >>>> Dragging on the track
+    if (valueIndex === -1) {
+      // >>>> Dragging on the track
+      const startValue = originValues[0];
+      const endValue = originValues[originValues.length - 1];
+      const maxStartOffset = min - startValue;
+      const maxEndOffset = max - endValue;
 
-    //   const startValue = originValues[0];
-    //   const endValue = originValues[originValues.length - 1];
+      // Get valid offset
+      let offset = offsetPercent * (max - min);
+      offset = Math.max(offset, maxStartOffset);
+      offset = Math.min(offset, maxEndOffset);
 
-    //   const maxStartOffset = min - startValue;
-    //   const maxEndOffset = max - endValue;
+      // Use first value to revert back of valid offset (like steps marks)
+      const formatStartValue = formatValue(startValue + offset);
+      offset = formatStartValue - startValue;
+      const cloneCacheValues = originValues.map((val) => val + offset);
+      flushValues(cloneCacheValues);
+    } else {
+      // >>>> Dragging on the handle
+      const offsetDist = (max - min) * offsetPercent;
 
-    //   // Get valid offset
-    //   let offset = offsetPercent * (max - min);
-    //   offset = Math.max(offset, maxStartOffset);
-    //   offset = Math.min(offset, maxEndOffset);
+      // Always start with the valueIndex origin value
+      const cloneValues = [...cacheValues];
+      cloneValues[valueIndex] = originValues[valueIndex];
 
-    //   // Use first value to revert back of valid offset (like steps marks)
-    //   const formatStartValue = formatValue(startValue + offset);
-    //   offset = formatStartValue - startValue;
+      const next = offsetValues(cloneValues, offsetDist, valueIndex, 'dist');
 
-    //   const cloneCacheValues = originValues.map((val) => val + offset);
-    //   flushValues(cloneCacheValues);
-    // } else {
-    //   // >>>> Dragging on the handle
-
-    //   // Align value
-    //   const originDragValue = originValues[draggingIndex];
-    //   let nextValue = originDragValue + offsetPercent * (max - min);
-
-    //   // Not pushable will make handle in the range
-    //   if (typeof pushable === 'number') {
-    //     nextValue = Math.max(nextValue, min + pushable * valueIndex);
-    //     nextValue = Math.min(nextValue, max - pushable * (rawValues.length - valueIndex - 1));
-    //   } else if (!allowCross) {
-    //     const crossMin = cacheValues[valueIndex - 1] ?? min;
-    //     const crossMax = cacheValues[valueIndex + 1] ?? max;
-
-    //     nextValue = Math.min(nextValue, crossMax);
-    //     nextValue = Math.max(nextValue, crossMin);
-    //   }
-
-    //   // Update values
-    //   const cloneCacheValues = [...cacheValues];
-    //   const formattedValue = formatValue(nextValue);
-    //   cloneCacheValues[valueIndex] = formattedValue;
-
-    //   // Pushable will makes others moving
-    //   if (typeof pushable === 'number') {
-    //     // Right
-    //     let lastValue = formattedValue;
-    //     for (let i = valueIndex + 1; i < cacheValues.length; i += 1) {
-    //       if (lastValue + pushable > cloneCacheValues[i]) {
-    //         const validValue = formatValue(lastValue + pushable);
-    //         cloneCacheValues[i] = validValue;
-    //         lastValue = validValue;
-    //       }
-    //     }
-
-    //     // Left
-    //     lastValue = formattedValue;
-    //     for (let i = valueIndex - 1; i >= 0; i -= 1) {
-    //       if (lastValue - pushable < cloneCacheValues[i]) {
-    //         const validValue = formatValue(lastValue - pushable);
-    //         cloneCacheValues[i] = validValue;
-    //         lastValue = validValue;
-    //       }
-    //     }
-    //   }
-
-    //   flushValues(cloneCacheValues, formattedValue);
-    // }
+      flushValues(next.values, next.value);
+    }
   };
 
   // Resolve closure

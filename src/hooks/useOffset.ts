@@ -10,12 +10,20 @@ type FormatStepValue = (value: number) => number;
 /** Format value align with step & marks */
 type FormatValue = (value: number) => number;
 
-type OffsetValue = (values: number[], offset: number | 'min' | 'max', valueIndex: number) => number;
+type OffsetMode = 'unit' | 'dist';
+
+type OffsetValue = (
+  values: number[],
+  offset: number | 'min' | 'max',
+  valueIndex: number,
+  mode?: OffsetMode,
+) => number;
 
 export type OffsetValues = (
   values: number[],
   offset: number | 'min' | 'max',
   valueIndex: number,
+  mode?: OffsetMode,
 ) => {
   value: number;
   values: number[];
@@ -28,7 +36,7 @@ export default function useOffset(
   markList: InternalMarkObj[],
   allowCross: boolean,
   pushable: false | number,
-): [FormatValue, OffsetValue, OffsetValues] {
+): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => {
       let formatNextValue = Math.min(max, val);
@@ -78,68 +86,76 @@ export default function useOffset(
 
   // ========================== Offset ==========================
   // Single Value
-  const offsetValue: OffsetValue = (values, offset, valueIndex) => {
+  const offsetValue: OffsetValue = (values, offset, valueIndex, mode = 'unit') => {
     if (typeof offset === 'number') {
       let nextValue: number;
       const originValue = values[valueIndex];
 
-      // No need to change if offset less than the sign
-      if (Math.abs(offset) < 1) {
-        return originValue;
-      }
+      // Used for `dist` mode
+      const targetDistValue = originValue + offset;
 
       // Compare next step value & mark value which is best match
-      const potentialValues: number[] = [];
+      let potentialValues: number[] = [];
       markList.forEach((mark) => {
         if (
           // Negative mark
-          (offset < 0 && mark.value < originValue) ||
+          (offset <= 0 && mark.value <= originValue) ||
           // Positive mark
-          (offset > 0 && mark.value > originValue)
+          (offset >= 0 && mark.value >= originValue)
         ) {
           potentialValues.push(mark.value);
         }
       });
 
-      // In case origin value is align with mark
-      const nextStepValue = formatStepValue(originValue);
-      if (
-        (offset < 0 && nextStepValue < originValue) ||
-        (offset > 0 && nextStepValue > originValue)
-      ) {
-        potentialValues.push(nextStepValue);
-      }
-
-      const sign = offset > 0 ? 1 : -1;
+      // In case origin value is align with mark but not with step
+      potentialValues.push(formatStepValue(originValue));
 
       // Put offset step value also
-      const nextStepOffsetValue = formatStepValue(originValue + sign * step);
-      if (nextStepValue !== null) {
-        potentialValues.push(nextStepOffsetValue);
+      const sign = offset > 0 ? 1 : -1;
+
+      if (mode === 'unit') {
+        potentialValues.push(formatStepValue(originValue + sign * step));
+      } else {
+        potentialValues.push(formatStepValue(targetDistValue));
       }
 
       // Find close one
+      potentialValues = potentialValues.filter((val) => val !== null);
+      if (mode === 'unit') {
+        potentialValues = potentialValues.filter((val) => val !== originValue);
+      }
+
+      const compareValue = mode === 'unit' ? originValue : targetDistValue;
+
       nextValue = potentialValues[0];
-      let valueDist = Math.abs(nextValue - originValue);
+      let valueDist = Math.abs(nextValue - compareValue);
 
       potentialValues.forEach((potentialValue) => {
-        const dist = Math.abs(potentialValue - originValue);
+        const dist = Math.abs(potentialValue - compareValue);
         if (dist < valueDist) {
           nextValue = potentialValue;
           valueDist = dist;
         }
       });
 
+      console.log('Offset:', potentialValues);
+
       // Out of range will back to range
       if (nextValue === undefined) {
         return offset < 0 ? min : max;
       }
 
+      // `dist` mode
+      if (mode === 'dist') {
+        return nextValue;
+      }
+
+      // `unit` mode may need another round
       if (Math.abs(offset) > 1) {
         const cloneValues = [...values];
         cloneValues[valueIndex] = nextValue;
 
-        return offsetValue(cloneValues, offset - sign, valueIndex);
+        return offsetValue(cloneValues, offset - sign, valueIndex, mode);
       }
 
       return nextValue;
@@ -151,9 +167,14 @@ export default function useOffset(
   };
 
   /** Same as `offsetValue` but return `changed` mark to tell value changed */
-  const offsetChangedValue = (values: number[], offset: number, valueIndex: number) => {
+  const offsetChangedValue = (
+    values: number[],
+    offset: number,
+    valueIndex: number,
+    mode: OffsetMode = 'unit',
+  ) => {
     const originValue = values[valueIndex];
-    const nextValue = offsetValue(values, offset, valueIndex);
+    const nextValue = offsetValue(values, offset, valueIndex, mode);
     return {
       value: nextValue,
       changed: nextValue !== originValue,
@@ -165,12 +186,14 @@ export default function useOffset(
   };
 
   // Values
-  const offsetValues: OffsetValues = (values, offset, valueIndex) => {
+  const offsetValues: OffsetValues = (values, offset, valueIndex, mode = 'unit') => {
     const nextValues = values.map(formatValue);
-    const nextValue = offsetValue(nextValues, offset, valueIndex);
+    const originValue = nextValues[valueIndex];
+    const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;
 
     if (typeof pushable === 'number' || pushable === null) {
+      // =============== Push ==================
       let changed = false;
 
       // >>>>>> Basic push
@@ -206,6 +229,15 @@ export default function useOffset(
           if (!changed) break;
         }
       }
+    } else if (allowCross === false) {
+      // ============ AllowCross ===============
+      if (valueIndex > 0 && nextValues[valueIndex - 1] !== originValue) {
+        nextValues[valueIndex] = Math.max(nextValues[valueIndex], nextValues[valueIndex - 1]);
+      }
+
+      if (valueIndex < nextValues.length - 1 && nextValues[valueIndex + 1] !== originValue) {
+        nextValues[valueIndex] = Math.min(nextValues[valueIndex], nextValues[valueIndex + 1]);
+      }
     }
 
     return {
@@ -214,5 +246,5 @@ export default function useOffset(
     };
   };
 
-  return [formatValue, offsetValue, offsetValues];
+  return [formatValue, offsetValues];
 }

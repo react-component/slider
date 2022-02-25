@@ -15,6 +15,7 @@ import type { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
 import Steps from './Steps';
 import useOffset from './hooks/useOffset';
+import warning from 'rc-util/lib/warning';
 
 /**
  * New:
@@ -200,7 +201,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [marks]);
 
   // ============================ Format ============================
-  const [formatValue, offsetValue, offsetValues] = useOffset(
+  const [formatValue, offsetValues] = useOffset(
     min,
     max,
     mergedStep,
@@ -353,6 +354,15 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [keyboardValue]);
 
   // ============================= Drag =============================
+  const mergedDraggableTrack = React.useMemo(() => {
+    if (draggableTrack && mergedStep === null) {
+      if (process.env.NODE_ENV !== 'production') {
+        warning(false, '`draggableTrack` will not work if `step` is null.');
+      }
+      return false;
+    }
+    return draggableTrack;
+  }, [draggableTrack, mergedStep]);
 
   const finishChange = () => {
     if (onAfterChange) {
@@ -366,6 +376,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     rawValues,
     min,
     max,
+    mergedStep,
     allowCross,
     mergedPush,
     formatValue,
@@ -474,7 +485,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           style={trackStyle}
           values={sortedCacheValues}
           startPoint={startPoint}
-          onStartMove={draggableTrack ? onStartMove : null}
+          onStartMove={mergedDraggableTrack ? onStartMove : null}
         />
 
         <Steps
