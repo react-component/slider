@@ -188,7 +188,26 @@ export default function useOffset(
     const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;
 
-    if (typeof pushable === 'number' || pushable === null) {
+    if (allowCross === false) {
+      // >>>>> Allow Cross
+      const pushNum = pushable || 0;
+
+      // ============ AllowCross ===============
+      if (valueIndex > 0 && nextValues[valueIndex - 1] !== originValue) {
+        nextValues[valueIndex] = Math.max(
+          nextValues[valueIndex],
+          nextValues[valueIndex - 1] + pushNum,
+        );
+      }
+
+      if (valueIndex < nextValues.length - 1 && nextValues[valueIndex + 1] !== originValue) {
+        nextValues[valueIndex] = Math.min(
+          nextValues[valueIndex],
+          nextValues[valueIndex + 1] - pushNum,
+        );
+      }
+    } else if (typeof pushable === 'number' || pushable === null) {
+      // >>>>> Pushable
       // =============== Push ==================
       let changed = false;
 
@@ -224,15 +243,6 @@ export default function useOffset(
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
           if (!changed) break;
         }
-      }
-    } else if (allowCross === false) {
-      // ============ AllowCross ===============
-      if (valueIndex > 0 && nextValues[valueIndex - 1] !== originValue) {
-        nextValues[valueIndex] = Math.max(nextValues[valueIndex], nextValues[valueIndex - 1]);
-      }
-
-      if (valueIndex < nextValues.length - 1 && nextValues[valueIndex + 1] !== originValue) {
-        nextValues[valueIndex] = Math.min(nextValues[valueIndex], nextValues[valueIndex + 1]);
       }
     }
 

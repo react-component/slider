@@ -9,6 +9,8 @@ import Slider from '../src/';
 // const RangeWithTooltip = createSliderWithTooltip(Range);
 
 describe('Range', () => {
+  let container;
+
   beforeAll(() => {
     spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
@@ -16,6 +18,15 @@ describe('Range', () => {
         height: 100,
       }),
     });
+  });
+
+  beforeEach(() => {
+    container = document.createElement('div');
+    document.body.appendChild(container);
+  });
+
+  afterEach(() => {
+    document.body.removeChild(container);
   });
 
   it('should render Range with correct DOM structure', () => {
@@ -135,41 +146,38 @@ describe('Range', () => {
   it('should keep pushable when not allowCross', () => {
     const onChange = jest.fn();
     const wrapper = mount(
-      <Slider range allowCross={false} onChange={onChange} defaultValue={[30, 40]} pushable={10} />,
+      <Slider range allowCross={false} onChange={onChange} defaultValue={[29, 40]} pushable={10} />,
     );
 
     const handle1 = wrapper.find('.rc-slider-handle').first();
     const handle2 = wrapper.find('.rc-slider-handle').last();
 
     handle1.simulate('keyDown', { keyCode: keyCode.UP });
-    expect(onChange).toHaveBeenCalledWith([31, 41]);
+    expect(onChange).toHaveBeenCalledWith([30, 40]);
+
+    onChange.mockReset();
+    handle1.simulate('keyDown', { keyCode: keyCode.UP });
+    expect(onChange).not.toHaveBeenCalled();
 
     onChange.mockReset();
     handle2.simulate('keyDown', { keyCode: keyCode.UP });
-    expect(onChange).toHaveBeenCalledWith([31, 42]);
-
-    onChange.mockReset();
-    handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
-    expect(onChange).toHaveBeenCalledWith([31, 41]);
-
-    onChange.mockReset();
-    handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
-    expect(onChange).toHaveBeenCalledWith([30, 40]);
+    expect(onChange).toHaveBeenCalledWith([30, 41]);
 
     // Push to the edge
     for (let i = 0; i < 99; i += 1) {
       handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
     }
+    expect(onChange).toHaveBeenCalledWith([30, 40]);
 
     onChange.mockReset();
     handle2.simulate('keyDown', { keyCode: keyCode.DOWN });
-    expect(onChange).toHaveBeenCalledWith([0, 10]);
+    expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('should render correctly when allowCross', () => {
+  it.only('should render correctly when allowCross', () => {
     const onChange = jest.fn();
     const wrapper = mount(<Slider range onChange={onChange} defaultValue={[20, 40]} />, {
-      attachTo: document.body,
+      attachTo: container,
     });
 
     // Mouse Down
@@ -190,7 +198,7 @@ describe('Range', () => {
     wrapper.unmount();
   });
 
-  it('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
+  it.only('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
     const onChange = jest.fn();
 
     const Demo = () => {
@@ -210,7 +218,7 @@ describe('Range', () => {
       );
     };
     const wrapper = mount(<Demo />, {
-      attachTo: document.body,
+      attachTo: container,
     });
 
     // Mouse Down
@@ -219,6 +227,7 @@ describe('Range', () => {
       clientX: 0,
     });
 
+    console.log(document.body.innerHTML);
     // Drag
     act(() => {
       const event = new MouseEvent('mousemove');
@@ -231,117 +240,72 @@ describe('Range', () => {
     wrapper.unmount();
   });
 
-  // it('track draggable', () => {
-  //   class CustomizedRange extends React.Component {
-  //     // eslint-disable-line
-  //     state = {
-  //       value: [0, 30],
-  //     };
+  it('track draggable', () => {
+    const onChange = jest.fn();
 
-  //     onChange = (value) => {
-  //       this.setState({
-  //         value,
-  //       });
-  //     };
+    const wrapper = mount(
+      <Slider range defaultValue={[0, 30]} draggableTrack onChange={onChange} />,
+      {
+        attachTo: document.body,
+      },
+    );
 
-  //     getSlider() {
-  //       return this.slider;
-  //     }
+    // Mouse Down
+    wrapper.find('.rc-slider-track').first().simulate('mouseDown', {
+      pageX: 0,
+      clientX: 0,
+    });
 
-  //     saveSlider = (slider) => {
-  //       this.slider = slider;
-  //     };
+    // Drag
+    act(() => {
+      const event = new MouseEvent('mousemove');
+      event.pageX = 20;
+      document.dispatchEvent(event);
+    });
 
-  //     render() {
-  //       return (
-  //         <Slider
-  //           range
-  //           ref={this.saveSlider}
-  //           value={this.state.value}
-  //           onChange={this.onChange}
-  //           draggableTrack
-  //         />
-  //       );
-  //     }
-  //   }
-  //   const map = {};
-  //   document.addEventListener = jest.fn().mockImplementation((event, cb) => {
-  //     map[event] = cb;
-  //   });
+    expect(onChange).toHaveBeenCalledWith([20, 50]);
 
-  //   const mockRect = (wrapper) => {
-  //     wrapper.instance().getSlider().sliderRef.getBoundingClientRect = () => ({
-  //       left: 0,
-  //       width: 100,
-  //     });
-  //   };
+    wrapper.unmount();
+  });
 
-  //   const container = document.createElement('div');
-  //   document.body.appendChild(container);
+  it('sets aria-label on the handles', () => {
+    const wrapper = mount(
+      <Slider range ariaLabelGroupForHandles={['Some Label', 'Some other Label']} />,
+    );
+    expect(wrapper.find('.rc-slider-handle-1').first().prop('aria-label')).toEqual('Some Label');
+    expect(wrapper.find('.rc-slider-handle-2').first().prop('aria-label')).toEqual(
+      'Some other Label',
+    );
+  });
 
-  //   const range = mount(<CustomizedRange />, { attachTo: container });
-  //   mockRect(range);
-  //   console.log(range.state().value);
-  //   expect(range.state().value).toEqual([0, 30]);
+  it('sets aria-labelledby on the handles', () => {
+    const wrapper = mount(<Slider range ariaLabelledByForHandle={['some_id', 'some_other_id']} />);
+    expect(wrapper.find('.rc-slider-handle-1').first().prop('aria-labelledby')).toEqual('some_id');
+    expect(wrapper.find('.rc-slider-handle-2').first().prop('aria-labelledby')).toEqual(
+      'some_other_id',
+    );
+  });
 
-  //   range.find('.rc-slider').simulate('mouseDown', {
-  //     button: 0,
-  //     pageX: 10,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   map.mousemove({
-  //     type: 'mousemove',
-  //     pageX: 30,
-  //     pageY: 0,
-  //     stopPropagation: () => {},
-  //     preventDefault: () => {},
-  //   });
-  //   console.log(range.state().value);
-  //   expect(range.state().value).toEqual([20, 50]);
-  // });
-
-  // it('sets aria-label on the handles', () => {
-  //   const wrapper = mount(
-  //     <Slider range ariaLabelGroupForHandles={['Some Label', 'Some other Label']} />,
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle-1').at(1).prop('aria-label')).toEqual('Some Label');
-  //   expect(wrapper.find('.rc-slider-handle-2').at(1).prop('aria-label')).toEqual(
-  //     'Some other Label',
-  //   );
-  // });
-
-  // it('sets aria-labelledby on the handles', () => {
-  //   const wrapper = mount(
-  //     <Slider range ariaLabelledByGroupForHandles={['some_id', 'some_other_id']} />,
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle-1').at(1).prop('aria-labelledby')).toEqual('some_id');
-  //   expect(wrapper.find('.rc-slider-handle-2').at(1).prop('aria-labelledby')).toEqual(
-  //     'some_other_id',
-  //   );
-  // });
-
-  // it('sets aria-valuetext on the handles', () => {
-  //   const wrapper = mount(
-  //     <Slider
-  //       range
-  //       min={0}
-  //       max={5}
-  //       defaultValue={[1, 3]}
-  //       ariaValueTextFormatterGroupForHandles={[
-  //         (value) => `${value} of something`,
-  //         (value) => `${value} of something else`,
-  //       ]}
-  //     />,
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle-1').at(1).prop('aria-valuetext')).toEqual(
-  //     '1 of something',
-  //   );
-  //   expect(wrapper.find('.rc-slider-handle-2').at(1).prop('aria-valuetext')).toEqual(
-  //     '3 of something else',
-  //   );
-  // });
+  it('sets aria-valuetext on the handles', () => {
+    const wrapper = mount(
+      <Slider
+        range
+        min={0}
+        max={5}
+        defaultValue={[1, 3]}
+        ariaValueTextFormatterForHandle={[
+          (value) => `${value} of something`,
+          (value) => `${value} of something else`,
+        ]}
+      />,
+    );
+    expect(wrapper.find('.rc-slider-handle-1').first().prop('aria-valuetext')).toEqual(
+      '1 of something',
+    );
+    expect(wrapper.find('.rc-slider-handle-2').first().prop('aria-valuetext')).toEqual(
+      '3 of something else',
+    );
+  });
 
   // // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
   // it('should correctly display a dynamically changed number of handles', () => {
