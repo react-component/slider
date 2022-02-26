@@ -1,9 +1,7 @@
 /* eslint-disable max-len, no-undef, react/no-string-refs, no-param-reassign, max-classes-per-file */
 import React from 'react';
-// import { render, mount } from 'enzyme';
-import { act } from 'react-dom/test-utils';
 import keyCode from 'rc-util/lib/KeyCode';
-import { render, fireEvent, waitFor, screen, createEvent } from '@testing-library/react';
+import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import Slider from '../src/';
@@ -368,24 +366,6 @@ describe('Range', () => {
   });
 
   describe('focus & blur', () => {
-    let container;
-
-    // beforeEach(() => {
-    //   container = document.createElement('div');
-    //   document.body.appendChild(container);
-    // });
-
-    // afterEach(() => {
-    //   document.body.removeChild(container);
-    // });
-
-    // const mockRect = (wrapper) => {
-    //   wrapper.instance().sliderRef.getBoundingClientRect = () => ({
-    //     left: 10,
-    //     width: 100,
-    //   });
-    // };
-
     it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onFocus={handleFocus} />);
