@@ -1,8 +1,9 @@
 /* eslint-disable max-len, no-undef */
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import KeyCode from 'rc-util/lib/KeyCode';
 import Slider, { Range, createSliderWithTooltip } from '../src';
 
 // const setWidth = (object, width) => {
@@ -180,25 +181,7 @@ describe('Common', () => {
     expect(handler).not.toHaveBeenCalled();
   });
 
-  it('Should remove event listeners if unrendered during drag', () => {
-    const { container, unmount } = render(<Slider />);
-
-    const sliderTrack = container.getElementsByClassName('rc-slider-track')[0];
-
-    fireEvent.touchStart(sliderTrack, {
-      type: 'touchstart',
-      target: sliderTrack,
-      touches: [{ pageX: 5 }],
-      stopPropagation() {},
-      preventDefault() {},
-    });
-
-    //   expect(wrapper.instance().onTouchUpListener).toBeTruthy();
-    //   wrapper.instance().onTouchUpListener.remove = jest.fn();
-    unmount();
-  });
-
-  // // TODO: should update the following test cases for it should test API instead implementation
+  // TODO: should update the following test cases for it should test API instead implementation
   // it('should set `dragOffset` to correct value when the left handle is clicked off-center', () => {
   //   const { container } = render(<Slider />);
   //   setWidth(wrapper.instance().sliderRef, 100);
@@ -245,144 +228,75 @@ describe('Common', () => {
   //   expect(wrapper.instance().getValue()).toBe(9);
   // });
 
-  // it('should not go to right direction when mouse go to the left', () => {
-  //   const { container } = render(<Slider />);
-  //   setWidth(wrapper.instance().sliderRef, 100);
-  //   const leftHandle = wrapper
-  //     .find('.rc-slider-handle')
-  //     .at(1)
-  //     .instance();
-  //   wrapper.simulate('mousedown', {
-  //     type: 'mousedown',
-  //     target: leftHandle,
-  //     pageX: 5,
-  //     button: 0,
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().getValue()).toBe(0); // zero on start
-  //   wrapper.instance().onMouseMove({
-  //     // to propagation
-  //     type: 'mousemove',
-  //     target: leftHandle,
-  //     pageX: 0,
-  //     button: 0,
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().getValue()).toBe(0); // still zero
-  // });
+  it('should not go to right direction when mouse go to the left', () => {
+    const { container } = render(<Slider />);
+    const leftHandle = container.getElementsByClassName('rc-slider-handle')[0];
 
-  // it("should set `dragOffset` to 0 when the MouseEvent target isn't a handle", () => {
-  //   const { container } = render(<Slider />);
-  //   setWidth(wrapper.instance().sliderRef, 100);
-  //   const sliderTrack = wrapper.find('.rc-slider-track').get(0);
-  //   wrapper.simulate('mousedown', {
-  //     type: 'mousedown',
-  //     target: sliderTrack,
-  //     pageX: 5,
-  //     button: 0,
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().dragOffset).toBe(0);
-  // });
+    const mouseDown = createEvent.mouseDown(leftHandle);
+    mouseDown.pageX = 5;
 
-  // it('should set `dragOffset` to correct value when the left handle is touched off-center', () => {
-  //   const { container } = render(<Slider />);
-  //   setWidth(wrapper.instance().sliderRef, 100);
-  //   const leftHandle = wrapper
-  //     .find('.rc-slider-handle')
-  //     .at(1)
-  //     .instance();
-  //   wrapper.simulate('touchstart', {
-  //     type: 'touchstart',
-  //     target: leftHandle,
-  //     touches: [{ pageX: 5 }],
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().dragOffset).toBe(5);
-  // });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-valuenow',
+      '0',
+    );
 
-  // it('should respect `dragOffset` while dragging the handle via TouchEvents', () => {
-  //   const { container } = render(<Slider />);
-  //   setWidth(wrapper.instance().sliderRef, 100);
-  //   const leftHandle = wrapper
-  //     .find('.rc-slider-handle')
-  //     .at(1)
-  //     .instance();
-  //   wrapper.simulate('touchstart', {
-  //     type: 'touchstart',
-  //     target: leftHandle,
-  //     touches: [{ pageX: 5 }],
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().dragOffset).toBe(5);
-  //   wrapper.instance().onTouchMove({
-  //     // to propagation
-  //     type: 'touchmove',
-  //     target: leftHandle,
-  //     touches: [{ pageX: 14 }],
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().getValue()).toBe(9);
-  // });
+    const mouseMove = createEvent.mouseMove(leftHandle);
+    mouseMove.pageX = 0;
 
-  // it("should set `dragOffset` to 0 when the TouchEvent target isn't a handle", () => {
-  //   const { container } = render(<Slider />);
-  //   setWidth(wrapper.instance().sliderRef, 100);
-  //   const sliderTrack = wrapper.find('.rc-slider-track').get(0);
-  //   wrapper.simulate('touchstart', {
-  //     type: 'touchstart',
-  //     target: sliderTrack,
-  //     touches: [{ pageX: 5 }],
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().dragOffset).toBe(0);
-  // });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-valuenow',
+      '0',
+    );
+  });
 
-  // it('should call onAfterChange when clicked on mark label', () => {
-  //   const labelId = 'to-be-clicked';
-  //   const marks = {
-  //     0: 'some other label',
-  //     100: <span id={labelId}>some label</span>,
-  //   };
+  it('should call onAfterChange when clicked on mark label', () => {
+    const labelId = 'to-be-clicked';
+    const marks = {
+      0: 'some other label',
+      100: <span id={labelId}>some label</span>,
+    };
 
-  //   const sliderOnAfterChange = jest.fn();
-  //   const sliderWrapper = render(
-  //     <Slider value={0} marks={marks} onAfterChange={sliderOnAfterChange} />,
-  //   );
-  //   const sliderHandleWrapper = sliderWrapper.find(`#${labelId}`).at(0);
-  //   sliderHandleWrapper.simulate('mousedown');
-  //   sliderHandleWrapper.simulate('mouseup');
-  //   expect(sliderOnAfterChange).toHaveBeenCalled();
+    const sliderOnChange = jest.fn();
+    const sliderOnAfterChange = jest.fn();
+    const { container } = render(
+      <Slider
+        value={0}
+        marks={marks}
+        onChange={sliderOnChange}
+        onAfterChange={sliderOnAfterChange}
+      />,
+    );
+    const sliderHandleWrapper = container.querySelector(`#${labelId}`);
+    fireEvent.click(sliderHandleWrapper);
+    expect(sliderOnChange).toHaveBeenCalled();
+    expect(sliderOnAfterChange).toHaveBeenCalled();
 
-  //   const rangeOnAfterChange = jest.fn();
-  //   const rangeWrapper = render(
-  //     <Slider range  value={[0, 1]} marks={marks} onAfterChange={rangeOnAfterChange} />,
-  //   );
-  //   const rangeHandleWrapper = rangeWrapper.find(`#${labelId}`).at(0);
-  //   rangeHandleWrapper.simulate('mousedown');
-  //   rangeHandleWrapper.simulate('mouseup');
+    const rangeOnAfterChange = jest.fn();
+    const { container: container2 } = render(
+      <Slider range value={[0, 1]} marks={marks} onAfterChange={rangeOnAfterChange} />,
+    );
+    const rangeHandleWrapper = container2.querySelector(`#${labelId}`);
+    fireEvent.click(rangeHandleWrapper);
+    expect(rangeOnAfterChange).toHaveBeenCalled();
+  });
 
-  //   expect(rangeOnAfterChange).toHaveBeenCalled();
-  // });
+  it('only call onAfterChange once', () => {
+    const sliderOnChange = jest.fn();
+    const sliderOnAfterChange = jest.fn();
+    const { container } = render(
+      <Slider value={0} onChange={sliderOnChange} onAfterChange={sliderOnAfterChange} />,
+    );
 
-  // it('only call onAfterChange once', () => {
-  //   const sliderOnAfterChange = jest.fn();
-  //   const sliderWrapper = render(<Slider value={0} onAfterChange={sliderOnAfterChange} />);
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: KeyCode.UP,
+    });
 
-  //   sliderWrapper.instance().onStart();
-  //   sliderWrapper.instance().onEnd();
-  //   sliderWrapper.instance().onEnd();
-  //   expect(sliderOnAfterChange).toHaveBeenCalled();
-  //   expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
-  // });
+    expect(sliderOnChange).toHaveBeenCalled();
+    expect(sliderOnAfterChange).toHaveBeenCalled();
+    expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
+  });
 
+  // Move to antd instead
   // it('the tooltip should be attach to the container with the id tooltip', () => {
   //   const SliderWithTooltip = createSliderWithTooltip(Slider);
   //   const tooltipPrefixer = {

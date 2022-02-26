@@ -298,6 +298,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       }
 
       triggerChange(cloneNextValues);
+      onAfterChange?.(cloneNextValues);
     }
   };
 
@@ -369,9 +370,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   }, [draggableTrack, mergedStep]);
 
   const finishChange = () => {
-    if (onAfterChange) {
-      onAfterChange(getTriggerValue(rawValuesRef.current));
-    }
+    onAfterChange?.(getTriggerValue(rawValuesRef.current));
   };
 
   const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
