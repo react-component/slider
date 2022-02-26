@@ -8,8 +8,6 @@ import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import Slider from '../src/';
 
-// const RangeWithTooltip = createSliderWithTooltip(Range);
-
 describe('Range', () => {
   let container;
 
@@ -330,101 +328,77 @@ describe('Range', () => {
     );
   });
 
-  // !!!!!!!!!!!!!!!!
+  // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
+  it('should correctly display a dynamically changed number of handles', () => {
+    const props = {
+      range: true,
+      allowCross: false,
+      marks: {
+        0: { label: '0', style: {} },
+        25: { label: '25', style: {} },
+        50: { label: '50', style: {} },
+        75: { label: '75', style: {} },
+        100: { label: '100', style: {} },
+      },
+      step: null,
+    };
 
-  // // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
-  // it('should correctly display a dynamically changed number of handles', () => {
-  //   class RangeUnderTest extends React.Component {
-  //     state = {
-  //       handles: [0, 25, 50, 75, 100],
-  //     };
+    const { container, rerender } = render(<Slider {...props} value={[0, 25, 50, 75, 100]} />);
 
-  //     render() {
-  //       return (
-  //         <Slider
-  //           range
-  //           allowCross={false}
-  //           marks={{
-  //             0: { label: '0', style: {} },
-  //             25: { label: '25', style: {} },
-  //             50: { label: '50', style: {} },
-  //             75: { label: '75', style: {} },
-  //             100: { label: '100', style: {} },
-  //           }}
-  //           step={null}
-  //           value={this.state.handles}
-  //         />
-  //       );
-  //     }
-  //   }
+    const verifyHandles = (values) => {
+      // Has the number of handles that we set.
+      expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(values.length);
 
-  //   const rangeUnderTest = mount(<Slider range UnderTest />);
-  //   const verifyHandles = () => {
-  //     // Has the number of handles that we set.
-  //     expect(rangeUnderTest.find('div.rc-slider-handle')).toHaveLength(
-  //       rangeUnderTest.state('handles').length,
-  //     );
-  //     // Handles have the values that we set.
-  //     expect(
-  //       rangeUnderTest
-  //         .find('div.rc-slider-handle')
-  //         .everyWhere(
-  //           (element, index) =>
-  //             Number(element.prop('aria-valuenow')) === rangeUnderTest.state('handles')[index],
-  //         ),
-  //     ).toEqual(true);
-  //   };
+      // Handles have the values that we set.
+      Array.from(container.getElementsByClassName('rc-slider-handle')).forEach((ele, index) => {
+        expect(ele).toHaveAttribute('aria-valuenow', values[index].toString());
+      });
+    };
 
-  //   // Assert that handles are correct initially.
-  //   verifyHandles();
+    // Assert that handles are correct initially.
+    verifyHandles([0, 25, 50, 75, 100]);
 
-  //   // Assert that handles are correct after decreasing their number.
-  //   rangeUnderTest.setState({ handles: [0, 75, 100] });
-  //   verifyHandles();
+    // Assert that handles are correct after decreasing their number.
+    rerender(<Slider {...props} value={[0, 75, 100]} />);
+    verifyHandles([0, 75, 100]);
 
-  //   // Assert that handles are correct after increasing their number.
-  //   rangeUnderTest.setState({ handles: [0, 25, 75, 100] });
-  //   verifyHandles();
-  // });
+    // Assert that handles are correct after increasing their number.
+    rerender(<Slider {...props} value={[0, 25, 75, 100]} />);
+    verifyHandles([0, 25, 75, 100]);
+  });
 
-  // describe('focus & blur', () => {
-  //   let container;
+  describe('focus & blur', () => {
+    let container;
 
-  //   beforeEach(() => {
-  //     container = document.createElement('div');
-  //     document.body.appendChild(container);
-  //   });
+    // beforeEach(() => {
+    //   container = document.createElement('div');
+    //   document.body.appendChild(container);
+    // });
 
-  //   afterEach(() => {
-  //     document.body.removeChild(container);
-  //   });
+    // afterEach(() => {
+    //   document.body.removeChild(container);
+    // });
 
-  //   const mockRect = (wrapper) => {
-  //     wrapper.instance().sliderRef.getBoundingClientRect = () => ({
-  //       left: 10,
-  //       width: 100,
-  //     });
-  //   };
+    // const mockRect = (wrapper) => {
+    //   wrapper.instance().sliderRef.getBoundingClientRect = () => ({
+    //     left: 10,
+    //     width: 100,
+    //   });
+    // };
 
-  //   it('focus()', () => {
-  //     const handleFocus = jest.fn();
-  //     const wrapper = mount(<Slider range min={0} max={20} onFocus={handleFocus} />, {
-  //       attachTo: container,
-  //     });
-  //     mockRect(wrapper);
-  //     wrapper.instance().focus();
-  //     expect(handleFocus).toBeCalled();
-  //   });
+    it('focus()', () => {
+      const handleFocus = jest.fn();
+      const { container } = render(<Slider range min={0} max={20} onFocus={handleFocus} />);
+      container.getElementsByClassName('rc-slider-handle')[0].focus();
+      expect(handleFocus).toBeCalled();
+    });
 
-  //   it('blur', () => {
-  //     const handleBlur = jest.fn();
-  //     const wrapper = mount(<Slider range min={0} max={20} onBlur={handleBlur} />, {
-  //       attachTo: container,
-  //     });
-  //     mockRect(wrapper);
-  //     wrapper.instance().focus();
-  //     wrapper.instance().blur();
-  //     expect(handleBlur).toBeCalled();
-  //   });
-  // });
+    it('blur', () => {
+      const handleBlur = jest.fn();
+      const { container } = render(<Slider range min={0} max={20} onBlur={handleBlur} />);
+      container.getElementsByClassName('rc-slider-handle')[0].focus();
+      container.getElementsByClassName('rc-slider-handle')[0].blur();
+      expect(handleBlur).toBeCalled();
+    });
+  });
 });
