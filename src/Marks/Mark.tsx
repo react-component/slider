@@ -17,10 +17,13 @@ export default function Mark(props: MarkProps) {
     React.useContext(SliderContext);
 
   const textCls = `${prefixCls}-text`;
-  // ant-slider-mark-text ant-slider-mark-text-active
 
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);
+
+  if (!children && typeof children !== 'number') {
+    return null;
+  }
 
   return (
     <span
