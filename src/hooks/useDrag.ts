@@ -2,15 +2,18 @@ import * as React from 'react';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
 
+function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) {
+  const obj = 'touches' in e ? e.touches[0] : e;
+
+  return { pageX: obj.pageX, pageY: obj.pageY };
+}
+
 export default function useDrag(
   containerRef: React.RefObject<HTMLDivElement>,
   direction: Direction,
   rawValues: number[],
   min: number,
   max: number,
-  step: number,
-  allowCross: boolean,
-  pushable: boolean | number,
   formatValue: (value: number) => number,
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
@@ -35,6 +38,8 @@ export default function useDrag(
     () => () => {
       document.removeEventListener('mousemove', mouseMoveEventRef.current);
       document.removeEventListener('mouseup', mouseUpEventRef.current);
+      document.removeEventListener('touchmove', mouseMoveEventRef.current);
+      document.removeEventListener('touchend', mouseUpEventRef.current);
     },
     [],
   );
@@ -98,14 +103,14 @@ export default function useDrag(
     setDraggingValue(originValue);
     setOriginValues(rawValues);
 
-    const { pageX: startX, pageY: startY } = e;
+    const { pageX: startX, pageY: startY } = getPosition(e);
     (e.target as HTMLDivElement).focus();
 
     // Moving
-    const onMouseMove = (event: MouseEvent) => {
+    const onMouseMove = (event: MouseEvent | TouchEvent) => {
       event.preventDefault();
 
-      const { pageX: moveX, pageY: moveY } = event;
+      const { pageX: moveX, pageY: moveY } = getPosition(event);
       const offsetX = moveX - startX;
       const offsetY = moveY - startY;
 
@@ -132,11 +137,13 @@ export default function useDrag(
     };
 
     // End
-    const onMouseUp = (event: MouseEvent) => {
+    const onMouseUp = (event: MouseEvent | TouchEvent) => {
       event.preventDefault();
 
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('touchend', onMouseUp);
+      document.removeEventListener('touchmove', onMouseMove);
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
 
@@ -146,6 +153,8 @@ export default function useDrag(
 
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('touchend', onMouseUp);
+    document.addEventListener('touchmove', onMouseMove);
     mouseMoveEventRef.current = onMouseMove;
     mouseUpEventRef.current = onMouseUp;
   };

@@ -2,12 +2,13 @@ import * as React from 'react';
 import Handle from './Handle';
 import type { HandleProps } from './Handle';
 import { getIndex } from '../util';
+import type { OnStartMove } from '../interface';
 
 export interface HandlesProps {
   prefixCls: string;
   style?: React.CSSProperties | React.CSSProperties[];
   values: number[];
-  onStartMove: (e: React.MouseEvent, value: number) => void;
+  onStartMove: OnStartMove;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;

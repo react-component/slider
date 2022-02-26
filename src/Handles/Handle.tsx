@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
 import SliderContext from '../context';
 import { getDirectionStyle, getIndex } from '../util';
+import type { OnStartMove } from '../interface';
 
 interface RenderProps {
   prefixCls: string;
@@ -16,7 +17,7 @@ export interface HandleProps {
   value: number;
   valueIndex: number;
   dragging: boolean;
-  onStartMove: (e: React.MouseEvent, valueIndex: number) => void;
+  onStartMove: OnStartMove;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
@@ -47,6 +48,13 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     ariaValueTextFormatterForHandle,
   } = React.useContext(SliderContext);
   const handlePrefixCls = `${prefixCls}-handle`;
+
+  // ============================ Events ============================
+  const onInternalStartMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!disabled) {
+      onStartMove(e, valueIndex);
+    }
+  };
 
   // =========================== Keyboard ===========================
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
@@ -112,11 +120,8 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
         ...positionStyle,
         ...style,
       }}
-      onMouseDown={(e) => {
-        if (!disabled) {
-          onStartMove(e, valueIndex);
-        }
-      }}
+      onMouseDown={onInternalStartMove}
+      onTouchStart={onInternalStartMove}
       onKeyDown={onKeyDown}
       tabIndex={disabled ? null : getIndex(tabIndex, valueIndex)}
       role="slider"

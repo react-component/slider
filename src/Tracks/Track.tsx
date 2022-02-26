@@ -22,6 +22,13 @@ export default function Track(props: TrackProps) {
   const offsetStart = getOffset(start, min, max);
   const offsetEnd = getOffset(end, min, max);
 
+  // ============================ Events ============================
+  const onInternalStartMove = (e: React.MouseEvent | React.TouchEvent) => {
+    if (!disabled && onStartMove) {
+      onStartMove(e, -1);
+    }
+  };
+
   // ============================ Render ============================
   const positionStyle: React.CSSProperties = {};
 
@@ -53,11 +60,8 @@ export default function Track(props: TrackProps) {
         ...positionStyle,
         ...style,
       }}
-      onMouseDown={(e) => {
-        if (!disabled) {
-          onStartMove?.(e, -1);
-        }
-      }}
+      onMouseDown={onInternalStartMove}
+      onTouchStart={onInternalStartMove}
     />
   );
 }

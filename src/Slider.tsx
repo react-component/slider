@@ -160,6 +160,10 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     return reverse ? 'rtl' : 'ltr';
   }, [reverse, vertical]);
 
+  // ============================ Range =============================
+  const mergedMin = React.useMemo(() => (isFinite(min) ? min : 0), [min]);
+  const mergedMax = React.useMemo(() => (isFinite(max) ? max : 100), [max]);
+
   // ============================= Step =============================
   const mergedStep = React.useMemo(() => (step !== null && step <= 0 ? 1 : step), [step]);
 
@@ -202,8 +206,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================ Format ============================
   const [formatValue, offsetValues] = useOffset(
-    min,
-    max,
+    mergedMin,
+    mergedMax,
     mergedStep,
     markList,
     allowCross,
@@ -223,7 +227,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         ? mergedValue
         : [mergedValue];
 
-    const [val0 = min] = valueList;
+    const [val0 = mergedMin] = valueList;
     let returnValues = mergedValue === null ? [] : [val0];
 
     // Format as range
@@ -237,7 +241,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
         // Fill with count
         while (returnValues.length < pointCount) {
-          returnValues.push(returnValues[returnValues.length - 1] ?? min);
+          returnValues.push(returnValues[returnValues.length - 1] ?? mergedMin);
         }
       }
       returnValues.sort((a, b) => a - b);
@@ -249,7 +253,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     });
 
     return returnValues;
-  }, [mergedValue, range, min, count, formatValue]);
+  }, [mergedValue, range, mergedMin, count, formatValue]);
 
   // =========================== onChange ===========================
   const rawValuesRef = React.useRef(rawValues);
@@ -273,7 +277,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const changeToCloseValue = (newValue: number) => {
     if (!disabled) {
       let valueIndex = 0;
-      let valueDist = max - min;
+      let valueDist = mergedMax - mergedMin;
 
       rawValues.forEach((val, index) => {
         const dist = Math.abs(newValue - val);
@@ -323,7 +327,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         percent = (clientX - left) / width;
     }
 
-    const nextValue = min + percent * (max - min);
+    const nextValue = mergedMin + percent * (mergedMax - mergedMin);
     changeToCloseValue(formatValue(nextValue));
   };
 
@@ -374,11 +378,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     containerRef,
     direction,
     rawValues,
-    min,
-    max,
-    mergedStep,
-    allowCross,
-    mergedPush,
+    mergedMin,
+    mergedMax,
     formatValue,
     triggerChange,
     finishChange,
@@ -410,11 +411,11 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // Used for Track, Mark & Dot
   const [includedStart, includedEnd] = React.useMemo(() => {
     if (!range) {
-      return [min, sortedCacheValues[0]];
+      return [mergedMin, sortedCacheValues[0]];
     }
 
     return [sortedCacheValues[0], sortedCacheValues[sortedCacheValues.length - 1]];
-  }, [sortedCacheValues, range, min]);
+  }, [sortedCacheValues, range, mergedMin]);
 
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
@@ -434,8 +435,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // =========================== Context ============================
   const context = React.useMemo<SliderContextProps>(
     () => ({
-      min,
-      max,
+      min: mergedMin,
+      max: mergedMax,
       direction,
       disabled,
       step: mergedStep,
@@ -449,8 +450,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       ariaValueTextFormatterForHandle,
     }),
     [
-      min,
-      max,
+      mergedMin,
+      mergedMax,
       direction,
       disabled,
       mergedStep,

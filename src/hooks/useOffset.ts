@@ -39,7 +39,8 @@ export default function useOffset(
 ): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => {
-      let formatNextValue = Math.min(max, val);
+      let formatNextValue = isFinite(val) ? val : min;
+      formatNextValue = Math.min(max, val);
       formatNextValue = Math.max(min, formatNextValue);
 
       return formatNextValue;
