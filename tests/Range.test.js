@@ -27,6 +27,32 @@ describe('Range', () => {
     document.body.removeChild(container);
   });
 
+  function doMouseMove(container, start, end, element = 'rc-slider-handle') {
+    const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
+    mouseDown.pageX = start;
+    fireEvent(container.getElementsByClassName(element)[0], mouseDown);
+
+    // Drag
+    const mouseMove = createEvent.mouseMove(document);
+    mouseMove.pageX = end;
+    fireEvent(document, mouseMove);
+  }
+
+  function doTouchMove(container, start, end, element = 'rc-slider-handle') {
+    const touchStart = createEvent.touchStart(container.getElementsByClassName(element)[0], {
+      touches: [{}],
+    });
+    touchStart.touches[0].pageX = start;
+    fireEvent(container.getElementsByClassName(element)[0], touchStart);
+
+    // Drag
+    const touchMove = createEvent.touchMove(document, {
+      touches: [{}],
+    });
+    touchMove.touches[0].pageX = end;
+    fireEvent(document, touchMove);
+  }
+
   it('should render Range with correct DOM structure', () => {
     const { asFragment } = render(<Slider range />);
     expect(asFragment().firstChild).toMatchSnapshot();
@@ -190,89 +216,85 @@ describe('Range', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('should render correctly when allowCross', () => {
-    const onChange = jest.fn();
-    const { container, unmount } = render(
-      <Slider range onChange={onChange} defaultValue={[20, 40]} />,
-    );
+  describe('should render correctly when allowCross', () => {
+    function test(name, func) {
+      it(name, () => {
+        const onChange = jest.fn();
+        const { container, unmount } = render(
+          <Slider range onChange={onChange} defaultValue={[20, 40]} />,
+        );
 
-    // Mouse Down
-    const mouseDown = createEvent.mouseDown(
-      container.getElementsByClassName('rc-slider-handle')[0],
-    );
-    mouseDown.pageX = 0;
-    fireEvent(container.getElementsByClassName('rc-slider-handle')[0], mouseDown);
+        // Do move
+        func(container);
 
-    // Drag
-    const mouseMove = createEvent.mouseMove(document);
-    mouseMove.pageX = 9999;
-    fireEvent(document, mouseMove);
+        expect(onChange).toHaveBeenCalledWith([40, 100]);
 
-    expect(onChange).toHaveBeenCalledWith([40, 100]);
+        unmount();
+      });
+    }
 
-    unmount();
+    test('mouse', (container) => doMouseMove(container, 0, 9999));
+    test('touch', (container) => doTouchMove(container, 0, 9999));
   });
 
-  it('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
-    const onChange = jest.fn();
+  describe('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
+    function test(name, func) {
+      it(name, () => {
+        const onChange = jest.fn();
 
-    const Demo = () => {
-      const [value, setValue] = React.useState([20, 40]);
+        const Demo = () => {
+          const [value, setValue] = React.useState([20, 40]);
 
-      return (
-        <Slider
-          range
-          onChange={(values) => {
-            setValue(values);
-            onChange(values);
-          }}
-          value={[20, 40]}
-          allowCross={false}
-          pushable
-        />
-      );
-    };
+          return (
+            <Slider
+              range
+              onChange={(values) => {
+                setValue(values);
+                onChange(values);
+              }}
+              value={[20, 40]}
+              allowCross={false}
+              pushable
+            />
+          );
+        };
 
-    global.error = true;
-    const { container, unmount } = render(<Demo />);
+        global.error = true;
+        const { container, unmount } = render(<Demo />);
 
-    // Mouse Down
-    const mouseDown = createEvent.mouseDown(
-      container.getElementsByClassName('rc-slider-handle')[0],
-    );
-    mouseDown.pageX = 0;
-    fireEvent(container.getElementsByClassName('rc-slider-handle')[0], mouseDown);
+        // Do move
+        func(container);
 
-    // Drag
-    const mouseMove = createEvent.mouseMove(document);
-    mouseMove.pageX = 9999;
-    fireEvent(document, mouseMove);
+        expect(onChange).toHaveBeenCalledWith([39, 40]);
 
-    expect(onChange).toHaveBeenCalledWith([39, 40]);
+        unmount();
+      });
+    }
 
-    unmount();
+    test('mouse', (container) => doMouseMove(container, 0, 9999));
+    test('touch', (container) => doTouchMove(container, 0, 9999));
   });
 
-  it('track draggable', () => {
-    const onChange = jest.fn();
+  describe('track draggable', () => {
+    function test(name, func) {
+      it(name, () => {
+        const onChange = jest.fn();
 
-    const { container, unmount } = render(
-      <Slider range defaultValue={[0, 30]} draggableTrack onChange={onChange} />,
-    );
+        const { container, unmount } = render(
+          <Slider range defaultValue={[0, 30]} draggableTrack onChange={onChange} />,
+        );
 
-    // Mouse Down
-    const mouseDown = createEvent.mouseDown(container.getElementsByClassName('rc-slider-track')[0]);
-    mouseDown.pageX = 0;
-    fireEvent(container.getElementsByClassName('rc-slider-track')[0], mouseDown);
+        // Do move
+        func(container);
 
-    // Drag
-    const mouseMove = createEvent.mouseMove(document);
-    mouseMove.pageX = 20;
-    fireEvent(document, mouseMove);
+        expect(onChange).toHaveBeenCalledWith([20, 50]);
 
-    expect(onChange).toHaveBeenCalledWith([20, 50]);
+        unmount();
+      });
+    }
 
-    unmount();
+    test('mouse', (container) => doMouseMove(container, 0, 20, 'rc-slider-track'));
+    test('touch', (container) => doTouchMove(container, 0, 20, 'rc-slider-track'));
   });
 
   it('sets aria-label on the handles', () => {
