@@ -267,6 +267,8 @@ describe('Common', () => {
       />,
     );
     const sliderHandleWrapper = container.querySelector(`#${labelId}`);
+    fireEvent.mouseDown(sliderHandleWrapper);
+    fireEvent.mouseUp(sliderHandleWrapper);
     fireEvent.click(sliderHandleWrapper);
     expect(sliderOnChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalled();

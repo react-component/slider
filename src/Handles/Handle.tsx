@@ -21,7 +21,7 @@ export interface HandleProps {
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  render?: (origin: React.ReactElement, props: RenderProps) => React.ReactElement;
+  render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
 }
 
 const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {

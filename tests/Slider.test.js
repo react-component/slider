@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import keyCode from 'rc-util/lib/KeyCode';
@@ -543,5 +544,19 @@ describe('Slider', () => {
     render(<Slider autoFocus onFocus={onFocus} />);
 
     expect(onFocus).toHaveBeenCalled();
+  });
+
+  it('custom handle', () => {
+    const { container } = render(
+      <Slider
+        handleRender={(node) =>
+          React.cloneElement(node, {
+            className: classNames(node.props.className, 'custom-handle'),
+          })
+        }
+      />,
+    );
+
+    expect(container.querySelector('.custom-handle')).toBeTruthy();
   });
 });
