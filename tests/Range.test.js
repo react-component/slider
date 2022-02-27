@@ -31,11 +31,13 @@ describe('Range', () => {
   function doMouseMove(container, start, end, element = 'rc-slider-handle') {
     const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
     mouseDown.pageX = start;
+    mouseDown.pageY = start;
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
 
     // Drag
     const mouseMove = createEvent.mouseMove(document);
     mouseMove.pageX = end;
+    mouseMove.pageY = end;
     fireEvent(document, mouseMove);
   }
 
@@ -217,8 +219,47 @@ describe('Range', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it('pushable & allowCross', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <Slider range onChange={onChange} defaultValue={[10, 30, 50]} pushable={10} />,
+    );
+
+    // Left to Right
+    for (let i = 0; i < 99; i += 1) {
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
+        keyCode: keyCode.UP,
+      });
+    }
+    expect(onChange).toHaveBeenCalledWith([80, 90, 100]);
+
+    // Center to Left
+    for (let i = 0; i < 99; i += 1) {
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+        keyCode: keyCode.DOWN,
+      });
+    }
+    expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
+
+    // Right to Right
+    for (let i = 0; i < 99; i += 1) {
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[2], {
+        keyCode: keyCode.DOWN,
+      });
+    }
+    expect(onChange).toHaveBeenCalledWith([0, 10, 20]);
+
+    // Center to Right
+    for (let i = 0; i < 99; i += 1) {
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+        keyCode: keyCode.UP,
+      });
+    }
+    expect(onChange).toHaveBeenCalledWith([0, 90, 100]);
+  });
+
   describe('should render correctly when allowCross', () => {
-    function test(name, func) {
+    function testLTR(name, func) {
       it(name, () => {
         const onChange = jest.fn();
         const { container, unmount } = render(
@@ -234,8 +275,44 @@ describe('Range', () => {
       });
     }
 
-    test('mouse', (container) => doMouseMove(container, 0, 9999));
-    test('touch', (container) => doTouchMove(container, 0, 9999));
+    testLTR('mouse', (container) => doMouseMove(container, 0, 9999));
+    testLTR('touch', (container) => doTouchMove(container, 0, 9999));
+
+    it('reverse', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range onChange={onChange} defaultValue={[20, 40]} reverse />,
+      );
+
+      // Do move
+      doMouseMove(container, 0, -10);
+
+      expect(onChange).toHaveBeenCalledWith([30, 40]);
+    });
+
+    it('vertical', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range onChange={onChange} defaultValue={[20, 40]} vertical />,
+      );
+
+      // Do move
+      doMouseMove(container, 0, -10);
+
+      expect(onChange).toHaveBeenCalledWith([30, 40]);
+    });
+
+    it('vertical & reverse', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range onChange={onChange} defaultValue={[20, 40]} vertical reverse />,
+      );
+
+      // Do move
+      doMouseMove(container, 0, -10);
+
+      expect(onChange).toHaveBeenCalledWith([10, 40]);
+    });
   });
 
   describe('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {

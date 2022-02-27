@@ -210,39 +210,38 @@ export default function useOffset(
     } else if (typeof pushable === 'number' || pushable === null) {
       // >>>>> Pushable
       // =============== Push ==================
-      let changed = false;
 
       // >>>>>> Basic push
       // End values
       for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
-        while (needPush(nextValues[i] - nextValues[i - 1])) {
+        let changed = true;
+        while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
-          if (!changed) break;
         }
       }
 
       // Start values
       for (let i = valueIndex; i > 0; i -= 1) {
-        while (needPush(nextValues[i] - nextValues[i - 1])) {
+        let changed = true;
+        while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
-          if (!changed) break;
         }
       }
 
       // >>>>> Revert back to safe push range
       // End to Start
       for (let i = nextValues.length - 1; i > 0; i -= 1) {
-        while (needPush(nextValues[i] - nextValues[i - 1])) {
+        let changed = true;
+        while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
-          if (!changed) break;
         }
       }
 
       // Start to End
       for (let i = 0; i < nextValues.length - 1; i += 1) {
-        while (needPush(nextValues[i + 1] - nextValues[i])) {
+        let changed = true;
+        while (needPush(nextValues[i + 1] - nextValues[i]) && changed) {
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
-          if (!changed) break;
         }
       }
     }
