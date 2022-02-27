@@ -28,7 +28,7 @@ import warning from 'rc-util/lib/warning';
  * - Key: up is plus, down is minus
  * - fix Key with step = null not align with marks
  * - Change range should not trigger onChange
- * - dragTrack & keyboard support pushable
+ * - keyboard support pushable
  */
 
 export interface SliderProps<ValueType = number | number[]> {
