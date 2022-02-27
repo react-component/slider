@@ -2,9 +2,23 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import keyCode from 'rc-util/lib/KeyCode';
+import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import Slider from '../src/Slider';
 
 describe('Slider', () => {
+  beforeAll(() => {
+    spyElementPrototypes(HTMLElement, {
+      getBoundingClientRect: () => ({
+        top: 0,
+        bottom: 100,
+        left: 0,
+        right: 100,
+        width: 100,
+        height: 100,
+      }),
+    });
+  });
+
   it('should render Slider with correct DOM structure', () => {
     const { asFragment } = render(<Slider />);
     expect(asFragment().firstChild).toMatchSnapshot();
@@ -427,7 +441,7 @@ describe('Slider', () => {
   });
 
   describe('focus & blur', () => {
-    it('focus()', () => {
+    it('focus', () => {
       const handleFocus = jest.fn();
       const { container, unmount } = render(
         <Slider min={0} max={10} defaultValue={0} onFocus={handleFocus} />,
@@ -449,6 +463,19 @@ describe('Slider', () => {
 
       unmount();
     });
+
+    it('ref focus & blur', () => {
+      const onFocus = jest.fn();
+      const onBlur = jest.fn();
+      const ref = React.createRef();
+      render(<Slider ref={ref} onFocus={onFocus} onBlur={onBlur} />);
+
+      ref.current.focus();
+      expect(onFocus).toBeCalled();
+
+      ref.current.blur();
+      expect(onBlur).toBeCalled();
+    });
   });
 
   it('should not be out of range when value is null', () => {
@@ -457,5 +484,64 @@ describe('Slider', () => {
 
     rerender(<Slider value={0} min={1} max={10} />);
     expect(container.getElementsByClassName('rc-slider-track')).toHaveLength(1);
+  });
+
+  describe('click slider to change value', () => {
+    it('ltr', () => {
+      const onChange = jest.fn();
+      const { container } = render(<Slider onChange={onChange} />);
+      fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+        clientX: 20,
+      });
+
+      expect(onChange).toHaveBeenCalledWith(20);
+    });
+
+    it('rtl', () => {
+      const onChange = jest.fn();
+      const { container } = render(<Slider onChange={onChange} reverse />);
+      fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+        clientX: 20,
+      });
+
+      expect(onChange).toHaveBeenCalledWith(80);
+    });
+
+    it('btt', () => {
+      const onChange = jest.fn();
+      const { container } = render(<Slider onChange={onChange} vertical />);
+      fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+        clientY: 93,
+      });
+
+      expect(onChange).toHaveBeenCalledWith(7);
+    });
+
+    it('ttb', () => {
+      const onChange = jest.fn();
+      const { container } = render(<Slider onChange={onChange} vertical reverse />);
+      fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+        clientY: 93,
+      });
+
+      expect(onChange).toHaveBeenCalledWith(93);
+    });
+
+    it('null value click to become 2 values', () => {
+      const onChange = jest.fn();
+      const { container } = render(<Slider defaultValue={null} range onChange={onChange} />);
+      fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+        clientX: 20,
+      });
+
+      expect(onChange).toHaveBeenCalledWith([20, 20]);
+    });
+  });
+
+  it('autoFocus', () => {
+    const onFocus = jest.fn();
+    render(<Slider autoFocus onFocus={onFocus} />);
+
+    expect(onFocus).toHaveBeenCalled();
   });
 });

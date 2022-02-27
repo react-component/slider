@@ -5,6 +5,7 @@ import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import Slider from '../src/';
+import { resetWarned } from 'rc-util/lib/warning';
 
 describe('Range', () => {
   let container;
@@ -402,5 +403,17 @@ describe('Range', () => {
       container.getElementsByClassName('rc-slider-handle')[0].blur();
       expect(handleBlur).toBeCalled();
     });
+  });
+
+  it('warning for `draggableTrack` and `mergedStep=null`', () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+
+    resetWarned();
+    render(<Slider range draggableTrack step={null} />);
+
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Warning: `draggableTrack` is not supported when `step` is `null`.',
+    );
+    errorSpy.mockRestore();
   });
 });

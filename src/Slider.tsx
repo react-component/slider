@@ -362,7 +362,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const mergedDraggableTrack = React.useMemo(() => {
     if (draggableTrack && mergedStep === null) {
       if (process.env.NODE_ENV !== 'production') {
-        warning(false, '`draggableTrack` will not work if `step` is null.');
+        warning(false, '`draggableTrack` is not supported when `step` is `null`.');
       }
       return false;
     }
@@ -421,7 +421,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     focus: () => {
       handlesRef.current.focus(0);
     },
-    blur: () => {},
+    blur: () => {
+      const { activeElement } = document;
+      if (containerRef.current.contains(activeElement)) {
+        (activeElement as HTMLElement)?.blur();
+      }
+    },
   }));
 
   // ========================== Auto Focus ==========================
@@ -515,7 +520,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   );
 });
 
-if (process.env.NODE_ENV === 'development') {
+if (process.env.NODE_ENV !== 'production') {
   Slider.displayName = 'Slider';
 }
 
