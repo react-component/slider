@@ -52,7 +52,13 @@ export default function useOffset(
     (val) => {
       if (step !== null) {
         const stepValue = min + Math.round((formatRangeValue(val) - min) / step) * step;
-        return min <= stepValue && stepValue <= max ? stepValue : null;
+
+        // Cut number in case to be like 0.30000000000000004
+        const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
+        const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
+        const fixedValue = Number(stepValue.toFixed(maxDecimal));
+
+        return min <= fixedValue && fixedValue <= max ? fixedValue : null;
       }
       return null;
     },
@@ -96,7 +102,7 @@ export default function useOffset(
       let nextValue: number;
       const originValue = values[valueIndex];
 
-      // Used for `dist` mode
+      // Only used for `dist` mode
       const targetDistValue = originValue + offset;
 
       // Compare next step value & mark value which is best match
