@@ -2,7 +2,13 @@ import React from 'react';
 import Slider from 'rc-slider';
 import '../../assets/index.less';
 
-const style = { float: 'left', width: 160, height: 400, marginBottom: 160, marginLeft: 50 };
+const style: React.CSSProperties = {
+  float: 'left',
+  width: 160,
+  height: 400,
+  marginBottom: 160,
+  marginLeft: 50,
+};
 const parentStyle = { overflow: 'hidden' };
 
 const marks = {
@@ -67,11 +73,12 @@ export default () => (
     </div>
     <div style={style}>
       <p>Range with marks</p>
-      <Slider.Range vertical min={-10} marks={marks} onChange={log} defaultValue={[20, 40]} />
+      <Slider range vertical min={-10} marks={marks} onChange={log} defaultValue={[20, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider.Range
+      <Slider
+        range
         vertical
         min={-10}
         marks={marks}
@@ -82,7 +89,8 @@ export default () => (
     </div>
     <div style={style}>
       <p>Range with marks and draggableTrack</p>
-      <Slider.Range
+      <Slider
+        range
         draggableTrack
         vertical
         min={-10}
@@ -93,7 +101,8 @@ export default () => (
     </div>
     <div style={style}>
       <p>Range with marks and draggableTrack(reverse)</p>
-      <Slider.Range
+      <Slider
+        range
         draggableTrack
         vertical
         reverse

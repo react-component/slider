@@ -1,3 +1,3 @@
 ## range
 
-<code src="../examples/range.jsx">
+<code src="../examples/range.tsx">

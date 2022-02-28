@@ -3,15 +3,13 @@ import React from 'react';
 import Slider from 'rc-slider';
 import '../../assets/index.less';
 
-const { Range } = Slider;
-
 const style = { width: 400, margin: 50 };
 
 function log(value) {
   console.log(value); //eslint-disable-line
 }
 
-class CustomizedRange extends React.Component {
+class CustomizedRange extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -55,13 +53,13 @@ class CustomizedRange extends React.Component {
         </button>
         <br />
         <br />
-        <Range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
+        <Slider range allowCross={false} value={this.state.value} onChange={this.onSliderChange} />
       </div>
     );
   }
 }
 
-class DynamicBounds extends React.Component {
+class DynamicBounds extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -96,7 +94,8 @@ class DynamicBounds extends React.Component {
         <input type="number" value={this.state.max} onChange={this.onMaxChange} />
         <br />
         <br />
-        <Range
+        <Slider
+          range
           defaultValue={[20, 50]}
           min={this.state.min}
           max={this.state.max}
@@ -107,7 +106,7 @@ class DynamicBounds extends React.Component {
   }
 }
 
-class ControlledRange extends React.Component {
+class ControlledRange extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -122,11 +121,11 @@ class ControlledRange extends React.Component {
   };
 
   render() {
-    return <Range value={this.state.value} onChange={this.handleChange} />;
+    return <Slider range value={this.state.value} onChange={this.handleChange} />;
   }
 }
 
-class ControlledRangeDisableAcross extends React.Component {
+class ControlledRangeDisableAcross extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -142,7 +141,8 @@ class ControlledRangeDisableAcross extends React.Component {
 
   render() {
     return (
-      <Range
+      <Slider
+        range
         value={this.state.value}
         onChange={this.handleChange}
         allowCross={false}
@@ -153,7 +153,7 @@ class ControlledRangeDisableAcross extends React.Component {
 }
 
 // https://github.com/react-component/slider/issues/226
-class PureRenderRange extends React.Component {
+class PureRenderRange extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -168,7 +168,12 @@ class PureRenderRange extends React.Component {
 
   render() {
     return (
-      <Range defaultValue={[20, 40, 60, 80]} onChange={this.handleChange} allowCross={false} />
+      <Slider
+        range
+        defaultValue={[20, 40, 60, 80]}
+        onChange={this.handleChange}
+        allowCross={false}
+      />
     );
   }
 }
@@ -177,23 +182,23 @@ export default () => (
   <div>
     <div style={style}>
       <p>Basic Range，`allowCross=false`</p>
-      <Range allowCross={false} defaultValue={[0, 20]} onChange={log} />
+      <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
       <p>Basic reverse Range`</p>
-      <Range allowCross={false} defaultValue={[0, 20]} onChange={log} reverse />
+      <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} reverse />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>
-      <Range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
+      <Slider range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20, dots` </p>
-      <Range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+      <Slider range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，disabled</p>
-      <Range allowCross={false} defaultValue={[0, 20]} onChange={log} disabled />
+      <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} disabled />
     </div>
     <div style={style}>
       <p>Controlled Range</p>
@@ -208,12 +213,13 @@ export default () => (
       <ControlledRangeDisableAcross pushable={5} />
     </div>
     <div style={style}>
-      <p>Multi Range</p>
-      <Range count={3} defaultValue={[20, 40, 60, 80]} pushable />
+      <p>Multi Range, count=3 and pushable=true</p>
+      <Slider range count={3} defaultValue={[20, 40, 60, 80]} pushable />
     </div>
     <div style={style}>
-      <p>Multi Range with custom track and handle style</p>
-      <Range
+      <p>Multi Range with custom track and handle style and pushable</p>
+      <Slider
+        range
         count={3}
         defaultValue={[20, 40, 60, 80]}
         pushable
@@ -236,15 +242,28 @@ export default () => (
     </div>
     <div style={style}>
       <p>draggableTrack two points</p>
-      <Range allowCross={false} defaultValue={[0, 40]} draggableTrack onChange={log} />
+      <Slider range allowCross={false} defaultValue={[0, 40]} draggableTrack onChange={log} />
     </div>
     <div style={style}>
       <p>draggableTrack two points(reverse)</p>
-      <Range allowCross={false} reverse defaultValue={[0, 40]} draggableTrack onChange={log} />
+      <Slider
+        range
+        allowCross={false}
+        reverse
+        defaultValue={[0, 40]}
+        draggableTrack
+        onChange={log}
+      />
     </div>
     <div style={style}>
       <p>draggableTrack multiple points</p>
-      <Range allowCross={false} defaultValue={[0, 20, 30, 40, 50]} draggableTrack onChange={log} />
+      <Slider
+        range
+        allowCross={false}
+        defaultValue={[0, 20, 30, 40, 50]}
+        draggableTrack
+        onChange={log}
+      />
     </div>
   </div>
 );

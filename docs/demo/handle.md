@@ -1,3 +1,3 @@
 ## handle
 
-<code src="../examples/handle.jsx">
+<code src="../examples/handle.tsx">

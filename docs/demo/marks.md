@@ -1,3 +1,3 @@
 ## marks
 
-<code src="../examples/marks.jsx">
+<code src="../examples/marks.tsx">

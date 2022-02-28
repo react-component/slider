@@ -1,7 +1,8 @@
 /* eslint react/no-multi-comp: 0, max-len: 0 */
 import React from 'react';
-import Slider, { createSliderWithTooltip } from 'rc-slider';
+import Slider from 'rc-slider';
 import '../../assets/index.less';
+import TooltipSlider from './components/TooltipSlider';
 
 const style = { width: 600, margin: 50 };
 
@@ -13,9 +14,9 @@ function percentFormatter(v) {
   return `${v} %`;
 }
 
-const SliderWithTooltip = createSliderWithTooltip(Slider);
+// const SliderWithTooltip = createSliderWithTooltip(Slider);
 
-class NullableSlider extends React.Component {
+class NullableSlider extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,14 +24,14 @@ class NullableSlider extends React.Component {
     };
   }
 
-  onSliderChange = value => {
+  onSliderChange = (value) => {
     log(value);
     this.setState({
       value,
     });
   };
 
-  onAfterChange = value => {
+  onAfterChange = (value) => {
     console.log(value); //eslint-disable-line
   };
 
@@ -55,7 +56,20 @@ class NullableSlider extends React.Component {
   }
 }
 
-class CustomizedSlider extends React.Component {
+const NullableRangeSlider = () => {
+  const [value, setValue] = React.useState(null);
+
+  return (
+    <div>
+      <Slider range value={value} onChange={setValue} />
+      <button type="button" onClick={() => setValue(null)}>
+        Reset
+      </button>
+    </div>
+  );
+};
+
+class CustomizedSlider extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -63,14 +77,14 @@ class CustomizedSlider extends React.Component {
     };
   }
 
-  onSliderChange = value => {
+  onSliderChange = (value) => {
     log(value);
     this.setState({
       value,
     });
   };
 
-  onAfterChange = value => {
+  onAfterChange = (value) => {
     console.log(value); //eslint-disable-line
   };
 
@@ -85,7 +99,7 @@ class CustomizedSlider extends React.Component {
   }
 }
 
-class DynamicBounds extends React.Component {
+class DynamicBounds extends React.Component<any, any> {
   constructor(props) {
     super(props);
     this.state = {
@@ -96,24 +110,24 @@ class DynamicBounds extends React.Component {
     };
   }
 
-  onSliderChange = value => {
+  onSliderChange = (value) => {
     log(value);
     this.setState({ value });
   };
 
-  onMinChange = e => {
+  onMinChange = (e) => {
     this.setState({
       min: +e.target.value || 0,
     });
   };
 
-  onMaxChange = e => {
+  onMaxChange = (e) => {
     this.setState({
       max: +e.target.value || 100,
     });
   };
 
-  onStepChange = e => {
+  onStepChange = (e) => {
     this.setState({
       step: +e.target.value || 1,
     });
@@ -203,7 +217,7 @@ export default () => (
     </div>
     <div style={style}>
       <p>Slider with tooltip, with custom `tipFormatter`</p>
-      <SliderWithTooltip
+      <TooltipSlider
         tipFormatter={percentFormatter}
         tipProps={{ overlayClassName: 'foo' }}
         onChange={log}
@@ -280,6 +294,10 @@ export default () => (
     <div style={style}>
       <p>Slider with null value and reset button</p>
       <NullableSlider />
+    </div>
+    <div style={style}>
+      <p>Range Slider with null value and reset button</p>
+      <NullableRangeSlider />
     </div>
     <div style={style}>
       <p>Slider with dynamic `min` `max` `step`</p>
