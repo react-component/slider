@@ -21,10 +21,6 @@ export default function Mark(props: MarkProps) {
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);
 
-  if (!children && typeof children !== 'number') {
-    return null;
-  }
-
   return (
     <span
       className={classNames(textCls, {
