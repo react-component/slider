@@ -6,6 +6,7 @@ import { getDirectionStyle, getIndex } from '../util';
 import type { OnStartMove } from '../interface';
 
 interface RenderProps {
+  index: number;
   prefixCls: string;
   value: number;
   dragging: boolean;
@@ -139,6 +140,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
   // Customize
   if (render) {
     handleNode = render(handleNode, {
+      index: valueIndex,
       prefixCls,
       value,
       dragging,
