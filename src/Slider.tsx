@@ -201,6 +201,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
         return markObj;
       })
+      .filter(({ label }) => label || typeof label === 'number')
       .sort((a, b) => a.value - b.value);
   }, [marks]);
 
@@ -479,6 +480,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-vertical`]: vertical,
           [`${prefixCls}-horizontal`]: !vertical,
+          [`${prefixCls}-with-marks`]: markList.length,
         })}
         style={style}
         onMouseDown={onSliderMouseDown}

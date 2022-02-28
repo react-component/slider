@@ -29,6 +29,8 @@ describe('marks', () => {
     expect(container2.getElementsByClassName('rc-slider-mark-text')[0].innerHTML).toBe('0');
     expect(container2.getElementsByClassName('rc-slider-mark-text')[1].innerHTML).toBe('30');
     expect(container2.getElementsByClassName('rc-slider-mark-text')[2].innerHTML).toBe('100');
+
+    expect(container.querySelector('.rc-slider-with-marks')).toBeTruthy();
   });
 
   it('should select correct value while click on marks', () => {
