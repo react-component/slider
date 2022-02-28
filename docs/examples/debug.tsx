@@ -54,9 +54,10 @@ export default () => {
           }}
           // value={value}
 
-          min={0.05}
-          max={2}
-          step={1}
+          min={0}
+          max={1}
+          defaultValue={0.81}
+          step={0.01}
         />
       </div>
     </div>

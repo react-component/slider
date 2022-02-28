@@ -571,4 +571,13 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalledWith(2);
     expect(container.querySelector('.rc-slider-handle').style.left).toBe('100%');
   });
+
+  it('not show decimal', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <Slider min={0} max={1} step={0.01} defaultValue={0.81} onChange={onChange} />,
+    );
+    fireEvent.keyDown(container.querySelector('.rc-slider-handle'), { keyCode: keyCode.RIGHT });
+    expect(onChange).toHaveBeenCalledWith(0.82);
+  });
 });
