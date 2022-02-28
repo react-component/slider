@@ -559,4 +559,16 @@ describe('Slider', () => {
 
     expect(container.querySelector('.custom-handle')).toBeTruthy();
   });
+
+  // https://github.com/ant-design/ant-design/issues/34020
+  it('max value not align with step', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <Slider min={0.5} max={2} step={1} defaultValue={1.5} onChange={onChange} />,
+    );
+    fireEvent.keyDown(container.querySelector('.rc-slider-handle'), { keyCode: keyCode.RIGHT });
+
+    expect(onChange).toHaveBeenCalledWith(2);
+    expect(container.querySelector('.rc-slider-handle').style.left).toBe('100%');
+  });
 });

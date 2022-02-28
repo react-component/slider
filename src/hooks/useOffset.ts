@@ -51,11 +51,12 @@ export default function useOffset(
   const formatStepValue: FormatStepValue = React.useCallback(
     (val) => {
       if (step !== null) {
-        return min + Math.round((formatRangeValue(val) - min) / step) * step;
+        const stepValue = min + Math.round((formatRangeValue(val) - min) / step) * step;
+        return min <= stepValue && stepValue <= max ? stepValue : null;
       }
       return null;
     },
-    [step, min, formatRangeValue],
+    [step, min, max, formatRangeValue],
   );
 
   const formatValue: FormatValue = React.useCallback(
@@ -67,6 +68,9 @@ export default function useOffset(
       if (step !== null) {
         alignValues.push(formatStepValue(val));
       }
+
+      // min & max
+      alignValues.push(min, max);
 
       // Align with marks
       let closeValue = alignValues[0];
@@ -100,6 +104,9 @@ export default function useOffset(
       markList.forEach((mark) => {
         potentialValues.push(mark.value);
       });
+
+      // Min & Max
+      potentialValues.push(min, max);
 
       // In case origin value is align with mark but not with step
       potentialValues.push(formatStepValue(originValue));
