@@ -94,7 +94,6 @@ export default function useDrag(
   updateCacheValueRef.current = updateCacheValue;
 
   const onStartMove: OnStartMove = (e, valueIndex) => {
-    e.preventDefault();
     e.stopPropagation();
 
     const originValue = rawValues[valueIndex];
@@ -104,7 +103,6 @@ export default function useDrag(
     setOriginValues(rawValues);
 
     const { pageX: startX, pageY: startY } = getPosition(e);
-    (e.target as HTMLDivElement).focus();
 
     // Moving
     const onMouseMove = (event: MouseEvent | TouchEvent) => {
