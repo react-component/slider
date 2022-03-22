@@ -299,7 +299,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       }
 
       triggerChange(cloneNextValues);
-      onAfterChange?.(cloneNextValues);
+      onAfterChange?.(getTriggerValue(cloneNextValues));
     }
   };
 
