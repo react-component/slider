@@ -580,4 +580,13 @@ describe('Slider', () => {
     fireEvent.keyDown(container.querySelector('.rc-slider-handle'), { keyCode: keyCode.RIGHT });
     expect(onChange).toHaveBeenCalledWith(0.82);
   });
+
+  it('onAfterChange should return number', () => {
+    const onAfterChange = jest.fn();
+    const { container } = render(<Slider onAfterChange={onAfterChange} />);
+    fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+      clientX: 20,
+    });
+    expect(onAfterChange).toHaveBeenCalledWith(20);
+  });
 });
