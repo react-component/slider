@@ -489,23 +489,13 @@ describe('Slider', () => {
 
   describe('click slider to change value', () => {
     it('ltr', () => {
-      const onBeforeChange = jest.fn();
       const onChange = jest.fn();
-      const onAfterChange = jest.fn();
-      const { container } = render(
-        <Slider
-          onBeforeChange={onBeforeChange}
-          onChange={onChange}
-          onAfterChange={onAfterChange}
-        />,
-      );
+      const { container } = render(<Slider onChange={onChange} />);
       fireEvent.mouseDown(container.querySelector('.rc-slider'), {
         clientX: 20,
       });
 
-      expect(onBeforeChange).toHaveBeenCalledWith(20);
       expect(onChange).toHaveBeenCalledWith(20);
-      expect(onAfterChange).toHaveBeenCalledWith(20);
     });
 
     it('rtl', () => {
@@ -546,6 +536,26 @@ describe('Slider', () => {
       });
 
       expect(onChange).toHaveBeenCalledWith([20, 20]);
+    });
+
+    it('should call onBeforeChange, onChange, and onAfterChange', () => {
+      const onBeforeChange = jest.fn();
+      const onChange = jest.fn();
+      const onAfterChange = jest.fn();
+      const { container } = render(
+        <Slider
+          onBeforeChange={onBeforeChange}
+          onChange={onChange}
+          onAfterChange={onAfterChange}
+        />,
+      );
+      fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+        clientX: 20,
+      });
+
+      expect(onBeforeChange).toHaveBeenCalledWith(20);
+      expect(onChange).toHaveBeenCalledWith(20);
+      expect(onAfterChange).toHaveBeenCalledWith(20);
     });
   });
 
