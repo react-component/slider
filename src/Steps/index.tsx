@@ -7,8 +7,8 @@ export interface StepsProps {
   prefixCls: string;
   marks: InternalMarkObj[];
   dots?: boolean;
-  style?: React.CSSProperties | ((number) => React.CSSProperties);
-  activeStyle?: React.CSSProperties | ((number) => React.CSSProperties);
+  style?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
+  activeStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 }
 
 export default function Steps(props: StepsProps) {
