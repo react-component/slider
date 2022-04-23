@@ -6,8 +6,8 @@ import SliderContext from '../context';
 export interface DotProps {
   prefixCls: string;
   value: number;
-  style?: React.CSSProperties;
-  activeStyle?: React.CSSProperties;
+  style?: React.CSSProperties | ((number) => React.CSSProperties);
+  activeStyle?: React.CSSProperties | ((number) => React.CSSProperties);
 }
 
 export default function Dot(props: DotProps) {
