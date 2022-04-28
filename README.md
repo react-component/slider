@@ -97,8 +97,8 @@ The following APIs are shared by Slider and Range.
 | handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi handle following element order`) |
 | trackStyle | Array[Object] \| Object | `[{}]` | The style used for track. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi track following element order`)|
 | railStyle | Object | `{}` | The style used for the track base color.  |
-| dotStyle | Object | `{}` | The style used for the dots. |
-| activeDotStyle | Object | `{}` | The style used for the active dots. |
+| dotStyle | Object \| (dotValue) => Object | `{}` | The style used for the dots. |
+| activeDotStyle | Object \| (dotValue) => Object | `{}` | The style used for the active dots. |
 
 ### Slider
 

@@ -51,6 +51,16 @@ describe('Common', () => {
     expect(container2.getElementsByClassName('rc-slider-dot-active')).toHaveLength(4);
   });
 
+  it('should render dots correctly when dotStyle is dynamic`', () => {
+    const { container: container1 } = render(<Slider value={50} step={10} dots dotStyle={dotValue => ({width: dotValue})}/>);
+    expect(container1.getElementsByClassName('rc-slider-dot')[1].getPropertyValue('width')).toBe('10px');
+    expect(container1.getElementsByClassName('rc-slider-dot')[2].getPropertyValue('width')).toBe('20px');
+
+    const { container: container2 } = render(<Slider range value={[20, 50]} step={10} dots activeDotStyle={dotValue => ({width: dotValue})}/>);
+    expect(container1.getElementsByClassName('rc-slider-dot-active')[1].getPropertyValue('width')).toBe('30px');
+    expect(container1.getElementsByClassName('rc-slider-dot-active')[2].getPropertyValue('width')).toBe('40px');
+  });
+
   it('should not set value greater than `max` or smaller `min`', () => {
     const { container: container1 } = render(<Slider value={0} min={10} />);
     expect(

@@ -6,8 +6,8 @@ import SliderContext from '../context';
 export interface DotProps {
   prefixCls: string;
   value: number;
-  style?: React.CSSProperties;
-  activeStyle?: React.CSSProperties;
+  style?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
+  activeStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 }
 
 export default function Dot(props: DotProps) {
@@ -21,13 +21,13 @@ export default function Dot(props: DotProps) {
   // ============================ Offset ============================
   let mergedStyle = {
     ...getDirectionStyle(direction, value, min, max),
-    ...style,
+    ...(typeof style === 'function' ? style(value) : style),
   };
 
   if (active) {
     mergedStyle = {
       ...mergedStyle,
-      ...activeStyle,
+      ...(typeof activeStyle === 'function' ? activeStyle(value) : activeStyle),
     };
   }
 
