@@ -53,7 +53,7 @@ describe('Common', () => {
 
   it('should render dots correctly when dotStyle is dynamic`', () => {
     const { container: container1 } = render(
-      <Slider value={50} step={10} dots dotStyle={dotValue => ({width: `${dotValue}px`})}/>
+      <Slider value={50} step={10} dots dotStyle={(dotValue) => ({width: `${dotValue}px`})}/>
     );
     expect(
       container1.getElementsByClassName('rc-slider-dot')[1]
@@ -63,7 +63,7 @@ describe('Common', () => {
     ).toHaveStyle('left: 18.18182%; transform: translateX(50%); width: 20px');
 
     const { container: container2 } = render(
-      <Slider range value={[20, 50]} step={10} dots activeDotStyle={dotValue => ({width: `${dotValue}px`})}/>
+      <Slider range value={[20, 50]} step={10} dots activeDotStyle={(dotValue) => ({width: `${dotValue}px`})}/>
     );
     expect(
       container2.getElementsByClassName('rc-slider-dot-active')[1]
