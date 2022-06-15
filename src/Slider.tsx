@@ -72,8 +72,8 @@ export interface SliderProps<ValueType = number | number[]> {
   trackStyle?: React.CSSProperties | React.CSSProperties[];
   handleStyle?: React.CSSProperties | React.CSSProperties[];
   railStyle?: React.CSSProperties;
-  dotStyle?: React.CSSProperties;
-  activeDotStyle?: React.CSSProperties;
+  dotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
+  activeDotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 
   // Decorations
   marks?: Record<string | number, React.ReactNode | MarkObj>;
