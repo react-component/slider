@@ -72,10 +72,10 @@ describe('Common', () => {
       />,
     );
     expect(container2.getElementsByClassName('rc-slider-dot-active')[1]).toHaveStyle(
-      'left: 40%; transform: translateX(-50%); width: 30px',
+      'left: 30%; transform: translateX(-50%); width: 30px',
     );
     expect(container2.getElementsByClassName('rc-slider-dot-active')[2]).toHaveStyle(
-      'left: 50%; transform: translateX(-50%); width: 40px',
+      'left: 40%; transform: translateX(-50%); width: 40px',
     );
   });
 
