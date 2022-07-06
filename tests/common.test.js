@@ -51,6 +51,11 @@ describe('Common', () => {
     expect(container2.getElementsByClassName('rc-slider-dot-active')).toHaveLength(4);
   });
 
+  it('should render normally when `dots=true` and `step=null`', () => {
+    const { container } = render(<Slider value={50} step={null} dots />);
+    expect(() => container).not.toThrowError();
+  });
+
   it('should render dots correctly when dotStyle is dynamic`', () => {
     const { container: container1 } = render(
       <Slider value={50} step={10} dots dotStyle={(dotValue) => ({ width: `${dotValue}px` })} />,
