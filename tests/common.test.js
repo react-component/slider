@@ -52,7 +52,7 @@ describe('Common', () => {
   });
 
   it('should render normally when `dots=true` and `step=null`', () => {
-    const { container } = render(<Slider value={50} step={null} dots />);
+    const { container } = render(<Slider step={null} dots />);
     expect(() => container).not.toThrowError();
   });
 
