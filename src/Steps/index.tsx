@@ -24,7 +24,7 @@ export default function Steps(props: StepsProps) {
     });
 
     // Fill dots
-    if (dots) {
+    if (dots && step !== null) {
       let current = min;
       while (current <= max) {
         dotSet.add(current);
