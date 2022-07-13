@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "10.0.0",
+  "version": "10.0.1",
   "description": "Slider UI component for React",
   "engines": {
     "node": ">=8.x"
