@@ -6,17 +6,21 @@ import SliderContext from '../context';
 export interface DotProps {
   prefixCls: string;
   value: number;
+  marksValue: number[];
   style?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
   activeStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 }
 
 export default function Dot(props: DotProps) {
-  const { prefixCls, value, style, activeStyle } = props;
-  const { min, max, direction, included, includedStart, includedEnd } =
-    React.useContext(SliderContext);
+  const { prefixCls, marksValue, value, style, activeStyle } = props;
+  const { min, max, direction, included, includedStart, includedEnd } = React.useContext(
+    SliderContext,
+  );
 
   const dotClassName = `${prefixCls}-dot`;
+  const marksDotClassName = `${prefixCls}-marks-dot`;
   const active = included && includedStart <= value && value <= includedEnd;
+  const marksDot = marksValue.indexOf(value) >= 0;
 
   // ============================ Offset ============================
   let mergedStyle = {
@@ -33,9 +37,15 @@ export default function Dot(props: DotProps) {
 
   return (
     <span
-      className={classNames(dotClassName, {
-        [`${dotClassName}-active`]: active,
-      })}
+      className={classNames(
+        dotClassName,
+        {
+          [`${dotClassName}-active`]: active,
+        },
+        {
+          [marksDotClassName]: marksDot,
+        },
+      )}
       style={mergedStyle}
     />
   );

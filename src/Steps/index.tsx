@@ -1,5 +1,6 @@
 import * as React from 'react';
 import type { InternalMarkObj } from '../Marks';
+import type { DotProps } from './Dot';
 import SliderContext from '../context';
 import Dot from './Dot';
 
@@ -15,6 +16,8 @@ export default function Steps(props: StepsProps) {
   const { prefixCls, marks, dots, style, activeStyle } = props;
   const { min, max, step } = React.useContext(SliderContext);
 
+  const marksValueRef = React.useRef<DotProps['marksValue']>([]);
+
   const stepDots = React.useMemo(() => {
     const dotSet = new Set<number>();
 
@@ -22,6 +25,9 @@ export default function Steps(props: StepsProps) {
     marks.forEach((mark) => {
       dotSet.add(mark.value);
     });
+
+    //Fill marksValue
+    marksValueRef.current = Array.from(dotSet);
 
     // Fill dots
     if (dots && step !== null) {
@@ -40,6 +46,7 @@ export default function Steps(props: StepsProps) {
       {stepDots.map((dotValue) => (
         <Dot
           prefixCls={prefixCls}
+          marksValue={marksValueRef.current}
           key={dotValue}
           value={dotValue}
           style={style}
