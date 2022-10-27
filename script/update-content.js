@@ -9,7 +9,7 @@ const glob = require('glob');
 
 const paths = glob.sync('./docs/examples/*.jsx');
 
-paths.forEach(path => {
+paths.forEach((path) => {
   const name = path.split('/').pop().split('.')[0];
   fs.writeFile(
     `./docs/demo/${name}.md`,
@@ -18,12 +18,12 @@ paths.forEach(path => {
 <code src="../examples/${name}.jsx">
 `,
     'utf8',
-    function(error) {
-      if(error){
+    function (error) {
+      if (error) {
         console.log(error);
         return false;
       }
       console.log(`${name} 更新成功~`);
-    }
-  )
+    },
+  );
 });

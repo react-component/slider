@@ -5,10 +5,8 @@ const name = 'rc-slider';
 
 export default defineConfig({
   title: name,
-  favicon:
-    'https://avatars0.githubusercontent.com/u/9441414?s=200&v=4',
-  logo:
-    'https://avatars0.githubusercontent.com/u/9441414?s=200&v=4',
+  favicon: 'https://avatars0.githubusercontent.com/u/9441414?s=200&v=4',
+  logo: 'https://avatars0.githubusercontent.com/u/9441414?s=200&v=4',
   outputPath: '.doc',
   exportStatic: {},
   styles: [
@@ -17,5 +15,5 @@ export default defineConfig({
         width: auto !important;
       }
     `,
-  ]
+  ],
 });

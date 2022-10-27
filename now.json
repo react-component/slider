@@ -8,7 +8,5 @@
       "config": { "distDir": ".doc" }
     }
   ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/dist/$1" }
-  ]
+  "routes": [{ "src": "/(.*)", "dest": "/dist/$1" }]
 }

@@ -56,34 +56,6 @@ describe('Common', () => {
     expect(() => container).not.toThrowError();
   });
 
-  it('should render dots correctly when dotStyle is dynamic`', () => {
-    const { container: container1 } = render(
-      <Slider value={50} step={10} dots dotStyle={(dotValue) => ({ width: `${dotValue}px` })} />,
-    );
-    expect(container1.getElementsByClassName('rc-slider-dot')[1]).toHaveStyle(
-      'left: 10%; transform: translateX(-50%); width: 10px',
-    );
-    expect(container1.getElementsByClassName('rc-slider-dot')[2]).toHaveStyle(
-      'left: 20%; transform: translateX(-50%); width: 20px',
-    );
-
-    const { container: container2 } = render(
-      <Slider
-        range
-        value={[20, 50]}
-        step={10}
-        dots
-        activeDotStyle={(dotValue) => ({ width: `${dotValue}px` })}
-      />,
-    );
-    expect(container2.getElementsByClassName('rc-slider-dot-active')[1]).toHaveStyle(
-      'left: 30%; transform: translateX(-50%); width: 30px',
-    );
-    expect(container2.getElementsByClassName('rc-slider-dot-active')[2]).toHaveStyle(
-      'left: 40%; transform: translateX(-50%); width: 40px',
-    );
-  });
-
   it('should not set value greater than `max` or smaller `min`', () => {
     const { container: container1 } = render(<Slider value={0} min={10} />);
     expect(
@@ -281,70 +253,4 @@ describe('Common', () => {
       '0',
     );
   });
-
-  it('should call onAfterChange when clicked on mark label', () => {
-    const labelId = 'to-be-clicked';
-    const marks = {
-      0: 'some other label',
-      100: <span id={labelId}>some label</span>,
-    };
-
-    const sliderOnChange = jest.fn();
-    const sliderOnAfterChange = jest.fn();
-    const { container } = render(
-      <Slider
-        value={0}
-        marks={marks}
-        onChange={sliderOnChange}
-        onAfterChange={sliderOnAfterChange}
-      />,
-    );
-    const sliderHandleWrapper = container.querySelector(`#${labelId}`);
-    fireEvent.mouseDown(sliderHandleWrapper);
-    fireEvent.mouseUp(sliderHandleWrapper);
-    fireEvent.click(sliderHandleWrapper);
-    expect(sliderOnChange).toHaveBeenCalled();
-    expect(sliderOnAfterChange).toHaveBeenCalled();
-
-    const rangeOnAfterChange = jest.fn();
-    const { container: container2 } = render(
-      <Slider range value={[0, 1]} marks={marks} onAfterChange={rangeOnAfterChange} />,
-    );
-    const rangeHandleWrapper = container2.querySelector(`#${labelId}`);
-    fireEvent.click(rangeHandleWrapper);
-    expect(rangeOnAfterChange).toHaveBeenCalled();
-  });
-
-  it('only call onAfterChange once', () => {
-    const sliderOnChange = jest.fn();
-    const sliderOnAfterChange = jest.fn();
-    const { container } = render(
-      <Slider value={0} onChange={sliderOnChange} onAfterChange={sliderOnAfterChange} />,
-    );
-
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-      keyCode: KeyCode.UP,
-    });
-
-    expect(sliderOnChange).toHaveBeenCalled();
-    expect(sliderOnAfterChange).toHaveBeenCalled();
-    expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
-  });
-
-  // Move to antd instead
-  // it('the tooltip should be attach to the container with the id tooltip', () => {
-  //   const SliderWithTooltip = createSliderWithTooltip(Slider);
-  //   const tooltipPrefixer = {
-  //     prefixCls: 'slider-tooltip',
-  //   };
-  //   const tooltipParent = document.createElement('div');
-  //   tooltipParent.setAttribute('id', 'tooltip');
-  //   const { container } = render(
-  //     <SliderWithTooltip
-  //       tipProps={tooltipPrefixer}
-  //       getTooltipContainer={() => document.getElementById('tooltip')}
-  //     />,
-  //   );
-  //   expect(wrapper.instance().props.getTooltipContainer).toBeTruthy();
-  // });
 });

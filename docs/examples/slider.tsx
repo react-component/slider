@@ -1,7 +1,8 @@
 /* eslint react/no-multi-comp: 0, max-len: 0 */
 import React from 'react';
-import Slider from 'rc-slider';
+import Slider from '@tordek/rc-slider';
 import '../../assets/index.less';
+import '../docs.less';
 import TooltipSlider from './components/TooltipSlider';
 
 const style = { width: 600, margin: 50 };
@@ -30,10 +31,7 @@ class NullableSlider extends React.Component<any, any> {
       value,
     });
   };
-
-  onAfterChange = (value) => {
-    console.log(value); //eslint-disable-line
-  };
+  
 
   reset = () => {
     console.log('reset value'); // eslint-disable-line
@@ -46,7 +44,6 @@ class NullableSlider extends React.Component<any, any> {
         <Slider
           value={this.state.value}
           onChange={this.onSliderChange}
-          onAfterChange={this.onAfterChange}
         />
         <button type="button" onClick={this.reset}>
           Reset
@@ -84,16 +81,11 @@ class CustomizedSlider extends React.Component<any, any> {
     });
   };
 
-  onAfterChange = (value) => {
-    console.log(value); //eslint-disable-line
-  };
-
   render() {
     return (
       <Slider
         value={this.state.value}
         onChange={this.onSliderChange}
-        onAfterChange={this.onAfterChange}
       />
     );
   }
@@ -194,25 +186,24 @@ export default () => (
       <Slider onChange={log} reverse min={20} max={60} />
     </div>
     <div style={style}>
-      <p>Basic Slider，`step=20`</p>
-      <Slider step={20} defaultValue={50} onBeforeChange={log} />
+      <p>Basic Slider, `step=20`</p>
+      <Slider step={20} defaultValue={50} />
     </div>
     <div style={style}>
-      <p>Basic Slider，`step=20, dots`</p>
-      <Slider dots step={20} defaultValue={100} onAfterChange={log} />
+      <p>Basic Slider, `step=20, dots`</p>
+      <Slider dots step={20} defaultValue={100} />
     </div>
     <div style={style}>
       <p>
-        Basic Slider，`step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle=
+        Basic Slider, `step=20, dots, dotStyle={"{borderColor: 'orange'}"}, activeDotStyle=
         {"{borderColor: 'yellow'}"}`
       </p>
       <Slider
         dots
         step={20}
         defaultValue={100}
-        onAfterChange={log}
-        dotStyle={{ borderColor: 'orange' }}
-        activeDotStyle={{ borderColor: 'yellow' }}
+        dotClassName="rc-slider-dot docs-slider-dot"
+        activeDotClassName="rc-slider-dot-active docs-slider-dot-active"
       />
     </div>
     <div style={style}>
@@ -229,16 +220,9 @@ export default () => (
       </p>
       <Slider
         defaultValue={30}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
-        }}
+        railClassName="rc-slider-rail docs-slider-rail"
+        trackClassName="rc-slider-track docs-slider-track"
+        handleClassName="rc-slider-handle docs-handle-handle"
       />
     </div>
     <div style={style}>
@@ -247,16 +231,9 @@ export default () => (
       </p>
       <Slider
         defaultValue={30}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
-        }}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
+        railClassName="rc-slider-rail docs-slider-rail"
+        trackClassName="rc-slider-track docs-slider-track"
+        handleClassName="rc-slider-handle docs-handle-handle"
       />
     </div>
     <div style={style}>
@@ -266,17 +243,9 @@ export default () => (
       </p>
       <Slider
         defaultValue={30}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        reverse
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
-        }}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
+        railClassName="rc-slider-rail docs-slider-rail"
+        trackClassName="rc-slider-track docs-slider-track"
+        handleClassName="rc-slider-handle docs-handle-handle"
       />
     </div>
     <div style={style}>

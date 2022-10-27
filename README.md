@@ -2,6 +2,8 @@
 
 Slider UI component for React
 
+Forked off rc-slider to add support for passing classNames to parts of the slider.
+
 [![NPM version][npm-image]][npm-url] [![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) [![build status][github-actions-image]][github-actions-url] [![Test coverage][coveralls-image]][coveralls-url] [![Dependencies][david-image]][david-url] [![DevDependencies][david-dev-image]][david-dev-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
@@ -23,7 +25,7 @@ Slider UI component for React
 
 ## Install
 
-[![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
+[![@tordek/rc-slider](https://nodei.co/npm/@tordek/rc-slider.png)](https://npmjs.org/package/@tordek/rc-slider)
 
 ## Example
 
@@ -67,8 +69,8 @@ const Range = createSliderWithTooltip(Slider.Range);
 
 After Range or Slider was wrapped by createSliderWithTooltip, it will have the following props:
 
-| Name         | Type    | Default | Description |
-| ------------ | ------- | ------- | ----------- |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
 | tipFormatter | (value: number): React.ReactNode | `value => value` | A function to format tooltip's overlay |
 | tipProps | Object | `{` <br>`placement: 'top',` <br> ` prefixCls: 'rc-slider-tooltip',` <br> `overlay: tipFormatter(value)` <br> `}` | A function to format tooltip's overlay |
 
@@ -76,48 +78,46 @@ After Range or Slider was wrapped by createSliderWithTooltip, it will have the f
 
 The following APIs are shared by Slider and Range.
 
-| Name         | Type    | Default | Description |
-| ------------ | ------- | ------- | ----------- |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
 | className | string | `''` | Additional CSS class for the root DOM node |
 | min | number | `0` | The minimum value of the slider |
 | max | number | `100` | The maximum value of the slider |
 | marks | `{number: ReactNode}` or`{number: { style, label }}` | `{}` | Marks on the slider. The key determines the position, and the value determines what will show. If you want to set the style of a specific mark point, the value should be an object which contains `style` and `label` properties. |
 | step | number or `null` | `1` | Value to be added or subtracted on each step the slider makes. Must be greater than zero, and `max` - `min` should be evenly divisible by the step value. <br /> When `marks` is not an empty object, `step` can be set to `null`, to make `marks` as steps. |
 | vertical | boolean | `false` | If vertical is `true`, the slider will be vertical. |
-| handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
+| handle | (props) => React.ReactNode |  | A handle generator which could be used to customized handle. |
 | included | boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
 | reverse | boolean | `false` | If the value is `true`, it means the component is rendered reverse. |
 | disabled | boolean | `false` | If `true`, handles can't be moved. |
-| dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
-| onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
+| dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to `true` if you want to render the slider with dots. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
-| onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
-| minimumTrackStyle | Object |  | please use  `trackStyle` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
-| maximumTrackStyle | Object |  | please use  `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
+| minimumTrackStyle | Object |  | please use `trackStyle` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
+| maximumTrackStyle | Object |  | please use `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
 | handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi handle following element order`) |
-| trackStyle | Array[Object] \| Object | `[{}]` | The style used for track. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi track following element order`)|
-| railStyle | Object | `{}` | The style used for the track base color.  |
+| trackStyle | Array[Object] \| Object | `[{}]` | The style used for track. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi track following element order`) |
+| railStyle | Object | `{}` | The style used for the track base color. |
 | dotStyle | Object \| (dotValue) => Object | `{}` | The style used for the dots. |
 | activeDotStyle | Object \| (dotValue) => Object | `{}` | The style used for the active dots. |
 
 ### Slider
 
-| Name         | Type    | Default | Description |
-| ------------ | ------- | ------- | ----------- |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
 | defaultValue | number | `0` | Set initial value of slider. |
 | value | number | - | Set current value of slider. |
 | startPoint | number | `undefined` | Track starts from this value. If `undefined`, `min` is used. |
 | tabIndex | number | `0` | Set the tabIndex of the slider handle. |
-| ariaLabelForHandle | string | - | Set the `aria-label` attribute on the slider handle.  |
+| ariaLabelForHandle | string | - | Set the `aria-label` attribute on the slider handle. |
 | ariaLabelledByForHandle | string | - | Set the `aria-labelledby` attribute on the slider handle. |
 | ariaValueTextFormatterForHandle | (value) => string | - | A function to set the `aria-valuetext` attribute on the slider handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
 
 ### Range
 
-| Name         | Type    | Default | Description |
-| ------------ | ------- | ------- | ----------- |
+| Name | Type | Default | Description |
+| --- | --- | --- | --- |
 | defaultValue | `number[]` | `[0, 0]` | Set initial positions of handles. |
-| value | `number[]` | | Set current positions of handles. |
+| value | `number[]` |  | Set current positions of handles. |
 | tabIndex | number[] | `[0, 0]` | Set the tabIndex of each handle. |
 | ariaLabelGroupForHandles | Array[string] | - | Set the `aria-label` attribute on each handle. |
 | ariaLabelledByGroupForHandles | Array[string] | - | Set the `aria-labelledby` attribute on each handle. |
@@ -145,6 +145,7 @@ npm start
 ## Coverage
 
 `npm run coverage`
+
 ## License
 
 `rc-slider` is released under the MIT license.

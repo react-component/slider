@@ -1,6 +1,8 @@
-global.requestAnimationFrame = global.requestAnimationFrame || function _raf(cb) {
-  return setTimeout(cb, 0);
-};
+global.requestAnimationFrame =
+  global.requestAnimationFrame ||
+  function _raf(cb) {
+    return setTimeout(cb, 0);
+  };
 require('regenerator-runtime');
 
 const Enzyme = require('enzyme');

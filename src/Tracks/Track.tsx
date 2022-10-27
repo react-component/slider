@@ -1,23 +1,18 @@
 import * as React from 'react';
-import classNames from 'classnames';
 import SliderContext from '../context';
 import { getOffset } from '../util';
 import type { OnStartMove } from '../interface';
 
 export interface TrackProps {
-  prefixCls: string;
-  style?: React.CSSProperties;
+  className: string;
   start: number;
   end: number;
-  index: number;
   onStartMove?: OnStartMove;
 }
 
 export default function Track(props: TrackProps) {
-  const { prefixCls, style, start, end, index, onStartMove } = props;
-  const { direction, min, max, disabled, range } = React.useContext(SliderContext);
-
-  const trackPrefixCls = `${prefixCls}-track`;
+  const { className, start, end, onStartMove } = props;
+  const { direction, min, max, disabled } = React.useContext(SliderContext);
 
   const offsetStart = getOffset(start, min, max);
   const offsetEnd = getOffset(end, min, max);
@@ -55,10 +50,9 @@ export default function Track(props: TrackProps) {
 
   return (
     <div
-      className={classNames(trackPrefixCls, range && `${trackPrefixCls}-${index + 1}`)}
+      className={className}
       style={{
         ...positionStyle,
-        ...style,
       }}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}

@@ -5,9 +5,9 @@ import { getIndex } from '../util';
 import type { OnStartMove } from '../interface';
 
 export interface HandlesProps {
-  prefixCls: string;
-  style?: React.CSSProperties | React.CSSProperties[];
   values: number[];
+  className?: string | string[];
+  draggingClassName?: string;
   onStartMove: OnStartMove;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
@@ -22,8 +22,8 @@ export interface HandlesRef {
 
 const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
   const {
-    prefixCls,
-    style,
+    className,
+    draggingClassName,
     onStartMove,
     onOffsetChange,
     values,
@@ -38,21 +38,22 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
       handlesRef.current[index]?.focus();
     },
   }));
+  console.log(values);
 
   return (
     <>
       {values.map((value, index) => (
         <Handle
           ref={(node) => {
-            if (!node) {
-              delete handlesRef.current[index];
-            } else {
+            if (node) {
               handlesRef.current[index] = node;
+            } else {
+              delete handlesRef.current[index];
             }
           }}
           dragging={draggingIndex === index}
-          prefixCls={prefixCls}
-          style={getIndex(style, index)}
+          className={getIndex(className, index)}
+          draggingClassName={draggingClassName}
           key={index}
           value={value}
           valueIndex={index}

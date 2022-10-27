@@ -17,20 +17,6 @@ import Steps from './Steps';
 import useOffset from './hooks/useOffset';
 import warning from 'rc-util/lib/warning';
 
-/**
- * New:
- * - click mark to update range value
- * - handleRender
- * - Fix handle with count not correct
- * - Fix pushable not work in some case
- * - No more FindDOMNode
- * - Move all position related style into inline style
- * - Key: up is plus, down is minus
- * - fix Key with step = null not align with marks
- * - Change range should not trigger onChange
- * - keyboard support pushable
- */
-
 export interface SliderProps<ValueType = number | number[]> {
   prefixCls?: string;
   className?: string;
@@ -51,10 +37,6 @@ export interface SliderProps<ValueType = number | number[]> {
   value?: ValueType;
   defaultValue?: ValueType;
   onChange?: (value: ValueType) => void;
-  /** @deprecated It's always better to use `onChange` instead */
-  onBeforeChange?: (value: ValueType) => void;
-  /** @deprecated It's always better to use `onChange` instead */
-  onAfterChange?: (value: ValueType) => void;
 
   // Cross
   allowCross?: boolean;
@@ -69,11 +51,21 @@ export interface SliderProps<ValueType = number | number[]> {
   // Style
   included?: boolean;
   startPoint?: number;
-  trackStyle?: React.CSSProperties | React.CSSProperties[];
-  handleStyle?: React.CSSProperties | React.CSSProperties[];
-  railStyle?: React.CSSProperties;
-  dotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
-  activeDotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
+
+  trackClassName?: string | string[];
+  handleClassName?: string | string[];
+  handleDraggingClassName?: string;
+  railClassName?: string;
+  stepsClassName?: string;
+  dotClassName?: string;
+  markTextClassName?: string;
+  activeDotClassName?: string;
+  disabledClassName?: string;
+  verticalClassName?: string;
+  horizontalClassName?: string;
+  withMarksClassName?: string;
+  marksClassName?: string;
+  activeMarkTextClassName?: string;
 
   // Decorations
   marks?: Record<string | number, React.ReactNode | MarkObj>;
@@ -96,10 +88,6 @@ export interface SliderRef {
 
 const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) => {
   const {
-    prefixCls = 'rc-slider',
-    className,
-    style,
-
     // Status
     disabled = false,
     autoFocus,
@@ -115,8 +103,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     range,
     count,
     onChange,
-    onBeforeChange,
-    onAfterChange,
 
     // Cross
     allowCross = true,
@@ -130,11 +116,22 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     // Style
     included = true,
     startPoint,
-    trackStyle,
-    handleStyle,
-    railStyle,
-    dotStyle,
-    activeDotStyle,
+
+    className = 'rc-slider',
+    railClassName = 'rc-slider-rail',
+    trackClassName = 'rc-slider-track',
+    handleClassName = 'rc-slider-handle',
+    handleDraggingClassName = 'rc-slider-handle-dragging',
+    stepsClassName = 'rc-slider-step',
+    dotClassName = 'rc-slider-dot',
+    activeDotClassName = 'rc-slider-dot-active',
+    disabledClassName = 'rc-slider-disabled',
+    verticalClassName = 'rc-slider-vertical',
+    horizontalClassName = 'rc-slider-horizontal',
+    withMarksClassName = 'rc-slider-with-marks',
+    marksClassName = 'rc-slider-mark',
+    markTextClassName = 'rc-slider-mark-text',
+    activeMarkTextClassName = 'rc-slider-mark-text-active',
 
     // Decorations
     marks,
@@ -298,9 +295,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         cloneNextValues.push(newValue);
       }
 
-      onBeforeChange?.(getTriggerValue(cloneNextValues));
       triggerChange(cloneNextValues);
-      onAfterChange?.(getTriggerValue(cloneNextValues));
     }
   };
 
@@ -341,9 +336,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     if (!disabled) {
       const next = offsetValues(rawValues, offset, valueIndex);
 
-      onBeforeChange?.(getTriggerValue(rawValues));
       triggerChange(next.values);
-      onAfterChange?.(getTriggerValue(next.values));
 
       setKeyboardValue(next.value);
     }
@@ -371,10 +364,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     return draggableTrack;
   }, [draggableTrack, mergedStep]);
 
-  const finishChange = () => {
-    onAfterChange?.(getTriggerValue(rawValuesRef.current));
-  };
-
   const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
     containerRef,
     direction,
@@ -383,14 +372,11 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     mergedMax,
     formatValue,
     triggerChange,
-    finishChange,
     offsetValues,
   );
 
   const onStartMove: OnStartMove = (e, valueIndex) => {
     onStartDrag(e, valueIndex);
-
-    onBeforeChange?.(getTriggerValue(rawValuesRef.current));
   };
 
   // Auto focus for updated handle
@@ -477,37 +463,35 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     <SliderContext.Provider value={context}>
       <div
         ref={containerRef}
-        className={classNames(prefixCls, className, {
-          [`${prefixCls}-disabled`]: disabled,
-          [`${prefixCls}-vertical`]: vertical,
-          [`${prefixCls}-horizontal`]: !vertical,
-          [`${prefixCls}-with-marks`]: markList.length,
+        className={classNames(className, {
+          [disabledClassName]: disabled,
+          [verticalClassName]: vertical,
+          [horizontalClassName]: !vertical,
+          [withMarksClassName]: markList.length,
         })}
-        style={style}
         onMouseDown={onSliderMouseDown}
       >
-        <div className={`${prefixCls}-rail`} style={railStyle} />
+        <div className={railClassName} />
 
         <Tracks
-          prefixCls={prefixCls}
-          style={trackStyle}
+          trackClassName={trackClassName}
           values={sortedCacheValues}
           startPoint={startPoint}
           onStartMove={mergedDraggableTrack ? onStartMove : null}
         />
 
         <Steps
-          prefixCls={prefixCls}
           marks={markList}
           dots={dots}
-          style={dotStyle}
-          activeStyle={activeDotStyle}
+          className={stepsClassName}
+          dotClassName={dotClassName}
+          activeClassName={activeDotClassName}
         />
 
         <Handles
           ref={handlesRef}
-          prefixCls={prefixCls}
-          style={handleStyle}
+          className={handleClassName}
+          draggingClassName={handleDraggingClassName}
           values={cacheValues}
           draggingIndex={draggingIndex}
           onStartMove={onStartMove}
@@ -517,7 +501,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           handleRender={handleRender}
         />
 
-        <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />
+        <Marks
+          className={marksClassName}
+          markClassName={markTextClassName}
+          activeMarkClassName={activeMarkTextClassName}
+          marks={markList}
+          onClick={changeToCloseValue}
+        />
       </div>
     </SliderContext.Provider>
   );

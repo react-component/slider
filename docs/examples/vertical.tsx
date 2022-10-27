@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from 'rc-slider';
+import Slider from '@tordek/rc-slider';
 import '../../assets/index.less';
 
 const style: React.CSSProperties = {
@@ -10,6 +10,8 @@ const style: React.CSSProperties = {
   marginLeft: 50,
 };
 const parentStyle = { overflow: 'hidden' };
+
+console.log(Slider)
 
 const marks = {
   '-10': '-10°C',

@@ -1,6 +1,6 @@
 /* eslint react/no-multi-comp: 0, no-console: 0 */
 import React from 'react';
-import Slider from 'rc-slider';
+import Slider from '@tordek/rc-slider';
 import '../../assets/index.less';
 
 const style = { width: 400, margin: 50 };
@@ -181,23 +181,23 @@ class PureRenderRange extends React.Component<any, any> {
 export default () => (
   <div>
     <div style={style}>
-      <p>Basic Range，`allowCross=false`</p>
+      <p>Basic Range, `allowCross=false`</p>
       <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} />
     </div>
     <div style={style}>
-      <p>Basic reverse Range`</p>
+      <p>Basic reverse Range</p>
       <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} reverse />
     </div>
     <div style={style}>
-      <p>Basic Range，`step=20` </p>
-      <Slider range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
+      <p>Basic Range, `step=20` </p>
+      <Slider range step={20} defaultValue={[20, 20]} />
     </div>
     <div style={style}>
-      <p>Basic Range，`step=20, dots` </p>
-      <Slider range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+      <p>Basic Range, `step=20, dots` </p>
+      <Slider range dots step={20} defaultValue={[20, 40]} />
     </div>
     <div style={style}>
-      <p>Basic Range，disabled</p>
+      <p>Basic Range, disabled</p>
       <Slider range allowCross={false} defaultValue={[0, 20]} onChange={log} disabled />
     </div>
     <div style={style}>
@@ -223,9 +223,9 @@ export default () => (
         count={3}
         defaultValue={[20, 40, 60, 80]}
         pushable
-        trackStyle={[{ backgroundColor: 'red' }, { backgroundColor: 'green' }]}
-        handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }]}
-        railStyle={{ backgroundColor: 'black' }}
+        trackClassName="rc-slider-track docs-slider-track"
+        handleClassName="rc-slider-handle docs-slider-handle"
+        railClassName="rc-slider-rail docs-slider-rail"
       />
     </div>
     <div style={style}>

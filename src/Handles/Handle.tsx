@@ -7,14 +7,13 @@ import type { OnStartMove } from '../interface';
 
 interface RenderProps {
   index: number;
-  prefixCls: string;
   value: number;
   dragging: boolean;
 }
 
 export interface HandleProps {
-  prefixCls: string;
-  style?: React.CSSProperties;
+  className?: string;
+  draggingClassName?: string;
   value: number;
   valueIndex: number;
   dragging: boolean;
@@ -27,11 +26,11 @@ export interface HandleProps {
 
 const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
   const {
-    prefixCls,
+    className,
+    draggingClassName,
     value,
     valueIndex,
     onStartMove,
-    style,
     render,
     dragging,
     onOffsetChange,
@@ -42,13 +41,11 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     max,
     direction,
     disabled,
-    range,
     tabIndex,
     ariaLabelForHandle,
     ariaLabelledByForHandle,
     ariaValueTextFormatterForHandle,
   } = React.useContext(SliderContext);
-  const handlePrefixCls = `${prefixCls}-handle`;
 
   // ============================ Events ============================
   const onInternalStartMove = (e: React.MouseEvent | React.TouchEvent) => {
@@ -113,14 +110,10 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
   let handleNode = (
     <div
       ref={ref}
-      className={classNames(handlePrefixCls, {
-        [`${handlePrefixCls}-${valueIndex + 1}`]: range,
-        [`${handlePrefixCls}-dragging`]: dragging,
+      className={classNames(className, {
+        [draggingClassName]: dragging,
       })}
-      style={{
-        ...positionStyle,
-        ...style,
-      }}
+      style={positionStyle}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
       onKeyDown={onKeyDown}
@@ -141,7 +134,6 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
   if (render) {
     handleNode = render(handleNode, {
       index: valueIndex,
-      prefixCls,
       value,
       dragging,
     });

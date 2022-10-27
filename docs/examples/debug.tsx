@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from 'rc-slider';
+import Slider from '@tordek/rc-slider';
 import '../../assets/index.less';
 
 export default () => {
@@ -7,14 +7,9 @@ export default () => {
   const [range, setRange] = React.useState(false);
   const [reverse, setReverse] = React.useState(false);
   const [vertical, setVertical] = React.useState(false);
-  const [value, setValue] = React.useState(30);
 
   return (
     <div
-      style={{
-        transform: 'scale(1.5)',
-        transformOrigin: 'top left',
-      }}
     >
       <div>
         <label>
@@ -38,10 +33,10 @@ export default () => {
       <div style={{ height: 300, width: 600 }}>
         <Slider
           // count={2}
-          // disabled={disabled}
-          // reverse={reverse}
-          // vertical={vertical}
-          // range={range}
+          disabled={disabled}
+          reverse={reverse}
+          vertical={vertical}
+          range={range}
           // defaultValue={[30, 50]}
           // dots
           // step={5}

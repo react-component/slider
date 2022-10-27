@@ -16,7 +16,6 @@ export default function useDrag(
   max: number,
   formatValue: (value: number) => number,
   triggerChange: (values: number[]) => void,
-  finishChange: () => void,
   offsetValues: OffsetValues,
 ): [number, number, number[], OnStartMove] {
   const [draggingValue, setDraggingValue] = React.useState(null);
@@ -146,7 +145,6 @@ export default function useDrag(
       mouseUpEventRef.current = null;
 
       setDraggingIndex(-1);
-      finishChange();
     };
 
     document.addEventListener('mouseup', onMouseUp);

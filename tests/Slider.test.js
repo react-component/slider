@@ -136,17 +136,6 @@ describe('Slider', () => {
     expect(onChange).toHaveBeenCalledWith(51);
   });
 
-  it('it should trigger onAfterChange when key pressed', () => {
-    const onAfterChange = jest.fn();
-    const { container } = render(<Slider defaultValue={50} onAfterChange={onAfterChange} />);
-
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-      keyCode: keyCode.RIGHT,
-    });
-
-    expect(onAfterChange).toBeCalled();
-  });
-
   it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
     const onChange = jest.fn();
     const { container } = render(<Slider defaultValue={50} reverse onChange={onChange} />);
@@ -537,26 +526,6 @@ describe('Slider', () => {
 
       expect(onChange).toHaveBeenCalledWith([20, 20]);
     });
-
-    it('should call onBeforeChange, onChange, and onAfterChange', () => {
-      const onBeforeChange = jest.fn();
-      const onChange = jest.fn();
-      const onAfterChange = jest.fn();
-      const { container } = render(
-        <Slider
-          onBeforeChange={onBeforeChange}
-          onChange={onChange}
-          onAfterChange={onAfterChange}
-        />,
-      );
-      fireEvent.mouseDown(container.querySelector('.rc-slider'), {
-        clientX: 20,
-      });
-
-      expect(onBeforeChange).toHaveBeenCalledWith(20);
-      expect(onChange).toHaveBeenCalledWith(20);
-      expect(onAfterChange).toHaveBeenCalledWith(20);
-    });
   });
 
   it('autoFocus', () => {
@@ -599,14 +568,5 @@ describe('Slider', () => {
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle'), { keyCode: keyCode.RIGHT });
     expect(onChange).toHaveBeenCalledWith(0.82);
-  });
-
-  it('onAfterChange should return number', () => {
-    const onAfterChange = jest.fn();
-    const { container } = render(<Slider onAfterChange={onAfterChange} />);
-    fireEvent.mouseDown(container.querySelector('.rc-slider'), {
-      clientX: 20,
-    });
-    expect(onAfterChange).toHaveBeenCalledWith(20);
   });
 });

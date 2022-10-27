@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from 'rc-slider';
+import Slider from '@tordek/rc-slider';
 import '../../assets/index.less';
 import TooltipSlider, { handleRender } from './components/TooltipSlider';
 
@@ -22,6 +22,7 @@ export default () => (
     <div style={wrapperStyle}>
       <p>Range with custom tooltip</p>
       <TooltipSlider
+        tipProps={{}}
         range
         min={0}
         max={20}

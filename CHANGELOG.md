@@ -1,5 +1,11 @@
 # Changelog
 
+## 10.0.0
+
+`2022-10-27`
+
+- feat: replaced uses of `style` for explicit `className`s
+
 ## 9.7.1
 
 `2020-12-15`
@@ -94,8 +100,7 @@ Support React 16.
 
 ## 5.0.0 / 2016-09-12
 
-[#147](https://github.com/react-component/slider/issues/147) fix style conflicts with rc-tooltip [@benjycui](https://github.com/benjycui)
-[#145](https://github.com/react-component/slider/pull/145) fix `onChange` will be triggered while mousemove [@Fuzzyma](https://github.com/Fuzzyma)
+[#147](https://github.com/react-component/slider/issues/147) fix style conflicts with rc-tooltip [@benjycui](https://github.com/benjycui) [#145](https://github.com/react-component/slider/pull/145) fix `onChange` will be triggered while mousemove [@Fuzzyma](https://github.com/Fuzzyma)
 
 ## 4.0.0 / 2016-08-12
 
@@ -109,6 +114,6 @@ Support React 16.
 
 ## 1.2.5 / 2015-07-13
 
-[#8](https://github.com/react-component/slider/issues/8) add `isIncluded` props   ([@simaQ](https://github.com/simaQ))
+[#8](https://github.com/react-component/slider/issues/8) add `isIncluded` props ([@simaQ](https://github.com/simaQ))
 
-[#7](https://github.com/react-component/slider/issues/7) add tooltip for handler when slider has no `marks` props   ([@simaQ](https://github.com/simaQ))
+[#7](https://github.com/react-component/slider/issues/7) add tooltip for handler when slider has no `marks` props ([@simaQ](https://github.com/simaQ))

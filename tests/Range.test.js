@@ -57,17 +57,65 @@ describe('Range', () => {
   }
 
   it('should render Range with correct DOM structure', () => {
-    const { asFragment } = render(<Slider range />);
+    const { asFragment } = render(
+      <Slider
+        range
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+        handleClassName={[
+          'rc-slider-handle rc-slider-handle-1',
+          'rc-slider-handle rc-slider-handle-2',
+          'rc-slider-handle rc-slider-handle-3',
+          'rc-slider-handle rc-slider-handle-4',
+        ]}
+      />,
+    );
     expect(asFragment().firstChild).toMatchSnapshot();
   });
 
   it('should render Multi-Range with correct DOM structure', () => {
-    const { asFragment } = render(<Slider range count={3} />);
+    const { asFragment } = render(
+      <Slider
+        range
+        count={3}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+          'rc-slider-track rc-slider-track-4',
+        ]}
+        handleClassName={[
+          'rc-slider-handle rc-slider-handle-1',
+          'rc-slider-handle rc-slider-handle-2',
+          'rc-slider-handle rc-slider-handle-3',
+          'rc-slider-handle rc-slider-handle-4',
+        ]}
+      />,
+    );
     expect(asFragment().firstChild).toMatchSnapshot();
   });
 
   it('should render Range with value correctly', async () => {
-    const { container } = render(<Slider range value={[0, 50]} />);
+    const { container } = render(
+      <Slider
+        range
+        value={[0, 50]}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+        handleClassName={[
+          'rc-slider-handle rc-slider-handle-1',
+          'rc-slider-handle rc-slider-handle-2',
+          'rc-slider-handle rc-slider-handle-3',
+          'rc-slider-handle rc-slider-handle-4',
+        ]}
+      />,
+    );
 
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('left: 0%');
     expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('left: 50%');
@@ -78,7 +126,18 @@ describe('Range', () => {
   });
 
   it('should render reverse Range with value correctly', () => {
-    const { container } = render(<Slider range value={[0, 50]} reverse />);
+    const { container } = render(
+      <Slider
+        range
+        value={[0, 50]}
+        reverse
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+      />,
+    );
 
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('right: 0%');
     expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('right: 50%');
@@ -89,7 +148,17 @@ describe('Range', () => {
   });
 
   it('should render Range with tabIndex correctly', () => {
-    const { container } = render(<Slider range tabIndex={[1, 2]} />);
+    const { container } = render(
+      <Slider
+        range
+        tabIndex={[1, 2]}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+      />,
+    );
 
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'tabIndex',
@@ -102,26 +171,34 @@ describe('Range', () => {
   });
 
   it('should render Range without tabIndex (equal null) correctly', () => {
-    const { container } = render(<Slider range tabIndex={[null, null]} />);
+    const { container } = render(
+      <Slider
+        range
+        tabIndex={[null, null]}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+      />,
+    );
     expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
     expect(container.getElementsByClassName('rc-slider-handle')[1]).not.toHaveAttribute('tabIndex');
   });
 
-  it('it should trigger onAfterChange when key pressed', () => {
-    const onAfterChange = jest.fn();
-    const { container } = render(
-      <Slider range defaultValue={[20, 50]} onAfterChange={onAfterChange} />,
-    );
-
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
-      keyCode: keyCode.RIGHT,
-    });
-
-    expect(onAfterChange).toBeCalled();
-  });
-
   it('should render Multi-Range with value correctly', () => {
-    const { container } = render(<Slider range count={3} value={[0, 25, 50, 75]} />);
+    const { container } = render(
+      <Slider
+        range
+        count={3}
+        value={[0, 25, 50, 75]}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+      />,
+    );
 
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('left: 0%');
     expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('left: 25%');
@@ -142,7 +219,17 @@ describe('Range', () => {
   });
 
   it('should update Range correctly in controlled model', () => {
-    const { container, rerender } = render(<Slider range value={[2, 4, 6]} />);
+    const { container, rerender } = render(
+      <Slider
+        range
+        value={[2, 4, 6]}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+      />,
+    );
     expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(3);
 
     rerender(<Slider range value={[2, 4]} />);
@@ -184,7 +271,18 @@ describe('Range', () => {
   it('should keep pushable when not allowCross', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider range allowCross={false} onChange={onChange} defaultValue={[29, 40]} pushable={10} />,
+      <Slider
+        range
+        allowCross={false}
+        onChange={onChange}
+        defaultValue={[29, 40]}
+        pushable={10}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+      />,
     );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
@@ -222,7 +320,17 @@ describe('Range', () => {
   it('pushable & allowCross', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider range onChange={onChange} defaultValue={[10, 30, 50]} pushable={10} />,
+      <Slider
+        range
+        onChange={onChange}
+        defaultValue={[10, 30, 50]}
+        pushable={10}
+        trackClassName={[
+          'rc-slider-track rc-slider-track-1',
+          'rc-slider-track rc-slider-track-2',
+          'rc-slider-track rc-slider-track-3',
+        ]}
+      />,
     );
 
     // Left to Right
@@ -263,7 +371,16 @@ describe('Range', () => {
       it(name, () => {
         const onChange = jest.fn();
         const { container, unmount } = render(
-          <Slider range onChange={onChange} defaultValue={[20, 40]} />,
+          <Slider
+            range
+            onChange={onChange}
+            defaultValue={[20, 40]}
+            trackClassName={[
+              'rc-slider-track rc-slider-track-1',
+              'rc-slider-track rc-slider-track-2',
+              'rc-slider-track rc-slider-track-3',
+            ]}
+          />,
         );
 
         // Do move

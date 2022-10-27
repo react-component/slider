@@ -5,15 +5,14 @@ import type { OnStartMove } from '../interface';
 import { getIndex } from '../util';
 
 export interface TrackProps {
-  prefixCls: string;
-  style?: React.CSSProperties | React.CSSProperties[];
+  trackClassName: string | string[];
   values: number[];
   onStartMove?: OnStartMove;
   startPoint?: number;
 }
 
 export default function Tracks(props: TrackProps) {
-  const { prefixCls, style, values, startPoint, onStartMove } = props;
+  const { trackClassName, values, startPoint, onStartMove } = props;
   const { included, range, min } = React.useContext(SliderContext);
 
   const trackList = React.useMemo(() => {
@@ -50,9 +49,7 @@ export default function Tracks(props: TrackProps) {
   return (included
     ? trackList.map(({ start, end }, index) => (
         <Track
-          index={index}
-          prefixCls={prefixCls}
-          style={getIndex(style, index)}
+          className={getIndex(trackClassName, index)}
           start={start}
           end={end}
           key={index}

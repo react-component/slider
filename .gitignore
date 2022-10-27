@@ -25,7 +25,7 @@ dist
 assets/**/*.css
 build
 lib
-es
+es/
 /coverage
 yarn.lock
 package-lock.json

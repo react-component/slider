@@ -4,15 +4,15 @@ import SliderContext from '../context';
 import Dot from './Dot';
 
 export interface StepsProps {
-  prefixCls: string;
   marks: InternalMarkObj[];
   dots?: boolean;
-  style?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
-  activeStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
+  className?: string;
+  dotClassName?: string;
+  activeClassName?: string;
 }
 
 export default function Steps(props: StepsProps) {
-  const { prefixCls, marks, dots, style, activeStyle } = props;
+  const { marks, dots, className, dotClassName, activeClassName } = props;
   const { min, max, step } = React.useContext(SliderContext);
 
   const stepDots = React.useMemo(() => {
@@ -36,14 +36,13 @@ export default function Steps(props: StepsProps) {
   }, [min, max, step, dots, marks]);
 
   return (
-    <div className={`${prefixCls}-step`}>
+    <div className={className}>
       {stepDots.map((dotValue) => (
         <Dot
-          prefixCls={prefixCls}
           key={dotValue}
           value={dotValue}
-          style={style}
-          activeStyle={activeStyle}
+          className={dotClassName}
+          activeClassName={activeClassName}
         />
       ))}
     </div>
