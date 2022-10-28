@@ -38,7 +38,6 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
       handlesRef.current[index]?.focus();
     },
   }));
-  console.log(values);
 
   return (
     <>
