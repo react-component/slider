@@ -11,9 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '12'
+          node-version: '16'
+          cache: 'npm'
       - run: npm ci
   
   lint:
@@ -21,9 +22,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '12'
+          node-version: '16'
+          cache: 'npm'
       - run: npm ci
       - run: npm run lint
   
@@ -32,9 +34,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '12'
+          node-version: '16'
+          cache: 'npm'
       - run: npm ci
       - run: npm run compile
   
@@ -43,8 +46,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@master
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v3
         with:
-          node-version: '12'
+          node-version: '16'
+          cache: 'npm'
       - run: npm ci
       - run: npm run coverage && bash <(curl -s https://codecov.io/bash)
