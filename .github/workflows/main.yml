@@ -48,5 +48,3 @@ jobs:
           node-version: '12'
       - run: npm ci
       - run: npm run coverage && bash <(curl -s https://codecov.io/bash)
-
-    needs: setup
