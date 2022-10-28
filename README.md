@@ -6,8 +6,8 @@ Forked off rc-slider to add support for passing classNames to parts of the slide
 
 [![NPM version][npm-image]][npm-url] [![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) [![build status][github-actions-image]][github-actions-url] [![Test coverage][coveralls-image]][coveralls-url] [![Dependencies][david-image]][david-url] [![DevDependencies][david-dev-image]][david-dev-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
 
-[npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
-[npm-url]: http://npmjs.org/package/rc-slider
+[npm-image]: http://img.shields.io/npm/v/@tordek/rc-slider.svg?style=flat-square
+[npm-url]: http://npmjs.org/package/@tordek/rc-slider
 [github-actions-image]: https://github.com/react-component/slider/workflows/CI/badge.svg
 [github-actions-url]: https://github.com/react-component/slider/actions
 [circleci-image]: https://img.shields.io/circleci/react-component/slider/master?style=flat-square
@@ -18,10 +18,10 @@ Forked off rc-slider to add support for passing classNames to parts of the slide
 [david-image]: https://david-dm.org/react-component/slider/status.svg?style=flat-square
 [david-dev-url]: https://david-dm.org/react-component/slider?type=dev
 [david-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg?style=flat-square
-[download-image]: https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square
-[download-url]: https://npmjs.org/package/rc-slider
-[bundlephobia-url]: https://bundlephobia.com/result?p=rc-slider
-[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/rc-slider
+[download-image]: https://img.shields.io/npm/dm/@tordek/rc-slider.svg?style=flat-square
+[download-url]: https://npmjs.org/package/@tordek/rc-slider
+[bundlephobia-url]: https://bundlephobia.com/result?p=@tordek/rc-slider
+[bundlephobia-image]: https://badgen.net/bundlephobia/minzip/@tordek/rc-slider
 
 ## Install
 
@@ -36,7 +36,7 @@ Online examples: https://slider.react-component.now.sh/
 ## Usage
 
 ```js
-import Slider, { Range } from 'rc-slider';
+import Slider, { Range } from '@tordek/rc-slider';
 import 'rc-slider/assets/index.css';
 
 export default () => (
@@ -60,7 +60,7 @@ export default () => (
 An extension to make Slider or Range support Tooltip on handle.
 
 ```js
-const Slider = require('rc-slider');
+const Slider = require('@tordek/rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 ```
@@ -92,13 +92,7 @@ The following APIs are shared by Slider and Range.
 | disabled | boolean | `false` | If `true`, handles can't be moved. |
 | dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to `true` if you want to render the slider with dots. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
-| minimumTrackStyle | Object |  | please use `trackStyle` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
-| maximumTrackStyle | Object |  | please use `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
-| handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi handle following element order`) |
-| trackStyle | Array[Object] \| Object | `[{}]` | The style used for track. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi track following element order`) |
-| railStyle | Object | `{}` | The style used for the track base color. |
-| dotStyle | Object \| (dotValue) => Object | `{}` | The style used for the dots. |
-| activeDotStyle | Object \| (dotValue) => Object | `{}` | The style used for the active dots. |
+| *ClassName | string \| string[] | varies | HTML `class` property for different elements in the slider
 
 ### Slider
 
@@ -148,4 +142,4 @@ npm start
 
 ## License
 
-`rc-slider` is released under the MIT license.
+`@tordek/rc-slider` is released under the MIT license.
