@@ -4,20 +4,16 @@ Slider UI component for React
 
 Forked off rc-slider to add support for passing classNames to parts of the slider.
 
-[![NPM version][npm-image]][npm-url] [![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) [![build status][github-actions-image]][github-actions-url] [![Test coverage][coveralls-image]][coveralls-url] [![Dependencies][david-image]][david-url] [![DevDependencies][david-dev-image]][david-dev-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
+[![NPM version][npm-image]][npm-url] [![dumi](https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square)](https://github.com/umijs/dumi) [![build status][github-actions-image]][github-actions-url] [![Test coverage][coveralls-image]][coveralls-url] [![npm download][download-image]][download-url] [![bundle size][bundlephobia-image]][bundlephobia-url]
 
 [npm-image]: http://img.shields.io/npm/v/@tordek/rc-slider.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/@tordek/rc-slider
-[github-actions-image]: https://github.com/react-component/slider/workflows/CI/badge.svg
-[github-actions-url]: https://github.com/react-component/slider/actions
-[circleci-image]: https://img.shields.io/circleci/react-component/slider/master?style=flat-square
-[circleci-url]: https://circleci.com/gh/react-component/slider
-[coveralls-image]: https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/slider?branch=master
-[david-url]: https://david-dm.org/react-component/slider
-[david-image]: https://david-dm.org/react-component/slider/status.svg?style=flat-square
-[david-dev-url]: https://david-dm.org/react-component/slider?type=dev
-[david-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg?style=flat-square
+[github-actions-image]: https://github.com/tordek/slider/workflows/CI/badge.svg
+[github-actions-url]: https://github.com/tordek/slider/actions
+[circleci-image]: https://img.shields.io/circleci/tordek/slider/master?style=flat-square
+[circleci-url]: https://circleci.com/gh/tordek/slider
+[coveralls-image]: https://img.shields.io/coveralls/tordek/slider.svg?style=flat-square
+[coveralls-url]: https://coveralls.io/r/tordek/slider?branch=master
 [download-image]: https://img.shields.io/npm/dm/@tordek/rc-slider.svg?style=flat-square
 [download-url]: https://npmjs.org/package/@tordek/rc-slider
 [bundlephobia-url]: https://bundlephobia.com/result?p=@tordek/rc-slider
@@ -36,13 +32,13 @@ Online examples: https://slider.react-component.now.sh/
 ## Usage
 
 ```js
-import Slider, { Range } from '@tordek/rc-slider';
+import Slider from '@tordek/rc-slider';
 import 'rc-slider/assets/index.css';
 
 export default () => (
   <>
     <Slider />
-    <Range />
+    <Slider range />
   </>
 );
 ```
