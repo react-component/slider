@@ -4,6 +4,7 @@
     "moduleResolution": "node",
     "baseUrl": "./",
     "jsx": "preserve",
+    "strict": true,
     "declaration": true,
     "skipLibCheck": true,
     "esModuleInterop": true,

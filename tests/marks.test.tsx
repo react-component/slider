@@ -1,9 +1,8 @@
-/* eslint-disable max-len, no-undef */
 import React from 'react';
-import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import Slider from '../src';
+import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 
 describe('marks', () => {
   beforeAll(() => {
@@ -36,27 +35,20 @@ describe('marks', () => {
   it('should select correct value while click on marks', () => {
     const marks = { 0: '0', 30: '30', 100: '100' };
 
-    const { container } = render(<Slider marks={marks} />);
+    const callBack = jest.fn();
+
+    const { container } = render(<Slider value={0} marks={marks} onChange={callBack} />);
     fireEvent.click(container.getElementsByClassName('rc-slider-mark-text')[1]);
+    expect(callBack).toBeCalledWith(30);
+  });
+
+  it('should show the correct aria value', () => {
+    const marks = { 0: '0', 30: '30', 100: '100' };
+
+    const { container } = render(<Slider marks={marks} value={30} />);
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'aria-valuenow',
       '30',
     );
   });
-
-  // TODO: not implement yet
-  // zombieJ: since this test leave years but not implement. Could we remove this?
-  // xit('should select correct value while click on marks in Ranger', () => {
-  //   const rangeWrapper = render(<Range marks={marks} />);
-  //   const rangeMark = rangeWrapper.find('.rc-slider-mark-text').at(1);
-  //   rangeMark.simulate('mousedown', {
-  //     type: 'mousedown',
-  //     target: rangeMark,
-  //     pageX: 25,
-  //     button: 0,
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(rangeWrapper.state('bounds')).toBe([0, 30]);
-  // });
 });

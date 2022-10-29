@@ -5,7 +5,7 @@ import type { InternalMarkObj } from '../Marks';
 type FormatRangeValue = (value: number) => number;
 
 /** Format value align with step */
-type FormatStepValue = (value: number) => number;
+type FormatStepValue = (value: number) => number | null;
 
 /** Format value align with step & marks */
 type FormatValue = (value: number) => number;
@@ -32,10 +32,10 @@ export type OffsetValues = (
 export default function useOffset(
   min: number,
   max: number,
-  step: number,
+  step: number | null,
   markList: InternalMarkObj[],
   allowCross: boolean,
-  pushable: false | number,
+  pushable: false | number | null,
 ): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => {
@@ -50,17 +50,17 @@ export default function useOffset(
 
   const formatStepValue: FormatStepValue = React.useCallback(
     (val) => {
-      if (step !== null) {
-        const stepValue = min + Math.round((formatRangeValue(val) - min) / step) * step;
-
-        // Cut number in case to be like 0.30000000000000004
-        const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
-        const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
-        const fixedValue = Number(stepValue.toFixed(maxDecimal));
-
-        return min <= fixedValue && fixedValue <= max ? fixedValue : null;
+      if (step === null) {
+        return null;
       }
-      return null;
+      const stepValue = min + Math.round((formatRangeValue(val) - min) / step) * step;
+
+      // Cut number in case to be like 0.30000000000000004
+      const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
+      const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
+      const fixedValue = Number(stepValue.toFixed(maxDecimal));
+
+      return min <= fixedValue && fixedValue <= max ? fixedValue : null;
     },
     [step, min, max, formatRangeValue],
   );
@@ -72,7 +72,8 @@ export default function useOffset(
       // List align values
       const alignValues = markList.map((mark) => mark.value);
       if (step !== null) {
-        alignValues.push(formatStepValue(val));
+        const formattedValue = formatStepValue(val);
+        if (formattedValue !== null) alignValues.push(formattedValue);
       }
 
       // min & max
@@ -115,15 +116,19 @@ export default function useOffset(
       potentialValues.push(min, max);
 
       // In case origin value is align with mark but not with step
-      potentialValues.push(formatStepValue(originValue));
+      const formattedValue = formatStepValue(originValue);
+      if (formattedValue) potentialValues.push(formattedValue);
 
       // Put offset step value also
       const sign = offset > 0 ? 1 : -1;
 
-      if (mode === 'unit') {
-        potentialValues.push(formatStepValue(originValue + sign * step));
+      if (mode === 'unit' && step) {
+        const formattedPotentialValue = formatStepValue(originValue + sign * step);
+        if (formattedPotentialValue) potentialValues.push(formattedPotentialValue);
       } else {
-        potentialValues.push(formatStepValue(targetDistValue));
+        const formattedPotentialValue = formatStepValue(targetDistValue);
+
+        if (formattedPotentialValue) potentialValues.push(formattedPotentialValue);
       }
 
       // Find close one
@@ -173,6 +178,8 @@ export default function useOffset(
       return min;
     } else if (offset === 'max') {
       return max;
+    } else {
+      throw new Error('Invalid offset');
     }
   };
 

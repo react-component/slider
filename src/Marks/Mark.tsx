@@ -1,5 +1,5 @@
 import * as React from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { getDirectionStyle } from '../util';
 import SliderContext from '../context';
 
@@ -22,9 +22,10 @@ export default function Mark(props: MarkProps) {
 
   return (
     <span
-      className={classNames(className, {
-        [activeClassName]: included && includedStart <= value && value <= includedEnd,
-      })}
+      className={clsx(
+        className,
+        included && includedStart <= value && value <= includedEnd && activeClassName,
+      )}
       style={{
         ...positionStyle,
         ...style,

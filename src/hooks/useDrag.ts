@@ -18,13 +18,13 @@ export default function useDrag(
   triggerChange: (values: number[]) => void,
   offsetValues: OffsetValues,
 ): [number, number, number[], OnStartMove] {
-  const [draggingValue, setDraggingValue] = React.useState(null);
+  const [draggingValue, setDraggingValue] = React.useState<number | null>(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
   const [originValues, setOriginValues] = React.useState(rawValues);
 
-  const mouseMoveEventRef = React.useRef<(event: MouseEvent) => void>(null);
-  const mouseUpEventRef = React.useRef<(event: MouseEvent) => void>(null);
+  const mouseMoveEventRef = React.useRef<null | ((event: MouseEvent | TouchEvent) => void)>(null);
+  const mouseUpEventRef = React.useRef<null | ((event: MouseEvent | TouchEvent) => void)>(null);
 
   React.useEffect(() => {
     if (draggingIndex === -1) {
@@ -35,10 +35,13 @@ export default function useDrag(
   // Clean up event
   React.useEffect(
     () => () => {
-      document.removeEventListener('mousemove', mouseMoveEventRef.current);
-      document.removeEventListener('mouseup', mouseUpEventRef.current);
-      document.removeEventListener('touchmove', mouseMoveEventRef.current);
-      document.removeEventListener('touchend', mouseUpEventRef.current);
+      if (mouseMoveEventRef.current)
+        document.removeEventListener('mousemove', mouseMoveEventRef.current);
+      if (mouseUpEventRef.current) document.removeEventListener('mouseup', mouseUpEventRef.current);
+      if (mouseMoveEventRef.current)
+        document.removeEventListener('touchmove', mouseMoveEventRef.current);
+      if (mouseUpEventRef.current)
+        document.removeEventListener('touchend', mouseUpEventRef.current);
     },
     [],
   );
@@ -111,6 +114,8 @@ export default function useDrag(
       const offsetX = moveX - startX;
       const offsetY = moveY - startY;
 
+      if (!containerRef.current) return;
+
       const { width, height } = containerRef.current.getBoundingClientRect();
 
       let offSetPercent: number;
@@ -165,5 +170,5 @@ export default function useDrag(
       : rawValues;
   }, [rawValues, cacheValues]);
 
-  return [draggingIndex, draggingValue, returnValues, onStartMove];
+  return [draggingIndex, draggingValue!, returnValues, onStartMove];
 }

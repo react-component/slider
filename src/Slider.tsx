@@ -11,11 +11,9 @@ import type { SliderContextProps } from './context';
 import Tracks from './Tracks';
 import type { AriaValueFormat, Direction, OnStartMove } from './interface';
 import Marks from './Marks';
-import type { MarkObj } from './Marks';
 import type { InternalMarkObj } from './Marks';
 import Steps from './Steps';
 import useOffset from './hooks/useOffset';
-import warning from 'rc-util/lib/warning';
 
 export interface SliderProps<ValueType = number | number[]> {
   prefixCls?: string;
@@ -34,7 +32,7 @@ export interface SliderProps<ValueType = number | number[]> {
   min?: number;
   max?: number;
   step?: number | null;
-  value?: ValueType;
+  value?: ValueType | null;
   defaultValue?: ValueType;
   onChange?: (value: ValueType) => void;
 
@@ -68,14 +66,14 @@ export interface SliderProps<ValueType = number | number[]> {
   activeMarkTextClassName?: string;
 
   // Decorations
-  marks?: Record<string | number, React.ReactNode | MarkObj>;
+  marks?: Record<number, React.ReactNode>;
   dots?: boolean;
 
   // Components
   handleRender?: HandlesProps['handleRender'];
 
   // Accessibility
-  tabIndex?: number | number[];
+  tabIndex?: null | number | number[];
   ariaLabelForHandle?: string | string[];
   ariaLabelledByForHandle?: string | string[];
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
@@ -147,8 +145,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     ariaValueTextFormatterForHandle,
   } = props;
 
-  const handlesRef = React.useRef<HandlesRef>();
-  const containerRef = React.useRef<HTMLDivElement>();
+  const handlesRef = React.useRef<HandlesRef>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
   const direction: Direction = React.useMemo(() => {
     if (vertical) {
@@ -175,29 +173,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
-    const keys = Object.keys(marks || {});
+    if (!marks) return [];
 
-    return keys
-      .map((key) => {
-        const mark = marks[key];
-        const markObj: InternalMarkObj = {
-          value: Number(key),
-        };
-
-        if (
-          mark &&
-          typeof mark === 'object' &&
-          !React.isValidElement(mark) &&
-          ('label' in mark || 'style' in mark)
-        ) {
-          markObj.style = mark.style;
-          markObj.label = mark.label;
-        } else {
-          markObj.label = mark;
-        }
-
-        return markObj;
-      })
+    return Object.entries(marks)
+      .map(([key, mark]) => ({
+        value: Number(key),
+        label: mark,
+      }))
       .filter(({ label }) => label || typeof label === 'number')
       .sort((a, b) => a.value - b.value);
   }, [marks]);
@@ -213,9 +195,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   );
 
   // ============================ Values ============================
-  const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
-    value,
-  });
+  // TODO: Use a correctly typed version of this
+  const [mergedValue, setValue] = useMergedState<number | number[] | null, number[]>(
+    defaultValue as number | number[],
+    {
+      value,
+    },
+  );
 
   const rawValues = React.useMemo(() => {
     const valueList =
@@ -234,7 +220,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       // When count provided or value is `undefined`, we fill values
       if (count || mergedValue === undefined) {
-        const pointCount = count >= 0 ? count + 1 : 2;
+        const pointCount = count && count >= 0 ? count + 1 : 2;
         returnValues = returnValues.slice(0, pointCount);
 
         // Fill with count
@@ -303,6 +289,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const onSliderMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
 
+    if (!containerRef.current) return;
+
     const { width, height, left, top, bottom, right } =
       containerRef.current.getBoundingClientRect();
     const { clientX, clientY } = e;
@@ -330,7 +318,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   };
 
   // =========================== Keyboard ===========================
-  const [keyboardValue, setKeyboardValue] = React.useState<number>(null);
+  const [keyboardValue, setKeyboardValue] = React.useState<number | null>(null);
 
   const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
     if (!disabled) {
@@ -346,7 +334,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     if (keyboardValue !== null) {
       const valueIndex = rawValues.indexOf(keyboardValue);
       if (valueIndex >= 0) {
-        handlesRef.current.focus(valueIndex);
+        handlesRef.current?.focus(valueIndex);
       }
     }
 
@@ -357,7 +345,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   const mergedDraggableTrack = React.useMemo(() => {
     if (draggableTrack && mergedStep === null) {
       if (process.env.NODE_ENV !== 'production') {
-        warning(false, '`draggableTrack` is not supported when `step` is `null`.');
+        console.warn('`draggableTrack` is not supported when `step` is `null`.');
       }
       return false;
     }
@@ -384,7 +372,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   React.useEffect(() => {
     if (!dragging) {
       const valueIndex = rawValues.lastIndexOf(draggingValue);
-      handlesRef.current.focus(valueIndex);
+      handlesRef.current?.focus(valueIndex);
     }
   }, [dragging]);
 
@@ -407,11 +395,11 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
     focus: () => {
-      handlesRef.current.focus(0);
+      handlesRef.current?.focus(0);
     },
     blur: () => {
       const { activeElement } = document;
-      if (containerRef.current.contains(activeElement)) {
+      if (containerRef.current?.contains(activeElement)) {
         (activeElement as HTMLElement)?.blur();
       }
     },
@@ -420,7 +408,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // ========================== Auto Focus ==========================
   React.useEffect(() => {
     if (autoFocus) {
-      handlesRef.current.focus(0);
+      handlesRef.current?.focus(0);
     }
   }, []);
 
@@ -477,7 +465,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           trackClassName={trackClassName}
           values={sortedCacheValues}
           startPoint={startPoint}
-          onStartMove={mergedDraggableTrack ? onStartMove : null}
+          onStartMove={mergedDraggableTrack ? onStartMove : undefined}
         />
 
         <Steps

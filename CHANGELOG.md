@@ -1,6 +1,13 @@
 # Changelog
 
-## 10.0.0
+## 11.0.6
+
+`2022-10-29`
+
+- chore: Cleanup dependencies
+- bugfix: use `strict` mode for typescript
+
+## 11.0.0
 
 `2022-10-27`
 

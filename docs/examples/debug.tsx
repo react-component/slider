@@ -43,7 +43,7 @@ export default () => {
           // draggableTrack
           // pushable={5}
           // allowCross={false}
-          onChange={(nextValues) => {
+          onChange={(nextValues: number | number[]) => {
             console.log('Change:', nextValues);
           //   setValue(nextValues as any);
           }}

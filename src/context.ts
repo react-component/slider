@@ -11,7 +11,7 @@ export interface SliderContextProps {
   included?: boolean;
   step: number | null;
   range?: boolean;
-  tabIndex: number | number[];
+  tabIndex: null | number | number[];
   ariaLabelForHandle?: string | string[];
   ariaLabelledByForHandle?: string | string[];
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import { getDirectionStyle } from '../util';
 import SliderContext from '../context';
 
@@ -19,12 +19,5 @@ export default function Dot(props: DotProps) {
   // ============================ Offset ============================
   const directionStyle = getDirectionStyle(direction, value, min, max);
 
-  return (
-    <span
-      className={classNames(className, {
-        [activeClassName]: active,
-      })}
-      style={directionStyle}
-    />
-  );
+  return <span className={clsx(className, active && activeClassName)} style={directionStyle} />;
 }

@@ -11,7 +11,7 @@ const style: React.CSSProperties = {
 };
 const parentStyle = { overflow: 'hidden' };
 
-console.log(Slider)
+console.log(Slider);
 
 const marks = {
   '-10': '-10°C',
@@ -19,15 +19,10 @@ const marks = {
   26: '26°C',
   37: '37°C',
   50: '50°C',
-  100: {
-    style: {
-      color: 'red',
-    },
-    label: <strong>100°C</strong>,
-  },
+  100: <strong style={{ color: 'red' }}>100°C</strong>,
 };
 
-function log(value) {
+function log(value: any) {
   console.log(value); //eslint-disable-line
 }
 

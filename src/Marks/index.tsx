@@ -1,12 +1,8 @@
 import * as React from 'react';
 import Mark from './Mark';
 
-export interface MarkObj {
-  style?: React.CSSProperties;
+export interface InternalMarkObj {
   label?: React.ReactNode;
-}
-
-export interface InternalMarkObj extends MarkObj {
   value: number;
 }
 
@@ -22,18 +18,17 @@ export default function Marks(props: MarksProps) {
   const { className, markClassName, activeMarkClassName, marks, onClick } = props;
 
   // Not render mark if empty
-  if (!marks.length) {
+  if (!marks?.length) {
     return null;
   }
 
   return (
     <div className={className}>
-      {marks.map(({ value, style, label }) => (
+      {marks.map(({ value, label }) => (
         <Mark
           key={value}
           className={markClassName}
           activeClassName={activeMarkClassName}
-          style={style}
           value={value}
           onClick={onClick}
         >

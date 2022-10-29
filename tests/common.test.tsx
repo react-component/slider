@@ -1,27 +1,8 @@
-/* eslint-disable max-len, no-undef */
 import React from 'react';
 import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
-import KeyCode from 'rc-util/lib/KeyCode';
-import Slider, { Range, createSliderWithTooltip } from '../src';
-
-// const setWidth = (object, width) => {
-//   // https://github.com/tmpvar/jsdom/commit/0cdb2efcc69b6672dc2928644fc0172df5521176
-//   Object.defineProperty(object, 'getBoundingClientRect', {
-//     value: () => ({
-//       width,
-//       // Let all other values retain the JSDom default of `0`.
-//       bottom: 0,
-//       height: 0,
-//       left: 0,
-//       right: 0,
-//       top: 0,
-//     }),
-//     enumerable: true,
-//     configurable: true,
-//   });
-// };
+import Slider from '../src';
 
 describe('Common', () => {
   beforeAll(() => {
@@ -34,10 +15,10 @@ describe('Common', () => {
   });
 
   it('should render vertical Slider/Range, when `vertical` is true', () => {
-    const { container: container1 } = render(<Slider vertical />);
+    const { container: container1 } = render(<Slider value={0} vertical />);
     expect(container1.getElementsByClassName('rc-slider-vertical')).toHaveLength(1);
 
-    const { container: container2 } = render(<Slider range vertical />);
+    const { container: container2 } = render(<Slider value={[0, 0]} range vertical />);
     expect(container2.getElementsByClassName('rc-slider-vertical')).toHaveLength(1);
   });
 
@@ -52,7 +33,7 @@ describe('Common', () => {
   });
 
   it('should render normally when `dots=true` and `step=null`', () => {
-    const { container } = render(<Slider step={null} dots />);
+    const { container } = render(<Slider value={0} step={null} dots />);
     expect(() => container).not.toThrowError();
   });
 
@@ -101,18 +82,18 @@ describe('Common', () => {
   it('should update value when it is out of range', () => {
     const sliderOnChange = jest.fn();
     const { container: container1, rerender: rerender1 } = render(
-      <Slider onChange={sliderOnChange} />,
+      <Slider value={0} onChange={sliderOnChange} />,
     );
-    rerender1(<Slider onChange={sliderOnChange} min={10} />);
+    rerender1(<Slider value={0} onChange={sliderOnChange} min={10} />);
     expect(
       container1.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('10');
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Slider range onChange={rangeOnChange} />,
+      <Slider range value={[0, 0]} onChange={rangeOnChange} />,
     );
-    rerender2(<Slider range onChange={rangeOnChange} min={10} />);
+    rerender2(<Slider range value={[0, 0]} onChange={rangeOnChange} min={10} />);
     expect(
       container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('10');
@@ -121,7 +102,7 @@ describe('Common', () => {
   it('should not trigger onChange when no min and max', () => {
     const sliderOnChange = jest.fn();
     const { container: container1, rerender: rerender1 } = render(
-      <Slider onChange={sliderOnChange} />,
+      <Slider value={0} onChange={sliderOnChange} />,
     );
     rerender1(<Slider onChange={sliderOnChange} value={100} />);
     expect(
@@ -131,7 +112,7 @@ describe('Common', () => {
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Slider range onChange={rangeOnChange} />,
+      <Slider range value={[]} onChange={rangeOnChange} />,
     );
     rerender2(<Slider range onChange={rangeOnChange} value={[0, 200]} />);
     expect(
@@ -156,7 +137,7 @@ describe('Common', () => {
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Slider range max={10} onChange={rangeOnChange} />,
+      <Slider range value={[0, 10]} max={10} onChange={rangeOnChange} />,
     );
     rerender2(<Slider range max={10} onChange={rangeOnChange} value={[0, 100]} />);
     expect(
@@ -171,13 +152,13 @@ describe('Common', () => {
   it('should not call onChange when value is the same', () => {
     const handler = jest.fn();
 
-    const { container: container1 } = render(<Slider onChange={handler} />);
+    const { container: container1 } = render(<Slider value={0} onChange={handler} />);
     const handle1 = container1.getElementsByClassName('rc-slider-handle')[0];
     fireEvent.mouseDown(handle1);
     fireEvent.mouseMove(handle1);
     fireEvent.mouseUp(handle1);
 
-    const { container: container2 } = render(<Slider range onChange={handler} />);
+    const { container: container2 } = render(<Slider range value={[0, 100]} onChange={handler} />);
     const handle2 = container2.getElementsByClassName('rc-slider-handle')[1];
     fireEvent.mouseDown(handle2);
     fireEvent.mouseMove(handle2);
@@ -234,11 +215,11 @@ describe('Common', () => {
   // });
 
   it('should not go to right direction when mouse go to the left', () => {
-    const { container } = render(<Slider />);
+    const { container } = render(<Slider value={0} />);
     const leftHandle = container.getElementsByClassName('rc-slider-handle')[0];
 
     const mouseDown = createEvent.mouseDown(leftHandle);
-    mouseDown.pageX = 5;
+    (mouseDown as any).pageX = 5;
 
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'aria-valuenow',
@@ -246,7 +227,7 @@ describe('Common', () => {
     );
 
     const mouseMove = createEvent.mouseMove(leftHandle);
-    mouseMove.pageX = 0;
+    (mouseMove as any).pageX = 0;
 
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'aria-valuenow',

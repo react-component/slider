@@ -20,7 +20,7 @@ export interface HandlesRef {
   focus: (index: number) => void;
 }
 
-const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
+const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
   const {
     className,
     draggingClassName,
@@ -40,7 +40,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
   }));
 
   return (
-    <>
+    <React.Fragment>
       {values.map((value, index) => (
         <Handle
           ref={(node) => {
@@ -62,7 +62,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
           {...restProps}
         />
       ))}
-    </>
+    </React.Fragment>
   );
 });
 
