@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '@tordek/rc-slider';
+import { Slider, Range } from '@tordek/rc-slider';
 import '../../assets/index.less';
 
 const style = { width: 400, margin: 50 };
@@ -31,10 +31,9 @@ export default () => (
       <Slider min={-10} marks={marks} step={null} onChange={log} defaultValue={20} />
     </div>
 
-    <div style={style}>
+    {/* <div style={style}>
       <p>Range Slider with marks, `step=null`, pushable, draggableTrack</p>
-      <Slider
-        range
+      <Range
         min={-10}
         marks={marks}
         step={null}
@@ -44,10 +43,10 @@ export default () => (
         pushable
         draggableTrack
       />
-    </div>
+    </div> */}
 
     <div style={style}>
-      <p>Slider with marks and steps</p>
+      <p>Slider with marks and steps - allows picking specific values that are multiples of `step`, or specific marked values.</p>
       <Slider dots min={-10} marks={marks} step={10} onChange={log} defaultValue={20} />
     </div>
     <div style={style}>
@@ -66,11 +65,11 @@ export default () => (
 
     <div style={style}>
       <p>Range with marks</p>
-      <Slider range min={-10} marks={marks} onChange={log} defaultValue={[20, 25, 30, 40]} />
+      <Range min={-10} marks={marks} onChange={log} defaultValue={[20, 25, 30, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider range min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
+      <Range min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
     </div>
   </div>
 );

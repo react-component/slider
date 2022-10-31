@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '@tordek/rc-slider';
+import { Slider, Range } from '@tordek/rc-slider';
 import '../../assets/index.less';
 
 const style: React.CSSProperties = {
@@ -70,24 +70,15 @@ export default () => (
     </div>
     <div style={style}>
       <p>Range with marks</p>
-      <Slider range vertical min={-10} marks={marks} onChange={log} defaultValue={[20, 40]} />
+      <Range vertical min={-10} marks={marks} onChange={log} defaultValue={[20, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and steps</p>
-      <Slider
-        range
-        vertical
-        min={-10}
-        marks={marks}
-        step={10}
-        onChange={log}
-        defaultValue={[20, 40]}
-      />
+      <Range vertical min={-10} marks={marks} step={10} onChange={log} defaultValue={[20, 40]} />
     </div>
     <div style={style}>
       <p>Range with marks and draggableTrack</p>
-      <Slider
-        range
+      <Range
         draggableTrack
         vertical
         min={-10}
@@ -98,8 +89,7 @@ export default () => (
     </div>
     <div style={style}>
       <p>Range with marks and draggableTrack(reverse)</p>
-      <Slider
-        range
+      <Range
         draggableTrack
         vertical
         reverse

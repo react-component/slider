@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import Handle from './Handle';
 import type { HandleProps } from './Handle';
 import { getIndex } from '../util';
@@ -6,7 +6,7 @@ import type { OnStartMove } from '../interface';
 
 export interface HandlesProps {
   values: number[];
-  className?: string | string[];
+  handleClassName?: string | string[];
   draggingClassName?: string;
   onStartMove: OnStartMove;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
@@ -22,7 +22,7 @@ export interface HandlesRef {
 
 const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
   const {
-    className,
+    handleClassName,
     draggingClassName,
     onStartMove,
     onOffsetChange,
@@ -51,9 +51,9 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
             }
           }}
           dragging={draggingIndex === index}
-          className={getIndex(className, index)}
+          className={getIndex(handleClassName, index)}
           draggingClassName={draggingClassName}
-          key={index}
+          key={`${index}+${value}`}
           value={value}
           valueIndex={index}
           onStartMove={onStartMove}

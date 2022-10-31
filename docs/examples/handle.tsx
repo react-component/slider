@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '@tordek/rc-slider';
+import { Slider } from '@tordek/rc-slider';
 import '../../assets/index.less';
 import TooltipSlider, { handleRender } from './components/TooltipSlider';
 
@@ -27,7 +27,7 @@ export default () => (
         min={0}
         max={20}
         defaultValue={[3, 10]}
-        tipFormatter={(value) => `${value}!`}
+        tipFormatter={(value: number) => `${value}!`}
       />
     </div>
   </div>

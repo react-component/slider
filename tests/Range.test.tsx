@@ -2,7 +2,7 @@ import React from 'react';
 import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
-import Slider from '../src';
+import { Range } from '../src';
 import { act } from 'react-dom/test-utils';
 
 describe('Range', () => {
@@ -26,13 +26,22 @@ describe('Range', () => {
     document.body.removeChild(mainContainer);
   });
 
-  function doMouseMove(e: HTMLElement, start: number, end: number) {
-    fireEvent.mouseDown(e, {
-      clientX: start,
-      clientY: start,
-    });
-    fireEvent.mouseMove(e, { clientX: end, clientY: end });
-    fireEvent.mouseUp(e);
+  function doMouseMove(
+    container: HTMLElement,
+    start: number,
+    end: number,
+    element = 'rc-slider-handle',
+  ) {
+    const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
+    (mouseDown as any).pageX = start;
+    (mouseDown as any).pageY = start;
+    fireEvent(container.getElementsByClassName(element)[0], mouseDown);
+
+    // Drag
+    const mouseMove = createEvent.mouseMove(document);
+    (mouseMove as any).pageX = end;
+    (mouseMove as any).pageY = end;
+    fireEvent(document, mouseMove);
   }
 
   function doTouchMove(
@@ -57,7 +66,7 @@ describe('Range', () => {
 
   it('should render Range with correct DOM structure', () => {
     const { asFragment } = render(
-      <Slider
+      <Range
         range
         value={[0, 0]}
         trackClassName={[
@@ -78,7 +87,7 @@ describe('Range', () => {
 
   it('should render Multi-Range with correct DOM structure', () => {
     const { asFragment } = render(
-      <Slider
+      <Range
         range
         value={[0, 0]}
         count={3}
@@ -101,7 +110,7 @@ describe('Range', () => {
 
   it('should render Range with value correctly', async () => {
     const { container } = render(
-      <Slider
+      <Range
         range
         value={[0, 50]}
         trackClassName={[
@@ -128,7 +137,7 @@ describe('Range', () => {
 
   it('should render reverse Range with value correctly', () => {
     const { container } = render(
-      <Slider
+      <Range
         range
         value={[0, 50]}
         reverse
@@ -150,7 +159,7 @@ describe('Range', () => {
 
   it('should render Range with tabIndex correctly', () => {
     const { container } = render(
-      <Slider
+      <Range
         range
         value={[0, 0]}
         tabIndex={[1, 2]}
@@ -174,7 +183,7 @@ describe('Range', () => {
 
   it('should render Range without tabIndex (equal null) correctly', () => {
     const { container } = render(
-      <Slider
+      <Range
         range
         value={[0, 0]}
         tabIndex={null}
@@ -191,7 +200,7 @@ describe('Range', () => {
 
   it('should render Multi-Range with value correctly', () => {
     const { container } = render(
-      <Slider
+      <Range
         range
         count={3}
         value={[0, 25, 50, 75]}
@@ -222,10 +231,10 @@ describe('Range', () => {
   });
 
   it('should update Range correctly in controlled model', () => {
-    const { container, rerender } = render(<Slider range value={[2, 4, 6]} />);
+    const { container, rerender } = render(<Range range value={[2, 4, 6]} />);
     expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(3);
 
-    rerender(<Slider range value={[2, 4]} />);
+    rerender(<Range range value={[2, 4]} />);
     expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(2);
   });
 
@@ -233,7 +242,7 @@ describe('Range', () => {
   it('should keep pushable when not allowCross', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider range allowCross={false} onChange={onChange} value={[30, 40]} pushable={10} />,
+      <Range range allowCross={false} onChange={onChange} value={[30, 40]} pushable={10} />,
     );
 
     onChange.mockReset();
@@ -247,7 +256,7 @@ describe('Range', () => {
   it.skip('pushable & allowCross', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider
+      <Range
         range
         onChange={onChange}
         value={[10, 30, 50]}
@@ -298,7 +307,7 @@ describe('Range', () => {
       it(name, () => {
         const onChange = jest.fn();
         const { container, unmount } = render(
-          <Slider
+          <Range
             range
             onChange={onChange}
             value={[20, 40]}
@@ -325,20 +334,20 @@ describe('Range', () => {
     testLTR('touch', (container: HTMLElement) => doTouchMove(container, 0, 9999));
 
     // FIXME: ?
-    it.skip('reverse', () => {
+    it('reverse', () => {
       const onChange = jest.fn();
-      const { container } = render(<Slider range onChange={onChange} value={[20, 40]} reverse />);
+      const { container } = render(<Range onChange={onChange} value={[20, 40]} reverse />);
 
       // Do move
-      doMouseMove(container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement, 0, -10);
+      doMouseMove(container, 0, -10);
 
       expect(onChange).toHaveBeenCalledWith([30, 40]);
     });
 
     // FIXME: ?
-    it.skip('vertical', () => {
+    it('vertical', () => {
       const onChange = jest.fn();
-      const { container } = render(<Slider range onChange={onChange} value={[20, 40]} vertical />);
+      const { container } = render(<Range range onChange={onChange} value={[20, 40]} vertical />);
 
       // Do move
       doMouseMove(container, 0, -10);
@@ -347,14 +356,14 @@ describe('Range', () => {
     });
 
     // FIXME
-    it.skip('vertical & reverse', () => {
+    it('vertical & reverse', () => {
       const onChange = jest.fn();
       const { container } = render(
-        <Slider range onChange={onChange} value={[20, 40]} vertical reverse />,
+        <Range range onChange={onChange} value={[20, 40]} vertical reverse />,
       );
 
       // Do move
-      doMouseMove(container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement, 0, -10);
+      doMouseMove(container, 0, -10);
 
       expect(onChange).toHaveBeenCalledWith([10, 40]);
     });
@@ -370,7 +379,7 @@ describe('Range', () => {
           const [, setValue] = React.useState<number | number[]>([20, 40]);
 
           return (
-            <Slider
+            <Range
               range
               onChange={(newValues) => {
                 setValue(newValues);
@@ -406,7 +415,7 @@ describe('Range', () => {
 
         let container: any, unmount: any;
         act(() => {
-          const u = render(<Slider range value={[0, 30]} draggableTrack onChange={onChange} />);
+          const u = render(<Range range value={[0, 30]} draggableTrack onChange={onChange} />);
           container = u.container;
           unmount = u.unmount;
         });
@@ -419,13 +428,13 @@ describe('Range', () => {
       });
     }
 
-    //test('mouse', (container: HTMLElement) => doMouseMove(container, 0, 20, 'rc-slider-track'));
+    test('mouse', (container: HTMLElement) => doMouseMove(container, 0, 20, 'rc-slider-track'));
     test('touch', (container: HTMLElement) => doTouchMove(container, 0, 20, 'rc-slider-track'));
   });
 
   it('sets aria-label on the handles', () => {
     const { container } = render(
-      <Slider range value={[0, 0]} ariaLabelForHandle={['Some Label', 'Some other Label']} />,
+      <Range range value={[0, 0]} ariaLabelForHandle={['Some Label', 'Some other Label']} />,
     );
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'aria-label',
@@ -439,7 +448,7 @@ describe('Range', () => {
 
   it('sets aria-labelledby on the handles', () => {
     const { container } = render(
-      <Slider range value={[0, 0]} ariaLabelledByForHandle={['some_id', 'some_other_id']} />,
+      <Range range value={[0, 0]} ariaLabelledByForHandle={['some_id', 'some_other_id']} />,
     );
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'aria-labelledby',
@@ -453,7 +462,7 @@ describe('Range', () => {
 
   it('sets aria-valuetext on the handles', () => {
     const { container } = render(
-      <Slider
+      <Range
         range
         min={0}
         max={5}
@@ -489,9 +498,7 @@ describe('Range', () => {
       step: null,
     };
 
-    const { container, rerender } = render(
-      <Slider {...props} range value={[0, 25, 50, 75, 100]} />,
-    );
+    const { container, rerender } = render(<Range {...props} range value={[0, 25, 50, 75, 100]} />);
 
     const verifyHandles = (values: number[]) => {
       // Has the number of handles that we set.
@@ -507,11 +514,11 @@ describe('Range', () => {
     verifyHandles([0, 25, 50, 75, 100]);
 
     // Assert that handles are correct after decreasing their number.
-    rerender(<Slider {...props} range value={[0, 75, 100]} />);
+    rerender(<Range {...props} range value={[0, 75, 100]} />);
     verifyHandles([0, 75, 100]);
 
     // Assert that handles are correct after increasing their number.
-    rerender(<Slider {...props} range value={[0, 25, 75, 100]} />);
+    rerender(<Range {...props} range value={[0, 25, 75, 100]} />);
     verifyHandles([0, 25, 75, 100]);
   });
 
@@ -519,7 +526,7 @@ describe('Range', () => {
     it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(
-        <Slider range value={[0, 0]} min={0} max={20} onFocus={handleFocus} />,
+        <Range range value={[0, 0]} min={0} max={20} onFocus={handleFocus} />,
       );
       (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).focus();
       expect(handleFocus).toBeCalled();
@@ -528,7 +535,7 @@ describe('Range', () => {
     it('blur', () => {
       const handleBlur = jest.fn();
       const { container } = render(
-        <Slider range value={[0, 0]} min={0} max={20} onBlur={handleBlur} />,
+        <Range range value={[0, 0]} min={0} max={20} onBlur={handleBlur} />,
       );
       (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).focus();
       (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).blur();
@@ -539,7 +546,7 @@ describe('Range', () => {
   it('warning for `draggableTrack` and `mergedStep=null`', () => {
     const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
-    render(<Slider range value={[0, 0]} draggableTrack step={null} />);
+    render(<Range range value={[0, 0]} draggableTrack step={null} />);
 
     expect(errorSpy).toHaveBeenCalledWith(
       '`draggableTrack` is not supported when `step` is `null`.',

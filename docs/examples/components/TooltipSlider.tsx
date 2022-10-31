@@ -1,7 +1,7 @@
-import * as React from 'react';
+import  React from 'react';
 import 'rc-tooltip/assets/bootstrap.css';
-import Slider from 'rc-slider';
-import type { SliderProps } from 'rc-slider';
+import type { SliderProps } from '@tordek/rc-slider';
+import { Range } from '@tordek/rc-slider';
 import raf from 'rc-util/lib/raf';
 import Tooltip from 'rc-tooltip';
 
@@ -76,7 +76,7 @@ const TooltipSlider = ({
     );
   };
 
-  return <Slider {...props} handleRender={tipHandleRender} />;
+  return <Range {...props} handleRender={tipHandleRender} />;
 };
 
 export default TooltipSlider;

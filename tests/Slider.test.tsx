@@ -4,8 +4,9 @@ import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
-import type { SliderRef } from '../src/Slider';
+import type { RangeRef } from '../src/Range';
 import Slider from '../src/Slider';
+import Range from '../src/Range';
 
 describe('Slider', () => {
   beforeAll(() => {
@@ -178,7 +179,7 @@ describe('Slider', () => {
 
   it('it should work fine when arrow key is pressed', () => {
     const onChange = jest.fn();
-    const { container } = render(<Slider range value={[20, 50]} onChange={onChange} />);
+    const { container } = render(<Range value={[20, 50]} onChange={onChange} />);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.LEFT,
@@ -414,7 +415,7 @@ describe('Slider', () => {
     it('ref focus & blur', () => {
       const onFocus = jest.fn();
       const onBlur = jest.fn();
-      const ref = React.createRef<SliderRef>();
+      const ref = React.createRef<RangeRef>();
       render(<Slider value={0} ref={ref} onFocus={onFocus} onBlur={onBlur} />);
 
       ref.current?.focus();
@@ -476,7 +477,7 @@ describe('Slider', () => {
 
     it('null value click to become 2 values', () => {
       const onChange = jest.fn();
-      const { container } = render(<Slider value={null} range onChange={onChange} />);
+      const { container } = render(<Range value={null} range onChange={onChange} />);
       fireEvent.mouseDown(container.querySelector('.rc-slider')!, {
         clientX: 20,
       });

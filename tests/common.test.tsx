@@ -2,7 +2,8 @@ import React from 'react';
 import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
-import Slider from '../src';
+import Slider from '../src/Slider';
+import Range from '../src/Range';
 
 describe('Common', () => {
   beforeAll(() => {
@@ -18,7 +19,7 @@ describe('Common', () => {
     const { container: container1 } = render(<Slider value={0} vertical />);
     expect(container1.getElementsByClassName('rc-slider-vertical')).toHaveLength(1);
 
-    const { container: container2 } = render(<Slider value={[0, 0]} range vertical />);
+    const { container: container2 } = render(<Range value={[0, 0]} range vertical />);
     expect(container2.getElementsByClassName('rc-slider-vertical')).toHaveLength(1);
   });
 
@@ -27,7 +28,7 @@ describe('Common', () => {
     expect(container1.getElementsByClassName('rc-slider-dot')).toHaveLength(11);
     expect(container1.getElementsByClassName('rc-slider-dot-active')).toHaveLength(6);
 
-    const { container: container2 } = render(<Slider range value={[20, 50]} step={10} dots />);
+    const { container: container2 } = render(<Range value={[20, 50]} step={10} dots />);
     expect(container2.getElementsByClassName('rc-slider-dot')).toHaveLength(11);
     expect(container2.getElementsByClassName('rc-slider-dot-active')).toHaveLength(4);
   });
@@ -48,7 +49,7 @@ describe('Common', () => {
       container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('90');
 
-    const { container: container3 } = render(<Slider range value={[0, 100]} min={10} max={90} />);
+    const { container: container3 } = render(<Range value={[0, 100]} min={10} max={90} />);
     expect(
       container3.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('10');
@@ -58,18 +59,28 @@ describe('Common', () => {
   });
 
   it('should not set values when sending invalid numbers', () => {
+    const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+
     const { container: container1 } = render(<Slider value={0} min={Math.min()} />);
     expect(
       container1.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('0');
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Invalid `min` value: Infinity. It must be a finite number.',
+    );
+    errorSpy.mockReset();
 
     const { container: container2 } = render(<Slider value={100} max={Math.max()} />);
     expect(
       container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('100');
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Invalid `max` value: -Infinity. It must be a finite number.',
+    );
+    errorSpy.mockReset();
 
     const { container: container3 } = render(
-      <Slider range value={[0, 100]} min={Math.min()} max={Math.max()} />,
+      <Range value={[0, 100]} min={Math.min()} max={Math.max()} />,
     );
     expect(
       container3.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
@@ -77,6 +88,13 @@ describe('Common', () => {
     expect(
       container3.getElementsByClassName('rc-slider-handle')[1].getAttribute('aria-valuenow'),
     ).toBe('100');
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Invalid `max` value: -Infinity. It must be a finite number.',
+    );
+    expect(errorSpy).toHaveBeenCalledWith(
+      'Invalid `min` value: Infinity. It must be a finite number.',
+    );
+    errorSpy.mockReset();
   });
 
   it('should update value when it is out of range', () => {
@@ -91,9 +109,9 @@ describe('Common', () => {
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Slider range value={[0, 0]} onChange={rangeOnChange} />,
+      <Range value={[0, 0]} onChange={rangeOnChange} />,
     );
-    rerender2(<Slider range value={[0, 0]} onChange={rangeOnChange} min={10} />);
+    rerender2(<Range value={[0, 0]} onChange={rangeOnChange} min={10} />);
     expect(
       container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('10');
@@ -112,9 +130,9 @@ describe('Common', () => {
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Slider range value={[]} onChange={rangeOnChange} />,
+      <Range value={[]} onChange={rangeOnChange} />,
     );
-    rerender2(<Slider range onChange={rangeOnChange} value={[0, 200]} />);
+    rerender2(<Range onChange={rangeOnChange} value={[0, 200]} />);
     expect(
       container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('0');
@@ -137,9 +155,9 @@ describe('Common', () => {
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Slider range value={[0, 10]} max={10} onChange={rangeOnChange} />,
+      <Range value={[0, 10]} max={10} onChange={rangeOnChange} />,
     );
-    rerender2(<Slider range max={10} onChange={rangeOnChange} value={[0, 100]} />);
+    rerender2(<Range max={10} onChange={rangeOnChange} value={[0, 100]} />);
     expect(
       container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
     ).toBe('0');
@@ -158,7 +176,7 @@ describe('Common', () => {
     fireEvent.mouseMove(handle1);
     fireEvent.mouseUp(handle1);
 
-    const { container: container2 } = render(<Slider range value={[0, 100]} onChange={handler} />);
+    const { container: container2 } = render(<Range value={[0, 100]} onChange={handler} />);
     const handle2 = container2.getElementsByClassName('rc-slider-handle')[1];
     fireEvent.mouseDown(handle2);
     fireEvent.mouseMove(handle2);
@@ -166,53 +184,6 @@ describe('Common', () => {
 
     expect(handler).not.toHaveBeenCalled();
   });
-
-  // TODO: should update the following test cases for it should test API instead implementation
-  // it('should set `dragOffset` to correct value when the left handle is clicked off-center', () => {
-  //   const { container } = render(<Slider />);
-  //   setWidth(wrapper.instance().sliderRef, 100);
-  //   const leftHandle = wrapper
-  //     .find('.rc-slider-handle')
-  //     .at(1)
-  //     .instance();
-  //   wrapper.simulate('mousedown', {
-  //     type: 'mousedown',
-  //     target: leftHandle,
-  //     pageX: 5,
-  //     button: 0,
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().dragOffset).toBe(5);
-  // });
-
-  // it('should respect `dragOffset` while dragging the handle via MouseEvents', () => {
-  //   const { container } = render(<Slider />);
-  //   setWidth(wrapper.instance().sliderRef, 100);
-  //   const leftHandle = wrapper
-  //     .find('.rc-slider-handle')
-  //     .at(1)
-  //     .instance();
-  //   wrapper.simulate('mousedown', {
-  //     type: 'mousedown',
-  //     target: leftHandle,
-  //     pageX: 5,
-  //     button: 0,
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().dragOffset).toBe(5);
-  //   wrapper.instance().onMouseMove({
-  //     // to propagation
-  //     type: 'mousemove',
-  //     target: leftHandle,
-  //     pageX: 14,
-  //     button: 0,
-  //     stopPropagation() {},
-  //     preventDefault() {},
-  //   });
-  //   expect(wrapper.instance().getValue()).toBe(9);
-  // });
 
   it('should not go to right direction when mouse go to the left', () => {
     const { container } = render(<Slider value={0} />);

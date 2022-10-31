@@ -1,7 +1,7 @@
-import * as React from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import SliderContext from '../context';
-import { getDirectionStyle, getIndex } from '../util';
+import { getPositionStyle, getIndex } from '../util';
 import type { OnStartMove } from '../interface';
 
 interface RenderProps {
@@ -17,7 +17,7 @@ export interface HandleProps {
   valueIndex: number;
   dragging: boolean;
   onStartMove: OnStartMove;
-  onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
+  onOffsetChange: (offset: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
@@ -51,62 +51,61 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
 
     // ============================ Events ============================
     const onInternalStartMove = (e: React.MouseEvent | React.TouchEvent) => {
-      if (!disabled) {
-        onStartMove(e, valueIndex);
+      if (disabled) {
+        return;
       }
+      onStartMove(e, valueIndex);
     };
 
     // =========================== Keyboard ===========================
     const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-      if (!disabled) {
-        let offset: number | 'min' | 'max' | null = null;
+      let offset: number | 'min' | 'max' | null = null;
 
-        // Change the value
-        switch (e.key) {
-          case 'ArrowLeft':
-            offset = direction === 'ltr' || direction === 'btt' ? -1 : 1;
-            break;
+      // Change the value
+      switch (e.key) {
+        case 'ArrowLeft':
+          offset = direction === 'ltr' || direction === 'btt' ? -1 : 1;
+          break;
 
-          case 'ArrowRight':
-            offset = direction === 'ltr' || direction === 'btt' ? 1 : -1;
-            break;
+        case 'ArrowRight':
+          offset = direction === 'ltr' || direction === 'btt' ? 1 : -1;
+          break;
 
-          // Up is plus
-          case 'ArrowUp':
-            offset = direction !== 'ttb' ? 1 : -1;
-            break;
+        case 'ArrowUp':
+          offset = direction === 'ttb' ? -1 : 1;
+          break;
 
-          // Down is minus
-          case 'ArrowDown':
-            offset = direction !== 'ttb' ? -1 : 1;
-            break;
+        case 'ArrowDown':
+          offset = direction === 'ttb' ? 1 : -1;
+          break;
 
-          case 'Home':
-            offset = 'min';
-            break;
+        case 'Home':
+          offset = 'min';
+          break;
 
-          case 'End':
-            offset = 'max';
-            break;
+        case 'End':
+          offset = 'max';
+          break;
 
-          case 'PageUp':
-            offset = 2;
-            break;
+        case 'PageUp':
+          offset = 2;
+          break;
 
-          case 'PageDown':
-            offset = -2;
-            break;
-        }
-
-        if (offset !== null) {
-          e.preventDefault();
-          onOffsetChange(offset, valueIndex);
-        }
+        case 'PageDown':
+          offset = -2;
+          break;
       }
+
+      if (offset === null) {
+        return;
+      }
+
+      e.preventDefault();
+      onOffsetChange(offset, valueIndex);
     };
 
     // ============================ Offset ============================
-    const positionStyle = getDirectionStyle(direction, value, min, max);
+    const positionStyle = getPositionStyle(direction, value, min, max);
 
     // ============================ Render ============================
     let handleNode = (

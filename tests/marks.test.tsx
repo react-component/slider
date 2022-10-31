@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import Slider from '../src';
+import Slider from '../src/Slider';
+import Range from '../src/Range';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 
 describe('marks', () => {
@@ -23,7 +24,7 @@ describe('marks', () => {
     expect(container.getElementsByClassName('rc-slider-mark-text')[1].innerHTML).toBe('30');
     expect(container.getElementsByClassName('rc-slider-mark-text')[2].innerHTML).toBe('100');
 
-    const { container: container2 } = render(<Slider range value={[0, 30]} marks={marks} />);
+    const { container: container2 } = render(<Range range value={[0, 30]} marks={marks} />);
     expect(container2.getElementsByClassName('rc-slider-mark-text')).toHaveLength(3);
     expect(container2.getElementsByClassName('rc-slider-mark-text')[0].innerHTML).toBe('0');
     expect(container2.getElementsByClassName('rc-slider-mark-text')[1].innerHTML).toBe('30');

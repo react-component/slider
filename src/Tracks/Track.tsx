@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import SliderContext from '../context';
 import { getOffset } from '../util';
 import type { OnStartMove } from '../interface';

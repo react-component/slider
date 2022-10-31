@@ -1,32 +1,36 @@
-import * as React from 'react';
+import React, { useRef, useEffect } from 'react';
 import 'rc-tooltip/assets/bootstrap.css';
 import raf from 'rc-util/lib/raf';
 import Tooltip from 'rc-tooltip';
-import type { SliderProps } from '../Slider';
-import Slider from '../Slider';
+import type { RangeProps } from '../Range';
+import Slider from '../Range';
 
-const HandleTooltip = (props: {
+const HandleTooltip = ({
+  value,
+  children,
+  visible,
+  tipFormatter = (val) => `${val}%`,
+  ...restProps
+}: {
   value: number;
   children: React.ReactElement;
   visible: boolean;
   tipFormatter?: (value: number) => React.ReactNode;
 }) => {
-  const { value, children, visible, tipFormatter = (val) => `${val}%`, ...restProps } = props;
+  const tooltipRef = useRef<any>();
+  const rafRef = useRef<number | null>(null);
 
-  const tooltipRef = React.useRef<any>();
-  const rafRef = React.useRef<number | null>(null);
-
-  function cancelKeepAlign() {
+  const cancelKeepAlign = () => {
     raf.cancel(rafRef.current!);
-  }
+  };
 
-  function keepAlign() {
+  const keepAlign = () => {
     rafRef.current = raf(() => {
       tooltipRef.current?.forcePopupAlign();
     });
-  }
+  };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (visible) {
       keepAlign();
     } else {
@@ -50,7 +54,7 @@ const HandleTooltip = (props: {
   );
 };
 
-export const handleRender: SliderProps['handleRender'] = (node, props) => {
+export const handleRender: RangeProps['handleRender'] = (node, props) => {
   return (
     <HandleTooltip value={props.value} visible={props.dragging}>
       {node}
@@ -62,22 +66,20 @@ const TooltipSlider = ({
   tipFormatter,
   tipProps,
   ...props
-}: SliderProps & {
+}: RangeProps & {
   tipFormatter?: (value: number) => React.ReactNode;
   tipProps: any;
 }) => {
-  const tipHandleRender: SliderProps['handleRender'] = (node, handleProps) => {
-    return (
-      <HandleTooltip
-        value={handleProps.value}
-        visible={handleProps.dragging}
-        tipFormatter={tipFormatter}
-        {...tipProps}
-      >
-        {node}
-      </HandleTooltip>
-    );
-  };
+  const tipHandleRender: RangeProps['handleRender'] = (node, handleProps) => (
+    <HandleTooltip
+      value={handleProps.value}
+      visible={handleProps.dragging}
+      tipFormatter={tipFormatter}
+      {...tipProps}
+    >
+      {node}
+    </HandleTooltip>
+  );
 
   return <Slider {...props} handleRender={tipHandleRender} />;
 };

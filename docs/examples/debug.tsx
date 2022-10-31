@@ -1,5 +1,5 @@
 import React from 'react';
-import Slider from '@tordek/rc-slider';
+import { Range } from '@tordek/rc-slider';
 import '../../assets/index.less';
 
 export default () => {
@@ -31,7 +31,7 @@ export default () => {
       </div>
 
       <div style={{ height: 300, width: 600 }}>
-        <Slider
+        <Range
           // count={2}
           disabled={disabled}
           reverse={reverse}
@@ -51,7 +51,7 @@ export default () => {
 
           min={0}
           max={1}
-          defaultValue={0.81}
+          defaultValue={[0.81]}
           step={0.01}
         />
       </div>

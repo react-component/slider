@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import type { InternalMarkObj } from '../Marks';
 import SliderContext from '../context';
 import Dot from './Dot';

@@ -1,6 +1,6 @@
-import * as React from 'react';
+import React from 'react';
 import clsx from 'clsx';
-import { getDirectionStyle } from '../util';
+import { getPositionStyle } from '../util';
 import SliderContext from '../context';
 
 export interface MarkProps {
@@ -18,7 +18,7 @@ export default function Mark(props: MarkProps) {
     React.useContext(SliderContext);
 
   // ============================ Offset ============================
-  const positionStyle = getDirectionStyle(direction, value, min, max);
+  const positionStyle = getPositionStyle(direction, value, min, max);
 
   return (
     <span

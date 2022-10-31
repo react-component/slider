@@ -1,31 +1,31 @@
 /* eslint react/no-multi-comp: 0, max-len: 0 */
 import React from 'react';
-import Slider from '@tordek/rc-slider';
+import { Slider, Range } from '@tordek/rc-slider';
 import '../../assets/index.less';
 import '../docs.less';
 import TooltipSlider from './components/TooltipSlider';
 
 const style = { width: 600, margin: 50 };
 
-function log(value) {
+function log(value: any) {
   console.log(value); //eslint-disable-line
 }
 
-function percentFormatter(v) {
+function percentFormatter(v: number) {
   return `${v} %`;
 }
 
 // const SliderWithTooltip = createSliderWithTooltip(Slider);
 
 class NullableSlider extends React.Component<any, any> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       value: null,
     };
   }
 
-  onSliderChange = (value) => {
+  onSliderChange = (value: any) => {
     log(value);
     this.setState({
       value,
@@ -54,11 +54,11 @@ class NullableSlider extends React.Component<any, any> {
 }
 
 const NullableRangeSlider = () => {
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState<null | number[]>(null);
 
   return (
     <div>
-      <Slider range value={value} onChange={setValue} />
+      <Range value={value} onChange={setValue} />
       <button type="button" onClick={() => setValue(null)}>
         Reset
       </button>
@@ -67,14 +67,14 @@ const NullableRangeSlider = () => {
 };
 
 class CustomizedSlider extends React.Component<any, any> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       value: 50,
     };
   }
 
-  onSliderChange = (value) => {
+  onSliderChange = (value: any) => {
     log(value);
     this.setState({
       value,
@@ -92,7 +92,7 @@ class CustomizedSlider extends React.Component<any, any> {
 }
 
 class DynamicBounds extends React.Component<any, any> {
-  constructor(props) {
+  constructor(props: any) {
     super(props);
     this.state = {
       min: 1,
@@ -102,24 +102,24 @@ class DynamicBounds extends React.Component<any, any> {
     };
   }
 
-  onSliderChange = (value) => {
+  onSliderChange = (value: any) => {
     log(value);
     this.setState({ value });
   };
 
-  onMinChange = (e) => {
+  onMinChange = (e: any) => {
     this.setState({
       min: +e.target.value || 0,
     });
   };
 
-  onMaxChange = (e) => {
+  onMaxChange = (e: any) => {
     this.setState({
       max: +e.target.value || 100,
     });
   };
 
-  onStepChange = (e) => {
+  onStepChange = (e: any) => {
     this.setState({
       step: +e.target.value || 1,
     });

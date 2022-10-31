@@ -1,14 +1,8 @@
-import * as React from 'react';
+import { useCallback } from 'react';
 import type { InternalMarkObj } from '../Marks';
 
-/** Format the value in the range of [min, max] */
-type FormatRangeValue = (value: number) => number;
-
-/** Format value align with step */
-type FormatStepValue = (value: number) => number | null;
-
-/** Format value align with step & marks */
-type FormatValue = (value: number) => number;
+/** Constrain value align with step & marks */
+type ConstrainValue = (value: number) => number;
 
 type OffsetMode = 'unit' | 'dist';
 
@@ -16,17 +10,31 @@ type OffsetValue = (
   values: number[],
   offset: number | 'min' | 'max',
   valueIndex: number,
-  mode?: OffsetMode,
+  mode: OffsetMode,
 ) => number;
 
 export type OffsetValues = (
   values: number[],
   offset: number | 'min' | 'max',
   valueIndex: number,
-  mode?: OffsetMode,
+  mode: OffsetMode,
 ) => {
   value: number;
   values: number[];
+};
+
+const constrainValueInRange = (min: number, val: number, max: number) =>
+  Math.max(min, Math.min(max, val));
+
+const constrainValueToStepSize = (min: number, val: number, max: number, step: number) => {
+  const stepValue = min + Math.round((constrainValueInRange(min, val, max) - min) / step) * step;
+
+  // Cut number in case to be like 0.30000000000000004
+  const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
+  const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
+  const fixedValue = Number(stepValue.toFixed(maxDecimal));
+
+  return min <= fixedValue && fixedValue <= max ? fixedValue : null;
 };
 
 export default function useOffset(
@@ -36,151 +44,128 @@ export default function useOffset(
   markList: InternalMarkObj[],
   allowCross: boolean,
   pushable: false | number | null,
-): [FormatValue, OffsetValues] {
-  const formatRangeValue: FormatRangeValue = React.useCallback(
+): [ConstrainValue, OffsetValues] {
+  const constrainValue: ConstrainValue = useCallback(
     (val) => {
-      let formatNextValue = isFinite(val) ? val : min;
-      formatNextValue = Math.min(max, val);
-      formatNextValue = Math.max(min, formatNextValue);
-
-      return formatNextValue;
-    },
-    [min, max],
-  );
-
-  const formatStepValue: FormatStepValue = React.useCallback(
-    (val) => {
-      if (step === null) {
-        return null;
-      }
-      const stepValue = min + Math.round((formatRangeValue(val) - min) / step) * step;
-
-      // Cut number in case to be like 0.30000000000000004
-      const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
-      const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
-      const fixedValue = Number(stepValue.toFixed(maxDecimal));
-
-      return min <= fixedValue && fixedValue <= max ? fixedValue : null;
-    },
-    [step, min, max, formatRangeValue],
-  );
-
-  const formatValue: FormatValue = React.useCallback(
-    (val) => {
-      const formatNextValue = formatRangeValue(val);
-
-      // List align values
+      // Constrain the value to one of the marks
       const alignValues = markList.map((mark) => mark.value);
+
+      // If step is null, disable `step` size
       if (step !== null) {
-        const formattedValue = formatStepValue(val);
-        if (formattedValue !== null) alignValues.push(formattedValue);
+        const constrainedValue = constrainValueToStepSize(min, val, max, step);
+        if (constrainedValue !== null) alignValues.push(constrainedValue);
       }
 
-      // min & max
+      // Constrain to max and min
       alignValues.push(min, max);
 
-      // Align with marks
-      let closeValue = alignValues[0];
-      let closeDist = max - min;
+      // Constrain to the nearest allowed value
+      let closestValue = alignValues[0];
+      let closestDist = max - min;
 
       alignValues.forEach((alignValue) => {
-        const dist = Math.abs(formatNextValue - alignValue);
-        if (dist <= closeDist) {
-          closeValue = alignValue;
-          closeDist = dist;
+        const dist = Math.abs(val - alignValue);
+        if (dist < closestDist) {
+          closestValue = alignValue;
+          closestDist = dist;
         }
       });
 
-      return closeValue;
+      return closestValue;
     },
-    [min, max, markList, step, formatRangeValue, formatStepValue],
+    [min, max, markList, step],
   );
 
   // ========================== Offset ==========================
   // Single Value
-  const offsetValue: OffsetValue = (values, offset, valueIndex, mode = 'unit') => {
-    if (typeof offset === 'number') {
-      let nextValue: number;
-      const originValue = values[valueIndex];
+  // TODO: is `values+valueIndex` necessary?
+  const offsetValue: OffsetValue = (values, offset, valueIndex, mode) => {
+    if (offset === 'min') {
+      return min;
+    }
 
-      // Only used for `dist` mode
-      const targetDistValue = originValue + offset;
+    if (offset === 'max') {
+      return max;
+    }
 
-      // Compare next step value & mark value which is best match
-      let potentialValues: number[] = [];
-      markList.forEach((mark) => {
-        potentialValues.push(mark.value);
-      });
+    const originValue = values[valueIndex];
 
-      // Min & Max
-      potentialValues.push(min, max);
+    // Only used for `dist` mode
+    const targetDistValue = originValue + offset;
 
-      // In case origin value is align with mark but not with step
-      const formattedValue = formatStepValue(originValue);
+    // Compare next step value & mark value which is best match
+    let potentialValues: number[] = markList.map(({ value }) => value);
+
+    // Min & Max
+    potentialValues.push(min, max);
+
+    // In case origin value is align with mark but not with step
+    if (step !== null) {
+      const formattedValue = constrainValueToStepSize(min, originValue, max, step);
       if (formattedValue) potentialValues.push(formattedValue);
+    }
 
-      // Put offset step value also
-      const sign = offset > 0 ? 1 : -1;
+    // Put offset step value also
+    const sign = Math.sign(offset);
 
-      if (mode === 'unit' && step) {
-        const formattedPotentialValue = formatStepValue(originValue + sign * step);
+    if (step !== null) {
+      if (mode === 'unit') {
+        const formattedPotentialValue = constrainValueToStepSize(
+          min,
+          originValue + sign * step,
+          max,
+          step,
+        );
         if (formattedPotentialValue) potentialValues.push(formattedPotentialValue);
       } else {
-        const formattedPotentialValue = formatStepValue(targetDistValue);
+        const formattedPotentialValue = constrainValueToStepSize(min, targetDistValue, max, step);
 
         if (formattedPotentialValue) potentialValues.push(formattedPotentialValue);
       }
-
-      // Find close one
-      potentialValues = potentialValues
-        .filter((val) => val !== null)
-        // Remove reverse value
-        .filter((val) => (offset < 0 ? val <= originValue : val >= originValue));
-
-      if (mode === 'unit') {
-        // `unit` mode can not contain itself
-        potentialValues = potentialValues.filter((val) => val !== originValue);
-      }
-
-      const compareValue = mode === 'unit' ? originValue : targetDistValue;
-
-      nextValue = potentialValues[0];
-      let valueDist = Math.abs(nextValue - compareValue);
-
-      potentialValues.forEach((potentialValue) => {
-        const dist = Math.abs(potentialValue - compareValue);
-        if (dist < valueDist) {
-          nextValue = potentialValue;
-          valueDist = dist;
-        }
-      });
-
-      // Out of range will back to range
-      if (nextValue === undefined) {
-        return offset < 0 ? min : max;
-      }
-
-      // `dist` mode
-      if (mode === 'dist') {
-        return nextValue;
-      }
-
-      // `unit` mode may need another round
-      if (Math.abs(offset) > 1) {
-        const cloneValues = [...values];
-        cloneValues[valueIndex] = nextValue;
-
-        return offsetValue(cloneValues, offset - sign, valueIndex, mode);
-      }
-
-      return nextValue;
-    } else if (offset === 'min') {
-      return min;
-    } else if (offset === 'max') {
-      return max;
-    } else {
-      throw new Error('Invalid offset');
     }
+
+    // Remove values in opposite direction
+    potentialValues = potentialValues.filter((val) =>
+      sign < 0 ? val <= originValue : val >= originValue,
+    );
+
+    if (mode === 'unit') {
+      // `unit` mode can not contain itself
+      potentialValues = potentialValues.filter((val) => val !== originValue);
+    }
+
+    const compareValue = mode === 'unit' ? originValue : targetDistValue;
+
+    let nextValue = potentialValues[0];
+    let valueDist = Math.abs(nextValue - compareValue);
+
+    potentialValues.forEach((potentialValue) => {
+      const dist = Math.abs(potentialValue - compareValue);
+      if (dist < valueDist) {
+        nextValue = potentialValue;
+        valueDist = dist;
+      }
+    });
+
+    // Out of range will back to range
+    if (nextValue === undefined) {
+      return offset < 0 ? min : max;
+    }
+
+    // `dist` mode
+    if (mode === 'dist') {
+      return nextValue;
+    }
+
+    // `unit` mode may need another round
+    if (Math.abs(offset) > 1) {
+      const cloneValues = [...values];
+      cloneValues[valueIndex] = nextValue;
+
+      return offsetValue(cloneValues, offset - sign, valueIndex, mode);
+    }
+
+    return nextValue;
   };
 
   /** Same as `offsetValue` but return `changed` mark to tell value changed */
@@ -198,13 +183,12 @@ export default function useOffset(
     };
   };
 
-  const needPush = (dist: number) => {
-    return (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
-  };
+  const needPush = (dist: number) =>
+    (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
 
   // Values
-  const offsetValues: OffsetValues = (values, offset, valueIndex, mode = 'unit') => {
-    const nextValues = values.map(formatValue);
+  const offsetValues: OffsetValues = (values, offset, valueIndex, mode) => {
+    const nextValues = values.map(constrainValue);
     const originValue = nextValues[valueIndex];
     const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;
@@ -272,5 +256,5 @@ export default function useOffset(
     };
   };
 
-  return [formatValue, offsetValues];
+  return [constrainValue, offsetValues];
 }

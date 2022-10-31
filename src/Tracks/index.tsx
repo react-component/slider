@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import SliderContext from '../context';
 import Track from './Track';
 import type { OnStartMove } from '../interface';
