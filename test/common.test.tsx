@@ -94,7 +94,7 @@ describe('Common', () => {
         .getAttribute('aria-valuenow')
     ).toBe('0');
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `min` value: Infinity. It must be a finite number.'
+      'Warning: Invalid `min` value: Infinity. It must be a finite number.'
     );
     errorSpy.mockReset();
 
@@ -107,7 +107,7 @@ describe('Common', () => {
         .getAttribute('aria-valuenow')
     ).toBe('100');
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `max` value: -Infinity. It must be a finite number.'
+      'Warning: Invalid `max` value: -Infinity. It must be a finite number.'
     );
     errorSpy.mockReset();
 
@@ -125,10 +125,10 @@ describe('Common', () => {
         .getAttribute('aria-valuenow')
     ).toBe('100');
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `max` value: -Infinity. It must be a finite number.'
+      'Warning: Invalid `max` value: -Infinity. It must be a finite number.'
     );
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `min` value: Infinity. It must be a finite number.'
+      'Warning: Invalid `min` value: Infinity. It must be a finite number.'
     );
     errorSpy.mockReset();
   });

@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import warning from 'tiny-warning';
 import shallowEqual from 'shallowequal';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import { HandlesRef } from './Handles';
@@ -232,30 +233,27 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
     const boundedMin = isFinite(min) ? min : 0;
     React.useEffect(() => {
-      if (!isFinite(min)) {
-        console.warn(
-          `Invalid \`min\` value: ${min}. It must be a finite number.`
-        );
-      }
+      warning(
+        isFinite(min),
+        `Invalid \`min\` value: ${min}. It must be a finite number.`
+      );
     }, [min]);
 
     const boundedMax = isFinite(max) ? max : 100;
     React.useEffect(() => {
-      if (!isFinite(max)) {
-        console.warn(
-          `Invalid \`max\` value: ${max}. It must be a finite number.`
-        );
-      }
+      warning(
+        isFinite(max),
+        `Invalid \`max\` value: ${max}. It must be a finite number.`
+      );
     }, [max]);
 
     // ============================= Step =============================
     const normalizedStep = step === null || step > 0 ? step : 1;
     React.useEffect(() => {
-      if (step && step < 0) {
-        console.warn(
-          `Invalid \`step\` value: ${step}. \`step\` cannot be negative.`
-        );
-      }
+      warning(
+        !(step && step < 0),
+        `Invalid \`step\` value: ${step}. \`step\` cannot be negative.`
+      );
     }, [step]);
 
     // ============================= Push =============================
