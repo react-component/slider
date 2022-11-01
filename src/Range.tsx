@@ -1,5 +1,5 @@
 import React from 'react';
-import classNames from 'classnames';
+import clsx from 'clsx';
 import shallowEqual from 'shallowequal';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { HandlesRef } from './Handles';
@@ -493,7 +493,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       >
         <div
           ref={containerRef}
-          className={classNames(className, {
+          className={clsx(className, {
             [disabledClassName]: disabled,
             [verticalClassName]: vertical,
             [horizontalClassName]: !vertical,
