@@ -39,7 +39,8 @@
     "build-storybook": "build-storybook"
   },
   "peerDependencies": {
-    "react": ">=16"
+    "react": ">=16",
+    "tiny-warning": "^1.0.3"
   },
   "husky": {
     "hooks": {
@@ -82,7 +83,6 @@
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
     "size-limit": "^8.1.0",
-    "tiny-warning": "^1.0.3",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.1",
     "typescript": "^4.8.4",
