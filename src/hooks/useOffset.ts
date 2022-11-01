@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import type { InternalMarkObj } from '../Marks';
+import { InternalMarkObj } from '../Marks';
 
 /** Constrain value align with step & marks */
 type ConstrainValue = (value: number) => number;
@@ -10,14 +10,14 @@ type OffsetValue = (
   values: number[],
   offset: number | 'min' | 'max',
   valueIndex: number,
-  mode: OffsetMode,
+  mode: OffsetMode
 ) => number;
 
 export type OffsetValues = (
   values: number[],
   offset: number | 'min' | 'max',
   valueIndex: number,
-  mode: OffsetMode,
+  mode: OffsetMode
 ) => {
   value: number;
   values: number[];
@@ -26,25 +26,36 @@ export type OffsetValues = (
 const constrainValueInRange = (min: number, val: number, max: number) =>
   Math.max(min, Math.min(max, val));
 
-const constrainValueToStepSize = (min: number, val: number, max: number, step: number) => {
-  const stepValue = min + Math.round((constrainValueInRange(min, val, max) - min) / step) * step;
+const constrainValueToStepSize = (
+  min: number,
+  val: number,
+  max: number,
+  step: number
+) => {
+  const stepValue =
+    min +
+    Math.round((constrainValueInRange(min, val, max) - min) / step) * step;
 
   // Cut number in case to be like 0.30000000000000004
   const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
-  const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
+  const maxDecimal = Math.max(
+    getDecimal(step),
+    getDecimal(max),
+    getDecimal(min)
+  );
   const fixedValue = Number(stepValue.toFixed(maxDecimal));
 
   return min <= fixedValue && fixedValue <= max ? fixedValue : null;
 };
 
-export default function useOffset(
+const useOffset = (
   min: number,
   max: number,
   step: number | null,
   markList: InternalMarkObj[],
   allowCross: boolean,
-  pushable: false | number | null,
-): [ConstrainValue, OffsetValues] {
+  pushable: false | number | null
+): { constrainValue: ConstrainValue; offsetValues: OffsetValues } => {
   const constrainValue: ConstrainValue = useCallback(
     (val) => {
       // Constrain the value to one of the marks
@@ -73,7 +84,7 @@ export default function useOffset(
 
       return closestValue;
     },
-    [min, max, markList, step],
+    [min, max, markList, step]
   );
 
   // ========================== Offset ==========================
@@ -101,7 +112,12 @@ export default function useOffset(
 
     // In case origin value is align with mark but not with step
     if (step !== null) {
-      const formattedValue = constrainValueToStepSize(min, originValue, max, step);
+      const formattedValue = constrainValueToStepSize(
+        min,
+        originValue,
+        max,
+        step
+      );
       if (formattedValue) potentialValues.push(formattedValue);
     }
 
@@ -114,19 +130,26 @@ export default function useOffset(
           min,
           originValue + sign * step,
           max,
-          step,
+          step
         );
-        if (formattedPotentialValue) potentialValues.push(formattedPotentialValue);
+        if (formattedPotentialValue)
+          potentialValues.push(formattedPotentialValue);
       } else {
-        const formattedPotentialValue = constrainValueToStepSize(min, targetDistValue, max, step);
+        const formattedPotentialValue = constrainValueToStepSize(
+          min,
+          targetDistValue,
+          max,
+          step
+        );
 
-        if (formattedPotentialValue) potentialValues.push(formattedPotentialValue);
+        if (formattedPotentialValue)
+          potentialValues.push(formattedPotentialValue);
       }
     }
 
     // Remove values in opposite direction
     potentialValues = potentialValues.filter((val) =>
-      sign < 0 ? val <= originValue : val >= originValue,
+      sign < 0 ? val <= originValue : val >= originValue
     );
 
     if (mode === 'unit') {
@@ -173,7 +196,7 @@ export default function useOffset(
     values: number[],
     offset: number,
     valueIndex: number,
-    mode: OffsetMode = 'unit',
+    mode: OffsetMode = 'unit'
   ) => {
     const originValue = values[valueIndex];
     const nextValue = offsetValue(values, offset, valueIndex, mode);
@@ -184,7 +207,8 @@ export default function useOffset(
   };
 
   const needPush = (dist: number) =>
-    (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
+    (pushable === null && dist === 0) ||
+    (typeof pushable === 'number' && dist < pushable);
 
   // Values
   const offsetValues: OffsetValues = (values, offset, valueIndex, mode) => {
@@ -201,14 +225,17 @@ export default function useOffset(
       if (valueIndex > 0 && nextValues[valueIndex - 1] !== originValue) {
         nextValues[valueIndex] = Math.max(
           nextValues[valueIndex],
-          nextValues[valueIndex - 1] + pushNum,
+          nextValues[valueIndex - 1] + pushNum
         );
       }
 
-      if (valueIndex < nextValues.length - 1 && nextValues[valueIndex + 1] !== originValue) {
+      if (
+        valueIndex < nextValues.length - 1 &&
+        nextValues[valueIndex + 1] !== originValue
+      ) {
         nextValues[valueIndex] = Math.min(
           nextValues[valueIndex],
-          nextValues[valueIndex + 1] - pushNum,
+          nextValues[valueIndex + 1] - pushNum
         );
       }
     } else if (typeof pushable === 'number' || pushable === null) {
@@ -220,7 +247,11 @@ export default function useOffset(
       for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
-          ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
+          ({ value: nextValues[i], changed } = offsetChangedValue(
+            nextValues,
+            1,
+            i
+          ));
         }
       }
 
@@ -228,7 +259,11 @@ export default function useOffset(
       for (let i = valueIndex; i > 0; i -= 1) {
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
-          ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
+          ({ value: nextValues[i - 1], changed } = offsetChangedValue(
+            nextValues,
+            -1,
+            i - 1
+          ));
         }
       }
 
@@ -237,7 +272,11 @@ export default function useOffset(
       for (let i = nextValues.length - 1; i > 0; i -= 1) {
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
-          ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
+          ({ value: nextValues[i - 1], changed } = offsetChangedValue(
+            nextValues,
+            -1,
+            i - 1
+          ));
         }
       }
 
@@ -245,7 +284,11 @@ export default function useOffset(
       for (let i = 0; i < nextValues.length - 1; i += 1) {
         let changed = true;
         while (needPush(nextValues[i + 1] - nextValues[i]) && changed) {
-          ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
+          ({ value: nextValues[i + 1], changed } = offsetChangedValue(
+            nextValues,
+            1,
+            i + 1
+          ));
         }
       }
     }
@@ -256,5 +299,7 @@ export default function useOffset(
     };
   };
 
-  return [constrainValue, offsetValues];
-}
+  return { constrainValue, offsetValues };
+};
+
+export default useOffset;

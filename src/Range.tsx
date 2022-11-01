@@ -2,15 +2,15 @@ import React from 'react';
 import clsx from 'clsx';
 import shallowEqual from 'shallowequal';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import type { HandlesRef } from './Handles';
+import { HandlesRef } from './Handles';
 import Handles from './Handles';
-import type { HandlesProps } from './Handles';
+import { HandlesProps } from './Handles';
 import useDrag from './hooks/useDrag';
 import SliderContext from './context';
 import Tracks from './Tracks';
-import type { AriaValueFormat, OnStartMove } from './interface';
+import { AriaValueFormat, OnStartMove } from './interface';
 import Marks from './Marks';
-import type { InternalMarkObj } from './Marks';
+import { InternalMarkObj } from './Marks';
 import Steps from './Steps';
 import useOffset from './hooks/useOffset';
 
@@ -68,7 +68,7 @@ export interface RangeProps {
   /** Alter the behavior of the Slider to allow vertical movement */
   vertical?: boolean;
 
-  /** [?] */
+  /** Whether to draw the tracks */
   included?: boolean;
 
   /** Starting point from where the track is drawn */
@@ -187,7 +187,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
       // Style
       included = true,
-      startPoint,
+      startPoint = min,
 
       className = 'rc-slider',
       disabledClassName = 'rc-slider-disabled',
@@ -218,23 +218,33 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       ariaLabelledByForHandle,
       ariaValueTextFormatterForHandle,
     },
-    ref,
+    ref
   ) => {
     const handlesRef = React.useRef<HandlesRef>(null);
     const containerRef = React.useRef<HTMLDivElement>(null);
-    const direction = vertical ? (reverse ? 'ttb' : 'btt') : reverse ? 'rtl' : 'ltr';
+    const direction = vertical
+      ? reverse
+        ? 'ttb'
+        : 'btt'
+      : reverse
+      ? 'rtl'
+      : 'ltr';
 
     const boundedMin = isFinite(min) ? min : 0;
     React.useEffect(() => {
       if (!isFinite(min)) {
-        console.warn(`Invalid \`min\` value: ${min}. It must be a finite number.`);
+        console.warn(
+          `Invalid \`min\` value: ${min}. It must be a finite number.`
+        );
       }
     }, [min]);
 
     const boundedMax = isFinite(max) ? max : 100;
     React.useEffect(() => {
       if (!isFinite(max)) {
-        console.warn(`Invalid \`max\` value: ${max}. It must be a finite number.`);
+        console.warn(
+          `Invalid \`max\` value: ${max}. It must be a finite number.`
+        );
       }
     }, [max]);
 
@@ -242,7 +252,9 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     const normalizedStep = step === null || step > 0 ? step : 1;
     React.useEffect(() => {
       if (step && step < 0) {
-        console.warn(`Invalid \`step\` value: ${step}. \`step\` cannot be negative.`);
+        console.warn(
+          `Invalid \`step\` value: ${step}. \`step\` cannot be negative.`
+        );
       }
     }, [step]);
 
@@ -267,13 +279,13 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     }, [marks]);
 
     // ============================ Format ============================
-    const [constrainValue, calculateOffsetValues] = useOffset(
+    const { constrainValue, offsetValues: calculateOffsetValues } = useOffset(
       boundedMin,
       boundedMax,
       normalizedStep,
       markList,
       allowCross,
-      mergedPush,
+      mergedPush
     );
 
     // ============================ Values ============================
@@ -282,11 +294,12 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       defaultValue as number[],
       {
         value,
-      },
+      }
     );
 
     const rawValues = React.useMemo(() => {
-      const valueList = mergedValue === null || mergedValue === undefined ? [] : mergedValue;
+      const valueList =
+        mergedValue === null || mergedValue === undefined ? [] : mergedValue;
 
       const [val0 = boundedMin] = valueList;
       let returnValues = mergedValue === null ? [] : [val0];
@@ -302,7 +315,9 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
           // Fill with count
           while (returnValues.length < pointCount) {
-            returnValues.push(returnValues[returnValues.length - 1] ?? boundedMin);
+            returnValues.push(
+              returnValues[returnValues.length - 1] ?? boundedMin
+            );
           }
         }
         returnValues.sort((a, b) => a - b);
@@ -365,8 +380,14 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
       if (!containerRef.current) return;
 
-      const { width, height, left, top, bottom, right } =
-        containerRef.current.getBoundingClientRect();
+      const {
+        width,
+        height,
+        left,
+        top,
+        bottom,
+        right,
+      } = containerRef.current.getBoundingClientRect();
       const { clientX, clientY } = e;
 
       let percent: number;
@@ -393,7 +414,10 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
     // =========================== Keyboard ===========================
 
-    const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
+    const onHandleOffsetChange = (
+      offset: number | 'min' | 'max',
+      valueIndex: number
+    ) => {
       if (disabled) {
         return;
       }
@@ -408,11 +432,13 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     const mergedDraggableTrack = draggableTrack && normalizedStep !== null;
     React.useEffect(() => {
       if (draggableTrack && normalizedStep === null) {
-        console.warn('`draggableTrack` is not supported when `step` is `null`.');
+        console.warn(
+          '`draggableTrack` is not supported when `step` is `null`.'
+        );
       }
     }, [draggableTrack, normalizedStep]);
 
-    const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
+    const { draggingIndex, draggingValue, cacheValues, onStartDrag } = useDrag(
       containerRef,
       direction,
       rawValues,
@@ -420,7 +446,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       boundedMax,
       constrainValue,
       triggerChange,
-      calculateOffsetValues,
+      calculateOffsetValues
     );
 
     const onStartMove: OnStartMove = (e, valueIndex) => {
@@ -439,7 +465,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     // =========================== Included ===========================
     const sortedCacheValues = React.useMemo(
       () => [...cacheValues].sort((a, b) => a - b),
-      [cacheValues],
+      [cacheValues]
     );
 
     // Provide a range values with included [min, max]
@@ -449,7 +475,10 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
         return [boundedMin, sortedCacheValues[0]];
       }
 
-      return [sortedCacheValues[0], sortedCacheValues[sortedCacheValues.length - 1]];
+      return [
+        sortedCacheValues[0],
+        sortedCacheValues[sortedCacheValues.length - 1],
+      ];
     }, [sortedCacheValues, range, boundedMin]);
 
     // ============================= Refs =============================
@@ -503,12 +532,14 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
         >
           <div className={railClassName} />
 
-          <Tracks
-            trackClassName={trackClassName}
-            values={sortedCacheValues}
-            startPoint={startPoint}
-            onStartMove={mergedDraggableTrack ? onStartMove : undefined}
-          />
+          {included && (
+            <Tracks
+              trackClassName={trackClassName}
+              values={sortedCacheValues}
+              startPoint={startPoint}
+              onStartMove={mergedDraggableTrack ? onStartMove : undefined}
+            />
+          )}
 
           <Steps
             marks={markList}
@@ -541,7 +572,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
         </div>
       </SliderContext.Provider>
     );
-  },
+  }
 );
 
 export default Slider;

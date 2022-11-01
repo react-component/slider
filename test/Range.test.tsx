@@ -30,9 +30,11 @@ describe('Range', () => {
     container: HTMLElement,
     start: number,
     end: number,
-    element = 'rc-slider-handle',
+    element = 'rc-slider-handle'
   ) {
-    const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
+    const mouseDown = createEvent.mouseDown(
+      container.getElementsByClassName(element)[0]
+    );
     (mouseDown as any).pageX = start;
     (mouseDown as any).pageY = start;
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
@@ -48,11 +50,14 @@ describe('Range', () => {
     container: HTMLElement,
     start: number,
     end: number,
-    element = 'rc-slider-handle',
+    element = 'rc-slider-handle'
   ) {
-    const touchStart = createEvent.touchStart(container.getElementsByClassName(element)[0], {
-      touches: [{}],
-    });
+    const touchStart = createEvent.touchStart(
+      container.getElementsByClassName(element)[0],
+      {
+        touches: [{}],
+      }
+    );
     ((touchStart as TouchEvent).touches[0] as any).pageX = start;
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
@@ -80,7 +85,7 @@ describe('Range', () => {
           'rc-slider-handle rc-slider-handle-3',
           'rc-slider-handle rc-slider-handle-4',
         ]}
-      />,
+      />
     );
     expect(asFragment().firstChild).toMatchSnapshot();
   });
@@ -103,7 +108,7 @@ describe('Range', () => {
           'rc-slider-handle rc-slider-handle-3',
           'rc-slider-handle rc-slider-handle-4',
         ]}
-      />,
+      />
     );
     expect(asFragment().firstChild).toMatchSnapshot();
   });
@@ -124,14 +129,18 @@ describe('Range', () => {
           'rc-slider-handle rc-slider-handle-3',
           'rc-slider-handle rc-slider-handle-4',
         ]}
-      />,
+      />
     );
 
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('left: 0%');
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('left: 50%');
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      'left: 0%'
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle(
+      'left: 50%'
+    );
 
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle(
-      'left: 0%; width: 50%',
+      'left: 0%; width: 50%'
     );
   });
 
@@ -146,14 +155,18 @@ describe('Range', () => {
           'rc-slider-track rc-slider-track-2',
           'rc-slider-track rc-slider-track-3',
         ]}
-      />,
+      />
     );
 
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('right: 0%');
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('right: 50%');
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      'right: 0%'
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle(
+      'right: 50%'
+    );
 
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle(
-      'right: 0%; width: 50%',
+      'right: 0%; width: 50%'
     );
   });
 
@@ -168,17 +181,15 @@ describe('Range', () => {
           'rc-slider-track rc-slider-track-2',
           'rc-slider-track rc-slider-track-3',
         ]}
-      />,
+      />
     );
 
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'tabIndex',
-      '1',
-    );
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
-      'tabIndex',
-      '2',
-    );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('tabIndex', '1');
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[1]
+    ).toHaveAttribute('tabIndex', '2');
   });
 
   it('should render Range without tabIndex (equal null) correctly', () => {
@@ -192,10 +203,14 @@ describe('Range', () => {
           'rc-slider-track rc-slider-track-2',
           'rc-slider-track rc-slider-track-3',
         ]}
-      />,
+      />
     );
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).not.toHaveAttribute('tabIndex');
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).not.toHaveAttribute('tabIndex');
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[1]
+    ).not.toHaveAttribute('tabIndex');
   });
 
   it('should render Multi-Range with value correctly', () => {
@@ -209,40 +224,58 @@ describe('Range', () => {
           'rc-slider-track rc-slider-track-2',
           'rc-slider-track rc-slider-track-3',
         ]}
-      />,
+      />
     );
 
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('left: 0%');
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('left: 25%');
-    expect(container.getElementsByClassName('rc-slider-handle')[2]).toHaveStyle('left: 50%');
-    expect(container.getElementsByClassName('rc-slider-handle')[3]).toHaveStyle('left: 75%');
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      'left: 0%'
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle(
+      'left: 25%'
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[2]).toHaveStyle(
+      'left: 50%'
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[3]).toHaveStyle(
+      'left: 75%'
+    );
 
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle(
-      'left: 0%; width: 25%',
+      'left: 0%; width: 25%'
     );
 
     expect(container.getElementsByClassName('rc-slider-track')[1]).toHaveStyle(
-      'left: 25%; width: 25%',
+      'left: 25%; width: 25%'
     );
 
     expect(container.getElementsByClassName('rc-slider-track')[2]).toHaveStyle(
-      'left: 50%; width: 25%',
+      'left: 50%; width: 25%'
     );
   });
 
   it('should update Range correctly in controlled model', () => {
     const { container, rerender } = render(<Range range value={[2, 4, 6]} />);
-    expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(3);
+    expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(
+      3
+    );
 
     rerender(<Range range value={[2, 4]} />);
-    expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(2);
+    expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(
+      2
+    );
   });
 
   // FIXME No state handling
   it('should keep pushable when not allowCross', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Range range allowCross={false} onChange={onChange} value={[30, 40]} pushable={10} />,
+      <Range
+        range
+        allowCross={false}
+        onChange={onChange}
+        value={[30, 40]}
+        pushable={10}
+      />
     );
 
     onChange.mockReset();
@@ -266,38 +299,50 @@ describe('Range', () => {
           'rc-slider-track rc-slider-track-2',
           'rc-slider-track rc-slider-track-3',
         ]}
-      />,
+      />
     );
 
     // Left to Right
     for (let i = 0; i < 99; i += 1) {
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-        keyCode: 'ArrowUp',
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[0],
+        {
+          keyCode: 'ArrowUp',
+        }
+      );
     }
     expect(onChange).toHaveBeenCalledWith([80, 90, 100]);
 
     // Center to Left
     for (let i = 0; i < 99; i += 1) {
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
-        keyCode: 'ArrowDown',
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[1],
+        {
+          keyCode: 'ArrowDown',
+        }
+      );
     }
     expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
 
     // Right to Right
     for (let i = 0; i < 99; i += 1) {
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[2], {
-        keyCode: 'ArrowDown',
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[2],
+        {
+          keyCode: 'ArrowDown',
+        }
+      );
     }
     expect(onChange).toHaveBeenCalledWith([0, 10, 20]);
 
     // Center to Right
     for (let i = 0; i < 99; i += 1) {
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
-        keyCode: 'ArrowUp',
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[1],
+        {
+          keyCode: 'ArrowUp',
+        }
+      );
     }
     expect(onChange).toHaveBeenCalledWith([0, 90, 100]);
   });
@@ -316,7 +361,7 @@ describe('Range', () => {
               'rc-slider-track rc-slider-track-2',
               'rc-slider-track rc-slider-track-3',
             ]}
-          />,
+          />
         );
 
         // Do move
@@ -331,12 +376,16 @@ describe('Range', () => {
     // testLTR("mouse", (container: HTMLElement) =>
     //   doMouseMove(container, 0, 9999)
     // );
-    testLTR('touch', (container: HTMLElement) => doTouchMove(container, 0, 9999));
+    testLTR('touch', (container: HTMLElement) =>
+      doTouchMove(container, 0, 9999)
+    );
 
     // FIXME: ?
     it('reverse', () => {
       const onChange = jest.fn();
-      const { container } = render(<Range onChange={onChange} value={[20, 40]} reverse />);
+      const { container } = render(
+        <Range onChange={onChange} value={[20, 40]} reverse />
+      );
 
       // Do move
       doMouseMove(container, 0, -10);
@@ -347,7 +396,9 @@ describe('Range', () => {
     // FIXME: ?
     it('vertical', () => {
       const onChange = jest.fn();
-      const { container } = render(<Range range onChange={onChange} value={[20, 40]} vertical />);
+      const { container } = render(
+        <Range range onChange={onChange} value={[20, 40]} vertical />
+      );
 
       // Do move
       doMouseMove(container, 0, -10);
@@ -359,7 +410,7 @@ describe('Range', () => {
     it('vertical & reverse', () => {
       const onChange = jest.fn();
       const { container } = render(
-        <Range range onChange={onChange} value={[20, 40]} vertical reverse />,
+        <Range range onChange={onChange} value={[20, 40]} vertical reverse />
       );
 
       // Do move
@@ -395,7 +446,9 @@ describe('Range', () => {
         const { container, unmount } = render(<Demo />);
 
         // Do move
-        func(container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement);
+        func(
+          container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+        );
 
         expect(onChange).toHaveBeenCalledWith([39, 40]);
 
@@ -415,7 +468,9 @@ describe('Range', () => {
 
         let container: any, unmount: any;
         act(() => {
-          const u = render(<Range range value={[0, 30]} draggableTrack onChange={onChange} />);
+          const u = render(
+            <Range range value={[0, 30]} draggableTrack onChange={onChange} />
+          );
           container = u.container;
           unmount = u.unmount;
         });
@@ -428,36 +483,42 @@ describe('Range', () => {
       });
     }
 
-    test('mouse', (container: HTMLElement) => doMouseMove(container, 0, 20, 'rc-slider-track'));
-    test('touch', (container: HTMLElement) => doTouchMove(container, 0, 20, 'rc-slider-track'));
+    test('mouse', (container: HTMLElement) =>
+      doMouseMove(container, 0, 20, 'rc-slider-track'));
+    test('touch', (container: HTMLElement) =>
+      doTouchMove(container, 0, 20, 'rc-slider-track'));
   });
 
   it('sets aria-label on the handles', () => {
     const { container } = render(
-      <Range range value={[0, 0]} ariaLabelForHandle={['Some Label', 'Some other Label']} />,
+      <Range
+        range
+        value={[0, 0]}
+        ariaLabelForHandle={['Some Label', 'Some other Label']}
+      />
     );
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'aria-label',
-      'Some Label',
-    );
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
-      'aria-label',
-      'Some other Label',
-    );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('aria-label', 'Some Label');
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[1]
+    ).toHaveAttribute('aria-label', 'Some other Label');
   });
 
   it('sets aria-labelledby on the handles', () => {
     const { container } = render(
-      <Range range value={[0, 0]} ariaLabelledByForHandle={['some_id', 'some_other_id']} />,
+      <Range
+        range
+        value={[0, 0]}
+        ariaLabelledByForHandle={['some_id', 'some_other_id']}
+      />
     );
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'aria-labelledby',
-      'some_id',
-    );
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
-      'aria-labelledby',
-      'some_other_id',
-    );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('aria-labelledby', 'some_id');
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[1]
+    ).toHaveAttribute('aria-labelledby', 'some_other_id');
   });
 
   it('sets aria-valuetext on the handles', () => {
@@ -471,16 +532,14 @@ describe('Range', () => {
           (value) => `${value} of something`,
           (value) => `${value} of something else`,
         ]}
-      />,
+      />
     );
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'aria-valuetext',
-      '1 of something',
-    );
-    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
-      'aria-valuetext',
-      '3 of something else',
-    );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('aria-valuetext', '1 of something');
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[1]
+    ).toHaveAttribute('aria-valuetext', '3 of something else');
   });
 
   // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
@@ -498,16 +557,25 @@ describe('Range', () => {
       step: null,
     };
 
-    const { container, rerender } = render(<Range {...props} range value={[0, 25, 50, 75, 100]} />);
+    const { container, rerender } = render(
+      <Range {...props} range value={[0, 25, 50, 75, 100]} />
+    );
 
     const verifyHandles = (values: number[]) => {
       // Has the number of handles that we set.
-      expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(values.length);
+      expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(
+        values.length
+      );
 
       // Handles have the values that we set.
-      Array.from(container.getElementsByClassName('rc-slider-handle')).forEach((ele, index) => {
-        expect(ele).toHaveAttribute('aria-valuenow', values[index].toString());
-      });
+      Array.from(container.getElementsByClassName('rc-slider-handle')).forEach(
+        (ele, index) => {
+          expect(ele).toHaveAttribute(
+            'aria-valuenow',
+            values[index].toString()
+          );
+        }
+      );
     };
 
     // Assert that handles are correct initially.
@@ -526,19 +594,25 @@ describe('Range', () => {
     it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(
-        <Range range value={[0, 0]} min={0} max={20} onFocus={handleFocus} />,
+        <Range range value={[0, 0]} min={0} max={20} onFocus={handleFocus} />
       );
-      (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).focus();
+      (container.getElementsByClassName(
+        'rc-slider-handle'
+      )[0] as HTMLElement).focus();
       expect(handleFocus).toBeCalled();
     });
 
     it('blur', () => {
       const handleBlur = jest.fn();
       const { container } = render(
-        <Range range value={[0, 0]} min={0} max={20} onBlur={handleBlur} />,
+        <Range range value={[0, 0]} min={0} max={20} onBlur={handleBlur} />
       );
-      (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).focus();
-      (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).blur();
+      (container.getElementsByClassName(
+        'rc-slider-handle'
+      )[0] as HTMLElement).focus();
+      (container.getElementsByClassName(
+        'rc-slider-handle'
+      )[0] as HTMLElement).blur();
       expect(handleBlur).toBeCalled();
     });
   });
@@ -549,7 +623,7 @@ describe('Range', () => {
     render(<Range range value={[0, 0]} draggableTrack step={null} />);
 
     expect(errorSpy).toHaveBeenCalledWith(
-      '`draggableTrack` is not supported when `step` is `null`.',
+      '`draggableTrack` is not supported when `step` is `null`.'
     );
     errorSpy.mockRestore();
   });

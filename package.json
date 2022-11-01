@@ -20,71 +20,78 @@
   },
   "license": "MIT",
   "author": "Guillermo O. Freschi",
-  "main": "./lib/index",
-  "module": "./es/index",
-  "types": "./lib/index.d.ts",
-  "style": "./assets/index.css",
-  "directories": {
-    "doc": "docs",
-    "test": "tests"
-  },
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "files": [
-    "assets/*.css",
-    "lib",
-    "es",
-    "dist"
+    "dist",
+    "src"
   ],
   "scripts": {
-    "compile": "father build && lessc assets/index.less assets/index.css",
-    "coverage": "father test --coverage",
-    "docs:build": "dumi build",
-    "docs:deploy": "gh-pages -d .doc",
-    "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
-    "now-build": "npm run docs:build",
-    "prepublishOnly": "npm run compile && np --yolo --no-publish",
-    "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "start": "dumi dev",
-    "test": "father test"
-  },
-  "dependencies": {
-    "@babel/runtime": "^7.10.1",
-    "clsx": "^1.2.1",
-    "rc-util": "^5.18.1",
-    "shallowequal": "^1.1.0"
-  },
-  "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.2",
-    "@testing-library/react": "^12.1.3",
-    "@types/classnames": "^2.2.9",
-    "@types/jest": "^26.0.0",
-    "@types/react": "^16.9.2",
-    "@types/react-dom": "^16.9.0",
-    "@types/shallowequal": "^1.1.1",
-    "@umijs/fabric": "^2.0.0",
-    "cross-env": "^7.0.0",
-    "dumi": "^1.1.7",
-    "enzyme": "^3.1.0",
-    "enzyme-adapter-react-16": "^1.0.1",
-    "enzyme-to-json": "^3.1.2",
-    "eslint": "^7.1.0",
-    "father": "^2.22.0",
-    "father-build": "^1.18.6",
-    "gh-pages": "^3.1.0",
-    "glob": "^7.1.6",
-    "less": "^3.10.3",
-    "np": "^7.0.0",
-    "rc-tooltip": "^5.0.1",
-    "rc-trigger": "^5.0.4",
-    "react": "^16.0.0",
-    "react-dom": "^16.0.0",
-    "regenerator-runtime": "^0.13.9",
-    "typescript": "^4.0.5"
+    "start": "tsdx watch",
+    "build": "tsdx build",
+    "test": "tsdx test --passWithNoTests",
+    "lint": "tsdx lint",
+    "lint:fix": "tsdx lint --fix",
+    "prepare": "tsdx build",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "peerDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "react": ">=16"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint"
+    }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "arrowParens": "always",
+    "trailingComma": "es5"
+  },
+  "module": "dist/rc-slider.esm.js",
+  "size-limit": [
+    {
+      "path": "dist/rc-slider.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/rc-slider.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.19.6",
+    "@size-limit/preset-small-lib": "^8.1.0",
+    "@storybook/addon-essentials": "^6.5.13",
+    "@storybook/addon-info": "^5.3.21",
+    "@storybook/addon-links": "^6.5.13",
+    "@storybook/addons": "^6.5.13",
+    "@storybook/react": "^6.5.13",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@types/react": "^18.0.24",
+    "@types/react-dom": "^18.0.8",
+    "@types/shallowequal": "^1.1.1",
+    "babel-loader": "^9.0.1",
+    "clsx": "^1.2.1",
+    "husky": "^8.0.1",
+    "rc-tooltip": "^5.2.2",
+    "rc-util": "^5.24.4",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-is": "^18.2.0",
+    "shallowequal": "^1.1.0",
+    "size-limit": "^8.1.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.4.1",
+    "typescript": "^4.8.4"
   },
   "engines": {
-    "node": ">=8.x"
+    "node": ">=10"
   }
 }

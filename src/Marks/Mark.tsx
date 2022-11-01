@@ -14,8 +14,14 @@ export interface MarkProps {
 
 export default function Mark(props: MarkProps) {
   const { style, children, value, onClick, className, activeClassName } = props;
-  const { min, max, direction, includedStart, includedEnd, included } =
-    React.useContext(SliderContext);
+  const {
+    min,
+    max,
+    direction,
+    includedStart,
+    includedEnd,
+    included,
+  } = React.useContext(SliderContext);
 
   // ============================ Offset ============================
   const positionStyle = getPositionStyle(direction, value, min, max);
@@ -24,7 +30,10 @@ export default function Mark(props: MarkProps) {
     <span
       className={clsx(
         className,
-        included && includedStart <= value && value <= includedEnd && activeClassName,
+        included &&
+          includedStart <= value &&
+          value <= includedEnd &&
+          activeClassName
       )}
       style={{
         ...positionStyle,

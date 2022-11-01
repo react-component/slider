@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import 'rc-tooltip/assets/bootstrap.css';
 import raf from 'rc-util/lib/raf';
 import Tooltip from 'rc-tooltip';
-import type { RangeProps } from '../Range';
+import { RangeProps } from '../Range';
 import Slider from '../Range';
 
 const HandleTooltip = ({

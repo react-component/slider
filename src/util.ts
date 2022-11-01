@@ -1,10 +1,15 @@
-import type { Direction } from './interface';
+import { Direction } from './interface';
 
 export function getOffset(value: number, min: number, max: number) {
   return (value - min) / (max - min);
 }
 
-export function getPositionStyle(direction: Direction, value: number, min: number, max: number) {
+export function getPositionStyle(
+  direction: Direction,
+  value: number,
+  min: number,
+  max: number
+) {
   const offset = getOffset(value, min, max);
 
   const positionStyle: React.CSSProperties = {};

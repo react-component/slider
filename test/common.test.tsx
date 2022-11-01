@@ -17,20 +17,34 @@ describe('Common', () => {
 
   it('should render vertical Slider/Range, when `vertical` is true', () => {
     const { container: container1 } = render(<Slider value={0} vertical />);
-    expect(container1.getElementsByClassName('rc-slider-vertical')).toHaveLength(1);
+    expect(
+      container1.getElementsByClassName('rc-slider-vertical')
+    ).toHaveLength(1);
 
-    const { container: container2 } = render(<Range value={[0, 0]} range vertical />);
-    expect(container2.getElementsByClassName('rc-slider-vertical')).toHaveLength(1);
+    const { container: container2 } = render(
+      <Range value={[0, 0]} range vertical />
+    );
+    expect(
+      container2.getElementsByClassName('rc-slider-vertical')
+    ).toHaveLength(1);
   });
 
   it('should render dots correctly when `dots=true`', () => {
-    const { container: container1 } = render(<Slider value={50} step={10} dots />);
+    const { container: container1 } = render(
+      <Slider value={50} step={10} dots />
+    );
     expect(container1.getElementsByClassName('rc-slider-dot')).toHaveLength(11);
-    expect(container1.getElementsByClassName('rc-slider-dot-active')).toHaveLength(6);
+    expect(
+      container1.getElementsByClassName('rc-slider-dot-active')
+    ).toHaveLength(6);
 
-    const { container: container2 } = render(<Range value={[20, 50]} step={10} dots />);
+    const { container: container2 } = render(
+      <Range value={[20, 50]} step={10} dots />
+    );
     expect(container2.getElementsByClassName('rc-slider-dot')).toHaveLength(11);
-    expect(container2.getElementsByClassName('rc-slider-dot-active')).toHaveLength(4);
+    expect(
+      container2.getElementsByClassName('rc-slider-dot-active')
+    ).toHaveLength(4);
   });
 
   it('should render normally when `dots=true` and `step=null`', () => {
@@ -41,58 +55,80 @@ describe('Common', () => {
   it('should not set value greater than `max` or smaller `min`', () => {
     const { container: container1 } = render(<Slider value={0} min={10} />);
     expect(
-      container1.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container1
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('10');
 
     const { container: container2 } = render(<Slider value={100} max={90} />);
     expect(
-      container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container2
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('90');
 
-    const { container: container3 } = render(<Range value={[0, 100]} min={10} max={90} />);
+    const { container: container3 } = render(
+      <Range value={[0, 100]} min={10} max={90} />
+    );
     expect(
-      container3.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container3
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('10');
     expect(
-      container3.getElementsByClassName('rc-slider-handle')[1].getAttribute('aria-valuenow'),
+      container3
+        .getElementsByClassName('rc-slider-handle')[1]
+        .getAttribute('aria-valuenow')
     ).toBe('90');
   });
 
   it('should not set values when sending invalid numbers', () => {
     const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
 
-    const { container: container1 } = render(<Slider value={0} min={Math.min()} />);
+    const { container: container1 } = render(
+      <Slider value={0} min={Math.min()} />
+    );
     expect(
-      container1.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container1
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('0');
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `min` value: Infinity. It must be a finite number.',
+      'Invalid `min` value: Infinity. It must be a finite number.'
     );
     errorSpy.mockReset();
 
-    const { container: container2 } = render(<Slider value={100} max={Math.max()} />);
+    const { container: container2 } = render(
+      <Slider value={100} max={Math.max()} />
+    );
     expect(
-      container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container2
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('100');
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `max` value: -Infinity. It must be a finite number.',
+      'Invalid `max` value: -Infinity. It must be a finite number.'
     );
     errorSpy.mockReset();
 
     const { container: container3 } = render(
-      <Range value={[0, 100]} min={Math.min()} max={Math.max()} />,
+      <Range value={[0, 100]} min={Math.min()} max={Math.max()} />
     );
     expect(
-      container3.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container3
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('0');
     expect(
-      container3.getElementsByClassName('rc-slider-handle')[1].getAttribute('aria-valuenow'),
+      container3
+        .getElementsByClassName('rc-slider-handle')[1]
+        .getAttribute('aria-valuenow')
     ).toBe('100');
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `max` value: -Infinity. It must be a finite number.',
+      'Invalid `max` value: -Infinity. It must be a finite number.'
     );
     expect(errorSpy).toHaveBeenCalledWith(
-      'Invalid `min` value: Infinity. It must be a finite number.',
+      'Invalid `min` value: Infinity. It must be a finite number.'
     );
     errorSpy.mockReset();
   });
@@ -100,44 +136,54 @@ describe('Common', () => {
   it('should update value when it is out of range', () => {
     const sliderOnChange = jest.fn();
     const { container: container1, rerender: rerender1 } = render(
-      <Slider value={0} onChange={sliderOnChange} />,
+      <Slider value={0} onChange={sliderOnChange} />
     );
     rerender1(<Slider value={0} onChange={sliderOnChange} min={10} />);
     expect(
-      container1.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container1
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('10');
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Range value={[0, 0]} onChange={rangeOnChange} />,
+      <Range value={[0, 0]} onChange={rangeOnChange} />
     );
     rerender2(<Range value={[0, 0]} onChange={rangeOnChange} min={10} />);
     expect(
-      container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container2
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('10');
   });
 
   it('should not trigger onChange when no min and max', () => {
     const sliderOnChange = jest.fn();
     const { container: container1, rerender: rerender1 } = render(
-      <Slider value={0} onChange={sliderOnChange} />,
+      <Slider value={0} onChange={sliderOnChange} />
     );
     rerender1(<Slider onChange={sliderOnChange} value={100} />);
     expect(
-      container1.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container1
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('100');
     expect(sliderOnChange).not.toHaveBeenCalled();
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Range value={[]} onChange={rangeOnChange} />,
+      <Range value={[]} onChange={rangeOnChange} />
     );
     rerender2(<Range onChange={rangeOnChange} value={[0, 200]} />);
     expect(
-      container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container2
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('0');
     expect(
-      container2.getElementsByClassName('rc-slider-handle')[1].getAttribute('aria-valuenow'),
+      container2
+        .getElementsByClassName('rc-slider-handle')[1]
+        .getAttribute('aria-valuenow')
     ).toBe('100');
     expect(rangeOnChange).not.toHaveBeenCalled();
   });
@@ -145,24 +191,30 @@ describe('Common', () => {
   it('should not trigger onChange when value is out of range', () => {
     const sliderOnChange = jest.fn();
     const { container: container1, rerender: rerender1 } = render(
-      <Slider value={9} max={10} onChange={sliderOnChange} />,
+      <Slider value={9} max={10} onChange={sliderOnChange} />
     );
     rerender1(<Slider value={11} max={10} onChange={sliderOnChange} />);
     expect(
-      container1.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container1
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('10');
     expect(sliderOnChange).not.toHaveBeenCalled();
 
     const rangeOnChange = jest.fn();
     const { container: container2, rerender: rerender2 } = render(
-      <Range value={[0, 10]} max={10} onChange={rangeOnChange} />,
+      <Range value={[0, 10]} max={10} onChange={rangeOnChange} />
     );
     rerender2(<Range max={10} onChange={rangeOnChange} value={[0, 100]} />);
     expect(
-      container2.getElementsByClassName('rc-slider-handle')[0].getAttribute('aria-valuenow'),
+      container2
+        .getElementsByClassName('rc-slider-handle')[0]
+        .getAttribute('aria-valuenow')
     ).toBe('0');
     expect(
-      container2.getElementsByClassName('rc-slider-handle')[1].getAttribute('aria-valuenow'),
+      container2
+        .getElementsByClassName('rc-slider-handle')[1]
+        .getAttribute('aria-valuenow')
     ).toBe('10');
     expect(rangeOnChange).not.toHaveBeenCalled();
   });
@@ -170,13 +222,17 @@ describe('Common', () => {
   it('should not call onChange when value is the same', () => {
     const handler = jest.fn();
 
-    const { container: container1 } = render(<Slider value={0} onChange={handler} />);
+    const { container: container1 } = render(
+      <Slider value={0} onChange={handler} />
+    );
     const handle1 = container1.getElementsByClassName('rc-slider-handle')[0];
     fireEvent.mouseDown(handle1);
     fireEvent.mouseMove(handle1);
     fireEvent.mouseUp(handle1);
 
-    const { container: container2 } = render(<Range value={[0, 100]} onChange={handler} />);
+    const { container: container2 } = render(
+      <Range value={[0, 100]} onChange={handler} />
+    );
     const handle2 = container2.getElementsByClassName('rc-slider-handle')[1];
     fireEvent.mouseDown(handle2);
     fireEvent.mouseMove(handle2);
@@ -192,17 +248,15 @@ describe('Common', () => {
     const mouseDown = createEvent.mouseDown(leftHandle);
     (mouseDown as any).pageX = 5;
 
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'aria-valuenow',
-      '0',
-    );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('aria-valuenow', '0');
 
     const mouseMove = createEvent.mouseMove(leftHandle);
     (mouseMove as any).pageX = 0;
 
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'aria-valuenow',
-      '0',
-    );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('aria-valuenow', '0');
   });
 });

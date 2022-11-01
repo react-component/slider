@@ -1,19 +1,19 @@
 import React from 'react';
 import SliderContext from '../context';
 import Track from './Track';
-import type { OnStartMove } from '../interface';
+import { OnStartMove } from '../interface';
 import { getIndex } from '../util';
 
 export interface TrackProps {
   trackClassName: string | string[];
   values: number[];
   onStartMove?: OnStartMove;
-  startPoint?: number;
+  startPoint: number;
 }
 
 export default function Tracks(props: TrackProps) {
   const { trackClassName, values, startPoint, onStartMove } = props;
-  const { included, range, min } = React.useContext(SliderContext);
+  const { range } = React.useContext(SliderContext);
 
   const trackList = React.useMemo(() => {
     if (!range) {
@@ -22,7 +22,7 @@ export default function Tracks(props: TrackProps) {
         return [];
       }
 
-      const startValue = startPoint ?? min;
+      const startValue = startPoint;
       const endValue = values[0];
 
       return [
@@ -44,10 +44,11 @@ export default function Tracks(props: TrackProps) {
     }
 
     return list;
-  }, [values, range, startPoint, min]);
+  }, [values, range, startPoint]);
 
-  return (included
-    ? trackList.map(({ start, end }, index) => (
+  return (
+    <>
+      {trackList.map(({ start, end }, index) => (
         <Track
           className={getIndex(trackClassName, index)}
           start={start}
@@ -55,6 +56,7 @@ export default function Tracks(props: TrackProps) {
           key={index}
           onStartMove={onStartMove}
         />
-      ))
-    : null) as unknown as React.ReactElement;
+      ))}
+    </>
+  );
 }

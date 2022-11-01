@@ -15,7 +15,13 @@ export interface MarksProps {
 }
 
 export default function Marks(props: MarksProps) {
-  const { className, markClassName, activeMarkClassName, marks, onClick } = props;
+  const {
+    className,
+    markClassName,
+    activeMarkClassName,
+    marks,
+    onClick,
+  } = props;
 
   // Not render mark if empty
   if (!marks?.length) {

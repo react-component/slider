@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import SliderContext from '../context';
 import { getPositionStyle, getIndex } from '../util';
-import type { OnStartMove } from '../interface';
+import { OnStartMove } from '../interface';
 
 interface RenderProps {
   index: number;
@@ -20,7 +20,10 @@ export interface HandleProps {
   onOffsetChange: (offset: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
+  render?: (
+    origin: React.ReactElement<HandleProps>,
+    props: RenderProps
+  ) => React.ReactElement;
 }
 
 const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
@@ -36,7 +39,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
       onOffsetChange,
       ...restProps
     },
-    ref,
+    ref
   ) => {
     const {
       min,
@@ -116,7 +119,9 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
         onMouseDown={onInternalStartMove}
         onTouchStart={onInternalStartMove}
         onKeyDown={onKeyDown}
-        tabIndex={disabled ? undefined : getIndex(tabIndex, valueIndex) ?? undefined}
+        tabIndex={
+          disabled ? undefined : getIndex(tabIndex, valueIndex) ?? undefined
+        }
         role="slider"
         aria-valuemin={min}
         aria-valuemax={max}
@@ -124,7 +129,10 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
         aria-disabled={disabled}
         aria-label={getIndex(ariaLabelForHandle, valueIndex)}
         aria-labelledby={getIndex(ariaLabelledByForHandle, valueIndex)}
-        aria-valuetext={getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value)}
+        aria-valuetext={getIndex(
+          ariaValueTextFormatterForHandle,
+          valueIndex
+        )?.(value)}
         {...restProps}
       />
     );
@@ -139,7 +147,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>(
     }
 
     return handleNode;
-  },
+  }
 );
 
 if (process.env.NODE_ENV !== 'production') {

@@ -1,8 +1,8 @@
 import React from 'react';
 import Handle from './Handle';
-import type { HandleProps } from './Handle';
+import { HandleProps } from './Handle';
 import { getIndex } from '../util';
-import type { OnStartMove } from '../interface';
+import { OnStartMove } from '../interface';
 
 export interface HandlesProps {
   values: number[];
@@ -65,9 +65,5 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
     </React.Fragment>
   );
 });
-
-if (process.env.NODE_ENV !== 'production') {
-  Handles.displayName = 'Handles';
-}
 
 export default Handles;

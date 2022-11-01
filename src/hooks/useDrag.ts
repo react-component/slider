@@ -1,14 +1,16 @@
 import React from 'react';
-import type { Direction, OnStartMove } from '../interface';
-import type { OffsetValues } from './useOffset';
+import { Direction, OnStartMove } from '../interface';
+import { OffsetValues } from './useOffset';
 
-function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) {
+function getPosition(
+  e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent
+) {
   const obj = 'touches' in e ? e.touches[0] : e;
 
   return { pageX: obj.pageX, pageY: obj.pageY };
 }
 
-export default function useDrag(
+const useDrag = (
   containerRef: React.RefObject<HTMLDivElement>,
   direction: Direction,
   rawValues: number[],
@@ -16,15 +18,24 @@ export default function useDrag(
   max: number,
   formatValue: (value: number) => number,
   triggerChange: (values: number[]) => void,
-  offsetValues: OffsetValues,
-): [number, number, number[], OnStartMove] {
+  offsetValues: OffsetValues
+): {
+  draggingIndex: number;
+  draggingValue: number;
+  cacheValues: number[];
+  onStartDrag: OnStartMove;
+} => {
   const [draggingValue, setDraggingValue] = React.useState<number | null>(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
   const [originValues, setOriginValues] = React.useState(rawValues);
 
-  const mouseMoveEventRef = React.useRef<null | ((event: MouseEvent | TouchEvent) => void)>(null);
-  const mouseUpEventRef = React.useRef<null | ((event: MouseEvent | TouchEvent) => void)>(null);
+  const mouseMoveEventRef = React.useRef<
+    null | ((event: MouseEvent | TouchEvent) => void)
+  >(null);
+  const mouseUpEventRef = React.useRef<
+    null | ((event: MouseEvent | TouchEvent) => void)
+  >(null);
 
   React.useEffect(() => {
     if (draggingIndex === -1) {
@@ -37,13 +48,14 @@ export default function useDrag(
     () => () => {
       if (mouseMoveEventRef.current)
         document.removeEventListener('mousemove', mouseMoveEventRef.current);
-      if (mouseUpEventRef.current) document.removeEventListener('mouseup', mouseUpEventRef.current);
+      if (mouseUpEventRef.current)
+        document.removeEventListener('mouseup', mouseUpEventRef.current);
       if (mouseMoveEventRef.current)
         document.removeEventListener('touchmove', mouseMoveEventRef.current);
       if (mouseUpEventRef.current)
         document.removeEventListener('touchend', mouseUpEventRef.current);
     },
-    [],
+    []
   );
 
   const flushValues = (nextValues: number[], nextValue?: number) => {
@@ -170,5 +182,12 @@ export default function useDrag(
       : rawValues;
   }, [rawValues, cacheValues]);
 
-  return [draggingIndex, draggingValue!, returnValues, onStartMove];
-}
+  return {
+    draggingIndex,
+    draggingValue: draggingValue!,
+    cacheValues: returnValues,
+    onStartDrag: onStartMove,
+  };
+};
+
+export default useDrag;

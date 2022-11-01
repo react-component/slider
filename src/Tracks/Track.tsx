@@ -1,7 +1,7 @@
 import React from 'react';
 import SliderContext from '../context';
 import { getOffset } from '../util';
-import type { OnStartMove } from '../interface';
+import { OnStartMove } from '../interface';
 
 export interface TrackProps {
   className: string;

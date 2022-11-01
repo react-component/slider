@@ -4,9 +4,8 @@ import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
-import type { RangeRef } from '../src/Range';
 import Slider from '../src/Slider';
-import Range from '../src/Range';
+import Range, { RangeRef } from '../src/Range';
 
 describe('Slider', () => {
   beforeAll(() => {
@@ -29,7 +28,9 @@ describe('Slider', () => {
 
   it('should render Slider with value correctly', () => {
     const { container } = render(<Slider value={50} />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle({ left: '50%' });
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveStyle({ left: '50%' });
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       left: '0%',
       width: '50%',
@@ -38,7 +39,9 @@ describe('Slider', () => {
 
   it('should render Slider correctly where value > startPoint', () => {
     const { container } = render(<Slider value={50} startPoint={20} />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle({ left: '50%' });
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveStyle({ left: '50%' });
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       left: '20%',
       width: '30%',
@@ -47,7 +50,9 @@ describe('Slider', () => {
 
   it('should render Slider correctly where value < startPoint', () => {
     const { container } = render(<Slider value={40} startPoint={60} />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle({ left: '40%' });
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveStyle({ left: '40%' });
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       left: '40%',
       width: '20%',
@@ -56,7 +61,9 @@ describe('Slider', () => {
 
   it('should render reverse Slider with value correctly', () => {
     const { container } = render(<Slider value={50} reverse />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle({ right: '50%' });
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveStyle({ right: '50%' });
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       right: '0%',
       width: '50%',
@@ -65,7 +72,9 @@ describe('Slider', () => {
 
   it('should render reverse Slider correctly where value > startPoint', () => {
     const { container } = render(<Slider value={50} startPoint={20} reverse />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle({ right: '50%' });
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveStyle({ right: '50%' });
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       right: '20%',
       width: '30%',
@@ -74,7 +83,9 @@ describe('Slider', () => {
 
   it('should render reverse Slider correctly where value < startPoint', () => {
     const { container } = render(<Slider value={30} startPoint={50} reverse />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle({ right: '30%' });
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveStyle({ right: '30%' });
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       right: '30%',
       width: '20%',
@@ -83,8 +94,12 @@ describe('Slider', () => {
 
   it('should render reverse Slider with marks correctly', () => {
     const marks = { 5: '5', 6: '6', 7: '7', 8: '8', 9: '9', 10: '10' };
-    const { container } = render(<Slider value={0} marks={marks} min={5} max={10} reverse />);
-    expect(container.getElementsByClassName('rc-slider-mark-text')[0]).toHaveStyle({ right: '0%' });
+    const { container } = render(
+      <Slider value={0} marks={marks} min={5} max={10} reverse />
+    );
+    expect(
+      container.getElementsByClassName('rc-slider-mark-text')[0]
+    ).toHaveStyle({ right: '0%' });
   });
 
   it('should render Slider without handle if value is null', () => {
@@ -94,10 +109,9 @@ describe('Slider', () => {
 
   it('should allow tabIndex to be set on Handle via Slider', () => {
     const { container } = render(<Slider value={0} tabIndex={1} />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'tabIndex',
-      '1',
-    );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('tabIndex', '1');
   });
 
   it('increases the value when key "up" is pressed', () => {
@@ -113,7 +127,9 @@ describe('Slider', () => {
 
   it('decreases the value for reverse-vertical when key "up" is pressed', () => {
     const onChange = jest.fn();
-    const { container } = render(<Slider value={50} onChange={onChange} reverse vertical />);
+    const { container } = render(
+      <Slider value={50} onChange={onChange} reverse vertical />
+    );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.UP,
@@ -135,7 +151,9 @@ describe('Slider', () => {
 
   it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
     const onChange = jest.fn();
-    const { container } = render(<Slider value={50} reverse onChange={onChange} />);
+    const { container } = render(
+      <Slider value={50} reverse onChange={onChange} />
+    );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.RIGHT,
@@ -179,7 +197,9 @@ describe('Slider', () => {
 
   it('it should work fine when arrow key is pressed', () => {
     const onChange = jest.fn();
-    const { container } = render(<Range value={[20, 50]} onChange={onChange} />);
+    const { container } = render(
+      <Range value={[20, 50]} onChange={onChange} />
+    );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.LEFT,
@@ -245,11 +265,14 @@ describe('Slider', () => {
           marks={{ 20: 20, 40: 40, 100: 100 }}
           step={null}
           onChange={onChange}
-        />,
+        />
       );
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-        keyCode: keyCode.UP,
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[0],
+        {
+          keyCode: keyCode.UP,
+        }
+      );
       expect(onChange).toHaveBeenCalledWith(100);
     });
 
@@ -262,11 +285,14 @@ describe('Slider', () => {
           marks={{ 20: 20, 40: 40, 100: 100 }}
           step={null}
           onChange={onChange}
-        />,
+        />
       );
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-        keyCode: keyCode.RIGHT,
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[0],
+        {
+          keyCode: keyCode.RIGHT,
+        }
+      );
       expect(onChange).toHaveBeenCalledWith(100);
     });
 
@@ -279,11 +305,14 @@ describe('Slider', () => {
           marks={{ 20: 20, 40: 40, 100: 100 }}
           step={null}
           onChange={onChange}
-        />,
+        />
       );
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-        keyCode: keyCode.DOWN,
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[0],
+        {
+          keyCode: keyCode.DOWN,
+        }
+      );
       expect(onChange).toHaveBeenCalledWith(20);
     });
 
@@ -296,11 +325,14 @@ describe('Slider', () => {
           marks={{ 20: 20, 40: 40, 100: 100 }}
           step={null}
           onChange={onChange}
-        />,
+        />
       );
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-        keyCode: keyCode.LEFT,
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[0],
+        {
+          keyCode: keyCode.LEFT,
+        }
+      );
       expect(onChange).toHaveBeenCalledWith(20);
     });
 
@@ -313,11 +345,14 @@ describe('Slider', () => {
           marks={{ 20: 20, 40: 40, 100: 100 }}
           step={null}
           onChange={onChange}
-        />,
+        />
       );
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-        keyCode: keyCode.HOME,
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[0],
+        {
+          keyCode: keyCode.HOME,
+        }
+      );
       expect(onChange).toHaveBeenCalledWith(20);
     });
 
@@ -330,11 +365,14 @@ describe('Slider', () => {
           marks={{ 20: 20, 40: 40, 100: 100 }}
           step={null}
           onChange={onChange}
-        />,
+        />
       );
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-        keyCode: keyCode.END,
-      });
+      fireEvent.keyDown(
+        container.getElementsByClassName('rc-slider-handle')[0],
+        {
+          keyCode: keyCode.END,
+        }
+      );
       expect(onChange).toHaveBeenCalledWith(100);
     });
   });
@@ -344,7 +382,14 @@ describe('Slider', () => {
 
     // [0], 3, 7, 10
     const { container } = render(
-      <Slider min={0} max={10} step={10} value={3} marks={{ 3: 3, 7: 7 }} onChange={onChange} />,
+      <Slider
+        min={0}
+        max={10}
+        step={10}
+        value={3}
+        marks={{ 3: 3, 7: 7 }}
+        onChange={onChange}
+      />
     );
     const handler = container.getElementsByClassName('rc-slider-handle')[0];
 
@@ -360,19 +405,21 @@ describe('Slider', () => {
   });
 
   it('sets aria-label on the handle', () => {
-    const { container } = render(<Slider value={0} ariaLabelForHandle="Some Label" />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'aria-label',
-      'Some Label',
+    const { container } = render(
+      <Slider value={0} ariaLabelForHandle="Some Label" />
     );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('aria-label', 'Some Label');
   });
 
   it('sets aria-labelledby on the handle', () => {
-    const { container } = render(<Slider value={0} ariaLabelledByForHandle="some_id" />);
-    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
-      'aria-labelledby',
-      'some_id',
+    const { container } = render(
+      <Slider value={0} ariaLabelledByForHandle="some_id" />
     );
+    expect(
+      container.getElementsByClassName('rc-slider-handle')[0]
+    ).toHaveAttribute('aria-labelledby', 'some_id');
   });
 
   it('sets aria-valuetext on the handle', () => {
@@ -382,7 +429,7 @@ describe('Slider', () => {
         max={5}
         value={3}
         ariaValueTextFormatterForHandle={(value) => `${value} of something`}
-      />,
+      />
     );
     const handle = container.getElementsByClassName('rc-slider-handle')[0];
     expect(handle).toHaveAttribute('aria-valuetext', '3 of something');
@@ -392,9 +439,11 @@ describe('Slider', () => {
     it('focus', () => {
       const handleFocus = jest.fn();
       const { container, unmount } = render(
-        <Slider min={0} max={10} value={0} onFocus={handleFocus} />,
+        <Slider min={0} max={10} value={0} onFocus={handleFocus} />
       );
-      (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).focus();
+      (container.getElementsByClassName(
+        'rc-slider-handle'
+      )[0] as HTMLElement).focus();
       expect(handleFocus).toBeCalled();
 
       unmount();
@@ -403,10 +452,14 @@ describe('Slider', () => {
     it('blur', () => {
       const handleBlur = jest.fn();
       const { container, unmount } = render(
-        <Slider min={0} max={10} value={0} onBlur={handleBlur} />,
+        <Slider min={0} max={10} value={0} onBlur={handleBlur} />
       );
-      (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).focus();
-      (container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement).blur();
+      (container.getElementsByClassName(
+        'rc-slider-handle'
+      )[0] as HTMLElement).focus();
+      (container.getElementsByClassName(
+        'rc-slider-handle'
+      )[0] as HTMLElement).blur();
       expect(handleBlur).toBeCalled();
 
       unmount();
@@ -427,7 +480,9 @@ describe('Slider', () => {
   });
 
   it('should not be out of range when value is null', () => {
-    const { container, rerender } = render(<Slider value={null} min={1} max={10} />);
+    const { container, rerender } = render(
+      <Slider value={null} min={1} max={10} />
+    );
     expect(container.getElementsByClassName('rc-slider-track')).toHaveLength(0);
 
     rerender(<Slider value={0} min={1} max={10} />);
@@ -447,7 +502,9 @@ describe('Slider', () => {
 
     it('rtl', () => {
       const onChange = jest.fn();
-      const { container } = render(<Slider value={0} onChange={onChange} reverse />);
+      const { container } = render(
+        <Slider value={0} onChange={onChange} reverse />
+      );
       fireEvent.mouseDown(container.querySelector('.rc-slider')!, {
         clientX: 20,
       });
@@ -457,7 +514,9 @@ describe('Slider', () => {
 
     it('btt', () => {
       const onChange = jest.fn();
-      const { container } = render(<Slider value={0} onChange={onChange} vertical />);
+      const { container } = render(
+        <Slider value={0} onChange={onChange} vertical />
+      );
       fireEvent.mouseDown(container.querySelector('.rc-slider')!, {
         clientY: 93,
       });
@@ -467,7 +526,9 @@ describe('Slider', () => {
 
     it('ttb', () => {
       const onChange = jest.fn();
-      const { container } = render(<Slider value={0} onChange={onChange} vertical reverse />);
+      const { container } = render(
+        <Slider value={0} onChange={onChange} vertical reverse />
+      );
       fireEvent.mouseDown(container.querySelector('.rc-slider')!, {
         clientY: 93,
       });
@@ -477,7 +538,9 @@ describe('Slider', () => {
 
     it('null value click to become 2 values', () => {
       const onChange = jest.fn();
-      const { container } = render(<Range value={null} range onChange={onChange} />);
+      const { container } = render(
+        <Range value={null} range onChange={onChange} />
+      );
       fireEvent.mouseDown(container.querySelector('.rc-slider')!, {
         clientX: 20,
       });
@@ -502,7 +565,7 @@ describe('Slider', () => {
             className: clsx(node.props.className, 'custom-handle'),
           })
         }
-      />,
+      />
     );
 
     expect(container.querySelector('.custom-handle')).toBeTruthy();
@@ -512,20 +575,22 @@ describe('Slider', () => {
   it.skip('max value not align with step', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider min={0.5} max={2} step={1} value={1.5} onChange={onChange} />,
+      <Slider min={0.5} max={2} step={1} value={1.5} onChange={onChange} />
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
       keyCode: keyCode.RIGHT,
     });
 
     expect(onChange).toHaveBeenCalledWith(2);
-    expect((container.querySelector('.rc-slider-handle') as HTMLElement).style.left).toBe('100%');
+    expect(
+      (container.querySelector('.rc-slider-handle') as HTMLElement).style.left
+    ).toBe('100%');
   });
 
   it('not show decimal', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider min={0} max={1} step={0.01} value={0.81} onChange={onChange} />,
+      <Slider min={0} max={1} step={0.01} value={0.81} onChange={onChange} />
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
       keyCode: keyCode.RIGHT,
