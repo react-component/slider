@@ -67,8 +67,6 @@
   "devDependencies": {
     "@babel/core": "^7.19.6",
     "@size-limit/preset-small-lib": "^8.1.0",
-    "@storybook/addon-essentials": "^6.5.13",
-    "@storybook/addon-info": "^5.3.21",
     "@storybook/addon-links": "^6.5.13",
     "@storybook/addons": "^6.5.13",
     "@storybook/react": "^6.5.13",
@@ -85,7 +83,8 @@
     "size-limit": "^8.1.0",
     "tsdx": "^0.14.1",
     "tslib": "^2.4.1",
-    "typescript": "^4.8.4"
+    "typescript": "^4.8.4",
+    "webpack": "^5.74.0"
   },
   "engines": {
     "node": ">=10"

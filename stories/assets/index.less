@@ -1,0 +1,319 @@
+@prefixClass: rc-slider;
+
+@disabledColor: #ccc;
+@border-radius-base: 6px;
+@primary-color: #2db7f5;
+@tooltip-color: #fff;
+@tooltip-bg: tint(#666, 4%);
+@tooltip-arrow-width: 4px;
+@tooltip-distance: @tooltip-arrow-width+4;
+@tooltip-arrow-color: @tooltip-bg;
+@ease-out-quint: cubic-bezier(0.23, 1, 0.32, 1);
+@ease-in-quint: cubic-bezier(0.755, 0.05, 0.855, 0.06);
+
+.borderBox() {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0); //  remove tap highlight color for mobile safari
+
+  * {
+    box-sizing: border-box;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); //  remove tap highlight color for mobile safari
+  }
+}
+
+.@{prefixClass} {
+  position: relative;
+  width: 100%;
+  height: 14px;
+  padding: 5px 0;
+  border-radius: @border-radius-base;
+  touch-action: none;
+  .borderBox();
+
+  &-rail {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background-color: #e9e9e9;
+    border-radius: @border-radius-base;
+  }
+
+  &-track {
+    position: absolute;
+    height: 4px;
+    background-color: tint(@primary-color, 60%);
+    border-radius: @border-radius-base;
+  }
+
+  &-handle {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    margin-top: -5px;
+    background-color: #fff;
+    border: solid 2px tint(@primary-color, 50%);
+    border-radius: 50%;
+    cursor: pointer;
+    cursor: -webkit-grab;
+    cursor: grab;
+    opacity: 0.8;
+    touch-action: pan-x;
+
+    &-dragging&-dragging&-dragging {
+      border-color: tint(@primary-color, 20%);
+      box-shadow: 0 0 0 5px tint(@primary-color, 50%);
+    }
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    &:focus-visible {
+      border-color: @primary-color;
+      box-shadow: 0 0 0 3px tint(@primary-color, 50%);
+    }
+
+    &-click-focused:focus {
+      border-color: tint(@primary-color, 50%);
+      box-shadow: unset;
+    }
+
+    &:hover {
+      border-color: tint(@primary-color, 20%);
+    }
+
+    &:active {
+      border-color: tint(@primary-color, 20%);
+      box-shadow: 0 0 5px tint(@primary-color, 20%);
+      cursor: -webkit-grabbing;
+      cursor: grabbing;
+    }
+  }
+
+  &-mark {
+    position: absolute;
+    top: 18px;
+    left: 0;
+    width: 100%;
+    font-size: 12px;
+  }
+
+  &-mark-text {
+    position: absolute;
+    display: inline-block;
+    color: #999;
+    text-align: center;
+    vertical-align: middle;
+    cursor: pointer;
+
+    &-active {
+      color: #666;
+    }
+  }
+
+  &-step {
+    position: absolute;
+    width: 100%;
+    height: 4px;
+    background: transparent;
+    pointer-events: none;
+  }
+
+  &-dot {
+    position: absolute;
+    bottom: -2px;
+    width: 8px;
+    height: 8px;
+    // margin-left: -4px;
+    vertical-align: middle;
+    background-color: #fff;
+    border: 2px solid #e9e9e9;
+    border-radius: 50%;
+    cursor: pointer;
+    &-active {
+      border-color: tint(@primary-color, 50%);
+    }
+    &-reverse {
+      margin-right: -4px;
+    }
+  }
+
+  &-disabled {
+    background-color: #e9e9e9;
+
+    .@{prefixClass}-track {
+      background-color: @disabledColor;
+    }
+
+    .@{prefixClass}-handle,
+    .@{prefixClass}-dot {
+      background-color: #fff;
+      border-color: @disabledColor;
+      box-shadow: none;
+      cursor: not-allowed;
+    }
+
+    .@{prefixClass}-mark-text,
+    .@{prefixClass}-dot {
+      cursor: not-allowed !important;
+    }
+  }
+}
+
+.@{prefixClass}-vertical {
+  width: 14px;
+  height: 100%;
+  padding: 0 5px;
+
+  .@{prefixClass} {
+    &-rail {
+      width: 4px;
+      height: 100%;
+    }
+
+    &-track {
+      bottom: 0;
+      left: 5px;
+      width: 4px;
+    }
+
+    &-handle {
+      margin-top: 0;
+      margin-left: -5px;
+      touch-action: pan-y;
+    }
+
+    &-mark {
+      top: 0;
+      left: 18px;
+      height: 100%;
+    }
+
+    &-step {
+      width: 4px;
+      height: 100%;
+    }
+
+    &-dot {
+      margin-left: -2px;
+      // margin-bottom: -4px;
+      // &:first-child {
+      //   margin-bottom: -4px;
+      // }
+      // &:last-child {
+      //   margin-bottom: -4px;
+      // }
+    }
+  }
+}
+
+.motion-common() {
+  display: block !important;
+  animation-duration: 0.3s;
+  animation-fill-mode: both;
+}
+
+.make-motion(@className, @keyframeName) {
+  .@{className}-enter,
+  .@{className}-appear {
+    .motion-common();
+    animation-play-state: paused;
+  }
+  .@{className}-leave {
+    .motion-common();
+    animation-play-state: paused;
+  }
+  .@{className}-enter.@{className}-enter-active,
+  .@{className}-appear.@{className}-appear-active {
+    animation-name: ~'@{keyframeName}In';
+    animation-play-state: running;
+  }
+  .@{className}-leave.@{className}-leave-active {
+    animation-name: ~'@{keyframeName}Out';
+    animation-play-state: running;
+  }
+}
+.zoom-motion(@className, @keyframeName) {
+  .make-motion(@className, @keyframeName);
+  .@{className}-enter,
+  .@{className}-appear {
+    transform: scale(0, 0); // need this by yiminghe
+    animation-timing-function: @ease-out-quint;
+  }
+  .@{className}-leave {
+    animation-timing-function: @ease-in-quint;
+  }
+}
+.zoom-motion(rc-slider-tooltip-zoom-down, rcSliderTooltipZoomDown);
+
+@keyframes rcSliderTooltipZoomDownIn {
+  0% {
+    transform: scale(0, 0);
+    transform-origin: 50% 100%;
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1, 1);
+    transform-origin: 50% 100%;
+  }
+}
+
+@keyframes rcSliderTooltipZoomDownOut {
+  0% {
+    transform: scale(1, 1);
+    transform-origin: 50% 100%;
+  }
+  100% {
+    transform: scale(0, 0);
+    transform-origin: 50% 100%;
+    opacity: 0;
+  }
+}
+
+.@{prefixClass}-tooltip {
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  visibility: visible;
+
+  .borderBox();
+
+  &-hidden {
+    display: none;
+  }
+
+  &-placement-top {
+    padding: @tooltip-arrow-width 0 @tooltip-distance 0;
+  }
+
+  &-inner {
+    min-width: 24px;
+    height: 24px;
+    padding: 6px 2px;
+    color: @tooltip-color;
+    font-size: 12px;
+    line-height: 1;
+    text-align: center;
+    text-decoration: none;
+    background-color: @tooltip-bg;
+    border-radius: @border-radius-base;
+    box-shadow: 0 0 4px #d9d9d9;
+  }
+
+  &-arrow {
+    position: absolute;
+    width: 0;
+    height: 0;
+    border-color: transparent;
+    border-style: solid;
+  }
+
+  &-placement-top &-arrow {
+    bottom: @tooltip-distance - @tooltip-arrow-width;
+    left: 50%;
+    margin-left: -@tooltip-arrow-width;
+    border-width: @tooltip-arrow-width @tooltip-arrow-width 0;
+    border-top-color: @tooltip-arrow-color;
+  }
+}
