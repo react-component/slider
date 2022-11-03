@@ -576,10 +576,10 @@ describe('Slider', () => {
   });
 
   // FIXME
-  it.skip('max value not align with step', () => {
+  it('max value not align with step', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider min={0.5} max={2} step={1} value={1.5} onChange={onChange} />
+      <Slider min={0.5} max={2} step={1} defaultValue={1.5} onChange={onChange} />
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
       keyCode: keyCode.RIGHT,
@@ -594,7 +594,7 @@ describe('Slider', () => {
   it('not show decimal', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider min={0} max={1} step={0.01} value={0.81} onChange={onChange} />
+      <Slider min={0} max={1} step={0.01} defaultValue={0.81} onChange={onChange} />
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
       keyCode: keyCode.RIGHT,

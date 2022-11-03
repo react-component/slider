@@ -7,7 +7,6 @@ import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import { Range } from '../src';
-import { act } from 'react-dom/test-utils';
 import KeyCode from 'rc-util/lib/KeyCode';
 
 describe('Range', () => {
@@ -35,7 +34,7 @@ describe('Range', () => {
     container: HTMLElement,
     start: number,
     end: number,
-    element = 'rc-slider-handle'
+    element: string
   ) {
     const mouseDown = createEvent.mouseDown(
       container.getElementsByClassName(element)[0]
@@ -55,7 +54,7 @@ describe('Range', () => {
     container: HTMLElement,
     start: number,
     end: number,
-    element = 'rc-slider-handle'
+    element: string,
   ) {
     const touchStart = createEvent.touchStart(
       container.getElementsByClassName(element)[0],
@@ -377,11 +376,11 @@ describe('Range', () => {
       });
     }
 
-    // testLTR("mouse", (container: HTMLElement) =>
-    //   doMouseMove(container, 0, 9999)
-    // );
+    testLTR("mouse", (container: HTMLElement) =>
+      doMouseMove(container, 0, 9999, 'rc-slider-handle')
+    );
     testLTR('touch', (container: HTMLElement) =>
-      doTouchMove(container, 0, 9999)
+      doTouchMove(container, 0, 9999, 'rc-slider-handle')
     );
 
     it('reverse', () => {
@@ -391,7 +390,7 @@ describe('Range', () => {
       );
 
       // Do move
-      doMouseMove(container, 0, -10);
+      doMouseMove(container, 0, -10, 'rc-slider-handle');
 
       expect(onChange).toHaveBeenCalledWith([30, 40]);
     });
@@ -403,7 +402,7 @@ describe('Range', () => {
       );
 
       // Do move
-      doMouseMove(container, 0, -10);
+      doMouseMove(container, 0, -10, 'rc-slider-handle');
 
       expect(onChange).toHaveBeenCalledWith([30, 40]);
     });
@@ -415,7 +414,7 @@ describe('Range', () => {
       );
 
       // Do move
-      doMouseMove(container, 0, -10);
+      doMouseMove(container, 0, -10, 'rc-slider-handle');
 
       expect(onChange).toHaveBeenCalledWith([10, 40]);
     });
@@ -446,9 +445,7 @@ describe('Range', () => {
         const { container, unmount } = render(<Demo />);
 
         // Do move
-        func(
-container
-        );
+        func(container);
 
         expect(onChange).toHaveBeenCalledWith([39, 40]);
 
@@ -456,37 +453,39 @@ container
       });
     }
 
-    test('mouse', (container: HTMLElement) => doMouseMove(container, 0, 9999, 'rc-slider-handle'));
-    test('touch', (container: HTMLElement) => doTouchMove(container, 0, 9999, 'rc-slider-handle'));
+    test('mouse', (container: HTMLElement) =>
+      doMouseMove(container, 0, 9999, 'rc-slider-handle'));
+    test('touch', (container: HTMLElement) =>
+      doTouchMove(container, 0, 9999, 'rc-slider-handle'));
   });
 
   describe('track draggable', () => {
     function test(name: string, func: (container: HTMLElement) => void) {
-      // FIXME
-      it.skip(name, () => {
+      it(name, () => {
         const onChange = jest.fn();
 
-        let container: any, unmount: any;
-        act(() => {
-          const u = render(
-            <Range range value={[0, 30]} draggableTrack onChange={onChange} />
-          );
-          container = u.container;
-          unmount = u.unmount;
-        });
+        const { container, unmount } = render(
+          <Range
+            range
+            defaultValue={[0, 30]}
+            draggableTrack
+            onChange={onChange}
+          />
+        );
 
         // Do move
 
         func(container);
         expect(onChange).toHaveBeenCalledWith([20, 50]);
-        (unmount as any)?.();
+        unmount();
       });
     }
 
     test('mouse', (container: HTMLElement) =>
       doMouseMove(container, 0, 20, 'rc-slider-track'));
-    test('touch', (container: HTMLElement) =>
-      doTouchMove(container, 0, 20, 'rc-slider-track'));
+    // FIXME
+    // test('touch', (container: HTMLElement) =>
+    //   doTouchMove(container, 0, 20, 'rc-slider-track'));
   });
 
   it('sets aria-label on the handles', () => {
@@ -596,9 +595,9 @@ container
       const { container } = render(
         <Range range value={[0, 0]} min={0} max={20} onFocus={handleFocus} />
       );
-      (container.getElementsByClassName(
-        'rc-slider-handle'
-      )[0] as HTMLElement).focus();
+      (
+        container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+      ).focus();
       expect(handleFocus).toBeCalled();
     });
 
@@ -607,12 +606,12 @@ container
       const { container } = render(
         <Range range value={[0, 0]} min={0} max={20} onBlur={handleBlur} />
       );
-      (container.getElementsByClassName(
-        'rc-slider-handle'
-      )[0] as HTMLElement).focus();
-      (container.getElementsByClassName(
-        'rc-slider-handle'
-      )[0] as HTMLElement).blur();
+      (
+        container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+      ).focus();
+      (
+        container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+      ).blur();
       expect(handleBlur).toBeCalled();
     });
   });
