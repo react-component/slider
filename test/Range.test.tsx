@@ -8,6 +8,7 @@ import '@testing-library/jest-dom';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import { Range } from '../src';
 import { act } from 'react-dom/test-utils';
+import KeyCode from 'rc-util/lib/KeyCode';
 
 describe('Range', () => {
   let mainContainer: HTMLElement;
@@ -289,13 +290,13 @@ describe('Range', () => {
   });
 
   // FIXME: Broken
-  it.skip('pushable & allowCross', () => {
+  it('pushable & allowCross', () => {
     const onChange = jest.fn();
     const { container } = render(
       <Range
         range
         onChange={onChange}
-        value={[10, 30, 50]}
+        defaultValue={[10, 30, 50]}
         pushable={10}
         trackClassName={[
           'rc-slider-track rc-slider-track-1',
@@ -310,7 +311,7 @@ describe('Range', () => {
       fireEvent.keyDown(
         container.getElementsByClassName('rc-slider-handle')[0],
         {
-          keyCode: 'ArrowUp',
+          keyCode: KeyCode.UP,
         }
       );
     }
@@ -321,7 +322,7 @@ describe('Range', () => {
       fireEvent.keyDown(
         container.getElementsByClassName('rc-slider-handle')[1],
         {
-          keyCode: 'ArrowDown',
+          keyCode: KeyCode.DOWN,
         }
       );
     }
@@ -332,7 +333,7 @@ describe('Range', () => {
       fireEvent.keyDown(
         container.getElementsByClassName('rc-slider-handle')[2],
         {
-          keyCode: 'ArrowDown',
+          keyCode: KeyCode.DOWN,
         }
       );
     }
@@ -343,7 +344,7 @@ describe('Range', () => {
       fireEvent.keyDown(
         container.getElementsByClassName('rc-slider-handle')[1],
         {
-          keyCode: 'ArrowUp',
+          keyCode: KeyCode.UP,
         }
       );
     }
