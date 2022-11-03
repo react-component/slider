@@ -440,8 +440,7 @@ describe('Slider', () => {
   });
 
   describe('focus & blur', () => {
-    // FIXME
-    it.skip('focus', () => {
+    it('focus', () => {
       const handleFocus = jest.fn();
       const { container, unmount } = render(
         <Slider min={0} max={10} value={0} onFocus={handleFocus} />
@@ -454,8 +453,7 @@ describe('Slider', () => {
       unmount();
     });
 
-    // FIXME
-    it.skip('blur', () => {
+    it('blur', () => {
       const handleBlur = jest.fn();
       const { container, unmount } = render(
         <Slider min={0} max={10} value={0} onBlur={handleBlur} />
@@ -471,8 +469,7 @@ describe('Slider', () => {
       unmount();
     });
 
-    // FIXME
-    it.skip('ref focus & blur', () => {
+    it('ref focus & blur', () => {
       const onFocus = jest.fn();
       const onBlur = jest.fn();
       const ref = React.createRef<RangeRef>();
@@ -556,8 +553,7 @@ describe('Slider', () => {
     });
   });
 
-  // FIXME
-  it.skip('autoFocus', () => {
+  it('autoFocus', () => {
     const onFocus = jest.fn();
     render(<Slider value={0} autoFocus onFocus={onFocus} />);
 
@@ -579,7 +575,7 @@ describe('Slider', () => {
     expect(container.querySelector('.custom-handle')).toBeTruthy();
   });
 
-  // FIXME We don't handle state
+  // FIXME
   it.skip('max value not align with step', () => {
     const onChange = jest.fn();
     const { container } = render(

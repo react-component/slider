@@ -269,7 +269,6 @@ describe('Range', () => {
     );
   });
 
-  // FIXME No state handling
   it('should keep pushable when not allowCross', () => {
     const onChange = jest.fn();
     const { container } = render(
@@ -384,7 +383,6 @@ describe('Range', () => {
       doTouchMove(container, 0, 9999)
     );
 
-    // FIXME: ?
     it('reverse', () => {
       const onChange = jest.fn();
       const { container } = render(
@@ -397,7 +395,6 @@ describe('Range', () => {
       expect(onChange).toHaveBeenCalledWith([30, 40]);
     });
 
-    // FIXME: ?
     it('vertical', () => {
       const onChange = jest.fn();
       const { container } = render(
@@ -410,7 +407,6 @@ describe('Range', () => {
       expect(onChange).toHaveBeenCalledWith([30, 40]);
     });
 
-    // FIXME
     it('vertical & reverse', () => {
       const onChange = jest.fn();
       const { container } = render(
@@ -424,8 +420,7 @@ describe('Range', () => {
     });
   });
 
-  // FIXME: Broken
-  describe.skip('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
+  describe('should keep pushable with pushable s defalutValue when not allowCross and setState', () => {
     function test(name: string, func: (container: HTMLElement) => void) {
       it(name, () => {
         const onChange = jest.fn();
@@ -451,7 +446,7 @@ describe('Range', () => {
 
         // Do move
         func(
-          container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+container
         );
 
         expect(onChange).toHaveBeenCalledWith([39, 40]);
@@ -460,14 +455,14 @@ describe('Range', () => {
       });
     }
 
-    test('mouse', (container: HTMLElement) => doMouseMove(container, 0, 9999));
-    test('touch', (container: HTMLElement) => doTouchMove(container, 0, 9999));
+    test('mouse', (container: HTMLElement) => doMouseMove(container, 0, 9999, 'rc-slider-handle'));
+    test('touch', (container: HTMLElement) => doTouchMove(container, 0, 9999, 'rc-slider-handle'));
   });
 
-  // FIXME: Broken
-  describe.skip('track draggable', () => {
+  describe('track draggable', () => {
     function test(name: string, func: (container: HTMLElement) => void) {
-      it(name, () => {
+      // FIXME
+      it.skip(name, () => {
         const onChange = jest.fn();
 
         let container: any, unmount: any;
@@ -595,8 +590,7 @@ describe('Range', () => {
   });
 
   describe('focus & blur', () => {
-    // FIXME
-    it.skip('focus()', () => {
+    it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(
         <Range range value={[0, 0]} min={0} max={20} onFocus={handleFocus} />
@@ -607,8 +601,7 @@ describe('Range', () => {
       expect(handleFocus).toBeCalled();
     });
 
-    // FIXME
-    it.skip('blur', () => {
+    it('blur', () => {
       const handleBlur = jest.fn();
       const { container } = render(
         <Range range value={[0, 0]} min={0} max={20} onBlur={handleBlur} />
