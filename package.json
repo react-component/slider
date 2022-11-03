@@ -20,7 +20,7 @@
   },
   "license": "MIT",
   "author": "Guillermo O. Freschi",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
