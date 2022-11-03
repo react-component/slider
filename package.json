@@ -54,15 +54,15 @@
     "arrowParens": "always",
     "trailingComma": "es5"
   },
-  "module": "dist/rc-slider.esm.js",
+  "module": "dist/index.esm.mjs",
   "sideEffects": false,
   "size-limit": [
     {
-      "path": "dist/rc-slider.cjs.production.min.js",
+      "path": "dist/index.cjs.production.min.cjs",
       "limit": "10 KB"
     },
     {
-      "path": "dist/rc-slider.esm.js",
+      "path": "dist/index.esm.mjs",
       "limit": "10 KB"
     }
   ],
@@ -72,6 +72,8 @@
     "@babel/plugin-transform-react-jsx": "^7.19.0",
     "@bluelovers/tsdx": "^3.0.7",
     "@size-limit/preset-small-lib": "^8.1.0",
+    "@size-limit/webpack": "^8.1.0",
+    "@size-limit/webpack-why": "^8.1.0",
     "@storybook/addon-essentials": "^6.5.13",
     "@storybook/addon-interactions": "^6.5.13",
     "@storybook/addon-links": "^6.5.13",
