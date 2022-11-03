@@ -2,7 +2,7 @@ import React from 'react';
 import clsx from 'clsx';
 import warning from 'tiny-warning';
 import shallowEqual from 'shallowequal';
-import useMergedState from 'rc-util/lib/hooks/useMergedState';
+import useMergedState from 'rc-util/lib/hooks/useMergedState.js';
 import type { HandlesRef } from './Handles';
 import Handles from './Handles';
 import type { HandlesProps } from './Handles';
