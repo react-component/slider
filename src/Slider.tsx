@@ -14,6 +14,7 @@ export type SliderProps = Omit<
   | 'pushable'
   | 'trackClassName'
   | 'handleClassName'
+  | 'tabIndex'
 > & {
   value?: number | null;
   defaultValue?: number;
@@ -21,6 +22,7 @@ export type SliderProps = Omit<
   handleClassName?: string;
   trackClassName?: string;
   range?: false;
+  tabIndex?: null | number;
 };
 
 const Slider = forwardRef<RangeRef, SliderProps>(

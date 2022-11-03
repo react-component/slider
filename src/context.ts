@@ -7,10 +7,10 @@ export interface SliderContextProps {
   includedStart: number;
   includedEnd: number;
   direction: Direction;
-  disabled?: boolean;
+  disabled: boolean;
   included?: boolean;
   step: number | null;
-  range?: boolean;
+  range: boolean;
   tabIndex: null | number | number[];
   ariaLabelForHandle?: string | string[];
   ariaLabelledByForHandle?: string | string[];
@@ -18,6 +18,8 @@ export interface SliderContextProps {
 }
 
 const SliderContext = React.createContext<SliderContextProps>({
+  disabled: false,
+  range: true,
   min: 0,
   max: 0,
   direction: 'ltr',

@@ -99,7 +99,7 @@ const useDrag = (
 
       const next = offsetValues(cloneValues, offsetDist, valueIndex, 'dist');
 
-      flushValues(next.values, next.value);
+      flushValues(next.values, next.values[valueIndex]);
     }
   };
 

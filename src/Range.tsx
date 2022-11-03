@@ -16,8 +16,11 @@ import Steps from './Steps';
 import useOffset from './hooks/useOffset';
 
 export interface RangeProps {
-  /** Whether it behaves as a Range or a Slider
-   * @ignore You should use the Slider element instead of setting this manually
+  /**
+   * Whether it behaves as a Range or a Slider
+   * You should use the Slider element instead of setting this manually
+   *
+   * @ignore
    */
   range?: boolean;
 
@@ -54,10 +57,19 @@ export interface RangeProps {
   onChange?: (value: number[]) => void;
 
   // Cross
-  /** Allow handles to pass over each other */
+  /**
+   * Allow handles to pass over each other
+   *
+   * @see `pushable` for interactions
+   */
   allowCross?: boolean;
 
-  /** Moving a handle over another causes both to move [number?] */
+  /**
+   * If set to a number, keeps handles spaced by that number. If AllowCross is true, moving
+   * a handle will push others to maintain spacing.
+   *
+   * If set to true, allows handles to push each other.
+   */
   pushable?: boolean | number;
 
   /** Allow the track to be clickable and draggable */
@@ -123,24 +135,30 @@ export interface RangeProps {
   /** Class for the slider's marks container */
   marksClassName?: string;
 
-  /** Class for the slider's marks
-   * @deprecatad
-   */
+  /** Class for the slider's marks */
   markTextClassName?: string;
 
   /** Class for the slider's currently active mark */
   activeMarkTextClassName?: string;
 
   // Decorations
+
+  /**
+   * Place labelled, clickable marks at `key` positions on the slider.
+   *
+   * @see `step` for regularly-spaced marks
+   */
   marks?: Record<number, React.ReactNode>;
 
   /** Whether to display dots when `step` is set */
   dots?: boolean;
 
   // Components
+  /** Custom renderer for handles */
   handleRender?: HandlesProps['handleRender'];
 
   // Accessibility
+  /** tabIndex for each handle. Set to `null` to disable. */
   tabIndex?: null | number | number[];
 
   /** ARIA Label for the handle */
@@ -208,7 +226,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
       // Decorations
       marks,
-      dots,
+      dots = false,
 
       // Components
       handleRender,
@@ -257,13 +275,8 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     }, [step]);
 
     // ============================= Push =============================
-    const mergedPush = React.useMemo(() => {
-      if (pushable === true) {
-        return normalizedStep;
-      }
-
-      return pushable >= 0 ? pushable : false;
-    }, [pushable, normalizedStep]);
+    const mergedPush =
+      pushable === true ? normalizedStep : pushable >= 0 ? pushable : false;
 
     // ============================ Marks =============================
     const markList = React.useMemo<InternalMarkObj[]>(() => {
@@ -277,7 +290,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     }, [marks]);
 
     // ============================ Format ============================
-    const { constrainValue, offsetValues: calculateOffsetValues } = useOffset(
+    const { constrainValue, offsetValues } = useOffset(
       boundedMin,
       boundedMax,
       normalizedStep,
@@ -287,9 +300,8 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     );
 
     // ============================ Values ============================
-    // TODO: Use a correctly typed version of this
-    const [mergedValue, setValue] = useMergedState<number[] | null, number[]>(
-      defaultValue as number[],
+    const [mergedValue, setValue] = useMergedState<number[] | null | undefined>(
+      defaultValue,
       {
         value,
       }
@@ -378,14 +390,8 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
       if (!containerRef.current) return;
 
-      const {
-        width,
-        height,
-        left,
-        top,
-        bottom,
-        right,
-      } = containerRef.current.getBoundingClientRect();
+      const { width, height, left, top, bottom, right } =
+        containerRef.current.getBoundingClientRect();
       const { clientX, clientY } = e;
 
       let percent: number;
@@ -404,6 +410,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
 
         case 'ltr':
           percent = (clientX - left) / width;
+          break;
       }
 
       const nextValue = boundedMin + percent * (boundedMax - boundedMin);
@@ -419,7 +426,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       if (disabled) {
         return;
       }
-      const next = calculateOffsetValues(rawValues, offset, valueIndex, 'unit');
+      const next = offsetValues(rawValues, offset, valueIndex, 'unit');
 
       triggerChange(next.values);
 
@@ -444,7 +451,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       boundedMax,
       constrainValue,
       triggerChange,
-      calculateOffsetValues
+      offsetValues
     );
 
     const onStartMove: OnStartMove = (e, valueIndex) => {

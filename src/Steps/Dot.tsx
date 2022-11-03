@@ -9,26 +9,18 @@ export interface DotProps {
   activeClassName?: string;
 }
 
-export default function Dot(props: DotProps) {
-  const { value, className, activeClassName } = props;
-  const {
-    min,
-    max,
-    direction,
-    included,
-    includedStart,
-    includedEnd,
-  } = React.useContext(SliderContext);
+export default function Dot({ value, className, activeClassName }: DotProps) {
+  const { min, max, direction, included, includedStart, includedEnd } =
+    React.useContext(SliderContext);
 
   const active = included && includedStart <= value && value <= includedEnd;
 
-  // ============================ Offset ============================
-  const directionStyle = getPositionStyle(direction, value, min, max);
+  const positionStyle = getPositionStyle(direction, value, min, max);
 
   return (
     <span
       className={clsx(className, active && activeClassName)}
-      style={directionStyle}
+      style={positionStyle}
     />
   );
 }

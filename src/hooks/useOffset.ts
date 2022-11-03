@@ -19,7 +19,6 @@ export type OffsetValues = (
   valueIndex: number,
   mode: OffsetMode
 ) => {
-  value: number;
   values: number[];
 };
 
@@ -294,7 +293,6 @@ const useOffset = (
     }
 
     return {
-      value: nextValues[valueIndex],
       values: nextValues,
     };
   };

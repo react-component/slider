@@ -10,8 +10,12 @@ export interface TrackProps {
   onStartMove?: OnStartMove;
 }
 
-export default function Track(props: TrackProps) {
-  const { className, start, end, onStartMove } = props;
+export default function Track({
+  className,
+  start,
+  end,
+  onStartMove,
+}: TrackProps) {
   const { direction, min, max, disabled } = React.useContext(SliderContext);
 
   const offsetStart = getOffset(start, min, max);
@@ -51,9 +55,7 @@ export default function Track(props: TrackProps) {
   return (
     <div
       className={className}
-      style={{
-        ...positionStyle,
-      }}
+      style={positionStyle}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
     />

@@ -89,6 +89,7 @@
     "debug": "^4.3.4",
     "husky": "^8.0.1",
     "jest-environment-jsdom": "^29.2.2",
+    "rc-tooltip": "^5.2.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-is": "^18.2.0",
@@ -104,7 +105,6 @@
   },
   "dependencies": {
     "clsx": "^1.2.1",
-    "rc-tooltip": "^5.2.2",
     "rc-util": "^5.24.4",
     "shallowequal": "^1.1.0",
     "tiny-warning": "^1.0.3"

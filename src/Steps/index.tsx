@@ -11,8 +11,13 @@ export interface StepsProps {
   activeClassName?: string;
 }
 
-export default function Steps(props: StepsProps) {
-  const { marks, dots, className, dotClassName, activeClassName } = props;
+export default function Steps({
+  marks,
+  dots,
+  className,
+  dotClassName,
+  activeClassName,
+}: StepsProps) {
   const { min, max, step } = React.useContext(SliderContext);
 
   const stepDots = React.useMemo(() => {

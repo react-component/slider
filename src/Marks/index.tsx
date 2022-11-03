@@ -7,24 +7,22 @@ export interface InternalMarkObj {
 }
 
 export interface MarksProps {
-  marks?: InternalMarkObj[];
+  marks: InternalMarkObj[];
   onClick: (value: number) => void;
   className?: string;
   markClassName?: string;
   activeMarkClassName?: string;
 }
 
-export default function Marks(props: MarksProps) {
-  const {
-    className,
-    markClassName,
-    activeMarkClassName,
-    marks,
-    onClick,
-  } = props;
-
+export default function Marks({
+  className,
+  markClassName,
+  activeMarkClassName,
+  marks,
+  onClick,
+}: MarksProps) {
   // Not render mark if empty
-  if (!marks?.length) {
+  if (marks.length === 0) {
     return null;
   }
 

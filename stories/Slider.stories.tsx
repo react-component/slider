@@ -409,6 +409,14 @@ export const RangeInput = () => {
         <ControlledRangeDisableAcross />
       </div>
       <div style={style}>
+        <p>Controlled Range, allow across, pushable=5</p>
+        <ControlledRangeDisableAcross pushable={5} allowCross />
+      </div>
+      <div style={style}>
+        <p>Controlled Range, allow across, pushable</p>
+        <ControlledRangeDisableAcross pushable allowCross />
+      </div>
+      <div style={style}>
         <p>Controlled Range, not allow across, pushable=5</p>
         <ControlledRangeDisableAcross pushable={5} />
       </div>

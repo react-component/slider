@@ -1,18 +1,24 @@
-import  React from 'react';
+import React from 'react';
 import 'rc-tooltip/assets/bootstrap.css';
 import type { RangeProps } from '../../src';
 import { Range } from '../../src';
 import raf from 'rc-util/lib/raf';
 import Tooltip from 'rc-tooltip';
 
-const HandleTooltip = (props: {
+export type TooltipSliderProps = {
   value: number;
   children: React.ReactElement;
   visible: boolean;
   tipFormatter?: (value: number) => React.ReactNode;
-}) => {
-  const { value, children, visible, tipFormatter = (val) => `${val} %`, ...restProps } = props;
+};
 
+const HandleTooltip = ({
+  value,
+  children,
+  visible,
+  tipFormatter = (val) => `${val} %`,
+  ...restProps
+}: TooltipSliderProps) => {
   const tooltipRef = React.useRef<any>();
   const rafRef = React.useRef<number | null>(null);
 
@@ -62,7 +68,10 @@ const TooltipSlider = ({
   tipFormatter,
   tipProps,
   ...props
-}: RangeProps & { tipFormatter?: (value: number) => React.ReactNode; tipProps: any }) => {
+}: RangeProps & {
+  tipFormatter?: (value: number) => React.ReactNode;
+  tipProps: any;
+}) => {
   const tipHandleRender: RangeProps['handleRender'] = (node, handleProps) => {
     return (
       <HandleTooltip

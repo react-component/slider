@@ -11,39 +11,43 @@ export interface TrackProps {
   startPoint: number;
 }
 
-export default function Tracks(props: TrackProps) {
-  const { trackClassName, values, startPoint, onStartMove } = props;
+export default function Tracks({
+  trackClassName,
+  values,
+  startPoint,
+  onStartMove,
+}: TrackProps) {
   const { range } = React.useContext(SliderContext);
 
   const trackList = React.useMemo(() => {
-    if (!range) {
-      // null value do not have track
-      if (values.length === 0) {
-        return [];
+    if (range) {
+      // Multiple
+      const list = [];
+
+      for (let i = 0; i < values.length - 1; i += 1) {
+        list.push({
+          start: values[i],
+          end: values[i + 1],
+        });
       }
 
-      const startValue = startPoint;
-      const endValue = values[0];
-
-      return [
-        {
-          start: Math.min(startValue, endValue),
-          end: Math.max(startValue, endValue),
-        },
-      ];
+      return list;
     }
 
-    // Multiple
-    const list = [];
-
-    for (let i = 0; i < values.length - 1; i += 1) {
-      list.push({
-        start: values[i],
-        end: values[i + 1],
-      });
+    // null value do not have track
+    if (values.length === 0) {
+      return [];
     }
 
-    return list;
+    const startValue = startPoint;
+    const endValue = values[0];
+
+    return [
+      {
+        start: Math.min(startValue, endValue),
+        end: Math.max(startValue, endValue),
+      },
+    ];
   }, [values, range, startPoint]);
 
   return (
