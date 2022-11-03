@@ -1,5 +1,5 @@
 import React from 'react';
-import { AriaValueFormat, Direction } from './interface';
+import type { AriaValueFormat, Direction } from './interface';
 
 export interface SliderContextProps {
   min: number;

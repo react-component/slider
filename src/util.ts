@@ -1,4 +1,4 @@
-import { Direction } from './interface';
+import type { Direction } from './interface';
 
 export function getOffset(value: number, min: number, max: number) {
   return (value - min) / (max - min);

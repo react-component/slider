@@ -1,3 +1,7 @@
+/**
+ * @jest-environment jsdom
+ */
+
 import React from 'react';
 import clsx from 'clsx';
 import { render, fireEvent } from '@testing-library/react';

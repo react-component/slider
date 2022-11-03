@@ -1,5 +1,5 @@
 import React, { forwardRef } from 'react';
-import { RangeProps, RangeRef } from './Range';
+import type { RangeProps, RangeRef } from './Range';
 import Range from './Range';
 
 export type SliderProps = Omit<
