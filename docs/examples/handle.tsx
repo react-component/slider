@@ -30,8 +30,8 @@ export default () => (
       />
     </div>
     <div style={wrapperStyle}>
-      <p>Keyboard events disbaled</p>
-      <Slider defaultValue={3} disableKeyboardEvents={true} />
+      <p>Keyboard events disabled</p>
+      <Slider defaultValue={3} keyboard={false} />
     </div>
   </div>
 );

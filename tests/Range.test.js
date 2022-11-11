@@ -123,12 +123,7 @@ describe('Range', () => {
   it('should not change value from keyboard events when disabled', () => {
     const onAfterChange = jest.fn();
     const { container } = render(
-      <Slider
-        range
-        disableKeyboardEvents={true}
-        defaultValue={[20, 50]}
-        onAfterChange={onAfterChange}
-      />,
+      <Slider range keyboard={false} defaultValue={[20, 50]} onAfterChange={onAfterChange} />,
     );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
