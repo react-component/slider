@@ -42,6 +42,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     max,
     direction,
     disabled,
+    keyboard,
     range,
     tabIndex,
     ariaLabelForHandle,
@@ -59,7 +60,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
 
   // =========================== Keyboard ===========================
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-    if (!disabled) {
+    if (!disabled && keyboard) {
       let offset: number | 'min' | 'max' = null;
 
       // Change the value

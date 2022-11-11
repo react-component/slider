@@ -120,6 +120,19 @@ describe('Range', () => {
     expect(onAfterChange).toBeCalled();
   });
 
+  it('should not change value from keyboard events when disabled', () => {
+    const onAfterChange = jest.fn();
+    const { container } = render(
+      <Slider range keyboard={false} defaultValue={[20, 50]} onAfterChange={onAfterChange} />,
+    );
+
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+      keyCode: keyCode.RIGHT,
+    });
+
+    expect(onAfterChange).not.toBeCalled();
+  });
+
   it('should render Multi-Range with value correctly', () => {
     const { container } = render(<Slider range count={3} value={[0, 25, 50, 75]} />);
 

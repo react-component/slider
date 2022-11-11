@@ -38,6 +38,7 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Status
   disabled?: boolean;
+  keyboard?: boolean;
   autoFocus?: boolean;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
@@ -102,6 +103,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
     // Status
     disabled = false,
+    keyboard = true,
     autoFocus,
     onFocus,
     onBlur,
@@ -445,6 +447,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       max: mergedMax,
       direction,
       disabled,
+      keyboard,
       step: mergedStep,
       included,
       includedStart,
@@ -460,6 +463,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       mergedMax,
       direction,
       disabled,
+      keyboard,
       mergedStep,
       included,
       includedStart,
