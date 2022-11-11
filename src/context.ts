@@ -8,6 +8,7 @@ export interface SliderContextProps {
   includedEnd: number;
   direction: Direction;
   disabled?: boolean;
+  disableKeyboardEvents?: boolean;
   included?: boolean;
   step: number | null;
   range?: boolean;
@@ -25,6 +26,7 @@ const SliderContext = React.createContext<SliderContextProps>({
   includedStart: 0,
   includedEnd: 0,
   tabIndex: 0,
+  disableKeyboardEvents: false,
 });
 
 export default SliderContext;

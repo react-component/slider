@@ -29,5 +29,9 @@ export default () => (
         tipFormatter={(value) => `${value}!`}
       />
     </div>
+    <div style={wrapperStyle}>
+      <p>Keyboard events disbaled</p>
+      <Slider defaultValue={3} disableKeyboardEvents={true} />
+    </div>
   </div>
 );
