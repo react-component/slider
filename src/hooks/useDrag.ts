@@ -108,6 +108,7 @@ const useDrag = (
   updateCacheValueRef.current = updateCacheValue;
 
   const onStartMove: OnStartMove = (e, valueIndex) => {
+    e.preventDefault();
     e.stopPropagation();
 
     const originValue = rawValues[valueIndex];
