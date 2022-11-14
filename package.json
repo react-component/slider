@@ -30,6 +30,7 @@
     "start": "tsdx watch",
     "build": "tsdx build",
     "test": "tsdx test --passWithNoTests",
+    "test:cov": "tsdx test --coverage",
     "lint": "tsdx lint",
     "lint:fix": "tsdx lint --fix",
     "prepare": "tsdx build",
