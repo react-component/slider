@@ -1,8 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import warning from 'tiny-warning';
 import shallowEqual from 'shallowequal';
-import useMergedState from 'rc-util/lib/hooks/useMergedState.js';
 import type { HandlesRef } from './Handles';
 import Handles from './Handles';
 import type { HandlesProps } from './Handles';
@@ -300,12 +299,9 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     );
 
     // ============================ Values ============================
-    const [mergedValue, setValue] = useMergedState<number[] | null | undefined>(
-      defaultValue,
-      {
-        value,
-      }
-    );
+    const [localValue, setValue] = useState(defaultValue);
+    const mergedValue = value === undefined ? localValue : value;
+
 
     const rawValues = React.useMemo(() => {
       const valueList =
