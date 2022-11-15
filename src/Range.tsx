@@ -302,7 +302,6 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     const [localValue, setValue] = useState(defaultValue);
     const mergedValue = value === undefined ? localValue : value;
 
-
     const rawValues = React.useMemo(() => {
       const valueList =
         mergedValue === null || mergedValue === undefined ? [] : mergedValue;

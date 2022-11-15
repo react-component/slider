@@ -32,9 +32,9 @@ describe('Slider', () => {
 
   it('should render Slider with value correctly', () => {
     const { container } = render(<Slider value={50} />);
-    expect(
-      container.getElementsByClassName('rc-slider-handle')[0]
-    ).toHaveStyle({ left: '50%' });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      { left: '50%' }
+    );
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       left: '0%',
       width: '50%',
@@ -43,9 +43,9 @@ describe('Slider', () => {
 
   it('should render Slider correctly where value > startPoint', () => {
     const { container } = render(<Slider value={50} startPoint={20} />);
-    expect(
-      container.getElementsByClassName('rc-slider-handle')[0]
-    ).toHaveStyle({ left: '50%' });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      { left: '50%' }
+    );
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       left: '20%',
       width: '30%',
@@ -54,9 +54,9 @@ describe('Slider', () => {
 
   it('should render Slider correctly where value < startPoint', () => {
     const { container } = render(<Slider value={40} startPoint={60} />);
-    expect(
-      container.getElementsByClassName('rc-slider-handle')[0]
-    ).toHaveStyle({ left: '40%' });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      { left: '40%' }
+    );
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       left: '40%',
       width: '20%',
@@ -65,9 +65,9 @@ describe('Slider', () => {
 
   it('should render reverse Slider with value correctly', () => {
     const { container } = render(<Slider value={50} reverse />);
-    expect(
-      container.getElementsByClassName('rc-slider-handle')[0]
-    ).toHaveStyle({ right: '50%' });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      { right: '50%' }
+    );
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       right: '0%',
       width: '50%',
@@ -76,9 +76,9 @@ describe('Slider', () => {
 
   it('should render reverse Slider correctly where value > startPoint', () => {
     const { container } = render(<Slider value={50} startPoint={20} reverse />);
-    expect(
-      container.getElementsByClassName('rc-slider-handle')[0]
-    ).toHaveStyle({ right: '50%' });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      { right: '50%' }
+    );
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       right: '20%',
       width: '30%',
@@ -87,9 +87,9 @@ describe('Slider', () => {
 
   it('should render reverse Slider correctly where value < startPoint', () => {
     const { container } = render(<Slider value={30} startPoint={50} reverse />);
-    expect(
-      container.getElementsByClassName('rc-slider-handle')[0]
-    ).toHaveStyle({ right: '30%' });
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle(
+      { right: '30%' }
+    );
     expect(container.getElementsByClassName('rc-slider-track')[0]).toHaveStyle({
       right: '30%',
       width: '20%',
@@ -445,9 +445,9 @@ describe('Slider', () => {
       const { container, unmount } = render(
         <Slider min={0} max={10} value={0} onFocus={handleFocus} />
       );
-      (container.getElementsByClassName(
-        'rc-slider-handle'
-      )[0] as HTMLElement).focus();
+      (
+        container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+      ).focus();
       expect(handleFocus).toBeCalled();
 
       unmount();
@@ -458,12 +458,12 @@ describe('Slider', () => {
       const { container, unmount } = render(
         <Slider min={0} max={10} value={0} onBlur={handleBlur} />
       );
-      (container.getElementsByClassName(
-        'rc-slider-handle'
-      )[0] as HTMLElement).focus();
-      (container.getElementsByClassName(
-        'rc-slider-handle'
-      )[0] as HTMLElement).blur();
+      (
+        container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+      ).focus();
+      (
+        container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
+      ).blur();
       expect(handleBlur).toBeCalled();
 
       unmount();
@@ -579,7 +579,13 @@ describe('Slider', () => {
   it('max value not align with step', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider min={0.5} max={2} step={1} defaultValue={1.5} onChange={onChange} />
+      <Slider
+        min={0.5}
+        max={2}
+        step={1}
+        defaultValue={1.5}
+        onChange={onChange}
+      />
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
       keyCode: keyCode.RIGHT,
@@ -594,7 +600,13 @@ describe('Slider', () => {
   it('not show decimal', () => {
     const onChange = jest.fn();
     const { container } = render(
-      <Slider min={0} max={1} step={0.01} defaultValue={0.81} onChange={onChange} />
+      <Slider
+        min={0}
+        max={1}
+        step={0.01}
+        defaultValue={0.81}
+        onChange={onChange}
+      />
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
       keyCode: keyCode.RIGHT,

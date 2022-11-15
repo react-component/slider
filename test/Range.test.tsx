@@ -54,7 +54,7 @@ describe('Range', () => {
     container: HTMLElement,
     start: number,
     end: number,
-    element: string,
+    element: string
   ) {
     const touchStart = createEvent.touchStart(
       container.getElementsByClassName(element)[0],
@@ -376,7 +376,7 @@ describe('Range', () => {
       });
     }
 
-    testLTR("mouse", (container: HTMLElement) =>
+    testLTR('mouse', (container: HTMLElement) =>
       doMouseMove(container, 0, 9999, 'rc-slider-handle')
     );
     testLTR('touch', (container: HTMLElement) =>
