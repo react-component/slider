@@ -8,7 +8,7 @@ import type { HandlesProps } from './Handles';
 import useDrag from './hooks/useDrag';
 import SliderContext from './context';
 import Tracks from './Tracks';
-import type { AriaValueFormat, OnStartMove } from './interface';
+import type { AriaValueFormat } from './interface';
 import Marks from './Marks';
 import type { InternalMarkObj } from './Marks';
 import Steps from './Steps';
@@ -343,12 +343,12 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       const cloneNextValues = [...nextValues].sort((a, b) => a - b);
 
       // Trigger event if needed
-      if (onChange && !shallowEqual(cloneNextValues, rawValues)) {
-        onChange(cloneNextValues);
-      }
+      if (!shallowEqual(cloneNextValues, rawValues)) {
+        onChange?.(cloneNextValues);
 
-      // We set this later since it will re-render component immediately
-      setValue(cloneNextValues);
+        // We set this later since it will re-render component immediately
+        setValue(cloneNextValues);
+      }
     };
 
     const setClosestHandle = (newValue: number) => {
@@ -438,34 +438,22 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       }
     }, [draggableTrack, normalizedStep]);
 
-    const { draggingIndex, draggingValue, cacheValues, onStartDrag } = useDrag(
+    const { draggingIndex, onStartDrag } = useDrag({
       containerRef,
+      handlesRef,
       direction,
       rawValues,
-      boundedMin,
-      boundedMax,
+      min: boundedMin,
+      max: boundedMax,
       constrainValue,
       triggerChange,
-      offsetValues
-    );
-
-    const onStartMove: OnStartMove = (e, valueIndex) => {
-      onStartDrag(e, valueIndex);
-    };
-
-    // Auto focus for updated handle
-    const dragging = draggingIndex !== -1;
-    React.useEffect(() => {
-      if (!dragging) {
-        const valueIndex = rawValues.lastIndexOf(draggingValue);
-        handlesRef.current?.focus(valueIndex);
-      }
-    }, [dragging]);
+      offsetValues,
+    });
 
     // =========================== Included ===========================
     const sortedCacheValues = React.useMemo(
-      () => [...cacheValues].sort((a, b) => a - b),
-      [cacheValues]
+      () => [...rawValues].sort((a, b) => a - b),
+      [rawValues]
     );
 
     // Provide a range values with included [min, max]
@@ -537,7 +525,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
               trackClassName={trackClassName}
               values={sortedCacheValues}
               startPoint={startPoint}
-              onStartMove={mergedDraggableTrack ? onStartMove : undefined}
+              onStartMove={mergedDraggableTrack ? onStartDrag : undefined}
             />
           )}
 
@@ -553,9 +541,9 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
             ref={handlesRef}
             handleClassName={handleClassName}
             draggingClassName={handleDraggingClassName}
-            values={cacheValues}
+            values={sortedCacheValues}
             draggingIndex={draggingIndex}
-            onStartMove={onStartMove}
+            onStartMove={onStartDrag}
             onOffsetChange={onHandleOffsetChange}
             onFocus={onFocus}
             onBlur={onBlur}

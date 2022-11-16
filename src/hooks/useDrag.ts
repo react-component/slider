@@ -1,6 +1,7 @@
 import React from 'react';
+import { HandlesRef } from '../Handles';
 import { Direction, OnStartMove } from '../interface';
-import { OffsetValues } from './useOffset';
+import { ConstrainValue, OffsetValues } from './useOffset';
 
 function getPosition(
   e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent
@@ -10,22 +11,30 @@ function getPosition(
   return { pageX: obj.pageX, pageY: obj.pageY };
 }
 
-const useDrag = (
-  containerRef: React.RefObject<HTMLDivElement>,
-  direction: Direction,
-  rawValues: number[],
-  min: number,
-  max: number,
-  formatValue: (value: number) => number,
-  triggerChange: (values: number[]) => void,
-  offsetValues: OffsetValues
-): {
+const useDrag = ({
+  containerRef,
+  handlesRef,
+  direction,
+  rawValues,
+  min,
+  max,
+  constrainValue,
+  triggerChange,
+  offsetValues,
+}: {
+  containerRef: React.RefObject<HTMLDivElement>;
+  handlesRef: React.RefObject<HandlesRef>;
+  direction: Direction;
+  rawValues: number[];
+  min: number;
+  max: number;
+  constrainValue: ConstrainValue;
+  triggerChange: (values: number[]) => void;
+  offsetValues: OffsetValues;
+}): {
   draggingIndex: number;
-  draggingValue: number;
-  cacheValues: number[];
   onStartDrag: OnStartMove;
 } => {
-  const [draggingValue, setDraggingValue] = React.useState<number | null>(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
   const [originValues, setOriginValues] = React.useState(rawValues);
@@ -58,12 +67,9 @@ const useDrag = (
     []
   );
 
-  const flushValues = (nextValues: number[], nextValue?: number) => {
+  const flushValues = (nextValues: number[]) => {
     // Perf: Only update state when value changed
     if (cacheValues.some((val, i) => val !== nextValues[i])) {
-      if (nextValue !== undefined) {
-        setDraggingValue(nextValue);
-      }
       setCacheValues(nextValues);
       triggerChange(nextValues);
     }
@@ -85,7 +91,7 @@ const useDrag = (
       offset = Math.min(offset, maxEndOffset);
 
       // Use first value to revert back of valid offset (like steps marks)
-      const formatStartValue = formatValue(startValue + offset);
+      const formatStartValue = constrainValue(startValue + offset);
       offset = formatStartValue - startValue;
       const cloneCacheValues = originValues.map((val) => val + offset);
       flushValues(cloneCacheValues);
@@ -99,7 +105,7 @@ const useDrag = (
 
       const next = offsetValues(cloneValues, valueIndex, offsetDist, 'dist');
 
-      flushValues(next.values, next.values[valueIndex]);
+      flushValues(next.values);
     }
   };
 
@@ -107,14 +113,11 @@ const useDrag = (
   const updateCacheValueRef = React.useRef(updateCacheValue);
   updateCacheValueRef.current = updateCacheValue;
 
-  const onStartMove: OnStartMove = (e, valueIndex) => {
+  const onStartDrag: OnStartMove = (e, valueIndex) => {
     e.preventDefault();
     e.stopPropagation();
 
-    const originValue = rawValues[valueIndex];
-
     setDraggingIndex(valueIndex);
-    setDraggingValue(originValue);
     setOriginValues(rawValues);
 
     const { pageX: startX, pageY: startY } = getPosition(e);
@@ -131,24 +134,24 @@ const useDrag = (
 
       const { width, height } = containerRef.current.getBoundingClientRect();
 
-      let offSetPercent: number;
+      let offsetRatio: number;
       switch (direction) {
         case 'btt':
-          offSetPercent = -offsetY / height;
+          offsetRatio = -offsetY / height;
           break;
 
         case 'ttb':
-          offSetPercent = offsetY / height;
+          offsetRatio = offsetY / height;
           break;
 
         case 'rtl':
-          offSetPercent = -offsetX / width;
+          offsetRatio = -offsetX / width;
           break;
 
         default:
-          offSetPercent = offsetX / width;
+          offsetRatio = offsetX / width;
       }
-      updateCacheValueRef.current(valueIndex, offSetPercent);
+      updateCacheValueRef.current(valueIndex, offsetRatio);
     };
 
     // End
@@ -162,6 +165,7 @@ const useDrag = (
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
 
+      handlesRef.current?.focus(valueIndex);
       setDraggingIndex(-1);
     };
 
@@ -173,21 +177,9 @@ const useDrag = (
     mouseUpEventRef.current = onMouseUp;
   };
 
-  // Only return cache value when it mapping with rawValues
-  const returnValues = React.useMemo(() => {
-    const sourceValues = [...rawValues].sort((a, b) => a - b);
-    const targetValues = [...cacheValues].sort((a, b) => a - b);
-
-    return sourceValues.every((val, index) => val === targetValues[index])
-      ? cacheValues
-      : rawValues;
-  }, [rawValues, cacheValues]);
-
   return {
     draggingIndex,
-    draggingValue: draggingValue!,
-    cacheValues: returnValues,
-    onStartDrag: onStartMove,
+    onStartDrag,
   };
 };
 

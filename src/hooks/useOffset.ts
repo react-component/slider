@@ -2,7 +2,7 @@ import { useCallback } from 'react';
 import { InternalMarkObj } from '../Marks';
 
 /** Constrain value align with step & marks */
-type ConstrainValue = (value: number) => number;
+export type ConstrainValue = (value: number) => number;
 
 type OffsetAmount = number | 'min' | 'max';
 type OffsetMode = 'unit' | 'dist';
@@ -92,7 +92,8 @@ const useConstrain = (
   );
 
   // ========================== Offset ==========================
-  // Single Value
+  // Offset `originValue` in the indicated direction, and constrain
+  // within [min, ...step, ...marks, max]
   const offsetValue: OffsetValue = (originValue, offset, mode) => {
     if (offset === 'min') {
       return min;
@@ -106,13 +107,16 @@ const useConstrain = (
     const targetDistValue = originValue + offset;
 
     // Compare next step value & mark value which is best match
-    let candidates: number[] = markList.map(({ value }) => value);
+    let candidates = markList.map(({ value }) => value);
 
     // Min & Max
     candidates.push(min, max);
 
-    // In case origin value is align with mark but not with step
+    // Put offset step value also
+    const sign = Math.sign(offset);
+
     if (step !== null) {
+      // In case origin value is align with mark but not with step
       const formattedValue = constrainValueToStepSize(
         min,
         originValue,
@@ -120,12 +124,7 @@ const useConstrain = (
         step
       );
       if (formattedValue) candidates.push(formattedValue);
-    }
 
-    // Put offset step value also
-    const sign = Math.sign(offset);
-
-    if (step !== null) {
       if (mode === 'unit') {
         const constrainedCandidate = constrainValueToStepSize(
           min,
@@ -135,13 +134,13 @@ const useConstrain = (
         );
         if (constrainedCandidate) candidates.push(constrainedCandidate);
       } else {
-        const formattedPotentialValue = constrainValueToStepSize(
+        const constrainedCandidate = constrainValueToStepSize(
           min,
           targetDistValue,
           max,
           step
         );
-        if (formattedPotentialValue) candidates.push(formattedPotentialValue);
+        if (constrainedCandidate) candidates.push(constrainedCandidate);
       }
     }
 
@@ -155,8 +154,12 @@ const useConstrain = (
       candidates = candidates.filter((val) => val !== originValue);
     }
 
-    const compareValue = mode === 'unit' ? originValue : targetDistValue;
+    // Out of range will back to range
+    if (candidates.length === 0) {
+      return offset < 0 ? min : max;
+    }
 
+    const compareValue = mode === 'unit' ? originValue : targetDistValue;
     let nextValue = candidates[0];
     let valueDist = Math.abs(nextValue - compareValue);
 
@@ -168,11 +171,6 @@ const useConstrain = (
       }
     });
 
-    // Out of range will back to range
-    if (nextValue === undefined) {
-      return offset < 0 ? min : max;
-    }
-
     // `unit` mode may need another round
     if (mode === 'unit' && Math.abs(offset) > 1) {
       return offsetValue(nextValue, offset - sign, mode);
@@ -183,12 +181,10 @@ const useConstrain = (
 
   /** Same as `offsetValue` but return `changed` mark to tell value changed */
   const offsetChangedValue = (
-    values: number[],
+    originValue: number,
     offset: number,
-    valueIndex: number,
     mode: OffsetMode
   ) => {
-    const originValue = values[valueIndex];
     const nextValue = offsetValue(originValue, offset, mode);
     return {
       value: nextValue,
@@ -202,16 +198,16 @@ const useConstrain = (
 
   // Values
   const offsetValues: OffsetValues = (values, valueIndex, offset, mode) => {
-    const nextValues = values.map(constrainValue);
+    const nextValues = values.map((value) => constrainValue(value));
     const originValue = nextValues[valueIndex];
     const nextValue = offsetValue(originValue, offset, mode);
     nextValues[valueIndex] = nextValue;
 
     if (allowCross === false) {
-      // >>>>> Allow Cross
       const pushNum = pushable || 0;
 
-      // ============ AllowCross ===============
+      // When AllowCross is disabled, if moving the value would make it
+      // cross over a neighbor, stay <pushNum> away.
       if (valueIndex > 0 && nextValues[valueIndex - 1] !== originValue) {
         nextValues[valueIndex] = Math.max(
           nextValues[valueIndex],
@@ -229,58 +225,53 @@ const useConstrain = (
         );
       }
     } else if (typeof pushable === 'number' || pushable === null) {
-      // >>>>> Pushable
-      // =============== Push ==================
+      // When AllowCross is enabled, and Push is not False,
+      // Move neighbors as needed
 
       // >>>>>> Basic push
-      // End values
+      // Push values after the current value towards the end
       for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
         let changed = true;
-        while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
+        while (changed && needPush(nextValues[i] - nextValues[i - 1])) {
           ({ value: nextValues[i], changed } = offsetChangedValue(
-            nextValues,
+            nextValues[i],
             1,
-            i,
             'unit'
           ));
         }
       }
 
-      // Start values
+      // Push values before the current value towards the start
       for (let i = valueIndex; i > 0; i -= 1) {
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(
-            nextValues,
+            nextValues[i - 1],
             -1,
-            i - 1,
             'unit'
           ));
         }
       }
 
-      // >>>>> Revert back to safe push range
-      // End to Start
+      // Push values from the end towards the start
       for (let i = nextValues.length - 1; i > 0; i -= 1) {
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(
-            nextValues,
+            nextValues[i - 1],
             -1,
-            i - 1,
             'unit'
           ));
         }
       }
 
-      // Start to End
+      // Push values from the start towards the end
       for (let i = 0; i < nextValues.length - 1; i += 1) {
         let changed = true;
         while (needPush(nextValues[i + 1] - nextValues[i]) && changed) {
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(
-            nextValues,
+            nextValues[i + 1],
             1,
-            i + 1,
             'unit'
           ));
         }
