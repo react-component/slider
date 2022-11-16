@@ -4,19 +4,19 @@ import { InternalMarkObj } from '../Marks';
 /** Constrain value align with step & marks */
 type ConstrainValue = (value: number) => number;
 
+type OffsetAmount = number | 'min' | 'max';
 type OffsetMode = 'unit' | 'dist';
 
 type OffsetValue = (
-  values: number[],
-  offset: number | 'min' | 'max',
-  valueIndex: number,
+  originValue: number,
+  offset: OffsetAmount,
   mode: OffsetMode
 ) => number;
 
 export type OffsetValues = (
   values: number[],
-  offset: number | 'min' | 'max',
   valueIndex: number,
+  offset: OffsetAmount,
   mode: OffsetMode
 ) => {
   values: number[];
@@ -31,23 +31,25 @@ const constrainValueToStepSize = (
   max: number,
   step: number
 ) => {
+  // Round the value to min + step * n
   const stepValue =
     min +
     Math.round((constrainValueInRange(min, val, max) - min) / step) * step;
 
   // Cut number in case to be like 0.30000000000000004
-  const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
-  const maxDecimal = Math.max(
-    getDecimal(step),
-    getDecimal(max),
-    getDecimal(min)
+  const getPrecision = (num: number) =>
+    (String(num).split('.')[1] || '').length;
+  const maxPrecision = Math.max(
+    getPrecision(step),
+    getPrecision(max),
+    getPrecision(min)
   );
-  const fixedValue = Number(stepValue.toFixed(maxDecimal));
+  const fixedValue = Number(stepValue.toFixed(maxPrecision));
 
   return min <= fixedValue && fixedValue <= max ? fixedValue : null;
 };
 
-const useOffset = (
+const useConstrain = (
   min: number,
   max: number,
   step: number | null,
@@ -55,25 +57,28 @@ const useOffset = (
   allowCross: boolean,
   pushable: false | number | null
 ): { constrainValue: ConstrainValue; offsetValues: OffsetValues } => {
+  /**
+   * Constrain a value to one of the valid candidates.
+   */
   const constrainValue: ConstrainValue = useCallback(
     (val) => {
       // Constrain the value to one of the marks
-      const alignValues = markList.map((mark) => mark.value);
+      const candidates = markList.map((mark) => mark.value);
 
       // If step is null, disable `step` size
       if (step !== null) {
         const constrainedValue = constrainValueToStepSize(min, val, max, step);
-        if (constrainedValue !== null) alignValues.push(constrainedValue);
+        if (constrainedValue !== null) candidates.push(constrainedValue);
       }
 
       // Constrain to max and min
-      alignValues.push(min, max);
+      candidates.push(min, max);
 
       // Constrain to the nearest allowed value
-      let closestValue = alignValues[0];
-      let closestDist = max - min;
+      let closestValue = candidates[0];
+      let closestDist = Math.abs(val - closestValue);
 
-      alignValues.forEach((alignValue) => {
+      candidates.forEach((alignValue) => {
         const dist = Math.abs(val - alignValue);
         if (dist < closestDist) {
           closestValue = alignValue;
@@ -88,8 +93,7 @@ const useOffset = (
 
   // ========================== Offset ==========================
   // Single Value
-  // TODO: is `values+valueIndex` necessary?
-  const offsetValue: OffsetValue = (values, offset, valueIndex, mode) => {
+  const offsetValue: OffsetValue = (originValue, offset, mode) => {
     if (offset === 'min') {
       return min;
     }
@@ -98,16 +102,14 @@ const useOffset = (
       return max;
     }
 
-    const originValue = values[valueIndex];
-
     // Only used for `dist` mode
     const targetDistValue = originValue + offset;
 
     // Compare next step value & mark value which is best match
-    let potentialValues: number[] = markList.map(({ value }) => value);
+    let candidates: number[] = markList.map(({ value }) => value);
 
     // Min & Max
-    potentialValues.push(min, max);
+    candidates.push(min, max);
 
     // In case origin value is align with mark but not with step
     if (step !== null) {
@@ -117,7 +119,7 @@ const useOffset = (
         max,
         step
       );
-      if (formattedValue) potentialValues.push(formattedValue);
+      if (formattedValue) candidates.push(formattedValue);
     }
 
     // Put offset step value also
@@ -125,14 +127,13 @@ const useOffset = (
 
     if (step !== null) {
       if (mode === 'unit') {
-        const formattedPotentialValue = constrainValueToStepSize(
+        const constrainedCandidate = constrainValueToStepSize(
           min,
           originValue + sign * step,
           max,
           step
         );
-        if (formattedPotentialValue)
-          potentialValues.push(formattedPotentialValue);
+        if (constrainedCandidate) candidates.push(constrainedCandidate);
       } else {
         const formattedPotentialValue = constrainValueToStepSize(
           min,
@@ -140,28 +141,26 @@ const useOffset = (
           max,
           step
         );
-
-        if (formattedPotentialValue)
-          potentialValues.push(formattedPotentialValue);
+        if (formattedPotentialValue) candidates.push(formattedPotentialValue);
       }
     }
 
     // Remove values in opposite direction
-    potentialValues = potentialValues.filter((val) =>
+    candidates = candidates.filter((val) =>
       sign < 0 ? val <= originValue : val >= originValue
     );
 
     if (mode === 'unit') {
       // `unit` mode can not contain itself
-      potentialValues = potentialValues.filter((val) => val !== originValue);
+      candidates = candidates.filter((val) => val !== originValue);
     }
 
     const compareValue = mode === 'unit' ? originValue : targetDistValue;
 
-    let nextValue = potentialValues[0];
+    let nextValue = candidates[0];
     let valueDist = Math.abs(nextValue - compareValue);
 
-    potentialValues.forEach((potentialValue) => {
+    candidates.forEach((potentialValue) => {
       const dist = Math.abs(potentialValue - compareValue);
       if (dist < valueDist) {
         nextValue = potentialValue;
@@ -174,17 +173,9 @@ const useOffset = (
       return offset < 0 ? min : max;
     }
 
-    // `dist` mode
-    if (mode === 'dist') {
-      return nextValue;
-    }
-
     // `unit` mode may need another round
-    if (Math.abs(offset) > 1) {
-      const cloneValues = [...values];
-      cloneValues[valueIndex] = nextValue;
-
-      return offsetValue(cloneValues, offset - sign, valueIndex, mode);
+    if (mode === 'unit' && Math.abs(offset) > 1) {
+      return offsetValue(nextValue, offset - sign, mode);
     }
 
     return nextValue;
@@ -195,10 +186,10 @@ const useOffset = (
     values: number[],
     offset: number,
     valueIndex: number,
-    mode: OffsetMode = 'unit'
+    mode: OffsetMode
   ) => {
     const originValue = values[valueIndex];
-    const nextValue = offsetValue(values, offset, valueIndex, mode);
+    const nextValue = offsetValue(originValue, offset, mode);
     return {
       value: nextValue,
       changed: nextValue !== originValue,
@@ -210,10 +201,10 @@ const useOffset = (
     (typeof pushable === 'number' && dist < pushable);
 
   // Values
-  const offsetValues: OffsetValues = (values, offset, valueIndex, mode) => {
+  const offsetValues: OffsetValues = (values, valueIndex, offset, mode) => {
     const nextValues = values.map(constrainValue);
     const originValue = nextValues[valueIndex];
-    const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
+    const nextValue = offsetValue(originValue, offset, mode);
     nextValues[valueIndex] = nextValue;
 
     if (allowCross === false) {
@@ -249,7 +240,8 @@ const useOffset = (
           ({ value: nextValues[i], changed } = offsetChangedValue(
             nextValues,
             1,
-            i
+            i,
+            'unit'
           ));
         }
       }
@@ -261,7 +253,8 @@ const useOffset = (
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(
             nextValues,
             -1,
-            i - 1
+            i - 1,
+            'unit'
           ));
         }
       }
@@ -274,7 +267,8 @@ const useOffset = (
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(
             nextValues,
             -1,
-            i - 1
+            i - 1,
+            'unit'
           ));
         }
       }
@@ -286,7 +280,8 @@ const useOffset = (
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(
             nextValues,
             1,
-            i + 1
+            i + 1,
+            'unit'
           ));
         }
       }
@@ -300,4 +295,4 @@ const useOffset = (
   return { constrainValue, offsetValues };
 };
 
-export default useOffset;
+export default useConstrain;

@@ -97,7 +97,7 @@ const useDrag = (
       const cloneValues = [...cacheValues];
       cloneValues[valueIndex] = originValues[valueIndex];
 
-      const next = offsetValues(cloneValues, offsetDist, valueIndex, 'dist');
+      const next = offsetValues(cloneValues, valueIndex, offsetDist, 'dist');
 
       flushValues(next.values, next.values[valueIndex]);
     }

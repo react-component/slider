@@ -12,7 +12,7 @@ import type { AriaValueFormat, OnStartMove } from './interface';
 import Marks from './Marks';
 import type { InternalMarkObj } from './Marks';
 import Steps from './Steps';
-import useOffset from './hooks/useOffset';
+import useConstrain from './hooks/useOffset';
 
 export interface RangeProps {
   /**
@@ -289,7 +289,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     }, [marks]);
 
     // ============================ Format ============================
-    const { constrainValue, offsetValues } = useOffset(
+    const { constrainValue, offsetValues } = useConstrain(
       boundedMin,
       boundedMax,
       normalizedStep,
@@ -421,7 +421,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       if (disabled) {
         return;
       }
-      const next = offsetValues(rawValues, offset, valueIndex, 'unit');
+      const next = offsetValues(rawValues, valueIndex, offset, 'unit');
 
       triggerChange(next.values);
 
