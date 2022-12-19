@@ -1,6 +1,6 @@
 import * as React from 'react';
 import classNames from 'classnames';
-import shallowEqual from 'shallowequal';
+import isEqual from 'rc-util/lib/isEqual';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import type { HandlesRef } from './Handles';
 import Handles from './Handles';
@@ -269,7 +269,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     const cloneNextValues = [...nextValues].sort((a, b) => a - b);
 
     // Trigger event if needed
-    if (onChange && !shallowEqual(cloneNextValues, rawValuesRef.current)) {
+    if (onChange && !isEqual(cloneNextValues, rawValuesRef.current, true)) {
       onChange(getTriggerValue(cloneNextValues));
     }
 
