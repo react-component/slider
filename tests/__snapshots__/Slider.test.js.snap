@@ -16,6 +16,7 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
   />
   <div
     aria-disabled="false"
+    aria-orientation="horizontal"
     aria-valuemax="100"
     aria-valuemin="0"
     aria-valuenow="0"
