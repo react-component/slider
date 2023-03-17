@@ -22,7 +22,7 @@ const HandleTooltip = (props: {
 
   function keepAlign() {
     rafRef.current = raf(() => {
-      tooltipRef.current?.forcePopupAlign();
+      tooltipRef.current?.forceAlign();
     });
   }
 
