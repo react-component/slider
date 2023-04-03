@@ -9,7 +9,7 @@ import '@testing-library/jest-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import Slider, { SliderProps } from '../src/Slider';
-import Range, { RangeRef } from '../src/Range';
+import { RangeRef } from '../src/Range';
 
 const SliderWithState = ({
   defaultValue,
@@ -226,29 +226,27 @@ describe('Slider', () => {
 
   it('it should work fine when arrow key is pressed', () => {
     const onChange = jest.fn();
-    const { container } = render(
-      <Range value={[20, 50]} onChange={onChange} />
-    );
+    const { container } = render(<Slider value={50} onChange={onChange} />);
 
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.LEFT,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 49]);
+    expect(onChange).toHaveBeenCalledWith(49);
 
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.RIGHT,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 51]);
+    expect(onChange).toHaveBeenCalledWith(51);
 
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.UP,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 51]);
+    expect(onChange).toHaveBeenCalledWith(51);
 
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.DOWN,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 49]);
+    expect(onChange).toHaveBeenCalledWith(49);
   });
 
   it('decreases the value when key "page down" is pressed, by a factor 2', () => {

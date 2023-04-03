@@ -98,7 +98,7 @@ describe('Range', () => {
     fireEvent(document, touchMove);
   }
 
-  it('should render Range with correct DOM structure', () => {
+  it('should render with correct DOM structure', () => {
     const { asFragment } = render(
       <Range
         range
@@ -144,7 +144,7 @@ describe('Range', () => {
     expect(asFragment().firstChild).toMatchSnapshot();
   });
 
-  it('should render Range with value correctly', () => {
+  it('should render with value correctly', () => {
     const { container } = render(
       <Range
         range
@@ -176,7 +176,7 @@ describe('Range', () => {
     );
   });
 
-  it('should render reverse Range with value correctly', () => {
+  it('should render reverse with value correctly', () => {
     const { container } = render(
       <Range
         range
@@ -203,7 +203,7 @@ describe('Range', () => {
     );
   });
 
-  it('should render Range with tabIndex correctly', () => {
+  it('should render with tabIndex correctly', () => {
     const { container } = render(
       <Range
         range
@@ -226,7 +226,7 @@ describe('Range', () => {
     ).toHaveAttribute('tabIndex', '2');
   });
 
-  it('should render Range without tabIndex (equal null) correctly', () => {
+  it('should render without tabIndex (equal null) correctly', () => {
     const { container } = render(
       <Range
         range
@@ -289,15 +289,15 @@ describe('Range', () => {
     );
   });
 
-  it('should update Range correctly in controlled model', () => {
+  it('should update correctly in controlled model', () => {
     const { container, rerender } = render(
-      <Range range readOnly value={[2, 4, 6]} />
+      <Range readOnly value={[2, 4, 6]} />
     );
     expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(
       3
     );
 
-    rerender(<Range range readOnly value={[2, 4]} />);
+    rerender(<Range readOnly value={[2, 4]} />);
     expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(
       2
     );
@@ -431,7 +431,7 @@ describe('Range', () => {
     it('vertical', () => {
       const onChange = jest.fn();
       const { container } = render(
-        <Range range onChange={onChange} value={[20, 40]} vertical />
+        <Range onChange={onChange} value={[20, 40]} vertical />
       );
 
       // Do move
@@ -443,7 +443,7 @@ describe('Range', () => {
     it('vertical & reverse', () => {
       const onChange = jest.fn();
       const { container } = render(
-        <Range range onChange={onChange} value={[20, 40]} vertical reverse />
+        <Range onChange={onChange} value={[20, 40]} vertical reverse />
       );
 
       // Do move
@@ -493,32 +493,32 @@ describe('Range', () => {
   });
 
   // describe('track draggable', () => {
-  //   function test(name: string, func: (container: HTMLElement) => void) {
-  //     it(name, () => {
-  //       const onChange = jest.fn();
+  function test(name: string, func: (container: HTMLElement) => void) {
+    it(name, () => {
+      const onChange = jest.fn();
 
-  //       const { container, unmount } = render(
-  //         <Range
-  //           range
-  //           defaultValue={[0, 30]}
-  //           draggableTrack
-  //           onChange={onChange}
-  //         />
-  //       );
+      const { container, unmount } = render(
+        <RangeWithState
+          range
+          defaultValue={[0, 30]}
+          draggableTrack
+          onChange={onChange}
+        />
+      );
 
-  //       // Do move
+      // Do move
 
-  //       func(container);
-  //       expect(onChange).toHaveBeenCalledWith([20, 50]);
-  //       unmount();
-  //     });
-  //   }
+      func(container);
+      expect(onChange).toHaveBeenCalledWith([20, 50]);
+      unmount();
+    });
+  }
 
-  //   test('mouse', (container: HTMLElement) =>
-  //     doMouseMove(container, 0, 20, 'rc-slider-track'));
-  //   // FIXME
-  //   // test('touch', (container: HTMLElement) =>
-  //   //   doTouchMove(container, 0, 20, 'rc-slider-track'));
+  test('mouse', (container: HTMLElement) =>
+    doMouseMove(container, 0, 20, 'rc-slider-track'));
+  // FIXME
+  // test('touch', (container: HTMLElement) =>
+  //   doTouchMove(container, 0, 20, 'rc-slider-track'));
   // });
 
   it('sets aria-label on the handles', () => {
@@ -578,52 +578,52 @@ describe('Range', () => {
   });
 
   // Corresponds to the issue described in https://github.com/react-component/slider/issues/690.
-  // it('should correctly display a dynamically changed number of handles', () => {
-  //   const props = {
-  //     range: true,
-  //     allowCross: false,
-  //     marks: {
-  //       0: '0',
-  //       25: '25',
-  //       50: '50',
-  //       75: '75',
-  //       100: '100',
-  //     },
-  //     step: null,
-  //   };
+  it('should correctly display a dynamically changed number of handles', () => {
+    const props = {
+      range: true,
+      allowCross: false,
+      marks: {
+        0: '0',
+        25: '25',
+        50: '50',
+        75: '75',
+        100: '100',
+      },
+      step: null,
+    };
 
-  //   const { container, rerender } = render(
-  //     <Range {...props} range value={[0, 25, 50, 75, 100]} />
-  //   );
+    const { container, rerender } = render(
+      <Range {...props} value={[0, 25, 50, 75, 100]} readOnly />
+    );
 
-  //   const verifyHandles = (values: number[]) => {
-  //     // Has the number of handles that we set.
-  //     expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(
-  //       values.length
-  //     );
+    const verifyHandles = (values: number[]) => {
+      // Has the number of handles that we set.
+      expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(
+        values.length
+      );
 
-  //     // Handles have the values that we set.
-  //     Array.from(container.getElementsByClassName('rc-slider-handle')).forEach(
-  //       (ele, index) => {
-  //         expect(ele).toHaveAttribute(
-  //           'aria-valuenow',
-  //           values[index].toString()
-  //         );
-  //       }
-  //     );
-  //   };
+      // Handles have the values that we set.
+      Array.from(container.getElementsByClassName('rc-slider-handle')).forEach(
+        (ele, index) => {
+          expect(ele).toHaveAttribute(
+            'aria-valuenow',
+            values[index].toString()
+          );
+        }
+      );
+    };
 
-  //   // Assert that handles are correct initially.
-  //   verifyHandles([0, 25, 50, 75, 100]);
+    // Assert that handles are correct initially.
+    verifyHandles([0, 25, 50, 75, 100]);
 
-  //   // Assert that handles are correct after decreasing their number.
-  //   rerender(<Range {...props} range value={[0, 75, 100]} />);
-  //   verifyHandles([0, 75, 100]);
+    // Assert that handles are correct after decreasing their number.
+    rerender(<Range {...props} value={[0, 75, 100]} readOnly />);
+    verifyHandles([0, 75, 100]);
 
-  //   // Assert that handles are correct after increasing their number.
-  //   rerender(<Range {...props} range value={[0, 25, 75, 100]} />);
-  //   verifyHandles([0, 25, 75, 100]);
-  // });
+    // Assert that handles are correct after increasing their number.
+    rerender(<Range {...props} value={[0, 25, 75, 100]} readOnly />);
+    verifyHandles([0, 25, 75, 100]);
+  });
 
   describe('focus & blur', () => {
     it('focus()', () => {
@@ -671,11 +671,49 @@ describe('Range', () => {
       return;
     });
 
-    render(<Range range value={[0, 0]} readOnly draggableTrack step={null} />);
+    render(<Range value={[0, 0]} readOnly draggableTrack step={null} />);
 
     expect(errorSpy).toHaveBeenCalledWith(
       '`draggableTrack` is not supported when `step` is `null`.'
     );
     errorSpy.mockRestore();
+  });
+
+  describe('warning for readOnly or onChange', () => {
+    let errorSpy: jest.SpyInstance<void, any>;
+
+    beforeEach(() => {
+      errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+        return;
+      });
+    });
+
+    afterEach(() => {
+      errorSpy.mockRestore();
+    });
+
+    it('should not warn if readOnly is passed', () => {
+      render(<Range value={[0, 0]} readOnly />);
+      expect(errorSpy).not.toBeCalled();
+    });
+
+    it('should not warn if onChange is passed', () => {
+      const onChange = jest.fn();
+      render(<Range value={[0, 0]} onChange={onChange} />);
+      expect(errorSpy).not.toBeCalled();
+    });
+
+    it('should not warn if both are passed', () => {
+      const onChange = jest.fn();
+      render(<Range value={[0, 0]} readOnly onChange={onChange} />);
+      expect(errorSpy).not.toBeCalled();
+    });
+
+    it('should warn if readOnly and onChange are not passed', () => {
+      render(<Range value={[0, 0]} />);
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Warning: You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. Set either `onChange` or `readOnly`.'
+      );
+    });
   });
 });

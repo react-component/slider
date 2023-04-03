@@ -22,7 +22,7 @@ describe('marks', () => {
   it('should render marks correctly when `marks` is not an empty object', () => {
     const marks = { 0: 0, 30: '30', 99: '', 100: '100' };
 
-    const { container } = render(<Slider value={30} marks={marks} />);
+    const { container } = render(<Slider value={30} marks={marks} readOnly />);
     expect(
       container.getElementsByClassName('rc-slider-mark-text')
     ).toHaveLength(3);
@@ -37,7 +37,7 @@ describe('marks', () => {
     ).toBe('100');
 
     const { container: container2 } = render(
-      <Range range value={[0, 30]} marks={marks} />
+      <Range range value={[0, 30]} marks={marks} readOnly />
     );
     expect(
       container2.getElementsByClassName('rc-slider-mark-text')
@@ -61,7 +61,7 @@ describe('marks', () => {
     const callBack = jest.fn();
 
     const { container } = render(
-      <Slider value={0} marks={marks} onChange={callBack} />
+      <Slider value={0} marks={marks} onChange={callBack} readOnly />
     );
     fireEvent.click(container.getElementsByClassName('rc-slider-mark-text')[1]);
     expect(callBack).toBeCalledWith(30);
@@ -70,7 +70,7 @@ describe('marks', () => {
   it('should show the correct aria value', () => {
     const marks = { 0: '0', 30: '30', 100: '100' };
 
-    const { container } = render(<Slider marks={marks} value={30} />);
+    const { container } = render(<Slider marks={marks} value={30} readOnly />);
     expect(
       container.getElementsByClassName('rc-slider-handle')[0]
     ).toHaveAttribute('aria-valuenow', '30');

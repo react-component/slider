@@ -177,7 +177,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
   (
     {
       // Status
-      // readOnly = false,
+      readOnly = false,
       disabled = false,
       autoFocus = false,
       onFocus,
@@ -273,12 +273,12 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       );
     }, [step]);
 
-    // React.useEffect(() => {
-    //   warning(
-    //     readOnly || onChange !== undefined,
-    //     'You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. Set either `onChange` or `readOnly`.'
-    //   );
-    // }, [readOnly, onChange]);
+    React.useEffect(() => {
+      warning(
+        readOnly || onChange !== undefined,
+        'You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. Set either `onChange` or `readOnly`.'
+      );
+    }, [readOnly, onChange]);
 
     // ============================= Push =============================
     const mergedPush =

@@ -20,13 +20,15 @@ describe('Common', () => {
   });
 
   it('should render vertical Slider/Range, when `vertical` is true', () => {
-    const { container: container1 } = render(<Slider value={0} vertical />);
+    const { container: container1 } = render(
+      <Slider value={0} readOnly vertical />
+    );
     expect(
       container1.getElementsByClassName('rc-slider-vertical')
     ).toHaveLength(1);
 
     const { container: container2 } = render(
-      <Range value={[0, 0]} range vertical />
+      <Range value={[0, 0]} readOnly range vertical />
     );
     expect(
       container2.getElementsByClassName('rc-slider-vertical')
@@ -35,7 +37,7 @@ describe('Common', () => {
 
   it('should render dots correctly when `dots=true`', () => {
     const { container: container1 } = render(
-      <Slider value={50} step={10} dots />
+      <Slider value={50} readOnly step={10} dots />
     );
     expect(container1.getElementsByClassName('rc-slider-dot')).toHaveLength(11);
     expect(
@@ -43,7 +45,7 @@ describe('Common', () => {
     ).toHaveLength(6);
 
     const { container: container2 } = render(
-      <Range value={[20, 50]} step={10} dots />
+      <Range value={[20, 50]} readOnly step={10} dots />
     );
     expect(container2.getElementsByClassName('rc-slider-dot')).toHaveLength(11);
     expect(
@@ -52,19 +54,25 @@ describe('Common', () => {
   });
 
   it('should render normally when `dots=true` and `step=null`', () => {
-    const { container } = render(<Slider value={0} step={null} dots />);
+    const { container } = render(
+      <Slider value={0} readOnly step={null} dots />
+    );
     expect(() => container).not.toThrowError();
   });
 
   it('should not set value greater than `max` or smaller `min`', () => {
-    const { container: container1 } = render(<Slider value={0} min={10} />);
+    const { container: container1 } = render(
+      <Slider value={0} readOnly min={10} />
+    );
     expect(
       container1
         .getElementsByClassName('rc-slider-handle')[0]
         .getAttribute('aria-valuenow')
     ).toBe('10');
 
-    const { container: container2 } = render(<Slider value={100} max={90} />);
+    const { container: container2 } = render(
+      <Slider value={100} readOnly max={90} />
+    );
     expect(
       container2
         .getElementsByClassName('rc-slider-handle')[0]
@@ -72,7 +80,7 @@ describe('Common', () => {
     ).toBe('90');
 
     const { container: container3 } = render(
-      <Range value={[0, 100]} min={10} max={90} />
+      <Range value={[0, 100]} readOnly min={10} max={90} />
     );
     expect(
       container3
@@ -92,7 +100,7 @@ describe('Common', () => {
     });
 
     const { container: container1 } = render(
-      <Slider value={0} min={Math.min()} />
+      <Slider value={0} readOnly min={Math.min()} />
     );
     expect(
       container1
@@ -105,7 +113,7 @@ describe('Common', () => {
     errorSpy.mockReset();
 
     const { container: container2 } = render(
-      <Slider value={100} max={Math.max()} />
+      <Slider value={100} readOnly max={Math.max()} />
     );
     expect(
       container2
@@ -118,7 +126,7 @@ describe('Common', () => {
     errorSpy.mockReset();
 
     const { container: container3 } = render(
-      <Range value={[0, 100]} min={Math.min()} max={Math.max()} />
+      <Range value={[0, 100]} readOnly min={Math.min()} max={Math.max()} />
     );
     expect(
       container3
@@ -248,7 +256,7 @@ describe('Common', () => {
   });
 
   it('should not go to right direction when mouse go to the left', () => {
-    const { container } = render(<Slider value={0} />);
+    const { container } = render(<Slider value={0} readOnly />);
     const leftHandle = container.getElementsByClassName('rc-slider-handle')[0];
 
     const mouseDown = createEvent.mouseDown(leftHandle);

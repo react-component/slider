@@ -65,7 +65,7 @@ exports[`Range should render Multi-Range with correct DOM structure 1`] = `
 </div>
 `;
 
-exports[`Range should render Range with correct DOM structure 1`] = `
+exports[`Range should render with correct DOM structure 1`] = `
 <div
   class="rc-slider rc-slider-horizontal"
 >
