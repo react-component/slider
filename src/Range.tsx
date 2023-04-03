@@ -173,7 +173,7 @@ export interface RangeRef {
   blur: () => void;
 }
 
-const Slider = React.forwardRef<RangeRef, RangeProps>(
+const Range = React.forwardRef<RangeRef, RangeProps>(
   (
     {
       // Status
@@ -567,4 +567,4 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
   }
 );
 
-export default Slider;
+export default Range;
