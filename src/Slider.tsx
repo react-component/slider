@@ -7,7 +7,6 @@ export type SliderProps = Omit<
   | 'value'
   | 'range'
   | 'count'
-  | 'defaultValue'
   | 'onChange'
   | 'draggableTrack'
   | 'allowCross'
