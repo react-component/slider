@@ -28,7 +28,7 @@ describe('Common', () => {
     ).toHaveLength(1);
 
     const { container: container2 } = render(
-      <Range value={[0, 0]} readOnly range vertical />
+      <Range value={[0, 0]} readOnly vertical />
     );
     expect(
       container2.getElementsByClassName('rc-slider-vertical')

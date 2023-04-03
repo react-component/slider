@@ -101,7 +101,6 @@ describe('Range', () => {
   it('should render with correct DOM structure', () => {
     const { asFragment } = render(
       <Range
-        range
         value={[0, 0]}
         readOnly
         trackClassName={[
@@ -123,7 +122,6 @@ describe('Range', () => {
   it('should render Multi-Range with correct DOM structure', () => {
     const { asFragment } = render(
       <Range
-        range
         value={[0, 0]}
         count={3}
         readOnly
@@ -147,7 +145,6 @@ describe('Range', () => {
   it('should render with value correctly', () => {
     const { container } = render(
       <Range
-        range
         value={[0, 50]}
         readOnly
         trackClassName={[
@@ -179,7 +176,6 @@ describe('Range', () => {
   it('should render reverse with value correctly', () => {
     const { container } = render(
       <Range
-        range
         value={[0, 50]}
         readOnly
         reverse
@@ -206,7 +202,6 @@ describe('Range', () => {
   it('should render with tabIndex correctly', () => {
     const { container } = render(
       <Range
-        range
         value={[0, 0]}
         readOnly
         tabIndex={[1, 2]}
@@ -229,7 +224,6 @@ describe('Range', () => {
   it('should render without tabIndex (equal null) correctly', () => {
     const { container } = render(
       <Range
-        range
         value={[0, 0]}
         readOnly
         tabIndex={null}
@@ -251,7 +245,6 @@ describe('Range', () => {
   it('should render Multi-Range with value correctly', () => {
     const { container } = render(
       <Range
-        range
         count={3}
         value={[0, 25, 50, 75]}
         readOnly
@@ -307,7 +300,6 @@ describe('Range', () => {
     const onChange = jest.fn();
     const { container } = render(
       <Range
-        range
         allowCross={false}
         onChange={onChange}
         value={[30, 40]}
@@ -326,7 +318,6 @@ describe('Range', () => {
     const onChange = jest.fn();
     const { container } = render(
       <RangeWithState
-        range
         defaultValue={[10, 30, 50]}
         pushable={10}
         onChange={onChange}
@@ -389,7 +380,6 @@ describe('Range', () => {
         const onChange = jest.fn();
         const { container, unmount } = render(
           <Range
-            range
             onChange={onChange}
             value={[20, 40]}
             trackClassName={[
@@ -463,7 +453,6 @@ describe('Range', () => {
 
           return (
             <Range
-              range
               onChange={(newValues) => {
                 setValue(newValues);
                 onChange(newValues);
@@ -499,7 +488,6 @@ describe('Range', () => {
 
       const { container, unmount } = render(
         <RangeWithState
-          range
           defaultValue={[0, 30]}
           draggableTrack
           onChange={onChange}
@@ -524,7 +512,6 @@ describe('Range', () => {
   it('sets aria-label on the handles', () => {
     const { container } = render(
       <Range
-        range
         value={[0, 0]}
         readOnly
         ariaLabelForHandle={['Some Label', 'Some other Label']}
@@ -541,7 +528,6 @@ describe('Range', () => {
   it('sets aria-labelledby on the handles', () => {
     const { container } = render(
       <Range
-        range
         value={[0, 0]}
         readOnly
         ariaLabelledByForHandle={['some_id', 'some_other_id']}
@@ -558,7 +544,6 @@ describe('Range', () => {
   it('sets aria-valuetext on the handles', () => {
     const { container } = render(
       <Range
-        range
         min={0}
         max={5}
         value={[1, 3]}
@@ -629,14 +614,7 @@ describe('Range', () => {
     it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(
-        <Range
-          range
-          value={[0, 0]}
-          readOnly
-          min={0}
-          max={20}
-          onFocus={handleFocus}
-        />
+        <Range value={[0, 0]} readOnly min={0} max={20} onFocus={handleFocus} />
       );
       (
         container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement
@@ -647,14 +625,7 @@ describe('Range', () => {
     it('blur', () => {
       const handleBlur = jest.fn();
       const { container } = render(
-        <Range
-          range
-          value={[0, 0]}
-          readOnly
-          min={0}
-          max={20}
-          onBlur={handleBlur}
-        />
+        <Range value={[0, 0]} readOnly min={0} max={20} onBlur={handleBlur} />
       );
       (
         container.getElementsByClassName('rc-slider-handle')[0] as HTMLElement

@@ -37,7 +37,7 @@ describe('marks', () => {
     ).toBe('100');
 
     const { container: container2 } = render(
-      <Range range value={[0, 30]} marks={marks} readOnly />
+      <Range value={[0, 30]} marks={marks} readOnly />
     );
     expect(
       container2.getElementsByClassName('rc-slider-mark-text')
