@@ -26,16 +26,3 @@ exports[`Slider should render Slider with correct DOM structure 1`] = `
   />
 </div>
 `;
-
-exports[`Slider should render Slider without handle if value is null 1`] = `
-<div
-  class="rc-slider rc-slider-horizontal"
->
-  <div
-    class="rc-slider-rail"
-  />
-  <div
-    class="rc-slider-step"
-  />
-</div>
-`;

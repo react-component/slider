@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import clsx from 'clsx';
 import warning from 'tiny-warning';
 import shallowEqual from 'shallowequal';
@@ -24,6 +24,7 @@ export interface RangeProps {
   range?: boolean;
 
   // Status
+  readOnly?: boolean;
   disabled?: boolean;
   autoFocus?: boolean;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
@@ -47,10 +48,7 @@ export interface RangeProps {
   step?: number | null;
 
   /** Selected values of handles, when using it as a controlled component */
-  value?: number[] | null;
-
-  /** Selected initial value, when using it as an uncontrolled component */
-  defaultValue?: number[];
+  value: number[];
 
   /** Called whenever a handle is moved */
   onChange?: (value: number[]) => void;
@@ -179,6 +177,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
   (
     {
       // Status
+      // readOnly = false,
       disabled = false,
       autoFocus = false,
       onFocus,
@@ -189,7 +188,6 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       max = 100,
       step = 1,
       value,
-      defaultValue,
       range = true,
       count,
       onChange,
@@ -275,6 +273,13 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       );
     }, [step]);
 
+    // React.useEffect(() => {
+    //   warning(
+    //     readOnly || onChange !== undefined,
+    //     'You provided a `value` prop to a form field without an `onChange` handler. This will render a read-only field. Set either `onChange` or `readOnly`.'
+    //   );
+    // }, [readOnly, onChange]);
+
     // ============================= Push =============================
     const mergedPush =
       pushable === true
@@ -305,22 +310,18 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     );
 
     // ============================ Values ============================
-    const [localValue, setValue] = useState(defaultValue);
-    const mergedValue = value === undefined ? localValue : value;
-
     const rawValues = React.useMemo(() => {
-      const valueList =
-        mergedValue === null || mergedValue === undefined ? [] : mergedValue;
+      const valueList = value ?? [];
 
       const [val0 = boundedMin] = valueList;
-      let returnValues = mergedValue === null ? [] : [val0];
+      let returnValues = value === null ? [] : [val0];
 
       // Format as range
       if (range) {
         returnValues = [...valueList];
 
         // When count provided or value is `undefined`, we fill values
-        if (count || mergedValue === undefined) {
+        if (count || value === undefined) {
           const pointCount = count && count >= 0 ? count + 1 : 2;
           returnValues = returnValues.slice(0, pointCount);
 
@@ -340,7 +341,7 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       });
 
       return returnValues;
-    }, [mergedValue, range, boundedMin, count, constrainValue]);
+    }, [value, range, boundedMin, count, constrainValue]);
 
     // =========================== onChange ===========================
 
@@ -351,9 +352,6 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
       // Trigger event if needed
       if (!shallowEqual(cloneNextValues, rawValues)) {
         onChange?.(cloneNextValues);
-
-        // We set this later since it will re-render component immediately
-        setValue(cloneNextValues);
       }
     };
 
