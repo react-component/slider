@@ -39,13 +39,17 @@ describe('Range', () => {
     const mouseDown = createEvent.mouseDown(
       container.getElementsByClassName(element)[0]
     );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (mouseDown as any).pageX = start;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (mouseDown as any).pageY = start;
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
 
     // Drag
     const mouseMove = createEvent.mouseMove(document);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (mouseMove as any).pageX = end;
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (mouseMove as any).pageY = end;
     fireEvent(document, mouseMove);
   }
@@ -62,6 +66,7 @@ describe('Range', () => {
         touches: [{}],
       }
     );
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     ((touchStart as TouchEvent).touches[0] as any).pageX = start;
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
@@ -69,6 +74,7 @@ describe('Range', () => {
     const touchMove = createEvent.touchMove(document, {
       touches: [{}],
     });
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     ((touchStart as TouchEvent).touches[0] as any).pageX = end;
     fireEvent(document, touchMove);
   }
@@ -117,7 +123,7 @@ describe('Range', () => {
     expect(asFragment().firstChild).toMatchSnapshot();
   });
 
-  it('should render Range with value correctly', async () => {
+  it('should render Range with value correctly', () => {
     const { container } = render(
       <Range
         range
@@ -617,7 +623,9 @@ describe('Range', () => {
   });
 
   it('warning for `draggableTrack` and `mergedStep=null`', () => {
-    const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+      return;
+    });
 
     render(<Range range value={[0, 0]} draggableTrack step={null} />);
 

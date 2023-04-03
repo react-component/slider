@@ -87,7 +87,9 @@ describe('Common', () => {
   });
 
   it('should not set values when sending invalid numbers', () => {
-    const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    const errorSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+      return;
+    });
 
     const { container: container1 } = render(
       <Slider value={0} min={Math.min()} />
@@ -250,6 +252,7 @@ describe('Common', () => {
     const leftHandle = container.getElementsByClassName('rc-slider-handle')[0];
 
     const mouseDown = createEvent.mouseDown(leftHandle);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (mouseDown as any).pageX = 5;
 
     expect(
@@ -257,6 +260,7 @@ describe('Common', () => {
     ).toHaveAttribute('aria-valuenow', '0');
 
     const mouseMove = createEvent.mouseMove(leftHandle);
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
     (mouseMove as any).pageX = 0;
 
     expect(

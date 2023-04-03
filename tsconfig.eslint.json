@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "src",
+    "types",
+    "test",
+    "stories"
+  ],
+  "compilerOptions": {
+    "lib": [
+      "es2016",
+      "dom"
+    ]
+  }
+}

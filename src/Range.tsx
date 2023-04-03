@@ -269,13 +269,19 @@ const Slider = React.forwardRef<RangeRef, RangeProps>(
     React.useEffect(() => {
       warning(
         !(step && step < 0),
-        `Invalid \`step\` value: ${step}. \`step\` cannot be negative.`
+        `Invalid \`step\` value: ${
+          step ?? '`null`'
+        }. \`step\` cannot be negative.`
       );
     }, [step]);
 
     // ============================= Push =============================
     const mergedPush =
-      pushable === true ? normalizedStep : pushable >= 0 ? pushable : false;
+      pushable === true
+        ? normalizedStep
+        : pushable && pushable >= 0
+        ? pushable
+        : false;
 
     // ============================ Marks =============================
     const markList = React.useMemo<InternalMarkObj[]>(() => {
