@@ -48,7 +48,7 @@ export interface RangeProps {
   step?: number | null;
 
   /** Selected values of handles, when using it as a controlled component */
-  value: number[];
+  value: number[] | null;
 
   /** Called whenever a handle is moved */
   onChange?: (value: number[]) => void;

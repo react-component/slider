@@ -136,6 +136,11 @@ describe('Slider', () => {
     ).toHaveStyle({ right: '0%' });
   });
 
+  it('should render Slider without handle if value is null', () => {
+    const { asFragment } = render(<Slider value={null} readOnly />);
+    expect(asFragment().firstChild).toMatchSnapshot();
+  });
+
   it('should allow tabIndex to be set on Handle via Slider', () => {
     const { container } = render(<Slider value={0} readOnly tabIndex={1} />);
     expect(
@@ -515,6 +520,16 @@ describe('Slider', () => {
     });
   });
 
+  it('should not be out of range when value is null', () => {
+    const { container, rerender } = render(
+      <Slider value={null} readOnly min={1} max={10} />
+    );
+    expect(container.getElementsByClassName('rc-slider-track')).toHaveLength(0);
+
+    rerender(<Slider value={0} readOnly min={1} max={10} />);
+    expect(container.getElementsByClassName('rc-slider-track')).toHaveLength(1);
+  });
+
   describe('click slider to change value', () => {
     it('ltr', () => {
       const onChange = jest.fn();
@@ -560,6 +575,18 @@ describe('Slider', () => {
       });
 
       expect(onChange).toHaveBeenCalledWith(93);
+    });
+
+    it('null value click to become 2 values', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider value={null} readOnly onChange={onChange} />
+      );
+      fireEvent.mouseDown(container.querySelector('.rc-slider')!, {
+        clientX: 20,
+      });
+
+      expect(onChange).toHaveBeenCalledWith(20);
     });
   });
 

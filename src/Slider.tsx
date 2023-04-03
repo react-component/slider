@@ -15,7 +15,7 @@ export type SliderProps = Omit<
   | 'handleClassName'
   | 'tabIndex'
 > & {
-  value: number;
+  value: number | null;
   onChange?: (value: number) => void;
   handleClassName?: string;
   trackClassName?: string;
@@ -25,7 +25,10 @@ export type SliderProps = Omit<
 
 const Slider = forwardRef<RangeRef, SliderProps>(
   ({ value, onChange, ...props }: SliderProps, ref) => {
-    const valueArray = useMemo(() => [value], [value]);
+    const valueArray = useMemo(
+      () => (value === null ? null : [value]),
+      [value]
+    );
 
     return (
       <Range
