@@ -1,9 +1,9 @@
 import React from 'react';
 import 'rc-tooltip/assets/bootstrap.css';
 import type { RangeProps } from '../../src';
-import { Range } from '../../src';
 import raf from 'rc-util/lib/raf';
 import Tooltip from 'rc-tooltip';
+import { RangeWithState, RangeWithStateProps } from '../UncontrolledComponents';
 
 export type TooltipSliderProps = {
   value: number;
@@ -28,6 +28,7 @@ const HandleTooltip = ({
 
   function keepAlign() {
     rafRef.current = raf(() => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
       tooltipRef.current?.forcePopupAlign();
     });
   }
@@ -68,7 +69,7 @@ const TooltipSlider = ({
   tipFormatter,
   tipProps,
   ...props
-}: RangeProps & {
+}: RangeWithStateProps & {
   tipFormatter?: (value: number) => React.ReactNode;
   tipProps: any;
 }) => {
@@ -85,7 +86,7 @@ const TooltipSlider = ({
     );
   };
 
-  return <Range {...props} handleRender={tipHandleRender} />;
+  return <RangeWithState {...props} handleRender={tipHandleRender} />;
 };
 
 export default TooltipSlider;
