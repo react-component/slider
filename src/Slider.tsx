@@ -478,8 +478,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // Performance improvements to not rerender marks and steps while dragging
   const marksElements = React.useMemo<React.ReactNode>(() => {
-    return <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />;
-  }, [markList, prefixCls, changeToCloseValue]);
+    return <Marks prefixCls={prefixCls} marks={markList} />;
+  }, [markList, prefixCls]);
+
   const stepsElements = React.useMemo<React.ReactNode>(() => {
     return (
       <Steps
