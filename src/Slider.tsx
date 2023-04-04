@@ -476,6 +476,22 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     ],
   );
 
+  // Performance improvements to not rerender marks and steps while dragging
+  const marksElements = React.useMemo<React.ReactNode>(() => {
+    return <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />;
+  }, [markList, prefixCls, changeToCloseValue]);
+  const stepsElements = React.useMemo<React.ReactNode>(() => {
+    return (
+      <Steps
+        prefixCls={prefixCls}
+        marks={markList}
+        dots={dots}
+        style={dotStyle}
+        activeStyle={activeDotStyle}
+      />
+    );
+  }, [markList, prefixCls, dots, dotStyle, activeDotStyle]);
+
   // ============================ Render ============================
   return (
     <SliderContext.Provider value={context}>
@@ -500,13 +516,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           onStartMove={mergedDraggableTrack ? onStartMove : null}
         />
 
-        <Steps
-          prefixCls={prefixCls}
-          marks={markList}
-          dots={dots}
-          style={dotStyle}
-          activeStyle={activeDotStyle}
-        />
+        {stepsElements}
 
         <Handles
           ref={handlesRef}
@@ -521,7 +531,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           handleRender={handleRender}
         />
 
-        <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />
+        {marksElements}
       </div>
     </SliderContext.Provider>
   );
