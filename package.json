@@ -1,10 +1,7 @@
 {
-  "name": "rc-slider",
-  "version": "10.1.2",
+  "name": "rc-slider-perf",
+  "version": "10.1.3",
   "description": "Slider UI component for React",
-  "engines": {
-    "node": ">=8.x"
-  },
   "keywords": [
     "react",
     "react-component",
@@ -13,40 +10,36 @@
     "input",
     "range"
   ],
-  "homepage": "http://github.com/react-component/slider/",
+  "homepage": "http://github.com/madzgo/rc-slider-perf/",
+  "bugs": {
+    "url": "http://github.com/madzgo/rc-slider-perf/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/slider.git"
+    "url": "git@github.com:madzgo/rc-slider-perf.git"
   },
-  "bugs": {
-    "url": "http://github.com/react-component/slider/issues"
-  },
+  "license": "MIT",
+  "main": "./lib/index",
+  "module": "./es/index",
+  "types": "./lib/index.d.ts",
+  "style": "./assets/index.css",
   "files": [
     "assets/*.css",
     "lib",
     "es",
     "dist"
   ],
-  "license": "MIT",
-  "main": "./lib/index",
-  "module": "./es/index",
-  "style": "./assets/index.css",
-  "types": "./lib/index.d.ts",
   "scripts": {
-    "start": "dumi dev",
+    "compile": "father build && lessc assets/index.less assets/index.css",
+    "coverage": "father test --coverage",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d .doc",
-    "compile": "father build && lessc assets/index.less assets/index.css",
-    "prepublishOnly": "npm run compile && np --yolo --no-publish",
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
+    "now-build": "npm run docs:build",
+    "prepublishOnly": "npm run compile && np --yolo --no-publish",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
-    "test": "father test",
-    "coverage": "father test --coverage",
-    "now-build": "npm run docs:build"
-  },
-  "peerDependencies": {
-    "react": ">=16.9.0",
-    "react-dom": ">=16.9.0"
+    "start": "dumi dev",
+    "test": "father test"
   },
   "dependencies": {
     "@babel/runtime": "^7.10.1",
@@ -79,5 +72,12 @@
     "react-dom": "^16.0.0",
     "regenerator-runtime": "^0.13.9",
     "typescript": "^4.0.5"
+  },
+  "peerDependencies": {
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
+  },
+  "engines": {
+    "node": ">=8.x"
   }
 }
