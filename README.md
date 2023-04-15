@@ -33,14 +33,28 @@ Online examples: https://slider.react-component.now.sh/
 
 ## Usage
 
+## Slider
+```js
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+
+export default () => (
+  <>
+    <Slider />
+  </>
+);
+```
+
+## Range
+Please refer to [#825](https://github.com/react-component/slider/issues/825) for information regarding usage of `Range`.
+An example:
 ```js
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 export default () => (
   <>
-    <Slider />
-    <Range />
+    <Slider range />
   </>
 );
 ```
