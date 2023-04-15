@@ -134,6 +134,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
       aria-label={getIndex(ariaLabelForHandle, valueIndex)}
       aria-labelledby={getIndex(ariaLabelledByForHandle, valueIndex)}
       aria-valuetext={getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value)}
+      aria-orientation={direction === 'ltr' || direction === 'rtl' ? 'horizontal' : 'vertical'}
       {...restProps}
     />
   );

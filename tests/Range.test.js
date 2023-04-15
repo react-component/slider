@@ -388,6 +388,26 @@ describe('Range', () => {
     test('touch', (container) => doTouchMove(container, 0, 20, 'rc-slider-track'));
   });
 
+  it('sets aria-orientation to default on the handle', () => {
+    const { container } = render(<Slider range />);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-orientation',
+      'horizontal',
+    );
+  });
+
+  it('sets aria-orientation to vertical on the handles of vertical Slider', () => {
+    const { container } = render(<Slider range vertical defaultValue={[0, 20]} />);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-orientation',
+      'vertical',
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
+      'aria-orientation',
+      'vertical',
+    );
+  });
+
   it('sets aria-label on the handles', () => {
     const { container } = render(
       <Slider range ariaLabelForHandle={['Some Label', 'Some other Label']} />,
