@@ -35,7 +35,7 @@ Online examples: https://slider.react-component.now.sh/
 
 ## Slider
 ```js
-import Slider, { Range } from 'rc-slider';
+import Slider from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 export default () => (
