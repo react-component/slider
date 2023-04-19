@@ -13,13 +13,14 @@ export interface DotProps {
 
 export default function Dot(props: DotProps) {
   const { prefixCls, marksValue, value, style, activeStyle } = props;
-  const { min, max, direction, included, includedStart, includedEnd } = React.useContext(
-    SliderContext,
-  );
+  const { min, max, direction, included, includedStart, includedEnd } =
+    React.useContext(SliderContext);
 
   const dotClassName = `${prefixCls}-dot`;
-  const marksDotClassName = `${prefixCls}-marks-dot`;
   const active = included && includedStart <= value && value <= includedEnd;
+
+  // It defines the className for the marks dots.
+  const marksDotClassName = `${prefixCls}-marks-dot`;
   const marksDot = marksValue.indexOf(value) >= 0;
 
   // ============================ Offset ============================
@@ -37,15 +38,10 @@ export default function Dot(props: DotProps) {
 
   return (
     <span
-      className={classNames(
-        dotClassName,
-        {
-          [`${dotClassName}-active`]: active,
-        },
-        {
-          [marksDotClassName]: marksDot,
-        },
-      )}
+      className={classNames(dotClassName, {
+        [`${dotClassName}-active`]: active,
+        [marksDotClassName]: marksDot,
+      })}
       style={mergedStyle}
     />
   );
