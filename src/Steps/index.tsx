@@ -16,9 +16,6 @@ export default function Steps(props: StepsProps) {
   const { prefixCls, marks, dots, style, activeStyle } = props;
   const { min, max, step } = React.useContext(SliderContext);
 
-  // It defines the className for the marks dots.
-  const marksDotClassName = `${prefixCls}-marks-dot`;
-
   const { stepDots, marksValue } = React.useMemo(() => {
     const dotSet = new Set<number>();
 
@@ -55,7 +52,7 @@ export default function Steps(props: StepsProps) {
           <Dot
             prefixCls={prefixCls}
             className={classNames({
-              [marksDotClassName]: isMarksDot,
+              [`${prefixCls}-marks-dot`]: isMarksDot,
             })}
             key={dotValue}
             value={dotValue}
