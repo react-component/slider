@@ -34,13 +34,9 @@ export default function Dot(props: DotProps) {
 
   return (
     <span
-      className={classNames(
-        dotClassName,
-        {
-          [`${dotClassName}-active`]: active,
-        },
-        className,
-      )}
+      className={classNames(dotClassName, {
+        [`${dotClassName}-active`]: active,
+      }, className)}
       style={mergedStyle}
     />
   );
