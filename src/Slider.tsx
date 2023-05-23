@@ -171,10 +171,12 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================= Push =============================
   const mergedPush = React.useMemo(() => {
-    if (pushable === true) {
-      return mergedStep;
+    if (typeof pushable === 'boolean') {
+      if (pushable === true) {
+        return mergedStep;
+      }
+      return false;
     }
-
     return pushable >= 0 ? pushable : false;
   }, [pushable, mergedStep]);
 
