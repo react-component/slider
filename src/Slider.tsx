@@ -172,10 +172,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
   // ============================= Push =============================
   const mergedPush = React.useMemo(() => {
     if (typeof pushable === 'boolean') {
-      if (pushable === true) {
-        return mergedStep;
-      }
-      return false;
+      return pushable ? mergedStep : false;
     }
     return pushable >= 0 ? pushable : false;
   }, [pushable, mergedStep]);
@@ -362,7 +359,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
 
     setKeyboardValue(null);
-  }, [keyboardValue]);
+  }, [rawValues, keyboardValue]);
 
   // ============================= Drag =============================
   const mergedDraggableTrack = React.useMemo(() => {
@@ -404,7 +401,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       const valueIndex = rawValues.lastIndexOf(draggingValue);
       handlesRef.current.focus(valueIndex);
     }
-  }, [dragging]);
+  }, [rawValues, draggingValue, dragging]);
 
   // =========================== Included ===========================
   const sortedCacheValues = React.useMemo(
