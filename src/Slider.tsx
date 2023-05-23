@@ -359,7 +359,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
 
     setKeyboardValue(null);
-  }, [rawValues, keyboardValue]);
+  }, [keyboardValue]);
 
   // ============================= Drag =============================
   const mergedDraggableTrack = React.useMemo(() => {
@@ -401,7 +401,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       const valueIndex = rawValues.lastIndexOf(draggingValue);
       handlesRef.current.focus(valueIndex);
     }
-  }, [rawValues, draggingValue, dragging]);
+  }, [dragging]);
 
   // =========================== Included ===========================
   const sortedCacheValues = React.useMemo(
