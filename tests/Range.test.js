@@ -526,4 +526,24 @@ describe('Range', () => {
     );
     errorSpy.mockRestore();
   });
+
+  it('Track should have the correct thickness', () => {
+    const { container } = render(
+      <Slider range allowCross={false} reverse defaultValue={[0, 40]} draggableTrack />,
+    );
+
+    const { container: containerVertical } = render(
+      <Slider
+        range
+        allowCross={false}
+        reverse
+        defaultValue={[0, 40]}
+        draggableTrack
+        vertical
+        style={{ height: '300px' }}
+      />,
+    );
+    expect(container.querySelector('.rc-slider-track-draggable')).toBeTruthy();
+    expect(containerVertical.querySelector('.rc-slider-track-draggable')).toBeTruthy();
+  });
 });

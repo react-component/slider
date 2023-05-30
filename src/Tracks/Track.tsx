@@ -55,7 +55,10 @@ export default function Track(props: TrackProps) {
 
   return (
     <div
-      className={classNames(trackPrefixCls, range && `${trackPrefixCls}-${index + 1}`)}
+      className={classNames(trackPrefixCls, {
+        [`${trackPrefixCls}-${index + 1}`]: range,
+        [`${prefixCls}-track-draggable`]: onStartMove,
+      })}
       style={{
         ...positionStyle,
         ...style,
