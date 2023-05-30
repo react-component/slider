@@ -18,7 +18,6 @@ export default function Track(props: TrackProps) {
   const { direction, min, max, disabled, range } = React.useContext(SliderContext);
 
   const trackPrefixCls = `${prefixCls}-track`;
-  const draggableTrackPrefixCls = onStartMove ? `${prefixCls}-track-draggable` : null;
 
   const offsetStart = getOffset(start, min, max);
   const offsetEnd = getOffset(end, min, max);
@@ -56,11 +55,10 @@ export default function Track(props: TrackProps) {
 
   return (
     <div
-      className={classNames(
-        trackPrefixCls,
-        range && `${trackPrefixCls}-${index + 1}`,
-        draggableTrackPrefixCls,
-      )}
+      className={classNames(trackPrefixCls, {
+        [`${trackPrefixCls}-${index + 1}`]: range,
+        [`${prefixCls}-track-draggable`]: onStartMove,
+      })}
       style={{
         ...positionStyle,
         ...style,
