@@ -78,6 +78,6 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "regenerator-runtime": "^0.13.9",
-    "typescript": "^4.0.5"
+    "typescript": "^5.1.5"
   }
 }
