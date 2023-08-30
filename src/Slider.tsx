@@ -425,7 +425,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       handlesRef.current.focus(0);
     },
     blur: () => {
-      const { activeElement } = document;
+      const { activeElement } = containerRef.current.ownerDocument;
       if (containerRef.current.contains(activeElement)) {
         (activeElement as HTMLElement)?.blur();
       }

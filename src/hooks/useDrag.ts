@@ -36,10 +36,16 @@ export default function useDrag(
   // Clean up event
   React.useEffect(
     () => () => {
-      document.removeEventListener('mousemove', mouseMoveEventRef.current);
-      document.removeEventListener('mouseup', mouseUpEventRef.current);
-      document.removeEventListener('touchmove', mouseMoveEventRef.current);
-      document.removeEventListener('touchend', mouseUpEventRef.current);
+      containerRef.current.ownerDocument.removeEventListener(
+        'mousemove',
+        mouseMoveEventRef.current,
+      );
+      containerRef.current.ownerDocument.removeEventListener('mouseup', mouseUpEventRef.current);
+      containerRef.current.ownerDocument.removeEventListener(
+        'touchmove',
+        mouseMoveEventRef.current,
+      );
+      containerRef.current.ownerDocument.removeEventListener('touchend', mouseUpEventRef.current);
     },
     [],
   );
@@ -138,10 +144,10 @@ export default function useDrag(
     const onMouseUp = (event: MouseEvent | TouchEvent) => {
       event.preventDefault();
 
-      document.removeEventListener('mouseup', onMouseUp);
-      document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('touchend', onMouseUp);
-      document.removeEventListener('touchmove', onMouseMove);
+      containerRef.current.ownerDocument.removeEventListener('mouseup', onMouseUp);
+      containerRef.current.ownerDocument.removeEventListener('mousemove', onMouseMove);
+      containerRef.current.ownerDocument.removeEventListener('touchend', onMouseUp);
+      containerRef.current.ownerDocument.removeEventListener('touchmove', onMouseMove);
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
 
@@ -149,10 +155,10 @@ export default function useDrag(
       finishChange();
     };
 
-    document.addEventListener('mouseup', onMouseUp);
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('touchend', onMouseUp);
-    document.addEventListener('touchmove', onMouseMove);
+    containerRef.current.ownerDocument.addEventListener('mouseup', onMouseUp);
+    containerRef.current.ownerDocument.addEventListener('mousemove', onMouseMove);
+    containerRef.current.ownerDocument.addEventListener('touchend', onMouseUp);
+    containerRef.current.ownerDocument.addEventListener('touchmove', onMouseMove);
     mouseMoveEventRef.current = onMouseMove;
     mouseUpEventRef.current = onMouseUp;
   };
