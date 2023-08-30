@@ -35,6 +35,7 @@ describe('Range', () => {
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
 
     // Drag
+    const document = container.ownerDocument;
     const mouseMove = createEvent.mouseMove(document);
     mouseMove.pageX = end;
     mouseMove.pageY = end;
@@ -49,6 +50,7 @@ describe('Range', () => {
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
     // Drag
+    const document = container.ownerDocument;
     const touchMove = createEvent.touchMove(document, {
       touches: [{}],
     });
@@ -378,6 +380,35 @@ describe('Range', () => {
         // Do move
         func(container);
 
+        expect(onChange).toHaveBeenCalledWith([20, 50]);
+
+        unmount();
+      });
+    }
+
+    test('mouse', (container) => doMouseMove(container, 0, 20, 'rc-slider-track'));
+    test('touch', (container) => doTouchMove(container, 0, 20, 'rc-slider-track'));
+  });
+
+  describe('track draggable in iframe', () => {
+    function test(name, func) {
+      it(name, async () => {
+        const onChange = jest.fn();
+
+        const root = document.createElement('div');
+        const iframe = document.createElement('iframe');
+        document.body.appendChild(iframe);
+        iframe.contentWindow.document.body.appendChild(root);
+
+        const { container, unmount } = render(
+          <Slider range defaultValue={[0, 30]} draggableTrack onChange={onChange} />,
+          {
+            baseElement: root,
+          },
+        );
+
+        // Do move
+        func(container);
         expect(onChange).toHaveBeenCalledWith([20, 50]);
 
         unmount();
