@@ -35,11 +35,11 @@ describe('Range', () => {
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
 
     // Drag
-    const document = container.ownerDocument;
-    const mouseMove = createEvent.mouseMove(document);
+    const ownerDocument = container.ownerDocument;
+    const mouseMove = createEvent.mouseMove(ownerDocument);
     mouseMove.pageX = end;
     mouseMove.pageY = end;
-    fireEvent(document, mouseMove);
+    fireEvent(ownerDocument, mouseMove);
   }
 
   function doTouchMove(container, start, end, element = 'rc-slider-handle') {
@@ -50,12 +50,12 @@ describe('Range', () => {
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
     // Drag
-    const document = container.ownerDocument;
-    const touchMove = createEvent.touchMove(document, {
+    const ownerDocument = container.ownerDocument;
+    const touchMove = createEvent.touchMove(ownerDocument, {
       touches: [{}],
     });
     touchMove.touches[0].pageX = end;
-    fireEvent(document, touchMove);
+    fireEvent(ownerDocument, touchMove);
   }
 
   it('should render Range with correct DOM structure', () => {
