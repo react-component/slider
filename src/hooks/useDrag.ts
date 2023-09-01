@@ -36,7 +36,8 @@ export default function useDrag(
   // Clean up event
   React.useEffect(
     () => () => {
-      const ownerDocument = containerRef.current.ownerDocument;
+      const ownerDocument = containerRef.current?.ownerDocument;
+      if (!ownerDocument) return;
 
       ownerDocument.removeEventListener('mousemove', mouseMoveEventRef.current);
       ownerDocument.removeEventListener('mouseup', mouseUpEventRef.current);
