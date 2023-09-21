@@ -1,21 +1,25 @@
-import * as React from 'react';
-import classNames from 'classnames';
-import isEqual from 'rc-util/lib/isEqual';
+import cls from 'classnames';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import type { HandlesRef } from './Handles';
-import Handles from './Handles';
-import type { HandlesProps } from './Handles';
-import useDrag from './hooks/useDrag';
-import SliderContext from './context';
-import type { SliderContextProps } from './context';
-import Tracks from './Tracks';
-import type { AriaValueFormat, Direction, OnStartMove } from './interface';
-import Marks from './Marks';
-import type { MarkObj } from './Marks';
-import type { InternalMarkObj } from './Marks';
-import Steps from './Steps';
-import useOffset from './hooks/useOffset';
+import isEqual from 'rc-util/lib/isEqual';
 import warning from 'rc-util/lib/warning';
+import * as React from 'react';
+import type { SliderContextProps } from './context';
+import SliderContext from './context';
+import type { HandlesProps, HandlesRef } from './Handles';
+import Handles from './Handles';
+import useDrag from './hooks/useDrag';
+import useOffset from './hooks/useOffset';
+import type {
+  AriaValueFormat,
+  Direction,
+  OnStartMove,
+  SliderClassNames,
+  SliderStyles,
+} from './interface';
+import type { InternalMarkObj, MarkObj } from './Marks';
+import Marks from './Marks';
+import Steps from './Steps';
+import Tracks from './Tracks';
 
 /**
  * New:
@@ -35,6 +39,9 @@ export interface SliderProps<ValueType = number | number[]> {
   prefixCls?: string;
   className?: string;
   style?: React.CSSProperties;
+
+  classNames?: SliderClassNames;
+  styles?: SliderStyles;
 
   // Status
   disabled?: boolean;
@@ -70,8 +77,11 @@ export interface SliderProps<ValueType = number | number[]> {
   // Style
   included?: boolean;
   startPoint?: number;
+  /** @deprecated Please use `styles.track` instead */
   trackStyle?: React.CSSProperties | React.CSSProperties[];
+  /** @deprecated Please use `styles.handle` instead */
   handleStyle?: React.CSSProperties | React.CSSProperties[];
+  /** @deprecated Please use `styles.rail` instead */
   railStyle?: React.CSSProperties;
   dotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
   activeDotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
@@ -100,6 +110,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     prefixCls = 'rc-slider',
     className,
     style,
+    classNames,
+    styles,
 
     // Status
     disabled = false,
@@ -456,6 +468,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       ariaLabelForHandle,
       ariaLabelledByForHandle,
       ariaValueTextFormatterForHandle,
+      styles: styles || {},
+      classNames: classNames || {},
     }),
     [
       mergedMin,
@@ -472,6 +486,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       ariaLabelForHandle,
       ariaLabelledByForHandle,
       ariaValueTextFormatterForHandle,
+      styles,
+      classNames,
     ],
   );
 
@@ -480,7 +496,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     <SliderContext.Provider value={context}>
       <div
         ref={containerRef}
-        className={classNames(prefixCls, className, {
+        className={cls(prefixCls, className, {
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-vertical`]: vertical,
           [`${prefixCls}-horizontal`]: !vertical,
@@ -489,7 +505,13 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         style={style}
         onMouseDown={onSliderMouseDown}
       >
-        <div className={`${prefixCls}-rail`} style={railStyle} />
+        <div
+          className={cls(`${prefixCls}-rail`, classNames?.rail)}
+          style={{
+            ...railStyle,
+            ...styles?.rail,
+          }}
+        />
 
         <Tracks
           prefixCls={prefixCls}

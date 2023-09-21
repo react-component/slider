@@ -1,11 +1,11 @@
 /* eslint-disable max-len, no-undef, react/no-string-refs, no-param-reassign, max-classes-per-file */
-import React from 'react';
-import keyCode from 'rc-util/lib/KeyCode';
-import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { createEvent, fireEvent, render } from '@testing-library/react';
+import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
-import Slider from '../src/';
 import { resetWarned } from 'rc-util/lib/warning';
+import React from 'react';
+import Slider from '../src/';
 
 describe('Range', () => {
   let container;
@@ -545,5 +545,53 @@ describe('Range', () => {
     );
     expect(container.querySelector('.rc-slider-track-draggable')).toBeTruthy();
     expect(containerVertical.querySelector('.rc-slider-track-draggable')).toBeTruthy();
+  });
+
+  it('styles', () => {
+    const { container } = render(
+      <Slider
+        range
+        value={[0, 10]}
+        styles={{
+          tracks: { backgroundColor: '#654321' },
+          track: { backgroundColor: '#123456' },
+          handle: { backgroundColor: '#112233' },
+          rail: { backgroundColor: '#332211' },
+        }}
+      />,
+    );
+
+    expect(container.querySelector('.rc-slider-tracks')).toHaveStyle({
+      backgroundColor: '#654321',
+    });
+    expect(container.querySelector('.rc-slider-track')).toHaveStyle({
+      backgroundColor: '#123456',
+    });
+    expect(container.querySelector('.rc-slider-handle')).toHaveStyle({
+      backgroundColor: '#112233',
+    });
+    expect(container.querySelector('.rc-slider-rail')).toHaveStyle({
+      backgroundColor: '#332211',
+    });
+  });
+
+  it('classNames', () => {
+    const { container } = render(
+      <Slider
+        range
+        value={[0, 10]}
+        classNames={{
+          tracks: 'my-tracks',
+          track: 'my-track',
+          handle: 'my-handle',
+          rail: 'my-rail',
+        }}
+      />,
+    );
+
+    expect(container.querySelector('.rc-slider-tracks')).toHaveClass('my-tracks');
+    expect(container.querySelector('.rc-slider-track')).toHaveClass('my-track');
+    expect(container.querySelector('.rc-slider-handle')).toHaveClass('my-handle');
+    expect(container.querySelector('.rc-slider-rail')).toHaveClass('my-rail');
   });
 });

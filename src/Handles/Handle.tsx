@@ -1,9 +1,9 @@
-import * as React from 'react';
-import classNames from 'classnames';
+import cls from 'classnames';
 import KeyCode from 'rc-util/lib/KeyCode';
+import * as React from 'react';
 import SliderContext from '../context';
-import { getDirectionStyle, getIndex } from '../util';
 import type { OnStartMove } from '../interface';
+import { getDirectionStyle, getIndex } from '../util';
 
 interface RenderProps {
   index: number;
@@ -48,6 +48,8 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     ariaLabelForHandle,
     ariaLabelledByForHandle,
     ariaValueTextFormatterForHandle,
+    styles,
+    classNames,
   } = React.useContext(SliderContext);
   const handlePrefixCls = `${prefixCls}-handle`;
 
@@ -114,13 +116,18 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
   let handleNode = (
     <div
       ref={ref}
-      className={classNames(handlePrefixCls, {
-        [`${handlePrefixCls}-${valueIndex + 1}`]: range,
-        [`${handlePrefixCls}-dragging`]: dragging,
-      })}
+      className={cls(
+        handlePrefixCls,
+        {
+          [`${handlePrefixCls}-${valueIndex + 1}`]: range,
+          [`${handlePrefixCls}-dragging`]: dragging,
+        },
+        classNames.handle,
+      )}
       style={{
         ...positionStyle,
         ...style,
+        ...styles.handle,
       }}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
