@@ -5,10 +5,7 @@
     {
       "src": "package.json",
       "use": "@now/static-build",
-      "config": { "distDir": ".doc" }
+      "config": { "distDir": "dist" }
     }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/dist/$1" }
   ]
 }
