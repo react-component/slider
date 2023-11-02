@@ -98,6 +98,7 @@ The following APIs are shared by Slider and Range.
 
 | Name         | Type    | Default | Description |
 | ------------ | ------- | ------- | ----------- |
+| prefixCls | string | `rc-tooltip` | Prefix class name |
 | className | string | `''` | Additional CSS class for the root DOM node |
 | min | number | `0` | The minimum value of the slider |
 | max | number | `100` | The maximum value of the slider |
