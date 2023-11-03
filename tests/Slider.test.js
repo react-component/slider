@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
@@ -608,5 +608,21 @@ describe('Slider', () => {
       clientX: 20,
     });
     expect(onAfterChange).toHaveBeenCalledWith(20);
+  });
+
+  // https://github.com/react-component/slider/pull/948
+  it('could drag handler after click tracker', () => {
+    const onChange = jest.fn();
+    const { container } = render(<Slider onChange={onChange} />);
+    fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+      clientX: 20,
+    });
+    expect(onChange).toHaveBeenLastCalledWith(20);
+
+    // Drag
+    const mouseMove = createEvent.mouseMove(document);
+    mouseMove.pageX = 100;
+    fireEvent(document, mouseMove);
+    expect(onChange).toHaveBeenLastCalledWith(100);
   });
 });
