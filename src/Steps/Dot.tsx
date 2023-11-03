@@ -5,13 +5,14 @@ import SliderContext from '../context';
 
 export interface DotProps {
   prefixCls: string;
+  className?: string;
   value: number;
   style?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
   activeStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 }
 
 export default function Dot(props: DotProps) {
-  const { prefixCls, value, style, activeStyle } = props;
+  const { prefixCls, className, value, style, activeStyle } = props;
   const { min, max, direction, included, includedStart, includedEnd } =
     React.useContext(SliderContext);
 
@@ -35,7 +36,7 @@ export default function Dot(props: DotProps) {
     <span
       className={classNames(dotClassName, {
         [`${dotClassName}-active`]: active,
-      })}
+      }, className)}
       style={mergedStyle}
     />
   );
