@@ -288,6 +288,22 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     setValue(cloneNextValues);
   };
 
+  const finishChange = () => {
+    onAfterChange?.(getTriggerValue(rawValuesRef.current));
+  };
+
+  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
+    containerRef,
+    direction,
+    rawValues,
+    mergedMin,
+    mergedMax,
+    formatValue,
+    triggerChange,
+    finishChange,
+    offsetValues,
+  );
+
   const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
     if (!disabled) {
       let valueIndex = 0;
@@ -386,22 +402,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
     return draggableTrack;
   }, [draggableTrack, mergedStep]);
-
-  const finishChange = () => {
-    onAfterChange?.(getTriggerValue(rawValuesRef.current));
-  };
-
-  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
-    containerRef,
-    direction,
-    rawValues,
-    mergedMin,
-    mergedMax,
-    formatValue,
-    triggerChange,
-    finishChange,
-    offsetValues,
-  );
 
   const onStartMove: OnStartMove = (e, valueIndex) => {
     onStartDrag(e, valueIndex);
