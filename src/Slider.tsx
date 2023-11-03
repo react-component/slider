@@ -288,7 +288,23 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     setValue(cloneNextValues);
   };
 
-  const changeToCloseValue = (newValue: number) => {
+  const finishChange = () => {
+    onAfterChange?.(getTriggerValue(rawValuesRef.current));
+  };
+
+  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
+    containerRef,
+    direction,
+    rawValues,
+    mergedMin,
+    mergedMax,
+    formatValue,
+    triggerChange,
+    finishChange,
+    offsetValues,
+  );
+
+  const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
     if (!disabled) {
       let valueIndex = 0;
       let valueDist = mergedMax - mergedMin;
@@ -314,6 +330,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       onBeforeChange?.(getTriggerValue(cloneNextValues));
       triggerChange(cloneNextValues);
       onAfterChange?.(getTriggerValue(cloneNextValues));
+      if (e) {
+        onStartDrag(e, valueIndex, cloneNextValues);
+      }
     }
   };
 
@@ -344,7 +363,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
 
     const nextValue = mergedMin + percent * (mergedMax - mergedMin);
-    changeToCloseValue(formatValue(nextValue));
+    changeToCloseValue(formatValue(nextValue), e);
   };
 
   // =========================== Keyboard ===========================
@@ -383,22 +402,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
     return draggableTrack;
   }, [draggableTrack, mergedStep]);
-
-  const finishChange = () => {
-    onAfterChange?.(getTriggerValue(rawValuesRef.current));
-  };
-
-  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
-    containerRef,
-    direction,
-    rawValues,
-    mergedMin,
-    mergedMax,
-    formatValue,
-    triggerChange,
-    finishChange,
-    offsetValues,
-  );
 
   const onStartMove: OnStartMove = (e, valueIndex) => {
     onStartDrag(e, valueIndex);
