@@ -1,7 +1,7 @@
+import cls from 'classnames';
 import * as React from 'react';
-import classNames from 'classnames';
-import { getDirectionStyle } from '../util';
 import SliderContext from '../context';
+import { getDirectionStyle } from '../util';
 
 export interface MarkProps {
   prefixCls: string;
@@ -13,22 +13,30 @@ export interface MarkProps {
 
 export default function Mark(props: MarkProps) {
   const { prefixCls, style, children, value, onClick } = props;
-  const { min, max, direction, includedStart, includedEnd, included } =
+  const { min, max, direction, includedStart, includedEnd, included, styles, classNames } =
     React.useContext(SliderContext);
 
   const textCls = `${prefixCls}-text`;
+  const active = included && includedStart <= value && value <= includedEnd;
 
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);
 
   return (
     <span
-      className={classNames(textCls, {
-        [`${textCls}-active`]: included && includedStart <= value && value <= includedEnd,
-      })}
+      className={cls(
+        textCls,
+        {
+          [`${textCls}-active`]: active,
+        },
+        active && classNames.markActive,
+        classNames.mark,
+      )}
       style={{
         ...positionStyle,
         ...style,
+        ...(active ? styles.markActive : {}),
+        ...styles.mark,
       }}
       onMouseDown={(e) => {
         e.stopPropagation();

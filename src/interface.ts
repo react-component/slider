@@ -2,11 +2,23 @@ import type React from 'react';
 
 export type Direction = 'rtl' | 'ltr' | 'ttb' | 'btt';
 
-export type OnStartMove = (e: React.MouseEvent | React.TouchEvent, valueIndex: number, startValues?: number[]) => void;
+export type OnStartMove = (
+  e: React.MouseEvent | React.TouchEvent,
+  valueIndex: number,
+  startValues?: number[],
+) => void;
 
 export type AriaValueFormat = (value: number) => string;
 
-export type SemanticName = 'tracks' | 'track' | 'rail' | 'handle';
+export type SemanticName =
+  | 'tracks'
+  | 'track'
+  | 'rail'
+  | 'handle'
+  | 'dot'
+  | 'dotActive'
+  | 'mark'
+  | 'markActive';
 
 export type SliderClassNames = Partial<Record<SemanticName, string>>;
 
