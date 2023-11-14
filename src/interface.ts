@@ -10,4 +10,4 @@ export type SemanticName = 'tracks' | 'track' | 'rail' | 'handle';
 
 export type SliderClassNames = Partial<Record<SemanticName, string>>;
 
-export type SliderStyles = Partial<Record<SemanticName, React.CSSProperties>>;
+export type SliderStyles = Partial<Record<SemanticName, React.CSSProperties|React.CSSProperties[]>>;
