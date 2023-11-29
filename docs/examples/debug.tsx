@@ -52,6 +52,9 @@ export default () => {
             console.log('Change:', nextValues);
           //   setValue(nextValues as any);
           }}
+          onAfterChange={(v) => {
+            console.log('AfterChange:', v);
+          }}
           // value={value}
 
           min={0}

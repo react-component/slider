@@ -329,7 +329,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       onBeforeChange?.(getTriggerValue(cloneNextValues));
       triggerChange(cloneNextValues);
-      onAfterChange?.(getTriggerValue(cloneNextValues));
       if (e) {
         onStartDrag(e, valueIndex, cloneNextValues);
       }
