@@ -52,7 +52,7 @@ export default () => {
             console.log('Change:', nextValues);
           //   setValue(nextValues as any);
           }}
-          onAfterChange={(v) => {
+          onChangeComplete={(v) => {
             console.log('AfterChange:', v);
           }}
           // value={value}
