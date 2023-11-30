@@ -301,7 +301,10 @@ describe('Common', () => {
     );
     const sliderHandleWrapper = container.querySelector(`#${labelId}`);
     fireEvent.mouseDown(sliderHandleWrapper);
-    fireEvent.mouseUp(sliderHandleWrapper);
+    // Simulate propagation
+    fireEvent.mouseDown(container.querySelector('.rc-slider'));
+    fireEvent.mouseUp(container.querySelector('.rc-slider'));
+
     fireEvent.click(sliderHandleWrapper);
     expect(sliderOnChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalled();
@@ -312,6 +315,9 @@ describe('Common', () => {
     );
     const rangeHandleWrapper = container2.querySelector(`#${labelId}`);
     fireEvent.click(rangeHandleWrapper);
+    // Simulate propagation
+    fireEvent.mouseDown(container2.querySelector('.rc-slider'));
+    fireEvent.mouseUp(container2.querySelector('.rc-slider'));
     expect(rangeOnAfterChange).toHaveBeenCalled();
   });
 
@@ -327,6 +333,11 @@ describe('Common', () => {
     });
 
     expect(sliderOnChange).toHaveBeenCalled();
+    expect(sliderOnAfterChange).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: KeyCode.UP,
+    });
     expect(sliderOnAfterChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
   });

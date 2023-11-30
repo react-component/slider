@@ -61,7 +61,6 @@ export interface SliderProps<ValueType = number | number[]> {
   onChange?: (value: ValueType) => void;
   /** @deprecated It's always better to use `onChange` instead */
   onBeforeChange?: (value: ValueType) => void;
-  /** @deprecated It's always better to use `onChange` instead */
   onAfterChange?: (value: ValueType) => void;
 
   // Cross
@@ -374,7 +373,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       onBeforeChange?.(getTriggerValue(rawValues));
       triggerChange(next.values);
-      onAfterChange?.(getTriggerValue(next.values));
 
       setKeyboardValue(next.value);
     }
@@ -542,6 +540,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           onFocus={onFocus}
           onBlur={onBlur}
           handleRender={handleRender}
+          onChangeComplete={finishChange}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />
