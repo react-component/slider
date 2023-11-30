@@ -61,6 +61,7 @@ export interface SliderProps<ValueType = number | number[]> {
   onChange?: (value: ValueType) => void;
   /** @deprecated It's always better to use `onChange` instead */
   onBeforeChange?: (value: ValueType) => void;
+  /** @deprecated It's always better to use `onChange` instead */
   onAfterChange?: (value: ValueType) => void;
 
   // Cross
