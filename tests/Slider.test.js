@@ -144,7 +144,13 @@ describe('Slider', () => {
       keyCode: keyCode.RIGHT,
     });
 
-    expect(onAfterChange).toBeCalled();
+    expect(onAfterChange).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: keyCode.RIGHT,
+    });
+
+    expect(onAfterChange).toHaveBeenCalled();
   });
 
   it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
@@ -182,13 +188,21 @@ describe('Slider', () => {
 
   it('decreases the value when key "left" is pressed', () => {
     const onChange = jest.fn();
-    const { container } = render(<Slider defaultValue={50} onChange={onChange} />);
+    const onChangeComplete = jest.fn();
+    const { container } = render(<Slider defaultValue={50} onChange={onChange} onAfterChange={onChangeComplete} />);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.LEFT,
     });
 
     expect(onChange).toHaveBeenCalledWith(49);
+    expect(onChangeComplete).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: keyCode.LEFT,
+    });
+
+    expect(onChangeComplete).toHaveBeenCalled();
   });
 
   it('it should work fine when arrow key is pressed', () => {
@@ -555,6 +569,10 @@ describe('Slider', () => {
 
       expect(onBeforeChange).toHaveBeenCalledWith(20);
       expect(onChange).toHaveBeenCalledWith(20);
+      expect(onAfterChange).not.toHaveBeenCalled();
+      fireEvent.mouseUp(container.querySelector('.rc-slider'), {
+        clientX: 20,
+      });
       expect(onAfterChange).toHaveBeenCalledWith(20);
     });
   });
@@ -605,6 +623,10 @@ describe('Slider', () => {
     const onAfterChange = jest.fn();
     const { container } = render(<Slider onAfterChange={onAfterChange} />);
     fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+      clientX: 20,
+    });
+    expect(onAfterChange).not.toHaveBeenCalled();
+    fireEvent.mouseUp(container.querySelector('.rc-slider'), {
       clientX: 20,
     });
     expect(onAfterChange).toHaveBeenCalledWith(20);

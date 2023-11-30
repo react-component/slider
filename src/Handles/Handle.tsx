@@ -23,6 +23,7 @@ export interface HandleProps {
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
+  onChangeComplete?: () => void;
 }
 
 const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
@@ -35,6 +36,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     render,
     dragging,
     onOffsetChange,
+    onChangeComplete,
     ...restProps
   } = props;
   const {
@@ -109,6 +111,21 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     }
   };
 
+  const handleKeyUp = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    switch (e.which || e.keyCode) {
+      case KeyCode.LEFT:
+      case KeyCode.RIGHT:
+      case KeyCode.UP:
+      case KeyCode.DOWN:
+      case KeyCode.HOME:
+      case KeyCode.END:
+      case KeyCode.PAGE_UP:
+      case KeyCode.PAGE_DOWN:
+        onChangeComplete?.();
+        break;
+    }
+  }
+
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);
 
@@ -132,6 +149,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
       onKeyDown={onKeyDown}
+      onKeyUp={handleKeyUp}
       tabIndex={disabled ? null : getIndex(tabIndex, valueIndex)}
       role="slider"
       aria-valuemin={min}

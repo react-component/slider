@@ -329,7 +329,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       onBeforeChange?.(getTriggerValue(cloneNextValues));
       triggerChange(cloneNextValues);
-      onAfterChange?.(getTriggerValue(cloneNextValues));
       if (e) {
         onStartDrag(e, valueIndex, cloneNextValues);
       }
@@ -375,7 +374,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       onBeforeChange?.(getTriggerValue(rawValues));
       triggerChange(next.values);
-      onAfterChange?.(getTriggerValue(next.values));
 
       setKeyboardValue(next.value);
     }
@@ -543,6 +541,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           onFocus={onFocus}
           onBlur={onBlur}
           handleRender={handleRender}
+          onChangeComplete={finishChange}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />

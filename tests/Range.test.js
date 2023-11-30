@@ -116,8 +116,13 @@ describe('Range', () => {
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.RIGHT,
     });
+    expect(onAfterChange).not.toHaveBeenCalled();
 
-    expect(onAfterChange).toBeCalled();
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[1], {
+      keyCode: keyCode.RIGHT,
+    });
+
+    expect(onAfterChange).toHaveBeenCalled();
   });
 
   it('should not change value from keyboard events when disabled', () => {
