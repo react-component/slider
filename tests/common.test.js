@@ -296,7 +296,7 @@ describe('Common', () => {
         value={0}
         marks={marks}
         onChange={sliderOnChange}
-        onAfterChange={sliderOnAfterChange}
+        onChangeComplete={sliderOnAfterChange}
       />,
     );
     const sliderHandleWrapper = container.querySelector(`#${labelId}`);
@@ -311,7 +311,7 @@ describe('Common', () => {
 
     const rangeOnAfterChange = jest.fn();
     const { container: container2 } = render(
-      <Slider range value={[0, 1]} marks={marks} onAfterChange={rangeOnAfterChange} />,
+      <Slider range value={[0, 1]} marks={marks} onChangeComplete={rangeOnAfterChange} />,
     );
     const rangeHandleWrapper = container2.querySelector(`#${labelId}`);
     fireEvent.click(rangeHandleWrapper);
@@ -325,7 +325,7 @@ describe('Common', () => {
     const sliderOnChange = jest.fn();
     const sliderOnAfterChange = jest.fn();
     const { container } = render(
-      <Slider value={0} onChange={sliderOnChange} onAfterChange={sliderOnAfterChange} />,
+      <Slider value={0} onChange={sliderOnChange} onChangeComplete={sliderOnAfterChange} />,
     );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
@@ -341,6 +341,32 @@ describe('Common', () => {
     expect(sliderOnAfterChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
   });
+
+  it('deprecate onAfterChange', () => {
+    const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const onChangeComplete = jest.fn();
+    const onAfterChange = jest.fn();
+    const { container } = render(
+      <Slider value={0} onChangeComplete={onChangeComplete} onAfterChange={onAfterChange} />,
+    );
+
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: KeyCode.UP,
+    });
+
+    expect(onChangeComplete).not.toHaveBeenCalled();
+    expect(onAfterChange).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: KeyCode.UP,
+    });
+    expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    expect(onAfterChange).toHaveBeenCalledTimes(1);
+    expect(errSpy).toHaveBeenCalledWith(
+      'Warning: [rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
+    );
+    errSpy.mockRestore();
+  })
 
   // Move to antd instead
   // it('the tooltip should be attach to the container with the id tooltip', () => {

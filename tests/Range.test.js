@@ -110,7 +110,7 @@ describe('Range', () => {
   it('it should trigger onAfterChange when key pressed', () => {
     const onAfterChange = jest.fn();
     const { container } = render(
-      <Slider range defaultValue={[20, 50]} onAfterChange={onAfterChange} />,
+      <Slider range defaultValue={[20, 50]} onChangeComplete={onAfterChange} />,
     );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
@@ -128,7 +128,7 @@ describe('Range', () => {
   it('should not change value from keyboard events when disabled', () => {
     const onAfterChange = jest.fn();
     const { container } = render(
-      <Slider range keyboard={false} defaultValue={[20, 50]} onAfterChange={onAfterChange} />,
+      <Slider range keyboard={false} defaultValue={[20, 50]} onChangeComplete={onAfterChange} />,
     );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {

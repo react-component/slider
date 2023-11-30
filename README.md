@@ -112,7 +112,7 @@ The following APIs are shared by Slider and Range.
 | dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
 | onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
-| onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
+| onChangeComplete | Function | NOOP | `onChangeComplete` will be triggered when `ontouchend` or `onmouseup` is triggered. |
 | minimumTrackStyle | Object |  | please use  `trackStyle` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
 | maximumTrackStyle | Object |  | please use  `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
 | handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi handle following element order`) |

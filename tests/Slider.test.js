@@ -138,7 +138,7 @@ describe('Slider', () => {
 
   it('it should trigger onAfterChange when key pressed', () => {
     const onAfterChange = jest.fn();
-    const { container } = render(<Slider defaultValue={50} onAfterChange={onAfterChange} />);
+    const { container } = render(<Slider defaultValue={50} onChangeComplete={onAfterChange} />);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.RIGHT,
@@ -189,7 +189,7 @@ describe('Slider', () => {
   it('decreases the value when key "left" is pressed', () => {
     const onChange = jest.fn();
     const onChangeComplete = jest.fn();
-    const { container } = render(<Slider defaultValue={50} onChange={onChange} onAfterChange={onChangeComplete} />);
+    const { container } = render(<Slider defaultValue={50} onChange={onChange} onChangeComplete={onChangeComplete} />);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.LEFT,
@@ -560,7 +560,7 @@ describe('Slider', () => {
         <Slider
           onBeforeChange={onBeforeChange}
           onChange={onChange}
-          onAfterChange={onAfterChange}
+          onChangeComplete={onAfterChange}
         />,
       );
       fireEvent.mouseDown(container.querySelector('.rc-slider'), {
@@ -621,7 +621,7 @@ describe('Slider', () => {
 
   it('onAfterChange should return number', () => {
     const onAfterChange = jest.fn();
-    const { container } = render(<Slider onAfterChange={onAfterChange} />);
+    const { container } = render(<Slider onChangeComplete={onAfterChange} />);
     fireEvent.mouseDown(container.querySelector('.rc-slider'), {
       clientX: 20,
     });

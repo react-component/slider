@@ -61,8 +61,9 @@ export interface SliderProps<ValueType = number | number[]> {
   onChange?: (value: ValueType) => void;
   /** @deprecated It's always better to use `onChange` instead */
   onBeforeChange?: (value: ValueType) => void;
-  /** @deprecated It's always better to use `onChange` instead */
+  /** @deprecated Use `onChangeComplete` instead */
   onAfterChange?: (value: ValueType) => void;
+  onChangeComplete?: (value: ValueType) => void;
 
   // Cross
   allowCross?: boolean;
@@ -131,6 +132,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     onChange,
     onBeforeChange,
     onAfterChange,
+    onChangeComplete,
 
     // Cross
     allowCross = true,
@@ -290,6 +292,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   const finishChange = () => {
     onAfterChange?.(getTriggerValue(rawValuesRef.current));
+    warning(!onAfterChange, '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.');
+    onChangeComplete?.(getTriggerValue(rawValuesRef.current));
   };
 
   const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
