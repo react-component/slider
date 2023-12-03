@@ -194,7 +194,7 @@ export default () => (
     </div>
     <div style={style}>
       <p>Basic Range，`step=20, dots` </p>
-      <Slider range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+      <Slider range dots step={20} defaultValue={[20, 40]} onChangeComplete={log} />
     </div>
     <div style={style}>
       <p>Basic Range，disabled</p>

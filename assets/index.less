@@ -38,15 +38,26 @@
     border-radius: @border-radius-base;
   }
 
-  &-track {
+  &-track,
+  &-tracks {
     position: absolute;
     height: 4px;
     background-color: tint(@primary-color, 60%);
     border-radius: @border-radius-base;
   }
 
+  &-track-draggable {
+    z-index: 1;
+    box-sizing: content-box;
+    background-clip: content-box;
+    border-top: 5px solid rgba(0, 0, 0, 0);
+    border-bottom: 5px solid rgba(0, 0, 0, 0);
+    transform: translateY(-5px);
+  }
+
   &-handle {
     position: absolute;
+    z-index: 1;
     width: 14px;
     height: 14px;
     margin-top: -5px;
@@ -175,8 +186,18 @@
       left: 5px;
       width: 4px;
     }
+    
+    &-track-draggable {
+      border-top:0;
+      border-bottom: 0;
+      border-right: 5px solid rgba(0, 0, 0, 0);
+      border-left: 5px solid rgba(0, 0, 0, 0);
+      transform: translateX(-5px);
+    }
 
     &-handle {
+      position: absolute;
+      z-index: 1;
       margin-top: 0;
       margin-left: -5px;
       touch-action: pan-y;

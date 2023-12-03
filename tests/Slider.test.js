@@ -1,6 +1,6 @@
 import React from 'react';
 import classNames from 'classnames';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
@@ -138,13 +138,19 @@ describe('Slider', () => {
 
   it('it should trigger onAfterChange when key pressed', () => {
     const onAfterChange = jest.fn();
-    const { container } = render(<Slider defaultValue={50} onAfterChange={onAfterChange} />);
+    const { container } = render(<Slider defaultValue={50} onChangeComplete={onAfterChange} />);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.RIGHT,
     });
 
-    expect(onAfterChange).toBeCalled();
+    expect(onAfterChange).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: keyCode.RIGHT,
+    });
+
+    expect(onAfterChange).toHaveBeenCalled();
   });
 
   it('decreases the value for reverse-horizontal when key "right" is pressed', () => {
@@ -182,13 +188,21 @@ describe('Slider', () => {
 
   it('decreases the value when key "left" is pressed', () => {
     const onChange = jest.fn();
-    const { container } = render(<Slider defaultValue={50} onChange={onChange} />);
+    const onChangeComplete = jest.fn();
+    const { container } = render(<Slider defaultValue={50} onChange={onChange} onChangeComplete={onChangeComplete} />);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.LEFT,
     });
 
     expect(onChange).toHaveBeenCalledWith(49);
+    expect(onChangeComplete).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: keyCode.LEFT,
+    });
+
+    expect(onChangeComplete).toHaveBeenCalled();
   });
 
   it('it should work fine when arrow key is pressed', () => {
@@ -546,7 +560,7 @@ describe('Slider', () => {
         <Slider
           onBeforeChange={onBeforeChange}
           onChange={onChange}
-          onAfterChange={onAfterChange}
+          onChangeComplete={onAfterChange}
         />,
       );
       fireEvent.mouseDown(container.querySelector('.rc-slider'), {
@@ -555,6 +569,10 @@ describe('Slider', () => {
 
       expect(onBeforeChange).toHaveBeenCalledWith(20);
       expect(onChange).toHaveBeenCalledWith(20);
+      expect(onAfterChange).not.toHaveBeenCalled();
+      fireEvent.mouseUp(container.querySelector('.rc-slider'), {
+        clientX: 20,
+      });
       expect(onAfterChange).toHaveBeenCalledWith(20);
     });
   });
@@ -603,10 +621,30 @@ describe('Slider', () => {
 
   it('onAfterChange should return number', () => {
     const onAfterChange = jest.fn();
-    const { container } = render(<Slider onAfterChange={onAfterChange} />);
+    const { container } = render(<Slider onChangeComplete={onAfterChange} />);
     fireEvent.mouseDown(container.querySelector('.rc-slider'), {
       clientX: 20,
     });
+    expect(onAfterChange).not.toHaveBeenCalled();
+    fireEvent.mouseUp(container.querySelector('.rc-slider'), {
+      clientX: 20,
+    });
     expect(onAfterChange).toHaveBeenCalledWith(20);
+  });
+
+  // https://github.com/react-component/slider/pull/948
+  it('could drag handler after click tracker', () => {
+    const onChange = jest.fn();
+    const { container } = render(<Slider onChange={onChange} />);
+    fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+      clientX: 20,
+    });
+    expect(onChange).toHaveBeenLastCalledWith(20);
+
+    // Drag
+    const mouseMove = createEvent.mouseMove(document);
+    mouseMove.pageX = 100;
+    fireEvent(document, mouseMove);
+    expect(onChange).toHaveBeenLastCalledWith(100);
   });
 });
