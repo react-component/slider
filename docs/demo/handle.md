@@ -1,3 +1,8 @@
-## handle
+---
+title: Handle
+nav:
+  title: Demo
+  path: /demo
+---
 
-<code src="../examples/handle.tsx">
+<code src="../examples/handle.tsx"></code>
