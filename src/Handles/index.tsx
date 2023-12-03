@@ -14,6 +14,7 @@ export interface HandlesProps {
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   handleRender?: HandleProps['render'];
   draggingIndex: number;
+  onChangeComplete?: () => void;
 }
 
 export interface HandlesRef {
