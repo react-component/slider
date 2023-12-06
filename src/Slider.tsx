@@ -444,7 +444,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     },
     blur: () => {
       const { activeElement } = document;
-      if (containerRef.current.contains(activeElement)) {
+      if (containerRef.current?.contains(activeElement)) {
         (activeElement as HTMLElement)?.blur();
       }
     },
@@ -513,10 +513,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       >
         <div
           className={cls(`${prefixCls}-rail`, classNames?.rail)}
-          style={{
-            ...railStyle,
-            ...styles?.rail,
-          }}
+          style={{ ...railStyle, ...styles?.rail }}
         />
 
         <Tracks
@@ -524,7 +521,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           style={trackStyle}
           values={sortedCacheValues}
           startPoint={startPoint}
-          onStartMove={mergedDraggableTrack ? onStartMove : null}
+          onStartMove={mergedDraggableTrack ? onStartMove : undefined}
         />
 
         <Steps
