@@ -1,6 +1,6 @@
 /* eslint react/no-multi-comp: 0, max-len: 0 */
+import Slider from '@/index';
 import React from 'react';
-import Slider from 'rc-slider';
 import '../../assets/index.less';
 import TooltipSlider from './components/TooltipSlider';
 
