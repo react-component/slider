@@ -26,7 +26,7 @@ export interface HandleProps {
   onChangeComplete?: () => void;
 }
 
-const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
+const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
   const {
     prefixCls,
     value,
@@ -124,7 +124,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
         onChangeComplete?.();
         break;
     }
-  };
+  }
 
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);
