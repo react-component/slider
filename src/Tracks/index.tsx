@@ -41,11 +41,13 @@ const Tracks: React.FC<TrackProps> = (props) => {
     return list;
   }, [values, range, startPoint, min]);
 
-  // ========================== Render ==========================
-  let tracksNode: React.ReactNode = null;
+  if (!included) {
+    return null;
+  }
 
-  if (classNames.tracks || styles.tracks) {
-    tracksNode = (
+  // ========================== Render ==========================
+  const tracksNode =
+    classNames.tracks || styles.tracks ? (
       <Track
         index={null}
         prefixCls={prefixCls}
@@ -54,10 +56,9 @@ const Tracks: React.FC<TrackProps> = (props) => {
         replaceCls={cls(classNames.tracks, `${prefixCls}-tracks`)}
         style={styles.tracks}
       />
-    );
-  }
+    ) : null;
 
-  return included ? (
+  return (
     <>
       {tracksNode}
       {trackList.map<React.ReactNode>(({ start, end }, index) => (
@@ -72,7 +73,7 @@ const Tracks: React.FC<TrackProps> = (props) => {
         />
       ))}
     </>
-  ) : null;
+  );
 };
 
 export default Tracks;
