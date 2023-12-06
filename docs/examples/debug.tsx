@@ -1,5 +1,5 @@
-import Slider from '@/index';
 import React from 'react';
+import Slider from 'rc-slider';
 import '../../assets/index.less';
 
 export default () => {
@@ -7,6 +7,7 @@ export default () => {
   const [range, setRange] = React.useState(false);
   const [reverse, setReverse] = React.useState(false);
   const [vertical, setVertical] = React.useState(false);
+  const [value, setValue] = React.useState(30);
 
   return (
     <div
@@ -49,7 +50,7 @@ export default () => {
           // allowCross={false}
           onChange={(nextValues) => {
             console.log('Change:', nextValues);
-            //   setValue(nextValues as any);
+          //   setValue(nextValues as any);
           }}
           onChangeComplete={(v) => {
             console.log('AfterChange:', v);

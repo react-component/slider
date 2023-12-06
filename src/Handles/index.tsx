@@ -1,8 +1,8 @@
 import * as React from 'react';
-import type { OnStartMove } from '../interface';
-import { getIndex } from '../util';
-import type { HandleProps } from './Handle';
 import Handle from './Handle';
+import type { HandleProps } from './Handle';
+import { getIndex } from '../util';
+import type { OnStartMove } from '../interface';
 
 export interface HandlesProps {
   prefixCls: string;
@@ -21,7 +21,7 @@ export interface HandlesRef {
   focus: (index: number) => void;
 }
 
-const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
+const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
   const {
     prefixCls,
     style,

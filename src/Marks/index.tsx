@@ -29,7 +29,13 @@ export default function Marks(props: MarksProps) {
   return (
     <div className={markPrefixCls}>
       {marks.map(({ value, style, label }) => (
-        <Mark key={value} prefixCls={markPrefixCls} style={style} value={value} onClick={onClick}>
+        <Mark
+          key={value}
+          prefixCls={markPrefixCls}
+          style={style}
+          value={value}
+          onClick={onClick}
+        >
           {label}
         </Mark>
       ))}

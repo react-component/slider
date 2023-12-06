@@ -3,14 +3,10 @@ import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import isEqual from 'rc-util/lib/isEqual';
 import warning from 'rc-util/lib/warning';
 import * as React from 'react';
-import type { HandlesProps, HandlesRef } from './Handles';
-import Handles from './Handles';
-import type { InternalMarkObj, MarkObj } from './Marks';
-import Marks from './Marks';
-import Steps from './Steps';
-import Tracks from './Tracks';
 import type { SliderContextProps } from './context';
 import SliderContext from './context';
+import type { HandlesProps, HandlesRef } from './Handles';
+import Handles from './Handles';
 import useDrag from './hooks/useDrag';
 import useOffset from './hooks/useOffset';
 import type {
@@ -20,6 +16,10 @@ import type {
   SliderClassNames,
   SliderStyles,
 } from './interface';
+import type { InternalMarkObj, MarkObj } from './Marks';
+import Marks from './Marks';
+import Steps from './Steps';
+import Tracks from './Tracks';
 
 /**
  * New:
@@ -106,7 +106,7 @@ export interface SliderRef {
   blur: () => void;
 }
 
-const Slider = React.forwardRef<SliderRef, SliderProps>((props, ref) => {
+const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) => {
   const {
     prefixCls = 'rc-slider',
     className,
@@ -211,7 +211,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps>((props, ref) => {
           markObj.style = mark.style;
           markObj.label = mark.label;
         } else {
-          markObj.label = mark as React.ReactNode;
+          markObj.label = mark;
         }
 
         return markObj;
@@ -292,10 +292,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps>((props, ref) => {
 
   const finishChange = () => {
     onAfterChange?.(getTriggerValue(rawValuesRef.current));
-    warning(
-      !onAfterChange,
-      '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
-    );
+    warning(!onAfterChange, '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.');
     onChangeComplete?.(getTriggerValue(rawValuesRef.current));
   };
 

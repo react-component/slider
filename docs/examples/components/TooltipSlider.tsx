@@ -1,10 +1,9 @@
-import type { SliderProps } from '@/index';
-import Slider from '@/index';
-import type { TooltipRef } from 'rc-tooltip';
-import Tooltip from 'rc-tooltip';
-import 'rc-tooltip/assets/bootstrap.css';
-import raf from 'rc-util/lib/raf';
 import * as React from 'react';
+import 'rc-tooltip/assets/bootstrap.css';
+import Slider from 'rc-slider';
+import type { SliderProps } from 'rc-slider';
+import raf from 'rc-util/lib/raf';
+import Tooltip from 'rc-tooltip';
 
 const HandleTooltip = (props: {
   value: number;
@@ -14,7 +13,7 @@ const HandleTooltip = (props: {
 }) => {
   const { value, children, visible, tipFormatter = (val) => `${val} %`, ...restProps } = props;
 
-  const tooltipRef = React.useRef<TooltipRef>();
+  const tooltipRef = React.useRef<any>();
   const rafRef = React.useRef<number | null>(null);
 
   function cancelKeepAlign() {
@@ -63,7 +62,7 @@ const TooltipSlider = ({
   tipFormatter,
   tipProps,
   ...props
-}: SliderProps & { tipFormatter?: (value: number) => React.ReactNode; tipProps?: any }) => {
+}: SliderProps & { tipFormatter?: (value: number) => React.ReactNode; tipProps: any }) => {
   const tipHandleRender: SliderProps['handleRender'] = (node, handleProps) => {
     return (
       <HandleTooltip
