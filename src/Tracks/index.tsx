@@ -13,7 +13,7 @@ export interface TrackProps {
   startPoint?: number;
 }
 
-export default function Tracks(props: TrackProps) {
+const Tracks: React.FC<TrackProps> = (props) => {
   const { prefixCls, style, values, startPoint, onStartMove } = props;
   const { included, range, min, styles, classNames } = React.useContext(SliderContext);
 
@@ -28,29 +28,21 @@ export default function Tracks(props: TrackProps) {
       const startValue = startPoint ?? min;
       const endValue = values[0];
 
-      return [
-        {
-          start: Math.min(startValue, endValue),
-          end: Math.max(startValue, endValue),
-        },
-      ];
+      return [{ start: Math.min(startValue, endValue), end: Math.max(startValue, endValue) }];
     }
 
     // Multiple
     const list: { start: number; end: number }[] = [];
 
     for (let i = 0; i < values.length - 1; i += 1) {
-      list.push({
-        start: values[i],
-        end: values[i + 1],
-      });
+      list.push({ start: values[i], end: values[i + 1] });
     }
 
     return list;
   }, [values, range, startPoint, min]);
 
   // ========================== Render ==========================
-  let tracksNode: React.ReactElement = null;
+  let tracksNode: React.ReactNode = null;
 
   if (classNames.tracks || styles.tracks) {
     tracksNode = (
@@ -65,17 +57,14 @@ export default function Tracks(props: TrackProps) {
     );
   }
 
-  return (included ? (
+  return included ? (
     <>
       {tracksNode}
-      {trackList.map(({ start, end }, index) => (
+      {trackList.map<React.ReactNode>(({ start, end }, index) => (
         <Track
           index={index}
           prefixCls={prefixCls}
-          style={{
-            ...getIndex(style, index),
-            ...styles.track,
-          }}
+          style={{ ...getIndex(style, index), ...styles.track }}
           start={start}
           end={end}
           key={index}
@@ -83,5 +72,7 @@ export default function Tracks(props: TrackProps) {
         />
       ))}
     </>
-  ) : null) as unknown as React.ReactElement;
-}
+  ) : null;
+};
+
+export default Tracks;

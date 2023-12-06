@@ -8,7 +8,7 @@ function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | Touch
   return { pageX: obj.pageX, pageY: obj.pageY };
 }
 
-export default function useDrag(
+function useDrag(
   containerRef: React.RefObject<HTMLDivElement>,
   direction: Direction,
   rawValues: number[],
@@ -73,7 +73,7 @@ export default function useDrag(
       // Use first value to revert back of valid offset (like steps marks)
       const formatStartValue = formatValue(startValue + offset);
       offset = formatStartValue - startValue;
-      const cloneCacheValues = originValues.map((val) => val + offset);
+      const cloneCacheValues = originValues.map<number>((val) => val + offset);
       flushValues(cloneCacheValues);
     } else {
       // >>>> Dragging on the handle
@@ -171,3 +171,5 @@ export default function useDrag(
 
   return [draggingIndex, draggingValue, returnValues, onStartMove];
 }
+
+export default useDrag;

@@ -26,7 +26,7 @@ export interface HandleProps {
   onChangeComplete?: () => void;
 }
 
-const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivElement>) => {
+const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
   const {
     prefixCls,
     value,
@@ -53,6 +53,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
     styles,
     classNames,
   } = React.useContext(SliderContext);
+
   const handlePrefixCls = `${prefixCls}-handle`;
 
   // ============================ Events ============================
@@ -124,7 +125,7 @@ const Handle = React.forwardRef((props: HandleProps, ref: React.Ref<HTMLDivEleme
         onChangeComplete?.();
         break;
     }
-  }
+  };
 
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);

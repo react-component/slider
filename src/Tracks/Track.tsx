@@ -15,7 +15,7 @@ export interface TrackProps {
   onStartMove?: OnStartMove;
 }
 
-export default function Track(props: TrackProps) {
+const Track: React.FC<TrackProps> = (props) => {
   const { prefixCls, style, start, end, index, onStartMove, replaceCls } = props;
   const { direction, min, max, disabled, range, classNames } = React.useContext(SliderContext);
 
@@ -69,12 +69,11 @@ export default function Track(props: TrackProps) {
   return (
     <div
       className={className}
-      style={{
-        ...positionStyle,
-        ...style,
-      }}
+      style={{ ...positionStyle, ...style }}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
     />
   );
-}
+};
+
+export default Track;
