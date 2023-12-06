@@ -1,9 +1,9 @@
-import React from 'react';
-import classNames from 'classnames';
-import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { createEvent, fireEvent, render } from '@testing-library/react';
+import classNames from 'classnames';
 import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import React from 'react';
 import Slider from '../src/Slider';
 
 describe('Slider', () => {
@@ -189,7 +189,9 @@ describe('Slider', () => {
   it('decreases the value when key "left" is pressed', () => {
     const onChange = jest.fn();
     const onChangeComplete = jest.fn();
-    const { container } = render(<Slider defaultValue={50} onChange={onChange} onChangeComplete={onChangeComplete} />);
+    const { container } = render(
+      <Slider defaultValue={50} onChange={onChange} onChangeComplete={onChangeComplete} />,
+    );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.LEFT,
@@ -646,5 +648,10 @@ describe('Slider', () => {
     mouseMove.pageX = 100;
     fireEvent(document, mouseMove);
     expect(onChange).toHaveBeenLastCalledWith(100);
+  });
+
+  it('should render Slider with included=false', () => {
+    const { asFragment } = render(<Slider included={false} />);
+    expect(asFragment().firstChild).toMatchSnapshot();
   });
 });

@@ -3,10 +3,14 @@ import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import isEqual from 'rc-util/lib/isEqual';
 import warning from 'rc-util/lib/warning';
 import * as React from 'react';
-import type { SliderContextProps } from './context';
-import SliderContext from './context';
 import type { HandlesProps, HandlesRef } from './Handles';
 import Handles from './Handles';
+import type { InternalMarkObj, MarkObj } from './Marks';
+import Marks from './Marks';
+import Steps from './Steps';
+import Tracks from './Tracks';
+import type { SliderContextProps } from './context';
+import SliderContext from './context';
 import useDrag from './hooks/useDrag';
 import useOffset from './hooks/useOffset';
 import type {
@@ -16,10 +20,6 @@ import type {
   SliderClassNames,
   SliderStyles,
 } from './interface';
-import type { InternalMarkObj, MarkObj } from './Marks';
-import Marks from './Marks';
-import Steps from './Steps';
-import Tracks from './Tracks';
 
 /**
  * New:
@@ -106,7 +106,7 @@ export interface SliderRef {
   blur: () => void;
 }
 
-const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) => {
+const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((props, ref) => {
   const {
     prefixCls = 'rc-slider',
     className,
@@ -166,10 +166,10 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     ariaValueTextFormatterForHandle,
   } = props;
 
-  const handlesRef = React.useRef<HandlesRef>();
-  const containerRef = React.useRef<HTMLDivElement>();
+  const handlesRef = React.useRef<HandlesRef>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const direction: Direction = React.useMemo(() => {
+  const direction = React.useMemo<Direction>(() => {
     if (vertical) {
       return reverse ? 'ttb' : 'btt';
     }
@@ -193,10 +193,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
-    const keys = Object.keys(marks || {});
-
-    return keys
-      .map((key) => {
+    return Object.keys(marks || {})
+      .map<InternalMarkObj>((key) => {
         const mark = marks[key];
         const markObj: InternalMarkObj = {
           value: Number(key),
@@ -211,7 +209,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           markObj.style = mark.style;
           markObj.label = mark.label;
         } else {
-          markObj.label = mark;
+          markObj.label = mark as React.ReactNode;
         }
 
         return markObj;
@@ -292,7 +290,10 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   const finishChange = () => {
     onAfterChange?.(getTriggerValue(rawValuesRef.current));
-    warning(!onAfterChange, '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.');
+    warning(
+      !onAfterChange,
+      '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
+    );
     onChangeComplete?.(getTriggerValue(rawValuesRef.current));
   };
 
@@ -443,7 +444,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     },
     blur: () => {
       const { activeElement } = document;
-      if (containerRef.current.contains(activeElement)) {
+      if (containerRef.current?.contains(activeElement)) {
         (activeElement as HTMLElement)?.blur();
       }
     },
@@ -512,10 +513,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       >
         <div
           className={cls(`${prefixCls}-rail`, classNames?.rail)}
-          style={{
-            ...railStyle,
-            ...styles?.rail,
-          }}
+          style={{ ...railStyle, ...styles?.rail }}
         />
 
         <Tracks
@@ -523,7 +521,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           style={trackStyle}
           values={sortedCacheValues}
           startPoint={startPoint}
-          onStartMove={mergedDraggableTrack ? onStartMove : null}
+          onStartMove={mergedDraggableTrack ? onStartMove : undefined}
         />
 
         <Steps

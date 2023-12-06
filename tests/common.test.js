@@ -1,10 +1,10 @@
 /* eslint-disable max-len, no-undef */
-import React from 'react';
-import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import { createEvent, fireEvent, render } from '@testing-library/react';
 import KeyCode from 'rc-util/lib/KeyCode';
-import Slider, { Range, createSliderWithTooltip } from '../src';
+import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import React from 'react';
+import Slider from '../src';
 
 // const setWidth = (object, width) => {
 //   // https://github.com/tmpvar/jsdom/commit/0cdb2efcc69b6672dc2928644fc0172df5521176
@@ -366,7 +366,7 @@ describe('Common', () => {
       'Warning: [rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
     );
     errSpy.mockRestore();
-  })
+  });
 
   // Move to antd instead
   // it('the tooltip should be attach to the container with the id tooltip', () => {

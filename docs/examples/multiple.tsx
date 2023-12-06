@@ -3,7 +3,10 @@ import Slider from 'rc-slider';
 import React from 'react';
 import '../../assets/index.less';
 
-const style = { width: 400, margin: 50 };
+const style: React.CSSProperties = {
+  width: 400,
+  margin: 50,
+};
 
 function log(value) {
   console.log(value);
