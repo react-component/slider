@@ -1,10 +1,13 @@
 /* eslint react/no-multi-comp: 0, max-len: 0 */
-import React from 'react';
 import Slider from 'rc-slider';
+import React from 'react';
 import '../../assets/index.less';
 import TooltipSlider from './components/TooltipSlider';
 
-const style = { width: 600, margin: 50 };
+const style: React.CSSProperties = {
+  width: 600,
+  margin: 50,
+};
 
 function log(value) {
   console.log(value); //eslint-disable-line
@@ -46,7 +49,7 @@ class NullableSlider extends React.Component<any, any> {
         <Slider
           value={this.state.value}
           onChange={this.onSliderChange}
-          onAfterChange={this.onAfterChange}
+          onChangeComplete={this.onAfterChange}
         />
         <button type="button" onClick={this.reset}>
           Reset
@@ -93,7 +96,7 @@ class CustomizedSlider extends React.Component<any, any> {
       <Slider
         value={this.state.value}
         onChange={this.onSliderChange}
-        onAfterChange={this.onAfterChange}
+        onChangeComplete={this.onAfterChange}
       />
     );
   }
@@ -199,7 +202,7 @@ export default () => (
     </div>
     <div style={style}>
       <p>Basic Slider，`step=20, dots`</p>
-      <Slider dots step={20} defaultValue={100} onAfterChange={log} />
+      <Slider dots step={20} defaultValue={100} onChangeComplete={log} />
     </div>
     <div style={style}>
       <p>
@@ -210,7 +213,7 @@ export default () => (
         dots
         step={20}
         defaultValue={100}
-        onAfterChange={log}
+        onChangeComplete={log}
         dotStyle={{ borderColor: 'orange' }}
         activeDotStyle={{ borderColor: 'yellow' }}
       />

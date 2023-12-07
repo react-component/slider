@@ -65,12 +65,12 @@ export default function useOffset(
     [step, min, max, formatRangeValue],
   );
 
-  const formatValue: FormatValue = React.useCallback(
+  const formatValue = React.useCallback<FormatValue>(
     (val) => {
       const formatNextValue = formatRangeValue(val);
 
       // List align values
-      const alignValues = markList.map((mark) => mark.value);
+      const alignValues = markList.map<number>((mark) => mark.value);
       if (step !== null) {
         alignValues.push(formatStepValue(val));
       }
@@ -197,7 +197,7 @@ export default function useOffset(
 
   // Values
   const offsetValues: OffsetValues = (values, offset, valueIndex, mode = 'unit') => {
-    const nextValues = values.map(formatValue);
+    const nextValues = values.map<number>(formatValue);
     const originValue = nextValues[valueIndex];
     const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;

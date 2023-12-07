@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Handle from './Handle';
-import type { HandleProps } from './Handle';
-import { getIndex } from '../util';
 import type { OnStartMove } from '../interface';
+import { getIndex } from '../util';
+import type { HandleProps } from './Handle';
+import Handle from './Handle';
 
 export interface HandlesProps {
   prefixCls: string;
@@ -14,13 +14,14 @@ export interface HandlesProps {
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   handleRender?: HandleProps['render'];
   draggingIndex: number;
+  onChangeComplete?: () => void;
 }
 
 export interface HandlesRef {
   focus: (index: number) => void;
 }
 
-const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef>) => {
+const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
   const {
     prefixCls,
     style,
@@ -41,7 +42,7 @@ const Handles = React.forwardRef((props: HandlesProps, ref: React.Ref<HandlesRef
 
   return (
     <>
-      {values.map((value, index) => (
+      {values.map<React.ReactNode>((value, index) => (
         <Handle
           ref={(node) => {
             if (!node) {

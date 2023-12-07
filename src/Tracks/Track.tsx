@@ -1,21 +1,23 @@
+import cls from 'classnames';
 import * as React from 'react';
-import classNames from 'classnames';
 import SliderContext from '../context';
-import { getOffset } from '../util';
 import type { OnStartMove } from '../interface';
+import { getOffset } from '../util';
 
 export interface TrackProps {
   prefixCls: string;
   style?: React.CSSProperties;
+  /** Replace with origin prefix concat className */
+  replaceCls?: string;
   start: number;
   end: number;
   index: number;
   onStartMove?: OnStartMove;
 }
 
-export default function Track(props: TrackProps) {
-  const { prefixCls, style, start, end, index, onStartMove } = props;
-  const { direction, min, max, disabled, range } = React.useContext(SliderContext);
+const Track: React.FC<TrackProps> = (props) => {
+  const { prefixCls, style, start, end, index, onStartMove, replaceCls } = props;
+  const { direction, min, max, disabled, range, classNames } = React.useContext(SliderContext);
 
   const trackPrefixCls = `${prefixCls}-track`;
 
@@ -53,18 +55,25 @@ export default function Track(props: TrackProps) {
       positionStyle.width = `${offsetEnd * 100 - offsetStart * 100}%`;
   }
 
+  const className =
+    replaceCls ||
+    cls(
+      trackPrefixCls,
+      {
+        [`${trackPrefixCls}-${index + 1}`]: index !== null && range,
+        [`${prefixCls}-track-draggable`]: onStartMove,
+      },
+      classNames.track,
+    );
+
   return (
     <div
-      className={classNames(trackPrefixCls, {
-        [`${trackPrefixCls}-${index + 1}`]: range,
-        [`${prefixCls}-track-draggable`]: onStartMove,
-      })}
-      style={{
-        ...positionStyle,
-        ...style,
-      }}
+      className={className}
+      style={{ ...positionStyle, ...style }}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
     />
   );
-}
+};
+
+export default Track;

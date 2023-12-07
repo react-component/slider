@@ -1,5 +1,5 @@
-import React from 'react';
 import Slider from 'rc-slider';
+import React from 'react';
 import '../../assets/index.less';
 
 const style: React.CSSProperties = {
@@ -9,7 +9,10 @@ const style: React.CSSProperties = {
   marginBottom: 160,
   marginLeft: 50,
 };
-const parentStyle = { overflow: 'hidden' };
+
+const parentStyle: React.CSSProperties = {
+  overflow: 'hidden',
+};
 
 const marks = {
   '-10': '-10°C',

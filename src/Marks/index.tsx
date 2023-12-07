@@ -16,7 +16,7 @@ export interface MarksProps {
   onClick: (value: number) => void;
 }
 
-export default function Marks(props: MarksProps) {
+const Marks: React.FC<MarksProps> = (props) => {
   const { prefixCls, marks, onClick } = props;
 
   const markPrefixCls = `${prefixCls}-mark`;
@@ -28,17 +28,13 @@ export default function Marks(props: MarksProps) {
 
   return (
     <div className={markPrefixCls}>
-      {marks.map(({ value, style, label }) => (
-        <Mark
-          key={value}
-          prefixCls={markPrefixCls}
-          style={style}
-          value={value}
-          onClick={onClick}
-        >
+      {marks.map<React.ReactNode>(({ value, style, label }) => (
+        <Mark key={value} prefixCls={markPrefixCls} style={style} value={value} onClick={onClick}>
           {label}
         </Mark>
       ))}
     </div>
   );
-}
+};
+
+export default Marks;
