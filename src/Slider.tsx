@@ -93,7 +93,7 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Components
   handleRender?: HandlesProps['handleRender'];
-  customHandle?: React.JSX.Element;
+  customHandle?: JSX.Element;
 
   // Accessibility
   tabIndex?: number | number[];
