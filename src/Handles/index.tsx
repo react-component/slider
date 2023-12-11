@@ -15,7 +15,7 @@ export interface HandlesProps {
   handleRender?: HandleProps['render'];
   draggingIndex: number;
   onChangeComplete?: () => void;
-  customHandle?: React.JSX.Element;
+  customHandle?: JSX.Element;
 }
 
 export interface HandlesRef {

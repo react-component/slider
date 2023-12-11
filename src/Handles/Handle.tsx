@@ -24,7 +24,7 @@ export interface HandleProps {
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
   onChangeComplete?: () => void;
-  customHandle?: React.JSX.Element;
+  customHandle?: JSX.Element;
 }
 
 const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
