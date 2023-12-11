@@ -15,6 +15,7 @@ export interface HandlesProps {
   handleRender?: HandleProps['render'];
   draggingIndex: number;
   onChangeComplete?: () => void;
+  customHandle?: React.JSX.Element;
 }
 
 export interface HandlesRef {
@@ -30,6 +31,7 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
     values,
     handleRender,
     draggingIndex,
+    customHandle,
     ...restProps
   } = props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
@@ -60,6 +62,7 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
           onStartMove={onStartMove}
           onOffsetChange={onOffsetChange}
           render={handleRender}
+          customHandle={customHandle}
           {...restProps}
         />
       ))}

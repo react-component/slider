@@ -93,6 +93,7 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Components
   handleRender?: HandlesProps['handleRender'];
+  customHandle?: React.JSX.Element;
 
   // Accessibility
   tabIndex?: number | number[];
@@ -158,6 +159,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     // Components
     handleRender,
+    customHandle,
 
     // Accessibility
     tabIndex = 0,
@@ -544,6 +546,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           onBlur={onBlur}
           handleRender={handleRender}
           onChangeComplete={finishChange}
+          customHandle={customHandle}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />

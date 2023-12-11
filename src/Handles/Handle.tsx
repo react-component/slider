@@ -24,6 +24,7 @@ export interface HandleProps {
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
   onChangeComplete?: () => void;
+  customHandle?: React.JSX.Element;
 }
 
 const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
@@ -37,6 +38,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     dragging,
     onOffsetChange,
     onChangeComplete,
+    customHandle,
     ...restProps
   } = props;
   const {
@@ -162,7 +164,9 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
       aria-valuetext={getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value)}
       aria-orientation={direction === 'ltr' || direction === 'rtl' ? 'horizontal' : 'vertical'}
       {...restProps}
-    />
+    >
+      {customHandle}
+    </div>
   );
 
   // Customize
