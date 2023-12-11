@@ -72,6 +72,20 @@ const NullableRangeSlider = () => {
   );
 };
 
+const CustomHandle = () => {
+  return (
+    <div style={{
+      width: 0,
+      height: 0,
+      borderLeft: '8px solid transparent',
+      borderRight: '8px solid transparent',
+      borderTop: '16px solid red',
+      marginTop: -10,
+      marginLeft: -4,
+    }}/>
+  )
+};
+
 class CustomizedSlider extends React.Component<any, any> {
   constructor(props) {
     super(props);
@@ -191,6 +205,18 @@ export default () => (
     <div style={style}>
       <p>Basic Slider, `startPoint=50`</p>
       <Slider onChange={log} startPoint={50} />
+    </div>
+    <div style={style}>
+      <p>Basic Slider with custom handle</p>
+      <Slider
+        onChange={log}
+        defaultValue={30}
+        styles={{
+          handle: {
+            opacity: 1,
+          }
+        }}
+        customHandle={<CustomHandle />}/>
     </div>
     <div style={style}>
       <p>Slider reverse</p>

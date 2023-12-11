@@ -148,6 +148,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
         ...positionStyle,
         ...style,
         ...styles.handle,
+        ...(customHandle ? { visibility: 'hidden' } : {}),
       }}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
@@ -165,7 +166,11 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
       aria-orientation={direction === 'ltr' || direction === 'rtl' ? 'horizontal' : 'vertical'}
       {...restProps}
     >
-      {customHandle}
+      {customHandle && (
+        <div style={{ visibility: 'visible' }}>
+          {customHandle}
+        </div>
+      )}
     </div>
   );
 
