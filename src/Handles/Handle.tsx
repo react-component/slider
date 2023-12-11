@@ -167,7 +167,9 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
       {...restProps}
     >
       {customHandle && (
-        <div style={{ visibility: 'visible' }}>
+        <div
+        className={cls(`${prefixCls}-custom-handle`)}
+        style={{ visibility: 'visible' }}>
           {customHandle}
         </div>
       )}

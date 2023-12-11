@@ -654,4 +654,17 @@ describe('Slider', () => {
     const { asFragment } = render(<Slider included={false} />);
     expect(asFragment().firstChild).toMatchSnapshot();
   });
+
+  it('should render custom handle', () => {
+    const { container } = render(<Slider customHandle={
+      <div style={{
+        width: '20px',
+        height: '20px',
+        background: 'red',
+        cursor: 'pointer',
+      }}/>
+    } />);
+    expect(container.querySelector('.rc-slider-handle').style.visibility).toBe('hidden');
+    expect(container.querySelector('.rc-slider-custom-handle').style.visibility).toBe('visible');
+  });
 });
