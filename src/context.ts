@@ -21,7 +21,7 @@ export interface SliderContextProps {
 }
 
 const SliderContext = React.createContext<SliderContextProps>({
-  min: 0,
+  min: 2,
   max: 0,
   direction: 'ltr',
   step: 1,
