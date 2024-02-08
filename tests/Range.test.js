@@ -348,7 +348,7 @@ describe('Range', () => {
                 setValue(values);
                 onChange(values);
               }}
-              value={[20, 40]}
+              value={value}
               allowCross={false}
               pushable
             />
