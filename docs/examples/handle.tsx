@@ -1,9 +1,12 @@
-import React from 'react';
 import Slider from 'rc-slider';
+import React from 'react';
 import '../../assets/index.less';
 import TooltipSlider, { handleRender } from './components/TooltipSlider';
 
-const wrapperStyle = { width: 400, margin: 50 };
+const wrapperStyle: React.CSSProperties = {
+  width: 400,
+  margin: 50,
+};
 
 export default () => (
   <div>

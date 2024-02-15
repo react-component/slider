@@ -11,11 +11,11 @@ export interface StepsProps {
   activeStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 }
 
-export default function Steps(props: StepsProps) {
+const Steps: React.FC<StepsProps> = (props) => {
   const { prefixCls, marks, dots, style, activeStyle } = props;
   const { min, max, step } = React.useContext(SliderContext);
 
-  const stepDots = React.useMemo(() => {
+  const stepDots = React.useMemo<number[]>(() => {
     const dotSet = new Set<number>();
 
     // Add marks
@@ -37,7 +37,7 @@ export default function Steps(props: StepsProps) {
 
   return (
     <div className={`${prefixCls}-step`}>
-      {stepDots.map((dotValue) => (
+      {stepDots.map<React.ReactNode>((dotValue) => (
         <Dot
           prefixCls={prefixCls}
           key={dotValue}
@@ -48,4 +48,6 @@ export default function Steps(props: StepsProps) {
       ))}
     </div>
   );
-}
+};
+
+export default Steps;

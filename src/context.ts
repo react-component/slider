@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { AriaValueFormat, Direction } from './interface';
+import type { AriaValueFormat, Direction, SliderClassNames, SliderStyles } from './interface';
 
 export interface SliderContextProps {
   min: number;
@@ -16,6 +16,8 @@ export interface SliderContextProps {
   ariaLabelForHandle?: string | string[];
   ariaLabelledByForHandle?: string | string[];
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
+  classNames: SliderClassNames;
+  styles: SliderStyles;
 }
 
 const SliderContext = React.createContext<SliderContextProps>({
@@ -27,6 +29,8 @@ const SliderContext = React.createContext<SliderContextProps>({
   includedEnd: 0,
   tabIndex: 0,
   keyboard: true,
+  styles: {},
+  classNames: {},
 });
 
 export default SliderContext;

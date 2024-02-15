@@ -1,21 +1,25 @@
-import * as React from 'react';
-import classNames from 'classnames';
-import isEqual from 'rc-util/lib/isEqual';
+import cls from 'classnames';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import type { HandlesRef } from './Handles';
-import Handles from './Handles';
-import type { HandlesProps } from './Handles';
-import useDrag from './hooks/useDrag';
-import SliderContext from './context';
-import type { SliderContextProps } from './context';
-import Tracks from './Tracks';
-import type { AriaValueFormat, Direction, OnStartMove } from './interface';
-import Marks from './Marks';
-import type { MarkObj } from './Marks';
-import type { InternalMarkObj } from './Marks';
-import Steps from './Steps';
-import useOffset from './hooks/useOffset';
+import isEqual from 'rc-util/lib/isEqual';
 import warning from 'rc-util/lib/warning';
+import * as React from 'react';
+import type { HandlesProps, HandlesRef } from './Handles';
+import Handles from './Handles';
+import type { InternalMarkObj, MarkObj } from './Marks';
+import Marks from './Marks';
+import Steps from './Steps';
+import Tracks from './Tracks';
+import type { SliderContextProps } from './context';
+import SliderContext from './context';
+import useDrag from './hooks/useDrag';
+import useOffset from './hooks/useOffset';
+import type {
+  AriaValueFormat,
+  Direction,
+  OnStartMove,
+  SliderClassNames,
+  SliderStyles,
+} from './interface';
 
 /**
  * New:
@@ -36,6 +40,9 @@ export interface SliderProps<ValueType = number | number[]> {
   className?: string;
   style?: React.CSSProperties;
 
+  classNames?: SliderClassNames;
+  styles?: SliderStyles;
+
   // Status
   disabled?: boolean;
   keyboard?: boolean;
@@ -54,8 +61,9 @@ export interface SliderProps<ValueType = number | number[]> {
   onChange?: (value: ValueType) => void;
   /** @deprecated It's always better to use `onChange` instead */
   onBeforeChange?: (value: ValueType) => void;
-  /** @deprecated It's always better to use `onChange` instead */
+  /** @deprecated Use `onChangeComplete` instead */
   onAfterChange?: (value: ValueType) => void;
+  onChangeComplete?: (value: ValueType) => void;
 
   // Cross
   allowCross?: boolean;
@@ -70,8 +78,11 @@ export interface SliderProps<ValueType = number | number[]> {
   // Style
   included?: boolean;
   startPoint?: number;
+  /** @deprecated Please use `styles.track` instead */
   trackStyle?: React.CSSProperties | React.CSSProperties[];
+  /** @deprecated Please use `styles.handle` instead */
   handleStyle?: React.CSSProperties | React.CSSProperties[];
+  /** @deprecated Please use `styles.rail` instead */
   railStyle?: React.CSSProperties;
   dotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
   activeDotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
@@ -95,11 +106,13 @@ export interface SliderRef {
   blur: () => void;
 }
 
-const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) => {
+const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((props, ref) => {
   const {
     prefixCls = 'rc-slider',
     className,
     style,
+    classNames,
+    styles,
 
     // Status
     disabled = false,
@@ -119,6 +132,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     onChange,
     onBeforeChange,
     onAfterChange,
+    onChangeComplete,
 
     // Cross
     allowCross = true,
@@ -152,10 +166,10 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     ariaValueTextFormatterForHandle,
   } = props;
 
-  const handlesRef = React.useRef<HandlesRef>();
-  const containerRef = React.useRef<HTMLDivElement>();
+  const handlesRef = React.useRef<HandlesRef>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
-  const direction: Direction = React.useMemo(() => {
+  const direction = React.useMemo<Direction>(() => {
     if (vertical) {
       return reverse ? 'ttb' : 'btt';
     }
@@ -171,19 +185,16 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
   // ============================= Push =============================
   const mergedPush = React.useMemo(() => {
-    if (pushable === true) {
-      return mergedStep;
+    if (typeof pushable === 'boolean') {
+      return pushable ? mergedStep : false;
     }
-
     return pushable >= 0 ? pushable : false;
   }, [pushable, mergedStep]);
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
-    const keys = Object.keys(marks || {});
-
-    return keys
-      .map((key) => {
+    return Object.keys(marks || {})
+      .map<InternalMarkObj>((key) => {
         const mark = marks[key];
         const markObj: InternalMarkObj = {
           value: Number(key),
@@ -198,7 +209,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           markObj.style = mark.style;
           markObj.label = mark.label;
         } else {
-          markObj.label = mark;
+          markObj.label = mark as React.ReactNode;
         }
 
         return markObj;
@@ -277,7 +288,28 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     setValue(cloneNextValues);
   };
 
-  const changeToCloseValue = (newValue: number) => {
+  const finishChange = () => {
+    onAfterChange?.(getTriggerValue(rawValuesRef.current));
+    warning(
+      !onAfterChange,
+      '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
+    );
+    onChangeComplete?.(getTriggerValue(rawValuesRef.current));
+  };
+
+  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
+    containerRef,
+    direction,
+    rawValues,
+    mergedMin,
+    mergedMax,
+    formatValue,
+    triggerChange,
+    finishChange,
+    offsetValues,
+  );
+
+  const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
     if (!disabled) {
       let valueIndex = 0;
       let valueDist = mergedMax - mergedMin;
@@ -302,7 +334,9 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       onBeforeChange?.(getTriggerValue(cloneNextValues));
       triggerChange(cloneNextValues);
-      onAfterChange?.(getTriggerValue(cloneNextValues));
+      if (e) {
+        onStartDrag(e, valueIndex, cloneNextValues);
+      }
     }
   };
 
@@ -333,7 +367,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
 
     const nextValue = mergedMin + percent * (mergedMax - mergedMin);
-    changeToCloseValue(formatValue(nextValue));
+    changeToCloseValue(formatValue(nextValue), e);
   };
 
   // =========================== Keyboard ===========================
@@ -345,7 +379,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
 
       onBeforeChange?.(getTriggerValue(rawValues));
       triggerChange(next.values);
-      onAfterChange?.(getTriggerValue(next.values));
 
       setKeyboardValue(next.value);
     }
@@ -372,22 +405,6 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     }
     return draggableTrack;
   }, [draggableTrack, mergedStep]);
-
-  const finishChange = () => {
-    onAfterChange?.(getTriggerValue(rawValuesRef.current));
-  };
-
-  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
-    containerRef,
-    direction,
-    rawValues,
-    mergedMin,
-    mergedMax,
-    formatValue,
-    triggerChange,
-    finishChange,
-    offsetValues,
-  );
 
   const onStartMove: OnStartMove = (e, valueIndex) => {
     onStartDrag(e, valueIndex);
@@ -427,7 +444,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     },
     blur: () => {
       const { activeElement } = document;
-      if (containerRef.current.contains(activeElement)) {
+      if (containerRef.current?.contains(activeElement)) {
         (activeElement as HTMLElement)?.blur();
       }
     },
@@ -457,6 +474,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       ariaLabelForHandle,
       ariaLabelledByForHandle,
       ariaValueTextFormatterForHandle,
+      styles: styles || {},
+      classNames: classNames || {},
     }),
     [
       mergedMin,
@@ -473,6 +492,8 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
       ariaLabelForHandle,
       ariaLabelledByForHandle,
       ariaValueTextFormatterForHandle,
+      styles,
+      classNames,
     ],
   );
 
@@ -481,7 +502,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
     <SliderContext.Provider value={context}>
       <div
         ref={containerRef}
-        className={classNames(prefixCls, className, {
+        className={cls(prefixCls, className, {
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-vertical`]: vertical,
           [`${prefixCls}-horizontal`]: !vertical,
@@ -490,14 +511,17 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
         style={style}
         onMouseDown={onSliderMouseDown}
       >
-        <div className={`${prefixCls}-rail`} style={railStyle} />
+        <div
+          className={cls(`${prefixCls}-rail`, classNames?.rail)}
+          style={{ ...railStyle, ...styles?.rail }}
+        />
 
         <Tracks
           prefixCls={prefixCls}
           style={trackStyle}
           values={sortedCacheValues}
           startPoint={startPoint}
-          onStartMove={mergedDraggableTrack ? onStartMove : null}
+          onStartMove={mergedDraggableTrack ? onStartMove : undefined}
         />
 
         <Steps
@@ -519,6 +543,7 @@ const Slider = React.forwardRef((props: SliderProps, ref: React.Ref<SliderRef>) 
           onFocus={onFocus}
           onBlur={onBlur}
           handleRender={handleRender}
+          onChangeComplete={finishChange}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />

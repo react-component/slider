@@ -1,7 +1,7 @@
-import * as React from 'react';
 import classNames from 'classnames';
-import { getDirectionStyle } from '../util';
+import * as React from 'react';
 import SliderContext from '../context';
+import { getDirectionStyle } from '../util';
 
 export interface DotProps {
   prefixCls: string;
@@ -10,7 +10,7 @@ export interface DotProps {
   activeStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 }
 
-export default function Dot(props: DotProps) {
+const Dot: React.FC<DotProps> = (props) => {
   const { prefixCls, value, style, activeStyle } = props;
   const { min, max, direction, included, includedStart, includedEnd } =
     React.useContext(SliderContext);
@@ -19,7 +19,7 @@ export default function Dot(props: DotProps) {
   const active = included && includedStart <= value && value <= includedEnd;
 
   // ============================ Offset ============================
-  let mergedStyle = {
+  let mergedStyle: React.CSSProperties = {
     ...getDirectionStyle(direction, value, min, max),
     ...(typeof style === 'function' ? style(value) : style),
   };
@@ -33,10 +33,10 @@ export default function Dot(props: DotProps) {
 
   return (
     <span
-      className={classNames(dotClassName, {
-        [`${dotClassName}-active`]: active,
-      })}
+      className={classNames(dotClassName, { [`${dotClassName}-active`]: active })}
       style={mergedStyle}
     />
   );
-}
+};
+
+export default Dot;

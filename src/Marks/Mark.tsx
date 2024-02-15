@@ -1,7 +1,7 @@
-import * as React from 'react';
 import classNames from 'classnames';
-import { getDirectionStyle } from '../util';
+import * as React from 'react';
 import SliderContext from '../context';
+import { getDirectionStyle } from '../util';
 
 export interface MarkProps {
   prefixCls: string;
@@ -11,7 +11,7 @@ export interface MarkProps {
   onClick: (value: number) => void;
 }
 
-export default function Mark(props: MarkProps) {
+const Mark: React.FC<MarkProps> = (props) => {
   const { prefixCls, style, children, value, onClick } = props;
   const { min, max, direction, includedStart, includedEnd, included } =
     React.useContext(SliderContext);
@@ -26,10 +26,7 @@ export default function Mark(props: MarkProps) {
       className={classNames(textCls, {
         [`${textCls}-active`]: included && includedStart <= value && value <= includedEnd,
       })}
-      style={{
-        ...positionStyle,
-        ...style,
-      }}
+      style={{ ...positionStyle, ...style }}
       onMouseDown={(e) => {
         e.stopPropagation();
       }}
@@ -40,4 +37,6 @@ export default function Mark(props: MarkProps) {
       {children}
     </span>
   );
-}
+};
+
+export default Mark;

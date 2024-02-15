@@ -8,7 +8,7 @@ function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | Touch
   return { pageX: obj.pageX, pageY: obj.pageY };
 }
 
-export default function useDrag(
+function useDrag(
   containerRef: React.RefObject<HTMLDivElement>,
   direction: Direction,
   rawValues: number[],
@@ -73,7 +73,7 @@ export default function useDrag(
       // Use first value to revert back of valid offset (like steps marks)
       const formatStartValue = formatValue(startValue + offset);
       offset = formatStartValue - startValue;
-      const cloneCacheValues = originValues.map((val) => val + offset);
+      const cloneCacheValues = originValues.map<number>((val) => val + offset);
       flushValues(cloneCacheValues);
     } else {
       // >>>> Dragging on the handle
@@ -93,14 +93,16 @@ export default function useDrag(
   const updateCacheValueRef = React.useRef(updateCacheValue);
   updateCacheValueRef.current = updateCacheValue;
 
-  const onStartMove: OnStartMove = (e, valueIndex) => {
+  const onStartMove: OnStartMove = (e, valueIndex, startValues?: number[]) => {
     e.stopPropagation();
 
-    const originValue = rawValues[valueIndex];
+    // 如果是点击 track 触发的，需要传入变化后的初始值，而不能直接用 rawValues
+    const initialValues = startValues || rawValues;
+    const originValue = initialValues[valueIndex];
 
     setDraggingIndex(valueIndex);
     setDraggingValue(originValue);
-    setOriginValues(rawValues);
+    setOriginValues(initialValues);
 
     const { pageX: startX, pageY: startY } = getPosition(e);
 
@@ -169,3 +171,5 @@ export default function useDrag(
 
   return [draggingIndex, draggingValue, returnValues, onStartMove];
 }
+
+export default useDrag;

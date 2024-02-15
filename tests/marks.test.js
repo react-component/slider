@@ -1,8 +1,8 @@
 /* eslint-disable max-len, no-undef */
-import React from 'react';
-import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
-import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
+import { fireEvent, render } from '@testing-library/react';
+import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import React from 'react';
 import Slider from '../src';
 
 describe('marks', () => {

@@ -1,10 +1,10 @@
 /* eslint-disable max-len, no-undef */
-import React from 'react';
-import { render, fireEvent, createEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import { createEvent, fireEvent, render } from '@testing-library/react';
 import KeyCode from 'rc-util/lib/KeyCode';
-import Slider, { Range, createSliderWithTooltip } from '../src';
+import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import React from 'react';
+import Slider from '../src';
 
 // const setWidth = (object, width) => {
 //   // https://github.com/tmpvar/jsdom/commit/0cdb2efcc69b6672dc2928644fc0172df5521176
@@ -296,22 +296,28 @@ describe('Common', () => {
         value={0}
         marks={marks}
         onChange={sliderOnChange}
-        onAfterChange={sliderOnAfterChange}
+        onChangeComplete={sliderOnAfterChange}
       />,
     );
     const sliderHandleWrapper = container.querySelector(`#${labelId}`);
     fireEvent.mouseDown(sliderHandleWrapper);
-    fireEvent.mouseUp(sliderHandleWrapper);
+    // Simulate propagation
+    fireEvent.mouseDown(container.querySelector('.rc-slider'));
+    fireEvent.mouseUp(container.querySelector('.rc-slider'));
+
     fireEvent.click(sliderHandleWrapper);
     expect(sliderOnChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalled();
 
     const rangeOnAfterChange = jest.fn();
     const { container: container2 } = render(
-      <Slider range value={[0, 1]} marks={marks} onAfterChange={rangeOnAfterChange} />,
+      <Slider range value={[0, 1]} marks={marks} onChangeComplete={rangeOnAfterChange} />,
     );
     const rangeHandleWrapper = container2.querySelector(`#${labelId}`);
     fireEvent.click(rangeHandleWrapper);
+    // Simulate propagation
+    fireEvent.mouseDown(container2.querySelector('.rc-slider'));
+    fireEvent.mouseUp(container2.querySelector('.rc-slider'));
     expect(rangeOnAfterChange).toHaveBeenCalled();
   });
 
@@ -319,7 +325,7 @@ describe('Common', () => {
     const sliderOnChange = jest.fn();
     const sliderOnAfterChange = jest.fn();
     const { container } = render(
-      <Slider value={0} onChange={sliderOnChange} onAfterChange={sliderOnAfterChange} />,
+      <Slider value={0} onChange={sliderOnChange} onChangeComplete={sliderOnAfterChange} />,
     );
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
@@ -327,8 +333,39 @@ describe('Common', () => {
     });
 
     expect(sliderOnChange).toHaveBeenCalled();
+    expect(sliderOnAfterChange).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: KeyCode.UP,
+    });
     expect(sliderOnAfterChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
+  });
+
+  it('deprecate onAfterChange', () => {
+    const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const onChangeComplete = jest.fn();
+    const onAfterChange = jest.fn();
+    const { container } = render(
+      <Slider value={0} onChangeComplete={onChangeComplete} onAfterChange={onAfterChange} />,
+    );
+
+    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: KeyCode.UP,
+    });
+
+    expect(onChangeComplete).not.toHaveBeenCalled();
+    expect(onAfterChange).not.toHaveBeenCalled();
+
+    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
+      keyCode: KeyCode.UP,
+    });
+    expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    expect(onAfterChange).toHaveBeenCalledTimes(1);
+    expect(errSpy).toHaveBeenCalledWith(
+      'Warning: [rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
+    );
+    errSpy.mockRestore();
   });
 
   // Move to antd instead

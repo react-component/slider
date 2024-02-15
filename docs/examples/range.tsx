@@ -1,9 +1,12 @@
 /* eslint react/no-multi-comp: 0, no-console: 0 */
-import React from 'react';
 import Slider from 'rc-slider';
+import React from 'react';
 import '../../assets/index.less';
 
-const style = { width: 400, margin: 50 };
+const style: React.CSSProperties = {
+  width: 400,
+  margin: 50,
+};
 
 function log(value) {
   console.log(value); //eslint-disable-line
@@ -194,7 +197,7 @@ export default () => (
     </div>
     <div style={style}>
       <p>Basic Range，`step=20, dots` </p>
-      <Slider range dots step={20} defaultValue={[20, 40]} onAfterChange={log} />
+      <Slider range dots step={20} defaultValue={[20, 40]} onChangeComplete={log} />
     </div>
     <div style={style}>
       <p>Basic Range，disabled</p>
