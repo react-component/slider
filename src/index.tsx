@@ -1,19 +1,6 @@
-import Slider, { SliderProps } from './Slider';
-import Range from './Range';
-import Handle from './Handle';
-import createSliderWithTooltip from './createSliderWithTooltip';
-import SliderTooltip from './common/SliderTooltip';
+import type { SliderProps, SliderRef } from './Slider';
+import Slider from './Slider';
 
-interface CompoundedComponent extends React.ComponentClass<SliderProps> {
-  Range: typeof Range;
-  Handle: typeof Handle;
-  createSliderWithTooltip: typeof createSliderWithTooltip;
-}
+export type { SliderProps, SliderRef };
 
-const InternalSlider = (Slider as unknown) as CompoundedComponent;
-
-InternalSlider.Range = Range;
-InternalSlider.Handle = Handle;
-InternalSlider.createSliderWithTooltip = createSliderWithTooltip;
-export default InternalSlider;
-export { Range, Handle, createSliderWithTooltip, SliderTooltip };
+export default Slider;

@@ -1,270 +1,559 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import React from 'react';
+import cls from 'classnames';
+import useMergedState from 'rc-util/lib/hooks/useMergedState';
+import isEqual from 'rc-util/lib/isEqual';
 import warning from 'rc-util/lib/warning';
-import Track from './common/Track';
-import createSlider from './common/createSlider';
-import * as utils from './utils';
-import { GenericSliderProps, GenericSliderState } from './interface';
+import * as React from 'react';
+import type { HandlesProps, HandlesRef } from './Handles';
+import Handles from './Handles';
+import type { InternalMarkObj, MarkObj } from './Marks';
+import Marks from './Marks';
+import Steps from './Steps';
+import Tracks from './Tracks';
+import type { SliderContextProps } from './context';
+import SliderContext from './context';
+import useDrag from './hooks/useDrag';
+import useOffset from './hooks/useOffset';
+import type {
+  AriaValueFormat,
+  Direction,
+  OnStartMove,
+  SliderClassNames,
+  SliderStyles,
+} from './interface';
 
-export interface SliderProps extends GenericSliderProps {
-  value?: number;
-  defaultValue?: number;
+/**
+ * New:
+ * - click mark to update range value
+ * - handleRender
+ * - Fix handle with count not correct
+ * - Fix pushable not work in some case
+ * - No more FindDOMNode
+ * - Move all position related style into inline style
+ * - Key: up is plus, down is minus
+ * - fix Key with step = null not align with marks
+ * - Change range should not trigger onChange
+ * - keyboard support pushable
+ */
+
+export interface SliderProps<ValueType = number | number[]> {
+  prefixCls?: string;
+  className?: string;
+  style?: React.CSSProperties;
+
+  classNames?: SliderClassNames;
+  styles?: SliderStyles;
+
+  // Status
+  disabled?: boolean;
+  keyboard?: boolean;
+  autoFocus?: boolean;
+  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+
+  // Value
+  range?: boolean;
+  count?: number;
   min?: number;
   max?: number;
   step?: number | null;
-  prefixCls?: string;
-  onChange?: (value: number) => void;
-  onBeforeChange?: (value: number) => void;
-  onAfterChange?: (value: number) => void;
-  vertical?: boolean;
-  included?: boolean;
-  disabled?: boolean;
+  value?: ValueType;
+  defaultValue?: ValueType;
+  onChange?: (value: ValueType) => void;
+  /** @deprecated It's always better to use `onChange` instead */
+  onBeforeChange?: (value: ValueType) => void;
+  /** @deprecated Use `onChangeComplete` instead */
+  onAfterChange?: (value: ValueType) => void;
+  onChangeComplete?: (value: ValueType) => void;
+
+  // Cross
+  allowCross?: boolean;
+  pushable?: boolean | number;
+  /** range only */
+  draggableTrack?: boolean;
+
+  // Direction
   reverse?: boolean;
-  minimumTrackStyle?: React.CSSProperties;
-  trackStyle?: React.CSSProperties;
-  handleStyle?: React.CSSProperties;
-  tabIndex?: number;
-  ariaLabelForHandle?: string;
-  ariaLabelledByForHandle?: string;
-  ariaValueTextFormatterForHandle?: string;
+  vertical?: boolean;
+
+  // Style
+  included?: boolean;
   startPoint?: number;
-  handle?: (props: {
-    className: string;
-    prefixCls?: string;
-    vertical?: boolean;
-    offset: number;
-    value: number;
-    dragging?: boolean;
-    disabled?: boolean;
-    min?: number;
-    max?: number;
-    reverse?: boolean;
-    index: number;
-    tabIndex?: number;
-    ariaLabel: string;
-    ariaLabelledBy: string;
-    ariaValueTextFormatter: string;
-    style?: React.CSSProperties;
-    ref?: React.Ref<any>;
-  }) => React.ReactElement;
-}
-export interface SliderState extends GenericSliderState {
-  value: number;
-  dragging: boolean;
+  /** @deprecated Please use `styles.track` instead */
+  trackStyle?: React.CSSProperties | React.CSSProperties[];
+  /** @deprecated Please use `styles.handle` instead */
+  handleStyle?: React.CSSProperties | React.CSSProperties[];
+  /** @deprecated Please use `styles.rail` instead */
+  railStyle?: React.CSSProperties;
+  dotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
+  activeDotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
+
+  // Decorations
+  marks?: Record<string | number, React.ReactNode | MarkObj>;
+  dots?: boolean;
+
+  // Components
+  handleRender?: HandlesProps['handleRender'];
+
+  // Accessibility
+  tabIndex?: number | number[];
+  ariaLabelForHandle?: string | string[];
+  ariaLabelledByForHandle?: string | string[];
+  ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
 }
 
-class Slider extends React.Component<SliderProps, SliderState> {
-  /**
-   * [Legacy] Used for inherit other component.
-   * It's a bad code style which should be refactor.
-   */
-  /* eslint-disable @typescript-eslint/no-unused-vars, class-methods-use-this */
-  calcValueByPos(value: number) {
-    return 0;
-  }
+export interface SliderRef {
+  focus: () => void;
+  blur: () => void;
+}
 
-  calcOffset(value: number) {
-    return 0;
-  }
+const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((props, ref) => {
+  const {
+    prefixCls = 'rc-slider',
+    className,
+    style,
+    classNames,
+    styles,
 
-  saveHandle(index: number, h: any) {}
+    // Status
+    disabled = false,
+    keyboard = true,
+    autoFocus,
+    onFocus,
+    onBlur,
 
-  removeDocumentEvents() {}
-  /* eslint-enable */
+    // Value
+    min = 0,
+    max = 100,
+    step = 1,
+    value,
+    defaultValue,
+    range,
+    count,
+    onChange,
+    onBeforeChange,
+    onAfterChange,
+    onChangeComplete,
 
-  constructor(props: SliderProps) {
-    super(props);
+    // Cross
+    allowCross = true,
+    pushable = false,
+    draggableTrack,
 
-    const defaultValue = props.defaultValue !== undefined ? props.defaultValue : props.min;
-    const value = props.value !== undefined ? props.value : defaultValue;
+    // Direction
+    reverse,
+    vertical,
 
-    this.state = {
-      value: this.trimAlignValue(value),
-      dragging: false,
-    };
+    // Style
+    included = true,
+    startPoint,
+    trackStyle,
+    handleStyle,
+    railStyle,
+    dotStyle,
+    activeDotStyle,
 
-    warning(
-      !('minimumTrackStyle' in props),
-      'minimumTrackStyle will be deprecated, please use trackStyle instead.',
-    );
-    warning(
-      !('maximumTrackStyle' in props),
-      'maximumTrackStyle will be deprecated, please use railStyle instead.',
-    );
-  }
+    // Decorations
+    marks,
+    dots,
 
-  startValue: number;
+    // Components
+    handleRender,
 
-  startPosition: number;
+    // Accessibility
+    tabIndex = 0,
+    ariaLabelForHandle,
+    ariaLabelledByForHandle,
+    ariaValueTextFormatterForHandle,
+  } = props;
 
-  prevMovedHandleIndex: number;
+  const handlesRef = React.useRef<HandlesRef>(null);
+  const containerRef = React.useRef<HTMLDivElement>(null);
 
-  componentDidUpdate(_: SliderProps, prevState: SliderState) {
-    if (!('value' in this.props || 'min' in this.props || 'max' in this.props)) {
-      return;
+  const direction = React.useMemo<Direction>(() => {
+    if (vertical) {
+      return reverse ? 'ttb' : 'btt';
     }
-    const { value, onChange } = this.props;
-    const theValue = value !== undefined ? value : prevState.value;
-    const nextValue = this.trimAlignValue(theValue, this.props);
-    if (nextValue !== prevState.value) {
-      // eslint-disable-next-line
-      this.setState({ value: nextValue });
-      if (utils.isValueOutOfRange(theValue, this.props)) {
-        onChange(nextValue);
+    return reverse ? 'rtl' : 'ltr';
+  }, [reverse, vertical]);
+
+  // ============================ Range =============================
+  const mergedMin = React.useMemo(() => (isFinite(min) ? min : 0), [min]);
+  const mergedMax = React.useMemo(() => (isFinite(max) ? max : 100), [max]);
+
+  // ============================= Step =============================
+  const mergedStep = React.useMemo(() => (step !== null && step <= 0 ? 1 : step), [step]);
+
+  // ============================= Push =============================
+  const mergedPush = React.useMemo(() => {
+    if (typeof pushable === 'boolean') {
+      return pushable ? mergedStep : false;
+    }
+    return pushable >= 0 ? pushable : false;
+  }, [pushable, mergedStep]);
+
+  // ============================ Marks =============================
+  const markList = React.useMemo<InternalMarkObj[]>(() => {
+    return Object.keys(marks || {})
+      .map<InternalMarkObj>((key) => {
+        const mark = marks[key];
+        const markObj: InternalMarkObj = {
+          value: Number(key),
+        };
+
+        if (
+          mark &&
+          typeof mark === 'object' &&
+          !React.isValidElement(mark) &&
+          ('label' in mark || 'style' in mark)
+        ) {
+          markObj.style = mark.style;
+          markObj.label = mark.label;
+        } else {
+          markObj.label = mark as React.ReactNode;
+        }
+
+        return markObj;
+      })
+      .filter(({ label }) => label || typeof label === 'number')
+      .sort((a, b) => a.value - b.value);
+  }, [marks]);
+
+  // ============================ Format ============================
+  const [formatValue, offsetValues] = useOffset(
+    mergedMin,
+    mergedMax,
+    mergedStep,
+    markList,
+    allowCross,
+    mergedPush,
+  );
+
+  // ============================ Values ============================
+  const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
+    value,
+  });
+
+  const rawValues = React.useMemo(() => {
+    const valueList =
+      mergedValue === null || mergedValue === undefined
+        ? []
+        : Array.isArray(mergedValue)
+        ? mergedValue
+        : [mergedValue];
+
+    const [val0 = mergedMin] = valueList;
+    let returnValues = mergedValue === null ? [] : [val0];
+
+    // Format as range
+    if (range) {
+      returnValues = [...valueList];
+
+      // When count provided or value is `undefined`, we fill values
+      if (count || mergedValue === undefined) {
+        const pointCount = count >= 0 ? count + 1 : 2;
+        returnValues = returnValues.slice(0, pointCount);
+
+        // Fill with count
+        while (returnValues.length < pointCount) {
+          returnValues.push(returnValues[returnValues.length - 1] ?? mergedMin);
+        }
       }
-    }
-  }
-
-  onChange(state: { value: number }) {
-    const { props } = this;
-    const isNotControlled = !('value' in props);
-    const nextState = state.value > this.props.max ? { ...state, value: this.props.max } : state;
-    if (isNotControlled) {
-      this.setState(nextState);
+      returnValues.sort((a, b) => a - b);
     }
 
-    const changedValue = nextState.value;
-    props.onChange(changedValue);
-  }
+    // Align in range
+    returnValues.forEach((val, index) => {
+      returnValues[index] = formatValue(val);
+    });
 
-  onStart(position: number) {
-    this.setState({ dragging: true });
-    const { props } = this;
-    const prevValue = this.getValue();
-    props.onBeforeChange(prevValue);
+    return returnValues;
+  }, [mergedValue, range, mergedMin, count, formatValue]);
 
-    const value = this.calcValueByPos(position);
-    this.startValue = value;
-    this.startPosition = position;
+  // =========================== onChange ===========================
+  const rawValuesRef = React.useRef(rawValues);
+  rawValuesRef.current = rawValues;
 
-    if (value === prevValue) return;
+  const getTriggerValue = (triggerValues: number[]) => (range ? triggerValues : triggerValues[0]);
 
-    this.prevMovedHandleIndex = 0;
+  const triggerChange = (nextValues: number[]) => {
+    // Order first
+    const cloneNextValues = [...nextValues].sort((a, b) => a - b);
 
-    this.onChange({ value });
-  }
-
-  onEnd = (force?: boolean) => {
-    const { dragging } = this.state;
-    this.removeDocumentEvents();
-    if (dragging || force) {
-      this.props.onAfterChange(this.getValue());
+    // Trigger event if needed
+    if (onChange && !isEqual(cloneNextValues, rawValuesRef.current, true)) {
+      onChange(getTriggerValue(cloneNextValues));
     }
-    this.setState({ dragging: false });
+
+    // We set this later since it will re-render component immediately
+    setValue(cloneNextValues);
   };
 
-  onMove(e, position) {
-    utils.pauseEvent(e);
-    const { value: oldValue } = this.state;
-    const value = this.calcValueByPos(position);
-    if (value === oldValue) return;
+  const finishChange = () => {
+    onAfterChange?.(getTriggerValue(rawValuesRef.current));
+    warning(
+      !onAfterChange,
+      '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
+    );
+    onChangeComplete?.(getTriggerValue(rawValuesRef.current));
+  };
 
-    this.onChange({ value });
-  }
+  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
+    containerRef,
+    direction,
+    rawValues,
+    mergedMin,
+    mergedMax,
+    formatValue,
+    triggerChange,
+    finishChange,
+    offsetValues,
+  );
 
-  onKeyboard(e) {
-    const { reverse, vertical } = this.props;
-    const valueMutator = utils.getKeyboardValueMutator(e, vertical, reverse);
-    if (valueMutator) {
-      utils.pauseEvent(e);
-      const { state } = this;
-      const oldValue = state.value;
-      const mutatedValue = valueMutator(oldValue, this.props);
-      const value = this.trimAlignValue(mutatedValue);
-      if (value === oldValue) return;
+  const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
+    if (!disabled) {
+      let valueIndex = 0;
+      let valueDist = mergedMax - mergedMin;
 
-      this.onChange({ value });
-      this.props.onAfterChange(value);
-      this.onEnd();
+      rawValues.forEach((val, index) => {
+        const dist = Math.abs(newValue - val);
+        if (dist <= valueDist) {
+          valueDist = dist;
+          valueIndex = index;
+        }
+      });
+
+      // Create new values
+      const cloneNextValues = [...rawValues];
+
+      cloneNextValues[valueIndex] = newValue;
+
+      // Fill value to match default 2
+      if (range && !rawValues.length && count === undefined) {
+        cloneNextValues.push(newValue);
+      }
+
+      onBeforeChange?.(getTriggerValue(cloneNextValues));
+      triggerChange(cloneNextValues);
+      if (e) {
+        onStartDrag(e, valueIndex, cloneNextValues);
+      }
     }
-  }
+  };
 
-  getValue() {
-    return this.state.value;
-  }
+  // ============================ Click =============================
+  const onSliderMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.preventDefault();
 
-  getLowerBound() {
-    const minPoint = this.props.startPoint || this.props.min;
-    return this.state.value > minPoint ? minPoint : this.state.value;
-  }
+    const { width, height, left, top, bottom, right } =
+      containerRef.current.getBoundingClientRect();
+    const { clientX, clientY } = e;
 
-  getUpperBound() {
-    if (this.state.value < this.props.startPoint) {
-      return this.props.startPoint;
+    let percent: number;
+    switch (direction) {
+      case 'btt':
+        percent = (bottom - clientY) / height;
+        break;
+
+      case 'ttb':
+        percent = (clientY - top) / height;
+        break;
+
+      case 'rtl':
+        percent = (right - clientX) / width;
+        break;
+
+      default:
+        percent = (clientX - left) / width;
     }
-    return this.state.value;
-  }
 
-  trimAlignValue(v: number, nextProps: Partial<SliderProps> = {}) {
-    if (v === null) {
-      return null;
+    const nextValue = mergedMin + percent * (mergedMax - mergedMin);
+    changeToCloseValue(formatValue(nextValue), e);
+  };
+
+  // =========================== Keyboard ===========================
+  const [keyboardValue, setKeyboardValue] = React.useState<number>(null);
+
+  const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
+    if (!disabled) {
+      const next = offsetValues(rawValues, offset, valueIndex);
+
+      onBeforeChange?.(getTriggerValue(rawValues));
+      triggerChange(next.values);
+
+      setKeyboardValue(next.value);
+    }
+  };
+
+  React.useEffect(() => {
+    if (keyboardValue !== null) {
+      const valueIndex = rawValues.indexOf(keyboardValue);
+      if (valueIndex >= 0) {
+        handlesRef.current.focus(valueIndex);
+      }
     }
 
-    const mergedProps = { ...this.props, ...nextProps };
-    const val = utils.ensureValueInRange(v, mergedProps);
-    return utils.ensureValuePrecision(val, mergedProps);
-  }
+    setKeyboardValue(null);
+  }, [keyboardValue]);
 
-  render() {
-    const {
-      prefixCls,
-      vertical,
-      included,
+  // ============================= Drag =============================
+  const mergedDraggableTrack = React.useMemo(() => {
+    if (draggableTrack && mergedStep === null) {
+      if (process.env.NODE_ENV !== 'production') {
+        warning(false, '`draggableTrack` is not supported when `step` is `null`.');
+      }
+      return false;
+    }
+    return draggableTrack;
+  }, [draggableTrack, mergedStep]);
+
+  const onStartMove: OnStartMove = (e, valueIndex) => {
+    onStartDrag(e, valueIndex);
+
+    onBeforeChange?.(getTriggerValue(rawValuesRef.current));
+  };
+
+  // Auto focus for updated handle
+  const dragging = draggingIndex !== -1;
+  React.useEffect(() => {
+    if (!dragging) {
+      const valueIndex = rawValues.lastIndexOf(draggingValue);
+      handlesRef.current.focus(valueIndex);
+    }
+  }, [dragging]);
+
+  // =========================== Included ===========================
+  const sortedCacheValues = React.useMemo(
+    () => [...cacheValues].sort((a, b) => a - b),
+    [cacheValues],
+  );
+
+  // Provide a range values with included [min, max]
+  // Used for Track, Mark & Dot
+  const [includedStart, includedEnd] = React.useMemo(() => {
+    if (!range) {
+      return [mergedMin, sortedCacheValues[0]];
+    }
+
+    return [sortedCacheValues[0], sortedCacheValues[sortedCacheValues.length - 1]];
+  }, [sortedCacheValues, range, mergedMin]);
+
+  // ============================= Refs =============================
+  React.useImperativeHandle(ref, () => ({
+    focus: () => {
+      handlesRef.current.focus(0);
+    },
+    blur: () => {
+      const { activeElement } = document;
+      if (containerRef.current?.contains(activeElement)) {
+        (activeElement as HTMLElement)?.blur();
+      }
+    },
+  }));
+
+  // ========================== Auto Focus ==========================
+  React.useEffect(() => {
+    if (autoFocus) {
+      handlesRef.current.focus(0);
+    }
+  }, []);
+
+  // =========================== Context ============================
+  const context = React.useMemo<SliderContextProps>(
+    () => ({
+      min: mergedMin,
+      max: mergedMax,
+      direction,
       disabled,
-      minimumTrackStyle,
-      trackStyle,
-      handleStyle,
+      keyboard,
+      step: mergedStep,
+      included,
+      includedStart,
+      includedEnd,
+      range,
       tabIndex,
       ariaLabelForHandle,
       ariaLabelledByForHandle,
       ariaValueTextFormatterForHandle,
-      min,
-      max,
-      startPoint,
-      reverse,
-      handle: handleGenerator,
-    } = this.props;
-    const { value, dragging } = this.state;
-    const offset = this.calcOffset(value);
-    const handle = handleGenerator({
-      className: `${prefixCls}-handle`,
-      prefixCls,
-      vertical,
-      offset,
-      value,
-      dragging,
+      styles: styles || {},
+      classNames: classNames || {},
+    }),
+    [
+      mergedMin,
+      mergedMax,
+      direction,
       disabled,
-      min,
-      max,
-      reverse,
-      index: 0,
+      keyboard,
+      mergedStep,
+      included,
+      includedStart,
+      includedEnd,
+      range,
       tabIndex,
-      ariaLabel: ariaLabelForHandle,
-      ariaLabelledBy: ariaLabelledByForHandle,
-      ariaValueTextFormatter: ariaValueTextFormatterForHandle,
-      style: handleStyle[0] || handleStyle,
-      ref: h => this.saveHandle(0, h),
-    });
+      ariaLabelForHandle,
+      ariaLabelledByForHandle,
+      ariaValueTextFormatterForHandle,
+      styles,
+      classNames,
+    ],
+  );
 
-    const trackOffset = startPoint !== undefined ? this.calcOffset(startPoint) : 0;
-    const mergedTrackStyle = trackStyle[0] || trackStyle;
-    const track = (
-      <Track
-        className={`${prefixCls}-track`}
-        vertical={vertical}
-        included={included}
-        offset={trackOffset}
-        reverse={reverse}
-        length={offset - trackOffset}
-        style={{
-          ...minimumTrackStyle,
-          ...mergedTrackStyle,
-        }}
-      />
-    );
+  // ============================ Render ============================
+  return (
+    <SliderContext.Provider value={context}>
+      <div
+        ref={containerRef}
+        className={cls(prefixCls, className, {
+          [`${prefixCls}-disabled`]: disabled,
+          [`${prefixCls}-vertical`]: vertical,
+          [`${prefixCls}-horizontal`]: !vertical,
+          [`${prefixCls}-with-marks`]: markList.length,
+        })}
+        style={style}
+        onMouseDown={onSliderMouseDown}
+      >
+        <div
+          className={cls(`${prefixCls}-rail`, classNames?.rail)}
+          style={{ ...railStyle, ...styles?.rail }}
+        />
 
-    return { tracks: track, handles: handle };
-  }
+        <Tracks
+          prefixCls={prefixCls}
+          style={trackStyle}
+          values={sortedCacheValues}
+          startPoint={startPoint}
+          onStartMove={mergedDraggableTrack ? onStartMove : undefined}
+        />
+
+        <Steps
+          prefixCls={prefixCls}
+          marks={markList}
+          dots={dots}
+          style={dotStyle}
+          activeStyle={activeDotStyle}
+        />
+
+        <Handles
+          ref={handlesRef}
+          prefixCls={prefixCls}
+          style={handleStyle}
+          values={cacheValues}
+          draggingIndex={draggingIndex}
+          onStartMove={onStartMove}
+          onOffsetChange={onHandleOffsetChange}
+          onFocus={onFocus}
+          onBlur={onBlur}
+          handleRender={handleRender}
+          onChangeComplete={finishChange}
+        />
+
+        <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />
+      </div>
+    </SliderContext.Provider>
+  );
+});
+
+if (process.env.NODE_ENV !== 'production') {
+  Slider.displayName = 'Slider';
 }
 
-export default createSlider(Slider);
+export default Slider;

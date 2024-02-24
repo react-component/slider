@@ -1,47 +1,66 @@
 # rc-slider
----
 
 Slider UI component for React
 
 [![NPM version][npm-image]][npm-url]
-[![build status][github-actions-image]][github-actions-url]
-[![Test coverage][coveralls-image]][coveralls-url]
-[![Dependencies][david-image]][david-url]
-[![DevDependencies][david-dev-image]][david-dev-url]
 [![npm download][download-image]][download-url]
+[![build status][github-actions-image]][github-actions-url]
+[![Codecov][codecov-image]][codecov-url]
 [![bundle size][bundlephobia-image]][bundlephobia-url]
+[![dumi][dumi-image]][dumi-url]
 
 [npm-image]: http://img.shields.io/npm/v/rc-slider.svg?style=flat-square
 [npm-url]: http://npmjs.org/package/rc-slider
+[travis-image]: https://img.shields.io/travis/react-component/slider/master?style=flat-square
+[travis-url]: https://travis-ci.com/react-component/slider
 [github-actions-image]: https://github.com/react-component/slider/workflows/CI/badge.svg
 [github-actions-url]: https://github.com/react-component/slider/actions
-[circleci-image]: https://img.shields.io/circleci/react-component/slider/master?style=flat-square
-[circleci-url]: https://circleci.com/gh/react-component/slider
-[coveralls-image]: https://img.shields.io/coveralls/react-component/slider.svg?style=flat-square
-[coveralls-url]: https://coveralls.io/r/react-component/slider?branch=master
+[codecov-image]: https://img.shields.io/codecov/c/github/react-component/slider/master.svg?style=flat-square
+[codecov-url]: https://app.codecov.io/gh/react-component/slider
 [david-url]: https://david-dm.org/react-component/slider
 [david-image]: https://david-dm.org/react-component/slider/status.svg?style=flat-square
 [david-dev-url]: https://david-dm.org/react-component/slider?type=dev
 [david-dev-image]: https://david-dm.org/react-component/slider/dev-status.svg?style=flat-square
 [download-image]: https://img.shields.io/npm/dm/rc-slider.svg?style=flat-square
 [download-url]: https://npmjs.org/package/rc-slider
-[bundlephobia-url]: https://bundlephobia.com/result?p=rc-slider
+[bundlephobia-url]: https://bundlephobia.com/package/rc-slider
 [bundlephobia-image]: https://badgen.net/bundlephobia/minzip/rc-slider
-
+[dumi-url]: https://github.com/umijs/dumi
+[dumi-image]: https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square
 ## Install
 
 [![rc-slider](https://nodei.co/npm/rc-slider.png)](https://npmjs.org/package/rc-slider)
 
+## Example
+
+`npm start` and then go to http://localhost:8000
+
+Online examples: https://slider.react-component.now.sh/
+
 ## Usage
 
+## Slider
+```js
+import Slider from 'rc-slider';
+import 'rc-slider/assets/index.css';
+
+export default () => (
+  <>
+    <Slider />
+  </>
+);
+```
+
+## Range
+Please refer to [#825](https://github.com/react-component/slider/issues/825) for information regarding usage of `Range`.
+An example:
 ```js
 import Slider, { Range } from 'rc-slider';
 import 'rc-slider/assets/index.css';
 
 export default () => (
   <>
-    <Slider />
-    <Range />
+    <Slider range />
   </>
 );
 ```
@@ -58,7 +77,7 @@ export default () => (
 
 An extension to make Slider or Range support Tooltip on handle.
 
-```jsx
+```js
 const Slider = require('rc-slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
@@ -89,17 +108,18 @@ The following APIs are shared by Slider and Range.
 | included | boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
 | reverse | boolean | `false` | If the value is `true`, it means the component is rendered reverse. |
 | disabled | boolean | `false` | If `true`, handles can't be moved. |
+| keyboard | boolean | `true` | Support using keyboard to move handlers. |
 | dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
 | onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
-| onAfterChange | Function | NOOP | `onAfterChange` will be triggered when `ontouchend` or `onmouseup` is triggered. |
+| onChangeComplete | Function | NOOP | `onChangeComplete` will be triggered when `ontouchend` or `onmouseup` is triggered. |
 | minimumTrackStyle | Object |  | please use  `trackStyle` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
 | maximumTrackStyle | Object |  | please use  `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
 | handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi handle following element order`) |
 | trackStyle | Array[Object] \| Object | `[{}]` | The style used for track. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi track following element order`)|
 | railStyle | Object | `{}` | The style used for the track base color.  |
-| dotStyle | Object | `{}` | The style used for the dots. |
-| activeDotStyle | Object | `{}` | The style used for the active dots. |
+| dotStyle | Object \| (dotValue) => Object | `{}` | The style used for the dots. |
+| activeDotStyle | Object \| (dotValue) => Object | `{}` | The style used for the active dots. |
 
 ### Slider
 
@@ -126,6 +146,7 @@ The following APIs are shared by Slider and Range.
 | count | number | `1` | Determine how many ranges to render, and multiple handles will be rendered (number + 1). |
 | allowCross | boolean | `true` | `allowCross` could be set as `true` to allow those handles to cross. |
 | pushable | boolean or number | `false` | `pushable` could be set as `true` to allow pushing of surrounding handles when moving a handle. When set to a number, the number will be the minimum ensured distance between handles. Example: ![](http://i.giphy.com/l46Cs36c9HrHMExoc.gif) |
+| draggableTrack | boolean | `false` | Open the track drag. open after click on the track will be invalid. |
 
 ### SliderTooltip
 
@@ -138,20 +159,13 @@ npm install
 npm start
 ```
 
-## Example
-
-`npm start` and then go to `http://localhost:8005/examples/`
-
-Online examples: [http://react-component.github.io/slider/](http://react-component.github.io/slider/)
-
 ## Test Case
 
-`http://localhost:8005/tests/runner.html?coverage`
+`npm run test`
 
 ## Coverage
 
-`http://localhost:8005/node_modules/rc-server/node_modules/node-jscover/lib/front-end/jscoverage.html?w=http://localhost:8088/tests/runner.html?coverage`
-
+`npm run coverage`
 ## License
 
 `rc-slider` is released under the MIT license.

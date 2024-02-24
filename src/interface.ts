@@ -1,63 +1,17 @@
-import * as React from 'react';
+import type React from 'react';
 
-export interface GenericSliderProps {
-  min?: number;
-  max?: number;
-  step?: number | null;
-  prefixCls?: string;
-  vertical?: boolean;
-  included?: boolean;
-  disabled?: boolean;
-  reverse?: boolean;
-  trackStyle?: React.CSSProperties | React.CSSProperties[];
-  handleStyle?: React.CSSProperties | React.CSSProperties[];
-  autoFocus?: boolean;
-  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  className?: string;
-  marks?: Record<number, React.ReactNode | { style?: React.CSSProperties; label?: string }>;
-  dots?: boolean;
-  maximumTrackStyle?: React.CSSProperties;
-  style?: React.CSSProperties;
-  railStyle?: React.CSSProperties;
-  dotStyle?: React.CSSProperties;
-  activeDotStyle?: React.CSSProperties;
-}
+export type Direction = 'rtl' | 'ltr' | 'ttb' | 'btt';
 
-export interface GenericSliderState {
-  value?: any;
-}
+export type OnStartMove = (
+  e: React.MouseEvent | React.TouchEvent,
+  valueIndex: number,
+  startValues?: number[],
+) => void;
 
-export interface GenericSliderClass<Props, State> extends React.Component<Props, State> {
-  onStart: (position: number) => void;
+export type AriaValueFormat = (value: number) => string;
 
-  onEnd: (force?: boolean) => void;
+export type SemanticName = 'tracks' | 'track' | 'rail' | 'handle';
 
-  onMove: (
-    e: React.MouseEvent<HTMLDivElement> | React.TouchEvent<HTMLDivElement>,
-    position: number,
-  ) => void;
+export type SliderClassNames = Partial<Record<SemanticName, string>>;
 
-  onKeyboard: (e: React.KeyboardEvent<HTMLDivElement>) => void;
-
-  onChange: (state: { value: any }) => void;
-
-  trimAlignValue: (v: number, nextProps?: Partial<Props>) => number;
-
-  getUpperBound: () => number;
-
-  getLowerBound: () => number;
-}
-
-export interface GenericSlider<Props, State>
-  extends Pick<
-    React.ComponentClass<Props, State>,
-    | 'displayName'
-    | 'defaultProps'
-    | 'propTypes'
-    | 'contextType'
-    | 'contextTypes'
-    | 'childContextTypes'
-  > {
-  new (props: Props, context?: any): GenericSliderClass<Props, State>;
-}
+export type SliderStyles = Partial<Record<SemanticName, React.CSSProperties>>;
