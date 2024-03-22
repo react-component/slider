@@ -31,6 +31,7 @@
   "scripts": {
     "compile": "father build && lessc assets/index.less assets/index.css",
     "coverage": "echo skip coverage",
+    "lint": "echo skip lint",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d .doc",
     "now-build": "npm run docs:build",
