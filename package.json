@@ -33,7 +33,6 @@
     "coverage": "echo skip coverage",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d .doc",
-    "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
     "now-build": "npm run docs:build",
     "prepublishOnly": "npm run compile && np --yolo --no-publish",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
