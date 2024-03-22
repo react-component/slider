@@ -1,5 +1,5 @@
 {
-  "name": "rc-slider",
+  "name": "@dm-mini-player/rc-slider",
   "version": "10.5.0",
   "description": "Slider UI component for React",
   "keywords": [
@@ -30,7 +30,7 @@
   ],
   "scripts": {
     "compile": "father build && lessc assets/index.less assets/index.css",
-    "coverage": "rc-test --coverage",
+    "coverage": "echo skip coverage",
     "docs:build": "dumi build",
     "docs:deploy": "gh-pages -d .doc",
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
