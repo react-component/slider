@@ -23,7 +23,10 @@ export interface HandleProps
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus: (e: React.FocusEvent<HTMLDivElement>, index: number) => void;
   onMouseEnter: (e: React.MouseEvent<HTMLDivElement>, index: number) => void;
-  render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
+  render?: (
+    origin: React.ReactElement<React.HTMLAttributes<HTMLDivElement>>,
+    props: RenderProps,
+  ) => React.ReactElement;
   onChangeComplete?: () => void;
 }
 

@@ -291,12 +291,13 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   };
 
   const finishChange = () => {
-    onAfterChange?.(getTriggerValue(rawValuesRef.current));
+    const finishValue = getTriggerValue(rawValuesRef.current);
+    onAfterChange?.(finishValue);
     warning(
       !onAfterChange,
       '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
     );
-    onChangeComplete?.(getTriggerValue(rawValuesRef.current));
+    onChangeComplete?.(finishValue);
   };
 
   const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(

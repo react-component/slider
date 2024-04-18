@@ -32,7 +32,7 @@ function useDrag(
   const mouseMoveEventRef = React.useRef<(event: MouseEvent) => void>(null);
   const mouseUpEventRef = React.useRef<(event: MouseEvent) => void>(null);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (draggingIndex === -1) {
       setCacheValues(rawValues);
     }

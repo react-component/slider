@@ -97,12 +97,13 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
         <Handle
           key="a11y"
           {...handleProps}
-          aria-hidden
           value={values[activeIndex]}
           valueIndex={0}
           dragging={draggingIndex !== -1}
           render={activeHandleRender}
           style={{ pointerEvents: 'none' }}
+          tabIndex={-1}
+          aria-hidden
         />
       )}
     </>
