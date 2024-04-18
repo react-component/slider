@@ -18,7 +18,12 @@ function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
   offsetValues: OffsetValues,
-): [number, number, number[], OnStartMove] {
+): [
+  draggingIndex: number,
+  draggingValue: number,
+  returnValues: number[],
+  onStartMove: OnStartMove,
+] {
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);

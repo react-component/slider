@@ -12,7 +12,7 @@ interface RenderProps {
   dragging: boolean;
 }
 
-export interface HandleProps {
+export interface HandleProps extends Pick<React.HTMLAttributes<HTMLDivElement>, 'aria-hidden'> {
   prefixCls: string;
   style?: React.CSSProperties;
   value: number;
@@ -20,8 +20,8 @@ export interface HandleProps {
   dragging: boolean;
   onStartMove: OnStartMove;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
-  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  onFocus: (index: number, e: React.FocusEvent<HTMLDivElement>) => void;
+  onMouseEnter: (index: number, e: React.MouseEvent<HTMLDivElement>) => void;
   render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
   onChangeComplete?: () => void;
 }
@@ -37,6 +37,8 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     dragging,
     onOffsetChange,
     onChangeComplete,
+    onFocus,
+    onMouseEnter,
     ...restProps
   } = props;
   const {
@@ -61,6 +63,14 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     if (!disabled) {
       onStartMove(e, valueIndex);
     }
+  };
+
+  const onInternalFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+    onFocus?.(valueIndex, e);
+  };
+
+  const onInternalMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    onMouseEnter(valueIndex, e);
   };
 
   // =========================== Keyboard ===========================
@@ -149,6 +159,8 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
       }}
       onMouseDown={onInternalStartMove}
       onTouchStart={onInternalStartMove}
+      onFocus={onInternalFocus}
+      onMouseEnter={onInternalMouseEnter}
       onKeyDown={onKeyDown}
       onKeyUp={handleKeyUp}
       tabIndex={disabled ? null : getIndex(tabIndex, valueIndex)}

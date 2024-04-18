@@ -12,19 +12,12 @@ function log(value) {
   console.log(value);
 }
 
-let uuid = 0;
-
 const NodeWrapper = ({ children }: { children: React.ReactElement }) => {
-  const [id] = React.useState(() => {
-    uuid += 1;
-    return uuid;
-  });
-
-  return <div>{React.cloneElement(children, {}, <div>{id}</div>)}</div>;
+  return <div>{React.cloneElement(children, {}, <div>TOOLTIP</div>)}</div>;
 };
 
 export default () => {
-  const [value, setValue] = React.useState([0, 10, 30]);
+  const [value, setValue] = React.useState([0, 5, 8]);
 
   return (
     <div>
@@ -33,12 +26,14 @@ export default () => {
           range
           // defaultValue={[0, 10, 30]}
           // onChange={log}
+          min={0}
+          max={10}
           value={value}
           onChange={(nextValue) => {
-            console.log('>>>', nextValue);
+            // console.log('>>>', nextValue);
             setValue(nextValue as any);
           }}
-          handleRender={(node) => <NodeWrapper>{node}</NodeWrapper>}
+          activeHandleRender={(node) => <NodeWrapper>{node}</NodeWrapper>}
           styles={{
             tracks: {
               background: `linear-gradient(to right, blue, red)`,
