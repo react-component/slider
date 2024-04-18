@@ -52,12 +52,12 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
   // =========================== Active ===========================
   const [activeIndex, setActiveIndex] = React.useState<number>(-1);
 
-  const onHandleFocus = (index: number, e: React.FocusEvent<HTMLDivElement>) => {
+  const onHandleFocus = (e: React.FocusEvent<HTMLDivElement>, index: number) => {
     setActiveIndex(index);
     onFocus?.(e);
   };
 
-  const onHandleMouseEnter = (index: number) => {
+  const onHandleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
     setActiveIndex(index);
   };
 
