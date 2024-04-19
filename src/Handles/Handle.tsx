@@ -144,6 +144,11 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
   // ============================ Offset ============================
   const positionStyle = getDirectionStyle(direction, value, min, max);
 
+  // ============================= Aria =============================
+  function ignoreAriaProp<T>(val: T) {
+    return valueIndex === null ? undefined : val;
+  }
+
   // ============================ Render ============================
   let handleNode = (
     <div
@@ -151,7 +156,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
       className={cls(
         handlePrefixCls,
         {
-          [`${handlePrefixCls}-${valueIndex + 1}`]: range,
+          [`${handlePrefixCls}-${valueIndex + 1}`]: ignoreAriaProp(range),
           [`${handlePrefixCls}-dragging`]: dragging,
         },
         classNames.handle,
@@ -167,15 +172,17 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
       onMouseEnter={onInternalMouseEnter}
       onKeyDown={onKeyDown}
       onKeyUp={handleKeyUp}
-      tabIndex={disabled ? null : getIndex(tabIndex, valueIndex)}
+      tabIndex={disabled ? null : ignoreAriaProp(getIndex(tabIndex, valueIndex))}
       role="slider"
       aria-valuemin={min}
       aria-valuemax={max}
       aria-valuenow={value}
       aria-disabled={disabled}
-      aria-label={getIndex(ariaLabelForHandle, valueIndex)}
-      aria-labelledby={getIndex(ariaLabelledByForHandle, valueIndex)}
-      aria-valuetext={getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value)}
+      aria-label={ignoreAriaProp(getIndex(ariaLabelForHandle, valueIndex))}
+      aria-labelledby={ignoreAriaProp(getIndex(ariaLabelledByForHandle, valueIndex))}
+      aria-valuetext={ignoreAriaProp(
+        getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value),
+      )}
       aria-orientation={direction === 'ltr' || direction === 'rtl' ? 'horizontal' : 'vertical'}
       {...restProps}
     />

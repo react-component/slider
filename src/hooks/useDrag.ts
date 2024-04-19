@@ -1,3 +1,4 @@
+import { useEvent } from 'rc-util';
 import * as React from 'react';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
@@ -60,7 +61,7 @@ function useDrag(
     }
   };
 
-  const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
+  const updateCacheValue = useEvent((valueIndex: number, offsetPercent: number) => {
     // Basic point offset
 
     if (valueIndex === -1) {
@@ -92,11 +93,7 @@ function useDrag(
 
       flushValues(next.values, next.value);
     }
-  };
-
-  // Resolve closure
-  const updateCacheValueRef = React.useRef(updateCacheValue);
-  updateCacheValueRef.current = updateCacheValue;
+  });
 
   const onStartMove: OnStartMove = (e, valueIndex, startValues?: number[]) => {
     e.stopPropagation();
@@ -138,7 +135,7 @@ function useDrag(
         default:
           offSetPercent = offsetX / width;
       }
-      updateCacheValueRef.current(valueIndex, offSetPercent);
+      updateCacheValue(valueIndex, offSetPercent);
     };
 
     // End
