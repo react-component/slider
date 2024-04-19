@@ -12,22 +12,38 @@ function log(value) {
   console.log(value);
 }
 
-export default () => (
-  <div>
-    <div style={style}>
-      <Slider
-        range
-        defaultValue={[0, 10, 30]}
-        onChange={log}
-        styles={{
-          tracks: {
-            background: `linear-gradient(to right, blue, red)`,
-          },
-          track: {
-            background: 'transparent',
-          },
-        }}
-      />
+const NodeWrapper = ({ children }: { children: React.ReactElement }) => {
+  return <div>{React.cloneElement(children, {}, <div>TOOLTIP</div>)}</div>;
+};
+
+export default () => {
+  const [value, setValue] = React.useState([0, 5, 8]);
+
+  return (
+    <div>
+      <div style={style}>
+        <Slider
+          range
+          // defaultValue={[0, 10, 30]}
+          // onChange={log}
+          min={0}
+          max={10}
+          value={value}
+          onChange={(nextValue) => {
+            // console.log('>>>', nextValue);
+            setValue(nextValue as any);
+          }}
+          activeHandleRender={(node) => <NodeWrapper>{node}</NodeWrapper>}
+          styles={{
+            tracks: {
+              background: `linear-gradient(to right, blue, red)`,
+            },
+            track: {
+              background: 'transparent',
+            },
+          }}
+        />
+      </div>
     </div>
-  </div>
-);
+  );
+};

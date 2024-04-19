@@ -511,12 +511,12 @@ describe('Range', () => {
       expect(handleFocus).toBeCalled();
     });
 
-    it('blur', () => {
+    it('blur()', () => {
       const handleBlur = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onBlur={handleBlur} />);
       container.getElementsByClassName('rc-slider-handle')[0].focus();
       container.getElementsByClassName('rc-slider-handle')[0].blur();
-      expect(handleBlur).toBeCalled();
+      expect(handleBlur).toHaveBeenCalled();
     });
   });
 

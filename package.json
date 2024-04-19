@@ -1,6 +1,6 @@
 {
   "name": "rc-slider",
-  "version": "10.5.0",
+  "version": "10.6.0-4",
   "description": "Slider UI component for React",
   "keywords": [
     "react",
@@ -35,7 +35,7 @@
     "docs:deploy": "gh-pages -d .doc",
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
     "now-build": "npm run docs:build",
-    "prepublishOnly": "npm run compile && np --yolo --no-publish",
+    "prepublishOnly": "npm run compile && np --yolo --no-publish --any-branch",
     "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
     "start": "dumi dev",
     "test": "rc-test"

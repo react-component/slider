@@ -93,6 +93,7 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Components
   handleRender?: HandlesProps['handleRender'];
+  activeHandleRender?: HandlesProps['handleRender'];
 
   // Accessibility
   tabIndex?: number | number[];
@@ -158,6 +159,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     // Components
     handleRender,
+    activeHandleRender,
 
     // Accessibility
     tabIndex = 0,
@@ -289,12 +291,13 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   };
 
   const finishChange = () => {
-    onAfterChange?.(getTriggerValue(rawValuesRef.current));
+    const finishValue = getTriggerValue(rawValuesRef.current);
+    onAfterChange?.(finishValue);
     warning(
       !onAfterChange,
       '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
     );
-    onChangeComplete?.(getTriggerValue(rawValuesRef.current));
+    onChangeComplete?.(finishValue);
   };
 
   const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
@@ -335,6 +338,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       onBeforeChange?.(getTriggerValue(cloneNextValues));
       triggerChange(cloneNextValues);
       if (e) {
+        handlesRef.current.focus(valueIndex);
         onStartDrag(e, valueIndex, cloneNextValues);
       }
     }
@@ -543,6 +547,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           onFocus={onFocus}
           onBlur={onBlur}
           handleRender={handleRender}
+          activeHandleRender={activeHandleRender}
           onChangeComplete={finishChange}
         />
 

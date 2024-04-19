@@ -13,6 +13,12 @@ export interface HandlesProps {
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
   handleRender?: HandleProps['render'];
+  /**
+   * When config `activeHandleRender`,
+   * it will render another hidden handle for active usage.
+   * This is useful for accessibility or tooltip usage.
+   */
+  activeHandleRender?: HandleProps['render'];
   draggingIndex: number;
   onChangeComplete?: () => void;
 }
@@ -29,7 +35,9 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
     onOffsetChange,
     values,
     handleRender,
+    activeHandleRender,
     draggingIndex,
+    onFocus,
     ...restProps
   } = props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
@@ -39,6 +47,30 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
       handlesRef.current[index]?.focus();
     },
   }));
+
+  // =========================== Active ===========================
+  const [activeIndex, setActiveIndex] = React.useState<number>(-1);
+
+  const onHandleFocus = (e: React.FocusEvent<HTMLDivElement>, index: number) => {
+    setActiveIndex(index);
+    onFocus?.(e);
+  };
+
+  const onHandleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
+    setActiveIndex(index);
+  };
+
+  // =========================== Render ===========================
+  // Handle Props
+  const handleProps = {
+    prefixCls,
+    onStartMove,
+    onOffsetChange,
+    render: handleRender,
+    onFocus: onHandleFocus,
+    onMouseEnter: onHandleMouseEnter,
+    ...restProps,
+  };
 
   return (
     <>
@@ -52,17 +84,27 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
             }
           }}
           dragging={draggingIndex === index}
-          prefixCls={prefixCls}
           style={getIndex(style, index)}
           key={index}
           value={value}
           valueIndex={index}
-          onStartMove={onStartMove}
-          onOffsetChange={onOffsetChange}
-          render={handleRender}
-          {...restProps}
+          {...handleProps}
         />
       ))}
+
+      {activeHandleRender && (
+        <Handle
+          key="a11y"
+          {...handleProps}
+          value={values[activeIndex]}
+          valueIndex={null}
+          dragging={draggingIndex !== -1}
+          render={activeHandleRender}
+          style={{ pointerEvents: 'none' }}
+          tabIndex={null}
+          aria-hidden
+        />
+      )}
     </>
   );
 });

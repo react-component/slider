@@ -12,7 +12,8 @@ interface RenderProps {
   dragging: boolean;
 }
 
-export interface HandleProps {
+export interface HandleProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onFocus' | 'onMouseEnter'> {
   prefixCls: string;
   style?: React.CSSProperties;
   value: number;
@@ -20,10 +21,14 @@ export interface HandleProps {
   dragging: boolean;
   onStartMove: OnStartMove;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
-  onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
-  render?: (origin: React.ReactElement<HandleProps>, props: RenderProps) => React.ReactElement;
+  onFocus: (e: React.FocusEvent<HTMLDivElement>, index: number) => void;
+  onMouseEnter: (e: React.MouseEvent<HTMLDivElement>, index: number) => void;
+  render?: (
+    origin: React.ReactElement<React.HTMLAttributes<HTMLDivElement>>,
+    props: RenderProps,
+  ) => React.ReactElement;
   onChangeComplete?: () => void;
+  mock?: boolean;
 }
 
 const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
@@ -37,6 +42,8 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     dragging,
     onOffsetChange,
     onChangeComplete,
+    onFocus,
+    onMouseEnter,
     ...restProps
   } = props;
   const {
@@ -61,6 +68,14 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     if (!disabled) {
       onStartMove(e, valueIndex);
     }
+  };
+
+  const onInternalFocus = (e: React.FocusEvent<HTMLDivElement>) => {
+    onFocus?.(e, valueIndex);
+  };
+
+  const onInternalMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+    onMouseEnter(e, valueIndex);
   };
 
   // =========================== Keyboard ===========================
@@ -131,13 +146,36 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
   const positionStyle = getDirectionStyle(direction, value, min, max);
 
   // ============================ Render ============================
+  let divProps: React.HtmlHTMLAttributes<HTMLDivElement> = {};
+
+  if (valueIndex !== null) {
+    divProps = {
+      tabIndex: disabled ? null : getIndex(tabIndex, valueIndex),
+      role: 'slider',
+      'aria-valuemin': min,
+      'aria-valuemax': max,
+      'aria-valuenow': value,
+      'aria-disabled': disabled,
+      'aria-label': getIndex(ariaLabelForHandle, valueIndex),
+      'aria-labelledby': getIndex(ariaLabelledByForHandle, valueIndex),
+      'aria-valuetext': getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value),
+      'aria-orientation': direction === 'ltr' || direction === 'rtl' ? 'horizontal' : 'vertical',
+      onMouseDown: onInternalStartMove,
+      onTouchStart: onInternalStartMove,
+      onFocus: onInternalFocus,
+      onMouseEnter: onInternalMouseEnter,
+      onKeyDown,
+      onKeyUp: handleKeyUp,
+    };
+  }
+
   let handleNode = (
     <div
       ref={ref}
       className={cls(
         handlePrefixCls,
         {
-          [`${handlePrefixCls}-${valueIndex + 1}`]: range,
+          [`${handlePrefixCls}-${valueIndex + 1}`]: valueIndex !== null && range,
           [`${handlePrefixCls}-dragging`]: dragging,
         },
         classNames.handle,
@@ -147,20 +185,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
         ...style,
         ...styles.handle,
       }}
-      onMouseDown={onInternalStartMove}
-      onTouchStart={onInternalStartMove}
-      onKeyDown={onKeyDown}
-      onKeyUp={handleKeyUp}
-      tabIndex={disabled ? null : getIndex(tabIndex, valueIndex)}
-      role="slider"
-      aria-valuemin={min}
-      aria-valuemax={max}
-      aria-valuenow={value}
-      aria-disabled={disabled}
-      aria-label={getIndex(ariaLabelForHandle, valueIndex)}
-      aria-labelledby={getIndex(ariaLabelledByForHandle, valueIndex)}
-      aria-valuetext={getIndex(ariaValueTextFormatterForHandle, valueIndex)?.(value)}
-      aria-orientation={direction === 'ltr' || direction === 'rtl' ? 'horizontal' : 'vertical'}
+      {...divProps}
       {...restProps}
     />
   );

@@ -1,3 +1,4 @@
+import { useEvent } from 'rc-util';
 import * as React from 'react';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
@@ -18,7 +19,12 @@ function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
   offsetValues: OffsetValues,
-): [number, number, number[], OnStartMove] {
+): [
+  draggingIndex: number,
+  draggingValue: number,
+  returnValues: number[],
+  onStartMove: OnStartMove,
+] {
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
@@ -27,7 +33,7 @@ function useDrag(
   const mouseMoveEventRef = React.useRef<(event: MouseEvent) => void>(null);
   const mouseUpEventRef = React.useRef<(event: MouseEvent) => void>(null);
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
     if (draggingIndex === -1) {
       setCacheValues(rawValues);
     }
@@ -55,7 +61,7 @@ function useDrag(
     }
   };
 
-  const updateCacheValue = (valueIndex: number, offsetPercent: number) => {
+  const updateCacheValue = useEvent((valueIndex: number, offsetPercent: number) => {
     // Basic point offset
 
     if (valueIndex === -1) {
@@ -87,11 +93,7 @@ function useDrag(
 
       flushValues(next.values, next.value);
     }
-  };
-
-  // Resolve closure
-  const updateCacheValueRef = React.useRef(updateCacheValue);
-  updateCacheValueRef.current = updateCacheValue;
+  });
 
   const onStartMove: OnStartMove = (e, valueIndex, startValues?: number[]) => {
     e.stopPropagation();
@@ -133,7 +135,7 @@ function useDrag(
         default:
           offSetPercent = offsetX / width;
       }
-      updateCacheValueRef.current(valueIndex, offSetPercent);
+      updateCacheValue(valueIndex, offSetPercent);
     };
 
     // End
