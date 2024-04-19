@@ -38,7 +38,6 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
     activeHandleRender,
     draggingIndex,
     onFocus,
-    onBlur,
     ...restProps
   } = props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
