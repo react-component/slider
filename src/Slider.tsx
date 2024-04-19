@@ -338,6 +338,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       onBeforeChange?.(getTriggerValue(cloneNextValues));
       triggerChange(cloneNextValues);
       if (e) {
+        (document.activeElement as HTMLElement)?.blur?.();
         handlesRef.current.focus(valueIndex);
         onStartDrag(e, valueIndex, cloneNextValues);
       }
