@@ -8,13 +8,21 @@ import * as React from 'react';
 
 interface HandleTooltipProps {
   value: number;
+  index: number;
   children: React.ReactElement;
   visible: boolean;
-  tipFormatter?: (value: number) => React.ReactNode;
+  tipFormatter?: (value: number, index: number) => React.ReactNode;
 }
 
 const HandleTooltip: React.FC<HandleTooltipProps> = (props) => {
-  const { value, children, visible, tipFormatter = (val) => `${val} %`, ...restProps } = props;
+  const {
+    value,
+    children,
+    visible,
+    tipFormatter = (val) => `${val} %`,
+    index,
+    ...restProps
+  } = props;
 
   const tooltipRef = React.useRef<TooltipRef>();
   const rafRef = React.useRef<number | null>(null);
@@ -42,7 +50,7 @@ const HandleTooltip: React.FC<HandleTooltipProps> = (props) => {
   return (
     <Tooltip
       placement="top"
-      overlay={tipFormatter(value)}
+      overlay={tipFormatter(value, index)}
       overlayInnerStyle={{ minHeight: 'auto' }}
       ref={tooltipRef}
       visible={visible}
@@ -53,14 +61,24 @@ const HandleTooltip: React.FC<HandleTooltipProps> = (props) => {
   );
 };
 
+const Handle = (props: { content: string; children }) => {
+  const { content, children } = props;
+  return (
+    <span className="handle">
+      {content}
+      {children}
+    </span>
+  );
+};
+
 export const handleRender: SliderProps['handleRender'] = (node, props) => (
-  <HandleTooltip value={props.value} visible={props.dragging}>
-    {node}
+  <HandleTooltip value={props.value} visible={props.dragging} index={props.index}>
+    {props.index === 0 ? <></> : <Handle content={`实验-${props.index}`} />}
   </HandleTooltip>
 );
 
 interface TooltipSliderProps extends SliderProps {
-  tipFormatter?: (value: number) => React.ReactNode;
+  tipFormatter?: (value: number, index: number) => React.ReactNode;
   tipProps?: any;
 }
 
@@ -69,10 +87,11 @@ const TooltipSlider: React.FC<TooltipSliderProps> = ({ tipFormatter, tipProps, .
     <HandleTooltip
       value={handleProps.value}
       visible={handleProps.dragging}
+      index={handleProps.index}
       tipFormatter={tipFormatter}
       {...tipProps}
     >
-      {node}
+      {handleProps.index === 0 ? <></> : node}
     </HandleTooltip>
   );
 

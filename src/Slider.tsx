@@ -70,6 +70,10 @@ export interface SliderProps<ValueType = number | number[]> {
   pushable?: boolean | number;
   /** range only */
   draggableTrack?: boolean;
+  clickable?: boolean;
+
+  // Freeze
+  freeze?: 'left' | 'right';
 
   // Direction
   reverse?: boolean;
@@ -139,6 +143,10 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     allowCross = true,
     pushable = false,
     draggableTrack,
+    clickable = true,
+
+    // Freeze
+    freeze,
 
     // Direction
     reverse,
@@ -228,6 +236,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     markList,
     allowCross,
     mergedPush,
+    freeze,
   );
 
   // ============================ Values ============================
@@ -240,8 +249,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       mergedValue === null || mergedValue === undefined
         ? []
         : Array.isArray(mergedValue)
-        ? mergedValue
-        : [mergedValue];
+          ? mergedValue
+          : [mergedValue];
 
     const [val0 = mergedMin] = valueList;
     let returnValues = mergedValue === null ? [] : [val0];
@@ -347,6 +356,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   // ============================ Click =============================
   const onSliderMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    if (!clickable) return;
     e.preventDefault();
 
     const { width, height, left, top, bottom, right } =

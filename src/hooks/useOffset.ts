@@ -24,6 +24,7 @@ export type OffsetValues = (
   offset: number | 'min' | 'max',
   valueIndex: number,
   mode?: OffsetMode,
+  originValues?: number[],
 ) => {
   value: number;
   values: number[];
@@ -36,6 +37,7 @@ export default function useOffset(
   markList: InternalMarkObj[],
   allowCross: boolean,
   pushable: false | number,
+  freeze: 'left' | 'right',
 ): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => Math.max(min, Math.min(max, val)),
@@ -190,11 +192,28 @@ export default function useOffset(
   };
 
   // Values
-  const offsetValues: OffsetValues = (values, offset, valueIndex, mode = 'unit') => {
+  const offsetValues: OffsetValues = (
+    values,
+    offset,
+    valueIndex,
+    mode = 'unit',
+    originValues = [],
+  ) => {
     const nextValues = values.map<number>(formatValue);
     const originValue = nextValues[valueIndex];
     const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;
+
+    const freezeValues = originValues.map(formatValue);
+    const freezeIntervals = freezeValues.map((item, index) => {
+      if (index === 0) {
+        return [item - min, freezeValues[index + 1] - item];
+      }
+      if (index === freezeValues.length - 1) {
+        return [item - freezeValues[index - 1], max - item];
+      }
+      return [item - freezeValues[index - 1], freezeValues[index + 1] - item];
+    });
 
     if (allowCross === false) {
       // >>>>> Allow Cross
@@ -213,6 +232,63 @@ export default function useOffset(
           nextValues[valueIndex],
           nextValues[valueIndex + 1] - pushNum,
         );
+      }
+    } else if (freeze) {
+      // freeze defaultly implements allowCross === false
+      if (freeze === 'right') {
+        const maxIncrease = max - originValues[originValues.length - 1];
+        const maxDecrease = freezeIntervals[valueIndex][0];
+
+        nextValues[valueIndex] = Math.max(
+          Math.min(originValue + maxIncrease, nextValue),
+          originValue - maxDecrease,
+        );
+
+        // move right handles left and right to keep intervals
+        for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
+          let changed = true;
+          while (
+            nextValues[i] - nextValues[i - 1] < freezeIntervals[i][0] &&
+            changed &&
+            max > nextValues[nextValues.length - 1]
+          ) {
+            ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
+          }
+        }
+
+        for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
+          let changed = true;
+          while (nextValues[i] - nextValues[i - 1] > freezeIntervals[i][0] && changed) {
+            ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, -1, i));
+          }
+        }
+      }
+      if (freeze === 'left') {
+        const maxIncrease = freezeIntervals[valueIndex][1];
+        const maxDecrease = originValues[0] - min;
+
+        nextValues[valueIndex] = Math.max(
+          Math.min(originValue + maxIncrease, nextValue),
+          originValue - maxDecrease,
+        );
+
+        for (let i = valueIndex; i > 0; i -= 1) {
+          let changed = true;
+          while (
+            nextValues[i] - nextValues[i - 1] < freezeIntervals[i][0] &&
+            changed &&
+            min < nextValues[0]
+          ) {
+            ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
+          }
+        }
+
+        for (let i = valueIndex; i > 0; i -= 1) {
+          let changed = true;
+          while (nextValues[i] - nextValues[i - 1] > freezeIntervals[i][0] && changed) {
+            ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, 1, i - 1));
+          }
+        }
       }
     } else if (typeof pushable === 'number' || pushable === null) {
       // >>>>> Pushable
