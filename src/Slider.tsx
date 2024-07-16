@@ -369,6 +369,19 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     }
   };
 
+  const onDelete = (index: number) => {
+    if (!disabled && rangeEditable) {
+      const cloneNextValues = [...rawValues];
+      cloneNextValues.splice(index, 1);
+
+      onBeforeChange?.(getTriggerValue(cloneNextValues));
+      triggerChange(cloneNextValues);
+
+      const nextFocusIndex = Math.max(0, index - 1);
+      handlesRef.current.focus(nextFocusIndex);
+    }
+  };
+
   // ============================ Click =============================
   const onSliderMouseDown: React.MouseEventHandler<HTMLDivElement> = (e) => {
     e.preventDefault();
@@ -576,6 +589,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           handleRender={handleRender}
           activeHandleRender={activeHandleRender}
           onChangeComplete={finishChange}
+          onDelete={rangeEditable ? onDelete : undefined}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />

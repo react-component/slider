@@ -12,6 +12,7 @@ export interface HandlesProps {
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
+  onDelete: (index: number) => void;
   handleRender?: HandleProps['render'];
   /**
    * When config `activeHandleRender`,

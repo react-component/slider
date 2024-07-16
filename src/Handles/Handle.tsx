@@ -20,6 +20,7 @@ export interface HandleProps
   valueIndex: number;
   dragging: boolean;
   onStartMove: OnStartMove;
+  onDelete: (index: number) => void;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus: (e: React.FocusEvent<HTMLDivElement>, index: number) => void;
   onMouseEnter: (e: React.MouseEvent<HTMLDivElement>, index: number) => void;
@@ -37,6 +38,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     value,
     valueIndex,
     onStartMove,
+    onDelete,
     style,
     render,
     dragging,
@@ -117,6 +119,11 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
 
         case KeyCode.PAGE_DOWN:
           offset = -2;
+          break;
+
+        case KeyCode.BACKSPACE:
+        case KeyCode.DELETE:
+          onDelete(valueIndex);
           break;
       }
 
