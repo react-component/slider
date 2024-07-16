@@ -105,6 +105,7 @@ function useDrag(
     setDraggingIndex(valueIndex);
     setDraggingValue(originValue);
     setOriginValues(initialValues);
+    setCacheValues(initialValues);
 
     const { pageX: startX, pageY: startY } = getPosition(e);
 
