@@ -17,17 +17,19 @@ const NodeWrapper = ({ children }: { children: React.ReactElement }) => {
 };
 
 export default () => {
-  const [value, setValue] = React.useState([0, 5, 8]);
+  const [value, setValue] = React.useState([0, 50, 80]);
 
   return (
     <div>
       <div style={style}>
         <Slider
-          range
+          range={{
+            editable: true,
+          }}
           // defaultValue={[0, 10, 30]}
           // onChange={log}
           min={0}
-          max={10}
+          max={100}
           value={value}
           onChange={(nextValue) => {
             // console.log('>>>', nextValue);
