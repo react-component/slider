@@ -320,9 +320,17 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     offsetValues,
   );
 
+  /**
+   * When `rangeEditable` will insert a new value in the values array.
+   * Else it will replace the value in the values array.
+   */
   const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
     if (!disabled) {
+      // Create new values
+      const cloneNextValues = [...rawValues];
+
       let valueIndex = 0;
+      let valueBeforeIndex = 0; // Record the index which value < newValue
       let valueDist = mergedMax - mergedMin;
 
       rawValues.forEach((val, index) => {
@@ -331,15 +339,23 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           valueDist = dist;
           valueIndex = index;
         }
+
+        if (val < newValue) {
+          valueBeforeIndex = index;
+        }
       });
 
-      // Create new values
-      const cloneNextValues = [...rawValues];
+      let focusIndex = valueIndex;
 
-      cloneNextValues[valueIndex] = newValue;
+      if (rangeEditable && valueDist !== 0) {
+        cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
+        focusIndex = valueBeforeIndex + 1;
+      } else {
+        cloneNextValues[valueIndex] = newValue;
+      }
 
       // Fill value to match default 2
-      if (rangeEnabled && !rawValues.length && count === undefined) {
+      if (rangeEnabled && !cloneNextValues.length && count === undefined) {
         cloneNextValues.push(newValue);
       }
 
@@ -347,8 +363,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       triggerChange(cloneNextValues);
       if (e) {
         (document.activeElement as HTMLElement)?.blur?.();
-        handlesRef.current.focus(valueIndex);
-        onStartDrag(e, valueIndex, cloneNextValues);
+        handlesRef.current.focus(focusIndex);
+        onStartDrag(e, focusIndex, cloneNextValues);
       }
     }
   };
