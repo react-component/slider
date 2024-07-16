@@ -3,6 +3,9 @@ import * as React from 'react';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
 
+/** Drag to delete offset. It's a user experience number for dragging out */
+const REMOVE_DIST = 125;
+
 function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) {
   const obj = 'touches' in e ? e.touches[0] : e;
 
@@ -19,14 +22,17 @@ function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
   offsetValues: OffsetValues,
+  onDelete: (index: number) => void,
 ): [
   draggingIndex: number,
   draggingValue: number,
+  draggingDelete: boolean,
   returnValues: number[],
   onStartMove: OnStartMove,
 ] {
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
+  const [draggingDelete, setDraggingDelete] = React.useState(false);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
   const [originValues, setOriginValues] = React.useState(rawValues);
 
@@ -95,6 +101,12 @@ function useDrag(
     }
   });
 
+  const deleteIfNeed = useEvent(() => {
+    if (draggingDelete) {
+      onDelete(draggingIndex);
+    }
+  });
+
   const onStartMove: OnStartMove = (e, valueIndex, startValues?: number[]) => {
     e.stopPropagation();
 
@@ -106,6 +118,7 @@ function useDrag(
     setDraggingValue(originValue);
     setOriginValues(initialValues);
     setCacheValues(initialValues);
+    setDraggingDelete(false);
 
     const { pageX: startX, pageY: startY } = getPosition(e);
 
@@ -120,23 +133,33 @@ function useDrag(
       const { width, height } = containerRef.current.getBoundingClientRect();
 
       let offSetPercent: number;
+      let removeDist: number;
+
       switch (direction) {
         case 'btt':
           offSetPercent = -offsetY / height;
+          removeDist = offsetX;
           break;
 
         case 'ttb':
           offSetPercent = offsetY / height;
+          removeDist = offsetX;
           break;
 
         case 'rtl':
           offSetPercent = -offsetX / width;
+          removeDist = offsetY;
           break;
 
         default:
           offSetPercent = offsetX / width;
+          removeDist = offsetY;
       }
+
       updateCacheValue(valueIndex, offSetPercent);
+
+      // Check if need mark remove
+      setDraggingDelete(Math.abs(removeDist) > REMOVE_DIST);
     };
 
     // End
@@ -149,6 +172,8 @@ function useDrag(
       document.removeEventListener('touchmove', onMouseMove);
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
+
+      deleteIfNeed();
 
       setDraggingIndex(-1);
       finishChange();
@@ -172,7 +197,7 @@ function useDrag(
       : rawValues;
   }, [rawValues, cacheValues]);
 
-  return [draggingIndex, draggingValue, returnValues, onStartMove];
+  return [draggingIndex, draggingValue, draggingDelete, returnValues, onStartMove];
 }
 
 export default useDrag;

@@ -23,8 +23,11 @@ export default () => {
           max={100}
           value={value}
           onChange={(nextValue) => {
-            console.error('Next', nextValue);
+            // console.error('Next', nextValue);
             setValue(nextValue as any);
+          }}
+          onChangeComplete={(nextValue) => {
+            console.log('Complete', nextValue);
           }}
           styles={{
             rail: {

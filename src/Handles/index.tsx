@@ -21,6 +21,7 @@ export interface HandlesProps {
    */
   activeHandleRender?: HandleProps['render'];
   draggingIndex: number;
+  draggingDelete: boolean;
   onChangeComplete?: () => void;
 }
 
@@ -38,6 +39,7 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
     handleRender,
     activeHandleRender,
     draggingIndex,
+    draggingDelete,
     onFocus,
     ...restProps
   } = props;
@@ -75,24 +77,30 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
 
   return (
     <>
-      {values.map<React.ReactNode>((value, index) => (
-        <Handle
-          ref={(node) => {
-            if (!node) {
-              delete handlesRef.current[index];
-            } else {
-              handlesRef.current[index] = node;
-            }
-          }}
-          dragging={draggingIndex === index}
-          style={getIndex(style, index)}
-          key={index}
-          value={value}
-          valueIndex={index}
-          {...handleProps}
-        />
-      ))}
+      {values.map<React.ReactNode>((value, index) => {
+        const dragging = draggingIndex === index;
 
+        return (
+          <Handle
+            ref={(node) => {
+              if (!node) {
+                delete handlesRef.current[index];
+              } else {
+                handlesRef.current[index] = node;
+              }
+            }}
+            dragging={dragging}
+            draggingDelete={dragging && draggingDelete}
+            style={getIndex(style, index)}
+            key={index}
+            value={value}
+            valueIndex={index}
+            {...handleProps}
+          />
+        );
+      })}
+
+      {/* Used for render tooltip, this is not a real handle */}
       {activeHandleRender && (
         <Handle
           key="a11y"
@@ -100,6 +108,7 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
           value={values[activeIndex]}
           valueIndex={null}
           dragging={draggingIndex !== -1}
+          draggingDelete={draggingDelete}
           render={activeHandleRender}
           style={{ pointerEvents: 'none' }}
           tabIndex={null}

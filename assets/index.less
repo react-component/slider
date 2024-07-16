@@ -73,6 +73,10 @@
     &-dragging&-dragging&-dragging {
       border-color: tint(@primary-color, 20%);
       box-shadow: 0 0 0 5px tint(@primary-color, 50%);
+
+      &-delete {
+        opacity: 0;
+      }
     }
 
     &:focus {
@@ -186,11 +190,11 @@
       left: 5px;
       width: 4px;
     }
-    
+
     &-track-draggable {
-      border-top:0;
-      border-bottom: 0;
+      border-top: 0;
       border-right: 5px solid rgba(0, 0, 0, 0);
+      border-bottom: 0;
       border-left: 5px solid rgba(0, 0, 0, 0);
       transform: translateX(-5px);
     }

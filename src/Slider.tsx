@@ -308,7 +308,20 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     onChangeComplete?.(finishValue);
   };
 
-  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
+  const onDelete = (index: number) => {
+    if (!disabled && rangeEditable) {
+      const cloneNextValues = [...rawValues];
+      cloneNextValues.splice(index, 1);
+
+      onBeforeChange?.(getTriggerValue(cloneNextValues));
+      triggerChange(cloneNextValues);
+
+      const nextFocusIndex = Math.max(0, index - 1);
+      handlesRef.current.focus(nextFocusIndex);
+    }
+  };
+
+  const [draggingIndex, draggingValue, draggingDelete, cacheValues, onStartDrag] = useDrag(
     containerRef,
     direction,
     rawValues,
@@ -318,6 +331,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     triggerChange,
     finishChange,
     offsetValues,
+    onDelete,
   );
 
   /**
@@ -366,19 +380,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         handlesRef.current.focus(focusIndex);
         onStartDrag(e, focusIndex, cloneNextValues);
       }
-    }
-  };
-
-  const onDelete = (index: number) => {
-    if (!disabled && rangeEditable) {
-      const cloneNextValues = [...rawValues];
-      cloneNextValues.splice(index, 1);
-
-      onBeforeChange?.(getTriggerValue(cloneNextValues));
-      triggerChange(cloneNextValues);
-
-      const nextFocusIndex = Math.max(0, index - 1);
-      handlesRef.current.focus(nextFocusIndex);
     }
   };
 
@@ -582,6 +583,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           style={handleStyle}
           values={cacheValues}
           draggingIndex={draggingIndex}
+          draggingDelete={draggingDelete}
           onStartMove={onStartMove}
           onOffsetChange={onHandleOffsetChange}
           onFocus={onFocus}
