@@ -1,3 +1,4 @@
+import { warning } from 'rc-util/lib/warning';
 import { useMemo } from 'react';
 import type { SliderProps } from '../Slider';
 
@@ -9,6 +10,12 @@ export default function useRange(
       return [!!range, false, false];
     }
 
-    return [true, range.editable, range.draggableTrack];
+    const { editable, draggableTrack } = range;
+
+    if (process.env.NODE_ENV !== 'production') {
+      warning(!editable || !draggableTrack, '`editable` can not work with `draggableTrack`.');
+    }
+
+    return [true, editable, !editable && draggableTrack];
   }, [range]);
 }

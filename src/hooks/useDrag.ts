@@ -56,50 +56,56 @@ function useDrag(
     [],
   );
 
-  const flushValues = (nextValues: number[], nextValue?: number) => {
+  const flushValues = (nextValues: number[], nextValue?: number, deleteMark?: boolean) => {
     // Perf: Only update state when value changed
     if (cacheValues.some((val, i) => val !== nextValues[i])) {
       if (nextValue !== undefined) {
         setDraggingValue(nextValue);
       }
       setCacheValues(nextValues);
-      triggerChange(nextValues);
+
+      let changeValues = nextValues;
+      if (deleteMark) {
+        changeValues = nextValues.filter((_, i) => i !== draggingIndex);
+      }
+      console.log('flushValues', changeValues, nextValues, draggingIndex, deleteMark);
+      triggerChange(changeValues);
     }
   };
 
-  const updateCacheValue = useEvent((valueIndex: number, offsetPercent: number) => {
-    // Basic point offset
+  const updateCacheValue = useEvent(
+    (valueIndex: number, offsetPercent: number, deleteMark: boolean) => {
+      if (valueIndex === -1) {
+        // >>>> Dragging on the track
+        const startValue = originValues[0];
+        const endValue = originValues[originValues.length - 1];
+        const maxStartOffset = min - startValue;
+        const maxEndOffset = max - endValue;
 
-    if (valueIndex === -1) {
-      // >>>> Dragging on the track
-      const startValue = originValues[0];
-      const endValue = originValues[originValues.length - 1];
-      const maxStartOffset = min - startValue;
-      const maxEndOffset = max - endValue;
+        // Get valid offset
+        let offset = offsetPercent * (max - min);
+        offset = Math.max(offset, maxStartOffset);
+        offset = Math.min(offset, maxEndOffset);
 
-      // Get valid offset
-      let offset = offsetPercent * (max - min);
-      offset = Math.max(offset, maxStartOffset);
-      offset = Math.min(offset, maxEndOffset);
+        // Use first value to revert back of valid offset (like steps marks)
+        const formatStartValue = formatValue(startValue + offset);
+        offset = formatStartValue - startValue;
+        const cloneCacheValues = originValues.map<number>((val) => val + offset);
+        flushValues(cloneCacheValues);
+      } else {
+        // >>>> Dragging on the handle
+        const offsetDist = (max - min) * offsetPercent;
 
-      // Use first value to revert back of valid offset (like steps marks)
-      const formatStartValue = formatValue(startValue + offset);
-      offset = formatStartValue - startValue;
-      const cloneCacheValues = originValues.map<number>((val) => val + offset);
-      flushValues(cloneCacheValues);
-    } else {
-      // >>>> Dragging on the handle
-      const offsetDist = (max - min) * offsetPercent;
+        // Always start with the valueIndex origin value
+        const cloneValues = [...cacheValues];
+        cloneValues[valueIndex] = originValues[valueIndex];
 
-      // Always start with the valueIndex origin value
-      const cloneValues = [...cacheValues];
-      cloneValues[valueIndex] = originValues[valueIndex];
+        const next = offsetValues(cloneValues, offsetDist, valueIndex, 'dist');
 
-      const next = offsetValues(cloneValues, offsetDist, valueIndex, 'dist');
-
-      flushValues(next.values, next.value);
-    }
-  });
+        flushValues(next.values, next.value, deleteMark);
+      }
+    },
+  );
 
   const deleteIfNeed = useEvent(() => {
     if (draggingDelete) {
@@ -156,10 +162,11 @@ function useDrag(
           removeDist = offsetY;
       }
 
-      updateCacheValue(valueIndex, offSetPercent);
-
       // Check if need mark remove
-      setDraggingDelete(Math.abs(removeDist) > REMOVE_DIST);
+      const deleteMark = Math.abs(removeDist) > REMOVE_DIST;
+      setDraggingDelete(deleteMark);
+
+      updateCacheValue(valueIndex, offSetPercent, deleteMark);
     };
 
     // End
@@ -190,12 +197,15 @@ function useDrag(
   // Only return cache value when it mapping with rawValues
   const returnValues = React.useMemo(() => {
     const sourceValues = [...rawValues].sort((a, b) => a - b);
-    const targetValues = [...cacheValues].sort((a, b) => a - b);
+
+    const targetValues = (
+      draggingDelete ? cacheValues.filter((_, i) => i !== draggingIndex) : [...cacheValues]
+    ).sort((a, b) => a - b);
 
     return sourceValues.every((val, index) => val === targetValues[index])
       ? cacheValues
       : rawValues;
-  }, [rawValues, cacheValues]);
+  }, [rawValues, cacheValues, draggingDelete, draggingIndex]);
 
   return [draggingIndex, draggingValue, draggingDelete, returnValues, onStartMove];
 }
