@@ -5,11 +5,9 @@ import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import { resetWarned } from 'rc-util/lib/warning';
 import React from 'react';
-import Slider from '../src/';
+import Slider from '../src';
 
 describe('Range', () => {
-  let container;
-
   beforeAll(() => {
     spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
@@ -19,25 +17,16 @@ describe('Range', () => {
     });
   });
 
-  beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
-  });
-
-  afterEach(() => {
-    document.body.removeChild(container);
-  });
-
   function doMouseMove(container, start, end, element = 'rc-slider-handle') {
     const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
-    mouseDown.pageX = start;
-    mouseDown.pageY = start;
+    (mouseDown as any).pageX = start;
+    (mouseDown as any).pageY = start;
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
 
     // Drag
     const mouseMove = createEvent.mouseMove(document);
-    mouseMove.pageX = end;
-    mouseMove.pageY = end;
+    (mouseMove as any).pageX = end;
+    (mouseMove as any).pageY = end;
     fireEvent(document, mouseMove);
   }
 
@@ -45,14 +34,14 @@ describe('Range', () => {
     const touchStart = createEvent.touchStart(container.getElementsByClassName(element)[0], {
       touches: [{}],
     });
-    touchStart.touches[0].pageX = start;
+    (touchStart as any).touches[0].pageX = start;
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
     // Drag
     const touchMove = createEvent.touchMove(document, {
       touches: [{}],
     });
-    touchMove.touches[0].pageX = end;
+    (touchMove as any).touches[0].pageX = end;
     fireEvent(document, touchMove);
   }
 
@@ -344,7 +333,7 @@ describe('Range', () => {
           return (
             <Slider
               range
-              onChange={(values) => {
+              onChange={(values: number[]) => {
                 setValue(values);
                 onChange(values);
               }}
@@ -377,7 +366,7 @@ describe('Range', () => {
         const onChange = jest.fn();
 
         const { container, unmount } = render(
-          <Slider range defaultValue={[0, 30]} draggableTrack onChange={onChange} />,
+          <Slider range={{ draggableTrack: true }} defaultValue={[0, 30]} onChange={onChange} />,
         );
 
         // Do move
@@ -507,15 +496,15 @@ describe('Range', () => {
     it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onFocus={handleFocus} />);
-      container.getElementsByClassName('rc-slider-handle')[0].focus();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle').focus();
       expect(handleFocus).toBeCalled();
     });
 
     it('blur()', () => {
       const handleBlur = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onBlur={handleBlur} />);
-      container.getElementsByClassName('rc-slider-handle')[0].focus();
-      container.getElementsByClassName('rc-slider-handle')[0].blur();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle').focus();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle').blur();
       expect(handleBlur).toHaveBeenCalled();
     });
   });
@@ -524,7 +513,7 @@ describe('Range', () => {
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
     resetWarned();
-    render(<Slider range draggableTrack step={null} />);
+    render(<Slider range={{ draggableTrack: true }} step={null} />);
 
     expect(errorSpy).toHaveBeenCalledWith(
       'Warning: `draggableTrack` is not supported when `step` is `null`.',
@@ -534,16 +523,15 @@ describe('Range', () => {
 
   it('Track should have the correct thickness', () => {
     const { container } = render(
-      <Slider range allowCross={false} reverse defaultValue={[0, 40]} draggableTrack />,
+      <Slider range={{ draggableTrack: true }} allowCross={false} reverse defaultValue={[0, 40]} />,
     );
 
     const { container: containerVertical } = render(
       <Slider
-        range
+        range={{ draggableTrack: true }}
         allowCross={false}
         reverse
         defaultValue={[0, 40]}
-        draggableTrack
         vertical
         style={{ height: '300px' }}
       />,
