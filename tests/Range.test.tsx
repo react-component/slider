@@ -660,6 +660,8 @@ describe('Range', () => {
         doMouseMove(container, 0, 1000);
         expect(onChange).toHaveBeenCalledWith([50, 100]);
 
+        expect(container.querySelectorAll('.rc-slider-track')).toHaveLength(1);
+
         // Fire mouse up
         fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
         expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);

@@ -561,7 +561,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           <Tracks
             prefixCls={prefixCls}
             style={trackStyle}
-            values={sortedCacheValues}
+            values={rawValues}
             startPoint={startPoint}
             onStartMove={mergedDraggableTrack ? onStartMove : undefined}
           />
