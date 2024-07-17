@@ -23,7 +23,7 @@ export default () => {
           max={100}
           value={value}
           onChange={(nextValue) => {
-            // console.log('Change:', nextValue);
+            console.log('Change:', nextValue);
             setValue(nextValue as any);
           }}
           onChangeComplete={(nextValue) => {

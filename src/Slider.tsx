@@ -1,4 +1,5 @@
 import cls from 'classnames';
+import { useEvent } from 'rc-util';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import isEqual from 'rc-util/lib/isEqual';
 import warning from 'rc-util/lib/warning';
@@ -279,34 +280,31 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   }, [mergedValue, rangeEnabled, mergedMin, count, formatValue]);
 
   // =========================== onChange ===========================
-  const rawValuesRef = React.useRef(rawValues);
-  rawValuesRef.current = rawValues;
-
   const getTriggerValue = (triggerValues: number[]) =>
     rangeEnabled ? triggerValues : triggerValues[0];
 
-  const triggerChange = (nextValues: number[]) => {
+  const triggerChange = useEvent((nextValues: number[]) => {
     // Order first
     const cloneNextValues = [...nextValues].sort((a, b) => a - b);
 
     // Trigger event if needed
-    if (onChange && !isEqual(cloneNextValues, rawValuesRef.current, true)) {
+    if (onChange && !isEqual(cloneNextValues, rawValues, true)) {
       onChange(getTriggerValue(cloneNextValues));
     }
 
     // We set this later since it will re-render component immediately
     setValue(cloneNextValues);
-  };
+  });
 
-  const finishChange = () => {
-    const finishValue = getTriggerValue(rawValuesRef.current);
+  const finishChange = useEvent(() => {
+    const finishValue = getTriggerValue(rawValues);
     onAfterChange?.(finishValue);
     warning(
       !onAfterChange,
       '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
     );
     onChangeComplete?.(finishValue);
-  };
+  });
 
   const onDelete = (index: number) => {
     if (!disabled && rangeEditable) {
@@ -331,7 +329,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     triggerChange,
     finishChange,
     offsetValues,
-    onDelete,
   );
 
   /**
@@ -449,11 +446,11 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     return rangeDraggableTrack;
   }, [rangeDraggableTrack, mergedStep]);
 
-  const onStartMove: OnStartMove = (e, valueIndex) => {
+  const onStartMove: OnStartMove = useEvent((e, valueIndex) => {
     onStartDrag(e, valueIndex);
 
-    onBeforeChange?.(getTriggerValue(rawValuesRef.current));
-  };
+    onBeforeChange?.(getTriggerValue(rawValues));
+  });
 
   // Auto focus for updated handle
   const dragging = draggingIndex !== -1;

@@ -22,7 +22,6 @@ function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
   offsetValues: OffsetValues,
-  onDelete: (index: number) => void,
 ): [
   draggingIndex: number,
   draggingValue: number,
@@ -68,7 +67,6 @@ function useDrag(
       if (deleteMark) {
         changeValues = nextValues.filter((_, i) => i !== draggingIndex);
       }
-      console.log('flushValues', changeValues, nextValues, draggingIndex, deleteMark);
       triggerChange(changeValues);
     }
   };
@@ -106,12 +104,6 @@ function useDrag(
       }
     },
   );
-
-  const deleteIfNeed = useEvent(() => {
-    if (draggingDelete) {
-      onDelete(draggingIndex);
-    }
-  });
 
   const onStartMove: OnStartMove = (e, valueIndex, startValues?: number[]) => {
     e.stopPropagation();
@@ -180,7 +172,7 @@ function useDrag(
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
 
-      deleteIfNeed();
+      // deleteIfNeed();
 
       setDraggingIndex(-1);
       finishChange();
