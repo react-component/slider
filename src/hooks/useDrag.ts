@@ -188,15 +188,21 @@ function useDrag(
   // Only return cache value when it mapping with rawValues
   const returnValues = React.useMemo(() => {
     const sourceValues = [...rawValues].sort((a, b) => a - b);
+    const targetValues = [...cacheValues].sort((a, b) => a - b);
 
-    const targetValues = (
-      draggingDelete ? cacheValues.filter((_, i) => i !== draggingIndex) : [...cacheValues]
-    ).sort((a, b) => a - b);
+    const counts: Record<number, number> = {};
+    targetValues.forEach((val) => {
+      counts[val] = (counts[val] || 0) + 1;
+    });
+    sourceValues.forEach((val) => {
+      counts[val] = (counts[val] || 0) - 1;
+    });
 
-    return sourceValues.every((val, index) => val === targetValues[index])
-      ? cacheValues
-      : rawValues;
-  }, [rawValues, cacheValues, draggingDelete, draggingIndex]);
+    const maxDiffCount = editable ? 1 : 0;
+    const diffCount: number = Object.values(counts).reduce((prev, next) => prev + next, 0);
+
+    return diffCount <= maxDiffCount ? cacheValues : rawValues;
+  }, [rawValues, cacheValues, editable]);
 
   return [draggingIndex, draggingValue, draggingDelete, returnValues, onStartMove];
 }
