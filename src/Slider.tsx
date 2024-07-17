@@ -366,8 +366,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         cloneNextValues[valueIndex] = newValue;
       }
 
-      // Fill value to match default 2
-      if (rangeEnabled && !cloneNextValues.length && count === undefined) {
+      // Fill value to match default 2 (only when `rawValues` is empty)
+      if (rangeEnabled && !rawValues.length && count === undefined) {
         cloneNextValues.push(newValue);
       }
 
