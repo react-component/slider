@@ -13,15 +13,37 @@ describe('Range', () => {
       getBoundingClientRect: () => ({
         width: 100,
         height: 100,
+        left: 0,
+        top: 0,
+        bottom: 100,
+        right: 100,
       }),
     });
   });
 
-  function doMouseMove(container, start, end, element = 'rc-slider-handle') {
+  beforeEach(() => {
+    resetWarned();
+  });
+
+  function doMouseDown(container: HTMLElement, start: number, element = 'rc-slider-handle') {
     const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
     (mouseDown as any).pageX = start;
     (mouseDown as any).pageY = start;
+    Object.defineProperties(mouseDown, {
+      clientX: { get: () => start },
+      clientY: { get: () => start },
+    });
+
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
+  }
+
+  function doMouseMove(
+    container: HTMLElement,
+    start: number,
+    end: number,
+    element = 'rc-slider-handle',
+  ) {
+    doMouseDown(container, start, element);
 
     // Drag
     const mouseMove = createEvent.mouseMove(document);
@@ -30,7 +52,12 @@ describe('Range', () => {
     fireEvent(document, mouseMove);
   }
 
-  function doTouchMove(container, start, end, element = 'rc-slider-handle') {
+  function doTouchMove(
+    container: HTMLElement,
+    start: number,
+    end: number,
+    element = 'rc-slider-handle',
+  ) {
     const touchStart = createEvent.touchStart(container.getElementsByClassName(element)[0], {
       touches: [{}],
     });
@@ -512,7 +539,6 @@ describe('Range', () => {
   it('warning for `draggableTrack` and `mergedStep=null`', () => {
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    resetWarned();
     render(<Slider range={{ draggableTrack: true }} step={null} />);
 
     expect(errorSpy).toHaveBeenCalledWith(
@@ -586,5 +612,62 @@ describe('Range', () => {
     expect(container.querySelector('.rc-slider-track')).toHaveClass('my-track');
     expect(container.querySelector('.rc-slider-handle')).toHaveClass('my-handle');
     expect(container.querySelector('.rc-slider-rail')).toHaveClass('my-rail');
+  });
+
+  describe('editable', () => {
+    it('click to create', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider
+          onChange={onChange}
+          min={0}
+          max={100}
+          value={[0, 100]}
+          range={{ editable: true }}
+        />,
+      );
+
+      doMouseDown(container, 50, 'rc-slider');
+
+      expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
+    });
+
+    it('can not editable with draggableTrack at same time', () => {
+      const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      render(<Slider range={{ editable: true, draggableTrack: true }} />);
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Warning: `editable` can not work with `draggableTrack`.',
+      );
+      errorSpy.mockRestore();
+    });
+
+    it('drag out to remove', () => {
+      const onChange = jest.fn();
+      const onChangeComplete = jest.fn();
+      const { container } = render(
+        <Slider
+          onChange={onChange}
+          onChangeComplete={onChangeComplete}
+          min={0}
+          max={100}
+          value={[0, 50, 100]}
+          range={{ editable: true }}
+        />,
+      );
+
+      doMouseMove(container, 0, 1000);
+      expect(onChange).toHaveBeenCalledWith([50, 100]);
+
+      // Fire mouse up
+      fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+      expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+    });
+
+    // it('key to delete', () => {
+    //   fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
+    //     keyCode: keyCode.RIGHT,
+    //   });
+    // });
   });
 });

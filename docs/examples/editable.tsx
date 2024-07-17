@@ -25,7 +25,7 @@ export default () => {
           value={value}
           // defaultValue={null}
           onChange={(nextValue) => {
-            // console.error('Change:', nextValue);
+            console.error('Change:', nextValue);
             setValue(nextValue as any);
           }}
           onChangeComplete={(nextValue) => {
