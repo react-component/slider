@@ -3,6 +3,9 @@ import * as React from 'react';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
 
+/** Drag to delete offset. It's a user experience number for dragging out */
+const REMOVE_DIST = 130;
+
 function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) {
   const obj = 'touches' in e ? e.touches[0] : e;
 
@@ -19,14 +22,17 @@ function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
   offsetValues: OffsetValues,
+  editable: boolean,
 ): [
   draggingIndex: number,
   draggingValue: number,
+  draggingDelete: boolean,
   returnValues: number[],
   onStartMove: OnStartMove,
 ] {
   const [draggingValue, setDraggingValue] = React.useState(null);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
+  const [draggingDelete, setDraggingDelete] = React.useState(false);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
   const [originValues, setOriginValues] = React.useState(rawValues);
 
@@ -50,50 +56,55 @@ function useDrag(
     [],
   );
 
-  const flushValues = (nextValues: number[], nextValue?: number) => {
+  const flushValues = (nextValues: number[], nextValue?: number, deleteMark?: boolean) => {
     // Perf: Only update state when value changed
-    if (cacheValues.some((val, i) => val !== nextValues[i])) {
+    if (cacheValues.some((val, i) => val !== nextValues[i]) || deleteMark) {
       if (nextValue !== undefined) {
         setDraggingValue(nextValue);
       }
       setCacheValues(nextValues);
-      triggerChange(nextValues);
+
+      let changeValues = nextValues;
+      if (deleteMark) {
+        changeValues = nextValues.filter((_, i) => i !== draggingIndex);
+      }
+      triggerChange(changeValues);
     }
   };
 
-  const updateCacheValue = useEvent((valueIndex: number, offsetPercent: number) => {
-    // Basic point offset
+  const updateCacheValue = useEvent(
+    (valueIndex: number, offsetPercent: number, deleteMark: boolean) => {
+      if (valueIndex === -1) {
+        // >>>> Dragging on the track
+        const startValue = originValues[0];
+        const endValue = originValues[originValues.length - 1];
+        const maxStartOffset = min - startValue;
+        const maxEndOffset = max - endValue;
 
-    if (valueIndex === -1) {
-      // >>>> Dragging on the track
-      const startValue = originValues[0];
-      const endValue = originValues[originValues.length - 1];
-      const maxStartOffset = min - startValue;
-      const maxEndOffset = max - endValue;
+        // Get valid offset
+        let offset = offsetPercent * (max - min);
+        offset = Math.max(offset, maxStartOffset);
+        offset = Math.min(offset, maxEndOffset);
 
-      // Get valid offset
-      let offset = offsetPercent * (max - min);
-      offset = Math.max(offset, maxStartOffset);
-      offset = Math.min(offset, maxEndOffset);
+        // Use first value to revert back of valid offset (like steps marks)
+        const formatStartValue = formatValue(startValue + offset);
+        offset = formatStartValue - startValue;
+        const cloneCacheValues = originValues.map<number>((val) => val + offset);
+        flushValues(cloneCacheValues);
+      } else {
+        // >>>> Dragging on the handle
+        const offsetDist = (max - min) * offsetPercent;
 
-      // Use first value to revert back of valid offset (like steps marks)
-      const formatStartValue = formatValue(startValue + offset);
-      offset = formatStartValue - startValue;
-      const cloneCacheValues = originValues.map<number>((val) => val + offset);
-      flushValues(cloneCacheValues);
-    } else {
-      // >>>> Dragging on the handle
-      const offsetDist = (max - min) * offsetPercent;
+        // Always start with the valueIndex origin value
+        const cloneValues = [...cacheValues];
+        cloneValues[valueIndex] = originValues[valueIndex];
 
-      // Always start with the valueIndex origin value
-      const cloneValues = [...cacheValues];
-      cloneValues[valueIndex] = originValues[valueIndex];
+        const next = offsetValues(cloneValues, offsetDist, valueIndex, 'dist');
 
-      const next = offsetValues(cloneValues, offsetDist, valueIndex, 'dist');
-
-      flushValues(next.values, next.value);
-    }
-  });
+        flushValues(next.values, next.value, deleteMark);
+      }
+    },
+  );
 
   const onStartMove: OnStartMove = (e, valueIndex, startValues?: number[]) => {
     e.stopPropagation();
@@ -105,6 +116,8 @@ function useDrag(
     setDraggingIndex(valueIndex);
     setDraggingValue(originValue);
     setOriginValues(initialValues);
+    setCacheValues(initialValues);
+    setDraggingDelete(false);
 
     const { pageX: startX, pageY: startY } = getPosition(e);
 
@@ -119,23 +132,34 @@ function useDrag(
       const { width, height } = containerRef.current.getBoundingClientRect();
 
       let offSetPercent: number;
+      let removeDist: number;
+
       switch (direction) {
         case 'btt':
           offSetPercent = -offsetY / height;
+          removeDist = offsetX;
           break;
 
         case 'ttb':
           offSetPercent = offsetY / height;
+          removeDist = offsetX;
           break;
 
         case 'rtl':
           offSetPercent = -offsetX / width;
+          removeDist = offsetY;
           break;
 
         default:
           offSetPercent = offsetX / width;
+          removeDist = offsetY;
       }
-      updateCacheValue(valueIndex, offSetPercent);
+
+      // Check if need mark remove
+      const deleteMark = editable ? Math.abs(removeDist) > REMOVE_DIST : false;
+      setDraggingDelete(deleteMark);
+
+      updateCacheValue(valueIndex, offSetPercent, deleteMark);
     };
 
     // End
@@ -166,12 +190,21 @@ function useDrag(
     const sourceValues = [...rawValues].sort((a, b) => a - b);
     const targetValues = [...cacheValues].sort((a, b) => a - b);
 
-    return sourceValues.every((val, index) => val === targetValues[index])
-      ? cacheValues
-      : rawValues;
-  }, [rawValues, cacheValues]);
+    const counts: Record<number, number> = {};
+    targetValues.forEach((val) => {
+      counts[val] = (counts[val] || 0) + 1;
+    });
+    sourceValues.forEach((val) => {
+      counts[val] = (counts[val] || 0) - 1;
+    });
 
-  return [draggingIndex, draggingValue, returnValues, onStartMove];
+    const maxDiffCount = editable ? 1 : 0;
+    const diffCount: number = Object.values(counts).reduce((prev, next) => prev + next, 0);
+
+    return diffCount <= maxDiffCount ? cacheValues : rawValues;
+  }, [rawValues, cacheValues, editable]);
+
+  return [draggingIndex, draggingValue, draggingDelete, returnValues, onStartMove];
 }
 
 export default useDrag;

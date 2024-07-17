@@ -1,4 +1,5 @@
 import cls from 'classnames';
+import { useEvent } from 'rc-util';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import isEqual from 'rc-util/lib/isEqual';
 import warning from 'rc-util/lib/warning';
@@ -13,6 +14,7 @@ import type { SliderContextProps } from './context';
 import SliderContext from './context';
 import useDrag from './hooks/useDrag';
 import useOffset from './hooks/useOffset';
+import useRange from './hooks/useRange';
 import type {
   AriaValueFormat,
   Direction,
@@ -35,6 +37,11 @@ import type {
  * - keyboard support pushable
  */
 
+export type RangeConfig = {
+  editable?: boolean;
+  draggableTrack?: boolean;
+};
+
 export interface SliderProps<ValueType = number | number[]> {
   prefixCls?: string;
   className?: string;
@@ -51,7 +58,7 @@ export interface SliderProps<ValueType = number | number[]> {
   onBlur?: (e: React.FocusEvent<HTMLDivElement>) => void;
 
   // Value
-  range?: boolean;
+  range?: boolean | RangeConfig;
   count?: number;
   min?: number;
   max?: number;
@@ -68,8 +75,6 @@ export interface SliderProps<ValueType = number | number[]> {
   // Cross
   allowCross?: boolean;
   pushable?: boolean | number;
-  /** range only */
-  draggableTrack?: boolean;
 
   // Direction
   reverse?: boolean;
@@ -94,6 +99,7 @@ export interface SliderProps<ValueType = number | number[]> {
   // Components
   handleRender?: HandlesProps['handleRender'];
   activeHandleRender?: HandlesProps['handleRender'];
+  track?: boolean;
 
   // Accessibility
   tabIndex?: number | number[];
@@ -138,7 +144,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     // Cross
     allowCross = true,
     pushable = false,
-    draggableTrack,
 
     // Direction
     reverse,
@@ -160,6 +165,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     // Components
     handleRender,
     activeHandleRender,
+    track,
 
     // Accessibility
     tabIndex = 0,
@@ -179,6 +185,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   }, [reverse, vertical]);
 
   // ============================ Range =============================
+  const [rangeEnabled, rangeEditable, rangeDraggableTrack] = useRange(range);
+
   const mergedMin = React.useMemo(() => (isFinite(min) ? min : 0), [min]);
   const mergedMax = React.useMemo(() => (isFinite(max) ? max : 100), [max]);
 
@@ -247,7 +255,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     let returnValues = mergedValue === null ? [] : [val0];
 
     // Format as range
-    if (range) {
+    if (rangeEnabled) {
       returnValues = [...valueList];
 
       // When count provided or value is `undefined`, we fill values
@@ -269,38 +277,49 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     });
 
     return returnValues;
-  }, [mergedValue, range, mergedMin, count, formatValue]);
+  }, [mergedValue, rangeEnabled, mergedMin, count, formatValue]);
 
   // =========================== onChange ===========================
-  const rawValuesRef = React.useRef(rawValues);
-  rawValuesRef.current = rawValues;
+  const getTriggerValue = (triggerValues: number[]) =>
+    rangeEnabled ? triggerValues : triggerValues[0];
 
-  const getTriggerValue = (triggerValues: number[]) => (range ? triggerValues : triggerValues[0]);
-
-  const triggerChange = (nextValues: number[]) => {
+  const triggerChange = useEvent((nextValues: number[]) => {
     // Order first
     const cloneNextValues = [...nextValues].sort((a, b) => a - b);
 
     // Trigger event if needed
-    if (onChange && !isEqual(cloneNextValues, rawValuesRef.current, true)) {
+    if (onChange && !isEqual(cloneNextValues, rawValues, true)) {
       onChange(getTriggerValue(cloneNextValues));
     }
 
     // We set this later since it will re-render component immediately
     setValue(cloneNextValues);
-  };
+  });
 
-  const finishChange = () => {
-    const finishValue = getTriggerValue(rawValuesRef.current);
+  const finishChange = useEvent(() => {
+    const finishValue = getTriggerValue(rawValues);
     onAfterChange?.(finishValue);
     warning(
       !onAfterChange,
       '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
     );
     onChangeComplete?.(finishValue);
+  });
+
+  const onDelete = (index: number) => {
+    if (!disabled && rangeEditable) {
+      const cloneNextValues = [...rawValues];
+      cloneNextValues.splice(index, 1);
+
+      onBeforeChange?.(getTriggerValue(cloneNextValues));
+      triggerChange(cloneNextValues);
+
+      const nextFocusIndex = Math.max(0, index - 1);
+      handlesRef.current.focus(nextFocusIndex);
+    }
   };
 
-  const [draggingIndex, draggingValue, cacheValues, onStartDrag] = useDrag(
+  const [draggingIndex, draggingValue, draggingDelete, cacheValues, onStartDrag] = useDrag(
     containerRef,
     direction,
     rawValues,
@@ -310,11 +329,20 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     triggerChange,
     finishChange,
     offsetValues,
+    rangeEditable,
   );
 
+  /**
+   * When `rangeEditable` will insert a new value in the values array.
+   * Else it will replace the value in the values array.
+   */
   const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
     if (!disabled) {
+      // Create new values
+      const cloneNextValues = [...rawValues];
+
       let valueIndex = 0;
+      let valueBeforeIndex = 0; // Record the index which value < newValue
       let valueDist = mergedMax - mergedMin;
 
       rawValues.forEach((val, index) => {
@@ -323,15 +351,23 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           valueDist = dist;
           valueIndex = index;
         }
+
+        if (val < newValue) {
+          valueBeforeIndex = index;
+        }
       });
 
-      // Create new values
-      const cloneNextValues = [...rawValues];
+      let focusIndex = valueIndex;
 
-      cloneNextValues[valueIndex] = newValue;
+      if (rangeEditable && valueDist !== 0) {
+        cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
+        focusIndex = valueBeforeIndex + 1;
+      } else {
+        cloneNextValues[valueIndex] = newValue;
+      }
 
-      // Fill value to match default 2
-      if (range && !rawValues.length && count === undefined) {
+      // Fill value to match default 2 (only when `rawValues` is empty)
+      if (rangeEnabled && !rawValues.length && count === undefined) {
         cloneNextValues.push(newValue);
       }
 
@@ -339,8 +375,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       triggerChange(cloneNextValues);
       if (e) {
         (document.activeElement as HTMLElement)?.blur?.();
-        handlesRef.current.focus(valueIndex);
-        onStartDrag(e, valueIndex, cloneNextValues);
+        handlesRef.current.focus(focusIndex);
+        onStartDrag(e, focusIndex, cloneNextValues);
       }
     }
   };
@@ -402,20 +438,20 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   // ============================= Drag =============================
   const mergedDraggableTrack = React.useMemo(() => {
-    if (draggableTrack && mergedStep === null) {
+    if (rangeDraggableTrack && mergedStep === null) {
       if (process.env.NODE_ENV !== 'production') {
         warning(false, '`draggableTrack` is not supported when `step` is `null`.');
       }
       return false;
     }
-    return draggableTrack;
-  }, [draggableTrack, mergedStep]);
+    return rangeDraggableTrack;
+  }, [rangeDraggableTrack, mergedStep]);
 
-  const onStartMove: OnStartMove = (e, valueIndex) => {
+  const onStartMove: OnStartMove = useEvent((e, valueIndex) => {
     onStartDrag(e, valueIndex);
 
-    onBeforeChange?.(getTriggerValue(rawValuesRef.current));
-  };
+    onBeforeChange?.(getTriggerValue(rawValues));
+  });
 
   // Auto focus for updated handle
   const dragging = draggingIndex !== -1;
@@ -435,12 +471,12 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   // Provide a range values with included [min, max]
   // Used for Track, Mark & Dot
   const [includedStart, includedEnd] = React.useMemo(() => {
-    if (!range) {
+    if (!rangeEnabled) {
       return [mergedMin, sortedCacheValues[0]];
     }
 
     return [sortedCacheValues[0], sortedCacheValues[sortedCacheValues.length - 1]];
-  }, [sortedCacheValues, range, mergedMin]);
+  }, [sortedCacheValues, rangeEnabled, mergedMin]);
 
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
@@ -474,7 +510,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       included,
       includedStart,
       includedEnd,
-      range,
+      range: rangeEnabled,
       tabIndex,
       ariaLabelForHandle,
       ariaLabelledByForHandle,
@@ -492,7 +528,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       included,
       includedStart,
       includedEnd,
-      range,
+      rangeEnabled,
       tabIndex,
       ariaLabelForHandle,
       ariaLabelledByForHandle,
@@ -521,13 +557,15 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           style={{ ...railStyle, ...styles?.rail }}
         />
 
-        <Tracks
-          prefixCls={prefixCls}
-          style={trackStyle}
-          values={sortedCacheValues}
-          startPoint={startPoint}
-          onStartMove={mergedDraggableTrack ? onStartMove : undefined}
-        />
+        {track !== false && (
+          <Tracks
+            prefixCls={prefixCls}
+            style={trackStyle}
+            values={sortedCacheValues}
+            startPoint={startPoint}
+            onStartMove={mergedDraggableTrack ? onStartMove : undefined}
+          />
+        )}
 
         <Steps
           prefixCls={prefixCls}
@@ -543,6 +581,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           style={handleStyle}
           values={cacheValues}
           draggingIndex={draggingIndex}
+          draggingDelete={draggingDelete}
           onStartMove={onStartMove}
           onOffsetChange={onHandleOffsetChange}
           onFocus={onFocus}
@@ -550,6 +589,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           handleRender={handleRender}
           activeHandleRender={activeHandleRender}
           onChangeComplete={finishChange}
+          onDelete={rangeEditable ? onDelete : undefined}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />

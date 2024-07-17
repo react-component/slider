@@ -10,6 +10,7 @@ interface RenderProps {
   prefixCls: string;
   value: number;
   dragging: boolean;
+  draggingDelete: boolean;
 }
 
 export interface HandleProps
@@ -19,7 +20,9 @@ export interface HandleProps
   value: number;
   valueIndex: number;
   dragging: boolean;
+  draggingDelete: boolean;
   onStartMove: OnStartMove;
+  onDelete: (index: number) => void;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus: (e: React.FocusEvent<HTMLDivElement>, index: number) => void;
   onMouseEnter: (e: React.MouseEvent<HTMLDivElement>, index: number) => void;
@@ -37,9 +40,11 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     value,
     valueIndex,
     onStartMove,
+    onDelete,
     style,
     render,
     dragging,
+    draggingDelete,
     onOffsetChange,
     onChangeComplete,
     onFocus,
@@ -118,6 +123,11 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
         case KeyCode.PAGE_DOWN:
           offset = -2;
           break;
+
+        case KeyCode.BACKSPACE:
+        case KeyCode.DELETE:
+          onDelete(valueIndex);
+          break;
       }
 
       if (offset !== null) {
@@ -177,6 +187,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
         {
           [`${handlePrefixCls}-${valueIndex + 1}`]: valueIndex !== null && range,
           [`${handlePrefixCls}-dragging`]: dragging,
+          [`${handlePrefixCls}-dragging-delete`]: draggingDelete,
         },
         classNames.handle,
       )}
@@ -197,6 +208,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
       prefixCls,
       value,
       dragging,
+      draggingDelete,
     });
   }
 

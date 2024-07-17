@@ -8,14 +8,6 @@ const style: React.CSSProperties = {
   margin: 50,
 };
 
-function log(value) {
-  console.log(value);
-}
-
-const NodeWrapper = ({ children }: { children: React.ReactElement }) => {
-  return <div>{React.cloneElement(children, {}, <div>TOOLTIP</div>)}</div>;
-};
-
 export default () => {
   const [value, setValue] = React.useState([0, 50, 80]);
 
@@ -23,23 +15,25 @@ export default () => {
     <div>
       <div style={style}>
         <Slider
-          range
-          // defaultValue={[0, 10, 30]}
-          // onChange={log}
+          // range
+          range={{
+            editable: true,
+          }}
+          track={false}
           min={0}
           max={100}
           value={value}
+          // defaultValue={null}
           onChange={(nextValue) => {
-            // console.log('>>>', nextValue);
+            console.error('Change:', nextValue);
             setValue(nextValue as any);
           }}
-          activeHandleRender={(node) => <NodeWrapper>{node}</NodeWrapper>}
+          onChangeComplete={(nextValue) => {
+            console.log('Complete', nextValue);
+          }}
           styles={{
-            tracks: {
+            rail: {
               background: `linear-gradient(to right, blue, red)`,
-            },
-            track: {
-              background: 'transparent',
             },
           }}
         />

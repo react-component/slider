@@ -5,54 +5,70 @@ import keyCode from 'rc-util/lib/KeyCode';
 import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
 import { resetWarned } from 'rc-util/lib/warning';
 import React from 'react';
-import Slider from '../src/';
+import Slider from '../src';
 
 describe('Range', () => {
-  let container;
-
   beforeAll(() => {
     spyElementPrototypes(HTMLElement, {
       getBoundingClientRect: () => ({
         width: 100,
         height: 100,
+        left: 0,
+        top: 0,
+        bottom: 100,
+        right: 100,
       }),
     });
   });
 
   beforeEach(() => {
-    container = document.createElement('div');
-    document.body.appendChild(container);
+    resetWarned();
   });
 
-  afterEach(() => {
-    document.body.removeChild(container);
-  });
-
-  function doMouseMove(container, start, end, element = 'rc-slider-handle') {
+  function doMouseDown(container: HTMLElement, start: number, element = 'rc-slider-handle') {
     const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
-    mouseDown.pageX = start;
-    mouseDown.pageY = start;
+    (mouseDown as any).pageX = start;
+    (mouseDown as any).pageY = start;
+    Object.defineProperties(mouseDown, {
+      clientX: { get: () => start },
+      clientY: { get: () => start },
+    });
+
     fireEvent(container.getElementsByClassName(element)[0], mouseDown);
+  }
+
+  function doMouseMove(
+    container: HTMLElement,
+    start: number,
+    end: number,
+    element = 'rc-slider-handle',
+  ) {
+    doMouseDown(container, start, element);
 
     // Drag
     const mouseMove = createEvent.mouseMove(document);
-    mouseMove.pageX = end;
-    mouseMove.pageY = end;
+    (mouseMove as any).pageX = end;
+    (mouseMove as any).pageY = end;
     fireEvent(document, mouseMove);
   }
 
-  function doTouchMove(container, start, end, element = 'rc-slider-handle') {
+  function doTouchMove(
+    container: HTMLElement,
+    start: number,
+    end: number,
+    element = 'rc-slider-handle',
+  ) {
     const touchStart = createEvent.touchStart(container.getElementsByClassName(element)[0], {
       touches: [{}],
     });
-    touchStart.touches[0].pageX = start;
+    (touchStart as any).touches[0].pageX = start;
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
     // Drag
     const touchMove = createEvent.touchMove(document, {
       touches: [{}],
     });
-    touchMove.touches[0].pageX = end;
+    (touchMove as any).touches[0].pageX = end;
     fireEvent(document, touchMove);
   }
 
@@ -344,7 +360,7 @@ describe('Range', () => {
           return (
             <Slider
               range
-              onChange={(values) => {
+              onChange={(values: number[]) => {
                 setValue(values);
                 onChange(values);
               }}
@@ -377,7 +393,7 @@ describe('Range', () => {
         const onChange = jest.fn();
 
         const { container, unmount } = render(
-          <Slider range defaultValue={[0, 30]} draggableTrack onChange={onChange} />,
+          <Slider range={{ draggableTrack: true }} defaultValue={[0, 30]} onChange={onChange} />,
         );
 
         // Do move
@@ -507,15 +523,15 @@ describe('Range', () => {
     it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onFocus={handleFocus} />);
-      container.getElementsByClassName('rc-slider-handle')[0].focus();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle').focus();
       expect(handleFocus).toBeCalled();
     });
 
     it('blur()', () => {
       const handleBlur = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onBlur={handleBlur} />);
-      container.getElementsByClassName('rc-slider-handle')[0].focus();
-      container.getElementsByClassName('rc-slider-handle')[0].blur();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle').focus();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle').blur();
       expect(handleBlur).toHaveBeenCalled();
     });
   });
@@ -523,8 +539,7 @@ describe('Range', () => {
   it('warning for `draggableTrack` and `mergedStep=null`', () => {
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
 
-    resetWarned();
-    render(<Slider range draggableTrack step={null} />);
+    render(<Slider range={{ draggableTrack: true }} step={null} />);
 
     expect(errorSpy).toHaveBeenCalledWith(
       'Warning: `draggableTrack` is not supported when `step` is `null`.',
@@ -534,16 +549,15 @@ describe('Range', () => {
 
   it('Track should have the correct thickness', () => {
     const { container } = render(
-      <Slider range allowCross={false} reverse defaultValue={[0, 40]} draggableTrack />,
+      <Slider range={{ draggableTrack: true }} allowCross={false} reverse defaultValue={[0, 40]} />,
     );
 
     const { container: containerVertical } = render(
       <Slider
-        range
+        range={{ draggableTrack: true }}
         allowCross={false}
         reverse
         defaultValue={[0, 40]}
-        draggableTrack
         vertical
         style={{ height: '300px' }}
       />,
@@ -598,5 +612,109 @@ describe('Range', () => {
     expect(container.querySelector('.rc-slider-track')).toHaveClass('my-track');
     expect(container.querySelector('.rc-slider-handle')).toHaveClass('my-handle');
     expect(container.querySelector('.rc-slider-rail')).toHaveClass('my-rail');
+  });
+
+  describe('editable', () => {
+    it('click to create', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider
+          onChange={onChange}
+          min={0}
+          max={100}
+          value={[0, 100]}
+          range={{ editable: true }}
+        />,
+      );
+
+      doMouseDown(container, 50, 'rc-slider');
+
+      expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
+    });
+
+    it('can not editable with draggableTrack at same time', () => {
+      const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+      render(<Slider range={{ editable: true, draggableTrack: true }} />);
+
+      expect(errorSpy).toHaveBeenCalledWith(
+        'Warning: `editable` can not work with `draggableTrack`.',
+      );
+      errorSpy.mockRestore();
+    });
+
+    describe('drag out to remove', () => {
+      it('uncontrolled', () => {
+        const onChange = jest.fn();
+        const onChangeComplete = jest.fn();
+        const { container } = render(
+          <Slider
+            onChange={onChange}
+            onChangeComplete={onChangeComplete}
+            min={0}
+            max={100}
+            defaultValue={[0, 50, 100]}
+            range={{ editable: true }}
+          />,
+        );
+
+        doMouseMove(container, 0, 1000);
+        expect(onChange).toHaveBeenCalledWith([50, 100]);
+
+        // Fire mouse up
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+      });
+
+      it('controlled', () => {
+        const onChange = jest.fn();
+        const onChangeComplete = jest.fn();
+
+        const Demo = () => {
+          const [value, setValue] = React.useState([0, 50, 100]);
+          return (
+            <Slider
+              onChange={(nextValue: number[]) => {
+                onChange(nextValue);
+                setValue(nextValue);
+              }}
+              onChangeComplete={onChangeComplete}
+              min={0}
+              max={100}
+              value={value}
+              range={{ editable: true }}
+            />
+          );
+        };
+
+        const { container } = render(<Demo />);
+
+        doMouseMove(container, 0, 1000);
+        expect(onChange).toHaveBeenCalledWith([50, 100]);
+
+        // Fire mouse up
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+      });
+    });
+
+    it('key to delete', () => {
+      const onChange = jest.fn();
+
+      const { container } = render(
+        <Slider
+          onChange={onChange}
+          min={0}
+          max={100}
+          defaultValue={[0, 50, 100]}
+          range={{ editable: true }}
+        />,
+      );
+
+      fireEvent.keyDown(container.querySelectorAll('.rc-slider-handle')[1], {
+        keyCode: keyCode.DELETE,
+      });
+
+      expect(onChange).toHaveBeenCalledWith([0, 100]);
+    });
   });
 });
