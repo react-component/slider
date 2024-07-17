@@ -15,15 +15,15 @@ export default () => {
     <div>
       <div style={style}>
         <Slider
-          range
-          // range={{
-          //   editable: true,
-          // }}
+          // range
+          range={{
+            editable: true,
+          }}
           track={false}
           min={0}
           max={100}
-          // value={value}
-          defaultValue={null}
+          value={value}
+          // defaultValue={null}
           onChange={(nextValue) => {
             // console.error('Change:', nextValue);
             setValue(nextValue as any);

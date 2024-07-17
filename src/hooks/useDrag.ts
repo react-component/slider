@@ -4,7 +4,7 @@ import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
 
 /** Drag to delete offset. It's a user experience number for dragging out */
-const REMOVE_DIST = 125;
+const REMOVE_DIST = 130;
 
 function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) {
   const obj = 'touches' in e ? e.touches[0] : e;
