@@ -329,6 +329,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     triggerChange,
     finishChange,
     offsetValues,
+    rangeEditable,
   );
 
   /**

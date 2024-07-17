@@ -22,6 +22,7 @@ function useDrag(
   triggerChange: (values: number[]) => void,
   finishChange: () => void,
   offsetValues: OffsetValues,
+  editable: boolean,
 ): [
   draggingIndex: number,
   draggingValue: number,
@@ -155,7 +156,7 @@ function useDrag(
       }
 
       // Check if need mark remove
-      const deleteMark = Math.abs(removeDist) > REMOVE_DIST;
+      const deleteMark = editable ? Math.abs(removeDist) > REMOVE_DIST : false;
       setDraggingDelete(deleteMark);
 
       updateCacheValue(valueIndex, offSetPercent, deleteMark);
@@ -171,8 +172,6 @@ function useDrag(
       document.removeEventListener('touchmove', onMouseMove);
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
-
-      // deleteIfNeed();
 
       setDraggingIndex(-1);
       finishChange();
