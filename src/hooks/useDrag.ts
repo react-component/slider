@@ -58,7 +58,7 @@ function useDrag(
 
   const flushValues = (nextValues: number[], nextValue?: number, deleteMark?: boolean) => {
     // Perf: Only update state when value changed
-    if (cacheValues.some((val, i) => val !== nextValues[i])) {
+    if (cacheValues.some((val, i) => val !== nextValues[i]) || deleteMark) {
       if (nextValue !== undefined) {
         setDraggingValue(nextValue);
       }

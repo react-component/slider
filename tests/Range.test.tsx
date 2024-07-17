@@ -642,32 +642,79 @@ describe('Range', () => {
       errorSpy.mockRestore();
     });
 
-    it('drag out to remove', () => {
+    describe('drag out to remove', () => {
+      it('uncontrolled', () => {
+        const onChange = jest.fn();
+        const onChangeComplete = jest.fn();
+        const { container } = render(
+          <Slider
+            onChange={onChange}
+            onChangeComplete={onChangeComplete}
+            min={0}
+            max={100}
+            defaultValue={[0, 50, 100]}
+            range={{ editable: true }}
+          />,
+        );
+
+        doMouseMove(container, 0, 1000);
+        expect(onChange).toHaveBeenCalledWith([50, 100]);
+
+        // Fire mouse up
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+      });
+
+      it('controlled', () => {
+        const onChange = jest.fn();
+        const onChangeComplete = jest.fn();
+
+        const Demo = () => {
+          const [value, setValue] = React.useState([0, 50, 100]);
+          return (
+            <Slider
+              onChange={(nextValue: number[]) => {
+                onChange(nextValue);
+                setValue(nextValue);
+              }}
+              onChangeComplete={onChangeComplete}
+              min={0}
+              max={100}
+              value={value}
+              range={{ editable: true }}
+            />
+          );
+        };
+
+        const { container } = render(<Demo />);
+
+        doMouseMove(container, 0, 1000);
+        expect(onChange).toHaveBeenCalledWith([50, 100]);
+
+        // Fire mouse up
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+      });
+    });
+
+    it('key to delete', () => {
       const onChange = jest.fn();
-      const onChangeComplete = jest.fn();
+
       const { container } = render(
         <Slider
           onChange={onChange}
-          onChangeComplete={onChangeComplete}
           min={0}
           max={100}
-          value={[0, 50, 100]}
+          defaultValue={[0, 50, 100]}
           range={{ editable: true }}
         />,
       );
 
-      doMouseMove(container, 0, 1000);
-      expect(onChange).toHaveBeenCalledWith([50, 100]);
+      fireEvent.keyDown(container.querySelectorAll('.rc-slider-handle')[1], {
+        keyCode: keyCode.DELETE,
+      });
 
-      // Fire mouse up
-      fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
-      expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+      expect(onChange).toHaveBeenCalledWith([0, 100]);
     });
-
-    // it('key to delete', () => {
-    //   fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
-    //     keyCode: keyCode.RIGHT,
-    //   });
-    // });
   });
 });
