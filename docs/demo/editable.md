@@ -1,5 +1,5 @@
 ---
-title: Multiple
+title: Editable
 nav:
   title: Demo
   path: /demo

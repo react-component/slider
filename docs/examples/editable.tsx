@@ -19,7 +19,7 @@ export default () => {
           range={{
             editable: true,
           }}
-          track={false}
+          // track={false}
           min={0}
           max={100}
           value={value}
@@ -34,6 +34,9 @@ export default () => {
           styles={{
             rail: {
               background: `linear-gradient(to right, blue, red)`,
+            },
+            track: {
+              background: 'orange',
             },
           }}
         />
