@@ -20,7 +20,7 @@ function useDrag(
   max: number,
   formatValue: (value: number) => number,
   triggerChange: (values: number[]) => void,
-  finishChange: () => void,
+  finishChange: (draggingDelete: boolean) => void,
   offsetValues: OffsetValues,
   editable: boolean,
 ): [
@@ -121,6 +121,9 @@ function useDrag(
 
     const { pageX: startX, pageY: startY } = getPosition(e);
 
+    // We declare it here since closure can't get outer latest value
+    let deleteMark = false;
+
     // Moving
     const onMouseMove = (event: MouseEvent | TouchEvent) => {
       event.preventDefault();
@@ -156,7 +159,7 @@ function useDrag(
       }
 
       // Check if need mark remove
-      const deleteMark = editable ? Math.abs(removeDist) > REMOVE_DIST : false;
+      deleteMark = editable ? Math.abs(removeDist) > REMOVE_DIST : false;
       setDraggingDelete(deleteMark);
 
       updateCacheValue(valueIndex, offSetPercent, deleteMark);
@@ -173,8 +176,10 @@ function useDrag(
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
 
+      finishChange(deleteMark);
+
       setDraggingIndex(-1);
-      finishChange();
+      setDraggingDelete(false);
     };
 
     document.addEventListener('mouseup', onMouseUp);

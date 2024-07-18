@@ -296,7 +296,12 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     setValue(cloneNextValues);
   });
 
-  const finishChange = useEvent(() => {
+  const finishChange = useEvent((draggingDelete?: boolean) => {
+    // Trigger from `useDrag` will tell if it's a delete action
+    if (draggingDelete) {
+      handlesRef.current.hideHelp();
+    }
+
     const finishValue = getTriggerValue(rawValues);
     onAfterChange?.(finishValue);
     warning(
@@ -315,6 +320,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       triggerChange(cloneNextValues);
 
       const nextFocusIndex = Math.max(0, index - 1);
+      handlesRef.current.hideHelp();
       handlesRef.current.focus(nextFocusIndex);
     }
   };
