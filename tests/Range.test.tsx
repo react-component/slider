@@ -30,13 +30,19 @@ describe('Range', () => {
     const mouseDown = createEvent.mouseDown(ele);
     (mouseDown as any).pageX = start;
     (mouseDown as any).pageY = start;
+
+    const preventDefault = jest.fn();
+
     Object.defineProperties(mouseDown, {
       clientX: { get: () => start },
       clientY: { get: () => start },
+      preventDefault: { value: preventDefault },
     });
 
     fireEvent.mouseEnter(ele);
     fireEvent(ele, mouseDown);
+
+    expect(preventDefault).toHaveBeenCalled();
   }
 
   function doMouseMove(
