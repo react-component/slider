@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { flushSync } from 'react-dom';
 import type { OnStartMove } from '../interface';
 import { getIndex } from '../util';
 import type { HandleProps } from './Handle';
@@ -27,6 +28,7 @@ export interface HandlesProps {
 
 export interface HandlesRef {
   focus: (index: number) => void;
+  hideHelp: VoidFunction;
 }
 
 const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
@@ -45,23 +47,35 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
   } = props;
   const handlesRef = React.useRef<Record<number, HTMLDivElement>>({});
 
-  React.useImperativeHandle(ref, () => ({
-    focus: (index: number) => {
-      handlesRef.current[index]?.focus();
-    },
-  }));
-
   // =========================== Active ===========================
-  const [activeIndex, setActiveIndex] = React.useState<number>(-1);
+  const [activeVisible, setActiveVisible] = React.useState(false);
+  const [activeIndex, setActiveIndex] = React.useState(-1);
+
+  const onActive = (index: number) => {
+    setActiveIndex(index);
+    setActiveVisible(true);
+  };
 
   const onHandleFocus = (e: React.FocusEvent<HTMLDivElement>, index: number) => {
-    setActiveIndex(index);
+    onActive(index);
     onFocus?.(e);
   };
 
   const onHandleMouseEnter = (e: React.MouseEvent<HTMLDivElement>, index: number) => {
-    setActiveIndex(index);
+    onActive(index);
   };
+
+  // =========================== Render ===========================
+  React.useImperativeHandle(ref, () => ({
+    focus: (index: number) => {
+      handlesRef.current[index]?.focus();
+    },
+    hideHelp: () => {
+      flushSync(() => {
+        setActiveVisible(false);
+      });
+    },
+  }));
 
   // =========================== Render ===========================
   // Handle Props
@@ -101,7 +115,7 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
       })}
 
       {/* Used for render tooltip, this is not a real handle */}
-      {activeHandleRender && (
+      {activeHandleRender && activeVisible && (
         <Handle
           key="a11y"
           {...handleProps}

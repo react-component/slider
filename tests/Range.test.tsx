@@ -26,7 +26,8 @@ describe('Range', () => {
   });
 
   function doMouseDown(container: HTMLElement, start: number, element = 'rc-slider-handle') {
-    const mouseDown = createEvent.mouseDown(container.getElementsByClassName(element)[0]);
+    const ele = container.getElementsByClassName(element)[0];
+    const mouseDown = createEvent.mouseDown(ele);
     (mouseDown as any).pageX = start;
     (mouseDown as any).pageY = start;
     Object.defineProperties(mouseDown, {
@@ -34,7 +35,8 @@ describe('Range', () => {
       clientY: { get: () => start },
     });
 
-    fireEvent(container.getElementsByClassName(element)[0], mouseDown);
+    fireEvent.mouseEnter(ele);
+    fireEvent(ele, mouseDown);
   }
 
   function doMouseMove(
@@ -709,14 +711,31 @@ describe('Range', () => {
           max={100}
           defaultValue={[0, 50, 100]}
           range={{ editable: true }}
+          // Test for active handle render
+          activeHandleRender={(ori) => ori}
         />,
       );
 
-      fireEvent.keyDown(container.querySelectorAll('.rc-slider-handle')[1], {
+      const handle = container.querySelectorAll('.rc-slider-handle')[1];
+
+      fireEvent.mouseEnter(handle);
+      fireEvent.keyDown(handle, {
         keyCode: keyCode.DELETE,
       });
 
       expect(onChange).toHaveBeenCalledWith([0, 100]);
+
+      // Clear all
+      fireEvent.keyDown(container.querySelector('.rc-slider-handle'), {
+        keyCode: keyCode.DELETE,
+      });
+      fireEvent.keyDown(container.querySelector('.rc-slider-handle'), {
+        keyCode: keyCode.DELETE,
+      });
+      expect(onChange).toHaveBeenCalledWith([]);
+
+      // 2 handle
+      expect(container.querySelectorAll('.rc-slider-handle')).toHaveLength(0);
     });
   });
 });
