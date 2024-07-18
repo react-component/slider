@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { flushSync } from 'react-dom';
 import type { OnStartMove } from '../interface';
 import { getIndex } from '../util';
 import type { HandleProps } from './Handle';
@@ -70,7 +71,9 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
       handlesRef.current[index]?.focus();
     },
     hideHelp: () => {
-      setActiveVisible(false);
+      flushSync(() => {
+        setActiveVisible(false);
+      });
     },
   }));
 

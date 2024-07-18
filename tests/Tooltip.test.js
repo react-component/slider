@@ -17,10 +17,10 @@ describe('Slider.Tooltip', () => {
         }
       />,
     );
-    expect(container.querySelector('.rc-slider-handle[data-test]')).toBeTruthy();
 
     // Click second
     fireEvent.mouseEnter(container.querySelectorAll('.rc-slider-handle')[1]);
+    expect(container.querySelector('.rc-slider-handle[data-test]')).toBeTruthy();
     expect(
       container.querySelector('.rc-slider-handle[data-value]').getAttribute('data-value'),
     ).toBe('50');
