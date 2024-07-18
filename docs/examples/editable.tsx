@@ -41,6 +41,8 @@ export default () => {
           }}
         />
       </div>
+
+      <p>Here is a word that drag should not select it</p>
     </div>
   );
 };
