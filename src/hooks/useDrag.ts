@@ -108,6 +108,7 @@ function useDrag(
 
   const onStartMove: OnStartMove = (e, valueIndex, startValues?: number[]) => {
     e.stopPropagation();
+    e.preventDefault();
 
     // 如果是点击 track 触发的，需要传入变化后的初始值，而不能直接用 rawValues
     const initialValues = startValues || rawValues;
