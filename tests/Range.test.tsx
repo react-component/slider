@@ -42,7 +42,8 @@ describe('Range', () => {
     fireEvent.mouseEnter(ele);
     fireEvent(ele, mouseDown);
 
-    expect(preventDefault).toHaveBeenCalled();
+    // Should not prevent default since focus will not change
+    expect(preventDefault).not.toHaveBeenCalled();
   }
 
   function doMouseMove(
