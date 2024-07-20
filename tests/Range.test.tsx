@@ -751,5 +751,49 @@ describe('Range', () => {
       // 2 handle
       expect(container.querySelectorAll('.rc-slider-handle')).toHaveLength(0);
     });
+
+    it('not remove when minCount', () => {
+      const onChange = jest.fn();
+
+      const { container } = render(
+        <Slider
+          onChange={onChange}
+          min={0}
+          max={100}
+          defaultValue={[0]}
+          range={{ editable: true, minCount: 1 }}
+          activeHandleRender={(ori) => ori}
+        />,
+      );
+
+      const handle = container.querySelector('.rc-slider-handle');
+
+      // Key
+      fireEvent.mouseEnter(handle);
+      fireEvent.keyDown(handle, {
+        keyCode: keyCode.DELETE,
+      });
+      expect(onChange).not.toHaveBeenCalled();
+
+      // Mouse
+      doMouseMove(container, 0, 1000);
+      expect(onChange).toHaveBeenCalledWith([100]);
+    });
+
+    it('maxCount not add', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider
+          onChange={onChange}
+          min={0}
+          max={100}
+          value={[0, 100]}
+          range={{ editable: true, maxCount: 2 }}
+        />,
+      );
+
+      doMouseDown(container, 50, 'rc-slider', true);
+      expect(onChange).toHaveBeenCalledWith([0, 50]);
+    });
   });
 });
