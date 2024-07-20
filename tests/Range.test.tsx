@@ -25,7 +25,12 @@ describe('Range', () => {
     resetWarned();
   });
 
-  function doMouseDown(container: HTMLElement, start: number, element = 'rc-slider-handle') {
+  function doMouseDown(
+    container: HTMLElement,
+    start: number,
+    element = 'rc-slider-handle',
+    skipEventCheck = false,
+  ) {
     const ele = container.getElementsByClassName(element)[0];
     const mouseDown = createEvent.mouseDown(ele);
     (mouseDown as any).pageX = start;
@@ -42,7 +47,10 @@ describe('Range', () => {
     fireEvent.mouseEnter(ele);
     fireEvent(ele, mouseDown);
 
-    expect(preventDefault).toHaveBeenCalled();
+    // Should not prevent default since focus will not change
+    if (!skipEventCheck) {
+      expect(preventDefault).not.toHaveBeenCalled();
+    }
   }
 
   function doMouseMove(
@@ -635,7 +643,7 @@ describe('Range', () => {
         />,
       );
 
-      doMouseDown(container, 50, 'rc-slider');
+      doMouseDown(container, 50, 'rc-slider', true);
 
       expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
     });
