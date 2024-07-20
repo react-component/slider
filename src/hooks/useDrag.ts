@@ -23,6 +23,7 @@ function useDrag(
   finishChange: (draggingDelete: boolean) => void,
   offsetValues: OffsetValues,
   editable: boolean,
+  minCount: number,
 ): [
   draggingIndex: number,
   draggingValue: number,
@@ -159,7 +160,9 @@ function useDrag(
       }
 
       // Check if need mark remove
-      deleteMark = editable ? Math.abs(removeDist) > REMOVE_DIST : false;
+      deleteMark = editable
+        ? Math.abs(removeDist) > REMOVE_DIST && minCount < cacheValues.length
+        : false;
       setDraggingDelete(deleteMark);
 
       updateCacheValue(valueIndex, offSetPercent, deleteMark);

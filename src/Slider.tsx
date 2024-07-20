@@ -40,6 +40,10 @@ import type {
 export type RangeConfig = {
   editable?: boolean;
   draggableTrack?: boolean;
+  /** Set min count when `editable` */
+  minCount?: number;
+  /** Set max count when `editable` */
+  maxCount?: number;
 };
 
 export interface SliderProps<ValueType = number | number[]> {
@@ -59,6 +63,7 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Value
   range?: boolean | RangeConfig;
+  /** @deprecated Use `range.minCount` or `range.maxCount` to handle this */
   count?: number;
   min?: number;
   max?: number;
@@ -185,7 +190,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   }, [reverse, vertical]);
 
   // ============================ Range =============================
-  const [rangeEnabled, rangeEditable, rangeDraggableTrack] = useRange(range);
+  const [rangeEnabled, rangeEditable, rangeDraggableTrack, minCount, maxCount] = useRange(range);
 
   const mergedMin = React.useMemo(() => (isFinite(min) ? min : 0), [min]);
   const mergedMax = React.useMemo(() => (isFinite(max) ? max : 100), [max]);
@@ -312,17 +317,19 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   });
 
   const onDelete = (index: number) => {
-    if (!disabled && rangeEditable) {
-      const cloneNextValues = [...rawValues];
-      cloneNextValues.splice(index, 1);
-
-      onBeforeChange?.(getTriggerValue(cloneNextValues));
-      triggerChange(cloneNextValues);
-
-      const nextFocusIndex = Math.max(0, index - 1);
-      handlesRef.current.hideHelp();
-      handlesRef.current.focus(nextFocusIndex);
+    if (disabled || !rangeEditable || rawValues.length <= minCount) {
+      return;
     }
+
+    const cloneNextValues = [...rawValues];
+    cloneNextValues.splice(index, 1);
+
+    onBeforeChange?.(getTriggerValue(cloneNextValues));
+    triggerChange(cloneNextValues);
+
+    const nextFocusIndex = Math.max(0, index - 1);
+    handlesRef.current.hideHelp();
+    handlesRef.current.focus(nextFocusIndex);
   };
 
   const [draggingIndex, draggingValue, draggingDelete, cacheValues, onStartDrag] = useDrag(
@@ -336,6 +343,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     finishChange,
     offsetValues,
     rangeEditable,
+    minCount,
   );
 
   /**
@@ -365,7 +373,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
       let focusIndex = valueIndex;
 
-      if (rangeEditable && valueDist !== 0) {
+      if (rangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
