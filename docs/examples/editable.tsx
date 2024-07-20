@@ -18,6 +18,8 @@ export default () => {
           // range
           range={{
             editable: true,
+            minCount: 1,
+            maxCount: 4,
           }}
           // track={false}
           min={0}
