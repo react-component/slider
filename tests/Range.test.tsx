@@ -199,6 +199,18 @@ describe('Range', () => {
     expect(container.getElementsByClassName('rc-slider-handle')).toHaveLength(2);
   });
 
+  it('not moved if controlled', () => {
+    const onChange = jest.fn();
+    const { container } = render(<Slider range value={[2, 4, 6]} onChange={onChange} />);
+    doMouseMove(container, 0, 9999999);
+
+    expect(onChange).toHaveBeenCalled();
+
+    expect(container.querySelector('.rc-slider-handle-dragging')).toHaveStyle({
+      left: '2%',
+    });
+  });
+
   // Not trigger onChange anymore
   // it('should only update bounds that are out of range', () => {
   //   const props = { min: 0, max: 10000, value: [0.01, 10000], onChange: jest.fn() };
