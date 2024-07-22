@@ -31,7 +31,7 @@ export default () => {
           value={value}
           onChange={(nextValue) => {
             // console.log('>>>', nextValue);
-            setValue(nextValue as any);
+            // setValue(nextValue as any);
           }}
           activeHandleRender={(node) => <NodeWrapper>{node}</NodeWrapper>}
           styles={{
