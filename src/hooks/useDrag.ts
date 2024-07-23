@@ -59,18 +59,16 @@ function useDrag(
 
   const flushValues = (nextValues: number[], nextValue?: number, deleteMark?: boolean) => {
     // Perf: Only update state when value changed
-    if (cacheValues.some((val, i) => val !== nextValues[i]) || deleteMark) {
-      if (nextValue !== undefined) {
-        setDraggingValue(nextValue);
-      }
-      setCacheValues(nextValues);
-
-      let changeValues = nextValues;
-      if (deleteMark) {
-        changeValues = nextValues.filter((_, i) => i !== draggingIndex);
-      }
-      triggerChange(changeValues);
+    if (nextValue !== undefined) {
+      setDraggingValue(nextValue);
     }
+    setCacheValues(nextValues);
+
+    let changeValues = nextValues;
+    if (deleteMark) {
+      changeValues = nextValues.filter((_, i) => i !== draggingIndex);
+    }
+    triggerChange(changeValues);
   };
 
   const updateCacheValue = useEvent(

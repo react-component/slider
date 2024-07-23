@@ -53,6 +53,13 @@ describe('Range', () => {
     }
   }
 
+  function doMouseDrag(end: number) {
+    const mouseMove = createEvent.mouseMove(document);
+    (mouseMove as any).pageX = end;
+    (mouseMove as any).pageY = end;
+    fireEvent(document, mouseMove);
+  }
+
   function doMouseMove(
     container: HTMLElement,
     start: number,
@@ -62,10 +69,7 @@ describe('Range', () => {
     doMouseDown(container, start, element);
 
     // Drag
-    const mouseMove = createEvent.mouseMove(document);
-    (mouseMove as any).pageX = end;
-    (mouseMove as any).pageY = end;
-    fireEvent(document, mouseMove);
+    doMouseDrag(end);
   }
 
   function doTouchMove(
@@ -693,6 +697,31 @@ describe('Range', () => {
         // Fire mouse up
         fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
         expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+      });
+
+      it('out and back', () => {
+        const onChange = jest.fn();
+        const onChangeComplete = jest.fn();
+        const { container } = render(
+          <Slider
+            onChange={onChange}
+            onChangeComplete={onChangeComplete}
+            min={0}
+            max={100}
+            defaultValue={[0, 50]}
+            range={{ editable: true }}
+          />,
+        );
+
+        doMouseMove(container, 0, 1000);
+        expect(onChange).toHaveBeenCalledWith([50]);
+
+        doMouseDrag(0);
+        expect(onChange).toHaveBeenCalledWith([0, 50]);
+
+        // Fire mouse up
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        expect(onChangeComplete).toHaveBeenCalledWith([0, 50]);
       });
 
       it('controlled', () => {
