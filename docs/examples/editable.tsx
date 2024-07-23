@@ -33,6 +33,12 @@ export default () => {
           onChangeComplete={(nextValue) => {
             console.log('Complete', nextValue);
           }}
+          // handleRender={(ori, handleProps) => {
+          //   if (handleProps.index === 0) {
+          //     console.log('handleRender', ori, handleProps);
+          //   }
+          //   return ori;
+          // }}
           styles={{
             rail: {
               background: `linear-gradient(to right, blue, red)`,
