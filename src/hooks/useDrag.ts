@@ -207,7 +207,10 @@ function useDrag(
     });
 
     const maxDiffCount = editable ? 1 : 0;
-    const diffCount: number = Object.values(counts).reduce((prev, next) => prev + next, 0);
+    const diffCount: number = Object.values(counts).reduce(
+      (prev, next) => prev + Math.abs(next),
+      0,
+    );
 
     return diffCount <= maxDiffCount ? cacheValues : rawValues;
   }, [rawValues, cacheValues, editable]);
