@@ -34,3 +34,20 @@ const SliderContext = React.createContext<SliderContextProps>({
 });
 
 export default SliderContext;
+
+export interface UnstableContextProps {
+  onDragStart?: (info: {
+    rawValues: number[];
+    draggingIndex: number;
+    draggingValue: number;
+  }) => void;
+  onDragChange?: (info: {
+    rawValues: number[];
+    deleteIndex: number;
+    draggingIndex: number;
+    draggingValue: number;
+  }) => void;
+}
+
+/** @private NOT PROMISE AVAILABLE. DO NOT USE IN PRODUCTION. */
+export const UnstableContext = React.createContext<UnstableContextProps>({});

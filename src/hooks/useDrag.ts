@@ -1,5 +1,6 @@
 import { useEvent } from 'rc-util';
 import * as React from 'react';
+import { UnstableContext } from '../context';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
 
@@ -40,6 +41,8 @@ function useDrag(
   const mouseMoveEventRef = React.useRef<(event: MouseEvent) => void>(null);
   const mouseUpEventRef = React.useRef<(event: MouseEvent) => void>(null);
 
+  const { onDragStart, onDragChange } = React.useContext(UnstableContext);
+
   React.useLayoutEffect(() => {
     if (draggingIndex === -1) {
       setCacheValues(rawValues);
@@ -69,6 +72,15 @@ function useDrag(
       changeValues = nextValues.filter((_, i) => i !== draggingIndex);
     }
     triggerChange(changeValues);
+
+    if (onDragChange) {
+      onDragChange({
+        rawValues: nextValues,
+        deleteIndex: deleteMark ? draggingIndex : -1,
+        draggingIndex,
+        draggingValue: nextValue,
+      });
+    }
   };
 
   const updateCacheValue = useEvent(
@@ -122,6 +134,15 @@ function useDrag(
 
     // We declare it here since closure can't get outer latest value
     let deleteMark = false;
+
+    // Internal trigger event
+    if (onDragStart) {
+      onDragStart({
+        rawValues: initialValues,
+        draggingIndex: valueIndex,
+        draggingValue: originValue,
+      });
+    }
 
     // Moving
     const onMouseMove = (event: MouseEvent | TouchEvent) => {
