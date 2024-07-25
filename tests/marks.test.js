@@ -35,13 +35,18 @@ describe('marks', () => {
 
   it('should select correct value while click on marks', () => {
     const marks = { 0: '0', 30: '30', 100: '100' };
-
-    const { container } = render(<Slider marks={marks} />);
+    const onChange = jest.fn();
+    const onChangeComplete = jest.fn();
+    const { container } = render(<Slider marks={marks} onChange={onChange} onChangeComplete={onChangeComplete} />);
     fireEvent.click(container.getElementsByClassName('rc-slider-mark-text')[1]);
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'aria-valuenow',
       '30',
     );
+    expect(onChange).toHaveBeenCalledTimes(1);
+    expect(onChange).toHaveBeenCalledWith(30);
+    expect(onChangeComplete).toHaveBeenCalledTimes(1);
+    expect(onChangeComplete).toHaveBeenCalledWith(30);
   });
 
   // TODO: not implement yet
