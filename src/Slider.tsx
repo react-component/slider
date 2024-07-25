@@ -385,12 +385,22 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         cloneNextValues.push(newValue);
       }
 
-      onBeforeChange?.(getTriggerValue(cloneNextValues));
+      const nextValue = getTriggerValue(cloneNextValues);
+      onBeforeChange?.(nextValue);
       triggerChange(cloneNextValues);
+
       if (e) {
         (document.activeElement as HTMLElement)?.blur?.();
         handlesRef.current.focus(focusIndex);
         onStartDrag(e, focusIndex, cloneNextValues);
+      } else {
+        // https://github.com/ant-design/ant-design/issues/49997
+        onAfterChange?.(nextValue);
+        warning(
+          !onAfterChange,
+          '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
+        );
+        onChangeComplete?.(nextValue);
       }
     }
   };

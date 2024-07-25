@@ -50,7 +50,7 @@ export default () => (
         defaultValue={[-10, 0]}
         allowCross={false}
         pushable
-        draggableTrack
+        onChangeComplete={(v) => console.log('AfterChange:', v)}
       />
     </div>
 
