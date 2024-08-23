@@ -245,26 +245,24 @@ export default () => (
     </div>
     <div style={style}>
       <p>draggableTrack two points</p>
-      <Slider range allowCross={false} defaultValue={[0, 40]} draggableTrack onChange={log} />
+      <Slider range={{ draggableTrack: true }} allowCross={false} defaultValue={[0, 40]} onChange={log} />
     </div>
     <div style={style}>
       <p>draggableTrack two points(reverse)</p>
       <Slider
-        range
+        range={{ draggableTrack: true }}
         allowCross={false}
         reverse
         defaultValue={[0, 40]}
-        draggableTrack
         onChange={log}
       />
     </div>
     <div style={style}>
       <p>draggableTrack multiple points</p>
       <Slider
-        range
+        range={{ draggableTrack: true }}
         allowCross={false}
         defaultValue={[0, 20, 30, 40, 50]}
-        draggableTrack
         onChange={log}
       />
     </div>

@@ -93,8 +93,7 @@ export default () => (
     <div style={style}>
       <p>Range with marks and draggableTrack</p>
       <Slider
-        range
-        draggableTrack
+        range={{ draggableTrack: true }}
         vertical
         min={-10}
         marks={marks}
@@ -105,8 +104,7 @@ export default () => (
     <div style={style}>
       <p>Range with marks and draggableTrack(reverse)</p>
       <Slider
-        range
-        draggableTrack
+        range={{ draggableTrack: true }}
         vertical
         reverse
         min={-10}
