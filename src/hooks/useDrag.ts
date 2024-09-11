@@ -8,7 +8,7 @@ import type { OffsetValues } from './useOffset';
 const REMOVE_DIST = 130;
 
 function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) {
-  const obj = 'touches' in e ? e.touches[0] : e;
+  const obj = 'targetTouches' in e ? e.targetTouches[0] : e;
 
   return { pageX: obj.pageX, pageY: obj.pageY };
 }
