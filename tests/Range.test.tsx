@@ -80,15 +80,19 @@ describe('Range', () => {
   ) {
     const touchStart = createEvent.touchStart(container.getElementsByClassName(element)[0], {
       touches: [{}],
+      targetTouches: [{}],
     });
     (touchStart as any).touches[0].pageX = start;
+    (touchStart as any).targetTouches[0].pageX = start;
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
     // Drag
     const touchMove = createEvent.touchMove(document, {
       touches: [{}],
+      targetTouches: [{}],
     });
     (touchMove as any).touches[0].pageX = end;
+    (touchMove as any).targetTouches[0].pageX = end;
     fireEvent(document, touchMove);
   }
 
