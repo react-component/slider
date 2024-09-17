@@ -8,7 +8,7 @@ import type { OffsetValues } from './useOffset';
 const REMOVE_DIST = 130;
 
 function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | TouchEvent) {
-  const obj = 'touches' in e ? e.touches[0] : e;
+  const obj = 'targetTouches' in e ? e.targetTouches[0] : e;
 
   return { pageX: obj.pageX, pageY: obj.pageY };
 }
@@ -40,6 +40,7 @@ function useDrag(
 
   const mouseMoveEventRef = React.useRef<(event: MouseEvent) => void>(null);
   const mouseUpEventRef = React.useRef<(event: MouseEvent) => void>(null);
+  const touchEventTargetRef = React.useRef<EventTarget>(null);
 
   const { onDragStart, onDragChange } = React.useContext(UnstableContext);
 
@@ -54,8 +55,10 @@ function useDrag(
     () => () => {
       document.removeEventListener('mousemove', mouseMoveEventRef.current);
       document.removeEventListener('mouseup', mouseUpEventRef.current);
-      document.removeEventListener('touchmove', mouseMoveEventRef.current);
-      document.removeEventListener('touchend', mouseUpEventRef.current);
+      if (touchEventTargetRef.current) {
+        touchEventTargetRef.current.removeEventListener('touchmove', mouseMoveEventRef.current);
+        touchEventTargetRef.current.removeEventListener('touchend', mouseUpEventRef.current);
+      }
     },
     [],
   );
@@ -193,10 +196,13 @@ function useDrag(
 
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
-      document.removeEventListener('touchend', onMouseUp);
-      document.removeEventListener('touchmove', onMouseMove);
+      if (touchEventTargetRef.current) {
+        touchEventTargetRef.current.removeEventListener('touchmove', mouseMoveEventRef.current);
+        touchEventTargetRef.current.removeEventListener('touchend', mouseUpEventRef.current);
+      }
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
+      touchEventTargetRef.current = null;
 
       finishChange(deleteMark);
 
@@ -206,10 +212,11 @@ function useDrag(
 
     document.addEventListener('mouseup', onMouseUp);
     document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('touchend', onMouseUp);
-    document.addEventListener('touchmove', onMouseMove);
+    e.currentTarget.addEventListener('touchend', onMouseUp);
+    e.currentTarget.addEventListener('touchmove', onMouseMove);
     mouseMoveEventRef.current = onMouseMove;
     mouseUpEventRef.current = onMouseUp;
+    touchEventTargetRef.current = e.currentTarget;
   };
 
   // Only return cache value when it mapping with rawValues
