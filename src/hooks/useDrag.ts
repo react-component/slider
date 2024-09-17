@@ -196,8 +196,10 @@ function useDrag(
 
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
-      event.currentTarget.removeEventListener('touchend', onMouseUp);
-      event.currentTarget.removeEventListener('touchmove', onMouseMove);
+      if (touchEventTargetRef.current) {
+        touchEventTargetRef.current.removeEventListener('touchmove', mouseMoveEventRef.current);
+        touchEventTargetRef.current.removeEventListener('touchend', mouseUpEventRef.current);
+      }
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;
       touchEventTargetRef.current = null;
