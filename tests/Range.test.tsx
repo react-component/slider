@@ -82,18 +82,16 @@ describe('Range', () => {
       touches: [{}],
       targetTouches: [{}],
     });
-    (touchStart as any).touches[0].pageX = start;
     (touchStart as any).targetTouches[0].pageX = start;
     fireEvent(container.getElementsByClassName(element)[0], touchStart);
 
     // Drag
-    const touchMove = createEvent.touchMove(document, {
+    const touchMove = createEvent.touchMove(container.getElementsByClassName(element)[0], {
       touches: [{}],
       targetTouches: [{}],
     });
-    (touchMove as any).touches[0].pageX = end;
     (touchMove as any).targetTouches[0].pageX = end;
-    fireEvent(document, touchMove);
+    fireEvent(container.getElementsByClassName(element)[0], touchMove);
   }
 
   it('should render Range with correct DOM structure', () => {
