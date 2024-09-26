@@ -54,6 +54,8 @@ export interface SliderProps<ValueType = number | number[]> {
   classNames?: SliderClassNames;
   styles?: SliderStyles;
 
+  id?: string;
+
   // Status
   disabled?: boolean;
   keyboard?: boolean;
@@ -125,6 +127,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     style,
     classNames,
     styles,
+
+    id,
 
     // Status
     disabled = false,
@@ -575,6 +579,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         })}
         style={style}
         onMouseDown={onSliderMouseDown}
+        id={id}
       >
         <div
           className={cls(`${prefixCls}-rail`, classNames?.rail)}
