@@ -1,5 +1,6 @@
-import { useEvent } from 'rc-util';
 import * as React from 'react';
+import useEvent from 'rc-util/lib/hooks/useEvent';
+import useLayoutEffect from 'rc-util/lib/hooks/useLayoutEffect';
 import { UnstableContext } from '../context';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';
@@ -44,7 +45,7 @@ function useDrag(
 
   const { onDragStart, onDragChange } = React.useContext(UnstableContext);
 
-  React.useLayoutEffect(() => {
+  useLayoutEffect(() => {
     if (draggingIndex === -1) {
       setCacheValues(rawValues);
     }
