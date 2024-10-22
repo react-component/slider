@@ -1,5 +1,5 @@
 # Security Policy
-TODO:  Publish a security policy so users know the process for reporting vulnerabilities and expectations on fixes.
+TODO:  Publish a security policy, so users know the process for reporting vulnerabilities and expectations on fixes.
 
 ## Supported Versions
 
