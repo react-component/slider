@@ -112,7 +112,7 @@ export interface SliderProps<ValueType = number | number[]> {
   tabIndex?: number | number[];
   ariaLabelForHandle?: string | string[];
   ariaLabelledByForHandle?: string | string[];
-  ariaRequired?: "true" | "false";
+  ariaRequired?: boolean;
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
 }
 
