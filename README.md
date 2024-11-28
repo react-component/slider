@@ -132,6 +132,7 @@ The following APIs are shared by Slider and Range.
 | tabIndex | number | `0` | Set the tabIndex of the slider handle. |
 | ariaLabelForHandle | string | - | Set the `aria-label` attribute on the slider handle.  |
 | ariaLabelledByForHandle | string | - | Set the `aria-labelledby` attribute on the slider handle. |
+| ariaRequired | boolean | - | Set the `aria-required` attribute on the slider handle. |
 | ariaValueTextFormatterForHandle | (value) => string | - | A function to set the `aria-valuetext` attribute on the slider handle. It receives the current value of the slider and returns a formatted string describing the value. See [WAI-ARIA Authoring Practices 1.1](https://www.w3.org/TR/wai-aria-practices-1.1/#slider) for more information. |
 
 ### Range

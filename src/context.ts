@@ -15,6 +15,7 @@ export interface SliderContextProps {
   tabIndex: number | number[];
   ariaLabelForHandle?: string | string[];
   ariaLabelledByForHandle?: string | string[];
+  ariaRequired?: boolean;
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
   classNames: SliderClassNames;
   styles: SliderStyles;

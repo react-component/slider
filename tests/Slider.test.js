@@ -441,6 +441,14 @@ describe('Slider', () => {
     );
   });
 
+  it('sets aria-required on the handle', () => {
+    const { container } = render(<Slider ariaRequired={true} />);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-required',
+      'true',
+    );
+  });
+
   it('sets aria-valuetext on the handle', () => {
     const { container } = render(
       <Slider
