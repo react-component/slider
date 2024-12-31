@@ -47,7 +47,7 @@ const Tracks: React.FC<TrackProps> = (props) => {
 
   // ========================== Render ==========================
   const tracksNode =
-    classNames.tracks || styles.tracks ? (
+      trackList?.length && (classNames.tracks || styles.tracks) ? (
       <Track
         index={null}
         prefixCls={prefixCls}

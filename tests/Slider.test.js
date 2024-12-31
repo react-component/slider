@@ -662,4 +662,10 @@ describe('Slider', () => {
     const { asFragment } = render(<Slider included={false} />);
     expect(asFragment().firstChild).toMatchSnapshot();
   });
+
+  it('tipFormatter should not crash with undefined value', () => {
+    [undefined, null].forEach((value) => {
+      render(<Slider value={value} tooltip={{ open: true }} styles={{ tracks: {} }}/>);
+    });
+  });
 });
