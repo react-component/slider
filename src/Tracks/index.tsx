@@ -47,12 +47,12 @@ const Tracks: React.FC<TrackProps> = (props) => {
 
   // ========================== Render ==========================
   const tracksNode =
-    classNames.tracks || styles.tracks ? (
+      trackList?.length && (classNames.tracks || styles.tracks) ? (
       <Track
         index={null}
         prefixCls={prefixCls}
-        start={trackList[0]?.start}
-        end={trackList[trackList?.length - 1]?.end}
+        start={trackList[0].start}
+        end={trackList[trackList.length - 1].end}
         replaceCls={cls(classNames.tracks, `${prefixCls}-tracks`)}
         style={styles.tracks}
       />
