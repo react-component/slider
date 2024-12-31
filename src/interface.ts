@@ -10,7 +10,7 @@ export type OnStartMove = (
 
 export type AriaValueFormat = (value: number) => string;
 
-export type SemanticName = 'tracks' | 'track' | 'rail' | 'handle';
+export type SemanticName = 'root' | 'tracks' | 'track' | 'rail' | 'handle';
 
 export type SliderClassNames = Partial<Record<SemanticName, string>>;
 
