@@ -575,13 +575,13 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     <SliderContext.Provider value={context}>
       <div
         ref={containerRef}
-        className={cls(prefixCls, className, classNames?.root, {
+        className={cls(prefixCls, className, {
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-vertical`]: vertical,
           [`${prefixCls}-horizontal`]: !vertical,
           [`${prefixCls}-with-marks`]: markList.length,
         })}
-        style={{ ...styles?.root, ...style  }}
+        style={style}
         onMouseDown={onSliderMouseDown}
         id={id}
       >
