@@ -51,8 +51,8 @@ const Tracks: React.FC<TrackProps> = (props) => {
       <Track
         index={null}
         prefixCls={prefixCls}
-        start={trackList[0].start}
-        end={trackList[trackList.length - 1].end}
+        start={trackList[0]?.start}
+        end={trackList[trackList?.length - 1]?.end}
         replaceCls={cls(classNames.tracks, `${prefixCls}-tracks`)}
         style={styles.tracks}
       />
