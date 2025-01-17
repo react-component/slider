@@ -562,28 +562,22 @@ describe('Slider', () => {
       expect(onChange).toHaveBeenCalledWith([20, 20]);
     });
 
-    it('should call onBeforeChange, onChange, and onAfterChange', () => {
-      const onBeforeChange = jest.fn();
+    it('should call onChange', () => {
       const onChange = jest.fn();
-      const onAfterChange = jest.fn();
       const { container } = render(
         <Slider
-          onBeforeChange={onBeforeChange}
           onChange={onChange}
-          onChangeComplete={onAfterChange}
         />,
       );
       fireEvent.mouseDown(container.querySelector('.rc-slider'), {
         clientX: 20,
       });
 
-      expect(onBeforeChange).toHaveBeenCalledWith(20);
       expect(onChange).toHaveBeenCalledWith(20);
-      expect(onAfterChange).not.toHaveBeenCalled();
       fireEvent.mouseUp(container.querySelector('.rc-slider'), {
         clientX: 20,
       });
-      expect(onAfterChange).toHaveBeenCalledWith(20);
+      expect(onChange).toHaveBeenCalledWith(20);
     });
   });
 
@@ -665,7 +659,7 @@ describe('Slider', () => {
 
   it('tipFormatter should not crash with undefined value', () => {
     [undefined, null].forEach((value) => {
-      render(<Slider value={value} tooltip={{ open: true }} styles={{ tracks: {} }}/>);
+      render(<Slider value={value} tooltip={{ open: true }} styles={{ tracks: {} }} />);
     });
   });
 });

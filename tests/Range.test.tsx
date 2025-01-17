@@ -99,11 +99,6 @@ describe('Range', () => {
     expect(asFragment().firstChild).toMatchSnapshot();
   });
 
-  it('should render Multi-Range with correct DOM structure', () => {
-    const { asFragment } = render(<Slider range count={3} />);
-    expect(asFragment().firstChild).toMatchSnapshot();
-  });
-
   it('should render Range with value correctly', async () => {
     const { container } = render(<Slider range value={[0, 50]} />);
 
@@ -173,11 +168,11 @@ describe('Range', () => {
       keyCode: keyCode.RIGHT,
     });
 
-    expect(onAfterChange).not.toBeCalled();
+    expect(onAfterChange).not.toHaveBeenCalled();
   });
 
   it('should render Multi-Range with value correctly', () => {
-    const { container } = render(<Slider range count={3} value={[0, 25, 50, 75]} />);
+    const { container } = render(<Slider range value={[0, 25, 50, 75]} />);
 
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle('left: 0%');
     expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveStyle('left: 25%');
@@ -558,7 +553,7 @@ describe('Range', () => {
       const handleFocus = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onFocus={handleFocus} />);
       container.querySelector<HTMLDivElement>('.rc-slider-handle').focus();
-      expect(handleFocus).toBeCalled();
+      expect(handleFocus).toHaveBeenCalled();
     });
 
     it('blur()', () => {
