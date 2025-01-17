@@ -193,7 +193,7 @@ export default () => (
     </div>
     <div style={style}>
       <p>Basic Range，`step=20` </p>
-      <Slider range step={20} defaultValue={[20, 20]} onBeforeChange={log} />
+      <Slider range step={20} defaultValue={[20, 20]} onChange={log} />
     </div>
     <div style={style}>
       <p>Basic Range，`step=20, dots` </p>
@@ -217,18 +217,22 @@ export default () => (
     </div>
     <div style={style}>
       <p>Multi Range, count=3 and pushable=true</p>
-      <Slider range count={3} defaultValue={[20, 40, 60, 80]} pushable />
+      <Slider range={{ minCount: 3 }} defaultValue={[20, 40, 60, 80]} pushable />
     </div>
     <div style={style}>
       <p>Multi Range with custom track and handle style and pushable</p>
       <Slider
-        range
-        count={3}
+        range={{ minCount: 3 }}
         defaultValue={[20, 40, 60, 80]}
         pushable
-        trackStyle={[{ backgroundColor: 'red' }, { backgroundColor: 'green' }]}
-        handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }]}
-        railStyle={{ backgroundColor: 'black' }}
+        styles={{
+          track: { backgroundColor: 'red' },
+          handle: { backgroundColor: 'yellow' },
+          rail: { backgroundColor: 'black' },
+        }}
+      // trackStyle={[{ backgroundColor: 'red' }, { backgroundColor: 'green' }]}
+      // handleStyle={[{ backgroundColor: 'yellow' }, { backgroundColor: 'gray' }]}
+      // railStyle={{ backgroundColor: 'black' }}
       />
     </div>
     <div style={style}>
