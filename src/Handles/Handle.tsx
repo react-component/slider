@@ -127,7 +127,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
 
         case KeyCode.BACKSPACE:
         case KeyCode.DELETE:
-          onDelete(valueIndex);
+          onDelete?.(valueIndex);
           break;
       }
 
