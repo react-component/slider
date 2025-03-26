@@ -341,47 +341,4 @@ describe('Common', () => {
     expect(sliderOnAfterChange).toHaveBeenCalled();
     expect(sliderOnAfterChange).toHaveBeenCalledTimes(1);
   });
-
-  it('deprecate onAfterChange', () => {
-    const errSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
-    const onChangeComplete = jest.fn();
-    const onAfterChange = jest.fn();
-    const { container } = render(
-      <Slider value={0} onChangeComplete={onChangeComplete} onAfterChange={onAfterChange} />,
-    );
-
-    fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
-      keyCode: KeyCode.UP,
-    });
-
-    expect(onChangeComplete).not.toHaveBeenCalled();
-    expect(onAfterChange).not.toHaveBeenCalled();
-
-    fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
-      keyCode: KeyCode.UP,
-    });
-    expect(onChangeComplete).toHaveBeenCalledTimes(1);
-    expect(onAfterChange).toHaveBeenCalledTimes(1);
-    expect(errSpy).toHaveBeenCalledWith(
-      'Warning: [rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
-    );
-    errSpy.mockRestore();
-  });
-
-  // Move to antd instead
-  // it('the tooltip should be attach to the container with the id tooltip', () => {
-  //   const SliderWithTooltip = createSliderWithTooltip(Slider);
-  //   const tooltipPrefixer = {
-  //     prefixCls: 'slider-tooltip',
-  //   };
-  //   const tooltipParent = document.createElement('div');
-  //   tooltipParent.setAttribute('id', 'tooltip');
-  //   const { container } = render(
-  //     <SliderWithTooltip
-  //       tipProps={tooltipPrefixer}
-  //       getTooltipContainer={() => document.getElementById('tooltip')}
-  //     />,
-  //   );
-  //   expect(wrapper.instance().props.getTooltipContainer).toBeTruthy();
-  // });
 });

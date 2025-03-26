@@ -198,7 +198,7 @@ export default () => (
     </div>
     <div style={style}>
       <p>Basic Slider，`step=20`</p>
-      <Slider step={20} defaultValue={50} onBeforeChange={log} />
+      <Slider step={20} defaultValue={50} onChange={log} />
     </div>
     <div style={style}>
       <p>Basic Slider，`step=20, dots`</p>
@@ -232,15 +232,17 @@ export default () => (
       </p>
       <Slider
         defaultValue={30}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
+        styles={{
+          rail: { backgroundColor: 'red', height: 10 },
+          track: { backgroundColor: 'blue', height: 10 },
+          handle: {
+            borderColor: 'blue',
+            height: 28,
+            width: 28,
+            marginLeft: -14,
+            marginTop: -9,
+            backgroundColor: 'black',
+          },
         }}
       />
     </div>
@@ -250,16 +252,18 @@ export default () => (
       </p>
       <Slider
         defaultValue={30}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
+        styles={{
+          track: { backgroundColor: 'blue', height: 10 },
+          handle: {
+            borderColor: 'blue',
+            height: 28,
+            width: 28,
+            marginLeft: -14,
+            marginTop: -9,
+            backgroundColor: 'black',
+          },
+          rail: { backgroundColor: 'red', height: 10 },
         }}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
       />
     </div>
     <div style={style}>
@@ -269,17 +273,19 @@ export default () => (
       </p>
       <Slider
         defaultValue={30}
-        trackStyle={{ backgroundColor: 'blue', height: 10 }}
         reverse
-        handleStyle={{
-          borderColor: 'blue',
-          height: 28,
-          width: 28,
-          marginLeft: -14,
-          marginTop: -9,
-          backgroundColor: 'black',
+        styles={{
+          track: { backgroundColor: 'blue', height: 10 },
+          handle: {
+            borderColor: 'blue',
+            height: 28,
+            width: 28,
+            marginLeft: -14,
+            marginTop: -9,
+            backgroundColor: 'black',
+          },
+          rail: { backgroundColor: 'red', height: 10 },
         }}
-        railStyle={{ backgroundColor: 'red', height: 10 }}
       />
     </div>
     <div style={style}>

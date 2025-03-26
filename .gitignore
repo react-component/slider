@@ -31,6 +31,7 @@ yarn.lock
 package-lock.json
 .doc
 .storybook
+.vscode
 
 # umi
 .umi

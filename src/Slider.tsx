@@ -65,18 +65,12 @@ export interface SliderProps<ValueType = number | number[]> {
 
   // Value
   range?: boolean | RangeConfig;
-  /** @deprecated Use `range.minCount` or `range.maxCount` to handle this */
-  count?: number;
   min?: number;
   max?: number;
   step?: number | null;
   value?: ValueType;
   defaultValue?: ValueType;
   onChange?: (value: ValueType) => void;
-  /** @deprecated It's always better to use `onChange` instead */
-  onBeforeChange?: (value: ValueType) => void;
-  /** @deprecated Use `onChangeComplete` instead */
-  onAfterChange?: (value: ValueType) => void;
   onChangeComplete?: (value: ValueType) => void;
 
   // Cross
@@ -90,12 +84,6 @@ export interface SliderProps<ValueType = number | number[]> {
   // Style
   included?: boolean;
   startPoint?: number;
-  /** @deprecated Please use `styles.track` instead */
-  trackStyle?: React.CSSProperties | React.CSSProperties[];
-  /** @deprecated Please use `styles.handle` instead */
-  handleStyle?: React.CSSProperties | React.CSSProperties[];
-  /** @deprecated Please use `styles.rail` instead */
-  railStyle?: React.CSSProperties;
   dotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
   activeDotStyle?: React.CSSProperties | ((dotValue: number) => React.CSSProperties);
 
@@ -145,10 +133,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     value,
     defaultValue,
     range,
-    count,
     onChange,
-    onBeforeChange,
-    onAfterChange,
     onChangeComplete,
 
     // Cross
@@ -162,9 +147,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     // Style
     included = true,
     startPoint,
-    trackStyle,
-    handleStyle,
-    railStyle,
     dotStyle,
     activeDotStyle,
 
@@ -259,8 +241,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       mergedValue === null || mergedValue === undefined
         ? []
         : Array.isArray(mergedValue)
-        ? mergedValue
-        : [mergedValue];
+          ? mergedValue
+          : [mergedValue];
 
     const [val0 = mergedMin] = valueList;
     let returnValues = mergedValue === null ? [] : [val0];
@@ -269,16 +251,11 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     if (rangeEnabled) {
       returnValues = [...valueList];
 
-      // When count provided or value is `undefined`, we fill values
-      if (count || mergedValue === undefined) {
-        const pointCount = count >= 0 ? count + 1 : 2;
-        returnValues = returnValues.slice(0, pointCount);
-
-        // Fill with count
-        while (returnValues.length < pointCount) {
-          returnValues.push(returnValues[returnValues.length - 1] ?? mergedMin);
-        }
+      // When value is `undefined`, we fill values with default 2 points
+      if (mergedValue === undefined) {
+        returnValues = [mergedMin, mergedMin];
       }
+
       returnValues.sort((a, b) => a - b);
     }
 
@@ -288,7 +265,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     });
 
     return returnValues;
-  }, [mergedValue, rangeEnabled, mergedMin, count, formatValue]);
+  }, [mergedValue, rangeEnabled, mergedMin, formatValue]);
 
   // =========================== onChange ===========================
   const getTriggerValue = (triggerValues: number[]) =>
@@ -314,11 +291,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     }
 
     const finishValue = getTriggerValue(rawValues);
-    onAfterChange?.(finishValue);
-    warning(
-      !onAfterChange,
-      '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
-    );
     onChangeComplete?.(finishValue);
   });
 
@@ -330,7 +302,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     const cloneNextValues = [...rawValues];
     cloneNextValues.splice(index, 1);
 
-    onBeforeChange?.(getTriggerValue(cloneNextValues));
     triggerChange(cloneNextValues);
 
     const nextFocusIndex = Math.max(0, index - 1);
@@ -386,13 +357,11 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         cloneNextValues[valueIndex] = newValue;
       }
 
-      // Fill value to match default 2 (only when `rawValues` is empty)
-      if (rangeEnabled && !rawValues.length && count === undefined) {
+      if (rangeEnabled && !rawValues.length) {
         cloneNextValues.push(newValue);
       }
 
       const nextValue = getTriggerValue(cloneNextValues);
-      onBeforeChange?.(nextValue);
       triggerChange(cloneNextValues);
 
       if (e) {
@@ -400,12 +369,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         handlesRef.current.focus(focusIndex);
         onStartDrag(e, focusIndex, cloneNextValues);
       } else {
-        // https://github.com/ant-design/ant-design/issues/49997
-        onAfterChange?.(nextValue);
-        warning(
-          !onAfterChange,
-          '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
-        );
         onChangeComplete?.(nextValue);
       }
     }
@@ -448,7 +411,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     if (!disabled) {
       const next = offsetValues(rawValues, offset, valueIndex);
 
-      onBeforeChange?.(getTriggerValue(rawValues));
       triggerChange(next.values);
 
       setKeyboardValue(next.value);
@@ -479,8 +441,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   const onStartMove: OnStartMove = useEvent((e, valueIndex) => {
     onStartDrag(e, valueIndex);
-
-    onBeforeChange?.(getTriggerValue(rawValues));
   });
 
   // Auto focus for updated handle
@@ -587,13 +547,13 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       >
         <div
           className={cls(`${prefixCls}-rail`, classNames?.rail)}
-          style={{ ...railStyle, ...styles?.rail }}
+          style={styles?.rail}
         />
 
         {track !== false && (
           <Tracks
             prefixCls={prefixCls}
-            style={trackStyle}
+            style={styles?.track}
             values={rawValues}
             startPoint={startPoint}
             onStartMove={mergedDraggableTrack ? onStartMove : undefined}
@@ -611,7 +571,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         <Handles
           ref={handlesRef}
           prefixCls={prefixCls}
-          style={handleStyle}
+          style={styles?.handle}
           values={cacheValues}
           draggingIndex={draggingIndex}
           draggingDelete={draggingDelete}
