@@ -22,7 +22,7 @@ export interface HandleProps
   dragging: boolean;
   draggingDelete: boolean;
   onStartMove: OnStartMove;
-  onDelete: (index: number) => void;
+  onDelete?: (index: number) => void;
   onOffsetChange: (value: number | 'min' | 'max', valueIndex: number) => void;
   onFocus: (e: React.FocusEvent<HTMLDivElement>, index: number) => void;
   onMouseEnter: (e: React.MouseEvent<HTMLDivElement>, index: number) => void;
