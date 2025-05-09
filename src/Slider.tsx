@@ -72,12 +72,12 @@ export interface SliderProps<ValueType = number | number[]> {
   step?: number | null;
   value?: ValueType;
   defaultValue?: ValueType;
-  onChange?: (value: ValueType) => void;
+  onChange?: (value: ValueType, index: number) => void;
   /** @deprecated It's always better to use `onChange` instead */
   onBeforeChange?: (value: ValueType) => void;
   /** @deprecated Use `onChangeComplete` instead */
   onAfterChange?: (value: ValueType) => void;
-  onChangeComplete?: (value: ValueType) => void;
+  onChangeComplete?: (value: ValueType, index: number) => void;
 
   // Cross
   allowCross?: boolean;
@@ -300,7 +300,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     // Trigger event if needed
     if (onChange && !isEqual(cloneNextValues, rawValues, true)) {
-      onChange(getTriggerValue(cloneNextValues));
+      onChange(getTriggerValue(cloneNextValues), draggingIndex);
     }
 
     // We set this later since it will re-render component immediately
@@ -319,7 +319,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       !onAfterChange,
       '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
     );
-    onChangeComplete?.(finishValue);
+    onChangeComplete?.(finishValue, draggingIndex);
   });
 
   const onDelete = (index: number) => {
@@ -406,7 +406,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           !onAfterChange,
           '[rc-slider] `onAfterChange` is deprecated. Please use `onChangeComplete` instead.',
         );
-        onChangeComplete?.(nextValue);
+        onChangeComplete?.(nextValue, draggingIndex);
       }
     }
   };
