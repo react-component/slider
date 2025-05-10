@@ -111,7 +111,7 @@ describe('Slider', () => {
       keyCode: keyCode.UP,
     });
 
-    expect(onChange).toHaveBeenCalledWith(51);
+    expect(onChange).toHaveBeenCalledWith(51, -1);
   });
 
   it('decreases the value for reverse-vertical when key "up" is pressed', () => {
@@ -122,7 +122,7 @@ describe('Slider', () => {
       keyCode: keyCode.UP,
     });
 
-    expect(onChange).toHaveBeenCalledWith(49);
+    expect(onChange).toHaveBeenCalledWith(49, -1);
   });
 
   it('increases the value when key "right" is pressed', () => {
@@ -133,7 +133,7 @@ describe('Slider', () => {
       keyCode: keyCode.RIGHT,
     });
 
-    expect(onChange).toHaveBeenCalledWith(51);
+    expect(onChange).toHaveBeenCalledWith(51, -1);
   });
 
   it('it should trigger onAfterChange when key pressed', () => {
@@ -161,7 +161,7 @@ describe('Slider', () => {
       keyCode: keyCode.RIGHT,
     });
 
-    expect(onChange).toHaveBeenCalledWith(49);
+    expect(onChange).toHaveBeenCalledWith(49, -1);
   });
 
   it('increases the value when key "page up" is pressed, by a factor 2', () => {
@@ -172,7 +172,7 @@ describe('Slider', () => {
       keyCode: keyCode.PAGE_UP,
     });
 
-    expect(onChange).toHaveBeenCalledWith(52);
+    expect(onChange).toHaveBeenCalledWith(52, -1);
   });
 
   it('decreases the value when key "down" is pressed', () => {
@@ -183,7 +183,7 @@ describe('Slider', () => {
       keyCode: keyCode.DOWN,
     });
 
-    expect(onChange).toHaveBeenCalledWith(49);
+    expect(onChange).toHaveBeenCalledWith(49, -1);
   });
 
   it('decreases the value when key "left" is pressed', () => {
@@ -197,7 +197,7 @@ describe('Slider', () => {
       keyCode: keyCode.LEFT,
     });
 
-    expect(onChange).toHaveBeenCalledWith(49);
+    expect(onChange).toHaveBeenCalledWith(49, -1);
     expect(onChangeComplete).not.toHaveBeenCalled();
 
     fireEvent.keyUp(container.getElementsByClassName('rc-slider-handle')[0], {
@@ -214,22 +214,22 @@ describe('Slider', () => {
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.LEFT,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 49]);
+    expect(onChange).toHaveBeenCalledWith([20, 49], -1);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.RIGHT,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 50]);
+    expect(onChange).toHaveBeenCalledWith([20, 50], -1);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.UP,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 51]);
+    expect(onChange).toHaveBeenCalledWith([20, 51], -1);
 
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.DOWN,
     });
-    expect(onChange).toHaveBeenCalledWith([20, 50]);
+    expect(onChange).toHaveBeenCalledWith([20, 50], -1);
   });
 
   it('decreases the value when key "page down" is pressed, by a factor 2', () => {
@@ -240,7 +240,7 @@ describe('Slider', () => {
       keyCode: keyCode.PAGE_DOWN,
     });
 
-    expect(onChange).toHaveBeenCalledWith(48);
+    expect(onChange).toHaveBeenCalledWith(48, -1);
   });
 
   it('sets the value to minimum when key "home" is pressed', () => {
@@ -251,7 +251,7 @@ describe('Slider', () => {
       keyCode: keyCode.HOME,
     });
 
-    expect(onChange).toHaveBeenCalledWith(0);
+    expect(onChange).toHaveBeenCalledWith(0, -1);
   });
 
   it('sets the value to maximum when the key "end" is pressed', () => {
@@ -262,7 +262,7 @@ describe('Slider', () => {
       keyCode: keyCode.END,
     });
 
-    expect(onChange).toHaveBeenCalledWith(100);
+    expect(onChange).toHaveBeenCalledWith(100, -1);
   });
 
   describe('when component has fixed values', () => {
@@ -280,7 +280,7 @@ describe('Slider', () => {
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
         keyCode: keyCode.UP,
       });
-      expect(onChange).toHaveBeenCalledWith(100);
+      expect(onChange).toHaveBeenCalledWith(100, -1);
     });
 
     it('increases the value when key "right" is pressed', () => {
@@ -297,7 +297,7 @@ describe('Slider', () => {
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
         keyCode: keyCode.RIGHT,
       });
-      expect(onChange).toHaveBeenCalledWith(100);
+      expect(onChange).toHaveBeenCalledWith(100, -1);
     });
 
     it('decreases the value when key "down" is pressed', () => {
@@ -314,7 +314,7 @@ describe('Slider', () => {
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
         keyCode: keyCode.DOWN,
       });
-      expect(onChange).toHaveBeenCalledWith(20);
+      expect(onChange).toHaveBeenCalledWith(20, -1);
     });
 
     it('decreases the value when key "left" is pressed', () => {
@@ -331,7 +331,7 @@ describe('Slider', () => {
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
         keyCode: keyCode.LEFT,
       });
-      expect(onChange).toHaveBeenCalledWith(20);
+      expect(onChange).toHaveBeenCalledWith(20, -1);
     });
 
     it('sets the value to minimum when key "home" is pressed', () => {
@@ -348,7 +348,7 @@ describe('Slider', () => {
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
         keyCode: keyCode.HOME,
       });
-      expect(onChange).toHaveBeenCalledWith(20);
+      expect(onChange).toHaveBeenCalledWith(20, -1);
     });
 
     it('sets the value to maximum when the key "end" is pressed', () => {
@@ -365,7 +365,7 @@ describe('Slider', () => {
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
         keyCode: keyCode.END,
       });
-      expect(onChange).toHaveBeenCalledWith(100);
+      expect(onChange).toHaveBeenCalledWith(100, -1);
     });
   });
 
@@ -387,17 +387,17 @@ describe('Slider', () => {
 
     // 0, [3], 7, 10
     fireEvent.keyDown(handler, { keyCode: keyCode.UP });
-    expect(onChange).toHaveBeenCalledWith(3);
+    expect(onChange).toHaveBeenCalledWith(3, -1);
 
     // 0, 3, [7], 10
     onChange.mockReset();
     fireEvent.keyDown(handler, { keyCode: keyCode.UP });
-    expect(onChange).toHaveBeenCalledWith(7);
+    expect(onChange).toHaveBeenCalledWith(7, -1);
 
     // 0, 3, 7, [10]
     onChange.mockReset();
     fireEvent.keyDown(handler, { keyCode: keyCode.UP });
-    expect(onChange).toHaveBeenCalledWith(10);
+    expect(onChange).toHaveBeenCalledWith(10, -1);
 
     // 0, 3, 7, [10]
     onChange.mockReset();
@@ -407,17 +407,17 @@ describe('Slider', () => {
     // 0, 3, [7], 10
     onChange.mockReset();
     fireEvent.keyDown(handler, { keyCode: keyCode.DOWN });
-    expect(onChange).toHaveBeenCalledWith(7);
+    expect(onChange).toHaveBeenCalledWith(7, -1);
 
     // 0, [3], 7, 10
     onChange.mockReset();
     fireEvent.keyDown(handler, { keyCode: keyCode.DOWN });
-    expect(onChange).toHaveBeenCalledWith(3);
+    expect(onChange).toHaveBeenCalledWith(3, -1);
 
     // [0], 3, 7, 10
     onChange.mockReset();
     fireEvent.keyDown(handler, { keyCode: keyCode.DOWN });
-    expect(onChange).toHaveBeenCalledWith(0);
+    expect(onChange).toHaveBeenCalledWith(0, -1);
 
     // [0], 3, 7, 10
     onChange.mockReset();
@@ -519,7 +519,7 @@ describe('Slider', () => {
         clientX: 20,
       });
 
-      expect(onChange).toHaveBeenCalledWith(20);
+      expect(onChange).toHaveBeenCalledWith(20, -1);
     });
 
     it('rtl', () => {
@@ -529,7 +529,7 @@ describe('Slider', () => {
         clientX: 20,
       });
 
-      expect(onChange).toHaveBeenCalledWith(80);
+      expect(onChange).toHaveBeenCalledWith(80, -1);
     });
 
     it('btt', () => {
@@ -539,7 +539,7 @@ describe('Slider', () => {
         clientY: 93,
       });
 
-      expect(onChange).toHaveBeenCalledWith(7);
+      expect(onChange).toHaveBeenCalledWith(7, -1);
     });
 
     it('ttb', () => {
@@ -549,7 +549,7 @@ describe('Slider', () => {
         clientY: 93,
       });
 
-      expect(onChange).toHaveBeenCalledWith(93);
+      expect(onChange).toHaveBeenCalledWith(93, -1);
     });
 
     it('null value click to become 2 values', () => {
@@ -559,7 +559,7 @@ describe('Slider', () => {
         clientX: 20,
       });
 
-      expect(onChange).toHaveBeenCalledWith([20, 20]);
+      expect(onChange).toHaveBeenCalledWith([20, 20], -1);
     });
 
     it('should call onBeforeChange, onChange, and onAfterChange', () => {
@@ -578,12 +578,12 @@ describe('Slider', () => {
       });
 
       expect(onBeforeChange).toHaveBeenCalledWith(20);
-      expect(onChange).toHaveBeenCalledWith(20);
+      expect(onChange).toHaveBeenCalledWith(20, -1);
       expect(onAfterChange).not.toHaveBeenCalled();
       fireEvent.mouseUp(container.querySelector('.rc-slider'), {
         clientX: 20,
       });
-      expect(onAfterChange).toHaveBeenCalledWith(20);
+      expect(onAfterChange).toHaveBeenCalledWith(20, 0);
     });
   });
 
@@ -616,7 +616,7 @@ describe('Slider', () => {
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle'), { keyCode: keyCode.RIGHT });
 
-    expect(onChange).toHaveBeenCalledWith(2);
+    expect(onChange).toHaveBeenCalledWith(2, -1);
     expect(container.querySelector('.rc-slider-handle').style.left).toBe('100%');
   });
 
@@ -626,7 +626,7 @@ describe('Slider', () => {
       <Slider min={0} max={1} step={0.01} defaultValue={0.81} onChange={onChange} />,
     );
     fireEvent.keyDown(container.querySelector('.rc-slider-handle'), { keyCode: keyCode.RIGHT });
-    expect(onChange).toHaveBeenCalledWith(0.82);
+    expect(onChange).toHaveBeenCalledWith(0.82, -1);
   });
 
   it('onAfterChange should return number', () => {
@@ -639,7 +639,7 @@ describe('Slider', () => {
     fireEvent.mouseUp(container.querySelector('.rc-slider'), {
       clientX: 20,
     });
-    expect(onAfterChange).toHaveBeenCalledWith(20);
+    expect(onAfterChange).toHaveBeenCalledWith(20, 0);
   });
 
   // https://github.com/react-component/slider/pull/948
@@ -649,13 +649,13 @@ describe('Slider', () => {
     fireEvent.mouseDown(container.querySelector('.rc-slider'), {
       clientX: 20,
     });
-    expect(onChange).toHaveBeenLastCalledWith(20);
+    expect(onChange).toHaveBeenLastCalledWith(20, -1);
 
     // Drag
     const mouseMove = createEvent.mouseMove(document);
     mouseMove.pageX = 100;
     fireEvent(document, mouseMove);
-    expect(onChange).toHaveBeenLastCalledWith(100);
+    expect(onChange).toHaveBeenLastCalledWith(100, 0);
   });
 
   it('should render Slider with included=false', () => {
@@ -665,7 +665,7 @@ describe('Slider', () => {
 
   it('tipFormatter should not crash with undefined value', () => {
     [undefined, null].forEach((value) => {
-      render(<Slider value={value} tooltip={{ open: true }} styles={{ tracks: {} }}/>);
+      render(<Slider value={value} tooltip={{ open: true }} styles={{ tracks: {} }} />);
     });
   });
 });
