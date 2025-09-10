@@ -3,7 +3,7 @@ import Slider from 'rc-slider';
 import type { TooltipRef } from 'rc-tooltip';
 import Tooltip from 'rc-tooltip';
 import 'rc-tooltip/assets/bootstrap.css';
-import raf from 'rc-util/lib/raf';
+import raf from '@rc-component/util/lib/raf';
 import * as React from 'react';
 
 interface HandleTooltipProps {

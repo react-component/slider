@@ -1,8 +1,8 @@
+import useControlledState from '@rc-component/util/lib/hooks/useControlledState';
+import useEvent from '@rc-component/util/lib/hooks/useEvent';
+import isEqual from '@rc-component/util/lib/isEqual';
+import warning from '@rc-component/util/lib/warning';
 import cls from 'classnames';
-import useEvent from 'rc-util/lib/hooks/useEvent';
-import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import isEqual from 'rc-util/lib/isEqual';
-import warning from 'rc-util/lib/warning';
 import * as React from 'react';
 import type { HandlesProps, HandlesRef } from './Handles';
 import Handles from './Handles';
@@ -250,9 +250,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   );
 
   // ============================ Values ============================
-  const [mergedValue, setValue] = useMergedState<number | number[], number[]>(defaultValue, {
-    value,
-  });
+  const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
   const rawValues = React.useMemo(() => {
     const valueList =

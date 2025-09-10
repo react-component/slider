@@ -1,6 +1,6 @@
 import * as React from 'react';
-import useEvent from 'rc-util/lib/hooks/useEvent';
-import useLayoutEffect from 'rc-util/lib/hooks/useLayoutEffect';
+import useEvent from '@rc-component/util/lib/hooks/useEvent';
+import useLayoutEffect from '@rc-component/util/lib/hooks/useLayoutEffect';
 import { UnstableContext } from '../context';
 import type { Direction, OnStartMove } from '../interface';
 import type { OffsetValues } from './useOffset';

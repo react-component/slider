@@ -1,5 +1,5 @@
 import cls from 'classnames';
-import KeyCode from 'rc-util/lib/KeyCode';
+import KeyCode from '@rc-component/util/lib/KeyCode';
 import * as React from 'react';
 import SliderContext from '../context';
 import type { OnStartMove } from '../interface';

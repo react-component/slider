@@ -1,7 +1,7 @@
 /* eslint-disable max-len, no-undef */
 import '@testing-library/jest-dom';
 import { fireEvent, render } from '@testing-library/react';
-import { spyElementPrototypes } from 'rc-util/lib/test/domHook';
+import { spyElementPrototypes } from '@rc-component/util/lib/test/domHook';
 import React from 'react';
 import Slider from '../src';
 
