@@ -41,8 +41,8 @@ Online examples: https://slider.react-component.now.sh/
 
 ## Slider
 ```js
-import Slider from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import Slider from '@rc-component/slider';
+import '@rc-component/slider/assets/index.css';
 
 export default () => (
   <>
@@ -55,8 +55,8 @@ export default () => (
 Please refer to [#825](https://github.com/react-component/slider/issues/825) for information regarding usage of `Range`.
 An example:
 ```js
-import Slider, { Range } from 'rc-slider';
-import 'rc-slider/assets/index.css';
+import Slider, { Range } from '@rc-component/slider';
+import '@rc-component/slider/assets/index.css';
 
 export default () => (
   <>
@@ -78,7 +78,7 @@ export default () => (
 An extension to make Slider or Range support Tooltip on handle.
 
 ```js
-const Slider = require('rc-slider');
+const Slider = require('@rc-component/slider');
 const createSliderWithTooltip = Slider.createSliderWithTooltip;
 const Range = createSliderWithTooltip(Slider.Range);
 ```

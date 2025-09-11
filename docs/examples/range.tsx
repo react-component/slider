@@ -1,5 +1,5 @@
 /* eslint react/no-multi-comp: 0, no-console: 0 */
-import Slider from 'rc-slider';
+import Slider from '@rc-component/slider';
 import React from 'react';
 import '../../assets/index.less';
 
