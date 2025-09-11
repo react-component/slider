@@ -1,4 +1,4 @@
-import Slider from 'rc-slider';
+import Slider from '@rc-component/slider';
 import React from 'react';
 import '../../assets/index.less';
 
