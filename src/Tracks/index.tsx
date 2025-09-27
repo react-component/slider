@@ -1,4 +1,4 @@
-import cls from 'classnames';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import SliderContext from '../context';
 import type { OnStartMove } from '../interface';
@@ -47,13 +47,13 @@ const Tracks: React.FC<TrackProps> = (props) => {
 
   // ========================== Render ==========================
   const tracksNode =
-      trackList?.length && (classNames.tracks || styles.tracks) ? (
+    trackList?.length && (classNames.tracks || styles.tracks) ? (
       <Track
         index={null}
         prefixCls={prefixCls}
         start={trackList[0].start}
         end={trackList[trackList.length - 1].end}
-        replaceCls={cls(classNames.tracks, `${prefixCls}-tracks`)}
+        replaceCls={clsx(classNames.tracks, `${prefixCls}-tracks`)}
         style={styles.tracks}
       />
     ) : null;

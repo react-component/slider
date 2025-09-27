@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom';
 import { createEvent, fireEvent, render } from '@testing-library/react';
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 import keyCode from '@rc-component/util/lib/KeyCode';
 import { spyElementPrototypes } from '@rc-component/util/lib/test/domHook';
 import React from 'react';
@@ -598,9 +598,7 @@ describe('Slider', () => {
     const { container } = render(
       <Slider
         handleRender={(node) =>
-          React.cloneElement(node, {
-            className: classNames(node.props.className, 'custom-handle'),
-          })
+          React.cloneElement(node, { className: clsx(node.props.className, 'custom-handle') })
         }
       />,
     );
@@ -665,7 +663,7 @@ describe('Slider', () => {
 
   it('tipFormatter should not crash with undefined value', () => {
     [undefined, null].forEach((value) => {
-      render(<Slider value={value} tooltip={{ open: true }} styles={{ tracks: {} }}/>);
+      render(<Slider value={value} tooltip={{ open: true }} styles={{ tracks: {} }} />);
     });
   });
 });

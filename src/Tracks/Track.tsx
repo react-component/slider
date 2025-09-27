@@ -1,4 +1,4 @@
-import cls from 'classnames';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import SliderContext from '../context';
 import type { OnStartMove } from '../interface';
@@ -57,7 +57,7 @@ const Track: React.FC<TrackProps> = (props) => {
 
   const className =
     replaceCls ||
-    cls(
+    clsx(
       trackPrefixCls,
       {
         [`${trackPrefixCls}-${index + 1}`]: index !== null && range,

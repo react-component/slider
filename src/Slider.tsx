@@ -2,7 +2,7 @@ import useControlledState from '@rc-component/util/lib/hooks/useControlledState'
 import useEvent from '@rc-component/util/lib/hooks/useEvent';
 import isEqual from '@rc-component/util/lib/isEqual';
 import warning from '@rc-component/util/lib/warning';
-import cls from 'classnames';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import type { HandlesProps, HandlesRef } from './Handles';
 import Handles from './Handles';
@@ -573,7 +573,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     <SliderContext.Provider value={context}>
       <div
         ref={containerRef}
-        className={cls(prefixCls, className, {
+        className={clsx(prefixCls, className, {
           [`${prefixCls}-disabled`]: disabled,
           [`${prefixCls}-vertical`]: vertical,
           [`${prefixCls}-horizontal`]: !vertical,
@@ -584,7 +584,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         id={id}
       >
         <div
-          className={cls(`${prefixCls}-rail`, classNames?.rail)}
+          className={clsx(`${prefixCls}-rail`, classNames?.rail)}
           style={{ ...railStyle, ...styles?.rail }}
         />
 

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import SliderContext from '../context';
 import { getDirectionStyle } from '../util';
@@ -23,7 +23,7 @@ const Mark: React.FC<MarkProps> = (props) => {
 
   return (
     <span
-      className={classNames(textCls, {
+      className={clsx(textCls, {
         [`${textCls}-active`]: included && includedStart <= value && value <= includedEnd,
       })}
       style={{ ...positionStyle, ...style }}
