@@ -1,4 +1,4 @@
-import cls from 'classnames';
+import { clsx } from 'clsx';
 import KeyCode from '@rc-component/util/lib/KeyCode';
 import * as React from 'react';
 import SliderContext from '../context';
@@ -184,7 +184,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
   let handleNode = (
     <div
       ref={ref}
-      className={cls(
+      className={clsx(
         handlePrefixCls,
         {
           [`${handlePrefixCls}-${valueIndex + 1}`]: valueIndex !== null && range,
@@ -193,11 +193,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
         },
         classNames.handle,
       )}
-      style={{
-        ...positionStyle,
-        ...style,
-        ...styles.handle,
-      }}
+      style={{ ...positionStyle, ...style, ...styles.handle }}
       {...divProps}
       {...restProps}
     />

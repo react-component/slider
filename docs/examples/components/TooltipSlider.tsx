@@ -43,7 +43,7 @@ const HandleTooltip: React.FC<HandleTooltipProps> = (props) => {
     <Tooltip
       placement="top"
       overlay={tipFormatter(value)}
-      overlayInnerStyle={{ minHeight: 'auto' }}
+      styles={{ container: { minHeight: 'auto' } }}
       ref={tooltipRef}
       visible={visible}
       {...restProps}

@@ -1,4 +1,4 @@
-import classNames from 'classnames';
+import { clsx } from 'clsx';
 import * as React from 'react';
 import SliderContext from '../context';
 import { getDirectionStyle } from '../util';
@@ -33,7 +33,7 @@ const Dot: React.FC<DotProps> = (props) => {
 
   return (
     <span
-      className={classNames(dotClassName, { [`${dotClassName}-active`]: active })}
+      className={clsx(dotClassName, { [`${dotClassName}-active`]: active })}
       style={mergedStyle}
     />
   );
