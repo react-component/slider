@@ -214,6 +214,24 @@ export default function useOffset(
           nextValues[valueIndex + 1] - pushNum,
         );
       }
+
+      if (valueIndex > 0 && nextValues[valueIndex - 1] === originValue && pushNum === 0) {
+        nextValues[valueIndex] = Math.max(
+          nextValues[valueIndex],
+          nextValues[valueIndex - 1] + pushNum,
+        );
+      }
+
+      if (
+        valueIndex < nextValues.length - 1 &&
+        nextValues[valueIndex + 1] === originValue &&
+        pushNum === 0
+      ) {
+        nextValues[valueIndex] = Math.min(
+          nextValues[valueIndex],
+          nextValues[valueIndex + 1] + pushNum,
+        );
+      }
     } else if (typeof pushable === 'number' || pushable === null) {
       // >>>>> Pushable
       // =============== Push ==================
