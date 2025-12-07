@@ -258,7 +258,7 @@ describe('Range', () => {
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
       keyCode: keyCode.UP,
     });
-    expect(onChange).toHaveBeenCalledWith([30, 40]);
+    expect(onChange).toHaveBeenCalledWith([30, 40], -1);
 
     onChange.mockReset();
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], {
@@ -270,7 +270,7 @@ describe('Range', () => {
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
       keyCode: keyCode.UP,
     });
-    expect(onChange).toHaveBeenCalledWith([30, 41]);
+    expect(onChange).toHaveBeenCalledWith([30, 41], -1);
 
     // Push to the edge
     for (let i = 0; i < 99; i += 1) {
@@ -278,7 +278,7 @@ describe('Range', () => {
         keyCode: keyCode.DOWN,
       });
     }
-    expect(onChange).toHaveBeenCalledWith([30, 40]);
+    expect(onChange).toHaveBeenCalledWith([30, 40], -1);
 
     onChange.mockReset();
     fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], {
@@ -299,7 +299,7 @@ describe('Range', () => {
         keyCode: keyCode.UP,
       });
     }
-    expect(onChange).toHaveBeenCalledWith([80, 90, 100]);
+    expect(onChange).toHaveBeenCalledWith([80, 90, 100], -1);
 
     // Center to Left
     for (let i = 0; i < 99; i += 1) {
@@ -307,7 +307,7 @@ describe('Range', () => {
         keyCode: keyCode.DOWN,
       });
     }
-    expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
+    expect(onChange).toHaveBeenCalledWith([0, 10, 100], -1);
 
     // Right to Right
     for (let i = 0; i < 99; i += 1) {
@@ -315,7 +315,7 @@ describe('Range', () => {
         keyCode: keyCode.DOWN,
       });
     }
-    expect(onChange).toHaveBeenCalledWith([0, 10, 20]);
+    expect(onChange).toHaveBeenCalledWith([0, 10, 20], -1);
 
     // Center to Right
     for (let i = 0; i < 99; i += 1) {
@@ -323,7 +323,7 @@ describe('Range', () => {
         keyCode: keyCode.UP,
       });
     }
-    expect(onChange).toHaveBeenCalledWith([0, 90, 100]);
+    expect(onChange).toHaveBeenCalledWith([0, 90, 100], -1);
   });
 
   describe('should render correctly when allowCross', () => {
@@ -337,7 +337,7 @@ describe('Range', () => {
         // Do move
         func(container);
 
-        expect(onChange).toHaveBeenCalledWith([40, 100]);
+        expect(onChange).toHaveBeenCalledWith([40, 100], 0);
 
         unmount();
       });
@@ -355,7 +355,7 @@ describe('Range', () => {
       // Do move
       doMouseMove(container, 0, -10);
 
-      expect(onChange).toHaveBeenCalledWith([30, 40]);
+      expect(onChange).toHaveBeenCalledWith([30, 40], 0);
     });
 
     it('vertical', () => {
@@ -367,7 +367,7 @@ describe('Range', () => {
       // Do move
       doMouseMove(container, 0, -10);
 
-      expect(onChange).toHaveBeenCalledWith([30, 40]);
+      expect(onChange).toHaveBeenCalledWith([30, 40], 0);
     });
 
     it('vertical & reverse', () => {
@@ -379,7 +379,7 @@ describe('Range', () => {
       // Do move
       doMouseMove(container, 0, -10);
 
-      expect(onChange).toHaveBeenCalledWith([10, 40]);
+      expect(onChange).toHaveBeenCalledWith([10, 40], 0);
     });
   });
 
@@ -433,7 +433,7 @@ describe('Range', () => {
         // Do move
         func(container);
 
-        expect(onChange).toHaveBeenCalledWith([20, 50]);
+        expect(onChange).toHaveBeenCalledWith([20, 50], -1);
 
         unmount();
       });
@@ -663,7 +663,7 @@ describe('Range', () => {
 
       doMouseDown(container, 50, 'rc-slider', true);
 
-      expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
+      expect(onChange).toHaveBeenCalledWith([0, 50, 100], -1);
     });
 
     it('can not editable with draggableTrack at same time', () => {
@@ -692,13 +692,13 @@ describe('Range', () => {
         );
 
         doMouseMove(container, 0, 1000);
-        expect(onChange).toHaveBeenCalledWith([50, 100]);
+        expect(onChange).toHaveBeenCalledWith([50, 100], 0);
 
         expect(container.querySelectorAll('.rc-slider-track')).toHaveLength(1);
 
         // Fire mouse up
         fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
-        expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+        expect(onChangeComplete).toHaveBeenCalledWith([50, 100], 0);
       });
 
       it('out and back', () => {
@@ -716,14 +716,14 @@ describe('Range', () => {
         );
 
         doMouseMove(container, 0, 1000);
-        expect(onChange).toHaveBeenCalledWith([50]);
+        expect(onChange).toHaveBeenCalledWith([50], 0);
 
         doMouseDrag(0);
-        expect(onChange).toHaveBeenCalledWith([0, 50]);
+        expect(onChange).toHaveBeenCalledWith([0, 50], 0);
 
         // Fire mouse up
         fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
-        expect(onChangeComplete).toHaveBeenCalledWith([0, 50]);
+        expect(onChangeComplete).toHaveBeenCalledWith([0, 50], 0);
       });
 
       it('controlled', () => {
@@ -754,7 +754,7 @@ describe('Range', () => {
 
         // Fire mouse up
         fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
-        expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
+        expect(onChangeComplete).toHaveBeenCalledWith([50, 100], 0);
       });
     });
 
@@ -780,7 +780,7 @@ describe('Range', () => {
         keyCode: keyCode.DELETE,
       });
 
-      expect(onChange).toHaveBeenCalledWith([0, 100]);
+      expect(onChange).toHaveBeenCalledWith([0, 100], -1);
 
       // Clear all
       fireEvent.keyDown(container.querySelector('.rc-slider-handle'), {
@@ -789,7 +789,7 @@ describe('Range', () => {
       fireEvent.keyDown(container.querySelector('.rc-slider-handle'), {
         keyCode: keyCode.DELETE,
       });
-      expect(onChange).toHaveBeenCalledWith([]);
+      expect(onChange).toHaveBeenCalledWith([], -1);
 
       // 2 handle
       expect(container.querySelectorAll('.rc-slider-handle')).toHaveLength(0);
@@ -820,7 +820,7 @@ describe('Range', () => {
 
       // Mouse
       doMouseMove(container, 0, 1000);
-      expect(onChange).toHaveBeenCalledWith([100]);
+      expect(onChange).toHaveBeenCalledWith([100], 0);
     });
 
     it('maxCount not add', () => {
@@ -836,7 +836,7 @@ describe('Range', () => {
       );
 
       doMouseDown(container, 50, 'rc-slider', true);
-      expect(onChange).toHaveBeenCalledWith([0, 50]);
+      expect(onChange).toHaveBeenCalledWith([0, 50], -1);
     });
   });
 });
