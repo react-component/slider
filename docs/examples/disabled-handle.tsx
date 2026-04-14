@@ -9,12 +9,12 @@ const style: React.CSSProperties = {
 };
 
 const BasicDisabledHandle = () => {
-  const [value, setValue] = useState([0, 30, 60, 100]);
+  const [value, setValue] = useState<number[]>([0, 30, 60, 100]);
   const [disabled, setDisabled] = useState([true, false, false, true]);
 
   return (
     <div>
-      <Slider range value={value} onChange={setValue} disabled={disabled} />
+      <Slider range value={value} onChange={(v) => setValue(v as number[])} disabled={disabled} />
       <div style={{ marginTop: 16 }}>
         {value.map((val, index) => (
           <label key={index} style={{ marginRight: 16 }}>
@@ -36,11 +36,11 @@ const BasicDisabledHandle = () => {
 };
 
 const DisabledHandleAsBoundary = () => {
-  const [value, setValue] = useState([10, 50, 90]);
+  const [value, setValue] = useState<number[]>([10, 50, 90]);
 
   return (
     <div>
-      <Slider range value={value} onChange={setValue} disabled={[false, true, false]} />
+      <Slider range value={value} onChange={(v) => setValue(v as number[])} disabled={[false, true, false]} />
       <p style={{ marginTop: 8, color: '#999' }}>
         Middle handle (50) is disabled and acts as a boundary.
         First handle cannot go beyond 50, third handle cannot go below 50.
@@ -51,11 +51,11 @@ const DisabledHandleAsBoundary = () => {
 };
 
 const MultipleDisabledBoundaries = () => {
-  const [value, setValue] = useState([10, 30, 50, 70, 90]);
+  const [value, setValue] = useState<number[]>([10, 30, 50, 70, 90]);
 
   return (
     <div>
-      <Slider range value={value} onChange={setValue} disabled={[true, false, true, false, true]} />
+      <Slider range value={value} onChange={(v) => setValue(v as number[])} disabled={[true, false, true, false, true]} />
       <p style={{ marginTop: 8, color: '#999' }}>
         Handles at 10, 50, 90 are disabled.
         Handle at 30 can only move between 10-50, handle at 70 can only move between 50-90.
