@@ -191,9 +191,10 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const disabled = React.useMemo(() => {
     if (typeof rawDisabled === 'boolean') {
       return rawDisabled;
-    }
-    return rawDisabled.every((d) => d);
-  }, [rawDisabled]);
+    };
+
+    return Array.isArray(value) && value.length === rawDisabled.length && rawDisabled.every(Boolean);
+  }, [rawDisabled, value]);
 
   const isHandleDisabled = React.useCallback(
     (index: number) => {
@@ -275,8 +276,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       mergedValue === null || mergedValue === undefined
         ? []
         : Array.isArray(mergedValue)
-        ? mergedValue
-        : [mergedValue];
+          ? mergedValue
+          : [mergedValue];
 
     const [val0 = mergedMin] = valueList;
     let returnValues = mergedValue === null ? [] : [val0];

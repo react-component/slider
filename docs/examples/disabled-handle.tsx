@@ -8,13 +8,53 @@ const style: React.CSSProperties = {
   margin: 50,
 };
 
-const BasicDisabledHandle = () => {
-  const [value, setValue] = useState<number[]>([0, 30, 60, 100]);
-  const [disabled, setDisabled] = useState([true, false, false, true]);
+// Basic editable with disabled handles
+const EditableWithDisabled = () => {
+  const [value, setValue] = useState<number[]>([0, 30, 100]);
+  const [disabled, setDisabled] = useState<boolean[]>([true, false, true]);
 
   return (
     <div>
-      <Slider range value={value} onChange={(v) => setValue(v as number[])} disabled={disabled} />
+      <Slider
+        range={{
+          editable: true,
+          minCount: 2,
+          maxCount: 5,
+        }}
+        value={value}
+        onChange={(v) => setValue(v as number[])}
+        disabled={disabled}
+      />
+      <div style={{ marginTop: 16 }}>
+        {value.map((val, index) => (
+          <label key={index} style={{ marginRight: 16 }}>
+            <input
+              type="checkbox"
+              checked={disabled[index]}
+              onChange={() => {
+                const newDisabled = [...disabled];
+                newDisabled[index] = !newDisabled[index];
+                setDisabled(newDisabled);
+              }}
+            />
+            Handle {index + 1} ({val}) {disabled[index] ? 'Disabled' : 'Enabled'}
+          </label>
+        ))}
+      </div>
+      <p style={{ marginTop: 8, color: '#999', fontSize: 12 }}>
+        Try: Click track to add handle • Drag handle to edge to delete • Toggle checkboxes to disable handles
+      </p>
+    </div>
+  );
+};
+
+const BasicDisabledHandle = () => {
+  const [value, setValue] = useState<number[]>([0, 30, 60, 100]);
+  const [disabled, setDisabled] = useState([true]);
+
+  return (
+    <div>
+      <Slider range={{ draggableTrack: true }} value={value} onChange={(v) => setValue(v as number[])} disabled={disabled} />
       <div style={{ marginTop: 16 }}>
         {value.map((val, index) => (
           <label key={index} style={{ marginRight: 16 }}>
@@ -50,25 +90,11 @@ const DisabledHandleAsBoundary = () => {
   );
 };
 
-const MultipleDisabledBoundaries = () => {
-  const [value, setValue] = useState<number[]>([10, 30, 50, 70, 90]);
-
-  return (
-    <div>
-      <Slider range value={value} onChange={(v) => setValue(v as number[])} disabled={[true, false, true, false, true]} />
-      <p style={{ marginTop: 8, color: '#999' }}>
-        Handles at 10, 50, 90 are disabled.
-        Handle at 30 can only move between 10-50, handle at 70 can only move between 50-90.
-      </p>
-    </div>
-  );
-};
-
 export default () => (
   <div>
     <div style={style}>
-      <h3>Basic Disabled Handle</h3>
-      <p>Toggle checkboxes to disable/enable specific handles</p>
+      <h3>Disabled Handle + Draggable Track</h3>
+      <p>Toggle checkboxes to disable/enable specific handles. Drag the track area to move the range.</p>
       <BasicDisabledHandle />
     </div>
 
@@ -76,10 +102,12 @@ export default () => (
       <h3>Disabled Handle as Boundary</h3>
       <DisabledHandleAsBoundary />
     </div>
-
-    <div style={style}>
-      <h3>Multiple Disabled Boundaries</h3>
-      <MultipleDisabledBoundaries />
+    <div>
+      <div style={style}>
+        <h3>Editable + Disabled Array</h3>
+        <p>Toggle checkboxes to enable/disable handles in editable mode</p>
+        <EditableWithDisabled />
+      </div>
     </div>
   </div>
 );
