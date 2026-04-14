@@ -981,5 +981,27 @@ describe('Range', () => {
 
       expect(onChange).not.toHaveBeenCalled();
     });
+
+    it('all handles disabled: find nearest enabled returns -1', () => {
+      // This test specifically covers line 426 in Slider.tsx
+      // When all handles are disabled and clicking near one,
+      // the nearestIndex search returns -1 and returns early
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[0, 50, 100]} disabled={[true, true, true]} onChange={onChange} />,
+      );
+
+      // Click at position 10 (near first disabled handle)
+      const rail = container.querySelector('.rc-slider-rail');
+      const mouseDown = createEvent.mouseDown(rail);
+      Object.defineProperties(mouseDown, {
+        clientX: { get: () => 10 },
+        clientY: { get: () => 10 },
+      });
+      fireEvent(rail, mouseDown);
+
+      // Should not trigger onChange because all handles are disabled
+      expect(onChange).not.toHaveBeenCalled();
+    });
   });
 });
