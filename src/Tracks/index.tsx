@@ -14,8 +14,18 @@ export interface TrackProps {
 }
 
 const Tracks: React.FC<TrackProps> = (props) => {
-  const { prefixCls, style, values, startPoint, onStartMove } = props;
-  const { included, range, min, styles, classNames } = React.useContext(SliderContext);
+  const { prefixCls, style, values, startPoint, onStartMove: propsOnStartMove } = props;
+  const { included, range, min, styles, classNames, isHandleDisabled } = React.useContext(SliderContext);
+
+  const hasDisabledHandle = React.useMemo(() => {
+    if (!isHandleDisabled) return false;
+    for (let i = 0; i < values.length; i++) {
+      if (isHandleDisabled(i)) return true;
+    }
+    return false;
+  }, [isHandleDisabled, values.length]);
+
+  const onStartMove = hasDisabledHandle ? undefined : propsOnStartMove;
 
   // =========================== List ===========================
   const trackList = React.useMemo(() => {

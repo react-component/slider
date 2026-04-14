@@ -30,8 +30,9 @@ describe('Range', () => {
     start: number,
     element = 'rc-slider-handle',
     skipEventCheck = false,
+    index = 0,
   ) {
-    const ele = container.getElementsByClassName(element)[0];
+    const ele = container.getElementsByClassName(element)[index];
     const mouseDown = createEvent.mouseDown(ele);
     (mouseDown as any).pageX = start;
     (mouseDown as any).pageY = start;
@@ -65,8 +66,9 @@ describe('Range', () => {
     start: number,
     end: number,
     element = 'rc-slider-handle',
+    index = 0,
   ) {
-    doMouseDown(container, start, element);
+    doMouseDown(container, start, element, false, index);
 
     // Drag
     doMouseDrag(end);
@@ -837,6 +839,147 @@ describe('Range', () => {
 
       doMouseDown(container, 50, 'rc-slider', true);
       expect(onChange).toHaveBeenCalledWith([0, 50]);
+    });
+  });
+
+  describe('disabled as array', () => {
+    it('basic', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
+      );
+
+      // Disabled handles: no tabIndex, aria-disabled=true
+      expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
+      expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute('aria-disabled', 'true');
+
+      // Enabled handle: has tabIndex, aria-disabled=false
+      expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute('tabIndex');
+      expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute('aria-disabled', 'false');
+
+      // Keyboard: disabled handle should not respond
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.RIGHT });
+      expect(onChange).not.toHaveBeenCalled();
+
+      // Keyboard: enabled handle should respond
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.RIGHT });
+      expect(onChange).toHaveBeenCalledWith([0, 51, 100]);
+    });
+
+    it('drag disabled handle', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[20, 50]} disabled={[true, false]} onChange={onChange} />,
+      );
+
+      // Try to drag disabled first handle
+      doMouseMove(container, 20, 80, 'rc-slider-handle');
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('click slider to move nearest enabled handle', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
+      );
+
+      // Click near disabled handle at 0, should move enabled handle at 50
+      doMouseDown(container, 10, 'rc-slider', true);
+      expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
+    });
+
+    it('cannot cross disabled handle', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} onChange={onChange} />,
+      );
+
+      // Try to move first handle past disabled middle handle
+      for (let i = 0; i < 50; i++) {
+        fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.RIGHT });
+      }
+      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
+      expect(lastCall[0][0]).toBeLessThanOrEqual(50);
+    });
+
+    it('editable: cannot delete disabled handle', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range={{ editable: true }} defaultValue={[20, 50, 80]} disabled={[false, true, false]} onChange={onChange} />,
+      );
+
+      // Try to delete disabled middle handle
+      const handle = container.getElementsByClassName('rc-slider-handle')[1];
+      fireEvent.mouseEnter(handle);
+      fireEvent.keyDown(handle, { keyCode: keyCode.DELETE });
+      expect(onChange).not.toHaveBeenCalled();
+
+      // Try to drag out disabled handle
+      doMouseMove(container, 50, 1000, 'rc-slider-handle', 1);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('backward compatible with boolean', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[20, 50]} disabled={true} onChange={onChange} />,
+      );
+
+      expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
+      doMouseDown(container, 30, 'rc-slider', true);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('editable: cannot add handle between two disabled handles', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range={{ editable: true }} defaultValue={[20, 50, 80]} disabled={[true, true, false]} onChange={onChange} />,
+      );
+
+      // Click between 20 and 50, both are disabled
+      doMouseDown(container, 35, 'rc-slider', true);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('all handles disabled: click does nothing', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[20, 50]} disabled={[true, true]} onChange={onChange} />,
+      );
+
+      const rail = container.querySelector('.rc-slider-rail');
+      const mouseDown = createEvent.mouseDown(rail);
+      Object.defineProperties(mouseDown, {
+        clientX: { get: () => 30 },
+        clientY: { get: () => 30 },
+      });
+      fireEvent(rail, mouseDown);
+
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('draggableTrack disabled when any handle is disabled', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range={{ draggableTrack: true }} defaultValue={[0, 50]} disabled={[false, true]} onChange={onChange} />,
+      );
+
+      // Try to drag track - should not work because one handle is disabled
+      const track = container.getElementsByClassName('rc-slider-track')[0];
+      const mouseDown = createEvent.mouseDown(track);
+      Object.defineProperties(mouseDown, {
+        clientX: { get: () => 0 },
+        clientY: { get: () => 0 },
+      });
+      fireEvent(track, mouseDown);
+
+      // Drag
+      const mouseMove = createEvent.mouseMove(document);
+      (mouseMove as any).pageX = 20;
+      (mouseMove as any).pageY = 20;
+      fireEvent(document, mouseMove);
+
+      expect(onChange).not.toHaveBeenCalled();
     });
   });
 });

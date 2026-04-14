@@ -36,6 +36,7 @@ export default function useOffset(
   markList: InternalMarkObj[],
   allowCross: boolean,
   pushable: false | number,
+  isHandleDisabled?: (index: number) => boolean,
 ): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => Math.max(min, Math.min(max, val)),
@@ -193,8 +194,32 @@ export default function useOffset(
   const offsetValues: OffsetValues = (values, offset, valueIndex, mode = 'unit') => {
     const nextValues = values.map<number>(formatValue);
     const originValue = nextValues[valueIndex];
+
+    let minBound = min;
+    let maxBound = max;
+
+    if (isHandleDisabled) {
+      for (let i = valueIndex - 1; i >= 0; i -= 1) {
+        if (isHandleDisabled(i)) {
+          minBound = nextValues[i];
+          break;
+        }
+      }
+      for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
+        if (isHandleDisabled(i)) {
+          maxBound = nextValues[i];
+          break;
+        }
+      }
+    }
+
     const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;
+
+    // Apply disabled handle boundaries
+    if (isHandleDisabled) {
+      nextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, nextValues[valueIndex]));
+    }
 
     if (allowCross === false) {
       // >>>>> Allow Cross

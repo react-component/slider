@@ -26,6 +26,7 @@ function useDrag(
   offsetValues: OffsetValues,
   editable: boolean,
   minCount: number,
+  isHandleDisabled?: (index: number) => boolean,
 ): [
   draggingIndex: number,
   draggingValue: number,
@@ -91,6 +92,10 @@ function useDrag(
     (valueIndex: number, offsetPercent: number, deleteMark: boolean) => {
       if (valueIndex === -1) {
         // >>>> Dragging on the track
+        if (isHandleDisabled && originValues.some((_, index) => isHandleDisabled(index))) {
+          return;
+        }
+
         const startValue = originValues[0];
         const endValue = originValues[originValues.length - 1];
         const maxStartOffset = min - startValue;
@@ -126,6 +131,10 @@ function useDrag(
 
     // 如果是点击 track 触发的，需要传入变化后的初始值，而不能直接用 rawValues
     const initialValues = startValues || rawValues;
+    if (isHandleDisabled && isHandleDisabled(valueIndex)) {
+      return;
+    }
+
     const originValue = initialValues[valueIndex];
 
     setDraggingIndex(valueIndex);

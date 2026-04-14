@@ -105,6 +105,20 @@
       cursor: -webkit-grabbing;
       cursor: grabbing;
     }
+
+    &-disabled {
+      background-color: #fff;
+      border-color: @disabledColor;
+      box-shadow: none;
+      cursor: not-allowed;
+
+      &:hover,
+      &:active {
+        border-color: @disabledColor;
+        box-shadow: none;
+        cursor: not-allowed;
+      }
+    }
   }
 
   &-mark {
