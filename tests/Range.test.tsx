@@ -943,9 +943,9 @@ describe('Range', () => {
         />,
       );
 
-      // Cannot add between two disabled handles
       doMouseDown(container, 40, 'rc-slider', true);
       expect(onChange).not.toHaveBeenCalled();
+      expect(onDisabledChange).not.toHaveBeenCalled();
 
       // Can add when only one side is disabled
       rerender(
@@ -1015,6 +1015,71 @@ describe('Range', () => {
       rerender(<Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />);
       doMouseDown(container, 90, 'rc-slider', true);
       expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
+    });
+
+    it('pushable respects disabled handle boundaries', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[20, 40, 60, 80]} disabled={[false, true, false, false]} pushable onChange={onChange} />,
+      );
+
+      // Push first handle right - should stop at disabled handle (40)
+      for (let i = 0; i < 30; i++) {
+        fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.UP });
+      }
+
+      // First handle should not exceed 40 (position of disabled handle)
+      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
+      expect(lastCall[0][0]).toBeLessThanOrEqual(40);
+      // Second handle is disabled at 40
+      expect(lastCall[0][1]).toBe(40);
+    });
+
+    it('pushable revert respects disabled handles', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[10, 20, 90, 100]} disabled={[false, true, false, false]} pushable={5} onChange={onChange} />,
+      );
+
+      // Move last handle left - should push third handle but stop at disabled
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[3], { keyCode: keyCode.LEFT });
+
+      // Third handle should not go below disabled handle at 20
+      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
+      expect(lastCall[0][2]).toBeGreaterThanOrEqual(20);
+    });
+
+    it('keyboard home/end with disabled handles', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[20, 50, 80]} disabled={[true, false, true]} onChange={onChange} />,
+      );
+
+      // HOME key on enabled middle handle - should go to left disabled handle boundary (20)
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.HOME });
+      expect(onChange).toHaveBeenCalledWith([20, 20, 80]);
+
+      onChange.mockClear();
+
+      // END key on enabled middle handle - should go to right disabled handle boundary (80)
+      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.END });
+      expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
+    });
+
+    it('allowCross false with disabled handles', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} allowCross={false} onChange={onChange} />,
+      );
+
+      // Try to move first handle past disabled middle handle
+      for (let i = 0; i < 50; i++) {
+        fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.RIGHT });
+      }
+
+      // First handle should not cross disabled handle at 50
+      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
+      expect(lastCall[0][0]).toBeLessThanOrEqual(50);
     });
   });
 });
