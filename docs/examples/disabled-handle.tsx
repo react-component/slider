@@ -26,12 +26,13 @@ const EditableWithDisabled = () => {
         disabled={disabled}
         onDisabledChange={setDisabled}
       />
+      Slider disabled {JSON.stringify(disabled)}
       <div style={{ marginTop: 16 }}>
         {value.map((val, index) => (
           <label key={index} style={{ marginRight: 16 }}>
             <input
               type="checkbox"
-              checked={disabled[index]}
+              checked={!!disabled[index]}
               onChange={() => {
                 const newDisabled = [...disabled];
                 newDisabled[index] = !newDisabled[index];
@@ -56,12 +57,13 @@ const BasicDisabledHandle = () => {
   return (
     <div>
       <Slider range={{ draggableTrack: true }} value={value} onChange={(v) => setValue(v as number[])} disabled={disabled} />
+      Slider disabled {JSON.stringify(disabled)}
       <div style={{ marginTop: 16 }}>
         {value.map((val, index) => (
           <label key={index} style={{ marginRight: 16 }}>
             <input
               type="checkbox"
-              checked={disabled[index]}
+              checked={!!disabled[index]}
               onChange={() => {
                 const newDisabled = [...disabled];
                 newDisabled[index] = !newDisabled[index];
@@ -98,7 +100,7 @@ const SingleSlider = () => {
   return (
     <div>
       <Slider value={value1} onChange={(v) => setValue1(v as number)} disabled />
-        <br/>
+      <br />
       <Slider value={value2} onChange={(v) => setValue2(v as number)} disabled={false} />
     </div>
   );
