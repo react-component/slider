@@ -1064,5 +1064,33 @@ describe('Range', () => {
       expect(onChange).not.toHaveBeenCalled();
       expect(onDisabledChange).not.toHaveBeenCalled();
     });
+
+    it('click to move cannot cross disabled handle boundary', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range value={[20, 50, 80]} disabled={[true, false, false]} onChange={onChange} />,
+      );
+
+      // Click at position 10, which is left of disabled handle at 20
+      // Nearest enabled handle is 50, but it cannot cross below 20
+      doMouseDown(container, 10, 'rc-slider', true);
+
+      // Should move handle to 20 (boundary), not 10
+      expect(onChange).toHaveBeenCalledWith([20, 20, 80]);
+    });
+
+    it('click to move cannot cross disabled handle on right side', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />,
+      );
+
+      // Click at position 90, which is right of disabled handle at 80
+      // Nearest enabled handle is 50, but it cannot cross above 80
+      doMouseDown(container, 90, 'rc-slider', true);
+
+      // Should move handle to 80 (boundary), not 90
+      expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
+    });
   });
 });

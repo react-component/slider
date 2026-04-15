@@ -189,18 +189,19 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   const handlesRef = React.useRef<HandlesRef>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
+  const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
   // ============================ Disabled ============================
   const disabled = React.useMemo(() => {
     if (typeof rawDisabled === 'boolean') {
       return rawDisabled;
     }
-    if (Array.isArray(value)) {
-      return value.every((_, index) => rawDisabled[index]);
+    if (Array.isArray(rawDisabled)) {
+      const values = Array.isArray(mergedValue) ? mergedValue : [mergedValue];
+      return values.every((_, index) => rawDisabled[index]);
     }
-
     return false;
-  }, [rawDisabled, value]);
+  }, [rawDisabled, mergedValue]);
 
   const isHandleDisabled = React.useCallback(
     (index: number) => {
@@ -275,7 +276,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   );
 
   // ============================ Values ============================
-  const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
   const rawValues = React.useMemo(() => {
     const valueList =
@@ -330,8 +330,9 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       const newDisabled = [...rawDisabled];
 
       if (cloneNextValues.length > rawValues.length) {
-        const index = cloneNextValues.findIndex((item) => !rawValues.includes(item));
-        newDisabled.splice(index, 0, false);
+        const index = cloneNextValues.findIndex((item, i) => item !== rawValues[i]);
+        const insertIndex = index === -1 ? rawValues.length : index;
+        newDisabled.splice(insertIndex, 0, false);
       } else if (cloneNextValues.length < rawValues.length) {
         const index = rawValues.findIndex((item) => !cloneNextValues.includes(item));
         newDisabled.splice(index, 1);

@@ -244,16 +244,22 @@ export default function useOffset(
       // =============== Push ==================
 
       // >>>>>> Basic push
-      // End values
+      // End values (skip disabled handles)
       for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
+        if (isHandleDisabled?.(i)) {
+          break; // Stop pushing when hitting a disabled handle
+        }
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
         }
       }
 
-      // Start values
+      // Start values (skip disabled handles)
       for (let i = valueIndex; i > 0; i -= 1) {
+        if (isHandleDisabled?.(i - 1)) {
+          break; // Stop pushing when hitting a disabled handle
+        }
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
@@ -261,16 +267,22 @@ export default function useOffset(
       }
 
       // >>>>> Revert back to safe push range
-      // End to Start
+      // End to Start (skip disabled handles)
       for (let i = nextValues.length - 1; i > 0; i -= 1) {
+        if (isHandleDisabled?.(i) || isHandleDisabled?.(i - 1)) {
+          continue; // Skip if either handle is disabled
+        }
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
         }
       }
 
-      // Start to End
+      // Start to End (skip disabled handles)
       for (let i = 0; i < nextValues.length - 1; i += 1) {
+        if (isHandleDisabled?.(i) || isHandleDisabled?.(i + 1)) {
+          continue; // Skip if either handle is disabled
+        }
         let changed = true;
         while (needPush(nextValues[i + 1] - nextValues[i]) && changed) {
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
