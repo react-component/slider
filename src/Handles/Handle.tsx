@@ -55,7 +55,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     min,
     max,
     direction,
-    disabled,
+    disabled: globalDisabled,
     keyboard,
     range,
     tabIndex,
@@ -65,15 +65,21 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     ariaValueTextFormatterForHandle,
     styles,
     classNames,
+    isHandleDisabled,
   } = React.useContext(SliderContext);
+
+  const handleDisabled =
+    globalDisabled || (isHandleDisabled ? isHandleDisabled(valueIndex) : false);
 
   const handlePrefixCls = `${prefixCls}-handle`;
 
   // ============================ Events ============================
   const onInternalStartMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (!disabled) {
-      onStartMove(e, valueIndex);
+    if (handleDisabled) {
+      e.stopPropagation();
+      return;
     }
+    onStartMove(e, valueIndex);
   };
 
   const onInternalFocus = (e: React.FocusEvent<HTMLDivElement>) => {
@@ -86,7 +92,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
 
   // =========================== Keyboard ===========================
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-    if (!disabled && keyboard) {
+    if (!handleDisabled && keyboard) {
       let offset: number | 'min' | 'max' = null;
 
       // Change the value
@@ -161,12 +167,12 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
 
   if (valueIndex !== null) {
     divProps = {
-      tabIndex: disabled ? null : getIndex(tabIndex, valueIndex),
+      tabIndex: handleDisabled ? null : getIndex(tabIndex, valueIndex),
       role: 'slider',
       'aria-valuemin': min,
       'aria-valuemax': max,
       'aria-valuenow': value,
-      'aria-disabled': disabled,
+      'aria-disabled': handleDisabled,
       'aria-label': getIndex(ariaLabelForHandle, valueIndex),
       'aria-labelledby': getIndex(ariaLabelledByForHandle, valueIndex),
       'aria-required': getIndex(ariaRequired, valueIndex),
@@ -190,6 +196,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
           [`${handlePrefixCls}-${valueIndex + 1}`]: valueIndex !== null && range,
           [`${handlePrefixCls}-dragging`]: dragging,
           [`${handlePrefixCls}-dragging-delete`]: draggingDelete,
+          [`${handlePrefixCls}-disabled`]: handleDisabled,
         },
         classNames.handle,
       )}

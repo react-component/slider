@@ -19,6 +19,7 @@ export interface SliderContextProps {
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
   classNames: SliderClassNames;
   styles: SliderStyles;
+  isHandleDisabled?: (index: number) => boolean;
 }
 
 const SliderContext = React.createContext<SliderContextProps>({

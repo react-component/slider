@@ -57,7 +57,7 @@ export interface SliderProps<ValueType = number | number[]> {
   id?: string;
 
   // Status
-  disabled?: boolean;
+  disabled?: boolean | boolean[];
   keyboard?: boolean;
   autoFocus?: boolean;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
@@ -131,8 +131,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     id,
 
-    // Status
-    disabled = false,
+    disabled: rawDisabled = false,
     keyboard = true,
     autoFocus,
     onFocus,
@@ -187,6 +186,25 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   const handlesRef = React.useRef<HandlesRef>(null);
   const containerRef = React.useRef<HTMLDivElement>(null);
+
+  // ============================ Disabled ============================
+  const disabled = React.useMemo(() => {
+    if (typeof rawDisabled === 'boolean') {
+      return rawDisabled;
+    };
+
+    return Array.isArray(value) && value.length === rawDisabled.length && rawDisabled.every(Boolean);
+  }, [rawDisabled, value]);
+
+  const isHandleDisabled = React.useCallback(
+    (index: number) => {
+      if (typeof rawDisabled === 'boolean') {
+        return rawDisabled;
+      }
+      return rawDisabled[index] || false;
+    },
+    [rawDisabled],
+  );
 
   const direction = React.useMemo<Direction>(() => {
     if (vertical) {
@@ -247,6 +265,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     markList,
     allowCross,
     mergedPush,
+    isHandleDisabled,
   );
 
   // ============================ Values ============================
@@ -257,8 +276,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       mergedValue === null || mergedValue === undefined
         ? []
         : Array.isArray(mergedValue)
-        ? mergedValue
-        : [mergedValue];
+          ? mergedValue
+          : [mergedValue];
 
     const [val0 = mergedMin] = valueList;
     let returnValues = mergedValue === null ? [] : [val0];
@@ -321,7 +340,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   });
 
   const onDelete = (index: number) => {
-    if (disabled || !rangeEditable || rawValues.length <= minCount) {
+    if (disabled || !rangeEditable || rawValues.length <= minCount || isHandleDisabled(index)) {
       return;
     }
 
@@ -348,6 +367,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     offsetValues,
     rangeEditable,
     minCount,
+    isHandleDisabled,
   );
 
   /**
@@ -378,10 +398,39 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       let focusIndex = valueIndex;
 
       if (rangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
+        const leftDisabled = isHandleDisabled(valueBeforeIndex);
+        const rightDisabled = isHandleDisabled(valueBeforeIndex + 1);
+
+        if (leftDisabled && rightDisabled) {
+          return;
+        }
+
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
+        if (isHandleDisabled(valueIndex)) {
+          let nearestIndex = -1;
+          let nearestDist = mergedMax - mergedMin;
+
+          rawValues.forEach((val, index) => {
+            if (!isHandleDisabled(index)) {
+              const dist = Math.abs(newValue - val);
+              if (dist < nearestDist) {
+                nearestDist = dist;
+                nearestIndex = index;
+              }
+            }
+          });
+
+          // If all handles are disabled, do nothing
+          if (nearestIndex === -1) {
+            return;
+          }
+
+          valueIndex = nearestIndex;
+        }
         cloneNextValues[valueIndex] = newValue;
+        focusIndex = valueIndex;
       }
 
       // Fill value to match default 2 (only when `rawValues` is empty)
@@ -443,7 +492,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const [keyboardValue, setKeyboardValue] = React.useState<number>(null);
 
   const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
-    if (!disabled) {
+    if (!disabled && !isHandleDisabled(valueIndex)) {
       const next = offsetValues(rawValues, offset, valueIndex);
 
       onBeforeChange?.(getTriggerValue(rawValues));
@@ -546,6 +595,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       ariaValueTextFormatterForHandle,
       styles: styles || {},
       classNames: classNames || {},
+      isHandleDisabled,
     }),
     [
       mergedMin,
@@ -565,6 +615,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       ariaValueTextFormatterForHandle,
       styles,
       classNames,
+      isHandleDisabled,
     ],
   );
 
