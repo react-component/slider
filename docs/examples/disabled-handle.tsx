@@ -24,6 +24,7 @@ const EditableWithDisabled = () => {
         value={value}
         onChange={(v) => setValue(v as number[])}
         disabled={disabled}
+        onDisabledChange={setDisabled}
       />
       <div style={{ marginTop: 16 }}>
         {value.map((val, index) => (
@@ -90,8 +91,28 @@ const DisabledHandleAsBoundary = () => {
   );
 };
 
+const SingleSlider = () => {
+  const [value1, setValue1] = useState(30);
+  const [value2, setValue2] = useState(30);
+
+  return (
+    <div>
+      <Slider value={value1} onChange={(v) => setValue1(v as number)} disabled />
+        <br/>
+      <Slider value={value2} onChange={(v) => setValue2(v as number)} disabled={false} />
+    </div>
+  );
+}
+
 export default () => (
   <div>
+    <div>
+      single handle disabled
+      <SingleSlider />
+    </div>
+    <div>
+
+    </div>
     <div style={style}>
       <h3>Disabled Handle + Draggable Track</h3>
       <p>Toggle checkboxes to disable/enable specific handles. Drag the track area to move the range.</p>

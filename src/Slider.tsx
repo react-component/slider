@@ -78,6 +78,8 @@ export interface SliderProps<ValueType = number | number[]> {
   /** @deprecated Use `onChangeComplete` instead */
   onAfterChange?: (value: ValueType) => void;
   onChangeComplete?: (value: ValueType) => void;
+  /** Callback when disabled array needs to be updated (e.g., when handles are added/removed in editable mode) */
+  onDisabledChange?: (disabled: boolean[]) => void;
 
   // Cross
   allowCross?: boolean;
@@ -149,6 +151,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     onBeforeChange,
     onAfterChange,
     onChangeComplete,
+    onDisabledChange,
 
     // Cross
     allowCross = true,
@@ -191,9 +194,12 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const disabled = React.useMemo(() => {
     if (typeof rawDisabled === 'boolean') {
       return rawDisabled;
-    };
+    }
+    if (Array.isArray(value)) {
+      return value.every((_, index) => rawDisabled[index]);
+    }
 
-    return Array.isArray(value) && value.length === rawDisabled.length && rawDisabled.every(Boolean);
+    return false;
   }, [rawDisabled, value]);
 
   const isHandleDisabled = React.useCallback(
@@ -314,6 +320,25 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const triggerChange = useEvent((nextValues: number[]) => {
     // Order first
     const cloneNextValues = [...nextValues].sort((a, b) => a - b);
+
+    // Sync disabled array when values length changes (add/remove handles in editable mode)
+    if (
+      typeof rawDisabled !== 'boolean' &&
+      Array.isArray(rawDisabled) &&
+      cloneNextValues.length !== rawValues.length
+    ) {
+      const newDisabled = [...rawDisabled];
+
+      if (cloneNextValues.length > rawValues.length) {
+        const index = cloneNextValues.findIndex((item) => !rawValues.includes(item));
+        newDisabled.splice(index, 0, false);
+      } else if (cloneNextValues.length < rawValues.length) {
+        const index = rawValues.findIndex((item) => !cloneNextValues.includes(item));
+        newDisabled.splice(index, 1);
+      }
+
+      onDisabledChange?.(newDisabled);
+    }
 
     // Trigger event if needed
     if (onChange && !isEqual(cloneNextValues, rawValues, true)) {

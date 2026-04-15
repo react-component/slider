@@ -1003,5 +1003,66 @@ describe('Range', () => {
       // Should not trigger onChange because all handles are disabled
       expect(onChange).not.toHaveBeenCalled();
     });
+
+    it('editable: onDisabledChange called when adding handle', () => {
+      const onChange = jest.fn();
+      const onDisabledChange = jest.fn();
+      const { container } = render(
+        <Slider
+          range={{ editable: true }}
+          value={[0, 100]}
+          disabled={[true, false]}
+          onChange={onChange}
+          onDisabledChange={onDisabledChange}
+        />,
+      );
+
+      // Click to add a handle between 0 and 100
+      doMouseDown(container, 50, 'rc-slider', true);
+
+      expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
+      expect(onDisabledChange).toHaveBeenCalledWith([true, false, false]);
+    });
+
+    it('editable: onDisabledChange called when removing handle', () => {
+      const onChange = jest.fn();
+      const onDisabledChange = jest.fn();
+      const { container } = render(
+        <Slider
+          range={{ editable: true }}
+          value={[0, 50, 100]}
+          disabled={[false, true, false]}
+          onChange={onChange}
+          onDisabledChange={onDisabledChange}
+        />,
+      );
+
+      // Drag first handle (enabled) out to delete it
+      doMouseMove(container, 0, 1000);
+
+      expect(onChange).toHaveBeenCalledWith([50, 100]);
+      expect(onDisabledChange).toHaveBeenCalledWith([true, false]);
+    });
+
+    it('editable: disabled array stays in sync when adding between disabled handles', () => {
+      const onChange = jest.fn();
+      const onDisabledChange = jest.fn();
+      const { container } = render(
+        <Slider
+          range={{ editable: true }}
+          value={[20, 60]}
+          disabled={[true, true]}
+          onChange={onChange}
+          onDisabledChange={onDisabledChange}
+        />,
+      );
+
+      // Click to add a handle between 20 and 60
+      doMouseDown(container, 40, 'rc-slider', true);
+
+      // Should not trigger onChange because both surrounding handles are disabled
+      expect(onChange).not.toHaveBeenCalled();
+      expect(onDisabledChange).not.toHaveBeenCalled();
+    });
   });
 });
