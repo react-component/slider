@@ -455,7 +455,25 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
           valueIndex = nearestIndex;
         }
-        cloneNextValues[valueIndex] = newValue;
+
+        // Apply boundary constraints from disabled handles
+        let minBound = mergedMin;
+        let maxBound = mergedMax;
+
+        for (let i = valueIndex - 1; i >= 0; i -= 1) {
+          if (isHandleDisabled(i)) {
+            minBound = rawValues[i];
+            break;
+          }
+        }
+        for (let i = valueIndex + 1; i < rawValues.length; i += 1) {
+          if (isHandleDisabled(i)) {
+            maxBound = rawValues[i];
+            break;
+          }
+        }
+
+        cloneNextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, newValue));
         focusIndex = valueIndex;
       }
 

@@ -843,9 +843,9 @@ describe('Range', () => {
   });
 
   describe('disabled as array', () => {
-    it('basic', () => {
+    it('basic functionality with boolean and array', () => {
       const onChange = jest.fn();
-      const { container } = render(
+      const { container, rerender } = render(
         <Slider range defaultValue={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
       );
 
@@ -864,31 +864,30 @@ describe('Range', () => {
       // Keyboard: enabled handle should respond
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.RIGHT });
       expect(onChange).toHaveBeenCalledWith([0, 51, 100]);
+
+      // Boolean disabled backward compatibility
+      rerender(<Slider range defaultValue={[20, 50]} disabled={true} onChange={onChange} />);
+      expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
+      doMouseDown(container, 30, 'rc-slider', true);
+      expect(onChange).toHaveBeenCalledTimes(1); // Still 1, not triggered
     });
 
-    it('drag disabled handle', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[20, 50]} disabled={[true, false]} onChange={onChange} />,
-      );
-
-      // Try to drag disabled first handle
-      doMouseMove(container, 20, 80, 'rc-slider-handle');
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('click slider to move nearest enabled handle', () => {
+    it('drag and click respect disabled state', () => {
       const onChange = jest.fn();
       const { container } = render(
         <Slider range defaultValue={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
       );
 
-      // Click near disabled handle at 0, should move enabled handle at 50
+      // Drag disabled handle - no change
+      doMouseMove(container, 0, 80, 'rc-slider-handle');
+      expect(onChange).not.toHaveBeenCalled();
+
+      // Click near disabled handle - moves nearest enabled handle
       doMouseDown(container, 10, 'rc-slider', true);
       expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
     });
 
-    it('cannot cross disabled handle', () => {
+    it('cannot cross disabled handle boundary', () => {
       const onChange = jest.fn();
       const { container } = render(
         <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} onChange={onChange} />,
@@ -902,129 +901,7 @@ describe('Range', () => {
       expect(lastCall[0][0]).toBeLessThanOrEqual(50);
     });
 
-    it('editable: cannot delete disabled handle', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range={{ editable: true }} defaultValue={[20, 50, 80]} disabled={[false, true, false]} onChange={onChange} />,
-      );
-
-      // Try to delete disabled middle handle
-      const handle = container.getElementsByClassName('rc-slider-handle')[1];
-      fireEvent.mouseEnter(handle);
-      fireEvent.keyDown(handle, { keyCode: keyCode.DELETE });
-      expect(onChange).not.toHaveBeenCalled();
-
-      // Try to drag out disabled handle
-      doMouseMove(container, 50, 1000, 'rc-slider-handle', 1);
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('backward compatible with boolean', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[20, 50]} disabled={true} onChange={onChange} />,
-      );
-
-      expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
-      doMouseDown(container, 30, 'rc-slider', true);
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('editable: cannot add handle between two disabled handles', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range={{ editable: true }} defaultValue={[20, 50, 80]} disabled={[true, true, false]} onChange={onChange} />,
-      );
-
-      // Click between 20 and 50, both are disabled
-      doMouseDown(container, 35, 'rc-slider', true);
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('all handles disabled: click does nothing', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[20, 50]} disabled={[true, true]} onChange={onChange} />,
-      );
-
-      const rail = container.querySelector('.rc-slider-rail');
-      const mouseDown = createEvent.mouseDown(rail);
-      Object.defineProperties(mouseDown, {
-        clientX: { get: () => 30 },
-        clientY: { get: () => 30 },
-      });
-      fireEvent(rail, mouseDown);
-
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('draggableTrack disabled when any handle is disabled', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range={{ draggableTrack: true }} defaultValue={[0, 50]} disabled={[false, true]} onChange={onChange} />,
-      );
-
-      // Try to drag track - should not work because one handle is disabled
-      const track = container.getElementsByClassName('rc-slider-track')[0];
-      const mouseDown = createEvent.mouseDown(track);
-      Object.defineProperties(mouseDown, {
-        clientX: { get: () => 0 },
-        clientY: { get: () => 0 },
-      });
-      fireEvent(track, mouseDown);
-
-      // Drag
-      const mouseMove = createEvent.mouseMove(document);
-      (mouseMove as any).pageX = 20;
-      (mouseMove as any).pageY = 20;
-      fireEvent(document, mouseMove);
-
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('all handles disabled: find nearest enabled returns -1', () => {
-      // This test specifically covers line 426 in Slider.tsx
-      // When all handles are disabled and clicking near one,
-      // the nearestIndex search returns -1 and returns early
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[0, 50, 100]} disabled={[true, true, true]} onChange={onChange} />,
-      );
-
-      // Click at position 10 (near first disabled handle)
-      const rail = container.querySelector('.rc-slider-rail');
-      const mouseDown = createEvent.mouseDown(rail);
-      Object.defineProperties(mouseDown, {
-        clientX: { get: () => 10 },
-        clientY: { get: () => 10 },
-      });
-      fireEvent(rail, mouseDown);
-
-      // Should not trigger onChange because all handles are disabled
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('editable: onDisabledChange called when adding handle', () => {
-      const onChange = jest.fn();
-      const onDisabledChange = jest.fn();
-      const { container } = render(
-        <Slider
-          range={{ editable: true }}
-          value={[0, 100]}
-          disabled={[true, false]}
-          onChange={onChange}
-          onDisabledChange={onDisabledChange}
-        />,
-      );
-
-      // Click to add a handle between 0 and 100
-      doMouseDown(container, 50, 'rc-slider', true);
-
-      expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
-      expect(onDisabledChange).toHaveBeenCalledWith([true, false, false]);
-    });
-
-    it('editable: onDisabledChange called when removing handle', () => {
+    it('editable mode with disabled handles', () => {
       const onChange = jest.fn();
       const onDisabledChange = jest.fn();
       const { container } = render(
@@ -1037,17 +914,26 @@ describe('Range', () => {
         />,
       );
 
-      // Drag first handle (enabled) out to delete it
-      doMouseMove(container, 0, 1000);
+      // Cannot delete disabled handle
+      const handle = container.getElementsByClassName('rc-slider-handle')[1];
+      fireEvent.mouseEnter(handle);
+      fireEvent.keyDown(handle, { keyCode: keyCode.DELETE });
+      expect(onChange).not.toHaveBeenCalled();
 
+      // Cannot drag out disabled handle
+      doMouseMove(container, 50, 1000, 'rc-slider-handle', 1);
+      expect(onChange).not.toHaveBeenCalled();
+
+      // onDisabledChange called when removing enabled handle
+      doMouseMove(container, 0, 1000);
       expect(onChange).toHaveBeenCalledWith([50, 100]);
       expect(onDisabledChange).toHaveBeenCalledWith([true, false]);
     });
 
-    it('editable: disabled array stays in sync when adding between disabled handles', () => {
+    it('editable: add handle respects disabled boundaries', () => {
       const onChange = jest.fn();
       const onDisabledChange = jest.fn();
-      const { container } = render(
+      const { container, rerender } = render(
         <Slider
           range={{ editable: true }}
           value={[20, 60]}
@@ -1057,39 +943,77 @@ describe('Range', () => {
         />,
       );
 
-      // Click to add a handle between 20 and 60
+      // Cannot add between two disabled handles
       doMouseDown(container, 40, 'rc-slider', true);
-
-      // Should not trigger onChange because both surrounding handles are disabled
       expect(onChange).not.toHaveBeenCalled();
-      expect(onDisabledChange).not.toHaveBeenCalled();
+
+      // Can add when only one side is disabled
+      rerender(
+        <Slider
+          range={{ editable: true }}
+          value={[0, 100]}
+          disabled={[true, false]}
+          onChange={onChange}
+          onDisabledChange={onDisabledChange}
+        />,
+      );
+      doMouseDown(container, 50, 'rc-slider', true);
+      expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
+      expect(onDisabledChange).toHaveBeenCalledWith([true, false, false]);
     });
 
-    it('click to move cannot cross disabled handle boundary', () => {
+    it('all handles disabled prevents interaction', () => {
       const onChange = jest.fn();
       const { container } = render(
+        <Slider range defaultValue={[0, 50, 100]} disabled={[true, true, true]} onChange={onChange} />,
+      );
+
+      // Click does nothing (covers findNearestEnabled returning -1)
+      const rail = container.querySelector('.rc-slider-rail');
+      const mouseDown = createEvent.mouseDown(rail);
+      Object.defineProperties(mouseDown, {
+        clientX: { get: () => 10 },
+        clientY: { get: () => 10 },
+      });
+      fireEvent(rail, mouseDown);
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('draggableTrack disabled when any handle is disabled', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider range={{ draggableTrack: true }} defaultValue={[0, 50]} disabled={[false, true]} onChange={onChange} />,
+      );
+
+      const track = container.getElementsByClassName('rc-slider-track')[0];
+      const mouseDown = createEvent.mouseDown(track);
+      Object.defineProperties(mouseDown, {
+        clientX: { get: () => 0 },
+        clientY: { get: () => 0 },
+      });
+      fireEvent(track, mouseDown);
+
+      const mouseMove = createEvent.mouseMove(document);
+      (mouseMove as any).pageX = 20;
+      (mouseMove as any).pageY = 20;
+      fireEvent(document, mouseMove);
+
+      expect(onChange).not.toHaveBeenCalled();
+    });
+
+    it('click to move respects disabled boundary', () => {
+      const onChange = jest.fn();
+      const { container, rerender } = render(
         <Slider range value={[20, 50, 80]} disabled={[true, false, false]} onChange={onChange} />,
       );
 
-      // Click at position 10, which is left of disabled handle at 20
-      // Nearest enabled handle is 50, but it cannot cross below 20
+      // Click left of disabled handle - clamped to boundary
       doMouseDown(container, 10, 'rc-slider', true);
-
-      // Should move handle to 20 (boundary), not 10
       expect(onChange).toHaveBeenCalledWith([20, 20, 80]);
-    });
 
-    it('click to move cannot cross disabled handle on right side', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />,
-      );
-
-      // Click at position 90, which is right of disabled handle at 80
-      // Nearest enabled handle is 50, but it cannot cross above 80
+      // Click right of disabled handle - clamped to boundary
+      rerender(<Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />);
       doMouseDown(container, 90, 'rc-slider', true);
-
-      // Should move handle to 80 (boundary), not 90
       expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
     });
   });
