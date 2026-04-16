@@ -323,7 +323,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     // Sync disabled array when values length changes (add/remove handles in editable mode)
     if (
-      typeof rawDisabled !== 'boolean' &&
       Array.isArray(rawDisabled) &&
       cloneNextValues.length !== rawValues.length
     ) {
