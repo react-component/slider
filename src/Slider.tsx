@@ -333,7 +333,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         const insertIndex = index === -1 ? rawValues.length : index;
         newDisabled.splice(insertIndex, 0, false);
       } else if (cloneNextValues.length < rawValues.length) {
-        const index = rawValues.findIndex((item) => !cloneNextValues.includes(item));
+        const index = rawValues.findIndex((item, i) => item !== cloneNextValues[i]);
         newDisabled.splice(index, 1);
       }
 
