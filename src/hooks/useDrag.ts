@@ -26,7 +26,7 @@ function useDrag(
   offsetValues: OffsetValues,
   editable: boolean,
   minCount: number,
-  isHandleDisabled?: (index: number) => boolean,
+  isHandleDisabled: (index: number) => boolean,
 ): [
   draggingIndex: number,
   draggingValue: number,
@@ -94,7 +94,7 @@ function useDrag(
       if (valueIndex === -1) {
         // >>>> Dragging on the track
         // Defensive: should not happen as Tracks/index.tsx blocks this when any handle is disabled
-        if (isHandleDisabled && originValues.some((_, index) => isHandleDisabled(index))) {
+        if (originValues.some((_, index) => isHandleDisabled(index))) {
           return;
         }
 
@@ -133,7 +133,7 @@ function useDrag(
 
     const initialValues = startValues || rawValues;
     // Defensive: should not happen as Handle.tsx blocks this when handle is disabled
-    if (isHandleDisabled && isHandleDisabled(valueIndex)) {
+    if (isHandleDisabled(valueIndex)) {
       return;
     }
 

@@ -36,7 +36,7 @@ export default function useOffset(
   markList: InternalMarkObj[],
   allowCross: boolean,
   pushable: false | number,
-  isHandleDisabled?: (index: number) => boolean,
+  isHandleDisabled: (index: number) => boolean,
 ): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => Math.max(min, Math.min(max, val)),
@@ -192,7 +192,6 @@ export default function useOffset(
 
   // Get the minimum boundary for a handle considering disabled handles
   const getHandleMinBound = (values: number[], handleIndex: number): number => {
-    if (!isHandleDisabled) return min;
     for (let i = handleIndex - 1; i >= 0; i -= 1) {
       if (isHandleDisabled(i)) {
         return values[i] + (typeof pushable === 'number' ? pushable : 0);
@@ -203,7 +202,6 @@ export default function useOffset(
 
   // Get the maximum boundary for a handle considering disabled handles
   const getHandleMaxBound = (values: number[], handleIndex: number): number => {
-    if (!isHandleDisabled) return max;
     for (let i = handleIndex + 1; i < values.length; i += 1) {
       if (isHandleDisabled(i)) {
         return values[i] - (typeof pushable === 'number' ? pushable : 0);
@@ -224,9 +222,7 @@ export default function useOffset(
     nextValues[valueIndex] = nextValue;
 
     // Apply disabled handle boundaries
-    if (isHandleDisabled) {
-      nextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, nextValues[valueIndex]));
-    }
+    nextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, nextValues[valueIndex]));
 
     if (allowCross === false) {
       // >>>>> Allow Cross
@@ -253,7 +249,7 @@ export default function useOffset(
       // >>>>>> Basic push
       // End values (skip disabled handles)
       for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
-        if (isHandleDisabled?.(i)) {
+        if (isHandleDisabled(i)) {
           break; // Stop pushing when hitting a disabled handle
         }
         let changed = true;
@@ -261,14 +257,12 @@ export default function useOffset(
           ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
         }
         // Apply boundary constraint to pushed handle
-        if (isHandleDisabled) {
-          nextValues[i] = Math.min(nextValues[i], getHandleMaxBound(nextValues, i));
-        }
+        nextValues[i] = Math.min(nextValues[i], getHandleMaxBound(nextValues, i));
       }
 
       // Start values (skip disabled handles)
       for (let i = valueIndex; i > 0; i -= 1) {
-        if (isHandleDisabled?.(i - 1)) {
+        if (isHandleDisabled(i - 1)) {
           break; // Stop pushing when hitting a disabled handle
         }
         let changed = true;
@@ -276,15 +270,13 @@ export default function useOffset(
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
         }
         // Apply boundary constraint to pushed handle
-        if (isHandleDisabled) {
-          nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
-        }
+        nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
       }
 
       // >>>>> Revert back to safe push range
       // End to Start (skip disabled handles)
       for (let i = nextValues.length - 1; i > 0; i -= 1) {
-        if (isHandleDisabled?.(i) || isHandleDisabled?.(i - 1)) {
+        if (isHandleDisabled(i) || isHandleDisabled(i - 1)) {
           continue; // Skip if either handle is disabled
         }
         let changed = true;
@@ -292,14 +284,12 @@ export default function useOffset(
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
         }
         // Apply boundary constraint to pushed handle
-        if (isHandleDisabled) {
-          nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
-        }
+        nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
       }
 
       // Start to End (skip disabled handles)
       for (let i = 0; i < nextValues.length - 1; i += 1) {
-        if (isHandleDisabled?.(i) || isHandleDisabled?.(i + 1)) {
+        if (isHandleDisabled(i) || isHandleDisabled(i + 1)) {
           continue; // Skip if either handle is disabled
         }
         let changed = true;
@@ -307,9 +297,7 @@ export default function useOffset(
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
         }
         // Apply boundary constraint to pushed handle
-        if (isHandleDisabled) {
-          nextValues[i + 1] = Math.min(nextValues[i + 1], getHandleMaxBound(nextValues, i + 1));
-        }
+        nextValues[i + 1] = Math.min(nextValues[i + 1], getHandleMaxBound(nextValues, i + 1));
       }
     }
 
