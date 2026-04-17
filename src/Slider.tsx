@@ -461,13 +461,15 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
         for (let i = valueIndex - 1; i >= 0; i -= 1) {
           if (isHandleDisabled(i)) {
-            minBound = rawValues[i];
+            const pushDistance = typeof mergedPush === 'number' ? mergedPush : 0;
+            minBound = rawValues[i] + pushDistance;
             break;
           }
         }
         for (let i = valueIndex + 1; i < rawValues.length; i += 1) {
           if (isHandleDisabled(i)) {
-            maxBound = rawValues[i];
+            const pushDistance = typeof mergedPush === 'number' ? mergedPush : 0;
+            maxBound = rawValues[i] - pushDistance;
             break;
           }
         }

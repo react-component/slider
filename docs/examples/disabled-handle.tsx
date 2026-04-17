@@ -44,7 +44,8 @@ const EditableWithDisabled = () => {
         ))}
       </div>
       <p style={{ marginTop: 8, color: '#999', fontSize: 12 }}>
-        Try: Click track to add handle • Drag handle to edge to delete • Toggle checkboxes to disable handles
+        Try: Click track to add handle • Drag handle to edge to delete • Toggle checkboxes to
+        disable handles
       </p>
     </div>
   );
@@ -82,11 +83,35 @@ const DisabledHandleAsBoundary = () => {
 
   return (
     <div>
-      <Slider range value={value} onChange={(v) => setValue(v as number[])} disabled={[false, true, false]} />
+      <Slider
+        range
+        value={value}
+        onChange={(v) => setValue(v as number[])}
+        disabled={[false, true, false]}
+      />
       <p style={{ marginTop: 8, color: '#999' }}>
-        Middle handle (50) is disabled and acts as a boundary.
-        First handle cannot go beyond 50, third handle cannot go below 50.
-        Disabled handle has gray border and not-allowed cursor.
+        Middle handle (50) is disabled and acts as a boundary. First handle cannot go beyond 50,
+        third handle cannot go below 50. Disabled handle has gray border and not-allowed cursor.
+      </p>
+    </div>
+  );
+};
+
+const PushableWithDisabledHandle = () => {
+  const [value, setValue] = useState<number[]>([20, 40, 60, 80]);
+
+  return (
+    <div>
+      <Slider
+        range
+        value={value}
+        onChange={(v) => setValue(v as number[])}
+        disabled={[false, true, false, false]}
+        pushable={10}
+      />
+      <p style={{ marginTop: 8, color: '#999' }}>
+        Second handle (40) is disabled. Drag the first handle toward it or push the last two handles
+        together: enabled handles keep at least 10 apart without crossing the disabled handle.
       </p>
     </div>
   );
@@ -103,7 +128,7 @@ const SingleSlider = () => {
       <Slider value={value2} onChange={(v) => setValue2(v as number)} disabled={false} />
     </div>
   );
-}
+};
 
 export default () => (
   <div>
@@ -113,13 +138,20 @@ export default () => (
     </div>
     <div style={style}>
       <h3>Disabled Handle + Draggable Track</h3>
-      <p>Toggle checkboxes to disable/enable specific handles. Drag the track area to move the range.</p>
+      <p>
+        Toggle checkboxes to disable/enable specific handles. Drag the track area to move the range.
+      </p>
       <BasicDisabledHandle />
     </div>
 
     <div style={style}>
       <h3>Disabled Handle as Boundary</h3>
       <DisabledHandleAsBoundary />
+    </div>
+
+    <div style={style}>
+      <h3>Disabled Handle + Pushable</h3>
+      <PushableWithDisabledHandle />
     </div>
     <div>
       <div style={style}>

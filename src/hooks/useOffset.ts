@@ -190,28 +190,35 @@ export default function useOffset(
     return (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
   };
 
+  // Get the minimum boundary for a handle considering disabled handles
+  const getHandleMinBound = (values: number[], handleIndex: number): number => {
+    if (!isHandleDisabled) return min;
+    for (let i = handleIndex - 1; i >= 0; i -= 1) {
+      if (isHandleDisabled(i)) {
+        return values[i] + (typeof pushable === 'number' ? pushable : 0);
+      }
+    }
+    return min;
+  };
+
+  // Get the maximum boundary for a handle considering disabled handles
+  const getHandleMaxBound = (values: number[], handleIndex: number): number => {
+    if (!isHandleDisabled) return max;
+    for (let i = handleIndex + 1; i < values.length; i += 1) {
+      if (isHandleDisabled(i)) {
+        return values[i] - (typeof pushable === 'number' ? pushable : 0);
+      }
+    }
+    return max;
+  };
+
   // Values
   const offsetValues: OffsetValues = (values, offset, valueIndex, mode = 'unit') => {
     const nextValues = values.map<number>(formatValue);
     const originValue = nextValues[valueIndex];
 
-    let minBound = min;
-    let maxBound = max;
-
-    if (isHandleDisabled) {
-      for (let i = valueIndex - 1; i >= 0; i -= 1) {
-        if (isHandleDisabled(i)) {
-          minBound = nextValues[i];
-          break;
-        }
-      }
-      for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
-        if (isHandleDisabled(i)) {
-          maxBound = nextValues[i];
-          break;
-        }
-      }
-    }
+    const minBound = getHandleMinBound(nextValues, valueIndex);
+    const maxBound = getHandleMaxBound(nextValues, valueIndex);
 
     const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;
@@ -253,6 +260,10 @@ export default function useOffset(
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
         }
+        // Apply boundary constraint to pushed handle
+        if (isHandleDisabled) {
+          nextValues[i] = Math.min(nextValues[i], getHandleMaxBound(nextValues, i));
+        }
       }
 
       // Start values (skip disabled handles)
@@ -263,6 +274,10 @@ export default function useOffset(
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
+        }
+        // Apply boundary constraint to pushed handle
+        if (isHandleDisabled) {
+          nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
         }
       }
 
@@ -276,6 +291,10 @@ export default function useOffset(
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
         }
+        // Apply boundary constraint to pushed handle
+        if (isHandleDisabled) {
+          nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
+        }
       }
 
       // Start to End (skip disabled handles)
@@ -286,6 +305,10 @@ export default function useOffset(
         let changed = true;
         while (needPush(nextValues[i + 1] - nextValues[i]) && changed) {
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
+        }
+        // Apply boundary constraint to pushed handle
+        if (isHandleDisabled) {
+          nextValues[i + 1] = Math.min(nextValues[i + 1], getHandleMaxBound(nextValues, i + 1));
         }
       }
     }
