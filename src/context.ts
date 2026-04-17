@@ -33,6 +33,7 @@ const SliderContext = React.createContext<SliderContextProps>({
   keyboard: true,
   styles: {},
   classNames: {},
+  isHandleDisabled: () => false,
 });
 
 export default SliderContext;
