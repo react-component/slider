@@ -68,8 +68,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     isHandleDisabled,
   } = React.useContext(SliderContext);
 
-  const handleDisabled =
-    globalDisabled || (isHandleDisabled ? isHandleDisabled(valueIndex) : false);
+  const handleDisabled = globalDisabled || isHandleDisabled(valueIndex);
 
   const handlePrefixCls = `${prefixCls}-handle`;
 
