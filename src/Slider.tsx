@@ -78,8 +78,6 @@ export interface SliderProps<ValueType = number | number[]> {
   /** @deprecated Use `onChangeComplete` instead */
   onAfterChange?: (value: ValueType) => void;
   onChangeComplete?: (value: ValueType) => void;
-  /** Callback when disabled array needs to be updated (e.g., when handles are added/removed in editable mode) */
-  onDisabledChange?: (disabled: boolean[]) => void;
 
   // Cross
   allowCross?: boolean;
@@ -151,7 +149,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     onBeforeChange,
     onAfterChange,
     onChangeComplete,
-    onDisabledChange,
 
     // Cross
     allowCross = true,
@@ -222,6 +219,17 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   // ============================ Range =============================
   const [rangeEnabled, rangeEditable, rangeDraggableTrack, minCount, maxCount] = useRange(range);
+
+  // Check if any handle is disabled - if so, disable all editable operations
+  const hasDisabledHandle = React.useMemo(() => {
+    if (typeof rawDisabled === 'boolean') {
+      return rawDisabled;
+    }
+    return rawDisabled.some((d) => d);
+  }, [rawDisabled]);
+
+  // Disable editable when any handle is disabled
+  const effectiveRangeEditable = rangeEditable && !hasDisabledHandle;
 
   const mergedMin = React.useMemo(() => (isFinite(min) ? min : 0), [min]);
   const mergedMax = React.useMemo(() => (isFinite(max) ? max : 100), [max]);
@@ -321,25 +329,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     // Order first
     const cloneNextValues = [...nextValues].sort((a, b) => a - b);
 
-    // Sync disabled array when values length changes (add/remove handles in editable mode)
-    if (
-      Array.isArray(rawDisabled) &&
-      cloneNextValues.length !== rawValues.length
-    ) {
-      const newDisabled = [...rawDisabled];
-
-      if (cloneNextValues.length > rawValues.length) {
-        const index = cloneNextValues.findIndex((item, i) => item !== rawValues[i]);
-        const insertIndex = index === -1 ? rawValues.length : index;
-        newDisabled.splice(insertIndex, 0, false);
-      } else if (cloneNextValues.length < rawValues.length) {
-        const index = rawValues.findIndex((item, i) => item !== cloneNextValues[i]);
-        newDisabled.splice(index, 1);
-      }
-
-      onDisabledChange?.(newDisabled);
-    }
-
     // Trigger event if needed
     if (onChange && !isEqual(cloneNextValues, rawValues, true)) {
       onChange(getTriggerValue(cloneNextValues));
@@ -365,7 +354,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   });
 
   const onDelete = (index: number) => {
-    if (disabled || !rangeEditable || rawValues.length <= minCount || isHandleDisabled(index)) {
+    if (disabled || !effectiveRangeEditable || rawValues.length <= minCount || isHandleDisabled(index)) {
       return;
     }
 
@@ -390,7 +379,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     triggerChange,
     finishChange,
     offsetValues,
-    rangeEditable,
+    effectiveRangeEditable,
     minCount,
     isHandleDisabled,
   );
@@ -422,14 +411,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
       let focusIndex = valueIndex;
 
-      if (rangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
-        const leftDisabled = isHandleDisabled(valueBeforeIndex);
-        const rightDisabled = isHandleDisabled(valueBeforeIndex + 1);
-
-        if (leftDisabled && rightDisabled) {
-          return;
-        }
-
+      if (effectiveRangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
@@ -716,7 +698,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           handleRender={handleRender}
           activeHandleRender={activeHandleRender}
           onChangeComplete={finishChange}
-          onDelete={rangeEditable ? onDelete : undefined}
+          onDelete={effectiveRangeEditable ? onDelete : undefined}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />

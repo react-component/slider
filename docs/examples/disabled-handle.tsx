@@ -8,48 +8,6 @@ const style: React.CSSProperties = {
   margin: 50,
 };
 
-// Basic editable with disabled handles
-const EditableWithDisabled = () => {
-  const [value, setValue] = useState<number[]>([0, 30, 100]);
-  const [disabled, setDisabled] = useState<boolean[]>([true, false, true]);
-
-  return (
-    <div>
-      <Slider
-        range={{
-          editable: true,
-          minCount: 2,
-          maxCount: 5,
-        }}
-        value={value}
-        onChange={(v) => setValue(v as number[])}
-        disabled={disabled}
-        onDisabledChange={setDisabled}
-      />
-      Slider disabled {JSON.stringify(disabled)}
-      <div style={{ marginTop: 16 }}>
-        {value.map((val, index) => (
-          <label key={index} style={{ marginRight: 16 }}>
-            <input
-              type="checkbox"
-              checked={!!disabled[index]}
-              onChange={() => {
-                const newDisabled = [...disabled];
-                newDisabled[index] = !newDisabled[index];
-                setDisabled(newDisabled);
-              }}
-            />
-            Handle {index + 1} ({val}) {disabled[index] ? 'Disabled' : 'Enabled'}
-          </label>
-        ))}
-      </div>
-      <p style={{ marginTop: 8, color: '#999', fontSize: 12 }}>
-        Try: Click track to add handle • Drag handle to edge to delete • Toggle checkboxes to
-        disable handles
-      </p>
-    </div>
-  );
-};
 const defaultValue = [0, 30, 60, 100];
 const BasicDisabledHandle = () => {
   const [disabled, setDisabled] = useState([true]);
@@ -85,6 +43,7 @@ const DisabledHandleAsBoundary = () => {
     <div>
       <Slider
         range
+        step={10}
         value={value}
         onChange={(v) => setValue(v as number[])}
         disabled={[false, true, false]}
@@ -130,6 +89,54 @@ const SingleSlider = () => {
   );
 };
 
+// Editable mode with disabled handles - editable is disabled when any handle is disabled
+const EditableWithDisabled = () => {
+  const [value, setValue] = useState<number[]>([0, 30, 100]);
+  const [disabled, setDisabled] = useState<boolean[]>([true, false, false]);
+
+  const hasDisabled = disabled.some((d) => d);
+
+  return (
+    <div>
+      <Slider
+        range={{
+          editable: true,
+          minCount: 2,
+          maxCount: 5,
+        }}
+        value={value}
+        onChange={(v) => setValue(v as number[])}
+        disabled={disabled}
+      />
+      <p style={{ marginTop: 8, color: hasDisabled ? '#f5222d' : '#52c41a' }}>
+        {hasDisabled
+          ? 'Editable mode is DISABLED because at least one handle is disabled. Clicking track will move nearest enabled handle.'
+          : 'Editable mode is ENABLED. Click track to add handles, drag to edge to delete.'}
+      </p>
+      <div style={{ marginTop: 16 }}>
+        {value.map((val, index) => (
+          <label key={index} style={{ marginRight: 16 }}>
+            <input
+              type="checkbox"
+              checked={!!disabled[index]}
+              onChange={() => {
+                const newDisabled = [...disabled];
+                newDisabled[index] = !newDisabled[index];
+                setDisabled(newDisabled);
+              }}
+            />
+            Handle {index + 1} ({val}) {disabled[index] ? 'Disabled' : 'Enabled'}
+          </label>
+        ))}
+      </div>
+      <p style={{ marginTop: 8, color: '#999', fontSize: 12 }}>
+        Try: Toggle checkboxes to enable/disable handles. When any handle is disabled, you cannot
+        add or remove handles. When all handles are enabled, editable mode works normally.
+      </p>
+    </div>
+  );
+};
+
 export default () => (
   <div>
     <div>
@@ -153,12 +160,10 @@ export default () => (
       <h3>Disabled Handle + Pushable</h3>
       <PushableWithDisabledHandle />
     </div>
-    <div>
-      <div style={style}>
-        <h3>Editable + Disabled Array</h3>
-        <p>Toggle checkboxes to enable/disable handles in editable mode</p>
-        <EditableWithDisabled />
-      </div>
+
+    <div style={style}>
+      <h3>Editable + Disabled (Editable Disabled When Any Handle Disabled)</h3>
+      <EditableWithDisabled />
     </div>
   </div>
 );

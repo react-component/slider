@@ -901,65 +901,45 @@ describe('Range', () => {
       expect(lastCall[0][0]).toBeLessThanOrEqual(50);
     });
 
-    it('editable mode with disabled handles', () => {
+    it('editable mode disabled when any handle is disabled', () => {
       const onChange = jest.fn();
-      const onDisabledChange = jest.fn();
       const { container } = render(
         <Slider
           range={{ editable: true }}
           value={[0, 50, 100]}
           disabled={[false, true, false]}
           onChange={onChange}
-          onDisabledChange={onDisabledChange}
         />,
       );
 
-      // Cannot delete disabled handle
-      const handle = container.getElementsByClassName('rc-slider-handle')[1];
+      // Cannot delete handle when any handle is disabled (editable is disabled)
+      const handle = container.getElementsByClassName('rc-slider-handle')[0];
       fireEvent.mouseEnter(handle);
       fireEvent.keyDown(handle, { keyCode: keyCode.DELETE });
       expect(onChange).not.toHaveBeenCalled();
 
-      // Cannot drag out disabled handle
-      doMouseMove(container, 50, 1000, 'rc-slider-handle', 1);
-      expect(onChange).not.toHaveBeenCalled();
-
-      // onDisabledChange called when removing enabled handle
-      doMouseMove(container, 0, 1000);
-      expect(onChange).toHaveBeenCalledWith([50, 100]);
-      expect(onDisabledChange).toHaveBeenCalledWith([true, false]);
+      // Clicking track moves nearest enabled handle instead of adding new one
+      // (editable is disabled, so it falls back to normal behavior)
+      doMouseDown(container, 25, 'rc-slider', true);
+      // Should move first handle to position 25 instead of adding new handle
+      expect(onChange).toHaveBeenCalledWith([25, 50, 100]);
     });
 
-    it('editable: add handle respects disabled boundaries', () => {
+    it('editable mode completely disabled when any handle is disabled', () => {
       const onChange = jest.fn();
-      const onDisabledChange = jest.fn();
-      const { container, rerender } = render(
+      const { container } = render(
         <Slider
           range={{ editable: true }}
           value={[20, 60]}
-          disabled={[true, true]}
-          onChange={onChange}
-          onDisabledChange={onDisabledChange}
-        />,
-      );
-
-      doMouseDown(container, 40, 'rc-slider', true);
-      expect(onChange).not.toHaveBeenCalled();
-      expect(onDisabledChange).not.toHaveBeenCalled();
-
-      // Can add when only one side is disabled
-      rerender(
-        <Slider
-          range={{ editable: true }}
-          value={[0, 100]}
           disabled={[true, false]}
           onChange={onChange}
-          onDisabledChange={onDisabledChange}
         />,
       );
-      doMouseDown(container, 50, 'rc-slider', true);
-      expect(onChange).toHaveBeenCalledWith([0, 50, 100]);
-      expect(onDisabledChange).toHaveBeenCalledWith([true, false, false]);
+
+      // Clicking track moves nearest enabled handle (editable is disabled)
+      doMouseDown(container, 40, 'rc-slider', true);
+      // Should move second handle to position 40 instead of adding new handle
+      expect(onChange).toHaveBeenCalledWith([20, 40]);
     });
 
     it('all handles disabled prevents interaction', () => {

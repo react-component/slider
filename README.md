@@ -108,13 +108,12 @@ The following APIs are shared by Slider and Range.
 | handle | (props) => React.ReactNode | | A handle generator which could be used to customized handle. |
 | included | boolean | `true` | If the value is `true`, it means a continuous value interval, otherwise, it is a independent value. |
 | reverse | boolean | `false` | If the value is `true`, it means the component is rendered reverse. |
-| disabled | boolean \| boolean[] | `false` | If `true`, handles can't be moved. This prop can also be an array to disable specific handles in range mode, e.g. `[true, false, true]` disables first and third handles. |
+| disabled | boolean \| boolean[] | `false` | If `true`, handles can't be moved. This prop can also be an array to disable specific handles in range mode, e.g. `[true, false, true]` disables first and third handles. When disabled is an array with any `true` value, `editable` mode will be disabled. |
 | keyboard | boolean | `true` | Support using keyboard to move handlers. |
 | dots | boolean | `false` | When the `step` value is greater than 1, you can set the `dots` to  `true` if you want to render the slider with dots. |
 | onBeforeChange | Function | NOOP | `onBeforeChange` will be triggered when `ontouchstart` or `onmousedown` is triggered. |
 | onChange | Function | NOOP | `onChange` will be triggered while the value of Slider changing. |
 | onChangeComplete | Function | NOOP | `onChangeComplete` will be triggered when `ontouchend` or `onmouseup` is triggered. |
-| onDisabledChange | (disabled: boolean[]) => void | - | Callback when disabled array needs to be updated (e.g., when handles are added/removed in editable mode). Use with `disabled` as array to keep disabled states in sync. |
 | minimumTrackStyle | Object |  | please use  `trackStyle` instead. (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x `) |
 | maximumTrackStyle | Object |  | please use  `railStyle` instead (`only used for slider, just for compatibility , will be deprecate at rc-slider@9.x`) |
 | handleStyle | Array[Object] \| Object | `[{}]` | The style used for handle. (`both for slider(`Object`) and range(`Array of Object`), the array will be used for multi handle following element order`) |
