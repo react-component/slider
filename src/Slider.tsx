@@ -12,6 +12,7 @@ import Steps from './Steps';
 import Tracks from './Tracks';
 import type { SliderContextProps } from './context';
 import SliderContext from './context';
+import useDisabled from './hooks/useDisabled';
 import useDrag from './hooks/useDrag';
 import useOffset from './hooks/useOffset';
 import useRange from './hooks/useRange';
@@ -189,27 +190,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
   // ============================ Disabled ============================
-  const disabled = React.useMemo(() => {
-    if (typeof rawDisabled === 'boolean') {
-      return rawDisabled;
-    }
-    if (Array.isArray(rawDisabled)) {
-      const values = Array.isArray(mergedValue) ? mergedValue : [mergedValue];
-      return values.every((_, index) => rawDisabled[index]);
-    }
-    return false;
-  }, [rawDisabled, mergedValue]);
 
-  const isHandleDisabled = React.useCallback(
-    (index: number) => {
-      if (typeof rawDisabled === 'boolean') {
-        return rawDisabled;
-      }
-      // Return individual disabled state if defined, otherwise fallback to global disabled
-      return rawDisabled[index] ?? disabled;
-    },
-    [rawDisabled, disabled],
-  );
+  const [disabled, isHandleDisabled, hasDisabledHandle] = useDisabled(rawDisabled, mergedValue);
 
   const direction = React.useMemo<Direction>(() => {
     if (vertical) {
@@ -220,14 +202,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   // ============================ Range =============================
   const [rangeEnabled, rangeEditable, rangeDraggableTrack, minCount, maxCount] = useRange(range);
-
-  // Check if any handle is disabled - if so, disable all editable operations
-  const hasDisabledHandle = React.useMemo(() => {
-    if (typeof rawDisabled === 'boolean') {
-      return rawDisabled;
-    }
-    return rawDisabled.some((d) => d);
-  }, [rawDisabled]);
 
   // Disable editable when any handle is disabled
   const effectiveRangeEditable = rangeEditable && !hasDisabledHandle;

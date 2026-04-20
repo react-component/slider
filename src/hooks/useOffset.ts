@@ -190,9 +190,10 @@ export default function useOffset(
     return (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
   };
 
+  const gap = typeof pushable === 'number' ? pushable : 0;
+
   // Get the minimum boundary for a handle considering disabled handles as fixed anchors
   const getHandleMinBound = (values: number[], handleIndex: number): number => {
-    const gap = typeof pushable === 'number' ? pushable : 0;
     // Collect min and all left-side disabled handle positions as candidates
     const candidates = [min];
     for (let i = handleIndex - 1; i >= 0; i -= 1) {
@@ -206,7 +207,6 @@ export default function useOffset(
 
   // Get the maximum boundary for a handle considering disabled handles as fixed anchors
   const getHandleMaxBound = (values: number[], handleIndex: number): number => {
-    const gap = typeof pushable === 'number' ? pushable : 0;
     // Collect max and all right-side disabled handle positions as candidates
     const candidates = [max];
     for (let i = handleIndex + 1; i < values.length; i += 1) {
