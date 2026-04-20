@@ -190,24 +190,32 @@ export default function useOffset(
     return (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
   };
 
-  // Get the minimum boundary for a handle considering disabled handles
+  // Get the minimum boundary for a handle considering disabled handles as fixed anchors
   const getHandleMinBound = (values: number[], handleIndex: number): number => {
+    const gap = typeof pushable === 'number' ? pushable : 0;
+    // Collect min and all left-side disabled handle positions as candidates
+    const candidates = [min];
     for (let i = handleIndex - 1; i >= 0; i -= 1) {
       if (isHandleDisabled(i)) {
-        return values[i] + (typeof pushable === 'number' ? pushable : 0);
+        candidates.push(values[i] + gap);
+        break; // Only need the nearest disabled handle
       }
     }
-    return min;
+    return Math.max(...candidates);
   };
 
-  // Get the maximum boundary for a handle considering disabled handles
+  // Get the maximum boundary for a handle considering disabled handles as fixed anchors
   const getHandleMaxBound = (values: number[], handleIndex: number): number => {
+    const gap = typeof pushable === 'number' ? pushable : 0;
+    // Collect max and all right-side disabled handle positions as candidates
+    const candidates = [max];
     for (let i = handleIndex + 1; i < values.length; i += 1) {
       if (isHandleDisabled(i)) {
-        return values[i] - (typeof pushable === 'number' ? pushable : 0);
+        candidates.push(values[i] - gap);
+        break; // Only need the nearest disabled handle
       }
     }
-    return max;
+    return Math.min(...candidates);
   };
 
   // Values
@@ -222,7 +230,13 @@ export default function useOffset(
     nextValues[valueIndex] = nextValue;
 
     // Apply disabled handle boundaries
-    nextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, nextValues[valueIndex]));
+    // If bounds conflict (min > max), the handle is locked between two disabled handles
+    // In this case, keep the original value
+    if (minBound <= maxBound) {
+      nextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, nextValues[valueIndex]));
+    } else {
+      nextValues[valueIndex] = originValue;
+    }
 
     if (allowCross === false) {
       // >>>>> Allow Cross

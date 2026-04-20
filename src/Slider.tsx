@@ -205,9 +205,10 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       if (typeof rawDisabled === 'boolean') {
         return rawDisabled;
       }
-      return rawDisabled[index] || false;
+      // Return individual disabled state if defined, otherwise fallback to global disabled
+      return rawDisabled[index] ?? disabled;
     },
-    [rawDisabled],
+    [rawDisabled, disabled],
   );
 
   const direction = React.useMemo<Direction>(() => {
@@ -415,46 +416,35 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
+        // Find nearest enabled handle if current is disabled
         if (isHandleDisabled(valueIndex)) {
-          let nearestIndex = -1;
-          let nearestDist = mergedMax - mergedMin;
+          const enabledIndices = rawValues
+            .map((_, i) => i)
+            .filter((i) => !isHandleDisabled(i));
 
-          rawValues.forEach((val, index) => {
-            if (!isHandleDisabled(index)) {
-              const dist = Math.abs(newValue - val);
-              if (dist < nearestDist) {
-                nearestDist = dist;
-                nearestIndex = index;
-              }
-            }
-          });
+          if (enabledIndices.length === 0) return;
 
-          // If all handles are disabled, do nothing
-          if (nearestIndex === -1) {
-            return;
-          }
-
-          valueIndex = nearestIndex;
+          valueIndex = enabledIndices.reduce((nearest, i) =>
+            Math.abs(newValue - rawValues[i]) < Math.abs(newValue - rawValues[nearest]) ? i : nearest,
+          );
         }
 
-        // Apply boundary constraints from disabled handles
-        let minBound = mergedMin;
-        let maxBound = mergedMax;
-
-        for (let i = valueIndex - 1; i >= 0; i -= 1) {
-          if (isHandleDisabled(i)) {
-            const pushDistance = typeof mergedPush === 'number' ? mergedPush : 0;
-            minBound = rawValues[i] + pushDistance;
-            break;
-          }
-        }
-        for (let i = valueIndex + 1; i < rawValues.length; i += 1) {
-          if (isHandleDisabled(i)) {
-            const pushDistance = typeof mergedPush === 'number' ? mergedPush : 0;
-            maxBound = rawValues[i] - pushDistance;
-            break;
-          }
-        }
+        // Calculate boundaries from disabled handles (treat as fixed anchors)
+        const pushDist = typeof mergedPush === 'number' ? mergedPush : 0;
+        const minBound = Math.max(
+          mergedMin,
+          ...rawValues
+            .slice(0, valueIndex)
+            .map((v, i) => (isHandleDisabled(i) ? v + pushDist : mergedMin))
+            .filter((v) => v > mergedMin),
+        );
+        const maxBound = Math.min(
+          mergedMax,
+          ...rawValues
+            .slice(valueIndex + 1)
+            .map((v, i) => (isHandleDisabled(i + valueIndex + 1) ? v - pushDist : mergedMax))
+            .filter((v) => v < mergedMax),
+        );
 
         cloneNextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, newValue));
         focusIndex = valueIndex;

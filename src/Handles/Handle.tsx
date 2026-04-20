@@ -55,7 +55,6 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     min,
     max,
     direction,
-    disabled: globalDisabled,
     keyboard,
     range,
     tabIndex,
@@ -68,13 +67,13 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
     isHandleDisabled,
   } = React.useContext(SliderContext);
 
-  const handleDisabled = globalDisabled || isHandleDisabled(valueIndex);
+  const mergedDisabled = isHandleDisabled(valueIndex);
 
   const handlePrefixCls = `${prefixCls}-handle`;
 
   // ============================ Events ============================
   const onInternalStartMove = (e: React.MouseEvent | React.TouchEvent) => {
-    if (handleDisabled) {
+    if (mergedDisabled) {
       e.stopPropagation();
       return;
     }
@@ -91,7 +90,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
 
   // =========================== Keyboard ===========================
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
-    if (!handleDisabled && keyboard) {
+    if (!mergedDisabled && keyboard) {
       let offset: number | 'min' | 'max' = null;
 
       // Change the value
@@ -166,12 +165,12 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
 
   if (valueIndex !== null) {
     divProps = {
-      tabIndex: handleDisabled ? null : getIndex(tabIndex, valueIndex),
+      tabIndex: mergedDisabled ? null : getIndex(tabIndex, valueIndex),
       role: 'slider',
       'aria-valuemin': min,
       'aria-valuemax': max,
       'aria-valuenow': value,
-      'aria-disabled': handleDisabled,
+      'aria-disabled': mergedDisabled,
       'aria-label': getIndex(ariaLabelForHandle, valueIndex),
       'aria-labelledby': getIndex(ariaLabelledByForHandle, valueIndex),
       'aria-required': getIndex(ariaRequired, valueIndex),
@@ -195,7 +194,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
           [`${handlePrefixCls}-${valueIndex + 1}`]: valueIndex !== null && range,
           [`${handlePrefixCls}-dragging`]: dragging,
           [`${handlePrefixCls}-dragging-delete`]: draggingDelete,
-          [`${handlePrefixCls}-disabled`]: handleDisabled,
+          [`${handlePrefixCls}-disabled`]: mergedDisabled,
         },
         classNames.handle,
       )}
