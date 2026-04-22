@@ -424,7 +424,11 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           }
         }
 
-        cloneNextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, newValue));
+        if (minBound <= maxBound) {
+          cloneNextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, newValue));
+        } else {
+          cloneNextValues[valueIndex] = rawValues[valueIndex];
+        }
         focusIndex = valueIndex;
       }
 
