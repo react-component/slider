@@ -2,24 +2,19 @@ import * as React from 'react';
 
 const useDisabled = (
   rawDisabled: boolean | boolean[],
-  mergedValue?: number | number[],
+  rawValue: number[],
 ): [boolean, boolean] => {
-
-  const values = React.useMemo(
-    () => (Array.isArray(mergedValue) ? mergedValue : [mergedValue]),
-    [mergedValue],
-  );
 
   const disabledArray = React.useMemo(() => {
     if (typeof rawDisabled === 'boolean') {
-      return values.map(() => rawDisabled);
+      return rawValue.map(() => rawDisabled);
     }
-    return Array.isArray(rawDisabled) ? rawDisabled : values.map(() => false);
-  }, [rawDisabled, mergedValue]);
+    return Array.isArray(rawDisabled) ? rawDisabled : rawValue.map(() => false);
+  }, [rawDisabled, rawValue]);
 
   const disabled = React.useMemo(() => {
-    return values.every((_, index) => disabledArray[index]);
-  }, [disabledArray, values]);
+    return rawValue.every((_, index) => disabledArray[index]);
+  }, [disabledArray, rawValue]);
 
   const hasDisabledHandle = React.useMemo(() => {
     return disabledArray.some((d) => d);

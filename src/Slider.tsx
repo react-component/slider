@@ -189,20 +189,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const containerRef = React.useRef<HTMLDivElement>(null);
   const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
-  // ============================ Disabled ============================
-
-  const [disabled, hasDisabledHandle] = useDisabled(rawDisabled, mergedValue);
-
-  const isHandleDisabled = React.useCallback(
-    (index: number): boolean => {
-      if (typeof rawDisabled === 'boolean') {
-        return rawDisabled;
-      }
-      return rawDisabled[index] ?? false;
-    },
-    [rawDisabled],
-  );
-
   const direction = React.useMemo<Direction>(() => {
     if (vertical) {
       return reverse ? 'ttb' : 'btt';
@@ -213,8 +199,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   // ============================ Range =============================
   const [rangeEnabled, rangeEditable, rangeDraggableTrack, minCount, maxCount] = useRange(range);
 
-  // Disable editable when any handle is disabled
-  const effectiveRangeEditable = rangeEditable && !hasDisabledHandle;
+
 
   const mergedMin = React.useMemo(() => (isFinite(min) ? min : 0), [min]);
   const mergedMax = React.useMemo(() => (isFinite(max) ? max : 100), [max]);
@@ -256,6 +241,17 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       .filter(({ label }) => label || typeof label === 'number')
       .sort((a, b) => a.value - b.value);
   }, [marks]);
+
+  // ============================ Disabled ============================
+  const isHandleDisabled = React.useCallback(
+    (index: number): boolean => {
+      if (typeof rawDisabled === 'boolean') {
+        return rawDisabled;
+      }
+      return rawDisabled[index] ?? false;
+    },
+    [rawDisabled],
+  );
 
   // ============================ Format ============================
   const [formatValue, offsetValues] = useOffset(
@@ -305,6 +301,10 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     return returnValues;
   }, [mergedValue, rangeEnabled, mergedMin, count, formatValue]);
+
+  const [disabled, hasDisabledHandle] = useDisabled(rawDisabled, rawValues);
+
+  const effectiveRangeEditable = rangeEditable && !hasDisabledHandle;
 
   // =========================== onChange ===========================
   const getTriggerValue = (triggerValues: number[]) =>
