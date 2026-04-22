@@ -45,7 +45,7 @@ const DisabledHandleAsBoundary = () => {
         range
         step={10}
         value={value}
-        onChange={(v) => setValue(v as number[])}
+        onChange={(v) => Array.isArray(v) && setValue(v)}
         disabled={[false, true, false]}
       />
       <p style={{ marginTop: 8, color: '#999' }}>
