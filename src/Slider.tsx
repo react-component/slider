@@ -329,7 +329,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   });
 
   const onDelete = (index: number) => {
-    if (disabled || !effectiveRangeEditable || rawValues.length <= minCount || isHandleDisabled(index)) {
+    if (disabled || !effectiveRangeEditable || rawValues.length <= minCount) {
       return;
     }
 
