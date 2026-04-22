@@ -5,36 +5,32 @@ const useDisabled = (
   mergedValue?: number | number[],
 ): [boolean, (index: number) => boolean, boolean] => {
 
-  const disabledIsArray = Array.isArray(rawDisabled);
-  const disabledIsBoolean = typeof rawDisabled === 'boolean';
   const values = React.useMemo(
     () => (Array.isArray(mergedValue) ? mergedValue : [mergedValue]),
     [mergedValue],
   );
 
-  const disabled = React.useMemo(() => {
-    if (disabledIsBoolean) {
-      return rawDisabled;
+  const disabledArray = React.useMemo(() => {
+    if (typeof rawDisabled === 'boolean') {
+      return values.map(() => rawDisabled);
     }
-    return disabledIsArray ? values.every((_, index) => rawDisabled[index]) : false;
+    return Array.isArray(rawDisabled) ? rawDisabled : values.map(() => false);
   }, [rawDisabled, mergedValue]);
+
+  const disabled = React.useMemo(() => {
+    return values.every((_, index) => disabledArray[index]);
+  }, [disabledArray, values]);
 
   const isHandleDisabled = React.useCallback(
     (index: number): boolean => {
-      if (disabledIsBoolean) {
-        return rawDisabled;
-      }
-      return rawDisabled[index] ?? disabled;
+      return disabledArray[index] ?? disabled;
     },
-    [rawDisabled, disabled],
+    [disabledArray, disabled],
   );
 
   const hasDisabledHandle = React.useMemo(() => {
-    if (disabledIsBoolean) {
-      return rawDisabled;
-    }
-    return rawDisabled.some((d) => d);
-  }, [rawDisabled]);
+    return disabledArray.some((d) => d);
+  }, [disabledArray]);
 
   return [
     disabled,

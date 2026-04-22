@@ -405,20 +405,24 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
         // Calculate boundaries from disabled handles (treat as fixed anchors)
         const pushDist = typeof mergedPush === 'number' ? mergedPush : 0;
-        const minBound = Math.max(
-          mergedMin,
-          ...rawValues
-            .slice(0, valueIndex)
-            .map((v, i) => (isHandleDisabled(i) ? v + pushDist : mergedMin))
-            .filter((v) => v > mergedMin),
-        );
-        const maxBound = Math.min(
-          mergedMax,
-          ...rawValues
-            .slice(valueIndex + 1)
-            .map((v, i) => (isHandleDisabled(i + valueIndex + 1) ? v - pushDist : mergedMax))
-            .filter((v) => v < mergedMax),
-        );
+        let minBound = mergedMin;
+        let maxBound = mergedMax;
+
+        // Find nearest disabled handle on the left as min boundary
+        for (let i = valueIndex - 1; i >= 0; i -= 1) {
+          if (isHandleDisabled(i)) {
+            minBound = Math.max(minBound, rawValues[i] + pushDist);
+            break;
+          }
+        }
+
+        // Find nearest disabled handle on the right as max boundary
+        for (let i = valueIndex + 1; i < rawValues.length; i += 1) {
+          if (isHandleDisabled(i)) {
+            maxBound = Math.min(maxBound, rawValues[i] - pushDist);
+            break;
+          }
+        }
 
         cloneNextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, newValue));
         focusIndex = valueIndex;
