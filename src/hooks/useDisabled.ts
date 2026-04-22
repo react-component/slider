@@ -13,7 +13,7 @@ const useDisabled = (
   }, [rawDisabled, rawValue]);
 
   const disabled = React.useMemo(() => {
-    return rawValue.every((_, index) => disabledArray[index]);
+    return rawValue.length > 0 && rawValue.every((_, index) => disabledArray[index]);
   }, [disabledArray, rawValue]);
 
   const hasDisabledHandle = React.useMemo(() => {
