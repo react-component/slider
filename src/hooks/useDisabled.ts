@@ -3,7 +3,7 @@ import * as React from 'react';
 const useDisabled = (
   rawDisabled: boolean | boolean[],
   mergedValue?: number | number[],
-): [boolean, (index: number) => boolean, boolean] => {
+): [boolean, boolean] => {
 
   const values = React.useMemo(
     () => (Array.isArray(mergedValue) ? mergedValue : [mergedValue]),
@@ -21,20 +21,12 @@ const useDisabled = (
     return values.every((_, index) => disabledArray[index]);
   }, [disabledArray, values]);
 
-  const isHandleDisabled = React.useCallback(
-    (index: number): boolean => {
-      return disabledArray[index] ?? disabled;
-    },
-    [disabledArray, disabled],
-  );
-
   const hasDisabledHandle = React.useMemo(() => {
     return disabledArray.some((d) => d);
   }, [disabledArray]);
 
   return [
     disabled,
-    isHandleDisabled,
     hasDisabledHandle,
   ];
 };

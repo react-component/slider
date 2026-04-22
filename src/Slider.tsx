@@ -191,7 +191,17 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   // ============================ Disabled ============================
 
-  const [disabled, isHandleDisabled, hasDisabledHandle] = useDisabled(rawDisabled, mergedValue);
+  const [disabled, hasDisabledHandle] = useDisabled(rawDisabled, mergedValue);
+
+  const isHandleDisabled = React.useCallback(
+    (index: number): boolean => {
+      if (typeof rawDisabled === 'boolean') {
+        return rawDisabled;
+      }
+      return rawDisabled[index] ?? false;
+    },
+    [rawDisabled],
+  );
 
   const direction = React.useMemo<Direction>(() => {
     if (vertical) {
