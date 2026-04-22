@@ -17,12 +17,10 @@ const Tracks: React.FC<TrackProps> = (props) => {
   const { prefixCls, style, values, startPoint, onStartMove: propsOnStartMove } = props;
   const { included, range, min, styles, classNames, isHandleDisabled } = React.useContext(SliderContext);
 
-  const hasDisabledHandle = React.useMemo(() => {
-    for (let i = 0; i < values.length; i++) {
-      if (isHandleDisabled(i)) return true;
-    }
-    return false;
-  }, [isHandleDisabled, values.length]);
+  const hasDisabledHandle = React.useMemo(
+    () => values.some((_, index) => isHandleDisabled(index)),
+    [isHandleDisabled, values],
+  );
 
   const onStartMove = hasDisabledHandle ? undefined : propsOnStartMove;
 
