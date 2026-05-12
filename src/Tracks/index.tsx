@@ -56,7 +56,7 @@ const Tracks: React.FC<TrackProps> = (props) => {
   const tracksNode =
     trackList?.length && (classNames.tracks || styles.tracks) ? (
       <Track
-        index={null}
+        index={null!}
         prefixCls={prefixCls}
         start={trackList[0].start}
         end={trackList[trackList.length - 1].end}

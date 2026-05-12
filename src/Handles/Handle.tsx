@@ -91,7 +91,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
   // =========================== Keyboard ===========================
   const onKeyDown: React.KeyboardEventHandler<HTMLDivElement> = (e) => {
     if (!mergedDisabled && keyboard) {
-      let offset: number | 'min' | 'max' = null;
+      let offset: number | 'min' | 'max' | undefined;
 
       // Change the value
       switch (e.which || e.keyCode) {
@@ -135,7 +135,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
           break;
       }
 
-      if (offset !== null) {
+      if (offset !== undefined) {
         e.preventDefault();
         onOffsetChange(offset, valueIndex);
       }
@@ -165,7 +165,7 @@ const Handle = React.forwardRef<HTMLDivElement, HandleProps>((props, ref) => {
 
   if (valueIndex !== null) {
     divProps = {
-      tabIndex: mergedDisabled ? null : getIndex(tabIndex, valueIndex),
+      tabIndex: mergedDisabled ? undefined : getIndex(tabIndex, valueIndex) ?? undefined,
       role: 'slider',
       'aria-valuemin': min,
       'aria-valuemax': max,

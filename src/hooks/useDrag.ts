@@ -15,7 +15,7 @@ function getPosition(e: React.MouseEvent | React.TouchEvent | MouseEvent | Touch
 }
 
 function useDrag(
-  containerRef: React.RefObject<HTMLDivElement>,
+  containerRef: React.RefObject<HTMLDivElement | null>,
   direction: Direction,
   rawValues: number[],
   min: number,
@@ -34,15 +34,15 @@ function useDrag(
   returnValues: number[],
   onStartMove: OnStartMove,
 ] {
-  const [draggingValue, setDraggingValue] = React.useState(null);
+  const [draggingValue, setDraggingValue] = React.useState<number>(null!);
   const [draggingIndex, setDraggingIndex] = React.useState(-1);
   const [draggingDelete, setDraggingDelete] = React.useState(false);
   const [cacheValues, setCacheValues] = React.useState(rawValues);
   const [originValues, setOriginValues] = React.useState(rawValues);
 
-  const mouseMoveEventRef = React.useRef<(event: MouseEvent) => void>(null);
-  const mouseUpEventRef = React.useRef<(event: MouseEvent) => void>(null);
-  const touchEventTargetRef = React.useRef<EventTarget>(null);
+  const mouseMoveEventRef = React.useRef<EventListener | null>(null);
+  const mouseUpEventRef = React.useRef<EventListener | null>(null);
+  const touchEventTargetRef = React.useRef<EventTarget | null>(null);
 
   const { onDragStart, onDragChange } = React.useContext(UnstableContext);
 
@@ -55,11 +55,19 @@ function useDrag(
   // Clean up event
   React.useEffect(
     () => () => {
-      document.removeEventListener('mousemove', mouseMoveEventRef.current);
-      document.removeEventListener('mouseup', mouseUpEventRef.current);
+      if (mouseMoveEventRef.current) {
+        document.removeEventListener('mousemove', mouseMoveEventRef.current);
+      }
+      if (mouseUpEventRef.current) {
+        document.removeEventListener('mouseup', mouseUpEventRef.current);
+      }
       if (touchEventTargetRef.current) {
-        touchEventTargetRef.current.removeEventListener('touchmove', mouseMoveEventRef.current);
-        touchEventTargetRef.current.removeEventListener('touchend', mouseUpEventRef.current);
+        if (mouseMoveEventRef.current) {
+          touchEventTargetRef.current.removeEventListener('touchmove', mouseMoveEventRef.current);
+        }
+        if (mouseUpEventRef.current) {
+          touchEventTargetRef.current.removeEventListener('touchend', mouseUpEventRef.current);
+        }
       }
     },
     [],
@@ -84,7 +92,7 @@ function useDrag(
         rawValues: nextValues,
         deleteIndex: deleteMark ? draggingIndex : -1,
         draggingIndex,
-        draggingValue: nextValue,
+        draggingValue: nextValue as number,
       });
     }
   };
@@ -160,14 +168,14 @@ function useDrag(
     }
 
     // Moving
-    const onMouseMove = (event: MouseEvent | TouchEvent) => {
+    const onMouseMove: EventListener = (event) => {
       event.preventDefault();
 
-      const { pageX: moveX, pageY: moveY } = getPosition(event);
+      const { pageX: moveX, pageY: moveY } = getPosition(event as MouseEvent | TouchEvent);
       const offsetX = moveX - startX;
       const offsetY = moveY - startY;
 
-      const { width, height } = containerRef.current.getBoundingClientRect();
+      const { width, height } = containerRef.current!.getBoundingClientRect();
 
       let offSetPercent: number;
       let removeDist: number;
@@ -203,14 +211,18 @@ function useDrag(
     };
 
     // End
-    const onMouseUp = (event: MouseEvent | TouchEvent) => {
+    const onMouseUp: EventListener = (event) => {
       event.preventDefault();
 
       document.removeEventListener('mouseup', onMouseUp);
       document.removeEventListener('mousemove', onMouseMove);
       if (touchEventTargetRef.current) {
-        touchEventTargetRef.current.removeEventListener('touchmove', mouseMoveEventRef.current);
-        touchEventTargetRef.current.removeEventListener('touchend', mouseUpEventRef.current);
+        if (mouseMoveEventRef.current) {
+          touchEventTargetRef.current.removeEventListener('touchmove', mouseMoveEventRef.current);
+        }
+        if (mouseUpEventRef.current) {
+          touchEventTargetRef.current.removeEventListener('touchend', mouseUpEventRef.current);
+        }
       }
       mouseMoveEventRef.current = null;
       mouseUpEventRef.current = null;

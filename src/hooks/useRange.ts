@@ -22,6 +22,6 @@ export default function useRange(
       warning(!editable || !draggableTrack, '`editable` can not work with `draggableTrack`.');
     }
 
-    return [true, editable, !editable && draggableTrack, minCount || 0, maxCount];
+    return [true, !!editable, !editable && !!draggableTrack, minCount || 0, maxCount];
   }, [range]);
 }

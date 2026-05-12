@@ -185,8 +185,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     ariaValueTextFormatterForHandle,
   } = props;
 
-  const handlesRef = React.useRef<HandlesRef>(null);
-  const containerRef = React.useRef<HTMLDivElement>(null);
+  const handlesRef = React.useRef<HandlesRef | null>(null);
+  const containerRef = React.useRef<HTMLDivElement | null>(null);
   const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
   const direction = React.useMemo<Direction>(() => {
@@ -217,9 +217,11 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   // ============================ Marks =============================
   const markList = React.useMemo<InternalMarkObj[]>(() => {
-    return Object.keys(marks || {})
+    const markRecord = marks || {};
+
+    return Object.keys(markRecord)
       .map<InternalMarkObj>((key) => {
-        const mark = marks[key];
+        const mark = markRecord[key];
         const markObj: InternalMarkObj = {
           value: Number(key),
         };
@@ -257,10 +259,10 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const [formatValue, offsetValues] = useOffset(
     mergedMin,
     mergedMax,
-    mergedStep,
+    mergedStep as number,
     markList,
     allowCross,
-    mergedPush,
+    mergedPush as false | number,
     isHandleDisabled,
   );
 
@@ -283,7 +285,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
       // When count provided or value is `undefined`, we fill values
       if (count || mergedValue === undefined) {
-        const pointCount = count >= 0 ? count + 1 : 2;
+        const pointCount = count !== undefined && count >= 0 ? count + 1 : 2;
         returnValues = returnValues.slice(0, pointCount);
 
         // Fill with count
@@ -326,7 +328,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   const finishChange = useEvent((draggingDelete?: boolean) => {
     // Trigger from `useDrag` will tell if it's a delete action
     if (draggingDelete) {
-      handlesRef.current.hideHelp();
+      handlesRef.current!.hideHelp();
     }
 
     const finishValue = getTriggerValue(rawValues);
@@ -350,8 +352,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     triggerChange(cloneNextValues);
 
     const nextFocusIndex = Math.max(0, index - 1);
-    handlesRef.current.hideHelp();
-    handlesRef.current.focus(nextFocusIndex);
+    handlesRef.current!.hideHelp();
+    handlesRef.current!.focus(nextFocusIndex);
   };
 
   const [draggingIndex, draggingValue, draggingDelete, cacheValues, onStartDrag] = useDrag(
@@ -453,7 +455,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
       if (e) {
         (document.activeElement as HTMLElement)?.blur?.();
-        handlesRef.current.focus(focusIndex);
+        handlesRef.current!.focus(focusIndex);
         onStartDrag(e, focusIndex, cloneNextValues);
       } else {
         // https://github.com/ant-design/ant-design/issues/49997
@@ -472,7 +474,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     e.preventDefault();
 
     const { width, height, left, top, bottom, right } =
-      containerRef.current.getBoundingClientRect();
+      containerRef.current!.getBoundingClientRect();
     const { clientX, clientY } = e;
 
     let percent: number;
@@ -498,7 +500,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   };
 
   // =========================== Keyboard ===========================
-  const [keyboardValue, setKeyboardValue] = React.useState<number>(null);
+  const [keyboardValue, setKeyboardValue] = React.useState<number>(null!);
 
   const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
     if (!disabled && !isHandleDisabled(valueIndex)) {
@@ -515,11 +517,12 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     if (keyboardValue !== null) {
       const valueIndex = rawValues.indexOf(keyboardValue);
       if (valueIndex >= 0) {
-        handlesRef.current.focus(valueIndex);
+        handlesRef.current!.focus(valueIndex);
       }
     }
 
-    setKeyboardValue(null);
+    setKeyboardValue(null!);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [keyboardValue]);
 
   // ============================= Drag =============================
@@ -544,8 +547,9 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   React.useEffect(() => {
     if (!dragging) {
       const valueIndex = rawValues.lastIndexOf(draggingValue);
-      handlesRef.current.focus(valueIndex);
+      handlesRef.current!.focus(valueIndex);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragging]);
 
   // =========================== Included ===========================
@@ -567,7 +571,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   // ============================= Refs =============================
   React.useImperativeHandle(ref, () => ({
     focus: () => {
-      handlesRef.current.focus(0);
+      handlesRef.current!.focus(0);
     },
     blur: () => {
       const { activeElement } = document;
@@ -578,9 +582,10 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   }));
 
   // ========================== Auto Focus ==========================
+  const autoFocusRef = React.useRef(autoFocus);
   React.useEffect(() => {
-    if (autoFocus) {
-      handlesRef.current.focus(0);
+    if (autoFocusRef.current) {
+      handlesRef.current!.focus(0);
     }
   }, []);
 

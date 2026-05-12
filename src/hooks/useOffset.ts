@@ -53,9 +53,9 @@ export default function useOffset(
         const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
         const fixedValue = Number(stepValue.toFixed(maxDecimal));
 
-        return min <= fixedValue && fixedValue <= max ? fixedValue : null;
+        return min <= fixedValue && fixedValue <= max ? fixedValue : null!;
       }
-      return null;
+      return null!;
     },
     [step, min, max, formatRangeValue],
   );
@@ -169,6 +169,9 @@ export default function useOffset(
     } else if (offset === 'max') {
       return max;
     }
+
+    // Unreachable since `offset` is typed as number | 'min' | 'max'.
+    return max;
   };
 
   /** Same as `offsetValue` but return `changed` mark to tell value changed */
