@@ -60,7 +60,7 @@ class NullableSlider extends React.Component<any, any> {
 }
 
 const NullableRangeSlider = () => {
-  const [value, setValue] = React.useState(null);
+  const [value, setValue] = React.useState<any>(null);
 
   return (
     <div>

@@ -17,7 +17,7 @@ export interface MarksProps {
 }
 
 const Marks: React.FC<MarksProps> = (props) => {
-  const { prefixCls, marks, onClick } = props;
+  const { prefixCls, marks = [], onClick } = props;
 
   const markPrefixCls = `${prefixCls}-mark`;
 
