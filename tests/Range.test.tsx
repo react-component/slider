@@ -140,7 +140,9 @@ describe('Range', () => {
   });
 
   it('should render Range without tabIndex (equal null) correctly', () => {
-    const { container } = render(<Slider range tabIndex={[null, null]} />);
+    const { container } = render(
+      <Slider range tabIndex={[null, null] as any} />,
+    );
     expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
     expect(container.getElementsByClassName('rc-slider-handle')[1]).not.toHaveAttribute('tabIndex');
   });
@@ -557,15 +559,15 @@ describe('Range', () => {
     it('focus()', () => {
       const handleFocus = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onFocus={handleFocus} />);
-      container.querySelector<HTMLDivElement>('.rc-slider-handle').focus();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle')!.focus();
       expect(handleFocus).toBeCalled();
     });
 
     it('blur()', () => {
       const handleBlur = jest.fn();
       const { container } = render(<Slider range min={0} max={20} onBlur={handleBlur} />);
-      container.querySelector<HTMLDivElement>('.rc-slider-handle').focus();
-      container.querySelector<HTMLDivElement>('.rc-slider-handle').blur();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle')!.focus();
+      container.querySelector<HTMLDivElement>('.rc-slider-handle')!.blur();
       expect(handleBlur).toHaveBeenCalled();
     });
   });
@@ -697,7 +699,7 @@ describe('Range', () => {
         expect(container.querySelectorAll('.rc-slider-track')).toHaveLength(1);
 
         // Fire mouse up
-        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle')!);
         expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
       });
 
@@ -722,7 +724,7 @@ describe('Range', () => {
         expect(onChange).toHaveBeenCalledWith([0, 50]);
 
         // Fire mouse up
-        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle')!);
         expect(onChangeComplete).toHaveBeenCalledWith([0, 50]);
       });
 
@@ -753,7 +755,7 @@ describe('Range', () => {
         expect(onChange).toHaveBeenCalledWith([50, 100]);
 
         // Fire mouse up
-        fireEvent.mouseUp(container.querySelector('.rc-slider-handle'));
+        fireEvent.mouseUp(container.querySelector('.rc-slider-handle')!);
         expect(onChangeComplete).toHaveBeenCalledWith([50, 100]);
       });
     });
@@ -783,10 +785,10 @@ describe('Range', () => {
       expect(onChange).toHaveBeenCalledWith([0, 100]);
 
       // Clear all
-      fireEvent.keyDown(container.querySelector('.rc-slider-handle'), {
+      fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
         keyCode: keyCode.DELETE,
       });
-      fireEvent.keyDown(container.querySelector('.rc-slider-handle'), {
+      fireEvent.keyDown(container.querySelector('.rc-slider-handle')!, {
         keyCode: keyCode.DELETE,
       });
       expect(onChange).toHaveBeenCalledWith([]);
@@ -812,8 +814,8 @@ describe('Range', () => {
       const handle = container.querySelector('.rc-slider-handle');
 
       // Key
-      fireEvent.mouseEnter(handle);
-      fireEvent.keyDown(handle, {
+      fireEvent.mouseEnter(handle!);
+      fireEvent.keyDown(handle!, {
         keyCode: keyCode.DELETE,
       });
       expect(onChange).not.toHaveBeenCalled();

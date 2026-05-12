@@ -16,7 +16,7 @@ interface HandleTooltipProps {
 const HandleTooltip: React.FC<HandleTooltipProps> = (props) => {
   const { value, children, visible, tipFormatter = (val) => `${val} %`, ...restProps } = props;
 
-  const tooltipRef = React.useRef<TooltipRef>();
+  const tooltipRef = React.useRef<TooltipRef>(null);
   const rafRef = React.useRef<number | null>(null);
 
   function cancelKeepAlign() {
