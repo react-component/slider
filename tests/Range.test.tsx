@@ -845,67 +845,77 @@ describe('Range', () => {
   });
 
   describe('disabled as array', () => {
-    it('basic functionality with boolean and array', () => {
+    const getHandle = (container: HTMLElement, index = 0) =>
+      container.getElementsByClassName('rc-slider-handle')[index] as HTMLElement;
+
+    const repeatKeyDown = (element: Element, code: number, count: number) => {
+      for (let i = 0; i < count; i += 1) {
+        fireEvent.keyDown(element, { keyCode: code });
+      }
+    };
+
+    const getLastChange = (onChange: jest.Mock) =>
+      onChange.mock.calls[onChange.mock.calls.length - 1][0];
+
+    it('respects handle disabled state and boolean disabled fallback', () => {
       const onChange = jest.fn();
       const { container, rerender } = render(
         <Slider range defaultValue={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
       );
 
-      // Disabled handles: no tabIndex, aria-disabled=true
-      expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
-      expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute('aria-disabled', 'true');
+      const disabledHandle = getHandle(container, 0);
+      const enabledHandle = getHandle(container, 1);
 
-      // Enabled handle: has tabIndex, aria-disabled=false
-      expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute('tabIndex');
-      expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute('aria-disabled', 'false');
+      expect(disabledHandle).not.toHaveAttribute('tabIndex');
+      expect(disabledHandle).toHaveAttribute('aria-disabled', 'true');
+      expect(enabledHandle).toHaveAttribute('tabIndex');
+      expect(enabledHandle).toHaveAttribute('aria-disabled', 'false');
 
-      // Keyboard: disabled handle should not respond
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.RIGHT });
+      fireEvent.keyDown(disabledHandle, { keyCode: keyCode.RIGHT });
+      doMouseMove(container, 0, 80, 'rc-slider-handle');
+      fireEvent.mouseUp(document);
       expect(onChange).not.toHaveBeenCalled();
 
-      // Keyboard: enabled handle should respond
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.RIGHT });
+      fireEvent.keyDown(enabledHandle, { keyCode: keyCode.RIGHT });
       expect(onChange).toHaveBeenCalledWith([0, 51, 100]);
 
-      // Boolean disabled backward compatibility
       rerender(<Slider range defaultValue={[20, 50]} disabled={true} onChange={onChange} />);
-      expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
+      expect(getHandle(container, 0)).not.toHaveAttribute('tabIndex');
       doMouseDown(container, 30, 'rc-slider', true);
-      expect(onChange).toHaveBeenCalledTimes(1); // Still 1, not triggered
+      fireEvent.mouseUp(document);
+      expect(onChange).toHaveBeenCalledTimes(1);
     });
 
-    it('drag and click respect disabled state', () => {
+    it('moves only eligible handles when clicking the track', () => {
       const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
+      const { container, rerender } = render(
+        <Slider range value={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
       );
 
-      // Drag disabled handle - no change
-      doMouseMove(container, 0, 80, 'rc-slider-handle');
+      doMouseDown(container, 10, 'rc-slider', true);
+      fireEvent.mouseUp(document);
+      expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
+
+      onChange.mockClear();
+      rerender(<Slider range value={[20, 50, 80]} disabled={[true, false, false]} onChange={onChange} />);
+      doMouseDown(container, 10, 'rc-slider', true);
+      fireEvent.mouseUp(document);
       expect(onChange).not.toHaveBeenCalled();
 
-      // Click near disabled handle - moves nearest enabled handle
+      rerender(<Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />);
+      doMouseDown(container, 90, 'rc-slider', true);
+      fireEvent.mouseUp(document);
+      expect(onChange).not.toHaveBeenCalled();
+
+      rerender(<Slider range value={[0, 50, 100]} disabled={[true, true, true]} onChange={onChange} />);
       doMouseDown(container, 10, 'rc-slider', true);
-      expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
+      fireEvent.mouseUp(document);
+      expect(onChange).not.toHaveBeenCalled();
     });
 
-    it('cannot cross disabled handle boundary', () => {
+    it('disables editable operations when any handle is disabled', () => {
       const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} onChange={onChange} />,
-      );
-
-      // Try to move first handle past disabled middle handle
-      for (let i = 0; i < 50; i++) {
-        fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.RIGHT });
-      }
-      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
-      expect(lastCall[0][0]).toBeLessThanOrEqual(50);
-    });
-
-    it('editable mode disabled when any handle is disabled', () => {
-      const onChange = jest.fn();
-      const { container } = render(
+      const { container, rerender } = render(
         <Slider
           range={{ editable: true }}
           value={[0, 50, 100]}
@@ -914,22 +924,17 @@ describe('Range', () => {
         />,
       );
 
-      // Cannot delete handle when any handle is disabled (editable is disabled)
-      const handle = container.getElementsByClassName('rc-slider-handle')[0];
+      const handle = getHandle(container, 0);
       fireEvent.mouseEnter(handle);
       fireEvent.keyDown(handle, { keyCode: keyCode.DELETE });
       expect(onChange).not.toHaveBeenCalled();
 
-      // Clicking track moves nearest enabled handle instead of adding new one
-      // (editable is disabled, so it falls back to normal behavior)
       doMouseDown(container, 25, 'rc-slider', true);
-      // Should move first handle to position 25 instead of adding new handle
+      fireEvent.mouseUp(document);
       expect(onChange).toHaveBeenCalledWith([25, 50, 100]);
-    });
 
-    it('editable mode completely disabled when any handle is disabled', () => {
-      const onChange = jest.fn();
-      const { container } = render(
+      onChange.mockClear();
+      rerender(
         <Slider
           range={{ editable: true }}
           value={[20, 60]}
@@ -938,32 +943,14 @@ describe('Range', () => {
         />,
       );
 
-      // Clicking track moves nearest enabled handle (editable is disabled)
       doMouseDown(container, 40, 'rc-slider', true);
-      // Should move second handle to position 40 instead of adding new handle
+      fireEvent.mouseUp(document);
       expect(onChange).toHaveBeenCalledWith([20, 40]);
     });
 
-    it('all handles disabled prevents interaction', () => {
+    it('disables draggableTrack only when rendered handles are disabled', () => {
       const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[0, 50, 100]} disabled={[true, true, true]} onChange={onChange} />,
-      );
-
-      // Click does nothing (covers findNearestEnabled returning -1)
-      const rail = container.querySelector('.rc-slider-rail');
-      const mouseDown = createEvent.mouseDown(rail!);
-      Object.defineProperties(mouseDown, {
-        clientX: { get: () => 10 },
-        clientY: { get: () => 10 },
-      });
-      fireEvent(rail!, mouseDown);
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('draggableTrack disabled when any handle is disabled', () => {
-      const onChange = jest.fn();
-      const { container } = render(
+      const { container, unmount } = render(
         <Slider range={{ draggableTrack: true }} defaultValue={[0, 50]} disabled={[false, true]} onChange={onChange} />,
       );
 
@@ -979,132 +966,89 @@ describe('Range', () => {
       (mouseMove as any).pageX = 20;
       (mouseMove as any).pageY = 20;
       fireEvent(document, mouseMove);
+      fireEvent.mouseUp(document);
 
       expect(onChange).not.toHaveBeenCalled();
-    });
 
-    it('ignores disabled config outside of rendered handles', () => {
-      const onChange = jest.fn();
-      const { container } = render(
+      unmount();
+
+      const onMove = jest.fn();
+      const { container: enabledContainer } = render(
         <Slider
           range={{ draggableTrack: true }}
           defaultValue={[20, 60]}
           disabled={[false, false, true]}
-          onChange={onChange}
+          onChange={onMove}
         />,
       );
 
-      doMouseMove(container, 20, 30, 'rc-slider-track');
-      expect(onChange).toHaveBeenCalledWith([30, 70]);
+      doMouseMove(enabledContainer, 20, 30, 'rc-slider-track');
+      fireEvent.mouseUp(document);
+      expect(onMove).toHaveBeenCalledWith([30, 70]);
     });
 
-    it('click to move respects disabled boundary', () => {
+    it('keeps keyboard movement inside disabled handle boundaries', () => {
       const onChange = jest.fn();
-      const { container, rerender } = render(
-        <Slider range value={[20, 50, 80]} disabled={[true, false, false]} onChange={onChange} />,
+      const { container, unmount } = render(
+        <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} onChange={onChange} />,
       );
 
-      // Click left of disabled handle - no enabled segment contains the target
-      doMouseDown(container, 10, 'rc-slider', true);
-      expect(onChange).not.toHaveBeenCalled();
+      repeatKeyDown(getHandle(container, 0), keyCode.RIGHT, 50);
+      expect(getLastChange(onChange)[0]).toBeLessThanOrEqual(50);
 
-      // Click right of disabled handle - no enabled segment contains the target
-      rerender(<Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />);
-      doMouseDown(container, 90, 'rc-slider', true);
-      expect(onChange).not.toHaveBeenCalled();
-    });
-
-    it('pushable respects disabled handle boundaries', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[20, 40, 60, 80]} disabled={[false, true, false, false]} pushable={10} onChange={onChange} />,
-      );
-
-      // Push first handle right - should stop at disabled handle boundary (40 - 10 = 30)
-      for (let i = 0; i < 30; i++) {
-        fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.UP });
-      }
-
-      // First handle should stop at 30 to maintain pushable distance from disabled handle at 40
-      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
-      expect(lastCall[0][0]).toBe(30);
-      expect(lastCall[0][1]).toBe(40);
-    });
-
-    it('pushable revert respects disabled handles', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[20, 40, 60, 80]} disabled={[false, true, false, false]} pushable={10} onChange={onChange} />,
-      );
-
-      // Drag last handle (80) left to push third handle (60) toward disabled handle (40)
-      for (let i = 0; i < 50; i++) {
-        fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[3], { keyCode: keyCode.LEFT });
-      }
-
-      // Third handle should maintain pushable distance from disabled handle at 40
-      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
-      expect(lastCall[0][2]).toBe(50);
-      expect(lastCall[0][2] - lastCall[0][1]).toBe(10);
-    });
-
-    it('keyboard home/end with disabled handles', () => {
-      const onChange = jest.fn();
-      const { container } = render(
-        <Slider range defaultValue={[20, 50, 80]} disabled={[true, false, true]} onChange={onChange} />,
-      );
-
-      // HOME key on enabled middle handle - should go to left disabled handle boundary (20)
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.HOME });
-      expect(onChange).toHaveBeenCalledWith([20, 20, 80]);
-
+      unmount();
       onChange.mockClear();
 
-      // END key on enabled middle handle - should go to right disabled handle boundary (80)
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.END });
-      expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
-    });
-
-    it('keeps focus on enabled handle when keyboard moves to disabled boundary', () => {
-      const { container } = render(
-        <Slider range defaultValue={[20, 50, 80]} disabled={[true, false, true]} />,
+      const { container: boundaryContainer } = render(
+        <Slider range defaultValue={[20, 50, 80]} disabled={[true, false, true]} onChange={onChange} />,
       );
-      const middleHandle = container.getElementsByClassName('rc-slider-handle')[1] as HTMLElement;
+      const middleHandle = getHandle(boundaryContainer, 1);
 
       middleHandle.focus();
       fireEvent.keyDown(middleHandle, { keyCode: keyCode.HOME });
+      expect(onChange).toHaveBeenCalledWith([20, 20, 80]);
+      expect(getHandle(boundaryContainer, 1)).toHaveFocus();
 
-      expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveFocus();
+      onChange.mockClear();
+      fireEvent.keyDown(getHandle(boundaryContainer, 1), { keyCode: keyCode.END });
+      expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
     });
 
-    it('allowCross false with disabled handles', () => {
+    it('respects pushable boundaries around disabled handles', () => {
       const onChange = jest.fn();
       const { container } = render(
+        <Slider range defaultValue={[20, 40, 60, 80]} disabled={[false, true, false, false]} pushable={10} onChange={onChange} />,
+      );
+
+      repeatKeyDown(getHandle(container, 0), keyCode.UP, 30);
+      expect(getLastChange(onChange)[0]).toBe(30);
+      expect(getLastChange(onChange)[1]).toBe(40);
+
+      onChange.mockClear();
+
+      repeatKeyDown(getHandle(container, 3), keyCode.LEFT, 50);
+      expect(getLastChange(onChange)[2]).toBe(50);
+      expect(getLastChange(onChange)[2] - getLastChange(onChange)[1]).toBe(10);
+    });
+
+    it('respects disabled boundaries with allowCross=false and step=null', () => {
+      const onChange = jest.fn();
+      const { container, unmount } = render(
         <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} allowCross={false} onChange={onChange} />,
       );
 
-      // Try to move first handle past disabled middle handle
-      for (let i = 0; i < 50; i++) {
-        fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.RIGHT });
-      }
+      repeatKeyDown(getHandle(container, 0), keyCode.RIGHT, 50);
+      expect(getLastChange(onChange)[0]).toBeLessThanOrEqual(50);
 
-      // First handle should not cross disabled handle at 50
-      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
-      expect(lastCall[0][0]).toBeLessThanOrEqual(50);
-    });
+      unmount();
+      onChange.mockClear();
 
-    it('pushable with step=null and disabled handles', () => {
-      const onChange = jest.fn();
-      const { container } = render(
+      const { container: stepContainer } = render(
         <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} step={null} marks={{ 0: '0', 50: '50', 100: '100' }} pushable={10} onChange={onChange} />,
       );
 
-      // Push first handle right - should stop at disabled handle
-      fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[0], { keyCode: keyCode.RIGHT });
-
-      const lastCall = onChange.mock.calls[onChange.mock.calls.length - 1];
-      // First handle should not exceed disabled handle boundary (50) minus pushable
-      expect(lastCall[0][0]).toBeLessThanOrEqual(50);
+      fireEvent.keyDown(getHandle(stepContainer, 0), { keyCode: keyCode.RIGHT });
+      expect(getLastChange(onChange)[0]).toBeLessThanOrEqual(50);
     });
   });
 });
