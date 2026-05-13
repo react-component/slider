@@ -106,12 +106,15 @@ export const getClosestEnabledHandleIndex = (
   return closestIndex;
 };
 
-export function useFormatValue(
+export default function useOffset(
   min: number,
   max: number,
   step: number,
   markList: InternalMarkObj[],
-): FormatValue {
+  allowCross: boolean,
+  pushable: false | number,
+  isHandleDisabled: IsHandleDisabled,
+): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => Math.max(min, Math.min(max, val)),
     [min, max],
@@ -162,37 +165,6 @@ export function useFormatValue(
       return closeValue;
     },
     [min, max, markList, step, formatRangeValue, formatStepValue],
-  );
-
-  return formatValue;
-}
-
-export default function useOffset(
-  min: number,
-  max: number,
-  step: number,
-  markList: InternalMarkObj[],
-  allowCross: boolean,
-  pushable: false | number,
-  formatValue: FormatValue,
-  isHandleDisabled: IsHandleDisabled,
-): OffsetValues {
-  const formatStepValue: FormatStepValue = React.useCallback(
-    (val) => {
-      if (step !== null) {
-        const rangedValue = Math.max(min, Math.min(max, val));
-        const stepValue = min + Math.round((rangedValue - min) / step) * step;
-
-        // Cut number in case to be like 0.30000000000000004
-        const getDecimal = (num: number) => (String(num).split('.')[1] || '').length;
-        const maxDecimal = Math.max(getDecimal(step), getDecimal(max), getDecimal(min));
-        const fixedValue = Number(stepValue.toFixed(maxDecimal));
-
-        return min <= fixedValue && fixedValue <= max ? fixedValue : null!;
-      }
-      return null!;
-    },
-    [step, min, max],
   );
 
   // ========================== Offset ==========================
@@ -432,5 +404,5 @@ export default function useOffset(
     };
   };
 
-  return offsetValues;
+  return [formatValue, offsetValues];
 }

@@ -14,7 +14,7 @@ import type { SliderContextProps } from './context';
 import SliderContext from './context';
 import useDisabled from './hooks/useDisabled';
 import useDrag from './hooks/useDrag';
-import useOffset, { getClosestEnabledHandleIndex, useFormatValue } from './hooks/useOffset';
+import useOffset, { getClosestEnabledHandleIndex } from './hooks/useOffset';
 import useRange from './hooks/useRange';
 import type {
   AriaValueFormat,
@@ -242,12 +242,18 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       .sort((a, b) => a.value - b.value);
   }, [marks]);
 
+  // ============================ Disabled ============================
+  const [isHandleDisabled, getDisabledState] = useDisabled(rawDisabled);
+
   // ============================ Format ============================
-  const formatValue = useFormatValue(
+  const [formatValue, offsetValues] = useOffset(
     mergedMin,
     mergedMax,
     mergedStep as number,
     markList,
+    allowCross,
+    mergedPush as false | number,
+    isHandleDisabled,
   );
 
   // ============================ Values ============================
@@ -287,18 +293,9 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     return returnValues;
   }, [mergedValue, rangeEnabled, mergedMin, count, formatValue]);
 
-  // ============================ Disabled ============================
-  const [isHandleDisabled, disabled, hasDisabledHandle] = useDisabled(rawDisabled, rawValues);
-
-  const offsetValues = useOffset(
-    mergedMin,
-    mergedMax,
-    mergedStep as number,
-    markList,
-    allowCross,
-    mergedPush as false | number,
-    formatValue,
-    isHandleDisabled,
+  const [disabled, hasDisabledHandle] = React.useMemo(
+    () => getDisabledState(rawValues),
+    [getDisabledState, rawValues],
   );
 
   const effectiveRangeEditable = rangeEditable && !hasDisabledHandle;

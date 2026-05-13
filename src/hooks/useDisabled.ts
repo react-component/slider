@@ -2,11 +2,9 @@ import * as React from 'react';
 
 const useDisabled = (
   rawDisabled: boolean | boolean[],
-  rawValues: number[],
 ): [
   isHandleDisabled: (index: number) => boolean,
-  disabled: boolean,
-  hasDisabledHandle: boolean,
+  getDisabledState: (rawValues: number[]) => [disabled: boolean, hasDisabledHandle: boolean],
 ] => {
   const isHandleDisabled = React.useCallback(
     (index: number) => {
@@ -19,10 +17,8 @@ const useDisabled = (
     [rawDisabled],
   );
 
-  const [disabled, hasDisabledHandle] = React.useMemo<
-    [disabled: boolean, hasDisabledHandle: boolean]
-  >(
-    () => {
+  const getDisabledState = React.useCallback(
+    (rawValues: number[]): [disabled: boolean, hasDisabledHandle: boolean] => {
       if (typeof rawDisabled === 'boolean') {
         return [rawDisabled, rawDisabled && rawValues.length > 0];
       }
@@ -32,13 +28,12 @@ const useDisabled = (
         rawValues.some((_, index) => isHandleDisabled(index)),
       ];
     },
-    [rawDisabled, rawValues, isHandleDisabled],
+    [rawDisabled, isHandleDisabled],
   );
 
-  return React.useMemo(() => [isHandleDisabled, disabled, hasDisabledHandle], [
+  return React.useMemo(() => [isHandleDisabled, getDisabledState], [
     isHandleDisabled,
-    disabled,
-    hasDisabledHandle,
+    getDisabledState,
   ]);
 };
 
