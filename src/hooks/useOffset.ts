@@ -30,6 +30,11 @@ export type OffsetValues = (
   values: number[];
 };
 
+/**
+ * Get the effective moving range for a handle.
+ * Disabled handles are treated as fixed anchors, and `pushable` is applied as the gap
+ * that enabled handles must keep away from those anchors.
+ */
 export const getDisabledBoundaryValues = (
   values: number[],
   valueIndex: number,
@@ -59,6 +64,11 @@ export const getDisabledBoundaryValues = (
   return [minBound, maxBound];
 };
 
+/**
+ * Find the nearest enabled handle that can accept the target value.
+ * A handle is only considered when the target value falls inside its disabled-anchor
+ * boundaries, so clicking outside an enabled segment becomes a no-op.
+ */
 export const getClosestEnabledHandleIndex = (
   values: number[],
   targetValue: number,

@@ -199,8 +199,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   // ============================ Range =============================
   const [rangeEnabled, rangeEditable, rangeDraggableTrack, minCount, maxCount] = useRange(range);
 
-
-
   const mergedMin = React.useMemo(() => (isFinite(min) ? min : 0), [min]);
   const mergedMax = React.useMemo(() => (isFinite(max) ? max : 100), [max]);
 
