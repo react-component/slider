@@ -243,15 +243,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   }, [marks]);
 
   // ============================ Disabled ============================
-  const isHandleDisabled = React.useCallback(
-    (index: number): boolean => {
-      if (typeof rawDisabled === 'boolean') {
-        return rawDisabled;
-      }
-      return rawDisabled[index] ?? false;
-    },
-    [rawDisabled],
-  );
+  const [isHandleDisabled, getDisabledState] = useDisabled(rawDisabled);
 
   // ============================ Format ============================
   const [formatValue, offsetValues] = useOffset(
@@ -265,7 +257,6 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   );
 
   // ============================ Values ============================
-
   const rawValues = React.useMemo(() => {
     const valueList =
       mergedValue === null || mergedValue === undefined
@@ -302,7 +293,10 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     return returnValues;
   }, [mergedValue, rangeEnabled, mergedMin, count, formatValue]);
 
-  const [disabled, hasDisabledHandle] = useDisabled(rawDisabled, rawValues);
+  const [disabled, hasDisabledHandle] = React.useMemo(
+    () => getDisabledState(rawValues),
+    [getDisabledState, rawValues],
+  );
 
   const effectiveRangeEditable = rangeEditable && !hasDisabledHandle;
 
