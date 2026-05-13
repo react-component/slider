@@ -369,20 +369,30 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
    */
   const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
     if (!disabled) {
+      const valueIndex = rawValues.length
+        ? getClosestEnabledHandleIndex(
+            rawValues,
+            newValue,
+            mergedMin,
+            mergedMax,
+            mergedPush as false | number,
+            isHandleDisabled,
+          )
+        : 0;
+
+      if (valueIndex === -1) {
+        return;
+      }
+
       // Create new values
       const cloneNextValues = [...rawValues];
 
-      let valueIndex = 0;
       let valueBeforeIndex = 0; // Record the index which value < newValue
-      let valueDist = mergedMax - mergedMin;
+      const valueDist = rawValues.length
+        ? Math.abs(newValue - rawValues[valueIndex])
+        : mergedMax - mergedMin;
 
       rawValues.forEach((val, index) => {
-        const dist = Math.abs(newValue - val);
-        if (dist <= valueDist) {
-          valueDist = dist;
-          valueIndex = index;
-        }
-
         if (val < newValue) {
           valueBeforeIndex = index;
         }
@@ -394,25 +404,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
-        if (!rawValues.length) {
-          cloneNextValues[valueIndex] = newValue;
-        } else {
-          const nextValueIndex = getClosestEnabledHandleIndex(
-            rawValues,
-            newValue,
-            mergedMin,
-            mergedMax,
-            mergedPush as false | number,
-            isHandleDisabled,
-          );
-
-          if (nextValueIndex === -1) {
-            return;
-          }
-
-          valueIndex = nextValueIndex;
-          cloneNextValues[valueIndex] = newValue;
-        }
+        cloneNextValues[valueIndex] = newValue;
         focusIndex = valueIndex;
       }
 
