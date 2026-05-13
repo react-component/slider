@@ -14,7 +14,7 @@ import type { SliderContextProps } from './context';
 import SliderContext from './context';
 import useDisabled from './hooks/useDisabled';
 import useDrag from './hooks/useDrag';
-import useOffset from './hooks/useOffset';
+import useOffset, { getClosestEnabledHandleIndex } from './hooks/useOffset';
 import useRange from './hooks/useRange';
 import type {
   AriaValueFormat,
@@ -402,44 +402,24 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
-        // Find nearest enabled handle if current is disabled
-        if (isHandleDisabled(valueIndex)) {
-          const enabledIndices = rawValues
-            .map((_, i) => i)
-            .filter((i) => !isHandleDisabled(i));
-
-          if (enabledIndices.length === 0) return;
-
-          valueIndex = enabledIndices.reduce((nearest, i) =>
-            Math.abs(newValue - rawValues[i]) < Math.abs(newValue - rawValues[nearest]) ? i : nearest,
-          );
-        }
-
-        // Calculate boundaries from disabled handles (treat as fixed anchors)
-        const pushDist = typeof mergedPush === 'number' ? mergedPush : 0;
-        let minBound = mergedMin;
-        let maxBound = mergedMax;
-
-        // Find nearest disabled handle on the left as min boundary
-        for (let i = valueIndex - 1; i >= 0; i -= 1) {
-          if (isHandleDisabled(i)) {
-            minBound = Math.max(minBound, rawValues[i] + pushDist);
-            break;
-          }
-        }
-
-        // Find nearest disabled handle on the right as max boundary
-        for (let i = valueIndex + 1; i < rawValues.length; i += 1) {
-          if (isHandleDisabled(i)) {
-            maxBound = Math.min(maxBound, rawValues[i] - pushDist);
-            break;
-          }
-        }
-
-        if (minBound <= maxBound) {
-          cloneNextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, newValue));
+        if (!rawValues.length) {
+          cloneNextValues[valueIndex] = newValue;
         } else {
-          cloneNextValues[valueIndex] = rawValues[valueIndex];
+          const nextValueIndex = getClosestEnabledHandleIndex(
+            rawValues,
+            newValue,
+            mergedMin,
+            mergedMax,
+            mergedPush as false | number,
+            isHandleDisabled,
+          );
+
+          if (nextValueIndex === -1) {
+            return;
+          }
+
+          valueIndex = nextValueIndex;
+          cloneNextValues[valueIndex] = newValue;
         }
         focusIndex = valueIndex;
       }
@@ -500,7 +480,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   };
 
   // =========================== Keyboard ===========================
-  const [keyboardValue, setKeyboardValue] = React.useState<number>(null!);
+  const [keyboardValue, setKeyboardValue] = React.useState<{ value: number; index: number }>(null!);
 
   const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
     if (!disabled && !isHandleDisabled(valueIndex)) {
@@ -509,13 +489,15 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       onBeforeChange?.(getTriggerValue(rawValues));
       triggerChange(next.values);
 
-      setKeyboardValue(next.value);
+      setKeyboardValue({ value: next.value, index: valueIndex });
     }
   };
 
   React.useEffect(() => {
     if (keyboardValue !== null) {
-      const valueIndex = rawValues.indexOf(keyboardValue);
+      const { value: nextKeyboardValue, index } = keyboardValue;
+      const valueIndex =
+        rawValues[index] === nextKeyboardValue ? index : rawValues.indexOf(nextKeyboardValue);
       if (valueIndex >= 0) {
         handlesRef.current!.focus(valueIndex);
       }

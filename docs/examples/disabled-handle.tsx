@@ -10,7 +10,7 @@ const style: React.CSSProperties = {
 
 const defaultValue = [0, 30, 60, 100];
 const BasicDisabledHandle = () => {
-  const [disabled, setDisabled] = useState([true]);
+  const [disabled, setDisabled] = useState([true, false, false, false]);
 
   return (
     <div>
@@ -144,9 +144,10 @@ export default () => (
       <SingleSlider />
     </div>
     <div style={style}>
-      <h3>Disabled Handle + Draggable Track</h3>
+      <h3>Disabled Handle</h3>
       <p>
-        Toggle checkboxes to disable/enable specific handles. Drag the track area to move the range.
+        Toggle checkboxes to disable/enable specific handles. Track dragging is disabled when any
+        handle is disabled.
       </p>
       <BasicDisabledHandle />
     </div>

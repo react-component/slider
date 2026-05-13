@@ -983,20 +983,35 @@ describe('Range', () => {
       expect(onChange).not.toHaveBeenCalled();
     });
 
+    it('ignores disabled config outside of rendered handles', () => {
+      const onChange = jest.fn();
+      const { container } = render(
+        <Slider
+          range={{ draggableTrack: true }}
+          defaultValue={[20, 60]}
+          disabled={[false, false, true]}
+          onChange={onChange}
+        />,
+      );
+
+      doMouseMove(container, 20, 30, 'rc-slider-track');
+      expect(onChange).toHaveBeenCalledWith([30, 70]);
+    });
+
     it('click to move respects disabled boundary', () => {
       const onChange = jest.fn();
       const { container, rerender } = render(
         <Slider range value={[20, 50, 80]} disabled={[true, false, false]} onChange={onChange} />,
       );
 
-      // Click left of disabled handle - clamped to boundary
+      // Click left of disabled handle - no enabled segment contains the target
       doMouseDown(container, 10, 'rc-slider', true);
-      expect(onChange).toHaveBeenCalledWith([20, 20, 80]);
+      expect(onChange).not.toHaveBeenCalled();
 
-      // Click right of disabled handle - clamped to boundary
+      // Click right of disabled handle - no enabled segment contains the target
       rerender(<Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />);
       doMouseDown(container, 90, 'rc-slider', true);
-      expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
+      expect(onChange).not.toHaveBeenCalled();
     });
 
     it('pushable respects disabled handle boundaries', () => {
@@ -1048,6 +1063,18 @@ describe('Range', () => {
       // END key on enabled middle handle - should go to right disabled handle boundary (80)
       fireEvent.keyDown(container.getElementsByClassName('rc-slider-handle')[1], { keyCode: keyCode.END });
       expect(onChange).toHaveBeenCalledWith([20, 80, 80]);
+    });
+
+    it('keeps focus on enabled handle when keyboard moves to disabled boundary', () => {
+      const { container } = render(
+        <Slider range defaultValue={[20, 50, 80]} disabled={[true, false, true]} />,
+      );
+      const middleHandle = container.getElementsByClassName('rc-slider-handle')[1] as HTMLElement;
+
+      middleHandle.focus();
+      fireEvent.keyDown(middleHandle, { keyCode: keyCode.HOME });
+
+      expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveFocus();
     });
 
     it('allowCross false with disabled handles', () => {

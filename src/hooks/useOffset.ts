@@ -11,6 +11,7 @@ type FormatStepValue = (value: number) => number;
 type FormatValue = (value: number) => number;
 
 type OffsetMode = 'unit' | 'dist';
+type IsHandleDisabled = (index: number) => boolean;
 
 type OffsetValue = (
   values: number[],
@@ -29,6 +30,72 @@ export type OffsetValues = (
   values: number[];
 };
 
+export const getDisabledBoundaryValues = (
+  values: number[],
+  valueIndex: number,
+  min: number,
+  max: number,
+  pushable: false | number,
+  isHandleDisabled: IsHandleDisabled,
+): [number, number] => {
+  const pushGap = typeof pushable === 'number' ? pushable : 0;
+  let minBound = min;
+  let maxBound = max;
+
+  for (let i = valueIndex - 1; i >= 0; i -= 1) {
+    if (isHandleDisabled(i)) {
+      minBound = values[i] + pushGap;
+      break;
+    }
+  }
+
+  for (let i = valueIndex + 1; i < values.length; i += 1) {
+    if (isHandleDisabled(i)) {
+      maxBound = values[i] - pushGap;
+      break;
+    }
+  }
+
+  return [minBound, maxBound];
+};
+
+export const getClosestEnabledHandleIndex = (
+  values: number[],
+  targetValue: number,
+  min: number,
+  max: number,
+  pushable: false | number,
+  isHandleDisabled: IsHandleDisabled,
+) => {
+  let closestIndex = -1;
+  let closestDist = max - min;
+
+  values.forEach((value, index) => {
+    if (isHandleDisabled(index)) {
+      return;
+    }
+
+    const [minBound, maxBound] = getDisabledBoundaryValues(
+      values,
+      index,
+      min,
+      max,
+      pushable,
+      isHandleDisabled,
+    );
+
+    if (minBound <= targetValue && targetValue <= maxBound) {
+      const dist = Math.abs(targetValue - value);
+      if (dist <= closestDist) {
+        closestDist = dist;
+        closestIndex = index;
+      }
+    }
+  });
+
+  return closestIndex;
+};
+
 export default function useOffset(
   min: number,
   max: number,
@@ -36,7 +103,7 @@ export default function useOffset(
   markList: InternalMarkObj[],
   allowCross: boolean,
   pushable: false | number,
-  isHandleDisabled: (index: number) => boolean,
+  isHandleDisabled: IsHandleDisabled,
 ): [FormatValue, OffsetValues] {
   const formatRangeValue: FormatRangeValue = React.useCallback(
     (val) => Math.max(min, Math.min(max, val)),
@@ -193,48 +260,23 @@ export default function useOffset(
     return (pushable === null && dist === 0) || (typeof pushable === 'number' && dist < pushable);
   };
 
-  const gap = typeof pushable === 'number' ? pushable : 0;
-
-  // Get the minimum boundary for a handle considering disabled handles as fixed anchors
-  const getHandleMinBound = (values: number[], handleIndex: number): number => {
-    // Collect min and all left-side disabled handle positions as candidates
-    const candidates = [min];
-    for (let i = handleIndex - 1; i >= 0; i -= 1) {
-      if (isHandleDisabled(i)) {
-        candidates.push(values[i] + gap);
-        break; // Only need the nearest disabled handle
-      }
-    }
-    return Math.max(...candidates);
-  };
-
-  // Get the maximum boundary for a handle considering disabled handles as fixed anchors
-  const getHandleMaxBound = (values: number[], handleIndex: number): number => {
-    // Collect max and all right-side disabled handle positions as candidates
-    const candidates = [max];
-    for (let i = handleIndex + 1; i < values.length; i += 1) {
-      if (isHandleDisabled(i)) {
-        candidates.push(values[i] - gap);
-        break; // Only need the nearest disabled handle
-      }
-    }
-    return Math.min(...candidates);
-  };
-
   // Values
   const offsetValues: OffsetValues = (values, offset, valueIndex, mode = 'unit') => {
     const nextValues = values.map<number>(formatValue);
     const originValue = nextValues[valueIndex];
 
-    const minBound = getHandleMinBound(nextValues, valueIndex);
-    const maxBound = getHandleMaxBound(nextValues, valueIndex);
+    const [minBound, maxBound] = getDisabledBoundaryValues(
+      nextValues,
+      valueIndex,
+      min,
+      max,
+      pushable,
+      isHandleDisabled,
+    );
 
     const nextValue = offsetValue(nextValues, offset, valueIndex, mode);
     nextValues[valueIndex] = nextValue;
 
-    // Apply disabled handle boundaries
-    // If bounds conflict (min > max), the handle is locked between two disabled handles
-    // In this case, keep the original value
     if (minBound <= maxBound) {
       nextValues[valueIndex] = Math.max(minBound, Math.min(maxBound, nextValues[valueIndex]));
     } else {
@@ -264,57 +306,85 @@ export default function useOffset(
       // =============== Push ==================
 
       // >>>>>> Basic push
-      // End values (skip disabled handles)
+      // End values
       for (let i = valueIndex + 1; i < nextValues.length; i += 1) {
         if (isHandleDisabled(i)) {
-          break; // Stop pushing when hitting a disabled handle
+          break;
         }
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i], changed } = offsetChangedValue(nextValues, 1, i));
         }
-        // Apply boundary constraint to pushed handle
-        nextValues[i] = Math.min(nextValues[i], getHandleMaxBound(nextValues, i));
+        const [, itemMaxBound] = getDisabledBoundaryValues(
+          nextValues,
+          i,
+          min,
+          max,
+          pushable,
+          isHandleDisabled,
+        );
+        nextValues[i] = Math.min(nextValues[i], itemMaxBound);
       }
 
-      // Start values (skip disabled handles)
+      // Start values
       for (let i = valueIndex; i > 0; i -= 1) {
         if (isHandleDisabled(i - 1)) {
-          break; // Stop pushing when hitting a disabled handle
+          break;
         }
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
         }
-        // Apply boundary constraint to pushed handle
-        nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
+        const [itemMinBound] = getDisabledBoundaryValues(
+          nextValues,
+          i - 1,
+          min,
+          max,
+          pushable,
+          isHandleDisabled,
+        );
+        nextValues[i - 1] = Math.max(nextValues[i - 1], itemMinBound);
       }
 
       // >>>>> Revert back to safe push range
-      // End to Start (skip disabled handles)
+      // End to Start
       for (let i = nextValues.length - 1; i > 0; i -= 1) {
         if (isHandleDisabled(i) || isHandleDisabled(i - 1)) {
-          continue; // Skip if either handle is disabled
+          continue;
         }
         let changed = true;
         while (needPush(nextValues[i] - nextValues[i - 1]) && changed) {
           ({ value: nextValues[i - 1], changed } = offsetChangedValue(nextValues, -1, i - 1));
         }
-        // Apply boundary constraint to pushed handle
-        nextValues[i - 1] = Math.max(nextValues[i - 1], getHandleMinBound(nextValues, i - 1));
+        const [itemMinBound] = getDisabledBoundaryValues(
+          nextValues,
+          i - 1,
+          min,
+          max,
+          pushable,
+          isHandleDisabled,
+        );
+        nextValues[i - 1] = Math.max(nextValues[i - 1], itemMinBound);
       }
 
-      // Start to End (skip disabled handles)
+      // Start to End
       for (let i = 0; i < nextValues.length - 1; i += 1) {
         if (isHandleDisabled(i) || isHandleDisabled(i + 1)) {
-          continue; // Skip if either handle is disabled
+          continue;
         }
         let changed = true;
         while (needPush(nextValues[i + 1] - nextValues[i]) && changed) {
           ({ value: nextValues[i + 1], changed } = offsetChangedValue(nextValues, 1, i + 1));
         }
-        // Apply boundary constraint to pushed handle
-        nextValues[i + 1] = Math.min(nextValues[i + 1], getHandleMaxBound(nextValues, i + 1));
+        const [, itemMaxBound] = getDisabledBoundaryValues(
+          nextValues,
+          i + 1,
+          min,
+          max,
+          pushable,
+          isHandleDisabled,
+        );
+        nextValues[i + 1] = Math.min(nextValues[i + 1], itemMaxBound);
       }
     }
 
