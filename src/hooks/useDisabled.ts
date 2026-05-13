@@ -3,7 +3,7 @@ import * as React from 'react';
 const useDisabled = (
   rawDisabled: boolean | boolean[],
   rawValues: number[],
-): [boolean, boolean] => {
+): [disabled: boolean, hasDisabledHandle: boolean] => {
   return React.useMemo(() => {
     if (typeof rawDisabled === 'boolean') {
       return [rawDisabled, rawDisabled && rawValues.length > 0];
