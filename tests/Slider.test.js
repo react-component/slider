@@ -511,6 +511,18 @@ describe('Slider', () => {
     expect(container.getElementsByClassName('rc-slider-track')).toHaveLength(1);
   });
 
+  it('should not change null value when disabled', () => {
+    const onChange = jest.fn();
+    const { container } = render(<Slider value={null} disabled onChange={onChange} />);
+
+    fireEvent.mouseDown(container.querySelector('.rc-slider'), {
+      clientX: 20,
+    });
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(container.getElementsByClassName('rc-slider-track')).toHaveLength(0);
+  });
+
   describe('click slider to change value', () => {
     it('ltr', () => {
       const onChange = jest.fn();

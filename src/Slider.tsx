@@ -12,8 +12,9 @@ import Steps from './Steps';
 import Tracks from './Tracks';
 import type { SliderContextProps } from './context';
 import SliderContext from './context';
+import useDisabled from './hooks/useDisabled';
 import useDrag from './hooks/useDrag';
-import useOffset from './hooks/useOffset';
+import useOffset, { getClosestEnabledHandleIndex } from './hooks/useOffset';
 import useRange from './hooks/useRange';
 import type {
   AriaValueFormat,
@@ -57,7 +58,7 @@ export interface SliderProps<ValueType = number | number[]> {
   id?: string;
 
   // Status
-  disabled?: boolean;
+  disabled?: boolean | boolean[];
   keyboard?: boolean;
   autoFocus?: boolean;
   onFocus?: (e: React.FocusEvent<HTMLDivElement>) => void;
@@ -131,8 +132,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     id,
 
-    // Status
-    disabled = false,
+    disabled: rawDisabled = false,
     keyboard = true,
     autoFocus,
     onFocus,
@@ -187,6 +187,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
   const handlesRef = React.useRef<HandlesRef | null>(null);
   const containerRef = React.useRef<HTMLDivElement | null>(null);
+  const [mergedValue, setValue] = useControlledState(defaultValue, value);
 
   const direction = React.useMemo<Direction>(() => {
     if (vertical) {
@@ -241,6 +242,9 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       .sort((a, b) => a.value - b.value);
   }, [marks]);
 
+  // ============================ Disabled ============================
+  const [isHandleDisabled, getDisabledState] = useDisabled(rawDisabled);
+
   // ============================ Format ============================
   const [formatValue, offsetValues] = useOffset(
     mergedMin,
@@ -249,18 +253,17 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     markList,
     allowCross,
     mergedPush as false | number,
+    isHandleDisabled,
   );
 
   // ============================ Values ============================
-  const [mergedValue, setValue] = useControlledState(defaultValue, value);
-
   const rawValues = React.useMemo(() => {
     const valueList =
       mergedValue === null || mergedValue === undefined
         ? []
         : Array.isArray(mergedValue)
-        ? mergedValue
-        : [mergedValue];
+          ? mergedValue
+          : [mergedValue];
 
     const [val0 = mergedMin] = valueList;
     let returnValues = mergedValue === null ? [] : [val0];
@@ -289,6 +292,13 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
     return returnValues;
   }, [mergedValue, rangeEnabled, mergedMin, count, formatValue]);
+
+  const [disabled, hasDisabledHandle] = React.useMemo(
+    () => getDisabledState(rawValues),
+    [getDisabledState, rawValues],
+  );
+
+  const effectiveRangeEditable = rangeEditable && !hasDisabledHandle;
 
   // =========================== onChange ===========================
   const getTriggerValue = (triggerValues: number[]) =>
@@ -323,7 +333,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   });
 
   const onDelete = (index: number) => {
-    if (disabled || !rangeEditable || rawValues.length <= minCount) {
+    if (disabled || !effectiveRangeEditable || rawValues.length <= minCount) {
       return;
     }
 
@@ -348,8 +358,9 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     triggerChange,
     finishChange,
     offsetValues,
-    rangeEditable,
+    effectiveRangeEditable,
     minCount,
+    isHandleDisabled,
   );
 
   /**
@@ -358,20 +369,30 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
    */
   const changeToCloseValue = (newValue: number, e?: React.MouseEvent) => {
     if (!disabled) {
+      const valueIndex = rawValues.length
+        ? getClosestEnabledHandleIndex(
+            rawValues,
+            newValue,
+            mergedMin,
+            mergedMax,
+            mergedPush as false | number,
+            isHandleDisabled,
+          )
+        : 0;
+
+      if (valueIndex === -1) {
+        return;
+      }
+
       // Create new values
       const cloneNextValues = [...rawValues];
 
-      let valueIndex = 0;
       let valueBeforeIndex = 0; // Record the index which value < newValue
-      let valueDist = mergedMax - mergedMin;
+      const valueDist = rawValues.length
+        ? Math.abs(newValue - rawValues[valueIndex])
+        : mergedMax - mergedMin;
 
       rawValues.forEach((val, index) => {
-        const dist = Math.abs(newValue - val);
-        if (dist <= valueDist) {
-          valueDist = dist;
-          valueIndex = index;
-        }
-
         if (val < newValue) {
           valueBeforeIndex = index;
         }
@@ -379,11 +400,12 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
       let focusIndex = valueIndex;
 
-      if (rangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
+      if (effectiveRangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
         cloneNextValues[valueIndex] = newValue;
+        focusIndex = valueIndex;
       }
 
       // Fill value to match default 2 (only when `rawValues` is empty)
@@ -442,22 +464,24 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   };
 
   // =========================== Keyboard ===========================
-  const [keyboardValue, setKeyboardValue] = React.useState<number>(null!);
+  const [keyboardValue, setKeyboardValue] = React.useState<{ value: number; index: number }>(null!);
 
   const onHandleOffsetChange = (offset: number | 'min' | 'max', valueIndex: number) => {
-    if (!disabled) {
+    if (!disabled && !isHandleDisabled(valueIndex)) {
       const next = offsetValues(rawValues, offset, valueIndex);
 
       onBeforeChange?.(getTriggerValue(rawValues));
       triggerChange(next.values);
 
-      setKeyboardValue(next.value);
+      setKeyboardValue({ value: next.value, index: valueIndex });
     }
   };
 
   React.useEffect(() => {
     if (keyboardValue !== null) {
-      const valueIndex = rawValues.indexOf(keyboardValue);
+      const { value: nextKeyboardValue, index } = keyboardValue;
+      const valueIndex =
+        rawValues[index] === nextKeyboardValue ? index : rawValues.indexOf(nextKeyboardValue);
       if (valueIndex >= 0) {
         handlesRef.current!.focus(valueIndex);
       }
@@ -551,6 +575,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       ariaValueTextFormatterForHandle,
       styles: styles || {},
       classNames: classNames || {},
+      isHandleDisabled,
     }),
     [
       mergedMin,
@@ -570,6 +595,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       ariaValueTextFormatterForHandle,
       styles,
       classNames,
+      isHandleDisabled,
     ],
   );
 
@@ -625,7 +651,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
           handleRender={handleRender}
           activeHandleRender={activeHandleRender}
           onChangeComplete={finishChange}
-          onDelete={rangeEditable ? onDelete : undefined}
+          onDelete={effectiveRangeEditable ? onDelete : undefined}
         />
 
         <Marks prefixCls={prefixCls} marks={markList} onClick={changeToCloseValue} />
