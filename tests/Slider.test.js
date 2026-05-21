@@ -1,8 +1,7 @@
 import '@testing-library/jest-dom';
 import { createEvent, fireEvent, render } from '@testing-library/react';
 import { clsx } from 'clsx';
-import keyCode from '@rc-component/util/lib/KeyCode';
-import { spyElementPrototypes } from '@rc-component/util/lib/test/domHook';
+import { KeyCode as keyCode, spyElementPrototypes } from '@rc-component/util';
 import React from 'react';
 import Slider from '../src/Slider';
 

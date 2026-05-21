@@ -1,4 +1,4 @@
-import { warning } from '@rc-component/util/lib/warning';
+import { warning } from '@rc-component/util';
 import { useMemo } from 'react';
 import type { SliderProps } from '../Slider';
 
