@@ -2,8 +2,7 @@ import * as React from 'react';
 import { flushSync } from 'react-dom';
 import type { OnStartMove } from '../interface';
 import { getIndex } from '../util';
-import type { HandleProps } from './Handle';
-import Handle from './Handle';
+import Handle, { type HandleProps } from './Handle';
 
 export interface HandlesProps {
   prefixCls: string;

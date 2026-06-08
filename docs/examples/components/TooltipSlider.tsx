@@ -1,9 +1,7 @@
-import type { SliderProps } from '@rc-component/slider';
-import Slider from '@rc-component/slider';
-import type { TooltipRef } from '@rc-component/tooltip';
-import Tooltip from '@rc-component/tooltip';
+import Slider, { type SliderProps } from '@rc-component/slider';
+import Tooltip, { type TooltipRef } from '@rc-component/tooltip';
 import '@rc-component/tooltip/assets/bootstrap.css';
-import raf from '@rc-component/util/lib/raf';
+import { raf } from '@rc-component/util';
 import * as React from 'react';
 
 interface HandleTooltipProps {
