@@ -30,7 +30,7 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dist: docs-dist
           failOnError: false
-          setCommitStatus: true
+          setCommitStatus: false
           build: |
             npm install
             npm run build
