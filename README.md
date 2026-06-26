@@ -136,8 +136,8 @@ npm run build
 npm run prepublishOnly
 ```
 
-`prepublishOnly` builds the package with Father and publishes through `rc-np`. Run `npm run gh-pages` to deploy the dumi site.
+The release flow is handled by `@rc-component/np` through the `rc-np` command after the package build.
 
 ## License
 
-@rc-component/slider is released under the MIT license.
+@rc-component/slider is released under the [MIT](./LICENSE) license.
