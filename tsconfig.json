@@ -10,7 +10,10 @@
     "paths": {
       "@/*": ["src/*"],
       "@@/*": ["src/.umi/*"],
-      "@rc-component/slider": ["src/index.tsx"]
+      "@rc-component/slider": ["src/index.tsx"],
+      "@rc-component/slider/es": ["src"],
+      "@rc-component/slider/es/*": ["src/*"],
+      "@rc-component/slider/assets/*": ["assets/*"]
     }
   },
   "include": [".dumirc.ts", "src", "tests", "docs/examples"],

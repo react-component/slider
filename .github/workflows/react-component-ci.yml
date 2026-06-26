@@ -5,4 +5,5 @@ permissions:
 jobs:
   test:
     uses: react-component/rc-test/.github/workflows/test-utoo.yml@main
-    secrets: inherit
+    secrets:
+      CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}

@@ -65,21 +65,21 @@ Online preview: https://slider.react-component.vercel.app/
 | `ariaLabelForHandle` | string \| string[] | - | `aria-label` for handle elements. |
 | `ariaLabelledByForHandle` | string \| string[] | - | `aria-labelledby` for handle elements. |
 | `ariaRequired` | boolean | - | `aria-required` for handle elements. |
-| `ariaValueTextFormatterForHandle` | `(value: number) => string` \| Array function | - | Formatter for `aria-valuetext`. |
+| `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | Formatter for `aria-valuetext`. |
 | `autoFocus` | boolean | - | Focus the slider on mount. |
 | `className` | string | - | Additional class name. |
-| `classNames` | Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', string>> | - | Semantic class names for internal slots. |
+| `classNames` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', string>>` | - | Semantic class names for internal slots. |
 | `count` | number | - | Deprecated. Use `range.minCount` or `range.maxCount`. |
 | `defaultValue` | number \| number[] | - | Initial value. |
 | `disabled` | boolean \| boolean[] | false | Disable all handles or specific handles. |
-| `dots` | boolean | false | Show dots when `step` is greater than 1. |
+| `dots` | boolean | false | Show dots at each valid step position. |
 | `dotStyle` | React.CSSProperties \| `(dotValue: number) => React.CSSProperties` | - | Style for dots. |
 | `handleRender` | `HandlesProps['handleRender']` | - | Custom handle renderer. |
 | `handleStyle` | React.CSSProperties \| React.CSSProperties[] | - | Deprecated. Use `styles.handle`. |
 | `id` | string | - | Root id. |
 | `included` | boolean | true | Whether the track is rendered as a continuous selected interval. |
 | `keyboard` | boolean | true | Enable keyboard interaction. |
-| `marks` | Record<string \| number, ReactNode \| MarkObj> | - | Slider marks. |
+| `marks` | `Record<string \| number, ReactNode \| MarkObj>` | - | Slider marks. |
 | `max` | number | 100 | Maximum value. |
 | `min` | number | 0 | Minimum value. |
 | `onAfterChange` | `(value) => void` | - | Deprecated. Use `onChangeComplete`. |
@@ -96,7 +96,7 @@ Online preview: https://slider.react-component.vercel.app/
 | `startPoint` | number | `min` | Start point for a single-value track. |
 | `step` | number \| null | 1 | Step size. Use `null` to use marks as steps. |
 | `style` | React.CSSProperties | - | Root style. |
-| `styles` | Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', React.CSSProperties>> | - | Semantic styles for internal slots. |
+| `styles` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', React.CSSProperties>>` | - | Semantic styles for internal slots. |
 | `tabIndex` | number \| number[] | 0 | Handle tab index. |
 | `track` | boolean | - | Whether to render track elements. |
 | `trackStyle` | React.CSSProperties \| React.CSSProperties[] | - | Deprecated. Use `styles.track`. |
