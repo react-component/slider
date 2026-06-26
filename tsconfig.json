@@ -12,5 +12,7 @@
       "@@/*": ["src/.umi/*"],
       "@rc-component/slider": ["src/index.tsx"]
     }
-  }
+  },
+  "include": [".dumirc.ts", "src", "tests", "docs/examples"],
+  "exclude": ["docs-dist", "lib", "es"]
 }

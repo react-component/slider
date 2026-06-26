@@ -1,0 +1,6 @@
+{
+  "framework": "umijs",
+  "installCommand": "npm install",
+  "buildCommand": "npm run build",
+  "outputDirectory": "docs-dist"
+}

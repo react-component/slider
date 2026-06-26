@@ -17,8 +17,6 @@ function percentFormatter(v) {
   return `${v} %`;
 }
 
-// const SliderWithTooltip = createSliderWithTooltip(Slider);
-
 class NullableSlider extends React.Component<any, any> {
   constructor(props) {
     super(props);

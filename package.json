@@ -29,17 +29,18 @@
     "es"
   ],
   "scripts": {
+    "build": "npm run docs:build",
     "compile": "father build && lessc assets/index.less assets/index.css",
     "coverage": "rc-test --coverage",
     "docs:build": "dumi build",
-    "docs:deploy": "gh-pages -d .doc",
+    "docs:deploy": "gh-pages -d docs-dist",
+    "gh-pages": "GH_PAGES=1 npm run docs:build && npm run docs:deploy",
     "lint": "eslint src/ --ext .ts,.tsx,.jsx,.js,.md",
-    "now-build": "npm run docs:build",
     "prepublishOnly": "npm run compile && rc-np",
-    "prettier": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "prettier": "prettier --write --ignore-unknown .",
     "start": "dumi dev",
     "test": "rc-test",
-    "tsc": "bunx tsc --noEmit"
+    "tsc": "tsc --noEmit"
   },
   "dependencies": {
     "@rc-component/util": "^1.11.1",
@@ -62,7 +63,7 @@
     "cross-env": "^7.0.0",
     "dumi": "^2.2.10",
     "eslint": "^8.54.0",
-    "eslint-plugin-jest": "^28.2.0",
+    "eslint-plugin-jest": "^27.9.0",
     "eslint-plugin-unicorn": "^54.0.0",
     "father": "^4.3.5",
     "father-build": "^1.18.6",

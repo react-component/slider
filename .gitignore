@@ -31,6 +31,8 @@ yarn.lock
 package-lock.json
 pnpm-lock.yaml
 .doc
+docs-dist
+.vercel
 .storybook
 
 # umi
