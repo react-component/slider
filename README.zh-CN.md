@@ -1,7 +1,6 @@
 <div align="center">
   <h1>@rc-component/slider</h1>
-  <p><sub>Ant Design 生态的一部分。</sub></p>
-  <img alt="Ant Design" height="32" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" />
+  <p><sub><img alt="Ant Design" height="14" src="https://gw.alipayobjects.com/zos/rmsportal/KDpgvguMpGfqaHPjicRK.svg" style="vertical-align: -0.125em;" /> Ant Design 生态的一部分。</sub></p>
   <p>🎚️ React 滑动输入组件，支持范围、刻度、提示和键盘交互。</p>
 
   <p>
@@ -19,10 +18,10 @@
 
 ## 特性
 
-- 支持 single-value and range sliders with one shared component.
-- 提供 marks, dots, keyboard interaction, reverse and vertical layouts.
-- 支持 editable range handles and draggable tracks through `range` config.
-- 暴露 semantic `classNames` and `styles` slots for tracks, rail, and handles.
+- 通过一个共享组件支持单值和范围滑块。
+- 提供标记、点、键盘交互、反向和垂直布局。
+- 通过 `range` 配置支持可编辑范围手柄和可拖动轨道。
+- 引入用于轨道、导轨和手柄的语义 `classNames` 和 `styles` 插槽。
 
 ## 安装
 
@@ -52,7 +51,7 @@ export default () => (
 );
 ```
 
-Online preview: https://slider.react-component.vercel.app/
+在线预览：https://slider.react-component.vercel.app/
 
 ## API
 
@@ -60,65 +59,65 @@ Online preview: https://slider.react-component.vercel.app/
 
 | 名称 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
-| `activeDotStyle` | React.CSSProperties \| `(dotValue: number) => React.CSSProperties` | - | Style for active dots. |
-| `activeHandleRender` | `HandlesProps['handleRender']` | - | Render function for the active handle. |
-| `allowCross` | boolean | true | Allow handles to cross in range mode. |
+| `activeDotStyle` | React.CSSProperties \| `(dotValue: number) => React.CSSProperties` | - | 激活点的样式。 |
+| `activeHandleRender` | `HandlesProps['handleRender']` | - | 活动句柄的渲染函数。 |
+| `allowCross` | boolean | true | 允许手柄在范围模式下交叉。 |
 | `ariaLabelForHandle` | string \| string[] | - | `aria-label` for handle elements. |
 | `ariaLabelledByForHandle` | string \| string[] | - | `aria-labelledby` for handle elements. |
 | `ariaRequired` | boolean | - | `aria-required` for handle elements. |
 | `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | Formatter for `aria-valuetext`. |
-| `autoFocus` | boolean | - | Focus the slider on mount. |
-| `className` | string | - | Additional class name. |
-| `classNames` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', string>>` | - | Semantic class names for internal slots. |
-| `count` | number | - | Deprecated. Use `range.minCount` or `range.maxCount`. |
-| `defaultValue` | number \| number[] | - | Initial value. |
-| `disabled` | boolean \| boolean[] | false | Disable all handles or specific handles. |
-| `dots` | boolean | false | Show dots at each valid step position. |
-| `dotStyle` | React.CSSProperties \| `(dotValue: number) => React.CSSProperties` | - | Style for dots. |
-| `handleRender` | `HandlesProps['handleRender']` | - | Custom handle renderer. |
-| `handleStyle` | React.CSSProperties \| React.CSSProperties[] | - | Deprecated. Use `styles.handle`. |
-| `id` | string | - | Root id. |
-| `included` | boolean | true | Whether the track is rendered as a continuous selected interval. |
-| `keyboard` | boolean | true | Enable keyboard interaction. |
+| `autoFocus` | boolean | - | 将滑块聚焦在安装座上。 |
+| `className` | string | - | 附加className。 |
+| `classNames` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', string>>` | - | 内部插槽的语义化 className。 |
+| `count` | number | - | 已废弃。请使用 `range.minCount` 或 `range.maxCount`。 |
+| `defaultValue` | number \| number[] | - | 初始值。 |
+| `disabled` | boolean \| boolean[] | false | 禁用全部滑块或指定滑块。 |
+| `dots` | boolean | false | 在每个有效步骤位置显示点。 |
+| `dotStyle` | React.CSSProperties \| `(dotValue: number) => React.CSSProperties` | - | 点的样式。 |
+| `handleRender` | `HandlesProps['handleRender']` | - | 自定义句柄渲染器。 |
+| `handleStyle` | React.CSSProperties \| React.CSSProperties[] | - | 已废弃。请使用 `styles.handle`。 |
+| `id` | string | - | 根 ID。 |
+| `included` | boolean | true | 轨道是否渲染为连续的选定间隔。 |
+| `keyboard` | boolean | true | 启用键盘交互。 |
 | `marks` | `Record<string \| number, ReactNode \| MarkObj>` | - | Slider marks. |
-| `max` | number | 100 | Maximum value. |
-| `min` | number | 0 | Minimum value. |
-| `onAfterChange` | `(value) => void` | - | Deprecated. Use `onChangeComplete`. |
-| `onBeforeChange` | `(value) => void` | - | Deprecated. Use `onChange`. |
-| `onBlur` | `(event) => void` | - | Blur handler. |
-| `onChange` | `(value) => void` | - | Triggered while value changes. |
-| `onChangeComplete` | `(value) => void` | - | Triggered when interaction completes. |
-| `onFocus` | `(event) => void` | - | Focus handler. |
-| `prefixCls` | string | `'rc-slider'` | Prefix class name. |
-| `pushable` | boolean \| number | false | Push adjacent handles in range mode. |
-| `railStyle` | React.CSSProperties | - | Deprecated. Use `styles.rail`. |
-| `range` | boolean \| RangeConfig | false | Enable range mode or configure editable range behavior. |
-| `reverse` | boolean | false | Render in reverse direction. |
-| `startPoint` | number | `min` | Start point for a single-value track. |
-| `step` | number \| null | 1 | Step size. Use `null` to use marks as steps. |
-| `style` | React.CSSProperties | - | Root style. |
-| `styles` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', React.CSSProperties>>` | - | Semantic styles for internal slots. |
-| `tabIndex` | number \| number[] | 0 | Handle tab index. |
-| `track` | boolean | - | Whether to render track elements. |
-| `trackStyle` | React.CSSProperties \| React.CSSProperties[] | - | Deprecated. Use `styles.track`. |
-| `value` | number \| number[] | - | Controlled value. |
-| `vertical` | boolean | false | Render vertically. |
+| `max` | number | 100 | 最大值。 |
+| `min` | number | 0 | 最小值。 |
+| `onAfterChange` | `(value) => void` | - | 已废弃。请使用 `onChangeComplete`。 |
+| `onBeforeChange` | `(value) => void` | - | 已废弃。请使用 `onChange`。 |
+| `onBlur` | `(event) => void` | - | 模糊处理程序。 |
+| `onChange` | `(value) => void` | - | 当值改变时触发。 |
+| `onChangeComplete` | `(value) => void` | - | 交互完成时触发。 |
+| `onFocus` | `(event) => void` | - | 焦点处理程序。 |
+| `prefixCls` | string | `'rc-slider'` | 前缀className。 |
+| `pushable` | boolean \| number | false | 范围模式下推动相邻滑块。 |
+| `railStyle` | React.CSSProperties | - | 已废弃。请使用 `styles.rail`。 |
+| `range` | boolean \| RangeConfig | false | 启用范围模式或配置可编辑范围行为。 |
+| `reverse` | boolean | false | 以相反方向渲染。 |
+| `startPoint` | number | `min` | 单值轨迹的起点。 |
+| `step` | number \| null | 1 | 步长。使用 `null` 时以标记作为步进。 |
+| `style` | React.CSSProperties | - | 根样式。 |
+| `styles` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', React.CSSProperties>>` | - | 内部插槽的语义化样式。 |
+| `tabIndex` | number \| number[] | 0 | 滑块的 tabIndex。 |
+| `track` | boolean | - | 是否渲染轨道元素。 |
+| `trackStyle` | React.CSSProperties \| React.CSSProperties[] | - | 已废弃。请使用 `styles.track`。 |
+| `value` | number \| number[] | - | 受控值。 |
+| `vertical` | boolean | false | 垂直渲染。 |
 
 ### RangeConfig
 
 | 名称             | 类型    | 默认值 | 说明                              |
 | ---------------- | ------- | ------- | ---------------------------------------- |
-| `draggableTrack` | boolean | false   | Allow dragging the selected range track. |
-| `editable`       | boolean | false   | Allow adding or removing range handles.  |
-| `maxCount`       | number  | -       | Maximum handle count when editable.      |
-| `minCount`       | number  | -       | Minimum handle count when editable.      |
+| `draggableTrack` | boolean | false   | 允许拖动选定的范围轨道。 |
+| `editable`       | boolean | false   | 允许添加或删除范围手柄。  |
+| `maxCount`       | number  | -       | 可编辑时的最大句柄数。      |
+| `minCount`       | number  | -       | 可编辑时的最小句柄数。      |
 
 ### Ref
 
 | 名称    | 类型         | 说明       |
 | ------- | ------------ | ----------------- |
-| `blur`  | `() => void` | Blur the slider.  |
-| `focus` | `() => void` | Focus the slider. |
+| `blur`  | `() => void` | 模糊滑块。  |
+| `focus` | `() => void` | 聚焦滑块。 |
 
 ## 本地开发
 
@@ -137,8 +136,8 @@ npm run build
 npm run prepublishOnly
 ```
 
-The release flow is handled by `@rc-component/np` through the `rc-np` command after the package build.
+包构建完成后，发布流程由 `@rc-component/np` 通过 `rc-np` 命令处理。
 
 ## 许可证
 
-@rc-component/slider is released under the [MIT](./LICENSE) license.
+@rc-component/slider 基于 [MIT](./LICENSE) 许可证发布。
