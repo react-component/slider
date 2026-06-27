@@ -1,7 +1,7 @@
 <div align="center">
   <h1>@rc-component/slider</h1>
-  <p><sub>Part of the Ant Design ecosystem.</sub></p>
-  <p>🎚️ Accessible React slider for single values, ranges, marks, and editable handles.</p>
+  <p><sub>Ant Design 生态的一部分。</sub></p>
+  <p>🎚️ React 滑动输入组件，支持范围、刻度、提示和键盘交互。</p>
 
   <p>
     <a href="https://www.npmjs.com/package/@rc-component/slider"><img src="https://img.shields.io/npm/v/@rc-component/slider.svg?style=flat-square" alt="npm version" /></a>
@@ -13,23 +13,23 @@
   </p>
 </div>
 
-<p align="center">English | <a href="./README.zh-CN.md">简体中文</a></p>
+<p align="center"><a href="./README.md">English</a> | 简体中文</p>
 
 
-## Highlights
+## 特性
 
-- Supports single-value and range sliders with one shared component.
-- Provides marks, dots, keyboard interaction, reverse and vertical layouts.
-- Supports editable range handles and draggable tracks through `range` config.
-- Exposes semantic `classNames` and `styles` slots for tracks, rail, and handles.
+- 支持 single-value and range sliders with one shared component.
+- 提供 marks, dots, keyboard interaction, reverse and vertical layouts.
+- 支持 editable range handles and draggable tracks through `range` config.
+- 暴露 semantic `classNames` and `styles` slots for tracks, rail, and handles.
 
-## Install
+## 安装
 
 ```bash
 npm install @rc-component/slider
 ```
 
-## Usage
+## 使用
 
 ```tsx pure
 import Slider from '@rc-component/slider';
@@ -57,7 +57,7 @@ Online preview: https://slider.react-component.vercel.app/
 
 ### Slider
 
-| Name | Type | Default | Description |
+| 名称 | 类型 | 默认值 | 说明 |
 | --- | --- | --- | --- |
 | `activeDotStyle` | React.CSSProperties \| `(dotValue: number) => React.CSSProperties` | - | Style for active dots. |
 | `activeHandleRender` | `HandlesProps['handleRender']` | - | Render function for the active handle. |
@@ -105,7 +105,7 @@ Online preview: https://slider.react-component.vercel.app/
 
 ### RangeConfig
 
-| Name             | Type    | Default | Description                              |
+| 名称             | 类型    | 默认值 | 说明                              |
 | ---------------- | ------- | ------- | ---------------------------------------- |
 | `draggableTrack` | boolean | false   | Allow dragging the selected range track. |
 | `editable`       | boolean | false   | Allow adding or removing range handles.  |
@@ -114,12 +114,12 @@ Online preview: https://slider.react-component.vercel.app/
 
 ### Ref
 
-| Name    | Type         | Description       |
+| 名称    | 类型         | 说明       |
 | ------- | ------------ | ----------------- |
 | `blur`  | `() => void` | Blur the slider.  |
 | `focus` | `() => void` | Focus the slider. |
 
-## Development
+## 本地开发
 
 ```bash
 npm install
@@ -130,7 +130,7 @@ npm run compile
 npm run build
 ```
 
-## Release
+## 发布
 
 ```bash
 npm run prepublishOnly
@@ -138,6 +138,6 @@ npm run prepublishOnly
 
 The release flow is handled by `@rc-component/np` through the `rc-np` command after the package build.
 
-## License
+## 许可证
 
 @rc-component/slider is released under the [MIT](./LICENSE) license.
