@@ -22,13 +22,23 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           persist-credentials: false
+      - name: Check Surge token
+        id: surge-token
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
+        run: |
+          if [ -n "$SURGE_TOKEN" ]; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
       - name: Build preview
-        if: ${{ secrets.SURGE_TOKEN != '' }}
+        if: ${{ steps.surge-token.outputs.enabled == 'true' }}
         run: |
           npm install
           npm run build
       - uses: afc163/surge-preview@bf90a5a86111f6311ca42f0a5a0f80fb0fb03cec
-        if: ${{ secrets.SURGE_TOKEN != '' }}
+        if: ${{ steps.surge-token.outputs.enabled == 'true' }}
         env:
           SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
         with:
@@ -38,5 +48,5 @@ jobs:
           failOnError: false
           setCommitStatus: false
       - name: Skip Surge preview
-        if: ${{ secrets.SURGE_TOKEN == '' }}
+        if: ${{ steps.surge-token.outputs.enabled != 'true' }}
         run: echo "SURGE_TOKEN is not configured; skip Surge preview."
