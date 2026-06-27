@@ -53,6 +53,17 @@ export default () => (
 
 Online preview: https://slider.react-component.vercel.app/
 
+## Examples
+
+Run the local dumi site:
+
+```bash
+npm install
+npm start
+```
+
+Then open `http://localhost:8000`.
+
 ## API
 
 ### Slider

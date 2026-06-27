@@ -8,14 +8,36 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "paths": {
-      "@/*": ["src/*"],
-      "@@/*": ["src/.umi/*"],
-      "@rc-component/slider": ["src/index.tsx"],
-      "@rc-component/slider/es": ["src"],
-      "@rc-component/slider/es/*": ["src/*"],
-      "@rc-component/slider/assets/*": ["assets/*"]
-    }
+      "@/*": [
+        "src/*"
+      ],
+      "@@/*": [
+        "src/.umi/*"
+      ],
+      "@rc-component/slider": [
+        "src/index.tsx"
+      ],
+      "@rc-component/slider/es": [
+        "src"
+      ],
+      "@rc-component/slider/es/*": [
+        "src/*"
+      ],
+      "@rc-component/slider/assets/*": [
+        "assets/*"
+      ]
+    },
+    "ignoreDeprecations": "5.0"
   },
-  "include": [".dumirc.ts", "src", "tests", "docs/examples"],
-  "exclude": ["docs-dist", "lib", "es"]
+  "include": [
+    ".dumirc.ts",
+    "src",
+    "tests",
+    "docs/examples"
+  ],
+  "exclude": [
+    "docs-dist",
+    "lib",
+    "es"
+  ]
 }
