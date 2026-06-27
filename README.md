@@ -1,10 +1,7 @@
 <div align="center">
   <h1>@rc-component/slider</h1>
+  <p><sub>Part of the Ant Design ecosystem.</sub></p>
   <p>🎚️ Accessible React slider for single values, ranges, marks, and editable handles.</p>
-  <p>
-    <img alt="Ant Design" src="https://mdn.alipayobjects.com/huamei_7uahnr/afts/img/A*FBw7Rr5aC7AAAAAAAAAAAAAADrJ8AQ/original" height="24" />
-  </p>
-  <p>Part of the Ant Design ecosystem.</p>
 
   <p>
     <a href="https://www.npmjs.com/package/@rc-component/slider"><img src="https://img.shields.io/npm/v/@rc-component/slider.svg?style=flat-square" alt="npm version" /></a>
@@ -15,6 +12,7 @@
     <a href="https://github.com/umijs/dumi"><img src="https://img.shields.io/badge/docs%20by-dumi-blue?style=flat-square" alt="dumi" /></a>
   </p>
 </div>
+
 
 ## Highlights
 
