@@ -17,23 +17,26 @@ jobs:
   preview:
     runs-on: ubuntu-latest
     env:
-      SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
       PREVIEW: true
     steps:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
         with:
           persist-credentials: false
+      - name: Build preview
+        if: ${{ secrets.SURGE_TOKEN != '' }}
+        run: |
+          npm install
+          npm run build
       - uses: afc163/surge-preview@bf90a5a86111f6311ca42f0a5a0f80fb0fb03cec
-        if: ${{ env.SURGE_TOKEN != '' }}
+        if: ${{ secrets.SURGE_TOKEN != '' }}
+        env:
+          SURGE_TOKEN: ${{ secrets.SURGE_TOKEN }}
         with:
           surge_token: ${{ env.SURGE_TOKEN }}
           github_token: ${{ secrets.GITHUB_TOKEN }}
           dist: docs-dist
           failOnError: false
           setCommitStatus: false
-          build: |
-            npm install
-            npm run build
       - name: Skip Surge preview
-        if: ${{ env.SURGE_TOKEN == '' }}
+        if: ${{ secrets.SURGE_TOKEN == '' }}
         run: echo "SURGE_TOKEN is not configured; skip Surge preview."
