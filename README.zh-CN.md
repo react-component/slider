@@ -15,7 +15,6 @@
 
 <p align="center"><a href="./README.md">English</a> | 简体中文</p>
 
-
 ## 特性
 
 - 通过一个共享组件支持单值和范围滑块。
@@ -77,7 +76,7 @@ npm start
 | `ariaLabelledByForHandle` | string \| string[] | - | `aria-labelledby` for handle elements. |
 | `ariaRequired` | boolean | - | 句柄元素的 `aria-required`。 |
 | `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | `aria-valuetext` 格式化函数。 |
-| `autoFocus` | boolean | - | 将滑块聚焦在安装座上。 |
+| `autoFocus` | boolean | - | 挂载后自动聚焦滑块。 |
 | `className` | string | - | 附加 className。 |
 | `classNames` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', string>>` | - | 内部插槽的语义化 className。 |
 | `count` | number | - | 已废弃。请使用 `range.minCount` 或 `range.maxCount`。 |
@@ -116,18 +115,18 @@ npm start
 
 ### RangeConfig
 
-| 名称             | 类型    | 默认值 | 说明                              |
-| ---------------- | ------- | ------- | ---------------------------------------- |
-| `draggableTrack` | boolean | false   | 允许拖动选定的范围轨道。 |
-| `editable`       | boolean | false   | 允许添加或删除范围手柄。  |
-| `maxCount`       | number  | -       | 可编辑时的最大句柄数。      |
-| `minCount`       | number  | -       | 可编辑时的最小句柄数。      |
+| 名称             | 类型    | 默认值 | 说明                     |
+| ---------------- | ------- | ------ | ------------------------ |
+| `draggableTrack` | boolean | false  | 允许拖动选定的范围轨道。 |
+| `editable`       | boolean | false  | 允许添加或删除范围手柄。 |
+| `maxCount`       | number  | -      | 可编辑时的最大句柄数。   |
+| `minCount`       | number  | -      | 可编辑时的最小句柄数。   |
 
 ### Ref
 
 | 名称    | 类型         | 说明       |
-| ------- | ------------ | ----------------- |
-| `blur`  | `() => void` | 模糊滑块。  |
+| ------- | ------------ | ---------- |
+| `blur`  | `() => void` | 模糊滑块。 |
 | `focus` | `() => void` | 聚焦滑块。 |
 
 ## 本地开发
