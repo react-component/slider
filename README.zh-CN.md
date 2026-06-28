@@ -78,7 +78,7 @@ npm start
 | `ariaRequired` | boolean | - | `aria-required` for handle elements. |
 | `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | Formatter for `aria-valuetext`. |
 | `autoFocus` | boolean | - | 将滑块聚焦在安装座上。 |
-| `className` | string | - | 附加className。 |
+| `className` | string | - | 附加 className。 |
 | `classNames` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', string>>` | - | 内部插槽的语义化 className。 |
 | `count` | number | - | 已废弃。请使用 `range.minCount` 或 `range.maxCount`。 |
 | `defaultValue` | number \| number[] | - | 初始值。 |
@@ -99,7 +99,7 @@ npm start
 | `onChange` | `(value) => void` | - | 当值改变时触发。 |
 | `onChangeComplete` | `(value) => void` | - | 交互完成时触发。 |
 | `onFocus` | `(event) => void` | - | 焦点处理程序。 |
-| `prefixCls` | string | `'rc-slider'` | 前缀className。 |
+| `prefixCls` | string | `'rc-slider'` | className 前缀。 |
 | `pushable` | boolean \| number | false | 范围模式下推动相邻滑块。 |
 | `railStyle` | React.CSSProperties | - | 已废弃。请使用 `styles.rail`。 |
 | `range` | boolean \| RangeConfig | false | 启用范围模式或配置可编辑范围行为。 |
