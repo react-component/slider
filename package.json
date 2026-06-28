@@ -40,7 +40,8 @@
     "prettier": "prettier --write --ignore-unknown .",
     "start": "dumi dev",
     "test": "rc-test",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "prepare": "husky"
   },
   "dependencies": {
     "@rc-component/util": "^1.11.1",
@@ -76,7 +77,9 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "regenerator-runtime": "^0.14.0",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0"
   },
   "peerDependencies": {
     "react": ">=16.9.0",
@@ -90,5 +93,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "lint-staged": {
+    "*": "prettier --write --ignore-unknown"
   }
 }
