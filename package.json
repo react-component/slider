@@ -12,11 +12,11 @@
   ],
   "homepage": "https://react-component.github.io/slider",
   "bugs": {
-    "url": "http://github.com/react-component/slider/issues"
+    "url": "https://github.com/react-component/slider/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:react-component/slider.git"
+    "url": "https://github.com/react-component/slider.git"
   },
   "license": "MIT",
   "main": "./lib/index",
@@ -86,5 +86,8 @@
   },
   "engines": {
     "node": ">=8.x"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
