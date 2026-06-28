@@ -48,6 +48,7 @@
   },
   "devDependencies": {
     "@rc-component/father-plugin": "^2.2.0",
+    "prettier": "^3.9.0",
     "@rc-component/np": "^1.0.4",
     "@rc-component/tooltip": "^1.2.1",
     "@rc-component/trigger": "^3.5.2",
