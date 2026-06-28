@@ -41,3 +41,6 @@ docs-dist
 .umi-test
 .env.local
 .dumi/
+coverage
+.dumi/tmp
+.dumi/tmp-production
