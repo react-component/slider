@@ -16,6 +16,9 @@ permissions:
 jobs:
   preview:
     runs-on: ubuntu-latest
+    concurrency:
+      group: surge-preview-${{ github.event.pull_request.number }}
+      cancel-in-progress: true
     env:
       PREVIEW: true
     steps:
