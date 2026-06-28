@@ -75,8 +75,8 @@ npm start
 | `allowCross` | boolean | true | 允许手柄在范围模式下交叉。 |
 | `ariaLabelForHandle` | string \| string[] | - | `aria-label` for handle elements. |
 | `ariaLabelledByForHandle` | string \| string[] | - | `aria-labelledby` for handle elements. |
-| `ariaRequired` | boolean | - | `aria-required` for handle elements. |
-| `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | Formatter for `aria-valuetext`. |
+| `ariaRequired` | boolean | - | 句柄元素的 `aria-required`。 |
+| `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | `aria-valuetext` 格式化函数。 |
 | `autoFocus` | boolean | - | 将滑块聚焦在安装座上。 |
 | `className` | string | - | 附加 className。 |
 | `classNames` | `Partial<Record<'tracks' \| 'track' \| 'rail' \| 'handle', string>>` | - | 内部插槽的语义化 className。 |
@@ -90,7 +90,7 @@ npm start
 | `id` | string | - | 根 ID。 |
 | `included` | boolean | true | 轨道是否渲染为连续的选定间隔。 |
 | `keyboard` | boolean | true | 启用键盘交互。 |
-| `marks` | `Record<string \| number, ReactNode \| MarkObj>` | - | Slider marks. |
+| `marks` | `Record<string \| number, ReactNode \| MarkObj>` | - | 滑块刻度标记。 |
 | `max` | number | 100 | 最大值。 |
 | `min` | number | 0 | 最小值。 |
 | `onAfterChange` | `(value) => void` | - | 已废弃。请使用 `onChangeComplete`。 |
