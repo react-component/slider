@@ -8,6 +8,10 @@ updates:
       time: '21:00'
       timezone: Asia/Shanghai
     open-pull-requests-limit: 10
+    groups:
+      npm-dependencies:
+        patterns:
+          - '*'
 
   - package-ecosystem: github-actions
     directory: '/'
@@ -17,3 +21,7 @@ updates:
       time: '21:00'
       timezone: Asia/Shanghai
     open-pull-requests-limit: 10
+    groups:
+      github-actions:
+        patterns:
+          - '*'
