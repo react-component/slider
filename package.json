@@ -66,7 +66,7 @@
     "cross-env": "^10.1.0",
     "dumi": "^2.4.35",
     "eslint": "^8.57.1",
-    "eslint-plugin-jest": "^27.9.0",
+    "eslint-plugin-jest": "^29.15.3",
     "eslint-plugin-unicorn": "^56.0.1",
     "father": "^4.6.23",
     "father-build": "^1.18.6",
