@@ -44,13 +44,5 @@ declare const vi: {
   restoreAllMocks: () => void;
 };
 
-declare const describe: any;
-declare const it: any;
-declare const test: any;
-declare const beforeEach: any;
-declare const afterEach: any;
-declare const beforeAll: any;
-declare const afterAll: any;
-declare const expect: any;
 
 declare module 'moment/locale/zh-cn';
