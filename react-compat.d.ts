@@ -10,7 +10,3 @@ declare module 'react' {
     ...children: React.ReactNode[]
   ): React.ReactElement<P>;
 }
-
-declare module 'react-dom' {
-  function hydrate(element: React.ReactNode, container: Element | DocumentFragment): void;
-}

@@ -15,13 +15,14 @@ const compat = new FlatCompat({
   allConfig: js.configs.all,
 });
 
-const recommendedTsRules = new Set(
-  Object.keys(tsEslintPlugin.configs.recommended.rules || {}),
-);
-const noopRule = {
-  meta: { type: 'problem', docs: {}, schema: [] },
-  create: () => ({}),
-};
+const recommendedTsRulesConfig = tsEslintPlugin.configs.recommended;
+const recommendedTsRulesObject = Array.isArray(recommendedTsRulesConfig)
+  ? recommendedTsRulesConfig.reduce(
+      (rules, config) => ({ ...rules, ...(config.rules || {}) }),
+      {},
+    )
+  : recommendedTsRulesConfig?.rules || {};
+const recommendedTsRules = new Set(Object.keys(recommendedTsRulesObject));
 
 function normalizeConfig(config) {
   const next = { ...config };
@@ -37,10 +38,7 @@ function normalizeConfig(config) {
         if (!ruleName.startsWith('@typescript-eslint/')) {
           return true;
         }
-        return (
-          recommendedTsRules.has(ruleName) ||
-          ruleName === '@typescript-eslint/ban-types'
-        );
+        return recommendedTsRules.has(ruleName);
       }),
     );
   }
@@ -66,20 +64,12 @@ export default [
   },
   {
     plugins: {
-      '@typescript-eslint': {
-        ...tsEslintPlugin,
-        rules: {
-          ...tsEslintPlugin.rules,
-          'ban-types': noopRule,
-          'consistent-type-exports': noopRule,
-        },
-      },
+      '@typescript-eslint': tsEslintPlugin,
     },
   },
   ...compat.config(require('./.eslintrc.js')).map(normalizeConfig),
   {
     rules: {
-      '@typescript-eslint/ban-types': 'off',
       '@typescript-eslint/no-empty-object-type': 'off',
       '@typescript-eslint/no-unsafe-function-type': 'off',
       '@typescript-eslint/no-unused-vars': 'off',
