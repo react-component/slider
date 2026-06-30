@@ -1,7 +1,6 @@
-import { createEvent, fireEvent } from '@testing-library/dom';
 /* eslint-disable max-len, no-undef */
 import '@testing-library/jest-dom';
-import { render } from '@testing-library/react';
+import { createEvent, fireEvent, render } from '@testing-library/react';
 import { KeyCode, spyElementPrototypes } from '@rc-component/util';
 import React from 'react';
 import Slider from '../src';
