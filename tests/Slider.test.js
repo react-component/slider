@@ -1,5 +1,6 @@
 import '@testing-library/jest-dom';
-import { createEvent, fireEvent, render } from '@testing-library/react';
+import { createEvent, fireEvent } from '@testing-library/dom';
+import { render } from '@testing-library/react';
 import { clsx } from 'clsx';
 import { KeyCode as keyCode, spyElementPrototypes } from '@rc-component/util';
 import React from 'react';
