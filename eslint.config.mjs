@@ -39,6 +39,9 @@ function normalizeConfig(config) {
   if (next.rules) {
     next.rules = Object.fromEntries(
       Object.entries(next.rules).filter(([ruleName]) => {
+        if (ruleName.startsWith('@babel/')) {
+          return false;
+        }
         if (!ruleName.startsWith('@typescript-eslint/')) {
           return true;
         }
