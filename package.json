@@ -89,8 +89,8 @@
     "typescript": "^6.0.3"
   },
   "peerDependencies": {
-    "react": "^19.2.7",
-    "react-dom": "^19.2.7"
+    "react": ">=16.9.0",
+    "react-dom": ">=16.9.0"
   },
   "overrides": {
     "@babel/core": "^7.29.7"
