@@ -1,11 +1,15 @@
 import js from '@eslint/js';
 import { defineConfig } from 'eslint/config';
+import { dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import prettier from 'eslint-config-prettier';
 import jest from 'eslint-plugin-jest';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
+
+const tsconfigRootDir = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig([
   {
@@ -15,7 +19,7 @@ export default defineConfig([
   },
   {
     linterOptions: {
-      reportUnusedDisableDirectives: 'off',
+      reportUnusedDisableDirectives: 'warn',
     },
   },
   {
@@ -26,10 +30,10 @@ export default defineConfig([
       'lib/',
       'dist/',
       'docs-dist/',
+      '.docs-dist/',
       '.dumi/',
       '.doc/',
       '.vercel/',
-      'src/index.d.ts',
     ],
   },
   {
@@ -88,7 +92,7 @@ export default defineConfig([
     languageOptions: {
       parserOptions: {
         projectService: true,
-        tsconfigRootDir: import.meta.dirname,
+        tsconfigRootDir,
       },
     },
   },
