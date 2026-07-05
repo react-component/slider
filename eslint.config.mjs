@@ -1,4 +1,5 @@
 import js from '@eslint/js';
+import { fixupConfigRules } from '@eslint/compat';
 import { defineConfig } from 'eslint/config';
 import { dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -40,8 +41,8 @@ export default defineConfig([
     files: ['**/*.{js,jsx,ts,tsx}'],
     extends: [
       js.configs.recommended,
-      react.configs.flat.recommended,
-      react.configs.flat['jsx-runtime'],
+      ...fixupConfigRules(react.configs.flat.recommended),
+      ...fixupConfigRules(react.configs.flat['jsx-runtime']),
       prettier,
     ],
     plugins: {

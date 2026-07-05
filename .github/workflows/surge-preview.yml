@@ -37,7 +37,7 @@ jobs:
       - name: Build preview
         if: ${{ steps.surge-token.outputs.enabled == 'true' }}
         run: |
-          npm install
+          npm install --legacy-peer-deps
           npm run build
       - uses: afc163/surge-preview@bf90a5a86111f6311ca42f0a5a0f80fb0fb03cec
         if: ${{ steps.surge-token.outputs.enabled == 'true' }}
