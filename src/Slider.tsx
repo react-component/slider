@@ -392,7 +392,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
         }
       });
 
-      let focusIndex = valueIndex;
+      let focusIndex: number;
 
       if (effectiveRangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
