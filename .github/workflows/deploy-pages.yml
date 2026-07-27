@@ -1,0 +1,15 @@
+name: Deploy documentation
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    uses: react-component/rc-test/.github/workflows/deploy-pages.yml@main
