@@ -395,13 +395,32 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       });
 
       let focusIndex: number;
+      let valueOffset = 0;
 
-      if (effectiveRangeEditable && valueDist !== 0 && (!maxCount || rawValues.length < maxCount)) {
+      if (!rawValues.length) {
+        cloneNextValues.push(newValue);
+        focusIndex = 0;
+      } else if (
+        effectiveRangeEditable &&
+        valueDist !== 0 &&
+        (!maxCount || rawValues.length < maxCount)
+      ) {
         cloneNextValues.splice(valueBeforeIndex + 1, 0, newValue);
         focusIndex = valueBeforeIndex + 1;
       } else {
-        cloneNextValues[valueIndex] = newValue;
+        valueOffset = newValue - rawValues[valueIndex];
         focusIndex = valueIndex;
+      }
+
+      if (rawValues.length) {
+        // Keep track clicks consistent with drag and keyboard constraints.
+        const { values: nextValues } = offsetValues(
+          cloneNextValues,
+          valueOffset,
+          focusIndex,
+          'dist',
+        );
+        cloneNextValues.splice(0, cloneNextValues.length, ...nextValues);
       }
 
       // Fill value to match default 2 (only when `rawValues` is empty)

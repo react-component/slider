@@ -856,6 +856,35 @@ describe('Range', () => {
     });
   });
 
+  it('keeps pushable when clicking the track', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <Slider range defaultValue={[20, 40]} pushable={20} onChange={onChange} />,
+    );
+
+    doMouseDown(container, 30, 'rc-slider', true);
+    fireEvent.mouseUp(document);
+
+    expect(onChange).toHaveBeenLastCalledWith([10, 30]);
+  });
+
+  it('keeps pushable when inserting an editable handle', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <Slider
+        range={{ editable: true }}
+        defaultValue={[20, 40]}
+        pushable={20}
+        onChange={onChange}
+      />,
+    );
+
+    doMouseDown(container, 30, 'rc-slider', true);
+    fireEvent.mouseUp(document);
+
+    expect(onChange).toHaveBeenLastCalledWith([10, 30, 50]);
+  });
+
   describe('disabled as array', () => {
     const getHandle = (container: HTMLElement, index = 0) =>
       container.getElementsByClassName('rc-slider-handle')[index] as HTMLElement;
