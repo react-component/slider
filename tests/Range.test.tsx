@@ -94,6 +94,28 @@ describe('Range', () => {
     fireEvent(container.getElementsByClassName(element)[0], touchMove);
   }
 
+  it('prevents the native default action when a touch drag ends', () => {
+    const onChangeComplete = jest.fn();
+    const { container } = render(
+      <Slider range defaultValue={[20, 40]} onChangeComplete={onChangeComplete} />,
+    );
+    const handle = container.getElementsByClassName('rc-slider-handle')[0];
+    const touchStart = createEvent.touchStart(handle, {
+      touches: [{}],
+      targetTouches: [{}],
+    });
+    (touchStart as any).targetTouches[0].pageX = 20;
+    fireEvent(handle, touchStart);
+
+    const touchEnd = createEvent.touchEnd(handle);
+    const preventDefault = jest.fn();
+    Object.defineProperty(touchEnd, 'preventDefault', { value: preventDefault });
+    fireEvent(handle, touchEnd);
+
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+    expect(onChangeComplete).toHaveBeenCalledWith([20, 40]);
+  });
+
   it('should render Range with correct DOM structure', () => {
     const { asFragment } = render(<Slider range />);
     expect(asFragment().firstChild).toMatchSnapshot();
@@ -140,9 +162,7 @@ describe('Range', () => {
   });
 
   it('should render Range without tabIndex (equal null) correctly', () => {
-    const { container } = render(
-      <Slider range tabIndex={[null, null] as any} />,
-    );
+    const { container } = render(<Slider range tabIndex={[null, null] as any} />);
     expect(container.getElementsByClassName('rc-slider-handle')[0]).not.toHaveAttribute('tabIndex');
     expect(container.getElementsByClassName('rc-slider-handle')[1]).not.toHaveAttribute('tabIndex');
   });
@@ -872,7 +892,12 @@ describe('Range', () => {
     it('respects handle disabled state and boolean disabled fallback', () => {
       const onChange = jest.fn();
       const { container, rerender } = render(
-        <Slider range defaultValue={[0, 50, 100]} disabled={[true, false, true]} onChange={onChange} />,
+        <Slider
+          range
+          defaultValue={[0, 50, 100]}
+          disabled={[true, false, true]}
+          onChange={onChange}
+        />,
       );
 
       const disabledHandle = getHandle(container, 0);
@@ -909,17 +934,23 @@ describe('Range', () => {
       expect(onChange).toHaveBeenCalledWith([0, 10, 100]);
 
       onChange.mockClear();
-      rerender(<Slider range value={[20, 50, 80]} disabled={[true, false, false]} onChange={onChange} />);
+      rerender(
+        <Slider range value={[20, 50, 80]} disabled={[true, false, false]} onChange={onChange} />,
+      );
       doMouseDown(container, 10, 'rc-slider', true);
       fireEvent.mouseUp(document);
       expect(onChange).not.toHaveBeenCalled();
 
-      rerender(<Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />);
+      rerender(
+        <Slider range value={[20, 50, 80]} disabled={[false, false, true]} onChange={onChange} />,
+      );
       doMouseDown(container, 90, 'rc-slider', true);
       fireEvent.mouseUp(document);
       expect(onChange).not.toHaveBeenCalled();
 
-      rerender(<Slider range value={[0, 50, 100]} disabled={[true, true, true]} onChange={onChange} />);
+      rerender(
+        <Slider range value={[0, 50, 100]} disabled={[true, true, true]} onChange={onChange} />,
+      );
       doMouseDown(container, 10, 'rc-slider', true);
       fireEvent.mouseUp(document);
       expect(onChange).not.toHaveBeenCalled();
@@ -963,7 +994,12 @@ describe('Range', () => {
     it('disables draggableTrack only when rendered handles are disabled', () => {
       const onChange = jest.fn();
       const { container, unmount } = render(
-        <Slider range={{ draggableTrack: true }} defaultValue={[0, 50]} disabled={[false, true]} onChange={onChange} />,
+        <Slider
+          range={{ draggableTrack: true }}
+          defaultValue={[0, 50]}
+          disabled={[false, true]}
+          onChange={onChange}
+        />,
       );
 
       const track = container.getElementsByClassName('rc-slider-track')[0];
@@ -1002,7 +1038,12 @@ describe('Range', () => {
     it('keeps keyboard movement inside disabled handle boundaries', () => {
       const onChange = jest.fn();
       const { container, unmount } = render(
-        <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} onChange={onChange} />,
+        <Slider
+          range
+          defaultValue={[20, 50, 80]}
+          disabled={[false, true, false]}
+          onChange={onChange}
+        />,
       );
 
       repeatKeyDown(getHandle(container, 0), keyCode.RIGHT, 50);
@@ -1012,7 +1053,12 @@ describe('Range', () => {
       onChange.mockClear();
 
       const { container: boundaryContainer } = render(
-        <Slider range defaultValue={[20, 50, 80]} disabled={[true, false, true]} onChange={onChange} />,
+        <Slider
+          range
+          defaultValue={[20, 50, 80]}
+          disabled={[true, false, true]}
+          onChange={onChange}
+        />,
       );
       const middleHandle = getHandle(boundaryContainer, 1);
 
@@ -1029,7 +1075,13 @@ describe('Range', () => {
     it('respects pushable boundaries around disabled handles', () => {
       const onChange = jest.fn();
       const { container } = render(
-        <Slider range defaultValue={[20, 40, 60, 80]} disabled={[false, true, false, false]} pushable={10} onChange={onChange} />,
+        <Slider
+          range
+          defaultValue={[20, 40, 60, 80]}
+          disabled={[false, true, false, false]}
+          pushable={10}
+          onChange={onChange}
+        />,
       );
 
       repeatKeyDown(getHandle(container, 0), keyCode.UP, 30);
@@ -1046,7 +1098,13 @@ describe('Range', () => {
     it('respects disabled boundaries with allowCross=false and step=null', () => {
       const onChange = jest.fn();
       const { container, unmount } = render(
-        <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} allowCross={false} onChange={onChange} />,
+        <Slider
+          range
+          defaultValue={[20, 50, 80]}
+          disabled={[false, true, false]}
+          allowCross={false}
+          onChange={onChange}
+        />,
       );
 
       repeatKeyDown(getHandle(container, 0), keyCode.RIGHT, 50);
@@ -1056,7 +1114,15 @@ describe('Range', () => {
       onChange.mockClear();
 
       const { container: stepContainer } = render(
-        <Slider range defaultValue={[20, 50, 80]} disabled={[false, true, false]} step={null} marks={{ 0: '0', 50: '50', 100: '100' }} pushable={10} onChange={onChange} />,
+        <Slider
+          range
+          defaultValue={[20, 50, 80]}
+          disabled={[false, true, false]}
+          step={null}
+          marks={{ 0: '0', 50: '50', 100: '100' }}
+          pushable={10}
+          onChange={onChange}
+        />,
       );
 
       fireEvent.keyDown(getHandle(stepContainer, 0), { keyCode: keyCode.RIGHT });
