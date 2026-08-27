@@ -328,6 +328,28 @@ describe('Range', () => {
     expect(onChange).toHaveBeenCalledWith([0, 90, 100]);
   });
 
+  it('pushes decimal handles in both directions', () => {
+    const onChange = jest.fn();
+    const { container } = render(
+      <Slider
+        range
+        min={0}
+        max={1}
+        step={0.1}
+        pushable={0.1}
+        defaultValue={[0.5, 0.6, 0.7]}
+        onChange={onChange}
+      />,
+    );
+    doMouseMove(container, 50, 60, 'rc-slider-handle', 0);
+    fireEvent.mouseUp(document);
+    expect(onChange).toHaveBeenLastCalledWith([0.6, 0.7, 0.8]);
+
+    doMouseMove(container, 80, 70, 'rc-slider-handle', 2);
+    fireEvent.mouseUp(document);
+    expect(onChange).toHaveBeenLastCalledWith([0.5, 0.6, 0.7]);
+  });
+
   describe('should render correctly when allowCross', () => {
     function testLTR(name, func) {
       it(name, () => {
