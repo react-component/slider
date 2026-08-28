@@ -415,7 +415,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
       if (e) {
         (document.activeElement as HTMLElement)?.blur?.();
-        handlesRef.current!.focus(focusIndex);
+        handlesRef.current!.focus(focusIndex, { preventScroll: true });
         onStartDrag(e, focusIndex, cloneNextValues);
       } else {
         // https://github.com/ant-design/ant-design/issues/49997

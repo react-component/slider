@@ -33,6 +33,17 @@ describe('Slider', () => {
     });
   });
 
+  it('does not scroll the page when focusing a handle from a track press', () => {
+    const { container } = render(<Slider defaultValue={25} />);
+    const slider = container.querySelector('.rc-slider');
+    const handle = container.querySelector('.rc-slider-handle');
+    const focus = jest.spyOn(handle, 'focus');
+
+    fireEvent.mouseDown(slider, { clientX: 50, clientY: 0 });
+
+    expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+  });
+
   it('should render Slider correctly where value > startPoint', () => {
     const { container } = render(<Slider value={50} startPoint={20} />);
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveStyle({ left: '50%' });
