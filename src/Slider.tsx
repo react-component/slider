@@ -1,4 +1,10 @@
-import { isEqual, useControlledState, useEvent, warning } from '@rc-component/util';
+import {
+  isEqual,
+  isReactRenderable,
+  useControlledState,
+  useEvent,
+  warning,
+} from '@rc-component/util';
 import { clsx } from 'clsx';
 import * as React from 'react';
 import Handles, { type HandlesProps, type HandlesRef } from './Handles';
@@ -234,7 +240,7 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
 
         return markObj;
       })
-      .filter(({ label }) => label || typeof label === 'number')
+      .filter(({ label }) => isReactRenderable(label))
       .sort((a, b) => a.value - b.value);
   }, [marks]);
 
