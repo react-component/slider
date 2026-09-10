@@ -266,5 +266,9 @@ export default () => (
         onChange={log}
       />
     </div>
+    <div style={style}>
+      <p>Set Distance between handles</p>
+      <Range allowCross={false} defaultValue={[0, 20]} distanceBetweenHandles={5} onChange={log} />
+    </div>
   </div>
 );
