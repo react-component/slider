@@ -58,7 +58,7 @@ function useDrag(
         document.removeEventListener('mousemove', mouseMoveEventRef.current);
       }
       if (mouseUpEventRef.current) {
-        document.removeEventListener('mouseup', mouseUpEventRef.current);
+        document.removeEventListener('mouseup', mouseUpEventRef.current, true);
       }
       if (touchEventTargetRef.current) {
         if (mouseMoveEventRef.current) {
@@ -211,9 +211,11 @@ function useDrag(
 
     // End
     const onMouseUp: EventListener = (event) => {
-      event.preventDefault();
+      if (event.type === 'touchend') {
+        event.preventDefault();
+      }
 
-      document.removeEventListener('mouseup', onMouseUp);
+      document.removeEventListener('mouseup', onMouseUp, true);
       document.removeEventListener('mousemove', onMouseMove);
       if (touchEventTargetRef.current) {
         if (mouseMoveEventRef.current) {
@@ -233,7 +235,7 @@ function useDrag(
       setDraggingDelete(false);
     };
 
-    document.addEventListener('mouseup', onMouseUp);
+    document.addEventListener('mouseup', onMouseUp, true);
     document.addEventListener('mousemove', onMouseMove);
     e.currentTarget.addEventListener('touchend', onMouseUp);
     e.currentTarget.addEventListener('touchmove', onMouseMove);

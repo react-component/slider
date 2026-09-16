@@ -659,6 +659,35 @@ describe('Slider', () => {
     expect(onAfterChange).toHaveBeenCalledWith(20);
   });
 
+  it('should finish dragging when a parent stops mouseup propagation', () => {
+    const onChange = jest.fn();
+    const onChangeComplete = jest.fn();
+    const onParentMouseUp = jest.fn((event) => event.stopPropagation());
+    const { container, getByTestId } = render(
+      <div data-testid="parent" onMouseUp={onParentMouseUp}>
+        <Slider defaultValue={50} onChange={onChange} onChangeComplete={onChangeComplete} />
+      </div>,
+    );
+    const handle = container.querySelector('.rc-slider-handle');
+
+    fireEvent.mouseDown(handle, { pageX: 50 });
+    const firstMove = createEvent.mouseMove(document);
+    firstMove.pageX = 60;
+    fireEvent(document, firstMove);
+    expect(onChange).toHaveBeenCalled();
+    const lastDraggedValue = onChange.mock.calls[onChange.mock.calls.length - 1][0];
+
+    onChange.mockClear();
+    fireEvent.mouseUp(getByTestId('parent'));
+    expect(onParentMouseUp.mock.calls[0][0].defaultPrevented).toBe(false);
+    expect(onChangeComplete).toHaveBeenCalledWith(lastDraggedValue);
+
+    const moveAfterRelease = createEvent.mouseMove(document);
+    moveAfterRelease.pageX = 70;
+    fireEvent(document, moveAfterRelease);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
   // https://github.com/react-component/slider/pull/948
   it('could drag handler after click tracker', () => {
     const onChange = jest.fn();
