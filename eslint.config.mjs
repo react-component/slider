@@ -32,6 +32,7 @@ export default defineConfig([
       'dist/',
       'docs-dist/',
       '.docs-dist/',
+      '**/.umi/',
       '.dumi/',
       '.doc/',
       '.vercel/',
