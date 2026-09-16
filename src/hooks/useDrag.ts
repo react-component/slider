@@ -168,13 +168,18 @@ function useDrag(
 
     // Moving
     const onMouseMove: EventListener = (event) => {
+      const container = containerRef.current;
+      if (!container) {
+        return;
+      }
+
       event.preventDefault();
 
       const { pageX: moveX, pageY: moveY } = getPosition(event as MouseEvent | TouchEvent);
       const offsetX = moveX - startX;
       const offsetY = moveY - startY;
 
-      const { width, height } = containerRef.current!.getBoundingClientRect();
+      const { width, height } = container.getBoundingClientRect();
 
       let offSetPercent: number;
       let removeDist: number;
