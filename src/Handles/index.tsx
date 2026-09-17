@@ -26,7 +26,7 @@ export interface HandlesProps {
 }
 
 export interface HandlesRef {
-  focus: (index: number) => void;
+  focus: (index: number, options?: FocusOptions) => void;
   hideHelp: VoidFunction;
 }
 
@@ -66,8 +66,12 @@ const Handles = React.forwardRef<HandlesRef, HandlesProps>((props, ref) => {
 
   // =========================== Render ===========================
   React.useImperativeHandle(ref, () => ({
-    focus: (index: number) => {
-      handlesRef.current[index]?.focus();
+    focus: (index: number, options?: FocusOptions) => {
+      if (options) {
+        handlesRef.current[index]?.focus(options);
+      } else {
+        handlesRef.current[index]?.focus();
+      }
     },
     hideHelp: () => {
       flushSync(() => {
