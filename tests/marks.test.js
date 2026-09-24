@@ -37,7 +37,9 @@ describe('marks', () => {
     const marks = { 0: '0', 30: '30', 100: '100' };
     const onChange = jest.fn();
     const onChangeComplete = jest.fn();
-    const { container } = render(<Slider marks={marks} onChange={onChange} onChangeComplete={onChangeComplete} />);
+    const { container } = render(
+      <Slider marks={marks} onChange={onChange} onChangeComplete={onChangeComplete} />,
+    );
     fireEvent.click(container.getElementsByClassName('rc-slider-mark-text')[1]);
     expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
       'aria-valuenow',
@@ -47,6 +49,48 @@ describe('marks', () => {
     expect(onChange).toHaveBeenCalledWith(30);
     expect(onChangeComplete).toHaveBeenCalledTimes(1);
     expect(onChangeComplete).toHaveBeenCalledWith(30);
+  });
+
+  it('should select marks with Enter and Space', () => {
+    const onChange = jest.fn();
+    const onChangeComplete = jest.fn();
+    const { container, getByRole } = render(
+      <Slider
+        marks={{ 0: 'Start', 30: 'Middle', 100: 'End' }}
+        onChange={onChange}
+        onChangeComplete={onChangeComplete}
+      />,
+    );
+
+    const middleMark = getByRole('button', { name: 'Middle' });
+    const endMark = getByRole('button', { name: 'End' });
+
+    expect(fireEvent.keyDown(middleMark, { key: 'Enter', keyCode: 13, which: 13 })).toBe(false);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-valuenow',
+      '30',
+    );
+    expect(fireEvent.keyDown(endMark, { key: ' ', keyCode: 32, which: 32 })).toBe(false);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-valuenow',
+      '100',
+    );
+    expect(onChange).toHaveBeenNthCalledWith(1, 30);
+    expect(onChange).toHaveBeenNthCalledWith(2, 100);
+    expect(onChangeComplete).toHaveBeenNthCalledWith(1, 30);
+    expect(onChangeComplete).toHaveBeenNthCalledWith(2, 100);
+  });
+
+  it('should expose disabled marks without adding them to the tab order', () => {
+    const onChange = jest.fn();
+    const { getByRole } = render(<Slider disabled marks={{ 30: 'Middle' }} onChange={onChange} />);
+
+    const mark = getByRole('button', { name: 'Middle' });
+
+    expect(mark).toHaveAttribute('aria-disabled', 'true');
+    expect(mark).toHaveAttribute('tabindex', '-1');
+    fireEvent.keyDown(mark, { key: 'Enter', keyCode: 13, which: 13 });
+    expect(onChange).not.toHaveBeenCalled();
   });
 
   // TODO: not implement yet
