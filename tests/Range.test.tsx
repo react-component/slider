@@ -549,6 +549,32 @@ describe('Range', () => {
     );
   });
 
+  it('sets aria-invalid on the handles', () => {
+    const { container } = render(
+      <Slider range ariaInvalidForHandle={[true, false]} />,
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
+      'aria-invalid',
+      'false',
+    );
+  });
+
+  it('sets aria-invalid on the handles using ariaInvalid prop', () => {
+    const { container } = render(<Slider range ariaInvalid={true} />);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+    expect(container.getElementsByClassName('rc-slider-handle')[1]).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+  });
+
   it('sets aria-valuetext on the handles', () => {
     const { container } = render(
       <Slider

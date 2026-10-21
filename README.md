@@ -77,6 +77,8 @@ Then open `http://localhost:8000`.
 | `ariaLabelledByForHandle` | string \| string[] | - | `aria-labelledby` for handle elements. |
 | `ariaDescribedByForHandle` | string \| string[] | - | `aria-describedby` for handle elements. |
 | `ariaRequired` | boolean | - | `aria-required` for handle elements. |
+| `ariaInvalid` | boolean | - | `aria-invalid` for handle elements. |
+| `ariaInvalidForHandle` | `AriaInvalid \| AriaInvalid[]` | - | `aria-invalid` for handle elements. |
 | `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | Formatter for `aria-valuetext`. |
 | `autoFocus` | boolean | - | Focus the slider on mount. |
 | `className` | string | - | Additional class name. |

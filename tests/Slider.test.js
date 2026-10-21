@@ -456,6 +456,22 @@ describe('Slider', () => {
     );
   });
 
+  it('sets aria-invalid on the handle', () => {
+    const { container } = render(<Slider ariaInvalid={true} />);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
+  });
+
+  it('sets aria-invalid on the handle with ariaInvalidForHandle', () => {
+    const { container } = render(<Slider ariaInvalidForHandle="grammar" />);
+    expect(container.getElementsByClassName('rc-slider-handle')[0]).toHaveAttribute(
+      'aria-invalid',
+      'grammar',
+    );
+  });
+
   it('sets aria-valuetext on the handle', () => {
     const { container } = render(
       <Slider
