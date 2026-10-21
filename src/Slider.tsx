@@ -17,6 +17,7 @@ import useDrag from './hooks/useDrag';
 import useOffset, { getClosestEnabledHandleIndex } from './hooks/useOffset';
 import useRange from './hooks/useRange';
 import type {
+  AriaInvalid,
   AriaValueFormat,
   Direction,
   OnStartMove,
@@ -115,6 +116,8 @@ export interface SliderProps<ValueType = number | number[]> {
   ariaLabelledByForHandle?: string | string[];
   ariaDescribedByForHandle?: string | string[];
   ariaRequired?: boolean;
+  ariaInvalid?: boolean;
+  ariaInvalidForHandle?: AriaInvalid | AriaInvalid[];
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
 }
 
@@ -184,6 +187,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
     ariaLabelledByForHandle,
     ariaDescribedByForHandle,
     ariaRequired,
+    ariaInvalid,
+    ariaInvalidForHandle,
     ariaValueTextFormatterForHandle,
   } = props;
 
@@ -594,6 +599,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       ariaLabelledByForHandle,
       ariaDescribedByForHandle,
       ariaRequired,
+      ariaInvalid,
+      ariaInvalidForHandle,
       ariaValueTextFormatterForHandle,
       styles: styles || {},
       classNames: classNames || {},
@@ -615,6 +622,8 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
       ariaLabelledByForHandle,
       ariaDescribedByForHandle,
       ariaRequired,
+      ariaInvalid,
+      ariaInvalidForHandle,
       ariaValueTextFormatterForHandle,
       styles,
       classNames,

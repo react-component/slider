@@ -1,5 +1,5 @@
 import * as React from 'react';
-import type { AriaValueFormat, Direction, SliderClassNames, SliderStyles } from './interface';
+import type { AriaInvalid, AriaValueFormat, Direction, SliderClassNames, SliderStyles } from './interface';
 
 export interface SliderContextProps {
   min: number;
@@ -17,6 +17,8 @@ export interface SliderContextProps {
   ariaLabelledByForHandle?: string | string[];
   ariaDescribedByForHandle?: string | string[];
   ariaRequired?: boolean;
+  ariaInvalid?: boolean;
+  ariaInvalidForHandle?: AriaInvalid | AriaInvalid[];
   ariaValueTextFormatterForHandle?: AriaValueFormat | AriaValueFormat[];
   classNames: SliderClassNames;
   styles: SliderStyles;
