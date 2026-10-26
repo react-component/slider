@@ -76,6 +76,8 @@ npm start
 | `ariaLabelledByForHandle` | string \| string[] | - | `aria-labelledby` for handle elements. |
 | `ariaDescribedByForHandle` | string \| string[] | - | 句柄元素的 `aria-describedby`。 |
 | `ariaRequired` | boolean | - | 句柄元素的 `aria-required`。 |
+| `ariaInvalid` | boolean | - | 句柄元素的 `aria-invalid`。 |
+| `ariaInvalidForHandle` | `AriaInvalid \| AriaInvalid[]` | - | 句柄元素的 `aria-invalid`。 |
 | `ariaValueTextFormatterForHandle` | `((value: number) => string) \| ((value: number) => string)[]` | - | `aria-valuetext` 格式化函数。 |
 | `autoFocus` | boolean | - | 挂载后自动聚焦滑块。 |
 | `className` | string | - | 附加 className。 |
