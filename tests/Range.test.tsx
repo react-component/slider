@@ -116,6 +116,73 @@ describe('Range', () => {
     expect(onChangeComplete).toHaveBeenCalledWith([20, 40]);
   });
 
+  it('does not prevent default on non-cancelable touch events', () => {
+    const onChange = jest.fn();
+    const onChangeComplete = jest.fn();
+    const { container } = render(
+      <Slider
+        range
+        defaultValue={[20, 40]}
+        onChange={onChange}
+        onChangeComplete={onChangeComplete}
+      />,
+    );
+    const handle = container.getElementsByClassName('rc-slider-handle')[0];
+    const touchStart = createEvent.touchStart(handle, {
+      touches: [{}],
+      targetTouches: [{}],
+    });
+    (touchStart as any).targetTouches[0].pageX = 20;
+    fireEvent(handle, touchStart);
+
+    // Simulate browser scrolling in progress: subsequent events are not cancelable
+    const touchMove = createEvent.touchMove(handle, {
+      cancelable: false,
+      touches: [{}],
+      targetTouches: [{}],
+    });
+    (touchMove as any).targetTouches[0].pageX = 50;
+    const movePreventDefault = jest.fn();
+    Object.defineProperty(touchMove, 'preventDefault', { value: movePreventDefault });
+    fireEvent(handle, touchMove);
+
+    expect(touchMove.cancelable).toBe(false);
+    expect(movePreventDefault).not.toHaveBeenCalled();
+    expect(onChange).toHaveBeenCalledWith([40, 50]);
+
+    const touchEnd = createEvent.touchEnd(handle, { cancelable: false });
+    const endPreventDefault = jest.fn();
+    Object.defineProperty(touchEnd, 'preventDefault', { value: endPreventDefault });
+    fireEvent(handle, touchEnd);
+
+    expect(touchEnd.cancelable).toBe(false);
+    expect(endPreventDefault).not.toHaveBeenCalled();
+    expect(onChangeComplete).toHaveBeenCalledWith([40, 50]);
+  });
+
+  it('prevents default on cancelable touchmove events', () => {
+    const { container } = render(<Slider range defaultValue={[20, 40]} />);
+    const handle = container.getElementsByClassName('rc-slider-handle')[0];
+    const touchStart = createEvent.touchStart(handle, {
+      touches: [{}],
+      targetTouches: [{}],
+    });
+    (touchStart as any).targetTouches[0].pageX = 20;
+    fireEvent(handle, touchStart);
+
+    const touchMove = createEvent.touchMove(handle, {
+      touches: [{}],
+      targetTouches: [{}],
+    });
+    (touchMove as any).targetTouches[0].pageX = 30;
+    const preventDefault = jest.fn();
+    Object.defineProperty(touchMove, 'preventDefault', { value: preventDefault });
+    fireEvent(handle, touchMove);
+
+    expect(touchMove.cancelable).toBe(true);
+    expect(preventDefault).toHaveBeenCalledTimes(1);
+  });
+
   it('should render Range with correct DOM structure', () => {
     const { asFragment } = render(<Slider range />);
     expect(asFragment().firstChild).toMatchSnapshot();
