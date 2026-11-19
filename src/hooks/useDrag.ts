@@ -173,7 +173,10 @@ function useDrag(
         return;
       }
 
-      event.preventDefault();
+      // Touch events become non-cancelable once the browser has started scrolling
+      if (event.cancelable) {
+        event.preventDefault();
+      }
 
       const { pageX: moveX, pageY: moveY } = getPosition(event as MouseEvent | TouchEvent);
       const offsetX = moveX - startX;
@@ -216,7 +219,7 @@ function useDrag(
 
     // End
     const onMouseUp: EventListener = (event) => {
-      if (event.type === 'touchend') {
+      if (event.type === 'touchend' && event.cancelable) {
         event.preventDefault();
       }
 
