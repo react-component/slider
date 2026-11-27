@@ -532,7 +532,9 @@ const Slider = React.forwardRef<SliderRef, SliderProps<number | number[]>>((prop
   // Auto focus for updated handle
   const dragging = draggingIndex !== -1;
   React.useEffect(() => {
-    if (!dragging) {
+    // `draggingValue` stays `null` until the first drag. Skip that case so the
+    // handle is not focused on mount when `rawValues` contains `null` (e.g. max < min).
+    if (!dragging && draggingValue !== null) {
       const valueIndex = rawValues.lastIndexOf(draggingValue);
       handlesRef.current!.focus(valueIndex);
     }

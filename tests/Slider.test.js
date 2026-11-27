@@ -508,6 +508,14 @@ describe('Slider', () => {
       ref.current.blur();
       expect(onBlur).toBeCalled();
     });
+
+    it('should not focus handle on mount when max is less than min', () => {
+      const onFocus = jest.fn();
+      const { container } = render(<Slider min={1} max={0} onFocus={onFocus} />);
+
+      expect(onFocus).not.toHaveBeenCalled();
+      expect(container.querySelector('.rc-slider-handle')).not.toHaveFocus();
+    });
   });
 
   it('should not be out of range when value is null', () => {
